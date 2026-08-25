@@ -43,10 +43,32 @@
       "reader_sha256": "74dbaa7a1bed8892a7d00bc028ac783c37d6b7212ec71f8200c4a5a4ecb585b5",
       "seq": 2,
       "slug": "phase0-round4-verdict"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "57352d609c138d7ddbf8734d6deed465289eccb9876ac9bc853231cd3c29dee3",
+          "round": 6408061
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "DE9DA2502392BA31347746CCB3919B38F76FB19954839A01F18E9EC7A92863704F3FBDE52800F5CB891836E4D8EE85D4A836BAD48923F4034EEDCFD86F78E522",
+          "pulse": 1917592,
+          "time_stamp": "2026-08-25T15:47:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-25T15:47:33Z",
+      "hash": "684923ba30b11d805e6117c22b56c40445fdbda9ff63d94b922adc051681f637",
+      "id": "0003",
+      "prev_hash": "1bbe94cbcf5134167496d905aeb4bdea6acef4053be299f32e00ac088a85c230",
+      "reader": "tools/readers/pivot_deflate_curve.py",
+      "reader_sha256": "77384d4f958aa0dbd63c6165499367e820d2fbc1414f0ed39f1f7d82853586e5",
+      "seq": 3,
+      "slug": "pivot-deflate-curve"
     }
   ],
-  "entries": 2,
-  "head": "1bbe94cbcf5134167496d905aeb4bdea6acef4053be299f32e00ac088a85c230",
+  "entries": 3,
+  "head": "684923ba30b11d805e6117c22b56c40445fdbda9ff63d94b922adc051681f637",
   "problems": 0,
   "schema": "raise-v1/prereg_status/1",
   "verified": true

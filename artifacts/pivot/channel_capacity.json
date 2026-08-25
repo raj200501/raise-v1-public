@@ -1,0 +1,90 @@
+{
+  "collision_rate": 0.1438,
+  "configurations": [
+    "zlib-1",
+    "zlib-2",
+    "zlib-3",
+    "zlib-4",
+    "zlib-5",
+    "zlib-6",
+    "zlib-7",
+    "zlib-8",
+    "zlib-9",
+    "libdeflate-1",
+    "libdeflate-2",
+    "libdeflate-3",
+    "libdeflate-4",
+    "libdeflate-5",
+    "libdeflate-6",
+    "libdeflate-7",
+    "libdeflate-8",
+    "libdeflate-9",
+    "libdeflate-10",
+    "libdeflate-11",
+    "libdeflate-12",
+    "isal-0",
+    "isal-1",
+    "isal-2",
+    "isal-3",
+    "zopfli"
+  ],
+  "n_configurations": 26,
+  "overall_mean_distinct_streams": 22.261,
+  "per_family": {
+    "base64": {
+      "max": 16,
+      "mean_distinct": 14.667,
+      "min": 14,
+      "n_probes": 12
+    },
+    "binary": {
+      "max": 16,
+      "mean_distinct": 14.75,
+      "min": 14,
+      "n_probes": 12
+    },
+    "code": {
+      "max": 26,
+      "mean_distinct": 25.583,
+      "min": 25,
+      "n_probes": 12
+    },
+    "csv": {
+      "max": 25,
+      "mean_distinct": 24.583,
+      "min": 24,
+      "n_probes": 12
+    },
+    "gutenberg": {
+      "max": 25,
+      "mean_distinct": 24.5,
+      "min": 24,
+      "n_probes": 12
+    },
+    "json": {
+      "max": 26,
+      "mean_distinct": 25.917,
+      "min": 25,
+      "n_probes": 12
+    },
+    "log": {
+      "max": 25,
+      "mean_distinct": 24.917,
+      "min": 24,
+      "n_probes": 12
+    },
+    "mixed": {
+      "max": 24,
+      "mean_distinct": 23.167,
+      "min": 22,
+      "n_probes": 12
+    }
+  },
+  "probes_per_family": 12,
+  "reading": "22.27 of 26 configurations produce byte-distinct streams on average, a collision rate of 0.143 against the javac failure's 1.0. The channel is real. Note the structure: base64 and binary content collapse to roughly 14 distinct streams because when there is nothing to match, encoders converge on stored or near-minimal blocks - mechanistically expected, and it caps what is achievable on incompressible content.",
+  "schema": "raise-v1/pivot_channel_capacity/1",
+  "source_chunk_bytes": 32768,
+  "verdict": "PASS",
+  "what": "A1 channel-capacity check for the carved-DEFLATE thesis, run BEFORE building any corpus. The cheapest possible falsification: if the 26 configurations produce identical streams, the label is not a function of the input and no volume of data can help.",
+  "why_it_matters": "The archived trial killed a candidate on exactly this failure - javac 17.0.8 and 17.0.13 at --release 8 produced 345 of 345 BYTE-IDENTICAL class files, a channel of zero capacity. This is that same test, run first rather than last."
+}
