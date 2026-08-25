@@ -608,6 +608,21 @@ def main() -> int:
         json.dump(report, fh, indent=2, sort_keys=True)
         fh.write("\n")
 
+    # Guard: the coverage map hard-codes this count in a claim. Adding a mutation without updating
+    # that claim turns CI red, and the failure is easy to miss because it surfaces one gate later.
+    # Warn here, loudly, at the moment the count changes. coverage.py remains the actual gate.
+    cov = os.path.join(REPO, "artifacts", "verification", "coverage.json")
+    if os.path.exists(cov):
+        try:
+            claims = json.load(open(cov))["claims"]
+            claimed = next((c.get("value") for c in claims if c.get("id") == "mutations-detected"), None)
+            if claimed is not None and int(claimed) != len(results):
+                print(f"\n!! artifacts/verification/coverage.json claims {claimed} mutations, this run "
+                      f"has {len(results)}.\n!! Update the 'mutations-detected' claim or "
+                      f"tools/coverage.py will fail and CI will go red.\n")
+        except Exception:  # noqa: BLE001
+            pass
+
     width = max(len(r["mutation"]) for r in results)
     for r in results:
         mark = "OK  " if r["detected"] else "HOLE"

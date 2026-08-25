@@ -19,6 +19,31 @@ Format:
 
 ---
 
+## 2026-08-25 — Published a mutation count that did not match the repository, and broke CI for an hour
+
+**Claimed.** `VERDICT.md`, `README.md` and `outbound/ONE_PAGER.md` all stated "38 mutations, 38
+detected, 0 survived".
+
+**Actual.** 49. Eleven mutation cases for the pivot reader were added and committed without
+updating the claim, so for roughly an hour the published figure understated the instrument by
+eleven cases and **GitHub Actions was red on every push in that window**.
+
+**Size.** Small in the number, and it errs *against* our own interest — understating how many ways
+the gates were shown to fail makes the instrument look weaker, not stronger. What is not small is
+the process failure behind it.
+
+**Cause.** The mutation tests were added, run, and committed — but `tools/coverage.py` was not run
+before committing. Locally the gates are only green if you actually run all of them, and I ran the
+one I had just changed. The stale claim then surfaced one gate later, in CI, where I was not
+looking. **The user noticed the red CI before I did**, which is the part worth recording: an
+unwatched gate is not a gate.
+
+**Fix.** Two changes. (1) `tests/mutation_test.py` now compares its own case count against the
+`mutations-detected` claim in the coverage map and prints a loud warning at the moment they
+diverge, so the mismatch surfaces where it is created rather than one gate downstream.
+`tools/coverage.py` remains the enforcing gate. (2) All four documents now read 49, from the
+banked artifact.
+
 ## 2026-08-25 — Called the round-3 finding "a usable specification"; it is not white space
 
 **Claimed.** In `VERDICT.md`: *"The class that would work: a high-bandwidth physical recording that

@@ -112,7 +112,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 
 | Result | Value | Class |
 |---|---|---|
-| Every gate can be shown to fail | 38 mutations, 38 detected, 0 survived | primary-verifiable |
+| Every gate can be shown to fail | 49 mutations, 49 detected, 0 survived | primary-verifiable |
 | Preregistration chain verifies, reader unchanged since freeze | 1 entry, head `cfcc915c…` | primary-verifiable |
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |
 | ACS PUMS record count reproduced | 392,318 records | primary-verifiable |

@@ -12,6 +12,10 @@
       "detected": 8,
       "total": 8
     },
+    "pivot-curve": {
+      "detected": 11,
+      "total": 11
+    },
     "prereg": {
       "detected": 9,
       "total": 9
@@ -96,7 +100,7 @@
     },
     {
       "detected": true,
-      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=a23f3b3fedb6e155)",
+      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=a59accb73e318313)",
       "exit_code": 0,
       "expected": "pass",
       "gate": "prereg",
@@ -141,7 +145,7 @@
     },
     {
       "detected": true,
-      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 5d96f518484f71c2 (chain order broken)",
+      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 09261e331015ff93 (chain order broken)",
       "exit_code": 1,
       "expected": "fail",
       "gate": "prereg",
@@ -168,7 +172,7 @@
     },
     {
       "detected": true,
-      "evidence": "/tmp/tmp0uvur1jq/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
+      "evidence": "/tmp/tmp2zfal9uo/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
       "exit_code": 2,
       "expected": "fail",
       "gate": "prereg",
@@ -363,10 +367,109 @@
       "gate": "coverage",
       "mutation": "weakest-class-is-printed-first",
       "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_ESTABLISHED failed=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "pivot-curve",
+      "mutation": "control-passing-curve-is-established",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['slope: slope_ci95_low=0.0 does not exceed 0 \u2014 the curve is not established as rising']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "flat-slope-interval-touching-zero-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['slope: slope_ci95_low=-0.04 does not exceed 0 \u2014 the curve is not established as rising']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "negative-slope-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['margin: 0.1999 - 0.15 = 0.0499 is below the preregistered 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "margin-just-below-the-frozen-0.05-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['scope: n_rungs=3, need >= 4']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "three-rungs-rejected-by-scope",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['scope: decades_spanned=1.9, need >= 2.0']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "under-two-decades-rejected-by-scope",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['split: split_is_grouped_by_source is not True \u2014 a random split measures content memorisation, not encoder identification']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "ungrouped-split-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['null control: shuffled labels reached 0.2, above chance 0.0385 + 0.02 \u2014 the pipeline is reading something other than the label']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "null-control-above-chance-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['slope: slope_ci95_low missing']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "missing-slope-field-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['null control: shuffled_label_accuracy or chance_accuracy missing']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "missing-null-control-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
     }
   ],
-  "detected": 38,
+  "detected": 49,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 38
+  "total_mutations": 49
 }

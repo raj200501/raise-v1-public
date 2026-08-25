@@ -5,8 +5,8 @@
     {
       "id": "mutations-detected",
       "class": "primary-verifiable",
-      "claim": "Every gate in this repository is shown capable of failing: 38 deliberate mutations across five gates, 38 detected, 0 survived.",
-      "value": 38,
+      "claim": "Every gate in this repository is shown capable of failing: 49 deliberate mutations across six gates, 49 detected, 0 survived.",
+      "value": 49,
       "artifact": "artifacts/verification/mutation_report.json",
       "json_path": "$.detected",
       "reverify": "python3 tests/mutation_test.py"
