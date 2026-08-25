@@ -110,6 +110,9 @@ machine generators, scheduled revelations and decision registers, did not contai
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |
 | ACS PUMS record count reproduced | 392,318 records | primary-verifiable |
 | Instrument reproduces on a cold clone | preflight names cause and fix | primary-verifiable |
+| SAT free decoder re-derived | 0.9857 with zero training rows, against 0.1667 chance | primary-verifiable |
+| Assembly-provenance split leak re-derived | temporal split 0.4765 **loses** to a 0.4805 constant | primary-verifiable |
+| Assembly-provenance confound re-derived | a fake BioProject partition is predictable at 0.7772 | primary-verifiable |
 
 ### Failed, or did not reach a conclusion
 
@@ -132,7 +135,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **9 of 24 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **9 of 27 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.**
@@ -153,7 +156,13 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 |---|---:|---|
 | `neither` | **9** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce. |
 | `arithmetic-verifiable` | 5 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 10 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `primary-verifiable` | 13 | A stranger can re-derive it from raw inputs with the shipped code. |
+
+Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
+by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
+The last of those was only possible because that reviewer happened to write its inputs into the
+repository instead of a scratch directory, which is luck rather than process, and is recorded as
+such in `data/asmprov/README.md`.
 
 ---
 

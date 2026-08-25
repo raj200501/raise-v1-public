@@ -5,3 +5,9 @@ data/raw/
 data/work/
 *.egg-info/
 .DS_Store
+
+# Bulk corpora pulled for a single experiment do not belong in git. data/asmprov/ is a
+# deliberate exception, kept because the inputs to a load-bearing measurement survived there;
+# see data/asmprov/README.md.
+data/*/*.zip
+data/*/*.tar*

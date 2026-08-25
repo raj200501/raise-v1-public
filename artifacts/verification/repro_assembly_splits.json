@@ -1,0 +1,158 @@
+{
+  "comparability_warning": "The null control is a BINARY task (chance 0.5). The assembler-family and method-string results are MULTI-CLASS (chance ~1/k). Their balanced accuracies are NOT numerically comparable and no such comparison is made here. The null control's finding stands on its own: an ARBITRARY partition of bioprojects inside a SINGLE assembler version is predictable from contiguity statistics alone, well above its own chance level. The features therefore carry strong project-batch signal that has nothing to do with which assembler ran.",
+  "cost_seconds": 121.2,
+  "features": [
+    "n_contigs",
+    "contig_n50",
+    "contig_l50",
+    "n_scaf",
+    "scaf_n50",
+    "scaf_l50",
+    "total_len",
+    "ungapped",
+    "gc",
+    "gc_count",
+    "atgc",
+    "n_comp"
+  ],
+  "inputs": [
+    "data/asmprov/ecoli.jsonl",
+    "data/asmprov/kpneu.jsonl",
+    "data/asmprov/saureus.jsonl"
+  ],
+  "max_records_cap": 80000,
+  "n_labelled_records_available": 239744,
+  "n_labelled_records_used": 80000,
+  "n_trees": 60,
+  "null_control": [
+    {
+      "accuracy": 0.7772,
+      "balanced_accuracy": 0.7772,
+      "beats_trivial": false,
+      "method": "SKESA v. 2.2",
+      "n": 30879,
+      "n_classes": 2,
+      "n_groups": 62,
+      "n_test": 23540,
+      "note": "FAKE label. True answer is chance = 0.5.",
+      "split": "grouped",
+      "trivial_train_majority": 1.0
+    },
+    {
+      "accuracy": 0.2483,
+      "balanced_accuracy": 0.2483,
+      "beats_trivial": false,
+      "method": "Prokka",
+      "n": 2379,
+      "n_classes": 2,
+      "n_groups": 32,
+      "n_test": 451,
+      "note": "FAKE label. True answer is chance = 0.5.",
+      "split": "grouped",
+      "trivial_train_majority": 1.0
+    },
+    {
+      "accuracy": 0.1774,
+      "balanced_accuracy": 0.1774,
+      "beats_trivial": true,
+      "method": "SPAdes v. 3.15.5",
+      "n": 1707,
+      "n_classes": 2,
+      "n_groups": 154,
+      "n_test": 248,
+      "note": "FAKE label. True answer is chance = 0.5.",
+      "split": "grouped",
+      "trivial_train_majority": 0.0
+    },
+    {
+      "accuracy": 0.3906,
+      "balanced_accuracy": 0.3906,
+      "beats_trivial": true,
+      "method": "SPAdes v. 3.13.0",
+      "n": 1432,
+      "n_classes": 2,
+      "n_groups": 143,
+      "n_test": 192,
+      "note": "FAKE label. True answer is chance = 0.5.",
+      "split": "grouped",
+      "trivial_train_majority": 0.0
+    }
+  ],
+  "null_control_chance": 0.5,
+  "null_control_max_balanced_accuracy_binary": 0.7772,
+  "reading": "Two findings, independent of each other. (1) SPLIT SENSITIVITY: accuracy falls sharply when whole bioprojects are held out, because the label is close to a project-level constant; and on a temporal split the full-method model loses outright to a train-majority constant. (2) CONFOUND: a fake label built from an arbitrary bioproject partition, inside one assembler version, is itself predictable - so a model scoring above chance on the real task may be reading the project, not the assembler.",
+  "results": {
+    "assembler FAMILY": [
+      {
+        "accuracy": 0.6509,
+        "balanced_accuracy": 0.0621,
+        "beats_trivial": true,
+        "n": 79584,
+        "n_classes": 268,
+        "n_groups": 7974,
+        "n_test": 15917,
+        "split": "random",
+        "trivial_train_majority": 0.3917
+      },
+      {
+        "accuracy": 0.5862,
+        "balanced_accuracy": 0.0279,
+        "beats_trivial": true,
+        "n": 79584,
+        "n_classes": 268,
+        "n_groups": 7974,
+        "n_test": 13316,
+        "split": "grouped",
+        "trivial_train_majority": 0.3198
+      },
+      {
+        "accuracy": 0.6563,
+        "balanced_accuracy": 0.0261,
+        "beats_trivial": true,
+        "n": 79584,
+        "n_classes": 268,
+        "n_groups": 7974,
+        "n_test": 15917,
+        "split": "temporal",
+        "trivial_train_majority": 0.488
+      }
+    ],
+    "full METHOD STRING": [
+      {
+        "accuracy": 0.4873,
+        "balanced_accuracy": 0.0817,
+        "beats_trivial": true,
+        "n": 78513,
+        "n_classes": 1479,
+        "n_groups": 7348,
+        "n_test": 15703,
+        "split": "random",
+        "trivial_train_majority": 0.3911
+      },
+      {
+        "accuracy": 0.1531,
+        "balanced_accuracy": 0.0177,
+        "beats_trivial": true,
+        "n": 78513,
+        "n_classes": 1479,
+        "n_groups": 7348,
+        "n_test": 10805,
+        "split": "grouped",
+        "trivial_train_majority": 0.1266
+      },
+      {
+        "accuracy": 0.4765,
+        "balanced_accuracy": 0.0068,
+        "beats_trivial": false,
+        "n": 78513,
+        "n_classes": 1479,
+        "n_groups": 7348,
+        "n_test": 15703,
+        "split": "temporal",
+        "trivial_train_majority": 0.4805
+      }
+    ]
+  },
+  "schema": "raise-v1/repro_assembly_splits/1",
+  "scope": "Three taxa are banked here; the originating measurement used ten. Sample sizes differ and the figures are NOT expected to match to the decimal. What is being reproduced is the PATTERN: random-split accuracy collapsing under grouping, and the temporal split losing to a constant."
+}

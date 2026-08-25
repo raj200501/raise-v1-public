@@ -177,6 +177,32 @@ It is the gates correctly reporting that the search space as framed — machine 
 revelations, and decision registers — is exhausted, and that the one class that would work was never
 in it.
 
+### The assembly-provenance kill, re-derived
+
+Unlike every other subagent measurement in this project, this reviewer's **inputs survived** — it
+wrote 239,744 public NCBI assembly metadata records into the repository rather than into a scratch
+directory. That made it possible to write the analysis afterwards and re-derive the central finding
+(`tools/repro/assembly_provenance_splits.py`):
+
+| Task | random split | BioProject-grouped | temporal | train-majority constant |
+|---|---:|---:|---:|---:|
+| assembler family | 0.6509 | 0.5862 | 0.6563 | 0.4880 |
+| full method string | 0.4873 | **0.1531** | 0.4765 | **0.4805** |
+
+The full method string **loses outright to a constant on a temporal split**, and collapses from
+0.4873 to 0.1531 once whole BioProjects are held out — because the label is close to a project-level
+constant rather than a property of the sequence.
+
+The negative control is worse still. Take a *single* assembler version, partition its BioProjects
+arbitrarily, and predict that **fake** label: balanced accuracy **0.7772** against its own chance
+level of 0.5. The contiguity features carry strong project-batch signal that has nothing to do with
+which assembler ran. (That figure is binary and is *not* numerically comparable to the multi-class
+rows above; no such comparison is made.)
+
+That the inputs survived at all was luck rather than process, and is recorded as such in
+`data/asmprov/README.md` — including that they were committed by a blanket `git add -A` before
+anyone had looked at them.
+
 ### Two candidates that could not be cleared, recorded so they are not lost
 
 - **UK rail delay attribution.** The only candidate whose artifact is genuinely high-dimensional (a

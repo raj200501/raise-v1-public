@@ -153,7 +153,7 @@
       "claim": "The real SPAdes version pair 3.11.1 vs 3.15.5 scored balanced accuracy 0.503, LOWER than the null pair 3.13.0 vs 3.13.1 at 0.566 - i.e. inside its own confound floor.",
       "value": 0.503,
       "artifact": "artifacts/phase0/round2_domain_search.json",
-      "why_not_verifiable": "Subagent measurement over thousands of NCBI downloads in an ephemeral scratch directory. Not retained, not re-run here."
+      "why_not_verifiable": "The SPECIFIC pairwise figures (0.503 for the real pair against 0.566 for the null pair) rest on ten taxa and on full contig data, of which only three taxa of METADATA are banked - so those exact numbers cannot be re-derived here. What HAS been re-derived from the banked inputs is the finding they support: the split leak and the confound. See the three asm-* claims in the primary-verifiable class. This row is narrower than the other 'neither' rows: its inputs survived, unlike every other subagent measurement in this project."
     },
     {
       "id": "darkfill-negative-r2",
@@ -207,6 +207,33 @@
       "artifact": "artifacts/verification/repro_sat_comparison.json",
       "json_path": "$.subagent_reported.learned_curve.13500",
       "why_not_verifiable": "Actively NOT reproduced, which is worse than merely unverified. Our own run at the same top rung gives 0.1800, +1.21 points per decade and 66.6 decades. The subagent's code lived in an ephemeral scratch directory and is gone, so the implementations cannot be diffed. The difference flatters our conclusion, and the likeliest explanation is that OUR feature set is the weaker one - so neither figure is quoted as established anywhere in this repository."
+    },
+    {
+      "id": "asm-temporal-loses-to-constant",
+      "class": "primary-verifiable",
+      "claim": "Predicting the full assembly method string on a TEMPORAL split scores 0.4765 against a train-majority constant at 0.4805 - it loses outright to a constant. Re-derived from banked public NCBI inputs.",
+      "value": 0.4765,
+      "artifact": "artifacts/verification/repro_assembly_splits.json",
+      "json_path": "$.results['full METHOD STRING'][2].accuracy",
+      "reverify": "python3 tools/repro/assembly_provenance_splits.py"
+    },
+    {
+      "id": "asm-grouped-collapse",
+      "class": "primary-verifiable",
+      "claim": "The same task falls from 0.4873 accuracy on a random split to 0.1531 when whole BioProjects are held out, because the label is close to a project-level constant.",
+      "value": 0.1531,
+      "artifact": "artifacts/verification/repro_assembly_splits.json",
+      "json_path": "$.results['full METHOD STRING'][1].accuracy",
+      "reverify": "python3 tools/repro/assembly_provenance_splits.py"
+    },
+    {
+      "id": "asm-null-control",
+      "class": "primary-verifiable",
+      "claim": "A FAKE label built from an arbitrary BioProject partition INSIDE a single assembler version is itself predictable at balanced accuracy 0.7772 against its own chance level of 0.5 - so contiguity features carry project-batch signal that has nothing to do with which assembler ran.",
+      "value": 0.7772,
+      "artifact": "artifacts/verification/repro_assembly_splits.json",
+      "json_path": "$.null_control_max_balanced_accuracy_binary",
+      "reverify": "python3 tools/repro/assembly_provenance_splits.py"
     }
   ]
 }
