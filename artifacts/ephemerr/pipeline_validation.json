@@ -1,0 +1,51 @@
+{
+  "bugs_found_and_fixed_before_any_bar_was_frozen": [
+    {
+      "after_fix": "all 9,248 epochs match; orbit RMS radial 1.386 m, along 0.863 m, cross 0.520 m, which is the textbook range",
+      "bug": "GPS epoch constant off by one - 2444244 instead of the correct JDN 2444245 for 1980-01-06",
+      "how_caught": "Validating magnitudes against published values BEFORE trusting anything. Published GPS broadcast orbit error is 1-2 m; 729 km is not a subtle discrepancy.",
+      "symptom": "729 km position errors and only 799 of 9,248 epochs matching"
+    },
+    {
+      "after_fix": "switched to the separate 30-second CLK product; the residual was unchanged at 5.2 m, which RULED OUT this explanation rather than fixing anything - recorded because a ruled-out hypothesis is still evidence",
+      "bug": "used the clock column of an orbit-only SP3 product",
+      "symptom": "suspected inflated clock error"
+    }
+  ],
+  "corpus": {
+    "broadcast": "BRDC00IGS_R_20250010000_01D_MN.rnx.gz from BKG, 459 GPS nav records",
+    "day": "2025-001, GPS week 2347",
+    "licence": "public IGS/ESA products, no authentication",
+    "precise_clock": "ESA0OPSFIN_20250010000_01D_30S_CLK.CLK.gz, 92,160 GPS samples",
+    "precise_orbit": "ESA0OPSFIN_20250010000_01D_05M_ORB.SP3.gz, 9,248 GPS samples"
+  },
+  "recorded_utc": "2026-08-25T18:16:40Z",
+  "schema": "raise-v1/ephemerr_pipeline_validation/1",
+  "status": "PIPELINE VALIDATION AND LABEL SANITY. Not the A2 test - that requires a preregistration and multiple days, and has not been run.",
+  "the_a2_signals_probed": {
+    "URA_SISA_index": {
+      "reading": "The operator's own error bound, shipped FREE inside the student's input, and round 2 flagged it as the likely dominant dumb baseline. It rank-correlates at -0.077 - essentially nothing, and with the wrong sign. On this one day it is NOT the strong baseline it was feared to be.",
+      "spearman_with_SISRE": -0.0768
+    },
+    "age_of_data": {
+      "per_satellite_ramp_r2": 0.003,
+      "reading": "Also near zero, BUT THIS IS NOT A CLEAN READING and must not be quoted as one. The selection rule used here picks the ephemeris with the closest toe, which emulates a receiver that always holds the freshest data - so age barely varies (almost no samples beyond +1 hour) and its effect cannot be observed. Physics says broadcast error MUST grow with age of data. A proper test requires emulating a receiver that uses the ephemeris actually available at time t. Recorded as COULD NOT VERIFY rather than as a null result.",
+      "spearman_with_SISRE": 0.0102
+    },
+    "per_satellite_identity": {
+      "reading": "THE REAL DUMB BASELINE, and it was not the one round 2 named. Satellite identity alone separates G28 at 0.300 m std from G21 at 12.592 m. A per-satellite historical mean is trivially available and will capture a large share of the variance. The A2 test must beat THAT, not URA."
+    }
+  },
+  "validation": {
+    "clock": "VALIDATED AS REAL, not as small. Per-satellite residual std ranges from G28 at 0.300 m - which proves the pipeline is correct - to G21 at 12.592 m and G07 at 9.230 m. Inspecting the time series shows those large residuals are SMOOTH RAMPS, roughly 8 m/hour on G21, not noise. That is genuine broadcast clock-prediction drift on specific satellites, and it is exactly the thing a correction service would pay to anticipate.",
+    "orbit": "VALIDATED. Radial 1.386, along 0.863, cross 0.520 m RMS over 8,640 healthy epochs.",
+    "unhealthy_excluded": "records with health != 0 are dropped; G01 and G22 carried health=63"
+  },
+  "what_this_does_not_establish": [
+    "It is not the A2 test. No learned model has been trained and no baseline has been scored.",
+    "One day, one constellation (GPS), one product line (ESA final). No seed sweep, no multi-day split.",
+    "The age-of-data reading is confounded by the ephemeris selection rule and is COULD NOT VERIFY.",
+    "SISRE here uses the standard global-average weights and removes a per-satellite median bias, which a receiver cannot observe. Different conventions give different absolute numbers."
+  ],
+  "what_was_built": "GPS broadcast-ephemeris propagation (IS-GPS-200 user algorithm), precise orbit and clock parsing, and signal-in-space ranging error. tools/gnss/ephem.py."
+}
