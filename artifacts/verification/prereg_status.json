@@ -21,10 +21,32 @@
       "reader_sha256": "cd7eed828f7a95a24d39d10d5eccfb38d30fffb022231b9315c56d767bc772c7",
       "seq": 1,
       "slug": "phase0-terminal-verdict"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "fd2a6ac1f510532cf478241981c324282a7843921998d701aaea0caef616c624",
+          "round": 6408007
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "9E4B8A86DACE48BAC5ED869DD268A90F2C824B6B5A328461F914869F627CCE74CA2A10FE8F919A141E2CDC7F9EA66BED8337BE6958B6F44210D656D240BF92D0",
+          "pulse": 1917565,
+          "time_stamp": "2026-08-25T15:20:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-25T15:20:35Z",
+      "hash": "1bbe94cbcf5134167496d905aeb4bdea6acef4053be299f32e00ac088a85c230",
+      "id": "0002",
+      "prev_hash": "cfcc915c6ff65f9c5da0be8f8e70a27add4f75e5455d14c5cf5c58bd6f5ef0dc",
+      "reader": "tools/readers/phase0_round4_verdict.py",
+      "reader_sha256": "74dbaa7a1bed8892a7d00bc028ac783c37d6b7212ec71f8200c4a5a4ecb585b5",
+      "seq": 2,
+      "slug": "phase0-round4-verdict"
     }
   ],
-  "entries": 1,
-  "head": "cfcc915c6ff65f9c5da0be8f8e70a27add4f75e5455d14c5cf5c58bd6f5ef0dc",
+  "entries": 2,
+  "head": "1bbe94cbcf5134167496d905aeb4bdea6acef4053be299f32e00ac088a85c230",
   "problems": 0,
   "schema": "raise-v1/prereg_status/1",
   "verified": true
