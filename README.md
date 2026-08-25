@@ -38,6 +38,7 @@ python3 tools/prereg.py verify        # hash-chained preregistration order + rea
 python3 tests/mutation_test.py        # deliberately break each gate; assert each notices
 python3 tools/coverage.py             # verification-coverage map, weakest class printed first
 python3 tools/claimcheck.py outbound VERDICT.md   # every number traces to a banked artifact
+python3 tools/freshness.py            # every LIVE number equals its artifact's current value
 ```
 
 - **Preregistration is hash-chained.** Entry *N* carries the hash of entry *N-1*, so the
@@ -51,6 +52,12 @@ python3 tools/claimcheck.py outbound VERDICT.md   # every number traces to a ban
 - **The dumbest baseline is measured first.** `tools/trivial_baselines.py` establishes the
   floor a learned result must clear — best trivial baseline *plus a preregistered margin*, not
   chance — and refuses to run at all if the margin was not frozen in advance.
+- **A stale number is caught, not just a fabricated one.** `claimcheck.py` asks whether a
+  number exists in a banked artifact, which is the wrong question for a value that was true
+  and no longer is — the old value stays banked forever, so it keeps passing. `freshness.py`
+  re-derives each live number from its artifact and fails on divergence. It was written after
+  that failure happened twice, and on its first run it caught three stale numbers in
+  `VERDICT.md`.
 - **Every gate has a mutation test.** `tests/mutation_test.py` reports surviving mutations
   as holes in the instrument rather than dropping them.
 
@@ -65,6 +72,8 @@ prereg/      frozen preregistrations + the append-only chain
 artifacts/   banked machine-readable results; the only legal source of a number
 docs/        domain selection, operating rules, verification coverage
 outbound/    anything intended to leave the repo; gated by claimcheck
+trial/       archived work that did not select: the full 99-candidate search, kept in full
+data/        corpora fetched by the shipped scripts; not committed
 ```
 
 ## Licence
