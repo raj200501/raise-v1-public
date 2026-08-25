@@ -1,0 +1,101 @@
+{
+  "candidates_considered": [
+    {
+      "crowding": 8,
+      "evidence": "Chess Rating Estimation from Moves and Clock Times Using a CNN-LSTM (arXiv 2409.11506; Springer 2025) is the proposal itself and reports that clock usage carries skill information board-only models cannot recover. Also RatingNet; Predicting Chess Player Rating Based on a Single Game (2023); ChessMimic (arXiv 2606.04473, 2026).",
+      "g4_verdict": "FAIL",
+      "name": "Chess clock traces -> player rating band",
+      "urls": [
+        "https://link.springer.com/chapter/10.1007/978-3-031-86585-5_1",
+        "https://github.com/AstroBoy1/RatingNet",
+        "https://arxiv.org/html/2606.04473"
+      ]
+    },
+    {
+      "crowding": 7,
+      "evidence": "An established multipath and NLOS classification literature over 2021-2025 using SNR from RINEX as a primary feature; UNAVCO also publishes deterministic antenna SNR comparisons.",
+      "g4_verdict": "FAIL",
+      "name": "GNSS SNR -> antenna / signal reception condition",
+      "urls": [
+        "https://www.mdpi.com/1424-8220/21/7/2503",
+        "https://link.springer.com/article/10.1007/s10291-023-01432-6"
+      ]
+    },
+    {
+      "crowding": 8,
+      "evidence": "Automated data curation for self-supervised learning in underwater acoustic analysis (arXiv 2505.20066) pairs AIS with bulk passive-acoustic recordings to pseudo-label a large unlabelled corpus for SSL. That is the FDM-1 structure itself, already built. Also Oceanship (arXiv 2401.02099), a large-scale underwater audio target-recognition dataset.",
+      "g4_verdict": "FAIL",
+      "name": "Hydrophone recordings + AIS -> ship class",
+      "urls": [
+        "https://arxiv.org/pdf/2505.20066",
+        "https://arxiv.org/pdf/2401.02099"
+      ]
+    },
+    {
+      "crowding": 9,
+      "evidence": "iDQ is a supervised learner over thousands of auxiliary channels that has run in real time across four observing runs, with a 2024 performance paper. Also Gravity Spy.",
+      "g4_verdict": "FAIL",
+      "name": "LIGO strain -> detector data-quality state",
+      "urls": [
+        "https://iopscience.iop.org/article/10.1088/2632-2153/abab5f",
+        "https://arxiv.org/pdf/2412.04638"
+      ]
+    },
+    {
+      "crowding": 7,
+      "evidence": "Adjacent to RF modulation classification, which is already on the pre-existing kill list, plus Large Scale Radio Frequency Signal Classification (arXiv 2207.09918).",
+      "g4_verdict": "FAIL",
+      "name": "Open radio observation archives (SatNOGS) -> signal state",
+      "urls": [
+        "https://arxiv.org/pdf/2207.09918"
+      ]
+    }
+  ],
+  "candidates_measured": [
+    {
+      "a1_label_entropy_bits": 1.97,
+      "a2_margin_over_best_baseline": 0.0313,
+      "a2_note": "Best trivial baseline was linear at 0.4293; the top rung reached 0.4606.",
+      "cost": {
+        "corpus_bytes_streamed": 700000000,
+        "cpu_cores": 4,
+        "eval_set_size": 20000,
+        "gpu": "none",
+        "note": "Cost beside quality: four rungs plus five baselines on 4 CPU cores, from a 700 MB streamed prefix of a CC0 corpus. No GPU at any point.",
+        "units_extracted": 400000
+      },
+      "f5_note": "slope 0.03379452190383932 accuracy points per decade, ci95 [0.03059246757235225, 0.03687297607402506], r2 0.9794473704361031, permutation p 0.041666666666666664 (floor 0.041666666666666664). The curve is decelerating: the last half-decade bought 0.0032.",
+      "f5_slope_ci95_low": 0.03059246757235225,
+      "g1_note": "Lichess standard rated games, CC0. The only corpus found in the whole search where Phase 3's 'ship an open dataset' would be unambiguously legal.",
+      "g1_verdict": "PASS",
+      "g2a_note": "Checked by construction: the feature vector is derived from the clock trace and the advertised time control only, and contains neither player's Elo nor any move. The manufacturer (Lichess) knows a rating that aggregates thousands of games; the student sees one game's timing.",
+      "g2a_verified": true,
+      "g4_verdict": "FAIL",
+      "g6_bytes_per_unit": 224,
+      "g6_note": "28 float64 features per unit. 224 bytes x 1e6 = 2.24e8, far inside the 2e10 budget.",
+      "licence_url": "https://database.lichess.org/",
+      "measured": {
+        "a1_label_entropy_bits": true,
+        "a2_margin_over_best_baseline": true,
+        "f5_slope_ci95_low": true
+      },
+      "measured_first_hand": true,
+      "name": "Chess clock traces -> player rating band (PIPELINE VALIDATION, cannot be selected)",
+      "status": "Measured to validate the instrument end-to-end on real data, NOT to select it. It is G4-dead, which is precisely why it was chosen: a domain that cannot be selected gives no incentive to flatter the result."
+    }
+  ],
+  "governed_by": "prereg/0002-phase0-round4-verdict.json (frozen before any candidate was chosen)",
+  "honest_scope": "FIVE candidates were generated and white-space checked, against 99 across rounds 1-3. This round is far narrower and its negative result is correspondingly weaker evidence about the world, while being stronger evidence about what it actually measured.",
+  "instrument_validation": {
+    "fired_correctly_three_ways": [
+      "tools/scaling.py REFUSED the 3-rung real dataset with exit code 3, citing the preregistered scope of >= 4 rungs. The scope gate fires on real data, not just on fixtures.",
+      "With 4 rungs spanning 2.4771 decades it produced a real fit: slope 0.03379452190383932 with a paired-bootstrap ci95 of [0.03059246757235225, 0.03687297607402506] that excludes zero, r2 0.9794473704361031.",
+      "The A2 clause would REJECT this candidate anyway: the measured margin over the best trivial baseline is 0.0313, below the 0.05 frozen in preregistration 0002 before any of this data existed."
+    ],
+    "why": "Until this round every part of the Phase 2 apparatus had only ever run on synthetic fixtures. An instrument that has only measured its own test data has not been shown to work."
+  },
+  "method": "Run first-hand in session. No subagents and no workflow fan-out - deliberately, because rounds 1-3 put their load-bearing measurements in the weakest verification class by making them in scratch directories that no longer exist. Depth over breadth: fewer candidates, measured.",
+  "round": 4,
+  "schema": "raise-v1/round4_measurements/1",
+  "structural_finding": "All five instances of the class named by the round-3 verdict are occupied. A general search confirms why: pseudo-labelling a large unlabelled sensor archive from weak or independent supervision is a named, surveyed methodology across sensing disciplines. Membership in that class is therefore NOT evidence of white space. The round-3 claim that the class was 'a usable specification' is withdrawn in CORRECTIONS.md."
+}

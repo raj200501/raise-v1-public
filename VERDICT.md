@@ -142,7 +142,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **9 of 27 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **9 of 32 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.**
@@ -162,8 +162,8 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 | Class | Count | Meaning |
 |---|---:|---|
 | `neither` | **9** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce. |
-| `arithmetic-verifiable` | 5 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 13 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `arithmetic-verifiable` | 6 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
+| `primary-verifiable` | 17 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -175,26 +175,58 @@ such in `data/asmprov/README.md`.
 
 ---
 
-## Why a fourth round is not being run here
+---
 
-The finding names the missing class precisely enough to search for it directly. A fourth round
-aimed at *high-bandwidth physical recordings that are the causal consequence of a hidden variable*
-is the obvious next move, and it would be a genuinely different search rather than a rerun.
+## Round 4 — authorised by the principal, and it also found nothing
 
-It is not being run, for one reason: **preregistration 0001 says it may not be.** Its frozen scope
-reads *"It does not license a fourth round: under this preregistration, a round-3 result with no
-qualifying candidate terminates Phase 0."*
+A fourth round was authorised after the verdict above, under a **new preregistration frozen before
+any candidate was chosen** (`prereg/0002`, chain seq 2, anchored to a beacon pulse eleven hours
+after 0001's, so the ordering of the two is externally provable). Its bar moved **up**, not down:
+rounds 1–3 admitted argued evidence, and four of this round's seven clauses require a **measured**
+value and reject an estimate however confident the prose around it. It cannot overturn 0001.
 
-Running one anyway would require a new preregistration superseding that clause — written, on this
-timeline, *after* seeing a result we did not like. That is exactly the move the whole discipline
-exists to prevent: the bar was frozen, it was not cleared, and the bar moved. The fact that the new
-round would be well-motivated is not a defence; a well-motivated bar change made after seeing the
-number is still a bar change made after seeing the number.
+**Verdict: `NO_VIABLE_DOMAIN_FOUND_ROUND4`.** Five candidates considered, all five G4-dead; one
+measured, and it failed two clauses.
 
-So it is flagged rather than taken. **A fourth round is a decision for the principal, not for the
-process that just failed to clear its own bar.** If it is authorised, it needs its own
-preregistration, frozen before it runs, that states in its own scope that it was opened in response
-to this negative result and what would make it stop.
+### Its finding is a retraction of ours
+
+Round 3 named a class the pool lacked and this repository published that as *"a usable
+specification."* Round 4 checked the class first-hand and **found it occupied at every instance
+probed** — chess clock traces, GNSS SNR, hydrophone recordings paired with AIS, LIGO strain paired
+with auxiliary channels, open radio archives. In one case the occupant is the FDM-1 structure
+itself. Pseudo-labelling a bulk unlabelled sensor archive from weak supervision has a name and a
+survey literature; it is the default of every sensing discipline. Filed in `CORRECTIONS.md`.
+
+### The instrument was finally run on real data
+
+Until this round, every part of the Phase 2 apparatus had only ever been exercised on synthetic
+fixtures. An instrument that has only measured its own test data has not been shown to work. So it
+was run end to end on 400,000 real units from a CC0 corpus — deliberately on a **G4-dead** domain,
+because a domain that cannot be selected gives no incentive to flatter the result. It fired
+correctly three times:
+
+1. `tools/scaling.py` **refused** the three-rung dataset with exit code 3, citing the preregistered
+   four-rung scope. The scope gate fires on real data, not just on fixtures.
+2. With four rungs spanning 2.4771 decades it produced a real fit: **+0.0338 accuracy points per
+   decade**, paired-bootstrap 95% interval **[0.0306, 0.0369]** excluding zero, r² 0.9794.
+3. The **A2 clause rejected the candidate anyway**: its measured margin over the best trivial
+   baseline is **0.0313**, below the **0.05** frozen before this data existed.
+
+So this repository does now contain a real, fitted, interval-bounded scaling curve — on a domain
+that cannot be selected, that fails its own preregistered margin, and whose last half-decade of
+data bought 0.0032. It is a validation of the instrument. It is not a result about the world, and
+it must not be quoted as one.
+
+## Why a fifth round is not being run here
+
+Round 4 was not taken unilaterally. Preregistration 0001's frozen scope forbade it, and opening a
+round after a result you did not like is exactly the move the discipline exists to prevent. So it
+was flagged as a decision for the principal, authorised by them, and then run under its own
+preregistration whose scope records — in a field named `opened_in_response_to` — that it was opened
+because of a negative result, and whose bar moved up rather than down.
+
+Preregistration 0002 forbids a fifth round on the same terms. If one is wanted, it needs its own
+preregistration, frozen before it runs, saying the same things about itself.
 
 ## An instruction that could not be followed
 
@@ -211,9 +243,10 @@ not a judgement that was made.
 
 - **It does not establish that a viable domain does not exist.** It establishes that a search of
   99 candidates across three framings did not find one, and it names the framing that was missing.
-- **It contains no scaling curve.** The slope fitter, its paired bootstrap, its permutation test and
-  its scope refusals are all built and mutation-tested against synthetic data. No real slope has
-  been fitted.
+- **It contains no scaling curve that means anything.** One real curve has now been fitted, with a
+  real interval, on real data — but on a domain that is G4-dead, that fails its own preregistered
+  A2 margin, and that was chosen *because* it could not be selected. It validates the instrument
+  and says nothing about the world.
 - **It has no customers, no users and no partners.** None are claimed anywhere.
 - **Most of its findings rest on subagent measurements** that have not been independently
   reproduced, as the coverage map states in detail.

@@ -10,14 +10,16 @@ cherry-pick, plus one shipped open artifact a stranger can reproduce from a cold
 
 | Phase | What it is | State |
 |---|---|---|
-| 0 | Domain selection against five hard gates | **terminated — NO VIABLE DOMAIN FOUND** |
+| 0 | Domain selection against five hard gates | **terminated — NO VIABLE DOMAIN FOUND** (rounds 1–3, and round 4 agreed) |
 | 1 | Falsify the data thesis cheaply | not started — there is no thesis to falsify |
-| 2 | The scaling curve | not started — **the headline absence** |
+| 2 | The scaling curve | one real curve fitted — **on a domain that cannot be selected** |
 | 3 | Ship the credibility artifact | partial — the *instrument* ships; no dataset or weights exist |
 | 4 | The evidence package (`VERDICT.md`, `CORRECTIONS.md`, coverage map) | delivered |
 
 **Phase 0 terminated with no domain selected.** 99 candidates across three rounds, 8 put through
-adversarial review with default posture REJECT, 0 SELECT. The verdict was emitted by a reader
+adversarial review with default posture REJECT, 0 SELECT. A fourth round, authorised afterwards
+under its own preregistration with a *higher* bar, agreed — and retracted the most encouraging
+claim the earlier rounds had produced. The verdict was emitted by a reader
 frozen and hashed before the data existed, under a preregistration anchored to a public randomness
 beacon. Read [`VERDICT.md`](VERDICT.md) first — it leads with what is missing, and the verification
 coverage map publishes its weakest row loudest.

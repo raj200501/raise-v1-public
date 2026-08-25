@@ -1,0 +1,21 @@
+{
+  "n_candidates_measured": 1,
+  "n_qualifying": 0,
+  "note": "",
+  "preregistration": "0002-phase0-round4-verdict",
+  "qualifying_domains": [],
+  "relationship_to_prereg_0001": "This verdict is recorded ALONGSIDE preregistration 0001's NO_VIABLE_DOMAIN_FOUND, never as a retraction of it. 0001 read the evidence of rounds 1-3 and that reading stands.",
+  "rows": [
+    {
+      "failed_clauses": [
+        "g4_verdict='FAIL', not PASS",
+        "a2_margin_over_best_baseline=0.0313 is below the preregistered 0.05"
+      ],
+      "name": "Chess clock traces -> player rating band (PIPELINE VALIDATION, cannot be selected)",
+      "qualifies": false
+    }
+  ],
+  "schema": "raise-v1/round4_verdict/1",
+  "source_artifact": "artifacts/phase0/round4_measurements.json",
+  "verdict": "NO_VIABLE_DOMAIN_FOUND_ROUND4"
+}

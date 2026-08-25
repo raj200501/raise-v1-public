@@ -234,6 +234,51 @@
       "artifact": "artifacts/verification/repro_assembly_splits.json",
       "json_path": "$.null_control_max_balanced_accuracy_binary",
       "reverify": "python3 tools/repro/assembly_provenance_splits.py"
+    },
+    {
+      "id": "lichess-entropy",
+      "class": "primary-verifiable",
+      "claim": "On 400,000 real Lichess player-side units the rating-band label carries 1.97 bits of entropy, comfortably clearing the 1.0-bit floor frozen in preregistration 0002.",
+      "value": 1.97,
+      "artifact": "artifacts/phase0/round4_lichess_pipeline_validation.json",
+      "json_path": "$.a1_label_entropy_bits",
+      "reverify": "python3 tools/repro/lichess_clock_curve.py --rungs 1000 10000 100000 300000"
+    },
+    {
+      "id": "lichess-best-baseline",
+      "class": "primary-verifiable",
+      "claim": "The best trivial baseline on that task is a logistic regression at 0.4293 accuracy, against a majority-class baseline of 0.4188.",
+      "value": 0.4293,
+      "artifact": "artifacts/phase0/round4_lichess_pipeline_validation.json",
+      "json_path": "$.best_baseline.accuracy",
+      "reverify": "python3 tools/repro/lichess_clock_curve.py --rungs 1000 10000 100000 300000"
+    },
+    {
+      "id": "lichess-slope",
+      "class": "primary-verifiable",
+      "claim": "THE FIRST REAL SCALING CURVE IN THIS REPOSITORY: +0.0338 accuracy points per decade of data over four rungs spanning 2.4771 orders of magnitude, with a paired-bootstrap 95% interval of [0.0306, 0.0369] that excludes zero and r2 0.9794. On a domain that CANNOT be selected. The stored value is the unrounded slope.",
+      "value": 0.03379452190383932,
+      "artifact": "artifacts/phase0/round4_lichess_scaling_fit.json",
+      "json_path": "$.primary_fit.slope",
+      "reverify": "python3 tools/scaling.py artifacts/phase0/round4_lichess_rung_scores.json --boot 2000"
+    },
+    {
+      "id": "lichess-a2-margin-fails",
+      "class": "primary-verifiable",
+      "claim": "That same candidate FAILS the A2 clause: its margin over the best trivial baseline is 0.0313, below the 0.05 frozen in preregistration 0002 before the data existed. The gate rejected it on real data.",
+      "value": 0.0313,
+      "artifact": "artifacts/phase0/round4_lichess_pipeline_validation.json",
+      "json_path": "$.a2_margin_over_best_baseline",
+      "reverify": "python3 tools/repro/lichess_clock_curve.py --rungs 1000 10000 100000 300000"
+    },
+    {
+      "id": "round4-verdict",
+      "class": "arithmetic-verifiable",
+      "claim": "Round 4's frozen reader emitted NO_VIABLE_DOMAIN_FOUND_ROUND4 over 5 candidates considered and 1 measured.",
+      "value": 5,
+      "artifact": "artifacts/phase0/round4_measurements.json",
+      "json_path": "count of candidates_considered",
+      "note": "The reader is shipped and hashed, but its input rests on our run."
     }
   ]
 }

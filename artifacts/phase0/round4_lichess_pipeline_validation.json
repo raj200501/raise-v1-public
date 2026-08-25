@@ -1,0 +1,50 @@
+{
+  "STATUS": "PIPELINE VALIDATION, NOT A CANDIDATE SELECTION",
+  "a1_label_entropy_bits": 1.97,
+  "a2_margin_over_best_baseline": 0.0313,
+  "best_baseline": {
+    "accuracy": 0.4293,
+    "name": "linear"
+  },
+  "corpus": {
+    "file": "lichess_db_standard_rated_2017-04.pgn.zst (streamed prefix)",
+    "input_truncated": false,
+    "licence": "CC0",
+    "source": "https://database.lichess.org/"
+  },
+  "eval_set_size": 20000,
+  "features": "clock trace only - never the moves, never either player's Elo",
+  "label": "rating band, 5 buckets: [(0, 1200), (1200, 1500), (1500, 1800), (1800, 2100), (2100, 9999)]",
+  "n_units_extracted": 400000,
+  "rungs": [
+    {
+      "accuracy": 0.3815,
+      "n_units": 1000
+    },
+    {
+      "accuracy": 0.4155,
+      "n_units": 10000
+    },
+    {
+      "accuracy": 0.4574,
+      "n_units": 100000
+    },
+    {
+      "accuracy": 0.4606,
+      "n_units": 300000
+    }
+  ],
+  "rungs_skipped_for_lack_of_units": [],
+  "schema": "raise-v1/round4_pipeline_validation/1",
+  "scope": "Games taken from the START of one month's file, so not a random sample of the month. One corpus, one month, one seed.",
+  "trivial_baselines": {
+    "best_single_feat": 0.4188,
+    "depth3_tree": 0.4237,
+    "linear": 0.4293,
+    "majority": 0.4188,
+    "stratified": 0.2917
+  },
+  "unit": "one player-side of one game carrying clock annotations",
+  "why_it_was_run": "Every part of the Phase 2 apparatus had until now only ever been exercised on synthetic data. This runs the chain end to end on a real public corpus, on a domain where there is no incentive to flatter the result because the result cannot be used.",
+  "why_this_cannot_select": "The domain fails G4 - rating estimation from chess moves and clock times is already published, including a CNN-LSTM that uses clock times explicitly. Preregistration 0002 requires g4_verdict == PASS, so nothing here can qualify a domain."
+}

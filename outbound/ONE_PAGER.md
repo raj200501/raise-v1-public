@@ -57,6 +57,25 @@ a large unlabelled sensor archive from weak supervision turns out to be the name
 of every sensing discipline. An earlier version of this page called the class "a usable
 specification"; that is withdrawn in the corrections ledger.
 
+## A fourth round was authorised, and it also found nothing
+
+Under a **new preregistration frozen before any candidate was chosen**, whose scope records in a
+named field that it was opened *because of* a negative result, and whose bar moved **up** — four of
+its seven clauses require a measured value and reject an estimate. Five candidates, all five already
+occupied. Verdict: `NO_VIABLE_DOMAIN_FOUND_ROUND4`.
+
+**The instrument was finally run on real data.** Until then every part of it had only ever been
+exercised on synthetic fixtures, which is not evidence that it works. So it was run end to end on
+400,000 units of a CC0 corpus — deliberately on a domain that *cannot be selected*, because that
+removes any incentive to flatter the result. It fired correctly three times: it **refused** a
+three-rung dataset for violating its own preregistered scope; it then fitted a real curve at
+**+0.0338 accuracy points per decade** with a paired-bootstrap interval of **[0.0306, 0.0369]**
+excluding zero; and it **rejected the candidate anyway**, because the measured margin over the best
+trivial baseline was **0.0313** against a **0.05** frozen before the data existed.
+
+So there is now one real, interval-bounded scaling curve here. It is a validation of the instrument,
+on a domain that cannot be used, that fails its own margin. It is not a result about the world.
+
 ## The part that should be read first
 
 The verification-coverage map is machine-checked and prints its weakest class first, deliberately.
