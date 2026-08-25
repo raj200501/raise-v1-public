@@ -14,6 +14,12 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install dependency floors
+        run: python3 -m pip install --quiet -r requirements.txt
+
+      - name: Preflight (interpreter + dependency floors)
+        run: python3 tools/preflight.py
+
       - name: Preregistration chain (order, sealed fields, reader hashes)
         run: python3 tools/prereg.py verify
 

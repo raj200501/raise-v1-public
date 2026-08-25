@@ -7,6 +7,10 @@
     "prereg": {
       "detected": 9,
       "total": 9
+    },
+    "scaling": {
+      "detected": 7,
+      "total": 7
     }
   },
   "cases": [
@@ -84,7 +88,7 @@
     },
     {
       "detected": true,
-      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=c7627eb36a0653cc)",
+      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=2338d3ac5c769c62)",
       "exit_code": 0,
       "expected": "pass",
       "gate": "prereg",
@@ -129,7 +133,7 @@
     },
     {
       "detected": true,
-      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 7c85459c7add29db (chain order broken)",
+      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 31df19cfd553d86d (chain order broken)",
       "exit_code": 1,
       "expected": "fail",
       "gate": "prereg",
@@ -156,16 +160,79 @@
     },
     {
       "detected": true,
-      "evidence": "/tmp/tmpjk69xcj2/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
+      "evidence": "/tmp/tmp_odmfgl9/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
       "exit_code": 2,
       "expected": "fail",
       "gate": "prereg",
       "mutation": "double-freeze-refused",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "positive_slope_survives=True",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "scaling",
+      "mutation": "control-rising-curve-is-called-positive",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "positive_slope_survives=False",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "scaling",
+      "mutation": "flat-curve-is-NOT-called-positive",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "positive_slope_survives=False",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "scaling",
+      "mutation": "declining-curve-is-NOT-called-positive",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "positive_slope_survives=False",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "scaling",
+      "mutation": "tiny-eval-set-must-not-survive-the-interval",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "scaling: REFUSED - 3 rung(s); the preregistered scope requires >= 4",
+      "exit_code": 3,
+      "expected": "fail",
+      "gate": "scaling",
+      "mutation": "three-rungs-refused-by-scope",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "scaling: REFUSED - rungs span 0.903 orders of magnitude; the preregistered scope requires >= 2.0",
+      "exit_code": 3,
+      "expected": "fail",
+      "gate": "scaling",
+      "mutation": "under-two-decades-refused-by-scope",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "scaling: REFUSED - rungs were evaluated on different numbers of examples ([50, 400]); the paired bootstrap requires one shared evaluation set",
+      "exit_code": 3,
+      "expected": "fail",
+      "gate": "scaling",
+      "mutation": "unpaired-eval-sets-refused",
+      "observed": "fail"
     }
   ],
-  "detected": 17,
+  "detected": 24,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 17
+  "total_mutations": 24
 }

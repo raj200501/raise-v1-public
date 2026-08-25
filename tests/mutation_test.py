@@ -32,7 +32,7 @@ def sandbox(tmp: str) -> str:
     os.makedirs(os.path.join(root, "artifacts"), exist_ok=True)
     os.makedirs(os.path.join(root, "docs"), exist_ok=True)
     os.makedirs(os.path.join(root, "prereg"), exist_ok=True)
-    for f in ("chainlib.py", "prereg.py", "claimcheck.py"):
+    for f in ("chainlib.py", "prereg.py", "claimcheck.py", "scaling.py"):
         shutil.copy(os.path.join(REPO, "tools", f), os.path.join(root, "tools", f))
     with open(os.path.join(root, "docs", "claimcheck_allowlist.tsv"), "w") as fh:
         fh.write("# value\treason\n")
@@ -241,6 +241,87 @@ def _(root):
 def _(root):
     path = seed_prereg(root)
     return run([PY, "tools/prereg.py", "freeze", path], root)
+
+
+# ---------------------------------------------------------------- scaling-curve gate
+
+def _rungs(root, probs, m=400, ns=(1000, 10000, 100000, 1000000), seed=7):
+    import random as _r
+    rng = _r.Random(seed)
+    rungs = [{"n_units": n, "per_example": [1 if rng.random() < p else 0 for _ in range(m)]}
+             for n, p in zip(ns, probs)]
+    path = os.path.join(root, "artifacts", "scores.json")
+    json.dump({"rungs": rungs}, open(path, "w"))
+    return path
+
+
+@case("scaling", "control-rising-curve-is-called-positive", "pass")
+def _(root):
+    p = _rungs(root, [0.20, 0.31, 0.42, 0.55])
+    rc, out = run([PY, "tools/scaling.py", p, "--boot", "600",
+                   "--out", os.path.join(root, "artifacts", "fit.json")], root)
+    if rc != 0:
+        return rc, out
+    fit = json.load(open(os.path.join(root, "artifacts", "fit.json")))
+    ok = fit["primary_fit"]["positive_slope_survives"] is True
+    return (0 if ok else 1), f"positive_slope_survives={fit['primary_fit']['positive_slope_survives']}"
+
+
+@case("scaling", "flat-curve-is-NOT-called-positive", "fail")
+def _(root):
+    p = _rungs(root, [0.30, 0.30, 0.30, 0.30])
+    rc, out = run([PY, "tools/scaling.py", p, "--boot", "600",
+                   "--out", os.path.join(root, "artifacts", "fit.json")], root)
+    if rc != 0:
+        return rc, out
+    fit = json.load(open(os.path.join(root, "artifacts", "fit.json")))
+    ok = fit["primary_fit"]["positive_slope_survives"] is True
+    return (0 if ok else 1), f"positive_slope_survives={fit['primary_fit']['positive_slope_survives']}"
+
+
+@case("scaling", "declining-curve-is-NOT-called-positive", "fail")
+def _(root):
+    p = _rungs(root, [0.55, 0.42, 0.31, 0.20])
+    rc, out = run([PY, "tools/scaling.py", p, "--boot", "600",
+                   "--out", os.path.join(root, "artifacts", "fit.json")], root)
+    if rc != 0:
+        return rc, out
+    fit = json.load(open(os.path.join(root, "artifacts", "fit.json")))
+    ok = fit["primary_fit"]["positive_slope_survives"] is True
+    return (0 if ok else 1), f"positive_slope_survives={fit['primary_fit']['positive_slope_survives']}"
+
+
+@case("scaling", "tiny-eval-set-must-not-survive-the-interval", "fail")
+def _(root):
+    p = _rungs(root, [0.30, 0.32, 0.34, 0.36], m=12)
+    rc, out = run([PY, "tools/scaling.py", p, "--boot", "600",
+                   "--out", os.path.join(root, "artifacts", "fit.json")], root)
+    if rc != 0:
+        return rc, out
+    fit = json.load(open(os.path.join(root, "artifacts", "fit.json")))
+    ok = fit["primary_fit"]["positive_slope_survives"] is True
+    return (0 if ok else 1), f"positive_slope_survives={fit['primary_fit']['positive_slope_survives']}"
+
+
+@case("scaling", "three-rungs-refused-by-scope", "fail")
+def _(root):
+    p = _rungs(root, [0.2, 0.3, 0.4], ns=(1000, 10000, 100000))
+    return run([PY, "tools/scaling.py", p, "--boot", "50"], root)
+
+
+@case("scaling", "under-two-decades-refused-by-scope", "fail")
+def _(root):
+    p = _rungs(root, [0.2, 0.3, 0.4, 0.5], ns=(1000, 2000, 4000, 8000))
+    return run([PY, "tools/scaling.py", p, "--boot", "50"], root)
+
+
+@case("scaling", "unpaired-eval-sets-refused", "fail")
+def _(root):
+    p = _rungs(root, [0.2, 0.3, 0.4, 0.5])
+    d = json.load(open(p))
+    d["rungs"][0]["per_example"] = d["rungs"][0]["per_example"][:50]
+    json.dump(d, open(p, "w"))
+    return run([PY, "tools/scaling.py", p, "--boot", "50"], root)
 
 
 def main() -> int:
