@@ -79,6 +79,13 @@ wall-clock, CPU-hours and, where relevant, dollars.
 Anything not verified is written as `COULD NOT VERIFY` together with the reason it could not
 be verified. An absent result is reported as absent.
 
+**A count derived from a pattern over names is not a measurement** until the pattern has been
+checked against the authoritative definition, and any artifact reporting such a count must print
+its derivation beside it. Where a check disagrees with the thing it is checking, the check is
+assumed wrong until shown otherwise. Added 2026-08-25 after this repository miscounted a column
+set with an unvalidated `F*P` filter and recorded the result as a defect in the work it was
+checking — see `CORRECTIONS.md`.
+
 ## 9. Commit and push after every meaningful step
 
 The execution container is ephemeral. Work that is not pushed does not exist.

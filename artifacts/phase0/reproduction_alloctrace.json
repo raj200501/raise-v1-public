@@ -1,0 +1,100 @@
+{
+  "agent_reported": {
+    "downloaded_bytes": 69791730,
+    "fancp_fires_on": 0,
+    "mean_auc_six_flags": 0.8026,
+    "n_columns": 287,
+    "n_records": 392318,
+    "per_flag_auc": {
+      "FESRP": 0.8632,
+      "FHICOVP": 0.7702,
+      "FMARP": 0.8622,
+      "FPINCP": 0.6921,
+      "FSCHLP": 0.8786,
+      "FWAGP": 0.7495
+    }
+  },
+  "corpus": {
+    "downloaded_bytes": 69791730,
+    "licence": "US Census Bureau public-use microdata; US federal government work, no domestic copyright",
+    "member": "psam_p06.csv",
+    "source": "https://www2.census.gov/programs-surveys/acs/data/pums/2023/1-Year/csv_pca.zip"
+  },
+  "corrections_filed": [
+    "CORRECTIONS.md 2026-08-25 - allocation-flag count"
+  ],
+  "detail": "Record count, column count and archive size match to the byte. FANCP fires on 0 of 392,318 records, confirming that ACS never imputes ancestry and therefore publishes ANC=4 '.Not reported' verbatim in the student's own input. The one-line rule ANC==4, with zero training records, reproduces the agent's per-flag AUCs to four decimal places and the same mean of 0.8026 across the six flags. The kill stands on first-hand evidence.",
+  "discrepancies": [
+    {
+      "agent_said": "77 allocation flags",
+      "assessment": "NO DISCREPANCY. An earlier version of this artifact recorded 76 and attributed the difference to the agent's naming filter. That was wrong: the error was in the check performed here, not in the agent's count. Corrected, and filed in CORRECTIONS.md at full size.",
+      "item": "count of allocation-flag columns",
+      "measured_here": "77, confirmed. 80 F-prefixed columns minus FER, FOD1P and FOD2P, which are data variables."
+    }
+  ],
+  "not_reproduced": [
+    "The de-leaked retraining result (0.9082 -> 0.6821 mean AUC at n=1e3 after deleting the ten leaking columns) was NOT re-run here. It is the agent's own measurement.",
+    "The eight-line rule at mean AUC 0.8297 under a household-grouped split was NOT re-run here; only the simpler one-equality-test version was.",
+    "The Oregon cross-state and cross-year transfer results were NOT re-run here."
+  ],
+  "reproduced": {
+    "allocation_flag_columns": 77,
+    "allocation_flag_derivation": "80 columns start with 'F'; three of them (FER, FOD1P, FOD2P) are substantive data variables rather than allocation flags, leaving 77 flags. Three flags end in 'C' (FHINS3C, FHINS4C, FHINS5C), which is why a startswith('F') and endswith('P') filter does not return 77.",
+    "anc_distribution": {
+      "1": 223976,
+      "2": 84271,
+      "3": 6116,
+      "4": 77955
+    },
+    "columns_starting_with_F": 80,
+    "fancp_distribution": {
+      "0": 392318
+    },
+    "mean_auc_six_flags": 0.8026,
+    "n_columns": 287,
+    "n_records": 392318,
+    "one_line_rule": "ANC == 4  (.Not reported)",
+    "per_flag_auc": {
+      "FESRP": {
+        "auc_binary_rule": 0.8632,
+        "base_rate_allocated": 0.1129,
+        "fpr": 0.1167,
+        "tpr": 0.8431
+      },
+      "FHICOVP": {
+        "auc_binary_rule": 0.7702,
+        "base_rate_allocated": 0.2356,
+        "fpr": 0.0714,
+        "tpr": 0.6118
+      },
+      "FMARP": {
+        "auc_binary_rule": 0.8622,
+        "base_rate_allocated": 0.0863,
+        "fpr": 0.1362,
+        "tpr": 0.8606
+      },
+      "FPINCP": {
+        "auc_binary_rule": 0.6921,
+        "base_rate_allocated": 0.2749,
+        "fpr": 0.0931,
+        "tpr": 0.4773
+      },
+      "FSCHLP": {
+        "auc_binary_rule": 0.8786,
+        "base_rate_allocated": 0.1382,
+        "fpr": 0.0941,
+        "tpr": 0.8512
+      },
+      "FWAGP": {
+        "auc_binary_rule": 0.7495,
+        "base_rate_allocated": 0.1835,
+        "fpr": 0.1072,
+        "tpr": 0.6062
+      }
+    }
+  },
+  "schema": "raise-v1/independent_reproduction/1",
+  "verdict": "REPRODUCED EXACTLY",
+  "verified_utc": "2026-08-25T04:49:08Z",
+  "what": "First-hand reproduction of the measurement that killed the AllocTrace (census allocation-mask) candidate in round 2 of domain selection. Round 2's screener called AllocTrace 'the real finding' of the pool; its adversary then killed it by showing the manufacturer's supposedly private information is printed in the published record. That reversal decided the candidate, so it was reproduced here rather than accepted."
+}
