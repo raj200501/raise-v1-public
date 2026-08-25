@@ -1,0 +1,118 @@
+{
+  "a_near_miss_worth_recording": "The first arXiv attempt returned HTTP 301 with 0 bytes because the API now requires HTTPS. The parser reported it as no results. Had that been taken at face value it would have become a false white-space claim built on a FAILED REQUEST - precisely the failure mode round 1's own standard warns about ('I did not find anything' is not evidence). It was caught by checking the raw response instead of trusting the empty parse.",
+  "adjacent_fields_found": [
+    "File fragment TYPE classification - which format a fragment belongs to. Fragments-Expert and related work. Shares the carved-fragment setting but asks a different question.",
+    "JPEG and MPEG double-compression detection - established media forensics. Shares the 'recover encoding history' shape but on a different medium and with the container available."
+  ],
+  "domain": "Carved-DEFLATE encoder provenance (implementation + level from a mid-stream fragment)",
+  "honest_limits": [
+    "encode.su, the venue where compression practitioners actually argue, is unreachable from this container (403) and was NOT searched. That is the single most likely place for undocumented prior work on this exact question, and its absence is a real gap in this check.",
+    "'File fragment classification' is adjacent enough that a reader could reasonably call it closer than this assessment does. The papers are named so that judgement can be made independently.",
+    "No patent search was run. Round 4 found two USPTO patents on a different candidate's exact task, so patents are a demonstrated blind spot for this kind of check."
+  ],
+  "known_non_learned_tools": [
+    "preflate / microsoft/preflate-rs",
+    "precomp",
+    "google/grittibanzli",
+    "reproducible-apk-tools list-compresslevel.py",
+    "koutto/compression-identifier (type only)"
+  ],
+  "recorded_utc": "2026-08-25T19:25:25Z",
+  "schema": "raise-v1/g4_verification_firsthand/1",
+  "searches": [
+    {
+      "note": "polygon deflation, quantum variational deflation, transformer encoders",
+      "query": "all:deflate AND all:encoder",
+      "relevant": 0,
+      "total": 25,
+      "venue": "arXiv API"
+    },
+    {
+      "note": "fingerprint BIOMETRICS compression and audio fingerprinting, not compressor ID",
+      "query": "abs:compression AND abs:fingerprinting",
+      "relevant": 0,
+      "total": 142,
+      "venue": "arXiv API"
+    },
+    {
+      "note": "image/video distortion and object-detection degradation",
+      "query": "abs:'compression level' AND abs:detection",
+      "relevant": 0,
+      "total": 24,
+      "venue": "arXiv API"
+    },
+    {
+      "note": "ADJACENT AND THE CLOSEST FOUND: Fragments-Expert (MATLAB toolbox for classifying file fragments) and 'File fragment recognition based on content and statistical features'. Both classify which FILE FORMAT a fragment came from, not which ENCODER produced it.",
+      "query": "abs:'file fragment'",
+      "relevant": 2,
+      "total": 20,
+      "venue": "arXiv API"
+    },
+    {
+      "query": "abs:zlib",
+      "relevant": 0,
+      "total": 20,
+      "venue": "arXiv API"
+    },
+    {
+      "note": "refrigeration compressors",
+      "query": "abs:compressor AND abs:identification",
+      "relevant": 0,
+      "total": 7,
+      "venue": "arXiv API"
+    },
+    {
+      "note": "ADJACENT: JPEG/MPEG double-compression detection - media forensics, a different task",
+      "query": "abs:'double compression'",
+      "relevant": 0,
+      "total": 21,
+      "venue": "arXiv API"
+    },
+    {
+      "note": "returned format documentation and one GitHub tool, koutto/compression-identifier, which identifies the compression TYPE (zlib vs deflate vs gzip), not the implementation or level",
+      "query": "DEFLATE zlib compression level encoder identification fingerprint machine learning forensics",
+      "relevant": 0,
+      "venue": "general web"
+    },
+    {
+      "note": "the carving literature is about REASSEMBLY and fragmentation points, not attribution",
+      "query": "carved compressed data fragment attribution digital forensics DFRWS high entropy fragment classification",
+      "relevant": 0,
+      "venue": "general web / DFRWS"
+    },
+    {
+      "note": "a video effect and three LLM finetunes",
+      "query": "deflate",
+      "relevant": 0,
+      "total": 4,
+      "venue": "HuggingFace datasets"
+    },
+    {
+      "query": "compression forensics",
+      "relevant": 0,
+      "total": 0,
+      "venue": "HuggingFace datasets"
+    },
+    {
+      "query": "file fragment",
+      "relevant": 0,
+      "total": 0,
+      "venue": "HuggingFace datasets"
+    },
+    {
+      "note": "COULD NOT VERIFY - returns HTTP 403 from this container",
+      "query": "encode.su, the compression practitioners' forum",
+      "relevant": null,
+      "total": null,
+      "venue": "practitioner"
+    }
+  ],
+  "verdict": {
+    "ml_efforts_on_the_task": 0,
+    "non_learned_tools": 5,
+    "open_datasets_at_1e6": 0,
+    "open_datasets_at_any_scale": 0,
+    "reading": "The second G4 clause - NO OPEN DATASET AT TARGET SCALE - is confirmed first-hand and is the clause that decides whether there is something to BUILD. Zero datasets at any scale, in the two indices where such a dataset would live. The first clause is weaker: five non-learned tools exist and are named, so this is not an unstudied problem. Under the effort lens that is the point rather than a problem - a published tool is evidence the mechanism works."
+  },
+  "why": "Everything now rests on this candidate - EphemErr died at A2 and the graveyard is exhausted - and the white-space claim had only ever been made by a round-1 subagent. Round 2 taught that an empty arXiv result can reflect a community's publishing habits rather than an empty field, so this was re-run first-hand."
+}
