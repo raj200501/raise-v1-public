@@ -15,7 +15,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from chainlib import REPO_ROOT, sha256_file  # noqa: E402
 
-OUT = os.path.join(REPO_ROOT, "docs", "DOMAIN_SELECTION.md")
+OUT = os.path.join(REPO_ROOT, "trial", "pivot", "DOMAIN_SELECTION.md")
 
 
 def esc(s: str) -> str:
@@ -66,7 +66,7 @@ def main() -> int:
     w("| **G2a** | The label manufacturer must know something the student's input cannot contain. | Added *after* round 1 on the evidence below. See “The finding that changed the gates”. |")
     w("")
 
-    analysis = os.path.join(REPO_ROOT, "docs", "_domain_selection_analysis.md")
+    analysis = os.path.join(REPO_ROOT, "trial", "pivot", "_analysis.md")
     if os.path.exists(analysis):
         w(open(analysis, encoding="utf-8").read().rstrip())
         w("")
