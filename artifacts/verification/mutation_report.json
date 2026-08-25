@@ -4,6 +4,10 @@
       "detected": 6,
       "total": 6
     },
+    "carve": {
+      "detected": 15,
+      "total": 15
+    },
     "claimcheck": {
       "detected": 8,
       "total": 8
@@ -112,7 +116,7 @@
     },
     {
       "detected": true,
-      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=d42f34642e00925d)",
+      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=205a2f1ae115397a)",
       "exit_code": 0,
       "expected": "pass",
       "gate": "prereg",
@@ -157,7 +161,7 @@
     },
     {
       "detected": true,
-      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor e7120ee3e08bd0e4 (chain order broken)",
+      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 78ec70971d1dc01f (chain order broken)",
       "exit_code": 1,
       "expected": "fail",
       "gate": "prereg",
@@ -184,7 +188,7 @@
     },
     {
       "detected": true,
-      "evidence": "/tmp/tmp55k0ciee/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
+      "evidence": "/tmp/tmp9riecrnp/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
       "exit_code": 2,
       "expected": "fail",
       "gate": "prereg",
@@ -766,10 +770,145 @@
       "gate": "topk",
       "mutation": "the-partial-outcome-is-NAMED-rather-than-left-spinnable",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_ROBUST within=[] transfer=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "carve",
+      "mutation": "control-robust-result-passes",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['within margin (frozen set): 0.17 - 0.13 = 0.04 is below the preregistered 0.05'] transfer=[\"transfer margin: 0.15 - 0.13 = 0.02 is below the preregistered 0.05 \u2014 a model t",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "within-margin-over-the-frozen-set-below-bar-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['within margin (expanded set): 0.17 - 0.13 = 0.04 is below the preregistered 0.05'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "within-margin-over-the-expanded-set-below-bar-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['within slope: within_slope_ci95_low=0.0 does not exceed 0'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "within-slope-lower-bound-touching-zero-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['null control: shuffled labels reached 0.0585, above chance 0.038462 + 0.02'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "within-null-control-above-chance-plus-tolerance-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['split: within_split_is_grouped_by_source is not True'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "non-grouped-split-is-rejected-however-good-the-numbers",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['scope: n_rungs=3, need >= 4'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "too-few-rungs-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['scope: decades_spanned=1.9999, need >= 2.0'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "too-few-decades-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_SIZE_SPECIFIC within=[] transfer=[\"transfer margin: 0.13 - 0.09 = 0.04 is below the preregistered 0.05 \u2014 a model trained at the longer carve does not beat the shorter corpus's own dumb r",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "transfer-margin-below-bar-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_SIZE_SPECIFIC within=[] transfer=['transfer: corpora_share_source_chunks is not False \u2014 the transfer model may have trained on source bytes present in this evaluation set']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "corpora-sharing-source-chunks-invalidates-the-transfer-arm",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_SIZE_SPECIFIC within=[] transfer=['transfer: corpora_share_source_chunks is not False \u2014 the transfer model may have trained on source bytes present in this evaluation set']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "an-unset-disjointness-flag-reads-as-failure-not-as-a-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['within slope: within_slope_ci95_low missing'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "a-missing-field-reads-as-failure-not-as-a-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_SIZE_SPECIFIC within=[] transfer=[\"transfer margin: 0.13 - 0.09 = 0.04 is below the preregistered 0.05 \u2014 a model trained at the longer carve does not beat the shorter corpus's own dumb r",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "a-transfer-only-failure-is-named-SIZE_SPECIFIC-not-collapsed-to-FAILS",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['within margin (frozen set): 0.1 - 0.09 = 0.01 is below the preregistered 0.05', 'within margin (expanded set): 0.1 - 0.11 = -0.01 is below the preregistered 0.05'] transfe",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "a-within-size-failure-is-NOT-softened-to-SIZE_SPECIFIC",
+      "observed": "fail"
     }
   ],
-  "detected": 81,
+  "detected": 96,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 81
+  "total_mutations": 96
 }

@@ -49,13 +49,18 @@ def _one(args):
             np.full(len(labels), idx, dtype=np.int32))
 
 
-def build(n_chunks, chunk_size, carve_len, src_dir, procs, ncols=0):
+def build(n_chunks, chunk_size, carve_len, src_dir, procs, ncols=0, chunk_offset=0):
     """Preallocated so peak memory is one copy of the corpus, not two.
 
     A vstack at a million rows briefly holds both the list of blocks and the result, which is the
     difference between fitting in 15 GB and not.
     """
-    tasks = [(i, FAMILIES[i % len(FAMILIES)], chunk_size, carve_len) for i in range(n_chunks)]
+    # chunk_offset shifts the SOURCE SEEDS. A second corpus built for a cross-corpus arm must not
+    # reuse chunk indices from the first: the index IS the generator seed, so overlapping indices
+    # mean identical source bytes, and a model trained on corpus A would be evaluated on content it
+    # has already seen. Offsetting past A's range makes the two corpora disjoint at the source.
+    tasks = [(i, FAMILIES[i % len(FAMILIES)], chunk_size, carve_len)
+             for i in range(chunk_offset, chunk_offset + n_chunks)]
     ncols = ncols or N_FEATURES
     cap = n_chunks * N_CONFIGS
     X = np.empty((cap, ncols), dtype=np.float32)
@@ -140,6 +145,9 @@ def make_model(seed, kind="mlp"):
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--chunks", type=int, default=2000)
+    ap.add_argument("--chunk-offset", type=int, default=0,
+                    help="shift the source-chunk seeds, so a second corpus shares no source bytes "
+                         "with the first")
     ap.add_argument("--chunk-size", type=int, default=32768)
     ap.add_argument("--carve", type=int, default=2048)
     ap.add_argument("--rungs", type=int, nargs="*", default=[500, 5000, 50000])
@@ -171,7 +179,7 @@ def main() -> int:
         print(f"[1/5] manufacturing from {args.chunks} source chunks "
               f"({args.chunk_size}B each, carving {args.carve}B)...", flush=True)
         X, y, g, build_s = build(args.chunks, args.chunk_size, args.carve, args.src, args.procs,
-                                 args.feature_cols)
+                                 args.feature_cols, args.chunk_offset)
         mmapped = False
         if args.cache:
             os.makedirs(os.path.dirname(os.path.abspath(args.cache)), exist_ok=True)

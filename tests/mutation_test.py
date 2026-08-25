@@ -859,6 +859,138 @@ def _(root):
     return rc, out
 
 
+# ---------------------------------------------------------------- carve gate (preregistration 0007)
+#
+# This reader has THREE outcomes, not two, and the middle one (CARVE_SIZE_SPECIFIC) is a far softer
+# statement than CARVE_FAILS. So the mutations check which verdict is emitted, not merely that the
+# study failed - a reader that collapsed every negative into the softer label would pass a
+# pass/fail-only test while misrepresenting the result.
+
+GOOD_CARVE = {
+    "carve_bytes": 1024, "reference_carve_bytes": 4096, "matched_rung": 100000,
+    "n_rungs": 4, "decades_spanned": 2.6990,
+    "within_top1": 0.17, "within_best_trivial_baseline": 0.09,
+    "within_best_trivial_baseline_name": "logistic",
+    "within_best_baseline_expanded": 0.11,
+    "within_best_baseline_expanded_name": "depth16_tree",
+    "within_slope": 0.04, "within_slope_ci95_low": 0.035,
+    "transfer_top1": 0.15, "reference_matched_rung_top1": 0.1965,
+    "chance_accuracy": 0.038462, "within_shuffled_label_accuracy": 0.0390,
+    "within_split_is_grouped_by_source": True, "corpora_share_source_chunks": False,
+    "n_classes": 26,
+}
+
+
+def _carve(root, art=GOOD_CARVE):
+    os.makedirs(os.path.join(root, "artifacts", "pivot"), exist_ok=True)
+    json.dump(art, open(os.path.join(root, "artifacts", "pivot",
+                                     "carve_generalisation.json"), "w"))
+    shutil.copy(os.path.join(REPO, "tools", "readers", "carve_generalisation_verdict.py"),
+                os.path.join(root, "tools", "readers", "carve_generalisation_verdict.py"))
+    rc, out = run([PY, "tools/readers/carve_generalisation_verdict.py"], root)
+    if rc != 0:
+        return rc, out
+    v = json.load(open(os.path.join(root, "artifacts", "pivot",
+                                    "carve_generalisation_verdict.json")))
+    ok = v["verdict"] == "CARVE_ROBUST"
+    return (0 if ok else 1), (f"verdict={v['verdict']} within={v['within_size_failed_clauses']} "
+                              f"transfer={v['transfer_failed_clauses']}")
+
+
+def _cmut(**kw):
+    a = dict(GOOD_CARVE); a.update(kw); return a
+
+
+@case("carve", "control-robust-result-passes", "pass")
+def _(root):
+    return _carve(root)
+
+
+@case("carve", "within-margin-over-the-frozen-set-below-bar-is-rejected", "fail")
+def _(root):
+    return _carve(root, _cmut(within_best_trivial_baseline=0.13))
+
+
+@case("carve", "within-margin-over-the-expanded-set-below-bar-is-rejected", "fail")
+def _(root):
+    return _carve(root, _cmut(within_best_baseline_expanded=0.13))
+
+
+@case("carve", "within-slope-lower-bound-touching-zero-is-rejected", "fail")
+def _(root):
+    return _carve(root, _cmut(within_slope_ci95_low=0.0))
+
+
+@case("carve", "within-null-control-above-chance-plus-tolerance-is-rejected", "fail")
+def _(root):
+    return _carve(root, _cmut(within_shuffled_label_accuracy=0.0585))
+
+
+@case("carve", "non-grouped-split-is-rejected-however-good-the-numbers", "fail")
+def _(root):
+    return _carve(root, _cmut(within_split_is_grouped_by_source=False, within_top1=0.95))
+
+
+@case("carve", "too-few-rungs-is-rejected", "fail")
+def _(root):
+    return _carve(root, _cmut(n_rungs=3))
+
+
+@case("carve", "too-few-decades-is-rejected", "fail")
+def _(root):
+    return _carve(root, _cmut(decades_spanned=1.9999))
+
+
+@case("carve", "transfer-margin-below-bar-is-rejected", "fail")
+def _(root):
+    return _carve(root, _cmut(transfer_top1=0.13))
+
+
+@case("carve", "corpora-sharing-source-chunks-invalidates-the-transfer-arm", "fail")
+def _(root):
+    # The chunk index IS the generator seed, so shared indices mean the transfer model is scored on
+    # source bytes it trained on. A high transfer number under that condition is leakage, not
+    # transfer, and must not be accepted.
+    return _carve(root, _cmut(corpora_share_source_chunks=True, transfer_top1=0.60))
+
+
+@case("carve", "an-unset-disjointness-flag-reads-as-failure-not-as-a-pass", "fail")
+def _(root):
+    a = dict(GOOD_CARVE); del a["corpora_share_source_chunks"]
+    return _carve(root, a)
+
+
+@case("carve", "a-missing-field-reads-as-failure-not-as-a-pass", "fail")
+def _(root):
+    a = dict(GOOD_CARVE); del a["within_slope_ci95_low"]
+    return _carve(root, a)
+
+
+@case("carve", "absent-artifact-emits-no-verdict", "fail")
+def _(root):
+    shutil.copy(os.path.join(REPO, "tools", "readers", "carve_generalisation_verdict.py"),
+                os.path.join(root, "tools", "readers", "carve_generalisation_verdict.py"))
+    return run([PY, "tools/readers/carve_generalisation_verdict.py"], root)
+
+
+@case("carve", "a-transfer-only-failure-is-named-SIZE_SPECIFIC-not-collapsed-to-FAILS", "fail")
+def _(root):
+    rc, out = _carve(root, _cmut(transfer_top1=0.13))
+    if rc != 0 and "verdict=CARVE_SIZE_SPECIFIC" not in out:
+        return 0, out + " !! a transfer-only failure was not named CARVE_SIZE_SPECIFIC"
+    return rc, out
+
+
+@case("carve", "a-within-size-failure-is-NOT-softened-to-SIZE_SPECIFIC", "fail")
+def _(root):
+    # Both halves fail. The verdict must be the STRONGER negative. Reporting CARVE_SIZE_SPECIFIC
+    # here would claim the information is present at the shorter carve when it is not.
+    rc, out = _carve(root, _cmut(within_top1=0.10, transfer_top1=0.10))
+    if rc != 0 and "verdict=CARVE_FAILS" not in out:
+        return 0, out + " !! a within-size failure was softened to the milder verdict"
+    return rc, out
+
+
 def main() -> int:
     results = []
     for c in CASES:
