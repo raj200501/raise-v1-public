@@ -217,6 +217,26 @@ def cmd_verify(args) -> int:
         for p in problems:
             print(f"  - {p}")
         return 1
+    status = {
+        "schema": "raise-v1/prereg_status/1",
+        "entries": len(entries),
+        "head": prev_hash if entries else "GENESIS",
+        "problems": 0,
+        "verified": True,
+        "chain": [{"seq": e["seq"], "id": e["id"], "slug": e["slug"], "frozen_utc": e["frozen_utc"],
+                   "hash": e["hash"], "prev_hash": e["prev_hash"],
+                   "anchors": json.load(open(os.path.join(REPO_ROOT, e["file"]), encoding="utf-8"))
+                              .get("anchors", {}),
+                   "reader": json.load(open(os.path.join(REPO_ROOT, e["file"]), encoding="utf-8"))
+                             .get("reader"),
+                   "reader_sha256": json.load(open(os.path.join(REPO_ROOT, e["file"]), encoding="utf-8"))
+                                    .get("reader_sha256")} for e in entries],
+    }
+    outdir = os.path.join(REPO_ROOT, "artifacts", "verification")
+    os.makedirs(outdir, exist_ok=True)
+    with open(os.path.join(outdir, "prereg_status.json"), "w", encoding="utf-8") as fh:
+        json.dump(status, fh, indent=2, sort_keys=True)
+        fh.write("\n")
     print(f"PREREG CHAIN VERIFY: PASS ({len(entries)} entr{'y' if len(entries) == 1 else 'ies'}, "
           f"head={prev_hash[:16] if entries else 'GENESIS'})")
     return 0

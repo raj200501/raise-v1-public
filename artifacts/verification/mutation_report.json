@@ -8,6 +8,10 @@
       "detected": 8,
       "total": 8
     },
+    "coverage": {
+      "detected": 8,
+      "total": 8
+    },
     "prereg": {
       "detected": 9,
       "total": 9
@@ -92,7 +96,7 @@
     },
     {
       "detected": true,
-      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=acb4c52585dfee5c)",
+      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=30b095adb4cf9560)",
       "exit_code": 0,
       "expected": "pass",
       "gate": "prereg",
@@ -137,7 +141,7 @@
     },
     {
       "detected": true,
-      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor c5c7a93c48164af8 (chain order broken)",
+      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor d757307e82597b43 (chain order broken)",
       "exit_code": 1,
       "expected": "fail",
       "gate": "prereg",
@@ -164,7 +168,7 @@
     },
     {
       "detected": true,
-      "evidence": "/tmp/tmp1p6bjeki/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
+      "evidence": "/tmp/tmp4gnyu5_1/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
       "exit_code": 2,
       "expected": "fail",
       "gate": "prereg",
@@ -287,10 +291,82 @@
       "gate": "a2-baseline",
       "mutation": "claimed-score-without-a-preregistered-margin-is-refused",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "COVERAGE: PASS \u2014 every claim cites an artifact that exists and contains its value; every primary-verifiable claim names a command that exists.",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "coverage",
+      "mutation": "control-coherent-map-passes",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "  - a: cited artifact does not exist: artifacts/does_not_exist.json",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "coverage",
+      "mutation": "claim-citing-a-missing-artifact-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - a: value 0.4242 is not present in artifacts/result.json",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "coverage",
+      "mutation": "value-absent-from-the-cited-artifact-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - a: filed primary-verifiable but names no reverify command",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "coverage",
+      "mutation": "primary-verifiable-without-a-reverify-command-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - a: reverify command references a script that does not exist: tools/repro/ghost.py",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "coverage",
+      "mutation": "primary-verifiable-naming-a-script-that-does-not-exist-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - c: filed 'neither' but gives no reason",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "coverage",
+      "mutation": "neither-without-a-written-reason-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - b: class 'mostly-verifiable' is not one of ['neither', 'arithmetic-verifiable', 'primary-verifiable']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "coverage",
+      "mutation": "invented-class-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "order neither=67 arithmetic=210 primary=310",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "coverage",
+      "mutation": "weakest-class-is-printed-first",
+      "observed": "pass"
     }
   ],
-  "detected": 30,
+  "detected": 38,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 30
+  "total_mutations": 38
 }

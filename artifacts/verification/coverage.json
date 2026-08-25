@@ -1,0 +1,167 @@
+{
+  "schema": "raise-v1/coverage_map/1",
+  "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",
+  "claims": [
+    {
+      "id": "mutations-detected",
+      "class": "primary-verifiable",
+      "claim": "Every gate in this repository is shown capable of failing: 38 deliberate mutations across five gates, 38 detected, 0 survived.",
+      "value": 38,
+      "artifact": "artifacts/verification/mutation_report.json",
+      "json_path": "$.detected",
+      "reverify": "python3 tests/mutation_test.py"
+    },
+    {
+      "id": "mutations-survived",
+      "class": "primary-verifiable",
+      "claim": "No mutation survived, i.e. no gate has a known hole.",
+      "value": 0,
+      "artifact": "artifacts/verification/mutation_report.json",
+      "json_path": "$.survived",
+      "reverify": "python3 tests/mutation_test.py"
+    },
+    {
+      "id": "prereg-chain-verifies",
+      "class": "primary-verifiable",
+      "claim": "The preregistration hash chain verifies: sealed fields unchanged, chain order intact, and the frozen reader's sha256 unchanged since it was frozen.",
+      "value": 1,
+      "artifact": "artifacts/verification/prereg_status.json",
+      "json_path": "$.entries",
+      "reverify": "python3 tools/prereg.py verify"
+    },
+    {
+      "id": "census-repro-records",
+      "class": "primary-verifiable",
+      "claim": "The ACS PUMS 2023 1-Year California person file contains 392,318 records, reproduced first-hand from the public corpus.",
+      "value": 392318,
+      "artifact": "artifacts/phase0/reproduction_alloctrace.json",
+      "json_path": "$.reproduced.n_records",
+      "reverify": "python3 tools/repro/census_leak_check.py"
+    },
+    {
+      "id": "census-repro-auc",
+      "class": "primary-verifiable",
+      "claim": "A ONE-LINE rule (ANC == 4) with ZERO training records predicts the allocation of six unrelated census fields at mean AUC 0.8026 - the measurement that killed round 2's strongest candidate.",
+      "value": 0.8026,
+      "artifact": "artifacts/phase0/reproduction_alloctrace.json",
+      "json_path": "$.reproduced.mean_auc_six_flags",
+      "reverify": "python3 tools/repro/census_leak_check.py"
+    },
+    {
+      "id": "census-repro-fancp",
+      "class": "primary-verifiable",
+      "claim": "FANCP fires on 0 of 392,318 records, confirming ACS never imputes ancestry and therefore publishes the ancestry nonresponse code verbatim inside the student's own input.",
+      "value": 392318,
+      "artifact": "artifacts/phase0/reproduction_alloctrace.json",
+      "json_path": "$.reproduced.fancp_distribution.0",
+      "reverify": "python3 tools/repro/census_leak_check.py"
+    },
+    {
+      "id": "total-candidates",
+      "class": "arithmetic-verifiable",
+      "claim": "99 candidate domains were generated across three rounds before any was selected.",
+      "value": 99,
+      "artifact": "artifacts/phase0/phase0_totals.json",
+      "json_path": "$.total_candidates",
+      "note": "Counted directly from the three banked round artifacts. The counting is arithmetic; the underlying candidate lists rest on our run."
+    },
+    {
+      "id": "total-adversarial",
+      "class": "arithmetic-verifiable",
+      "claim": "8 candidates were subjected to adversarial review with default posture REJECT.",
+      "value": 8,
+      "artifact": "artifacts/phase0/phase0_totals.json",
+      "json_path": "$.total_adversarial_reviews",
+      "note": "Round 3's own screener summary said 11. Recounted from the banked artifacts the figure is 8, and 8 is what this repository uses."
+    },
+    {
+      "id": "total-select",
+      "class": "arithmetic-verifiable",
+      "claim": "Zero candidates received an adversarial SELECT.",
+      "value": 0,
+      "artifact": "artifacts/phase0/phase0_totals.json",
+      "json_path": "$.total_select"
+    },
+    {
+      "id": "phase0-verdict",
+      "class": "arithmetic-verifiable",
+      "claim": "The frozen reader for preregistration 0001 emitted NO_VIABLE_DOMAIN_FOUND.",
+      "value": "NO_VIABLE_DOMAIN_FOUND",
+      "artifact": "artifacts/phase0/phase0_verdict.json",
+      "json_path": "$.verdict",
+      "note": "The reader is shipped and hashed, but its INPUT (the round-3 search artifact) rests on our run and a stranger cannot re-derive it."
+    },
+    {
+      "id": "round1-searches",
+      "class": "arithmetic-verifiable",
+      "claim": "109 white-space searches were recorded across 99 distinct venues in round 1.",
+      "value": 109,
+      "artifact": "artifacts/phase0/round1_summary.json",
+      "json_path": "$.recorded_searches"
+    },
+    {
+      "id": "javac-identical",
+      "class": "neither",
+      "claim": "javac 17.0.8 and javac 17.0.13 at --release 8 produced 345 of 345 BYTE-IDENTICAL class files - the measurement that established zero channel capacity and killed the JVM build-provenance candidate.",
+      "value": 345,
+      "artifact": "artifacts/phase0/round1_domain_search.json",
+      "why_not_verifiable": "Measured by a subagent inside an ephemeral scratch directory that no longer exists. No script was banked, the four JDK downloads were not retained, and it was not re-run here. The claim is a first-hand agent measurement, not an independently confirmed one."
+    },
+    {
+      "id": "elf-base-entropy",
+      "class": "neither",
+      "claim": "The ELF load base address carries H = 0.1518 bits over 838 real multi-architecture Debian binaries (0x0 is 98.45%), which killed the headerless-firmware candidate's uncrowded half.",
+      "value": 0.1518,
+      "artifact": "artifacts/phase0/round2_domain_search.json",
+      "why_not_verifiable": "Subagent measurement in an ephemeral scratch directory. The ~480 .deb downloads were not retained and no script was banked. Not re-run here."
+    },
+    {
+      "id": "mot-untrained-rule",
+      "class": "neither",
+      "claim": "On the UK MOT archive an untrained two-term rule (age/10 + mileage/100000) scores AUC 0.6553 and beats the learned model at every n below about 3x10^4.",
+      "value": 0.6553,
+      "artifact": "artifacts/phase0/round3_domain_search.json",
+      "why_not_verifiable": "Subagent measurement over a multi-gigabyte download in an ephemeral scratch directory. Not retained, no script banked, not re-run here. It is the strongest single piece of evidence for law L3(iii) and it sits in the weakest verification class."
+    },
+    {
+      "id": "mot-prior-outcome",
+      "class": "neither",
+      "claim": "The same vehicle's own previous MOT outcome predicts its next outcome at AUC 0.5077 - very nearly a closed channel.",
+      "value": 0.5077,
+      "artifact": "artifacts/phase0/round3_domain_search.json",
+      "why_not_verifiable": "Same subagent, same ephemeral scratch directory, same absence of a banked script."
+    },
+    {
+      "id": "sentinel1-fit",
+      "class": "neither",
+      "claim": "A cubic polynomial plus a once-per-revolution sinusoid explains 0.946 to 0.994 of Sentinel-1 orbit-correction residual variance in eight of nine component-arcs - the basis of law L1.",
+      "value": 0.994,
+      "artifact": "artifacts/phase0/round2_domain_search.json",
+      "why_not_verifiable": "Subagent measurement on three real orbit arcs in an ephemeral scratch directory. Not retained, not re-run here. Law L1 retires an entire candidate family on the strength of it."
+    },
+    {
+      "id": "cobol-dumb-f1",
+      "class": "neither",
+      "claim": "A ~50-line non-learned rule reached exact-boundary F1 0.768 on COBOL record-layout induction, where 20,000 training records bought 1.4 more points.",
+      "value": 0.768,
+      "artifact": "artifacts/phase0/round1_domain_search.json",
+      "why_not_verifiable": "Subagent measurement AND, additionally, measured against a synthetic generator the same subagent wrote - so even the original is indicative rather than established. Not re-run here."
+    },
+    {
+      "id": "assemblyprov-confound",
+      "class": "neither",
+      "claim": "The real SPAdes version pair 3.11.1 vs 3.15.5 scored balanced accuracy 0.503, LOWER than the null pair 3.13.0 vs 3.13.1 at 0.566 - i.e. inside its own confound floor.",
+      "value": 0.503,
+      "artifact": "artifacts/phase0/round2_domain_search.json",
+      "why_not_verifiable": "Subagent measurement over thousands of NCBI downloads in an ephemeral scratch directory. Not retained, not re-run here."
+    },
+    {
+      "id": "darkfill-negative-r2",
+      "class": "neither",
+      "claim": "On NASDAQ ITCH hidden-liquidity prediction the dumbest rule (give every symbol the market-wide fraction) scores R^2 = -0.0149, i.e. worse than the cross-sectional mean - the best F2 result Phase 0 produced, on a candidate that died anyway on G1 and G4.",
+      "value": -0.0149,
+      "artifact": "artifacts/phase0/round3_domain_search.json",
+      "why_not_verifiable": "Subagent measurement over a 400 MB slice of a 4.76 GB ITCH file in an ephemeral scratch directory. Not retained, not re-run here."
+    }
+  ]
+}

@@ -32,7 +32,7 @@ def sandbox(tmp: str) -> str:
     os.makedirs(os.path.join(root, "artifacts"), exist_ok=True)
     os.makedirs(os.path.join(root, "docs"), exist_ok=True)
     os.makedirs(os.path.join(root, "prereg"), exist_ok=True)
-    for f in ("chainlib.py", "prereg.py", "claimcheck.py", "scaling.py", "trivial_baselines.py"):
+    for f in ("chainlib.py", "prereg.py", "claimcheck.py", "scaling.py", "trivial_baselines.py", "coverage.py"):
         shutil.copy(os.path.join(REPO, "tools", f), os.path.join(root, "tools", f))
     with open(os.path.join(root, "docs", "claimcheck_allowlist.tsv"), "w") as fh:
         fh.write("# value\treason\n")
@@ -392,6 +392,86 @@ def _(root):
 def _(root):
     tr, te = _tb(root)
     return run([PY, "tools/trivial_baselines.py", tr, te, "--claimed-score", "0.99"], root)
+
+
+# ---------------------------------------------------------------- coverage-map gate
+
+def _cov(root, claims):
+    os.makedirs(os.path.join(root, "artifacts", "verification"), exist_ok=True)
+    json.dump({"schema": "raise-v1/coverage_map/1", "claims": claims},
+              open(os.path.join(root, "artifacts", "verification", "coverage.json"), "w"))
+    json.dump({"detected": 30, "survived": 0, "score": 0.8026},
+              open(os.path.join(root, "artifacts", "result.json"), "w"))
+    os.makedirs(os.path.join(root, "tools", "repro"), exist_ok=True)
+    open(os.path.join(root, "tools", "repro", "r.py"), "w").write("print('ok')\n")
+    return run([PY, "tools/coverage.py"], root)
+
+
+GOOD = [
+    {"id": "a", "class": "primary-verifiable", "claim": "x", "value": 30,
+     "artifact": "artifacts/result.json", "reverify": "python3 tools/repro/r.py"},
+    {"id": "b", "class": "arithmetic-verifiable", "claim": "y", "value": 0,
+     "artifact": "artifacts/result.json"},
+    {"id": "c", "class": "neither", "claim": "z", "value": 0.8026,
+     "artifact": "artifacts/result.json", "why_not_verifiable": "ephemeral scratch dir"},
+]
+
+
+@case("coverage", "control-coherent-map-passes", "pass")
+def _(root):
+    return _cov(root, [dict(c) for c in GOOD])
+
+
+@case("coverage", "claim-citing-a-missing-artifact-is-rejected", "fail")
+def _(root):
+    c = [dict(x) for x in GOOD]
+    c[0]["artifact"] = "artifacts/does_not_exist.json"
+    return _cov(root, c)
+
+
+@case("coverage", "value-absent-from-the-cited-artifact-is-rejected", "fail")
+def _(root):
+    c = [dict(x) for x in GOOD]
+    c[0]["value"] = 0.4242
+    return _cov(root, c)
+
+
+@case("coverage", "primary-verifiable-without-a-reverify-command-is-rejected", "fail")
+def _(root):
+    c = [dict(x) for x in GOOD]
+    c[0].pop("reverify")
+    return _cov(root, c)
+
+
+@case("coverage", "primary-verifiable-naming-a-script-that-does-not-exist-is-rejected", "fail")
+def _(root):
+    c = [dict(x) for x in GOOD]
+    c[0]["reverify"] = "python3 tools/repro/ghost.py"
+    return _cov(root, c)
+
+
+@case("coverage", "neither-without-a-written-reason-is-rejected", "fail")
+def _(root):
+    c = [dict(x) for x in GOOD]
+    c[2].pop("why_not_verifiable")
+    return _cov(root, c)
+
+
+@case("coverage", "invented-class-is-rejected", "fail")
+def _(root):
+    c = [dict(x) for x in GOOD]
+    c[1]["class"] = "mostly-verifiable"
+    return _cov(root, c)
+
+
+@case("coverage", "weakest-class-is-printed-first", "pass")
+def _(root):
+    rc, out = _cov(root, [dict(x) for x in GOOD])
+    if rc != 0:
+        return rc, out
+    i_n, i_a, i_p = out.find("NEITHER"), out.find("ARITHMETIC-VERIFIABLE"), out.find("PRIMARY-VERIFIABLE")
+    ok = -1 < i_n < i_a < i_p
+    return (0 if ok else 1), f"order neither={i_n} arithmetic={i_a} primary={i_p}"
 
 
 def main() -> int:

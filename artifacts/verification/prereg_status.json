@@ -1,0 +1,31 @@
+{
+  "chain": [
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "04b143fb1ea89fef7ac5848d7a5e41dfa2025c40d9f9e5c738154bbdafc3885c",
+          "round": 6406735
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "143F35E9774B3F42290B1846E61D127D1876AE446B22C18F7370BC73CD38A54945CB3C5029356FD3B681CFF880238692D55959DB60204EEABBFDD89E4A3EA422",
+          "pulse": 1916929,
+          "time_stamp": "2026-08-25T04:44:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-25T04:44:44Z",
+      "hash": "cfcc915c6ff65f9c5da0be8f8e70a27add4f75e5455d14c5cf5c58bd6f5ef0dc",
+      "id": "0001",
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "reader": "tools/readers/phase0_verdict.py",
+      "reader_sha256": "cd7eed828f7a95a24d39d10d5eccfb38d30fffb022231b9315c56d767bc772c7",
+      "seq": 1,
+      "slug": "phase0-terminal-verdict"
+    }
+  ],
+  "entries": 1,
+  "head": "cfcc915c6ff65f9c5da0be8f8e70a27add4f75e5455d14c5cf5c58bd6f5ef0dc",
+  "problems": 0,
+  "schema": "raise-v1/prereg_status/1",
+  "verified": true
+}

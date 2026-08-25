@@ -26,8 +26,11 @@ jobs:
       - name: Mutation tests (proof the gates can fail)
         run: python3 tests/mutation_test.py
 
-      - name: Outbound-copy gate
-        run: python3 tools/claimcheck.py outbound
+      - name: Verification-coverage map
+        run: python3 tools/coverage.py
+
+      - name: Outbound-copy gate (outbound copy AND the verdict itself)
+        run: python3 tools/claimcheck.py outbound VERDICT.md
 
       - name: Mutation report must show zero surviving mutations
         run: |

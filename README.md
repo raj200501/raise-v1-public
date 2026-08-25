@@ -10,11 +10,17 @@ cherry-pick, plus one shipped open artifact a stranger can reproduce from a cold
 
 | Phase | What it is | State |
 |---|---|---|
-| 0 | Domain selection against five hard gates | in progress |
-| 1 | Falsify the data thesis cheaply (obtain data, measure label noise) | not started |
-| 2 | The scaling curve: >=4 data scales, >=2 orders of magnitude, preregistered | not started |
-| 3 | Ship the credibility artifact (open data/weights + harness, one command) | not started |
-| 4 | The evidence package (`VERDICT.md`, `CORRECTIONS.md`, coverage map) | scaffolded |
+| 0 | Domain selection against five hard gates | **terminated — NO VIABLE DOMAIN FOUND** |
+| 1 | Falsify the data thesis cheaply | not started — there is no thesis to falsify |
+| 2 | The scaling curve | not started — **the headline absence** |
+| 3 | Ship the credibility artifact | partial — the *instrument* ships; no dataset or weights exist |
+| 4 | The evidence package (`VERDICT.md`, `CORRECTIONS.md`, coverage map) | delivered |
+
+**Phase 0 terminated with no domain selected.** 99 candidates across three rounds, 8 put through
+adversarial review with default posture REJECT, 0 SELECT. The verdict was emitted by a reader
+frozen and hashed before the data existed, under a preregistration anchored to a public randomness
+beacon. Read [`VERDICT.md`](VERDICT.md) first — it leads with what is missing, and the verification
+coverage map publishes its weakest row loudest.
 
 No customers, no users, no partners. Nothing in this repository claims otherwise.
 
@@ -28,7 +34,8 @@ each of its gates can be shown to fail on demand.
 python3 tools/preflight.py            # interpreter + dependency floors, cause and fix
 python3 tools/prereg.py verify        # hash-chained preregistration order + reader hashes
 python3 tests/mutation_test.py        # deliberately break each gate; assert each notices
-python3 tools/claimcheck.py outbound  # every number in outbound copy traces to an artifact
+python3 tools/coverage.py             # verification-coverage map, weakest class printed first
+python3 tools/claimcheck.py outbound VERDICT.md   # every number traces to a banked artifact
 ```
 
 - **Preregistration is hash-chained.** Entry *N* carries the hash of entry *N-1*, so the
