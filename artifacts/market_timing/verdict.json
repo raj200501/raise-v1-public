@@ -1,0 +1,49 @@
+{
+  "n_candidates": 4,
+  "n_qualifying": 0,
+  "preregistration": "0004-market-timing-search",
+  "qualifying": [],
+  "rows": [
+    {
+      "failed_clauses": [
+        "an open dataset at >= 10^6 labelled units exists (or was not checked)",
+        "5 serious efforts postdate the market event, need < 2"
+      ],
+      "name": "Cryptographic inventory / CBOM from binaries (post-quantum migration)",
+      "qualifies": false
+    },
+    {
+      "failed_clauses": [
+        "no dated, citable market event with a URL ('the market is growing' is not an event)",
+        "market_event_months_ago missing",
+        "an open dataset at >= 10^6 labelled units exists (or was not checked)",
+        "5 serious efforts postdate the market event, need < 2",
+        "g6: 64000 bytes/unit x 1e6 exceeds 2e+10"
+      ],
+      "name": "Synthetic speech source tracing (which TTS system generated this audio)",
+      "qualifies": false
+    },
+    {
+      "failed_clauses": [
+        "no dated, citable market event with a URL ('the market is growing' is not an event)",
+        "market_event_months_ago missing",
+        "an open dataset at >= 10^6 labelled units exists (or was not checked)",
+        "3 serious efforts postdate the market event, need < 2",
+        "g6: 5000000 bytes/unit x 1e6 exceeds 2e+10"
+      ],
+      "name": "Video encoder and settings recovery from decoded video",
+      "qualifies": false
+    },
+    {
+      "failed_clauses": [
+        "an open dataset at >= 10^6 labelled units exists (or was not checked)",
+        "5 serious efforts postdate the market event, need < 2"
+      ],
+      "name": "LLM model provenance (which base model is this fine-tune derived from)",
+      "qualifies": false
+    }
+  ],
+  "schema": "raise-v1/market_timing_verdict/1",
+  "source_artifact": "artifacts/market_timing/candidates.json",
+  "verdict": "NO_MARKET_TIMED_CANDIDATE_FOUND"
+}
