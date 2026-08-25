@@ -1,0 +1,70 @@
+{
+  "n_probes": 10,
+  "n_reachable": 10,
+  "note": "A 200 here means reachable from this container through its egress proxy. It is NOT a licence check and NOT a rate-limit check. Licence is verified per-corpus in docs/DOMAIN_SELECTION.md.",
+  "probed_utc": "2026-08-25T00:50:19Z",
+  "probes": [
+    {
+      "http_status": 200,
+      "name": "huggingface_datasets_api",
+      "seconds": 0.33,
+      "url": "https://huggingface.co/api/datasets?limit=1"
+    },
+    {
+      "http_status": 200,
+      "name": "zenodo_api",
+      "seconds": 1.792,
+      "url": "https://zenodo.org/api/records?size=1"
+    },
+    {
+      "http_status": 200,
+      "name": "github_raw",
+      "seconds": 0.125,
+      "url": "https://raw.githubusercontent.com/torvalds/linux/master/README"
+    },
+    {
+      "http_status": 200,
+      "name": "github_api",
+      "seconds": 0.209,
+      "url": "https://api.github.com/rate_limit"
+    },
+    {
+      "http_status": 200,
+      "name": "sec_edgar",
+      "seconds": 0.157,
+      "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany"
+    },
+    {
+      "http_status": 200,
+      "name": "arxiv_api",
+      "seconds": 0.172,
+      "url": "https://export.arxiv.org/api/query?search_query=all:test&max_results=1"
+    },
+    {
+      "http_status": 200,
+      "name": "pypi_files",
+      "seconds": 0.053,
+      "url": "https://files.pythonhosted.org/"
+    },
+    {
+      "http_status": 200,
+      "name": "common_crawl",
+      "seconds": 0.257,
+      "url": "https://data.commoncrawl.org/"
+    },
+    {
+      "http_status": 200,
+      "name": "crossref_api",
+      "seconds": 0.456,
+      "url": "https://api.crossref.org/works?rows=1"
+    },
+    {
+      "http_status": 200,
+      "name": "ncbi",
+      "seconds": 0.234,
+      "url": "https://www.ncbi.nlm.nih.gov/"
+    }
+  ],
+  "purpose": "Phase 1 de-risking: confirm the execution container can actually reach the corpus sources a candidate domain might need, before a domain is chosen.",
+  "schema": "raise-v1/reachability/1"
+}
