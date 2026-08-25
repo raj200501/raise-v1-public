@@ -148,6 +148,40 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 ---
 
+---
+
+## Why a fourth round is not being run here
+
+The finding names the missing class precisely enough to search for it directly. A fourth round
+aimed at *high-bandwidth physical recordings that are the causal consequence of a hidden variable*
+is the obvious next move, and it would be a genuinely different search rather than a rerun.
+
+It is not being run, for one reason: **preregistration 0001 says it may not be.** Its frozen scope
+reads *"It does not license a fourth round: under this preregistration, a round-3 result with no
+qualifying candidate terminates Phase 0."*
+
+Running one anyway would require a new preregistration superseding that clause — written, on this
+timeline, *after* seeing a result we did not like. That is exactly the move the whole discipline
+exists to prevent: the bar was frozen, it was not cleared, and the bar moved. The fact that the new
+round would be well-motivated is not a defence; a well-motivated bar change made after seeing the
+number is still a bar change made after seeing the number.
+
+So it is flagged rather than taken. **A fourth round is a decision for the principal, not for the
+process that just failed to clear its own bar.** If it is authorised, it needs its own
+preregistration, frozen before it runs, that states in its own scope that it was opened in response
+to this negative result and what would make it stop.
+
+## An instruction that could not be followed
+
+The task specified: *"Stop only for the three things listed under STOP CONDITIONS."* **No STOP
+CONDITIONS section was present in the instructions given.** Rather than guess at three conditions
+and act as though they had been specified, this is recorded as `COULD NOT VERIFY`.
+
+In their absence, the explicit stop instruction in the Phase 0 section was applied — *"If nothing
+clears all five gates, write that, commit it, and STOP."* That is what happened. If the three
+missing conditions would have produced a different stopping point, that is a gap in the record and
+not a judgement that was made.
+
 ## What this repository does not establish
 
 - **It does not establish that a viable domain does not exist.** It establishes that a search of
