@@ -1,0 +1,9 @@
+=== NEGATIVE CONTROL: SAME SOFTWARE, arbitrary bioproject partition as a fake label ===
+  SPAdes v. 3.13.0   n=350  bp=30   FAKE-label grouped balACC 0.527  (chance .500)
+  SPAdes v. 3.14.1   n=350  bp=26   FAKE-label grouped balACC 0.449  (chance .500)
+  SPAdes v. 3.15.5   n=329  bp=30   FAKE-label grouped balACC 0.545  (chance .500)
+
+=== SUBMITTER-grouped (stricter than bioproject) ===
+  SPAdes v. 3.13.0   vs SPAdes v. 3.13     submitter-grouped balACC 0.553 +-0.185   [SAME RELEASE, typed differently -> TRUE ANSWER = 0.500]
+  SPAdes v. 3.13.0   vs SPAdes v. 3.13.1   submitter-grouped balACC 0.566 +-0.069   [rnaSPAdes-only changes -> identical bacterial code path]
+  SPAdes v. 3.11.1   vs SPAdes v. 3.15.5   submitter-grouped balACC 0.503 +-0.121   [4 years apart, real code changes]

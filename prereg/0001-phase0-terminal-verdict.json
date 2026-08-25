@@ -1,0 +1,70 @@
+{
+  "id": "0001",
+  "slug": "phase0-terminal-verdict",
+  "title": "Phase 0 terminal verdict: does round 3 of the domain search select a domain, or does Phase 0 end with NO VIABLE DOMAIN FOUND?",
+  "scope": {
+    "one_line": "ONE search round (round 3), three scouts, at most five screened survivors, adversarial review of every survivor whose G4 verdict is not FAIL, on one execution box.",
+    "corpus": "Public literature, dataset and repository indices reachable from this container. No private data. No paid indices.",
+    "seed": "Rounds 1 and 2 of this same search, already banked at artifacts/phase0/round1_domain_search.json and artifacts/phase0/round2_domain_search.json (73 candidates, 8 adversarial reviews, 0 SELECT).",
+    "rungs": "Not applicable - this preregistration governs a SEARCH verdict, not a scaling curve.",
+    "what_this_does_not_cover": "It does not cover Phase 1, Phase 2 or any scaling result. It does not license a fourth round: under this preregistration, a round-3 result with no qualifying candidate terminates Phase 0. It says nothing about whether a viable domain EXISTS in the world - only about whether this search, run to this depth under these gates, found one."
+  },
+  "bar": {
+    "domain_selected": {
+      "threshold": 1,
+      "direction": "higher_is_better",
+      "passes_if": "count of round-3 candidates with adversarial overall_recommendation == 'SELECT' AND g2a_verdict == 'PASS' AND g3_verdict == 'PASS' AND g1_verdict == 'PASS' AND g6_verdict == 'PASS' AND G4 verdict == 'PASS'  >=  1"
+    }
+  },
+  "readings": [
+    {
+      "name": "n_qualifying",
+      "unit": "count of candidates",
+      "source_artifact": "artifacts/phase0/phase0_verdict.json",
+      "json_path": "$.n_qualifying"
+    },
+    {
+      "name": "verdict",
+      "unit": "enum{DOMAIN_SELECTED,NO_VIABLE_DOMAIN_FOUND}",
+      "source_artifact": "artifacts/phase0/phase0_verdict.json",
+      "json_path": "$.verdict"
+    },
+    {
+      "name": "n_adversarial_reviews",
+      "unit": "count of reviews",
+      "source_artifact": "artifacts/phase0/phase0_verdict.json",
+      "json_path": "$.n_adversarial_reviews"
+    }
+  ],
+  "arms": [
+    "Scout A - candidates whose manufacturer holds information destroyed by law, contract or physics (irrecoverable in principle, not merely absent).",
+    "Scout B - candidates whose generator is provably LOSSY and NOT analytically invertible, chosen against the round-2 law that an invertible generator yields a closed-form inverse that takes the whole label.",
+    "Scout C - candidates where the label is a DECISION a human or an organisation made, recorded contemporaneously, and not derivable from the artifact by any rule.",
+    "RIVAL EXPLANATION RUN AS AN ARM: every survivor must have its dumbest non-learned baseline MEASURED, not estimated, before adversarial review concludes. Round 1 and round 2 killed five candidates this way."
+  ],
+  "stop_rules": [
+    "If the reader emits NO_VIABLE_DOMAIN_FOUND, Phase 0 terminates. The result is written to VERDICT.md as a finding, not as a failure, and no fourth round is run under this preregistration.",
+    "If the reader exits non-zero (artifact missing or malformed), NO verdict is reported and the failure is recorded. Absence never reads as success.",
+    "If a reviewer returns SELECT while any of its own gate verdicts reads FAIL or MARGINAL, the gate verdict is taken and the candidate does not qualify. The non-flattering reading wins."
+  ],
+  "reader": "tools/readers/phase0_verdict.py",
+  "frozen": true,
+  "reader_sha256": "cd7eed828f7a95a24d39d10d5eccfb38d30fffb022231b9315c56d767bc772c7",
+  "frozen_utc": "2026-08-25T04:44:44Z",
+  "git_commit": "f0cdd1c16bf7dec3427f61514f50aeff56032ef8",
+  "git_dirty_at_freeze": true,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1916929,
+      "time_stamp": "2026-08-25T04:44:00.000Z",
+      "output_value": "143F35E9774B3F42290B1846E61D127D1876AE446B22C18F7370BC73CD38A54945CB3C5029356FD3B681CFF880238692D55959DB60204EEABBFDD89E4A3EA422"
+    },
+    "drand": {
+      "round": 6406735,
+      "randomness": "04b143fb1ea89fef7ac5848d7a5e41dfa2025c40d9f9e5c738154bbdafc3885c"
+    }
+  },
+  "chain_hash": "cfcc915c6ff65f9c5da0be8f8e70a27add4f75e5455d14c5cf5c58bd6f5ef0dc",
+  "chain_prev_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+}

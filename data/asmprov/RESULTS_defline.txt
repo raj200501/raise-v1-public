@@ -1,0 +1,24 @@
+n=2999  rule fires on 0.640 of assemblies
+ACCURACY of 35-line defline regex on assembler FAMILY (abstain=wrong): 0.5559
+   precision when it fires: 0.8691 (n=1918)
+majority-class baseline: 0.4842
+balanced ACC over 25 families: 0.2037
+
+   skesa          n=1452  recall 0.753
+   spades         n=573   recall 0.356
+   prokka         n=215   recall 0.014
+   allpaths       n=190   recall 0.984
+   unicycler      n=105   recall 0.467
+   flye           n=94    recall 0.511
+   clc            n=74    recall 0.419
+   hgap           n=54    recall 0.000
+   shovill        n=48    recall 0.875
+   velvet         n=46    recall 0.022
+   other          n=23    recall 0.000
+   soapdenovo     n=22    recall 0.000
+   abyss          n=21    recall 0.000
+   newbler        n=16    recall 0.000
+   a5             n=15    recall 0.000
+   canu           n=13    recall 0.692
+
+top confusions (true,guess): [(('spades', 'shovill'), 73), (('spades', 'unicycler'), 50), (('velvet', 'spades'), 19), (('clc', 'flye'), 12), (('spades', 'clc'), 12), (('soapdenovo', 'velvet'), 11), (('skesa', 'shovill'), 11), (('spades', 'flye'), 8)]
