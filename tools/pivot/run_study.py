@@ -82,15 +82,20 @@ def make_model(seed, kind="mlp"):
     """
     if kind == "hgb":
         from sklearn.ensemble import HistGradientBoostingClassifier
-        # early_stopping is OFF, and that is a memory decision, not a modelling one. With it on,
-        # sklearn calls train_test_split(X, y) inside fit(), which materialises a full extra copy of
-        # the training pool - 5.19 GB at the top rung. Two runs were OOM-killed at exactly that
-        # point, both at anon-rss 13.9 GB. Turning it off removes the copy. It is applied to EVERY
-        # rung and to the null control, so the model class stays identical across the curve and no
-        # rung is advantaged.
+        # early_stopping is ON. It was briefly turned OFF as a memory fix - sklearn's fit() calls
+        # train_test_split(X, y) internally when it is on, costing a full extra copy of the training
+        # pool - and that change is REVERTED. Run 3 showed why: with 200 unregularised iterations of
+        # 26 classes at 63 leaves, the 100k rung COLLAPSED from 0.1952 to 0.0637, barely above the
+        # 0.0385 chance level and below its own 10k rung. On a split grouped by source chunk that is
+        # the content-memorisation failure the grouped split exists to expose. Early stopping was
+        # doing the regularising.
+        #
+        # The revert restores the class chosen on PILOT data before any full-run number existed, so
+        # it is undoing a memory-motivated deviation rather than selecting a setting by its result.
+        # Memory is instead solved by capping the top rung, below.
         return HistGradientBoostingClassifier(max_iter=200, learning_rate=0.15,
-                                              max_leaf_nodes=63, early_stopping=False,
-                                              random_state=seed)
+                                              max_leaf_nodes=63, early_stopping=True,
+                                              n_iter_no_change=10, random_state=seed)
     if kind == "extratrees":
         from sklearn.ensemble import ExtraTreesClassifier
         return ExtraTreesClassifier(n_estimators=300, n_jobs=-1, min_samples_leaf=2,
@@ -157,6 +162,10 @@ def main() -> int:
     tr = np.nonzero(~is_ev)[0]
     rng.shuffle(tr)
     ncols = args.feature_cols or X.shape[1]
+    # Materialise ONLY as many training rows as the top rung needs. sklearn's early stopping copies
+    # whatever it is handed, so an oversized pool is paid for twice at the largest fit.
+    need = min(len(tr), max(args.rungs))
+    tr = tr[:need]
     Xe = np.ascontiguousarray(X[np.nonzero(is_ev)[0]][:, :ncols])
     ye = y[is_ev]
     Xtr = np.ascontiguousarray(X[tr][:, :ncols])
