@@ -16,6 +16,8 @@
     "broadcast": "BRDC00IGS_R_20250010000_01D_MN.rnx.gz from BKG, 459 GPS nav records",
     "day": "2025-001, GPS week 2347",
     "licence": "public IGS/ESA products, no authentication",
+    "n_sp3_gps_epochs": 9248,
+    "n_sp3_gps_epochs_note": "transcribed from this artifact's own prose (corpus.precise_orbit and the first bug record) so the number is machine-checkable; no new measurement",
     "precise_clock": "ESA0OPSFIN_20250010000_01D_30S_CLK.CLK.gz, 92,160 GPS samples",
     "precise_orbit": "ESA0OPSFIN_20250010000_01D_05M_ORB.SP3.gz, 9,248 GPS samples"
   },

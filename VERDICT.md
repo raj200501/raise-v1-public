@@ -179,6 +179,64 @@ such in `data/asmprov/README.md`.
 
 ---
 
+## EphemErr — `A2_FAILED`, by less than one part in ten of the bar
+
+The one candidate the archived search resurrected under an "effort" lens: predict, from a GPS
+broadcast ephemeris record alone, whether that record's signal-in-space range error will exceed
+its 0.90 quantile at a future epoch. Free labels — the truth is the precise orbit and clock
+product IGS publishes days later, so the environment supplies the answer key at zero marginal
+cost, forever.
+
+| | |
+|---|---|
+| **Verdict** | `A2_FAILED` |
+| **Emitted by** | `tools/readers/ephemerr_a2_verdict.py`, frozen and hashed before the data existed |
+| **Governed by** | `prereg/0005-ephemerr-a2`, chain seq 5 |
+| **Artifact** | `artifacts/ephemerr/a2_result.json` |
+
+| Reading | Value |
+|---|---:|
+| Learned model, held-out AUC | 0.9821 |
+| Best trivial baseline (`per_satellite_mean`) | 0.9363 |
+| **Margin** | **0.0458** against a frozen bar of **0.05** |
+| Null control (labels shuffled) | 0.4804 |
+| Split | temporal — train on days 1–15, test on 16–21 |
+| Test epochs / satellites | 51839 / 30 |
+
+### The pipeline was validated before the bar was applied
+
+An instrument that has never been checked against a known answer cannot fail honestly. Two bugs
+were found and fixed *before* any bar was applied, both by validating magnitudes against published
+values rather than by inspecting code:
+
+- The GPS epoch constant was **2444244** instead of **2444245**. Symptom: **729** km position
+  errors and 799 of **9248** epochs matching. Published broadcast orbit error is one to two metres,
+  so this was not a subtle discrepancy. After the fix, orbit RMS **1.386** m radial, **0.863** m
+  along-track, **0.520** m cross-track — the textbook range.
+- The clock column of an orbit-only SP3 product was used where a separate clock product was
+  needed. Fixing it left the residual unchanged, which **ruled the hypothesis out rather than
+  fixing anything**. Recorded, because a ruled-out hypothesis is still evidence.
+
+### The gate caught what the pre-run analysis did not
+
+Before the run, the anticipated killer was the operator's own broadcast accuracy index (URA/SISA),
+shipped free inside the student's input. It measured **0.5037** — a coin. The actual killer was
+**satellite identity**: a per-satellite historical mean scores **0.9363** on its own. Six earlier
+candidates died to the same shape, which is why the A2 clause exists and why it is applied before
+any learned number is believed.
+
+### A calibration observation, recorded and deliberately NOT applied
+
+An absolute margin of 0.05 against a baseline already at 0.9363 demands more than **three
+quarters** of all the headroom that remains above it — a far harder bar than the same 0.05
+against a baseline at 0.5, where it demands a fraction of the room available. That is a real
+argument, it was noticed *after* the result missed, and acting on it would be moving the bar to
+admit a result it excluded. **The verdict stands as `A2_FAILED`.** The observation is filed as
+guidance for future preregistrations — margins against high baselines should be specified in
+headroom, and specified before the data exists.
+
+---
+
 ## Round 4 — authorised by the principal, and it also found nothing
 
 A fourth round was authorised after the verdict above, under a **new preregistration frozen before
