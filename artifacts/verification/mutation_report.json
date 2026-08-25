@@ -31,6 +31,10 @@
     "scaling": {
       "detected": 7,
       "total": 7
+    },
+    "topk": {
+      "detected": 14,
+      "total": 14
     }
   },
   "cases": [
@@ -108,7 +112,7 @@
     },
     {
       "detected": true,
-      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=3503c375e70daa1c)",
+      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=abaf1d103f3f8a15)",
       "exit_code": 0,
       "expected": "pass",
       "gate": "prereg",
@@ -153,7 +157,7 @@
     },
     {
       "detected": true,
-      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 58bdaa2983387f00 (chain order broken)",
+      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 195627e2d083151f (chain order broken)",
       "exit_code": 1,
       "expected": "fail",
       "gate": "prereg",
@@ -180,7 +184,7 @@
     },
     {
       "detected": true,
-      "evidence": "/tmp/tmp0v6u2d4t/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
+      "evidence": "/tmp/tmpygbjsjzg/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
       "exit_code": 2,
       "expected": "fail",
       "gate": "prereg",
@@ -636,10 +640,136 @@
       "gate": "freshness",
       "mutation": "group-count-not-matching-path-count-is-a-failure",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_USABLE shape=BOTH HALVES USABLE failed=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "topk",
+      "mutation": "control-usable-output-passes",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=USABLE CONFIDENCE, SHORTLIST NO BETTER THAN A DUMB RULE failed=['top5 margin (frozen set): 0.52 - 0.48 = 0.04 is below the preregistered 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "top5-margin-over-the-FROZEN-set-below-bar-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=USABLE CONFIDENCE, SHORTLIST NO BETTER THAN A DUMB RULE failed=['top5 margin (expanded set): 0.52 - 0.49 = 0.03 is below the preregistered 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "top5-margin-over-the-EXPANDED-set-below-bar-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=USABLE SHORTLIST, UNUSABLE CONFIDENCE failed=['selective margin: 0.71 - 0.69 = 0.02 is below the preregistered 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "selective-margin-over-the-best-baseline-decile-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=USABLE SHORTLIST, UNUSABLE CONFIDENCE failed=['selective floor: 0.44 is below the preregistered 0.5 \u2014 on the tenth of fragments it is surest about, the tool is wrong mo",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "selective-accuracy-below-the-0.50-usability-floor-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=USABLE CONFIDENCE, SHORTLIST NO BETTER THAN A DUMB RULE failed=['top5 slope: top5_slope_ci95_low=0.0 does not exceed 0']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "top5-slope-lower-bound-touching-zero-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=NEITHER HALF USABLE failed=['null control: shuffled labels reached top-5 0.2124, above the 0.2123 chance-plus-tolerance level \u2014 a top-5 metric is five times easier to s",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "null-control-above-the-5-of-26-chance-level-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=NEITHER HALF USABLE failed=['split: split_is_grouped_by_source is not True']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "non-grouped-split-is-rejected-however-good-the-numbers",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=NEITHER HALF USABLE failed=['scope: n_rungs=3, need >= 4']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "too-few-rungs-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=NEITHER HALF USABLE failed=['scope: decades_spanned=1.9999, need >= 2.0']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "too-few-decades-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=USABLE SHORTLIST, UNUSABLE CONFIDENCE failed=['selective margin: selective_top_decile_accuracy or its baseline is missing', 'selective floor: selective_top_decile_accur",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "a-missing-field-reads-as-failure-not-as-a-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=NEITHER HALF USABLE failed=['split: split_is_grouped_by_source is not True']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "a-true-looking-string-is-not-True",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=USABLE SHORTLIST, UNUSABLE CONFIDENCE failed=['selective margin: 0.4 - 0.38 = 0.02 is below the preregistered 0.05', 'selective floor: 0.4 is below the preregistered 0.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "the-partial-outcome-is-NAMED-rather-than-left-spinnable",
+      "observed": "fail"
     }
   ],
-  "detected": 67,
+  "detected": 81,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 67
+  "total_mutations": 81
 }

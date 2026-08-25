@@ -112,9 +112,9 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 
 | Result | Value | Class |
 |---|---|---|
-| Every gate can be shown to fail | 67 mutations, 67 detected, 0 survived | primary-verifiable |
+| Every gate can be shown to fail | 81 mutations, 81 detected, 0 survived | primary-verifiable |
 | A number that is real but STALE is caught, not just a fabricated one | `tools/freshness.py`, 9 mutations | primary-verifiable |
-| Preregistration chain verifies, reader unchanged since freeze | 5 entries, head `8ebe55a5…` | primary-verifiable |
+| Preregistration chain verifies, reader unchanged since freeze | 6 entries, head `f4ae64ff…` | primary-verifiable |
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |
 | ACS PUMS record count reproduced | 392,318 records | primary-verifiable |
 | Instrument reproduces on a cold clone | preflight names cause and fix | primary-verifiable |
@@ -146,7 +146,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **9 of 45 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **9 of 46 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.**
@@ -167,7 +167,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 |---|---:|---|
 | `neither` | **9** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce. |
 | `arithmetic-verifiable` | 7 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 29 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `primary-verifiable` | 30 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.

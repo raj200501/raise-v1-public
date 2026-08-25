@@ -730,6 +730,135 @@ def _(root):
                                  "select": ["chain|len"]}])
 
 
+# ---------------------------------------------------------------- topk gate (preregistration 0006)
+#
+# The operational-output reader. Its two hardest clauses are the ones a passing top-1 result does
+# NOT imply: that the model's shortlist still beats a deep tree once ranking 5 of 26 makes the task
+# easier, and that its confidence tracks its correctness well enough to abstain on.
+
+GOOD_TOPK = {
+    "n_rungs": 4, "decades_spanned": 2.9031,
+    "top1_accuracy": 0.24, "top3_accuracy": 0.41, "top5_accuracy": 0.52,
+    "best_trivial_baseline_top5": 0.31, "best_trivial_baseline_top5_name": "logistic",
+    "best_baseline_expanded_top5": 0.40, "best_baseline_expanded_top5_name": "depth8_tree",
+    "selective_top_decile_accuracy": 0.71,
+    "baseline_selective_top_decile_accuracy": 0.60,
+    "top5_slope": 0.09, "top5_slope_ci95_low": 0.08, "top5_slope_ci95_high": 0.10,
+    "shuffled_label_top5_accuracy": 0.1925,
+    "split_is_grouped_by_source": True, "n_classes": 26,
+}
+
+
+def _topk(root, art=GOOD_TOPK):
+    """Run the reader, then translate its VERDICT into an exit code.
+
+    The reader exits 0 whenever it successfully emits a verdict, pass or fail alike - a reader that
+    exited non-zero on a negative finding would be conflating "the study failed" with "the reader
+    broke". So the mutation has to be judged on the verdict, not on the process exit code. The first
+    version of this helper skipped that step and 12 mutations "survived" that the reader was in fact
+    catching perfectly; the harness reported them as holes, which is what it is for.
+    """
+    os.makedirs(os.path.join(root, "artifacts", "pivot"), exist_ok=True)
+    json.dump(art, open(os.path.join(root, "artifacts", "pivot", "deflate_topk.json"), "w"))
+    shutil.copy(os.path.join(REPO, "tools", "readers", "deflate_topk_verdict.py"),
+                os.path.join(root, "tools", "readers", "deflate_topk_verdict.py"))
+    rc, out = run([PY, "tools/readers/deflate_topk_verdict.py"], root)
+    if rc != 0:
+        return rc, out
+    v = json.load(open(os.path.join(root, "artifacts", "pivot", "deflate_topk_verdict.json")))
+    ok = v["verdict"] == "OUTPUT_USABLE"
+    return (0 if ok else 1), f"verdict={v['verdict']} shape={v['shape']} failed={v['failed_clauses']}"
+
+
+def _mut(**kw):
+    a = dict(GOOD_TOPK); a.update(kw); return a
+
+
+@case("topk", "control-usable-output-passes", "pass")
+def _(root):
+    return _topk(root)
+
+
+@case("topk", "top5-margin-over-the-FROZEN-set-below-bar-is-rejected", "fail")
+def _(root):
+    return _topk(root, _mut(best_trivial_baseline_top5=0.48))
+
+
+@case("topk", "top5-margin-over-the-EXPANDED-set-below-bar-is-rejected", "fail")
+def _(root):
+    # The likely honest failure: ranking 5 of 26 is much easier than picking 1, so a deep tree can
+    # close the gap even where top-1 was clear. 0003 reported this set voluntarily; here it binds.
+    return _topk(root, _mut(best_baseline_expanded_top5=0.49))
+
+
+@case("topk", "selective-margin-over-the-best-baseline-decile-is-rejected", "fail")
+def _(root):
+    return _topk(root, _mut(baseline_selective_top_decile_accuracy=0.69))
+
+
+@case("topk", "selective-accuracy-below-the-0.50-usability-floor-is-rejected", "fail")
+def _(root):
+    # Clears the comparative margin and still fails: being better than a dumb rule is not the same
+    # as being right more often than not on the fragments you are surest about.
+    return _topk(root, _mut(selective_top_decile_accuracy=0.44,
+                            baseline_selective_top_decile_accuracy=0.30))
+
+
+@case("topk", "top5-slope-lower-bound-touching-zero-is-rejected", "fail")
+def _(root):
+    return _topk(root, _mut(top5_slope_ci95_low=0.0))
+
+
+@case("topk", "null-control-above-the-5-of-26-chance-level-is-rejected", "fail")
+def _(root):
+    return _topk(root, _mut(shuffled_label_top5_accuracy=0.2124))
+
+
+@case("topk", "non-grouped-split-is-rejected-however-good-the-numbers", "fail")
+def _(root):
+    return _topk(root, _mut(split_is_grouped_by_source=False, top5_accuracy=0.95))
+
+
+@case("topk", "too-few-rungs-is-rejected", "fail")
+def _(root):
+    return _topk(root, _mut(n_rungs=3))
+
+
+@case("topk", "too-few-decades-is-rejected", "fail")
+def _(root):
+    return _topk(root, _mut(decades_spanned=1.9999))
+
+
+@case("topk", "a-missing-field-reads-as-failure-not-as-a-pass", "fail")
+def _(root):
+    a = dict(GOOD_TOPK); del a["selective_top_decile_accuracy"]
+    return _topk(root, a)
+
+
+@case("topk", "a-true-looking-string-is-not-True", "fail")
+def _(root):
+    return _topk(root, _mut(split_is_grouped_by_source="yes"))
+
+
+@case("topk", "absent-artifact-emits-no-verdict", "fail")
+def _(root):
+    shutil.copy(os.path.join(REPO, "tools", "readers", "deflate_topk_verdict.py"),
+                os.path.join(root, "tools", "readers", "deflate_topk_verdict.py"))
+    return run([PY, "tools/readers/deflate_topk_verdict.py"], root)
+
+
+@case("topk", "the-partial-outcome-is-NAMED-rather-than-left-spinnable", "fail")
+def _(root):
+    # Shortlist clauses pass, selective clauses fail. The reader must not merely say FAILED - it
+    # must name the shape, because "a usable shortlist" is exactly what such a result would be
+    # sold as. If the name is missing, return 0 so this registers as a SURVIVING mutation.
+    rc, out = _topk(root, _mut(selective_top_decile_accuracy=0.40,
+                               baseline_selective_top_decile_accuracy=0.38))
+    if rc == 1 and "USABLE SHORTLIST, UNUSABLE CONFIDENCE" not in out:
+        return 0, out + " !! failed the study without naming the partial shape"
+    return rc, out
+
+
 def main() -> int:
     results = []
     for c in CASES:

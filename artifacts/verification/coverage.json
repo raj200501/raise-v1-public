@@ -2,12 +2,12 @@
   "claims": [
     {
       "artifact": "artifacts/verification/mutation_report.json",
-      "claim": "Every gate in this repository is shown capable of failing: 67 deliberate mutations across 8 gates, 67 detected, 0 survived.",
+      "claim": "Every gate in this repository is shown capable of failing: 81 deliberate mutations across 9 gates, 81 detected, 0 survived.",
       "class": "primary-verifiable",
       "id": "mutations-detected",
       "json_path": "$.detected",
       "reverify": "python3 tests/mutation_test.py",
-      "value": 67
+      "value": 81
     },
     {
       "artifact": "artifacts/verification/mutation_report.json",
@@ -393,6 +393,15 @@
       "json_path": "$.baseline_aucs.ura_index_alone",
       "reverify": "python3 tools/readers/ephemerr_a2_verdict.py",
       "value": 0.5037
+    },
+    {
+      "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "The operational-output gate of preregistration 0006 is shown capable of failing by 14 deliberate mutations, all detected - including one asserting that a partial outcome (usable shortlist, unusable confidence) is NAMED by the reader rather than left spinnable.",
+      "class": "primary-verifiable",
+      "id": "topk-gate-mutations",
+      "json_path": "$.by_gate.topk.total",
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 14
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

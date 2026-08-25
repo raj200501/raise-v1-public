@@ -109,10 +109,32 @@
       "reader_sha256": "e7864853109f02159dfb74acf7759371b6511889be5d1fc4af462f4e6360a561",
       "seq": 5,
       "slug": "ephemerr-a2"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "87feef852b25db1df6802ce8f57c2c1a47f96d7630fe18d311ab392a5fad8f75",
+          "round": 6408784
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "26157BB7B84AACAB905DD6C8FEA69752142F48E7087E2C722A7CCD27CF478335700773BC4874A65916ED3419D2A16B951EDE6EB92DDCB775C02CFDEDD7386ABD",
+          "pulse": 1917953,
+          "time_stamp": "2026-08-25T21:48:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-25T21:49:05Z",
+      "hash": "f4ae64ff58d9dfcf2a3614fa1c6db024bca824a627de3285a44be91d95c2d429",
+      "id": "0006",
+      "prev_hash": "8ebe55a595491d5724b71542e8ebfcd0e84f5e992d0a44b607508a5120333856",
+      "reader": "tools/readers/deflate_topk_verdict.py",
+      "reader_sha256": "ed8666f696306d09514ccffda2834ed88f8df92b64dd13775614f21ab44891aa",
+      "seq": 6,
+      "slug": "deflate-operational-output"
     }
   ],
-  "entries": 5,
-  "head": "8ebe55a595491d5724b71542e8ebfcd0e84f5e992d0a44b607508a5120333856",
+  "entries": 6,
+  "head": "f4ae64ff58d9dfcf2a3614fa1c6db024bca824a627de3285a44be91d95c2d429",
   "problems": 0,
   "schema": "raise-v1/prereg_status/1",
   "verified": true
