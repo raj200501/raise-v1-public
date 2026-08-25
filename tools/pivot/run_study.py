@@ -28,6 +28,7 @@ import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from corpus import CONFIG_NAMES, FAMILIES, N_CONFIGS, chunk_fragments, load_real  # noqa: E402
 from features import N_FEATURES, features_many  # noqa: E402
+from npzmap import fill_f32, fill_f64, npz_memmap  # noqa: E402
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 _REAL = None
@@ -72,6 +73,28 @@ def build(n_chunks, chunk_size, carve_len, src_dir, procs, ncols=0):
                 print(f"    {k}/{n_chunks} chunks, {n} fragments, "
                       f"{time.perf_counter()-t0:.0f}s", flush=True)
     return X[:n], Y[:n], G[:n], round(time.perf_counter() - t0, 1)
+
+
+def predict_chunked(model, Xe32, chunk=50000):
+    """Predict over a float32 evaluation block, converting one chunk at a time.
+
+    Holding the evaluation set as float64 costs 2.30 GB for the whole run. Converting per chunk
+    costs 0.44 GB transiently and is numerically identical: the features were computed and stored
+    as float32, so widening them is exact.
+    """
+    return np.concatenate([model.predict(np.asarray(Xe32[i:i + chunk], dtype=np.float64))
+                           for i in range(0, len(Xe32), chunk)])
+
+
+def _rss_gb():
+    try:
+        with open("/proc/self/status") as fh:
+            for ln in fh:
+                if ln.startswith("VmRSS:"):
+                    return int(ln.split()[1]) / 1e6
+    except OSError:
+        pass
+    return float("nan")
 
 
 def make_model(seed, kind="mlp"):
@@ -136,10 +159,13 @@ def main() -> int:
     args = ap.parse_args()
 
     if args.cache and os.path.exists(args.cache):
-        print(f"[1/5] reusing cached corpus {args.cache} (memory-mapped)", flush=True)
-        z = np.load(args.cache, mmap_mode="r")
-        X, y, g, build_s = z["X"], z["y"], z["g"], float(z["build_s"])
-        y = np.asarray(y); g = np.asarray(g)
+        print(f"[1/5] reusing cached corpus {args.cache} (memory-mapped in place)", flush=True)
+        # np.load(..., mmap_mode="r") SILENTLY IGNORES mmap_mode on a .npz and reads the whole
+        # array. That phantom 5.76 GB resident copy is the largest term in all five OOM kills on
+        # this run. npz_memmap maps the STORED zip entry in place instead. See tools/pivot/npzmap.py.
+        X = npz_memmap(args.cache, "X")
+        with np.load(args.cache) as z:                      # y and g are megabytes, not gigabytes
+            y = np.asarray(z["y"]); g = np.asarray(z["g"]); build_s = float(z["build_s"])
         mmapped = True
     else:
         print(f"[1/5] manufacturing from {args.chunks} source chunks "
@@ -170,17 +196,26 @@ def main() -> int:
     # whatever it is handed, so an oversized pool is paid for twice at the largest fit.
     need = min(len(tr), max(args.rungs))
     tr = tr[:need]
-    # float64 up front: sklearn's HGB converts internally otherwise, doubling peak memory.
-    Xe = np.ascontiguousarray(X[np.nonzero(is_ev)[0]][:, :ncols], dtype=np.float64)
+    # float64 up front: sklearn's HGB uses X_DTYPE=float64 and converts internally otherwise,
+    # doubling peak memory. Filled CHUNKWISE from the memmap: the one-shot
+    # `np.ascontiguousarray(X[tr][:, :ncols], dtype=np.float64)` holds a 3.55 GB float32
+    # intermediate and the 7.09 GB float64 result simultaneously.
+    ev = np.nonzero(is_ev)[0]
+    # The evaluation block stays float32 and is converted one predict-chunk at a time (see
+    # predict_chunked). float32 -> float64 is exact for values that were computed and stored as
+    # float32, so this is bitwise the same evaluation, for 1.15 GB instead of 2.30 GB held for the
+    # entire run - headroom that the depth-16 baseline needs, since sklearn's trees make their own
+    # float32 copy of whatever they are handed.
+    Xe = fill_f32(np.empty((len(ev), ncols), np.float32), X, ev, ncols)
     ye = y[is_ev]
-    Xtr = np.ascontiguousarray(X[tr][:, :ncols], dtype=np.float64)
+    Xtr = fill_f64(np.empty((len(tr), ncols), np.float64), X, tr, ncols)
     ytr = y[tr]
     if mmapped:
-        del X, z
+        del X
     import gc as _gc
     _gc.collect()
-    print(f"      materialised float64: train {Xtr.nbytes/1e9:.2f} GB, eval {Xe.nbytes/1e9:.2f} GB, "
-          f"{ncols} feature columns", flush=True)
+    print(f"      materialised: train float64 {Xtr.nbytes/1e9:.2f} GB, eval float32 "
+          f"{Xe.nbytes/1e9:.2f} GB, {ncols} feature columns, RSS {_rss_gb():.2f} GB", flush=True)
     chance = 1.0 / N_CONFIGS
     print(f"[2/5] grouped split: {len(tr)} train / {len(ye)} eval, "
           f"{len(ev_groups)} held-out source chunks, chance={chance:.4f}", flush=True)
@@ -205,8 +240,9 @@ def main() -> int:
                     ("logistic", LogisticRegression(max_iter=400))]:
         t = time.perf_counter()
         clf.fit(Xtr[:nb], ytr[:nb])
-        baselines[nm] = round(float(accuracy_score(ye, clf.predict(Xe))), 4)
-        print(f"      {nm:<18} {baselines[nm]:.4f}   ({time.perf_counter()-t:.0f}s)", flush=True)
+        baselines[nm] = round(float(accuracy_score(ye, predict_chunked(clf, Xe))), 4)
+        print(f"      {nm:<18} {baselines[nm]:.4f}   ({time.perf_counter()-t:.0f}s, "
+              f"RSS {_rss_gb():.2f} GB)", flush=True)
     # The frozen baseline set (preregistration 0003) is: majority, label-prior sampling,
     # length/ratio-only (NOT COMPUTABLE here - see artifacts/pivot/prereg_interpretation.json),
     # depth-3 tree, logistic regression. `best_trivial_baseline` takes the best of THAT set,
@@ -237,13 +273,13 @@ def main() -> int:
             m.fit(Xtr[:k], ytr[:k], X_val=Xtr[k:r], y_val=ytr[k:r])
         else:
             m.fit(Xtr[:r], ytr[:r])
-        correct = (m.predict(Xe) == ye).astype(np.int8)
+        correct = (predict_chunked(m, Xe) == ye).astype(np.int8)
         acc = float(correct.mean())
         secs = round(time.perf_counter() - t, 1)
         rungs.append({"n_units": int(r), "accuracy": round(acc, 4), "train_seconds": secs})
         per_ex.append({"n_units": int(r), "per_example": correct.tolist()})
         costs.append(secs)
-        print(f"      rung {r:>8}: accuracy {acc:.4f}   ({secs}s)", flush=True)
+        print(f"      rung {r:>8}: accuracy {acc:.4f}   ({secs}s, RSS {_rss_gb():.2f} GB)", flush=True)
 
     print("[5/5] null control: labels shuffled, identical pipeline...", flush=True)
     nn = min(len(ytr), max(args.rungs[0], 20000))
@@ -255,7 +291,7 @@ def main() -> int:
         m0.fit(Xtr[:k0], y_sh[:k0], X_val=Xtr[k0:nn], y_val=y_sh[k0:nn])
     else:
         m0.fit(Xtr[:nn], y_sh)
-    null_acc = round(float((m0.predict(Xe) == ye).mean()), 4)
+    null_acc = round(float((predict_chunked(m0, Xe) == ye).mean()), 4)
     print(f"      shuffled-label accuracy {null_acc:.4f}  vs chance {chance:.4f}   "
           f"({time.perf_counter()-t:.0f}s)", flush=True)
 
