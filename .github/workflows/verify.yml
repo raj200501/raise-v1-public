@@ -1,0 +1,33 @@
+name: verify
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  instrument:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Preregistration chain (order, sealed fields, reader hashes)
+        run: python3 tools/prereg.py verify
+
+      - name: Mutation tests (proof the gates can fail)
+        run: python3 tests/mutation_test.py
+
+      - name: Outbound-copy gate
+        run: python3 tools/claimcheck.py outbound
+
+      - name: Mutation report must show zero surviving mutations
+        run: |
+          python3 - <<'PY'
+          import json, sys
+          r = json.load(open("artifacts/verification/mutation_report.json"))
+          print(f"{r['detected']}/{r['total_mutations']} detected, {r['survived']} survived")
+          sys.exit(1 if r["survived"] else 0)
+          PY
