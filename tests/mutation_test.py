@@ -32,7 +32,8 @@ def sandbox(tmp: str) -> str:
     os.makedirs(os.path.join(root, "artifacts"), exist_ok=True)
     os.makedirs(os.path.join(root, "docs"), exist_ok=True)
     os.makedirs(os.path.join(root, "prereg"), exist_ok=True)
-    for f in ("chainlib.py", "prereg.py", "claimcheck.py", "scaling.py", "trivial_baselines.py", "coverage.py"):
+    for f in ("chainlib.py", "prereg.py", "claimcheck.py", "scaling.py", "trivial_baselines.py",
+              "coverage.py", "freshness.py"):
         shutil.copy(os.path.join(REPO, "tools", f), os.path.join(root, "tools", f))
     with open(os.path.join(root, "docs", "claimcheck_allowlist.tsv"), "w") as fh:
         fh.write("# value\treason\n")
@@ -641,6 +642,92 @@ def _(root):
     shutil.copy(os.path.join(REPO, "tools", "readers", "ephemerr_a2_verdict.py"),
                 os.path.join(root, "tools", "readers", "ephemerr_a2_verdict.py"))
     return run([PY, "tools/readers/ephemerr_a2_verdict.py"], root)
+
+
+# ---------------------------------------------------------------- freshness gate
+#
+# claimcheck asks whether a number EXISTS in a banked artifact. freshness asks whether it is the
+# CURRENT one. A stale number passes the first and must fail the second, so the control case and
+# the stale cases below are the whole point of the gate.
+
+def _fresh(root, doc_text=None, art=None, claims=None):
+    os.makedirs(os.path.join(root, "artifacts", "verification"), exist_ok=True)
+    art = art if art is not None else {"chain": [{"hash": "aaaaaaaa11"}, {"hash": "bbbbbbbb22"}],
+                                       "items": [{"class": "x"}, {"class": "y"}, {"class": "x"}]}
+    json.dump(art, open(os.path.join(root, "artifacts", "verification", "s.json"), "w"))
+    doc = os.path.join(root, "docs", "report.md")
+    with open(doc, "w") as fh:
+        fh.write(doc_text if doc_text is not None else "chain: 2 entries, head `bbbbbbbb`\nx-class: 2\n")
+    default = [
+        {"id": "chain", "file": "docs/report.md",
+         "pattern": r"chain: (\d+) entries, head `([0-9a-z]{8})`",
+         "artifact": "artifacts/verification/s.json",
+         "select": ["chain|len", "chain.-1.hash|head8"]},
+        {"id": "xclass", "file": "docs/report.md", "pattern": r"x-class: (\d+)",
+         "artifact": "artifacts/verification/s.json",
+         "select": ["items|count:class=x"]},
+    ]
+    reg = os.path.join(root, "docs", "live_claims.json")
+    json.dump({"claims": claims if claims is not None else default}, open(reg, "w"))
+    return run([PY, "tools/freshness.py", "docs/live_claims.json"], root)
+
+
+@case("freshness", "control-current-claims-pass", "pass")
+def _(root):
+    return _fresh(root)
+
+
+@case("freshness", "stale-count-that-claimcheck-would-still-pass", "fail")
+def _(root):
+    # 1 is a real number and appears in the artifact's own structure, so claimcheck has no grounds
+    # to object. It is simply no longer the count. That gap is why this gate exists.
+    return _fresh(root, doc_text="chain: 1 entries, head `bbbbbbbb`\nx-class: 2\n")
+
+
+@case("freshness", "stale-hash-that-was-true-earlier", "fail")
+def _(root):
+    return _fresh(root, doc_text="chain: 2 entries, head `aaaaaaaa`\nx-class: 2\n")
+
+
+@case("freshness", "stale-count-under-a-filtered-path", "fail")
+def _(root):
+    return _fresh(root, doc_text="chain: 2 entries, head `bbbbbbbb`\nx-class: 3\n")
+
+
+@case("freshness", "reworded-claim-is-not-silently-skipped", "fail")
+def _(root):
+    # The sentence changed so the pattern no longer matches. Treating that as "nothing to check"
+    # would let any claim escape the gate by being rephrased.
+    return _fresh(root, doc_text="the chain holds two entries\nx-class: 2\n")
+
+
+@case("freshness", "missing-artifact-is-a-failure-not-a-skip", "fail")
+def _(root):
+    r = _fresh(root)
+    os.remove(os.path.join(root, "artifacts", "verification", "s.json"))
+    return run([PY, "tools/freshness.py", "docs/live_claims.json"], root)
+
+
+@case("freshness", "path-that-does-not-resolve-is-a-failure", "fail")
+def _(root):
+    return _fresh(root, claims=[{"id": "bad", "file": "docs/report.md", "pattern": r"x-class: (\d+)",
+                                 "artifact": "artifacts/verification/s.json",
+                                 "select": ["no_such_key|len"]}])
+
+
+@case("freshness", "unknown-path-operator-is-a-failure", "fail")
+def _(root):
+    return _fresh(root, claims=[{"id": "bad", "file": "docs/report.md", "pattern": r"x-class: (\d+)",
+                                 "artifact": "artifacts/verification/s.json",
+                                 "select": ["items|sum"]}])
+
+
+@case("freshness", "group-count-not-matching-path-count-is-a-failure", "fail")
+def _(root):
+    return _fresh(root, claims=[{"id": "bad", "file": "docs/report.md",
+                                 "pattern": r"chain: (\d+) entries, head `([0-9a-z]{8})`",
+                                 "artifact": "artifacts/verification/s.json",
+                                 "select": ["chain|len"]}])
 
 
 def main() -> int:

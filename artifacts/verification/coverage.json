@@ -1,320 +1,329 @@
 {
-  "schema": "raise-v1/coverage_map/1",
-  "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",
   "claims": [
     {
+      "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "Every gate in this repository is shown capable of failing: 67 deliberate mutations across 8 gates, 67 detected, 0 survived.",
+      "class": "primary-verifiable",
       "id": "mutations-detected",
-      "class": "primary-verifiable",
-      "claim": "Every gate in this repository is shown capable of failing: 58 deliberate mutations across seven gates, 58 detected, 0 survived.",
-      "value": 58,
-      "artifact": "artifacts/verification/mutation_report.json",
       "json_path": "$.detected",
-      "reverify": "python3 tests/mutation_test.py"
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 67
     },
     {
-      "id": "mutations-survived",
-      "class": "primary-verifiable",
-      "claim": "No mutation survived, i.e. no gate has a known hole.",
-      "value": 0,
       "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "No mutation survived, i.e. no gate has a known hole.",
+      "class": "primary-verifiable",
+      "id": "mutations-survived",
       "json_path": "$.survived",
-      "reverify": "python3 tests/mutation_test.py"
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 0
     },
     {
-      "id": "prereg-chain-verifies",
-      "class": "primary-verifiable",
-      "claim": "The preregistration hash chain verifies: sealed fields unchanged, chain order intact, and the frozen reader's sha256 unchanged since it was frozen.",
-      "value": 1,
       "artifact": "artifacts/verification/prereg_status.json",
+      "claim": "The preregistration hash chain verifies: sealed fields unchanged, chain order intact, and the frozen reader's sha256 unchanged since it was frozen.",
+      "class": "primary-verifiable",
+      "id": "prereg-chain-verifies",
       "json_path": "$.entries",
-      "reverify": "python3 tools/prereg.py verify"
+      "reverify": "python3 tools/prereg.py verify",
+      "value": 1
     },
     {
-      "id": "census-repro-records",
-      "class": "primary-verifiable",
+      "artifact": "artifacts/phase0/reproduction_alloctrace.json",
       "claim": "The ACS PUMS 2023 1-Year California person file contains 392,318 records, reproduced first-hand from the public corpus.",
-      "value": 392318,
-      "artifact": "artifacts/phase0/reproduction_alloctrace.json",
+      "class": "primary-verifiable",
+      "id": "census-repro-records",
       "json_path": "$.reproduced.n_records",
-      "reverify": "python3 tools/repro/census_leak_check.py"
+      "reverify": "python3 tools/repro/census_leak_check.py",
+      "value": 392318
     },
     {
-      "id": "census-repro-auc",
-      "class": "primary-verifiable",
+      "artifact": "artifacts/phase0/reproduction_alloctrace.json",
       "claim": "A ONE-LINE rule (ANC == 4) with ZERO training records predicts the allocation of six unrelated census fields at mean AUC 0.8026 - the measurement that killed round 2's strongest candidate.",
-      "value": 0.8026,
-      "artifact": "artifacts/phase0/reproduction_alloctrace.json",
-      "json_path": "$.reproduced.mean_auc_six_flags",
-      "reverify": "python3 tools/repro/census_leak_check.py"
-    },
-    {
-      "id": "census-repro-fancp",
       "class": "primary-verifiable",
-      "claim": "FANCP fires on 0 of 392,318 records, confirming ACS never imputes ancestry and therefore publishes the ancestry nonresponse code verbatim inside the student's own input.",
-      "value": 392318,
+      "id": "census-repro-auc",
+      "json_path": "$.reproduced.mean_auc_six_flags",
+      "reverify": "python3 tools/repro/census_leak_check.py",
+      "value": 0.8026
+    },
+    {
       "artifact": "artifacts/phase0/reproduction_alloctrace.json",
+      "claim": "FANCP fires on 0 of 392,318 records, confirming ACS never imputes ancestry and therefore publishes the ancestry nonresponse code verbatim inside the student's own input.",
+      "class": "primary-verifiable",
+      "id": "census-repro-fancp",
       "json_path": "$.reproduced.fancp_distribution.0",
-      "reverify": "python3 tools/repro/census_leak_check.py"
+      "reverify": "python3 tools/repro/census_leak_check.py",
+      "value": 392318
     },
     {
-      "id": "total-candidates",
-      "class": "arithmetic-verifiable",
+      "artifact": "artifacts/phase0/phase0_totals.json",
       "claim": "99 candidate domains were generated across three rounds before any was selected.",
-      "value": 99,
-      "artifact": "artifacts/phase0/phase0_totals.json",
+      "class": "arithmetic-verifiable",
+      "id": "total-candidates",
       "json_path": "$.total_candidates",
-      "note": "Counted directly from the three banked round artifacts. The counting is arithmetic; the underlying candidate lists rest on our run."
+      "note": "Counted directly from the three banked round artifacts. The counting is arithmetic; the underlying candidate lists rest on our run.",
+      "value": 99
     },
     {
-      "id": "total-adversarial",
-      "class": "arithmetic-verifiable",
+      "artifact": "artifacts/phase0/phase0_totals.json",
       "claim": "8 candidates were subjected to adversarial review with default posture REJECT.",
-      "value": 8,
-      "artifact": "artifacts/phase0/phase0_totals.json",
+      "class": "arithmetic-verifiable",
+      "id": "total-adversarial",
       "json_path": "$.total_adversarial_reviews",
-      "note": "Round 3's own screener summary said 11. Recounted from the banked artifacts the figure is 8, and 8 is what this repository uses."
+      "note": "Round 3's own screener summary said 11. Recounted from the banked artifacts the figure is 8, and 8 is what this repository uses.",
+      "value": 8
     },
     {
-      "id": "total-select",
-      "class": "arithmetic-verifiable",
-      "claim": "Zero candidates received an adversarial SELECT.",
-      "value": 0,
       "artifact": "artifacts/phase0/phase0_totals.json",
-      "json_path": "$.total_select"
+      "claim": "Zero candidates received an adversarial SELECT.",
+      "class": "arithmetic-verifiable",
+      "id": "total-select",
+      "json_path": "$.total_select",
+      "value": 0
     },
     {
-      "id": "phase0-verdict",
-      "class": "arithmetic-verifiable",
-      "claim": "The frozen reader for preregistration 0001 emitted NO_VIABLE_DOMAIN_FOUND.",
-      "value": "NO_VIABLE_DOMAIN_FOUND",
       "artifact": "artifacts/phase0/phase0_verdict.json",
-      "json_path": "$.verdict",
-      "note": "The reader is shipped and hashed, but its INPUT (the round-3 search artifact) rests on our run and a stranger cannot re-derive it."
-    },
-    {
-      "id": "round1-searches",
+      "claim": "The frozen reader for preregistration 0001 emitted NO_VIABLE_DOMAIN_FOUND.",
       "class": "arithmetic-verifiable",
-      "claim": "109 white-space searches were recorded across 99 distinct venues in round 1.",
-      "value": 109,
-      "artifact": "artifacts/phase0/round1_summary.json",
-      "json_path": "$.recorded_searches"
+      "id": "phase0-verdict",
+      "json_path": "$.verdict",
+      "note": "The reader is shipped and hashed, but its INPUT (the round-3 search artifact) rests on our run and a stranger cannot re-derive it.",
+      "value": "NO_VIABLE_DOMAIN_FOUND"
     },
     {
-      "id": "javac-identical",
-      "class": "neither",
-      "claim": "javac 17.0.8 and javac 17.0.13 at --release 8 produced 345 of 345 BYTE-IDENTICAL class files - the measurement that established zero channel capacity and killed the JVM build-provenance candidate.",
-      "value": 345,
+      "artifact": "artifacts/phase0/round1_summary.json",
+      "claim": "109 white-space searches were recorded across 99 distinct venues in round 1.",
+      "class": "arithmetic-verifiable",
+      "id": "round1-searches",
+      "json_path": "$.recorded_searches",
+      "value": 109
+    },
+    {
       "artifact": "artifacts/phase0/round1_domain_search.json",
+      "claim": "javac 17.0.8 and javac 17.0.13 at --release 8 produced 345 of 345 BYTE-IDENTICAL class files - the measurement that established zero channel capacity and killed the JVM build-provenance candidate.",
+      "class": "neither",
+      "id": "javac-identical",
+      "value": 345,
       "why_not_verifiable": "Measured by a subagent inside an ephemeral scratch directory that no longer exists. No script was banked, the four JDK downloads were not retained, and it was not re-run here. The claim is a first-hand agent measurement, not an independently confirmed one."
     },
     {
-      "id": "elf-base-entropy",
-      "class": "neither",
-      "claim": "The ELF load base address carries H = 0.1518 bits over 838 real multi-architecture Debian binaries (0x0 is 98.45%), which killed the headerless-firmware candidate's uncrowded half.",
-      "value": 0.1518,
       "artifact": "artifacts/phase0/round2_domain_search.json",
+      "claim": "The ELF load base address carries H = 0.1518 bits over 838 real multi-architecture Debian binaries (0x0 is 98.45%), which killed the headerless-firmware candidate's uncrowded half.",
+      "class": "neither",
+      "id": "elf-base-entropy",
+      "value": 0.1518,
       "why_not_verifiable": "Subagent measurement in an ephemeral scratch directory. The ~480 .deb downloads were not retained and no script was banked. Not re-run here."
     },
     {
-      "id": "mot-untrained-rule",
-      "class": "neither",
-      "claim": "On the UK MOT archive an untrained two-term rule (age/10 + mileage/100000) scores AUC 0.6553 and beats the learned model at every n below about 3x10^4.",
-      "value": 0.6553,
       "artifact": "artifacts/phase0/round3_domain_search.json",
+      "claim": "On the UK MOT archive an untrained two-term rule (age/10 + mileage/100000) scores AUC 0.6553 and beats the learned model at every n below about 3x10^4.",
+      "class": "neither",
+      "id": "mot-untrained-rule",
+      "value": 0.6553,
       "why_not_verifiable": "Subagent measurement over a multi-gigabyte download in an ephemeral scratch directory. Not retained, no script banked, not re-run here. It is the strongest single piece of evidence for law L3(iii) and it sits in the weakest verification class."
     },
     {
-      "id": "mot-prior-outcome",
-      "class": "neither",
-      "claim": "The same vehicle's own previous MOT outcome predicts its next outcome at AUC 0.5077 - very nearly a closed channel.",
-      "value": 0.5077,
       "artifact": "artifacts/phase0/round3_domain_search.json",
+      "claim": "The same vehicle's own previous MOT outcome predicts its next outcome at AUC 0.5077 - very nearly a closed channel.",
+      "class": "neither",
+      "id": "mot-prior-outcome",
+      "value": 0.5077,
       "why_not_verifiable": "Same subagent, same ephemeral scratch directory, same absence of a banked script."
     },
     {
-      "id": "sentinel1-fit",
-      "class": "neither",
-      "claim": "A cubic polynomial plus a once-per-revolution sinusoid explains 0.946 to 0.994 of Sentinel-1 orbit-correction residual variance in eight of nine component-arcs - the basis of law L1.",
-      "value": 0.994,
       "artifact": "artifacts/phase0/round2_domain_search.json",
+      "claim": "A cubic polynomial plus a once-per-revolution sinusoid explains 0.946 to 0.994 of Sentinel-1 orbit-correction residual variance in eight of nine component-arcs - the basis of law L1.",
+      "class": "neither",
+      "id": "sentinel1-fit",
+      "value": 0.994,
       "why_not_verifiable": "Subagent measurement on three real orbit arcs in an ephemeral scratch directory. Not retained, not re-run here. Law L1 retires an entire candidate family on the strength of it."
     },
     {
-      "id": "cobol-dumb-f1",
-      "class": "neither",
-      "claim": "A ~50-line non-learned rule reached exact-boundary F1 0.768 on COBOL record-layout induction, where 20,000 training records bought 1.4 more points.",
-      "value": 0.768,
       "artifact": "artifacts/phase0/round1_domain_search.json",
+      "claim": "A ~50-line non-learned rule reached exact-boundary F1 0.768 on COBOL record-layout induction, where 20,000 training records bought 1.4 more points.",
+      "class": "neither",
+      "id": "cobol-dumb-f1",
+      "value": 0.768,
       "why_not_verifiable": "Subagent measurement AND, additionally, measured against a synthetic generator the same subagent wrote - so even the original is indicative rather than established. Not re-run here."
     },
     {
-      "id": "assemblyprov-confound",
-      "class": "neither",
-      "claim": "The real SPAdes version pair 3.11.1 vs 3.15.5 scored balanced accuracy 0.503, LOWER than the null pair 3.13.0 vs 3.13.1 at 0.566 - i.e. inside its own confound floor.",
-      "value": 0.503,
       "artifact": "artifacts/phase0/round2_domain_search.json",
+      "claim": "The real SPAdes version pair 3.11.1 vs 3.15.5 scored balanced accuracy 0.503, LOWER than the null pair 3.13.0 vs 3.13.1 at 0.566 - i.e. inside its own confound floor.",
+      "class": "neither",
+      "id": "assemblyprov-confound",
+      "value": 0.503,
       "why_not_verifiable": "The SPECIFIC pairwise figures (0.503 for the real pair against 0.566 for the null pair) rest on ten taxa and on full contig data, of which only three taxa of METADATA are banked - so those exact numbers cannot be re-derived here. What HAS been re-derived from the banked inputs is the finding they support: the split leak and the confound. See the three asm-* claims in the primary-verifiable class. This row is narrower than the other 'neither' rows: its inputs survived, unlike every other subagent measurement in this project."
     },
     {
-      "id": "darkfill-negative-r2",
-      "class": "neither",
-      "claim": "On NASDAQ ITCH hidden-liquidity prediction the dumbest rule (give every symbol the market-wide fraction) scores R^2 = -0.0149, i.e. worse than the cross-sectional mean - the best F2 result Phase 0 produced, on a candidate that died anyway on G1 and G4.",
-      "value": -0.0149,
       "artifact": "artifacts/phase0/round3_domain_search.json",
+      "claim": "On NASDAQ ITCH hidden-liquidity prediction the dumbest rule (give every symbol the market-wide fraction) scores R^2 = -0.0149, i.e. worse than the cross-sectional mean - the best F2 result Phase 0 produced, on a candidate that died anyway on G1 and G4.",
+      "class": "neither",
+      "id": "darkfill-negative-r2",
+      "value": -0.0149,
       "why_not_verifiable": "Subagent measurement over a 400 MB slice of a 4.76 GB ITCH file in an ephemeral scratch directory. Not retained, not re-run here."
     },
     {
-      "id": "sat-determinism",
-      "class": "primary-verifiable",
+      "artifact": "artifacts/verification/repro_sat_solver_identity_run2.json",
       "claim": "Re-running a CDCL SAT solver on the same instance returns the byte-identical model in 1530 of 1530 checks - so the label is a deterministic function of the instance and the solver.",
-      "value": 1530,
-      "artifact": "artifacts/verification/repro_sat_solver_identity_run2.json",
+      "class": "primary-verifiable",
+      "id": "sat-determinism",
       "json_path": "$.determinism.identical",
-      "reverify": "python3 tools/repro/sat_solver_identity.py --instances 3000 --test-frac 0.1"
+      "reverify": "python3 tools/repro/sat_solver_identity.py --instances 3000 --test-frac 0.1",
+      "value": 1530
     },
     {
-      "id": "sat-free-decoder",
-      "class": "primary-verifiable",
+      "artifact": "artifacts/verification/repro_sat_solver_identity_run2.json",
       "claim": "The zero-training decoder (re-run all six solvers and compare) identifies the producing solver at 0.9857 over 18,000 items, against a 0.1667 chance level - the measurement behind law L3(i).",
-      "value": 0.9857,
-      "artifact": "artifacts/verification/repro_sat_solver_identity_run2.json",
+      "class": "primary-verifiable",
+      "id": "sat-free-decoder",
       "json_path": "$.free_decoder_rerun_and_compare.accuracy",
-      "reverify": "python3 tools/repro/sat_solver_identity.py --instances 3000 --test-frac 0.1"
+      "reverify": "python3 tools/repro/sat_solver_identity.py --instances 3000 --test-frac 0.1",
+      "value": 0.9857
     },
     {
-      "id": "sat-divergence",
-      "class": "primary-verifiable",
+      "artifact": "artifacts/verification/repro_sat_solver_identity_run2.json",
       "claim": "All six solvers returned the identical model on 0 of 3,000 instances, so the artifact genuinely varies with the label and this is not a zero-capacity channel.",
-      "value": 0,
-      "artifact": "artifacts/verification/repro_sat_solver_identity_run2.json",
-      "json_path": "$.divergence.all_six_agree",
-      "reverify": "python3 tools/repro/sat_solver_identity.py --instances 3000 --test-frac 0.1"
-    },
-    {
-      "id": "sat-learned-top-rung",
       "class": "primary-verifiable",
-      "claim": "A learned model on 27 joint formula-assignment features reaches 0.18 at 13,500 training rows - barely above the 0.1667 chance level, and 0.8057 below the free decoder.",
-      "value": 0.18,
-      "artifact": "artifacts/verification/repro_sat_solver_identity_run2.json",
-      "json_path": "$.learned_model_curve[3].accuracy",
-      "reverify": "python3 tools/repro/sat_solver_identity.py --instances 3000 --test-frac 0.1"
+      "id": "sat-divergence",
+      "json_path": "$.divergence.all_six_agree",
+      "reverify": "python3 tools/repro/sat_solver_identity.py --instances 3000 --test-frac 0.1",
+      "value": 0
     },
     {
-      "id": "sat-subagent-slope-not-reproduced",
-      "class": "neither",
-      "claim": "The subagent reported the learned model at 0.2384 with a slope of +2.8 accuracy points per decade, closing the gap in about 27 decades. This repository could not reproduce any of the three.",
-      "value": 0.2384,
+      "artifact": "artifacts/verification/repro_sat_solver_identity_run2.json",
+      "claim": "A learned model on 27 joint formula-assignment features reaches 0.18 at 13,500 training rows - barely above the 0.1667 chance level, and 0.8057 below the free decoder.",
+      "class": "primary-verifiable",
+      "id": "sat-learned-top-rung",
+      "json_path": "$.learned_model_curve[3].accuracy",
+      "reverify": "python3 tools/repro/sat_solver_identity.py --instances 3000 --test-frac 0.1",
+      "value": 0.18
+    },
+    {
       "artifact": "artifacts/verification/repro_sat_comparison.json",
+      "claim": "The subagent reported the learned model at 0.2384 with a slope of +2.8 accuracy points per decade, closing the gap in about 27 decades. This repository could not reproduce any of the three.",
+      "class": "neither",
+      "id": "sat-subagent-slope-not-reproduced",
       "json_path": "$.subagent_reported.learned_curve.13500",
+      "value": 0.2384,
       "why_not_verifiable": "Actively NOT reproduced, which is worse than merely unverified. Our own run at the same top rung gives 0.1800, +1.21 points per decade and 66.6 decades. The subagent's code lived in an ephemeral scratch directory and is gone, so the implementations cannot be diffed. The difference flatters our conclusion, and the likeliest explanation is that OUR feature set is the weaker one - so neither figure is quoted as established anywhere in this repository."
     },
     {
-      "id": "asm-temporal-loses-to-constant",
-      "class": "primary-verifiable",
+      "artifact": "artifacts/verification/repro_assembly_splits.json",
       "claim": "Predicting the full assembly method string on a TEMPORAL split scores 0.4765 against a train-majority constant at 0.4805 - it loses outright to a constant. Re-derived from banked public NCBI inputs.",
-      "value": 0.4765,
-      "artifact": "artifacts/verification/repro_assembly_splits.json",
+      "class": "primary-verifiable",
+      "id": "asm-temporal-loses-to-constant",
       "json_path": "$.results['full METHOD STRING'][2].accuracy",
-      "reverify": "python3 tools/repro/assembly_provenance_splits.py"
+      "reverify": "python3 tools/repro/assembly_provenance_splits.py",
+      "value": 0.4765
     },
     {
-      "id": "asm-grouped-collapse",
-      "class": "primary-verifiable",
+      "artifact": "artifacts/verification/repro_assembly_splits.json",
       "claim": "The same task falls from 0.4873 accuracy on a random split to 0.1531 when whole BioProjects are held out, because the label is close to a project-level constant.",
-      "value": 0.1531,
-      "artifact": "artifacts/verification/repro_assembly_splits.json",
+      "class": "primary-verifiable",
+      "id": "asm-grouped-collapse",
       "json_path": "$.results['full METHOD STRING'][1].accuracy",
-      "reverify": "python3 tools/repro/assembly_provenance_splits.py"
+      "reverify": "python3 tools/repro/assembly_provenance_splits.py",
+      "value": 0.1531
     },
     {
-      "id": "asm-null-control",
-      "class": "primary-verifiable",
-      "claim": "A FAKE label built from an arbitrary BioProject partition INSIDE a single assembler version is itself predictable at balanced accuracy 0.7772 against its own chance level of 0.5 - so contiguity features carry project-batch signal that has nothing to do with which assembler ran.",
-      "value": 0.7772,
       "artifact": "artifacts/verification/repro_assembly_splits.json",
+      "claim": "A FAKE label built from an arbitrary BioProject partition INSIDE a single assembler version is itself predictable at balanced accuracy 0.7772 against its own chance level of 0.5 - so contiguity features carry project-batch signal that has nothing to do with which assembler ran.",
+      "class": "primary-verifiable",
+      "id": "asm-null-control",
       "json_path": "$.null_control_max_balanced_accuracy_binary",
-      "reverify": "python3 tools/repro/assembly_provenance_splits.py"
+      "reverify": "python3 tools/repro/assembly_provenance_splits.py",
+      "value": 0.7772
     },
     {
-      "id": "lichess-entropy",
-      "class": "primary-verifiable",
+      "artifact": "artifacts/phase0/round4_lichess_pipeline_validation.json",
       "claim": "On 400,000 real Lichess player-side units the rating-band label carries 1.97 bits of entropy, comfortably clearing the 1.0-bit floor frozen in preregistration 0002.",
-      "value": 1.97,
-      "artifact": "artifacts/phase0/round4_lichess_pipeline_validation.json",
+      "class": "primary-verifiable",
+      "id": "lichess-entropy",
       "json_path": "$.a1_label_entropy_bits",
-      "reverify": "python3 tools/repro/lichess_clock_curve.py --rungs 1000 10000 100000 300000"
+      "reverify": "python3 tools/repro/lichess_clock_curve.py --rungs 1000 10000 100000 300000",
+      "value": 1.97
     },
     {
-      "id": "lichess-best-baseline",
-      "class": "primary-verifiable",
+      "artifact": "artifacts/phase0/round4_lichess_pipeline_validation.json",
       "claim": "The best trivial baseline on that task is a logistic regression at 0.4293 accuracy, against a majority-class baseline of 0.4188.",
-      "value": 0.4293,
-      "artifact": "artifacts/phase0/round4_lichess_pipeline_validation.json",
+      "class": "primary-verifiable",
+      "id": "lichess-best-baseline",
       "json_path": "$.best_baseline.accuracy",
-      "reverify": "python3 tools/repro/lichess_clock_curve.py --rungs 1000 10000 100000 300000"
+      "reverify": "python3 tools/repro/lichess_clock_curve.py --rungs 1000 10000 100000 300000",
+      "value": 0.4293
     },
     {
-      "id": "lichess-slope",
-      "class": "primary-verifiable",
-      "claim": "THE FIRST REAL SCALING CURVE IN THIS REPOSITORY: +0.0338 accuracy points per decade of data over four rungs spanning 2.4771 orders of magnitude, with a paired-bootstrap 95% interval of [0.0306, 0.0369] that excludes zero and r2 0.9794. On a domain that CANNOT be selected. The stored value is the unrounded slope.",
-      "value": 0.03379452190383932,
       "artifact": "artifacts/phase0/round4_lichess_scaling_fit.json",
+      "claim": "THE FIRST REAL SCALING CURVE IN THIS REPOSITORY: +0.0338 accuracy points per decade of data over four rungs spanning 2.4771 orders of magnitude, with a paired-bootstrap 95% interval of [0.0306, 0.0369] that excludes zero and r2 0.9794. On a domain that CANNOT be selected. The stored value is the unrounded slope.",
+      "class": "primary-verifiable",
+      "id": "lichess-slope",
       "json_path": "$.primary_fit.slope",
-      "reverify": "python3 tools/scaling.py artifacts/phase0/round4_lichess_rung_scores.json --boot 2000"
+      "reverify": "python3 tools/scaling.py artifacts/phase0/round4_lichess_rung_scores.json --boot 2000",
+      "value": 0.03379452190383932
     },
     {
-      "id": "lichess-a2-margin-fails",
-      "class": "primary-verifiable",
-      "claim": "That same candidate FAILS the A2 clause: its margin over the best trivial baseline is 0.0313, below the 0.05 frozen in preregistration 0002 before the data existed. The gate rejected it on real data.",
-      "value": 0.0313,
       "artifact": "artifacts/phase0/round4_lichess_pipeline_validation.json",
+      "claim": "That same candidate FAILS the A2 clause: its margin over the best trivial baseline is 0.0313, below the 0.05 frozen in preregistration 0002 before the data existed. The gate rejected it on real data.",
+      "class": "primary-verifiable",
+      "id": "lichess-a2-margin-fails",
       "json_path": "$.a2_margin_over_best_baseline",
-      "reverify": "python3 tools/repro/lichess_clock_curve.py --rungs 1000 10000 100000 300000"
+      "reverify": "python3 tools/repro/lichess_clock_curve.py --rungs 1000 10000 100000 300000",
+      "value": 0.0313
     },
     {
-      "id": "round4-verdict",
-      "class": "arithmetic-verifiable",
-      "claim": "Round 4's frozen reader emitted NO_VIABLE_DOMAIN_FOUND_ROUND4 over 5 candidates considered and 1 measured.",
-      "value": 5,
       "artifact": "artifacts/phase0/round4_measurements.json",
+      "claim": "Round 4's frozen reader emitted NO_VIABLE_DOMAIN_FOUND_ROUND4 over 5 candidates considered and 1 measured.",
+      "class": "arithmetic-verifiable",
+      "id": "round4-verdict",
       "json_path": "count of candidates_considered",
-      "note": "The reader is shipped and hashed, but its input rests on our run."
+      "note": "The reader is shipped and hashed, but its input rests on our run.",
+      "value": 5
     },
     {
-      "id": "ephemerr-a2-baseline",
-      "class": "primary-verifiable",
+      "artifact": "artifacts/ephemerr/a2_result.json",
       "claim": "EphemErr A2: a per-satellite historical mean with ZERO training reaches AUC 0.9363 at predicting which GPS broadcast ephemerides will be badly wrong, on a temporal split. Satellite identity alone nearly owns the label.",
-      "value": 0.9363,
-      "artifact": "artifacts/ephemerr/a2_result.json",
+      "class": "primary-verifiable",
+      "id": "ephemerr-a2-baseline",
       "json_path": "$.best_baseline_auc",
-      "reverify": "python3 tools/gnss/a2_test.py"
+      "reverify": "python3 tools/gnss/a2_test.py",
+      "value": 0.9363
     },
     {
-      "id": "ephemerr-a2-ura-useless",
-      "class": "primary-verifiable",
+      "artifact": "artifacts/ephemerr/a2_result.json",
       "claim": "The URA/SISA index - which round 2 named as the likely dominant baseline, and which ships free inside the student's input - reaches AUC 0.5037, indistinguishable from a coin. Round 2 named the wrong killer.",
-      "value": 0.5037,
-      "artifact": "artifacts/ephemerr/a2_result.json",
+      "class": "primary-verifiable",
+      "id": "ephemerr-a2-ura-useless",
       "json_path": "$.baseline_aucs.ura_index_alone",
-      "reverify": "python3 tools/gnss/a2_test.py"
+      "reverify": "python3 tools/gnss/a2_test.py",
+      "value": 0.5037
     },
     {
-      "id": "ephemerr-a2-learned",
-      "class": "primary-verifiable",
+      "artifact": "artifacts/ephemerr/a2_result.json",
       "claim": "The learned model reaches AUC 0.9821, a real improvement that captures 71.9% of the headroom above the baseline - but the margin is 0.0458 against a frozen 0.05, so A2 FAILS by 0.0042.",
-      "value": 0.9821,
-      "artifact": "artifacts/ephemerr/a2_result.json",
+      "class": "primary-verifiable",
+      "id": "ephemerr-a2-learned",
       "json_path": "$.learned_auc",
-      "reverify": "python3 tools/gnss/a2_test.py"
+      "reverify": "python3 tools/gnss/a2_test.py",
+      "value": 0.9821
     },
     {
-      "id": "ephemerr-a2-null",
-      "class": "primary-verifiable",
-      "claim": "The EphemErr null control is clean: shuffled labels fall to AUC 0.4804.",
-      "value": 0.4804,
       "artifact": "artifacts/ephemerr/a2_result.json",
+      "claim": "The EphemErr null control is clean: shuffled labels fall to AUC 0.4804.",
+      "class": "primary-verifiable",
+      "id": "ephemerr-a2-null",
       "json_path": "$.shuffled_label_auc",
-      "reverify": "python3 tools/gnss/a2_test.py"
+      "reverify": "python3 tools/gnss/a2_test.py",
+      "value": 0.4804
+    },
+    {
+      "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "The freshness gate - which fails a number that is real but no longer current, a class the outbound-copy gate structurally cannot catch - is itself shown capable of failing by 9 deliberate mutations, all detected.",
+      "class": "primary-verifiable",
+      "id": "freshness-gate-mutations",
+      "json_path": "$.by_gate.freshness.total",
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 9
     }
-  ]
+  ],
+  "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",
+  "schema": "raise-v1/coverage_map/1"
 }

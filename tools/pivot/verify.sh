@@ -14,6 +14,7 @@ echo "== the instrument =="
 "$PY" tests/mutation_test.py | tail -2
 "$PY" tools/coverage.py | tail -2
 "$PY" tools/claimcheck.py outbound VERDICT.md | tail -2
+"$PY" tools/freshness.py | tail -2
 
 echo
 echo "== the pivot result, read by its frozen reader =="

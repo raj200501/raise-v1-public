@@ -1,0 +1,76 @@
+{
+  "schema": "raise-v1/live_claims/1",
+  "why": "Numbers that describe the CURRENT state of the instrument rather than a past measurement. These go stale silently: the value stays banked in some artifact forever, so tools/claimcheck.py keeps passing it long after it stopped being true. tools/freshness.py re-derives each one and fails on divergence. A past measurement does NOT belong here - a 2026-08-25 accuracy is supposed to stay what it was.",
+  "claims": [
+    {
+      "id": "mutations-run",
+      "file": "VERDICT.md",
+      "pattern": "\\| Every gate can be shown to fail \\| (\\d+) mutations, (\\d+) detected, (\\d+) survived \\|",
+      "artifact": "artifacts/verification/mutation_report.json",
+      "select": [
+        "total_mutations",
+        "detected",
+        "survived"
+      ]
+    },
+    {
+      "id": "prereg-chain",
+      "file": "VERDICT.md",
+      "pattern": "\\| Preregistration chain verifies, reader unchanged since freeze \\| (\\d+) entries, head `([0-9a-f]{8})",
+      "artifact": "artifacts/verification/prereg_status.json",
+      "select": [
+        "chain|len",
+        "chain.-1.hash|head8"
+      ]
+    },
+    {
+      "id": "coverage-weakest-row",
+      "file": "VERDICT.md",
+      "pattern": "\\*\\*(\\d+) of (\\d+) claims are in `neither`",
+      "artifact": "artifacts/verification/coverage.json",
+      "select": [
+        "claims|count:class=neither",
+        "claims|len"
+      ]
+    },
+    {
+      "id": "coverage-neither",
+      "file": "VERDICT.md",
+      "pattern": "\\| `neither` \\| \\*\\*(\\d+)\\*\\* \\|",
+      "artifact": "artifacts/verification/coverage.json",
+      "select": [
+        "claims|count:class=neither"
+      ]
+    },
+    {
+      "id": "coverage-arithmetic",
+      "file": "VERDICT.md",
+      "pattern": "\\| `arithmetic-verifiable` \\| (\\d+) \\|",
+      "artifact": "artifacts/verification/coverage.json",
+      "select": [
+        "claims|count:class=arithmetic-verifiable"
+      ]
+    },
+    {
+      "id": "coverage-primary",
+      "file": "VERDICT.md",
+      "pattern": "\\| `primary-verifiable` \\| (\\d+) \\|",
+      "artifact": "artifacts/verification/coverage.json",
+      "select": [
+        "claims|count:class=primary-verifiable"
+      ]
+    },
+    {
+      "id": "coverage-claim-prose",
+      "file": "artifacts/verification/coverage.json",
+      "pattern": "(\\d+) deliberate mutations across (\\d+) gates, (\\d+) detected, (\\d+) survived",
+      "artifact": "artifacts/verification/mutation_report.json",
+      "select": [
+        "total_mutations",
+        "by_gate|len",
+        "detected",
+        "survived"
+      ]
+    }
+  ]
+}

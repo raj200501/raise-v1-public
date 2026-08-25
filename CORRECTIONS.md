@@ -19,6 +19,66 @@ Format:
 
 ---
 
+## 2026-08-25 — Published three stale numbers in `VERDICT.md`, and the outbound gate passed all three
+
+**What was published.** Three numbers in `VERDICT.md` describing the current state of the
+instrument had stopped being true and kept being published:
+
+| Row | Published | Actual at the time it was read |
+|---|---|---|
+| Preregistration chain | `1 entry, head cfcc915c…` | 5 entries, head `8ebe55a5…` |
+| Weakest coverage row | `9 of 32 claims are in neither` | 9 of 36 |
+| Coverage table | `primary-verifiable  17` | 21 |
+
+All three were true when written. None was true when found. The chain row is the worst of them:
+it is the row a reader would check *first* to decide whether anything else in the document can be
+trusted, and it understated the instrument's own record by four preregistrations.
+
+**Why the gate passed them.** `tools/claimcheck.py` asks: does this number appear in a banked
+artifact at the precision written? For a fabricated number that is the right question. For a stale
+one it is the wrong question, and the gate cannot be tuned into asking the right one — the old
+value stays banked forever, so it keeps passing on its own merits. `cfcc915c` really is the hash
+of chain entry 1. `17` really was the count. The gate was working exactly as specified and the
+specification had a hole in it.
+
+**Size.** Three numbers, in the document that exists to be the honest summary, one of them the
+integrity claim about the preregistration chain itself. Against that: the direction is
+*self-deprecating* in all three cases — fewer preregistrations, fewer primary-verifiable claims,
+a smaller denominator on the weakest row. Nothing here flattered the work. That is luck rather
+than process, and it is not a mitigation: a mechanism that lets stale numbers through lets
+flattering ones through equally.
+
+**This is the second instance of the same bug.** The first is the entry above, dated the same day:
+the mutation count in `coverage.json` said 49 while the suite ran 58, CI went red for about an
+hour, and the principal caught it before this repository did. That was patched with a one-off
+guard inside `tests/mutation_test.py` comparing the two numbers. A one-off guard for one number
+is not a fix for a class of bug, and writing a second one-off would have been the wrong response
+to being shown the same failure twice.
+
+**Fix.** `tools/freshness.py`, a gate that re-derives each live number from its artifact and fails
+on divergence, driven by a data registry (`docs/live_claims.json`) so adding a claim needs no code
+change. It is wired into CI and `tools/pivot/verify.sh`. On its first run against the unmodified
+repository it failed, naming all three stale numbers — the failure above is the gate's own control
+case, not a hypothetical.
+
+Two design choices worth stating, because both could have been made the comfortable way:
+
+- A registry pattern that **no longer matches** its document is a FAILURE, not a skip. Otherwise
+  any claim escapes the gate by being reworded. This is the case that caught the chain row: the
+  document said "1 entry" where the pattern wanted "entries".
+- A **missing artifact** is a failure, not a skip. Absence is never a pass, the same rule the
+  frozen readers already apply.
+
+Nine mutation tests cover it, including the one that states the point: a stale count that
+`claimcheck` still passes must make `freshness` fail. The suite is now 67 mutations across 8
+gates, 67 detected, 0 survived.
+
+**What it does not fix.** Only numbers entered in the registry are checked; a live number nobody
+registers is still unguarded. The registry is a judgement call about which numbers describe the
+present rather than a past measurement, and that judgement is not itself mechanised. A 2026-08-25
+accuracy is *supposed* to stay what it was, so it must stay out of the registry — and the boundary
+between those two kinds of number is drawn by hand.
+
 ## 2026-08-25 — Published a mutation count that did not match the repository, and broke CI for an hour
 
 **Claimed.** `VERDICT.md`, `README.md` and `outbound/ONE_PAGER.md` all stated "38 mutations, 38

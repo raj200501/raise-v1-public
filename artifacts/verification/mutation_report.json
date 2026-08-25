@@ -16,6 +16,10 @@
       "detected": 9,
       "total": 9
     },
+    "freshness": {
+      "detected": 9,
+      "total": 9
+    },
     "pivot-curve": {
       "detected": 11,
       "total": 11
@@ -104,7 +108,7 @@
     },
     {
       "detected": true,
-      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=6c3247e7c7604df3)",
+      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=8e1301b1daaecfb0)",
       "exit_code": 0,
       "expected": "pass",
       "gate": "prereg",
@@ -149,7 +153,7 @@
     },
     {
       "detected": true,
-      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 6f723b0014ad0586 (chain order broken)",
+      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 1d6c5ba75844f2b1 (chain order broken)",
       "exit_code": 1,
       "expected": "fail",
       "gate": "prereg",
@@ -176,7 +180,7 @@
     },
     {
       "detected": true,
-      "evidence": "/tmp/tmpxa5vtsaj/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
+      "evidence": "/tmp/tmp6ybfkchc/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
       "exit_code": 2,
       "expected": "fail",
       "gate": "prereg",
@@ -551,10 +555,91 @@
       "gate": "ephemerr-a2",
       "mutation": "absent-artifact-emits-no-verdict",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: PASS",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "freshness",
+      "mutation": "control-current-claims-pass",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (chain)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "freshness",
+      "mutation": "stale-count-that-claimcheck-would-still-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (chain)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "freshness",
+      "mutation": "stale-hash-that-was-true-earlier",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (xclass)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "freshness",
+      "mutation": "stale-count-under-a-filtered-path",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (chain)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "freshness",
+      "mutation": "reworded-claim-is-not-silently-skipped",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (chain, xclass)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "freshness",
+      "mutation": "missing-artifact-is-a-failure-not-a-skip",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (bad)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "freshness",
+      "mutation": "path-that-does-not-resolve-is-a-failure",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (bad)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "freshness",
+      "mutation": "unknown-path-operator-is-a-failure",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (bad)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "freshness",
+      "mutation": "group-count-not-matching-path-count-is-a-failure",
+      "observed": "fail"
     }
   ],
-  "detected": 58,
+  "detected": 67,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 58
+  "total_mutations": 67
 }

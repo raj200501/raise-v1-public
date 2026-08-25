@@ -32,6 +32,9 @@ jobs:
       - name: Outbound-copy gate (outbound copy AND the verdict itself)
         run: python3 tools/claimcheck.py outbound VERDICT.md
 
+      - name: Freshness gate (live numbers must match the CURRENT artifact, not merely exist)
+        run: python3 tools/freshness.py
+
       - name: Mutation report must show zero surviving mutations
         run: |
           python3 - <<'PY'
