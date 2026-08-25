@@ -32,7 +32,7 @@ def sandbox(tmp: str) -> str:
     os.makedirs(os.path.join(root, "artifacts"), exist_ok=True)
     os.makedirs(os.path.join(root, "docs"), exist_ok=True)
     os.makedirs(os.path.join(root, "prereg"), exist_ok=True)
-    for f in ("chainlib.py", "prereg.py", "claimcheck.py", "scaling.py"):
+    for f in ("chainlib.py", "prereg.py", "claimcheck.py", "scaling.py", "trivial_baselines.py"):
         shutil.copy(os.path.join(REPO, "tools", f), os.path.join(root, "tools", f))
     with open(os.path.join(root, "docs", "claimcheck_allowlist.tsv"), "w") as fh:
         fh.write("# value\treason\n")
@@ -322,6 +322,76 @@ def _(root):
     d["rungs"][0]["per_example"] = d["rungs"][0]["per_example"][:50]
     json.dump(d, open(p, "w"))
     return run([PY, "tools/scaling.py", p, "--boot", "50"], root)
+
+
+# ---------------------------------------------------------------- A2 trivial-baseline gate
+
+def _tb(root, kind="signal", n=1200, seed=3):
+    import random as _r
+    rng = _r.Random(seed)
+    X, y = [], []
+    for _ in range(n):
+        f = [rng.gauss(0, 1) for _ in range(5)]
+        if kind == "signal":
+            lab = 1 if f[0] + 0.5 * f[1] + rng.gauss(0, 0.6) > 0 else 0
+        elif kind == "noise":
+            lab = rng.randint(0, 1)
+        elif kind == "leaked":
+            lab = 1 if f[0] > 0 else 0
+            f = f + [float(lab)]          # the label is literally a feature
+        X.append(f); y.append(lab)
+    cut = int(n * 0.7)
+    tr = os.path.join(root, "artifacts", "tb_tr.json")
+    te = os.path.join(root, "artifacts", "tb_te.json")
+    json.dump({"X": X[:cut], "y": y[:cut]}, open(tr, "w"))
+    json.dump({"X": X[cut:], "y": y[cut:]}, open(te, "w"))
+    return tr, te
+
+
+@case("a2-baseline", "control-strong-model-clears-the-floor", "pass")
+def _(root):
+    tr, te = _tb(root)
+    return run([PY, "tools/trivial_baselines.py", tr, te,
+                "--claimed-score", "0.99", "--margin", "0.02"], root)
+
+
+@case("a2-baseline", "weak-model-below-floor-is-rejected", "fail")
+def _(root):
+    tr, te = _tb(root)
+    return run([PY, "tools/trivial_baselines.py", tr, te,
+                "--claimed-score", "0.55", "--margin", "0.02"], root)
+
+
+@case("a2-baseline", "margin-does-real-work-just-above-baseline-still-fails", "fail")
+def _(root):
+    tr, te = _tb(root)
+    rc, out = run([PY, "tools/trivial_baselines.py", tr, te, "--out",
+                   os.path.join(root, "artifacts", "tb.json")], root)
+    if rc != 0:
+        return rc, out
+    best = json.load(open(os.path.join(root, "artifacts", "tb.json")))["best_baseline_accuracy"]["value"]
+    return run([PY, "tools/trivial_baselines.py", tr, te,
+                "--claimed-score", f"{best + 0.005:.6f}", "--margin", "0.05"], root)
+
+
+@case("a2-baseline", "degenerate-leaked-label-makes-the-baseline-unbeatable", "fail")
+def _(root):
+    tr, te = _tb(root, kind="leaked")
+    return run([PY, "tools/trivial_baselines.py", tr, te,
+                "--claimed-score", "0.97", "--margin", "0.02"], root)
+
+
+@case("a2-baseline", "pure-noise-labels-cannot-be-cleared", "fail")
+def _(root):
+    tr, te = _tb(root, kind="noise")
+    return run([PY, "tools/trivial_baselines.py", tr, te,
+                "--claimed-score", "0.52", "--margin", "0.05"], root)
+
+
+@case("a2-baseline", "claimed-score-without-a-preregistered-margin-is-refused", "fail")
+def _(root):
+    tr, te = _tb(root)
+    return run([PY, "tools/trivial_baselines.py", tr, te, "--claimed-score", "0.99"], root)
 
 
 def main() -> int:

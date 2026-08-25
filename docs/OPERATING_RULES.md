@@ -42,6 +42,21 @@ gate and asserts the gate notices. A mutation that survives is reported as a hol
 instrument, not quietly dropped. The report is banked at
 `artifacts/verification/mutation_report.json`.
 
+## 4a. Measure the dumbest thing that could work, first
+
+Before any learned result is believed, the trivial baselines are run and banked:
+`tools/trivial_baselines.py` fits majority-class, label-prior sampling, a single thresholded
+feature, a depth-3 tree, 1-NN and logistic regression, and reports the best of them as a floor.
+A learned score is compared against **that floor plus a preregistered margin**, never against
+chance. The gate exits non-zero when the floor is not cleared, and refuses to run at all if a
+claimed score is offered without a margin frozen in advance.
+
+This rule exists because of a specific near-miss. In round 1 of domain selection, a candidate
+whose entire thesis was that a task required a learned model was killed by fifty lines of
+non-learned rules reaching F1 0.768 on it; twenty thousand training records bought 1.4 more
+points. That was found by an adversarial reviewer in under an hour. It is cheaper to find it
+first.
+
 ## 5. File corrections against yourself, at full size
 
 `CORRECTIONS.md` records every claim withdrawn or revised, dated. An over-claim against our

@@ -25,6 +25,7 @@ reported was built and committed *before* the numbers existed, and it is designe
 each of its gates can be shown to fail on demand.
 
 ```
+python3 tools/preflight.py            # interpreter + dependency floors, cause and fix
 python3 tools/prereg.py verify        # hash-chained preregistration order + reader hashes
 python3 tests/mutation_test.py        # deliberately break each gate; assert each notices
 python3 tools/claimcheck.py outbound  # every number in outbound copy traces to an artifact
@@ -38,6 +39,9 @@ python3 tools/claimcheck.py outbound  # every number in outbound copy traces to 
   reader was edited after its bar was frozen.
 - **Numbers come only from banked artifacts.** `claimcheck.py` fails on any number in
   outbound copy that no artifact under `artifacts/` supports at the precision written.
+- **The dumbest baseline is measured first.** `tools/trivial_baselines.py` establishes the
+  floor a learned result must clear — best trivial baseline *plus a preregistered margin*, not
+  chance — and refuses to run at all if the margin was not frozen in advance.
 - **Every gate has a mutation test.** `tests/mutation_test.py` reports surviving mutations
   as holes in the instrument rather than dropping them.
 

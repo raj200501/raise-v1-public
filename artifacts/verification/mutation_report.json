@@ -1,5 +1,9 @@
 {
   "by_gate": {
+    "a2-baseline": {
+      "detected": 6,
+      "total": 6
+    },
     "claimcheck": {
       "detected": 8,
       "total": 8
@@ -88,7 +92,7 @@
     },
     {
       "detected": true,
-      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=2338d3ac5c769c62)",
+      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=acb4c52585dfee5c)",
       "exit_code": 0,
       "expected": "pass",
       "gate": "prereg",
@@ -133,7 +137,7 @@
     },
     {
       "detected": true,
-      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 31df19cfd553d86d (chain order broken)",
+      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor c5c7a93c48164af8 (chain order broken)",
       "exit_code": 1,
       "expected": "fail",
       "gate": "prereg",
@@ -160,7 +164,7 @@
     },
     {
       "detected": true,
-      "evidence": "/tmp/tmp_odmfgl9/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
+      "evidence": "/tmp/tmp1p6bjeki/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
       "exit_code": 2,
       "expected": "fail",
       "gate": "prereg",
@@ -229,10 +233,64 @@
       "gate": "scaling",
       "mutation": "unpaired-eval-sets-refused",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "A2 GATE: PASS - claimed 0.9900 clears the floor",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "a2-baseline",
+      "mutation": "control-strong-model-clears-the-floor",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "A2 GATE: FAIL - claimed 0.5500 does NOT clear the floor 0.8700. The manufactured labels have not been shown to carry learnable signal beyond a rule anyone could write by hand.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "a2-baseline",
+      "mutation": "weak-model-below-floor-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "A2 GATE: FAIL - claimed 0.8550 does NOT clear the floor 0.9000. The manufactured labels have not been shown to carry learnable signal beyond a rule anyone could write by hand.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "a2-baseline",
+      "mutation": "margin-does-real-work-just-above-baseline-still-fails",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "A2 GATE: FAIL - claimed 0.9700 does NOT clear the floor 1.0200. The manufactured labels have not been shown to carry learnable signal beyond a rule anyone could write by hand.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "a2-baseline",
+      "mutation": "degenerate-leaked-label-makes-the-baseline-unbeatable",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "A2 GATE: FAIL - claimed 0.5200 does NOT clear the floor 0.5889. The manufactured labels have not been shown to carry learnable signal beyond a rule anyone could write by hand.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "a2-baseline",
+      "mutation": "pure-noise-labels-cannot-be-cleared",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "--claimed-score requires --margin (the preregistered margin)",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "a2-baseline",
+      "mutation": "claimed-score-without-a-preregistered-margin-is-refused",
+      "observed": "fail"
     }
   ],
-  "detected": 24,
+  "detected": 30,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 24
+  "total_mutations": 30
 }
