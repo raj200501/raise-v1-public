@@ -155,8 +155,19 @@ def main() -> int:
         clf.fit(X[bsub], y[bsub])
         baselines[nm] = round(float(accuracy_score(ye, clf.predict(Xe))), 4)
         print(f"      {nm:<18} {baselines[nm]:.4f}   ({time.perf_counter()-t:.0f}s)", flush=True)
-    best_name = max(baselines, key=baselines.get)
-    best_val = baselines[best_name]
+    # The frozen baseline set (preregistration 0003) is: majority, label-prior sampling,
+    # length/ratio-only (NOT COMPUTABLE here - see artifacts/pivot/prereg_interpretation.json),
+    # depth-3 tree, logistic regression. `best_trivial_baseline` takes the best of THAT set,
+    # because that is what was frozen. The deeper trees added during piloting are reported
+    # separately as the expanded, stricter reading.
+    FROZEN_SET = ["majority", "stratified", "depth3_tree", "logistic"]
+    frozen = {k: v for k, v in baselines.items() if k in FROZEN_SET}
+    best_name = max(frozen, key=frozen.get)
+    best_val = frozen[best_name]
+    exp_name = max(baselines, key=baselines.get)
+    exp_val = baselines[exp_name]
+    print(f"      frozen-set best:   {best_name} {best_val:.4f}", flush=True)
+    print(f"      expanded-set best: {exp_name} {exp_val:.4f}  (stricter reading)", flush=True)
 
     print("[4/5] rungs (one fixed model class throughout)...", flush=True)
     rungs, per_ex, skipped, costs = [], [], [], []
@@ -213,6 +224,11 @@ def main() -> int:
         "n_heldout_source_chunks": int(len(ev_groups)),
         "trivial_baselines": baselines,
         "best_trivial_baseline_name": best_name, "best_trivial_baseline": best_val,
+        "frozen_baseline_set": ["majority", "stratified", "depth3_tree", "logistic"],
+        "length_ratio_baseline": "NOT COMPUTABLE - fragments are fixed-length and the ratio needs "
+                                 "the plaintext; it degenerates to the majority baseline, which is "
+                                 "measured. See artifacts/pivot/prereg_interpretation.json.",
+        "best_baseline_expanded_name": exp_name, "best_baseline_expanded": exp_val,
         "baselines_trained_on_n": int(len(bsub)),
         "rungs": rungs, "rungs_skipped": skipped,
         "n_rungs": len(rungs),
@@ -225,6 +241,9 @@ def main() -> int:
         "cost": {"build_seconds": build_s, "train_seconds_per_rung": costs,
                  "cpu_cores": args.procs, "gpu": "none"},
     }
+    if rungs:
+        out["margin_over_frozen_baseline"] = round(rungs[-1]["accuracy"] - best_val, 4)
+        out["margin_over_expanded_baseline"] = round(rungs[-1]["accuracy"] - exp_val, 4)
     if fit:
         out["decades_spanned"] = fit["orders_of_magnitude_spanned"]
         out["slope"] = fit["primary_fit"]["slope"]
