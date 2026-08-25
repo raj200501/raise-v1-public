@@ -474,6 +474,102 @@ def _(root):
     return (0 if ok else 1), f"order neither={i_n} arithmetic={i_a} primary={i_p}"
 
 
+# ---------------------------------------------------------------- pivot curve reader (prereg 0003)
+
+PASSING_CURVE = {
+    "n_rungs": 4, "decades_spanned": 3.0,
+    "slope": 0.06, "slope_ci95_low": 0.04, "slope_ci95_high": 0.08,
+    "top_rung_accuracy": 0.25, "best_trivial_baseline": 0.15,
+    "chance_accuracy": 0.0385, "shuffled_label_accuracy": 0.039,
+    "split_is_grouped_by_source": True, "n_classes": 26,
+}
+
+
+def _curve(root, **overrides):
+    os.makedirs(os.path.join(root, "artifacts", "pivot"), exist_ok=True)
+    os.makedirs(os.path.join(root, "tools", "readers"), exist_ok=True)
+    shutil.copy(os.path.join(REPO, "tools", "readers", "pivot_deflate_curve.py"),
+                os.path.join(root, "tools", "readers", "pivot_deflate_curve.py"))
+    d = dict(PASSING_CURVE)
+    for k, v in overrides.items():
+        if v is _DROP:
+            d.pop(k, None)
+        else:
+            d[k] = v
+    json.dump(d, open(os.path.join(root, "artifacts", "pivot", "deflate_curve.json"), "w"))
+    rc, out = run([PY, "tools/readers/pivot_deflate_curve.py"], root)
+    if rc != 0:
+        return rc, out
+    v = json.load(open(os.path.join(root, "artifacts", "pivot", "deflate_verdict.json")))
+    ok = v["verdict"] == "CURVE_ESTABLISHED"
+    return (0 if ok else 1), f"verdict={v['verdict']} failed={v['failed_clauses']}"
+
+
+class _Drop:
+    pass
+
+
+_DROP = _Drop()
+
+
+@case("pivot-curve", "control-passing-curve-is-established", "pass")
+def _(root):
+    return _curve(root)
+
+
+@case("pivot-curve", "flat-slope-interval-touching-zero-is-rejected", "fail")
+def _(root):
+    return _curve(root, slope_ci95_low=0.0)
+
+
+@case("pivot-curve", "negative-slope-is-rejected", "fail")
+def _(root):
+    return _curve(root, slope=-0.02, slope_ci95_low=-0.04, slope_ci95_high=-0.01)
+
+
+@case("pivot-curve", "margin-just-below-the-frozen-0.05-is-rejected", "fail")
+def _(root):
+    return _curve(root, top_rung_accuracy=0.1999, best_trivial_baseline=0.15)
+
+
+@case("pivot-curve", "three-rungs-rejected-by-scope", "fail")
+def _(root):
+    return _curve(root, n_rungs=3)
+
+
+@case("pivot-curve", "under-two-decades-rejected-by-scope", "fail")
+def _(root):
+    return _curve(root, decades_spanned=1.9)
+
+
+@case("pivot-curve", "ungrouped-split-is-rejected", "fail")
+def _(root):
+    return _curve(root, split_is_grouped_by_source=False)
+
+
+@case("pivot-curve", "null-control-above-chance-is-rejected", "fail")
+def _(root):
+    return _curve(root, shuffled_label_accuracy=0.20)
+
+
+@case("pivot-curve", "missing-slope-field-is-rejected", "fail")
+def _(root):
+    return _curve(root, slope_ci95_low=_DROP)
+
+
+@case("pivot-curve", "missing-null-control-is-rejected", "fail")
+def _(root):
+    return _curve(root, shuffled_label_accuracy=_DROP)
+
+
+@case("pivot-curve", "absent-artifact-emits-no-verdict", "fail")
+def _(root):
+    os.makedirs(os.path.join(root, "tools", "readers"), exist_ok=True)
+    shutil.copy(os.path.join(REPO, "tools", "readers", "pivot_deflate_curve.py"),
+                os.path.join(root, "tools", "readers", "pivot_deflate_curve.py"))
+    return run([PY, "tools/readers/pivot_deflate_curve.py"], root)
+
+
 def main() -> int:
     results = []
     for c in CASES:
