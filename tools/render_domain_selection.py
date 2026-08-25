@@ -79,6 +79,37 @@ def main() -> int:
         w("")
         w(f"# Round {rn}")
         w("")
+        for i, sr in enumerate(d.get("scout_reads", []) or [], 1):
+            w(f"### Round {rn}: scout {i} — honest read")
+            w("")
+            w("> Scouts were told that “nothing in this structure threads it, and here is why” is a")
+            w("> valid and valuable answer, and is better than padding.")
+            w("")
+            w("```")
+            w(sr)
+            w("```")
+            w("")
+        for a in d.get("round1_leftovers_attacked", []) or []:
+            w(f"### Round {rn}: adversarial review of a round-1 survivor that was never attacked — {a['domain']}")
+            w("")
+            w(f"**Recommendation: {a['overall_recommendation']}.** "
+              f"G2a {a.get('g2a_verdict','?')} · G3 {a['g3_verdict']} · G1 {a['g1_verdict']} · G6 {a['g6_verdict']}")
+            w("")
+            for head, key in [("What the manufacturer knows that the student cannot (G2a)", "g2a_what_manufacturer_knows"),
+                              ("Channel capacity (A1)", "a1_channel_capacity"),
+                              ("The dumbest baseline (A2)", "a2_dumb_baseline"),
+                              ("G3 — kill attempt", "g3_kill_attempt"),
+                              ("G3 — does it survive?", "g3_survives"),
+                              ("G1 — licence reality", "g1_licence_reality"),
+                              ("G4 — re-check", "g4_recheck"),
+                              ("G6 — feasibility", "g6_reasoning"),
+                              ("Strongest case against", "strongest_case_against")]:
+                if a.get(key):
+                    w(f"**{head}**")
+                    w("")
+                    w(a[key])
+                    w("")
+
         m = d.get("method", {})
         w("**Method.** " + " → ".join(f"*{k}*: {v}" for k, v in m.items()) if m else "")
         w("")

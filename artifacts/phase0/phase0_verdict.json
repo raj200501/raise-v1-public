@@ -1,0 +1,11 @@
+{
+  "n_adversarial_reviews": 0,
+  "n_qualifying": 0,
+  "note": "Zero adversarial reviews reads as NO_VIABLE_DOMAIN_FOUND, not as inconclusive.",
+  "preregistration": "0001-phase0-terminal-verdict",
+  "qualifying_domains": [],
+  "rows": [],
+  "schema": "raise-v1/phase0_verdict/1",
+  "source_artifact": "artifacts/phase0/round3_domain_search.json",
+  "verdict": "NO_VIABLE_DOMAIN_FOUND"
+}
