@@ -82,9 +82,15 @@ def make_model(seed, kind="mlp"):
     """
     if kind == "hgb":
         from sklearn.ensemble import HistGradientBoostingClassifier
+        # early_stopping is OFF, and that is a memory decision, not a modelling one. With it on,
+        # sklearn calls train_test_split(X, y) inside fit(), which materialises a full extra copy of
+        # the training pool - 5.19 GB at the top rung. Two runs were OOM-killed at exactly that
+        # point, both at anon-rss 13.9 GB. Turning it off removes the copy. It is applied to EVERY
+        # rung and to the null control, so the model class stays identical across the curve and no
+        # rung is advantaged.
         return HistGradientBoostingClassifier(max_iter=200, learning_rate=0.15,
-                                              max_leaf_nodes=63, early_stopping=True,
-                                              n_iter_no_change=10, random_state=seed)
+                                              max_leaf_nodes=63, early_stopping=False,
+                                              random_state=seed)
     if kind == "extratrees":
         from sklearn.ensemble import ExtraTreesClassifier
         return ExtraTreesClassifier(n_estimators=300, n_jobs=-1, min_samples_leaf=2,
