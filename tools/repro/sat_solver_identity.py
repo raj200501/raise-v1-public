@@ -26,8 +26,18 @@ import sys
 import time
 
 import numpy as np
-from pysat.formula import CNF
-from pysat.solvers import Solver
+
+try:
+    from pysat.solvers import Solver
+except ImportError:  # noqa: BLE001
+    sys.stderr.write(
+        "PREFLIGHT: FAIL\n\n"
+        "  cause: `python-sat` is not installed. This reproduction needs six real CDCL solvers.\n"
+        "  fix:   Run:  pip install -r requirements-repro.txt\n\n"
+        "         (It is a separate file from requirements.txt on purpose: the core gates in this\n"
+        "          repository do not need a SAT solver stack, and a cold clone can verify them\n"
+        "          without one.)\n")
+    raise SystemExit(1)
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SOLVERS = ["Cadical153", "Glucose42", "Lingeling", "Minisat22", "MapleChrono", "Mergesat3"]
@@ -112,6 +122,9 @@ def main() -> int:
     ap.add_argument("--instances", type=int, default=2500)
     ap.add_argument("--seed", type=int, default=20260825)
     ap.add_argument("--determinism-checks", type=int, default=200)
+    ap.add_argument("--test-frac", type=float, default=0.2,
+                    help="fraction of INSTANCES held out; rungs are drawn from the remainder")
+    ap.add_argument("--rungs", type=int, nargs="*", default=[300, 900, 3000, 13500])
     ap.add_argument("--out", default=os.path.join(REPO, "artifacts", "verification",
                                                   "repro_sat_solver_identity.json"))
     args = ap.parse_args()
@@ -180,13 +193,18 @@ def main() -> int:
     X = np.asarray(X, dtype=float); y = np.asarray(y); groups = np.asarray(groups)
     X = np.nan_to_num(X, nan=0.0, posinf=0.0, neginf=0.0)
     uniq = np.unique(groups); rs = np.random.default_rng(args.seed); rs.shuffle(uniq)
-    n_test_g = max(1, len(uniq) // 5)
+    n_test_g = max(1, int(round(len(uniq) * args.test_frac)))
     test_g, train_g = set(uniq[:n_test_g].tolist()), uniq[n_test_g:]
     te = np.array([g in test_g for g in groups])
     Xte, yte = X[te], y[te]
 
     curve = []
-    for rung in [r for r in (300, 900, 3000, 13500) if r <= (len(train_g) * len(SOLVERS))]:
+    max_rows = len(train_g) * len(SOLVERS)
+    usable = [r for r in args.rungs if r <= max_rows]
+    skipped = [r for r in args.rungs if r > max_rows]
+    if skipped:
+        print(f"NOTE: rungs {skipped} exceed the {max_rows} training rows available and were NOT run.")
+    for rung in usable:
         keep = set(train_g[: max(1, rung // len(SOLVERS))].tolist())
         m = np.array([g in keep for g in groups])
         t2 = time.perf_counter()
@@ -215,6 +233,10 @@ def main() -> int:
             "seconds": round(decoder_seconds, 1),
             "training_rows_required": 0},
         "learned_model_curve": curve,
+        "rungs_requested": args.rungs,
+        "rungs_skipped_for_lack_of_training_rows": skipped,
+        "test_fraction_of_instances": args.test_frac,
+        "training_rows_available": int(max_rows),
         "cost": {"data_generation_seconds": round(gen_seconds, 1),
                  "total_seconds": round(time.perf_counter() - t0, 1),
                  "cpu_cores": os.cpu_count()},

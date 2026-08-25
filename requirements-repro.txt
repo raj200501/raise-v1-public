@@ -1,0 +1,4 @@
+# Extra dependencies needed ONLY to re-derive the reproductions under tools/repro/.
+# Kept separate so the core instrument's dependency floor stays low and a cold clone can
+# verify the gates without installing a SAT solver stack.
+python-sat>=1.8
