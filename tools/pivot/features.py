@@ -79,10 +79,59 @@ def features_one(frag: bytes) -> np.ndarray:
     return np.concatenate([
         hist, pairh, runs,
         np.array([ones, byte_ent, distinct] + ent_stats + lags, dtype=np.float64),
+        _align_stats(bits), _stored_block_signal(a),
     ])
 
 
-N_FEATURES = 256 + NBUCKET_PAIR + BIT_RUN_BUCKETS * 2 + 3 + 6 + 8
+def _align_stats(bits: np.ndarray) -> np.ndarray:
+    """Read the fragment as bytes at each of the 8 bit alignments.
+
+    DEFLATE is bit-packed: Huffman codes do not respect byte boundaries, so a carved fragment's
+    natural byte grid is arbitrary. Statistics computed at every alignment expose structure the
+    byte-aligned view cannot see, and the alignment at which the data looks LEAST uniform is itself
+    informative about the code lengths the encoder chose.
+    """
+    out = []
+    n = bits.size // 8 * 8
+    for off in range(8):
+        b = bits[off: off + n - 8]
+        if b.size < 64:
+            out.extend([0.0] * 5)
+            continue
+        v = np.packbits(b[: b.size // 8 * 8])
+        c = np.bincount(v, minlength=256).astype(np.float64)
+        tot = c.sum()
+        if tot <= 0:
+            out.extend([0.0] * 5)
+            continue
+        p = c / tot
+        nz = p[p > 0]
+        ent = float(-(nz * np.log2(nz)).sum())
+        chi = float(((c - tot / 256.0) ** 2 / (tot / 256.0)).sum() / tot)
+        srt = np.sort(p)[::-1]
+        out.extend([ent, chi, float(srt[0]), float(srt[:5].sum()), float((p > 0).mean())])
+    return np.asarray(out, dtype=np.float64)
+
+
+def _stored_block_signal(a: np.ndarray) -> np.ndarray:
+    """DEFLATE stored blocks (BTYPE=00) byte-align and emit LEN followed by its complement ~LEN.
+
+    That complement pair is a hard, checkable signature, and encoders differ sharply in how often
+    they emit stored blocks - ISA-L at its lowest level leans on them heavily. Scanning for
+    positions where two consecutive 16-bit little-endian words are bitwise complements gives a
+    direct count of that behaviour without needing to decode anything.
+    """
+    if a.size < 8:
+        return np.zeros(3)
+    lo = a[:-3].astype(np.uint16) | (a[1:-2].astype(np.uint16) << 8)
+    hi = a[2:-1].astype(np.uint16) | (a[3:].astype(np.uint16) << 8)
+    comp = (lo ^ hi) == 0xFFFF
+    n_comp = float(comp.sum())
+    runs = float((a == 0).sum()) / a.size
+    return np.array([n_comp, n_comp / max(a.size, 1), runs])
+
+
+N_FEATURES = 256 + NBUCKET_PAIR + BIT_RUN_BUCKETS * 2 + 3 + 6 + 8 + 40 + 3
 
 
 def features_many(frags) -> np.ndarray:
