@@ -45,12 +45,17 @@ field already built the tool and the buyer's incumbent is "wait". A *human* reco
 register — and a register publishes the decision, not the state.
 
 **What that leaves.** A register row is a *description* of a decision; a video frame is a physical
-*effect* of one. So the class of problem that would work is:
+*effect* of one. So the class the pool lacked is:
 
 > a high-bandwidth physical recording that is the causal consequence of the hidden variable,
 > published in bulk for a reason unrelated to the label.
 
-None of the 99 candidates had it. That is a usable specification, not a consolation.
+None of the 99 candidates had it — **and a fourth round then found that class is not white space
+either.** Every instance probed was already occupied, one of them by the FDM-1 structure itself
+(AIS used to pseudo-label bulk hydrophone recordings for self-supervised learning). Pseudo-labelling
+a large unlabelled sensor archive from weak supervision turns out to be the named, surveyed default
+of every sensing discipline. An earlier version of this page called the class "a usable
+specification"; that is withdrawn in the corrections ledger.
 
 ## The part that should be read first
 

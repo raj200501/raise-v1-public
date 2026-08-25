@@ -69,6 +69,13 @@ other people's mistakes is worth nothing.
 "One corpus, one seed, one rung" belongs in the preregistration, not in a limitations
 paragraph written once the number is known.
 
+**A finding that something is absent from our sample is never written as a finding that it is
+available in the world.** Those are different claims resting on different evidence, and the second
+needs its own check. Added 2026-08-25 after this repository turned "the pool contained no instances
+of this class" into "this class is a usable specification", and put the second version in outbound
+copy — where a first-hand check then found the class occupied at every instance probed. See
+`CORRECTIONS.md`.
+
 ## 7. Cost beside quality, always
 
 No price without the score that bought it, and no score without the price. Every arm reports

@@ -19,6 +19,52 @@ Format:
 
 ---
 
+## 2026-08-25 — Called the round-3 finding "a usable specification"; it is not white space
+
+**Claimed.** In `VERDICT.md`: *"The class that would work: a high-bandwidth physical recording that
+is the causal consequence of the hidden variable, published in bulk for a reason unrelated to the
+label. … That is a usable specification for a fourth round, and it is the most valuable thing the
+search produced."* Amplified in `outbound/ONE_PAGER.md` as *"That is a usable specification, not a
+consolation."*
+
+**Actual.** Round 4 checked that class first-hand and found it **occupied wherever it was probed**.
+Five instances, five crowded:
+
+| Instance in the class | What is already there |
+|---|---|
+| chess clock traces → rating | *Chess Rating Estimation from Moves and Clock Times Using a CNN-LSTM* (arXiv 2409.11506, Springer 2025) — the proposal itself, and it reports that clock usage carries skill information board-only models cannot recover. Plus RatingNet, *Predicting Chess Player Rating Based on a Single Game* (2023), ChessMimic (2026). |
+| GNSS SNR → antenna / signal condition | An established multipath and NLOS classification literature, 2021–2025. |
+| hydrophone recordings + AIS → ship | *Automated data curation for self-supervised learning in underwater acoustic analysis* (arXiv 2505.20066) pairs AIS with bulk passive-acoustic recordings to pseudo-label a large unlabelled corpus for SSL — **the FDM-1 structure itself, already built**. Plus Oceanship (arXiv 2401.02099). |
+| LIGO strain → detector data quality | `iDQ`, a supervised learner on thousands of auxiliary channels, **in production across four observing runs**, with a 2024 performance paper. Plus Gravity Spy. |
+| open radio archives → signal state | Adjacent to RF modulation classification, already on the pre-existing kill list. |
+
+A general search confirms the shape: pseudo-labelling a large unlabelled sensor archive from weak or
+independent supervision is a **named, surveyed methodology** across sensing disciplines —
+pseudo-labeling, self-training, weak supervision — with its own review literature.
+
+**Size.** This retracts the single most positive-sounding output of the entire project. It was the
+one forward-looking sentence in a document that is otherwise a negative result, it was the line the
+outbound one-pager led its closing section with, and it is now withdrawn as written.
+
+**Precisely what survives and what does not.** What survives: the round-3 observation that the
+99-candidate pool contained **zero instances of the class**. That is still true and still
+interesting. What does not survive: the inference that the class is therefore **open**. Membership
+in the class is not evidence of white space — the class is where every sensing discipline already
+works. Five probes is not proof that every instance is occupied, and the corrected claim is the
+narrower one: *the class is not white space by default, and every instance must be crowding-checked
+individually.*
+
+**Cause.** A finding about the *absence of something in our pool* was written up as a finding about
+*the presence of an opportunity in the world*. Those are different claims and the evidence only
+supported the first. It read well, it was the only encouraging thing in the document, and it was
+not checked before being published — including into outbound copy. That combination is exactly how
+an over-claim survives review.
+
+**Fix.** Both documents now state the narrower claim and carry the five probes. Added to
+`docs/OPERATING_RULES.md` §6: **a finding that something is absent from our sample is never written
+as a finding that it is available in the world without a separate check** — and where the two get
+conflated, the conflation is the error, not the wording.
+
 ## 2026-08-25 — Published a scaling-rate figure that our own reproduction does not reproduce
 
 **Claimed.** In `docs/_domain_selection_analysis.md`, under law L3(i): *"a learned model on 27 joint

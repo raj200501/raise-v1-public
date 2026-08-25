@@ -90,12 +90,19 @@ The MOT tester put the car on a ramp. The fire officer stood in the burned room.
 private information is the whole of the evidence and the public artifact is an identifier and a
 date.
 
-> **The class that would work: a high-bandwidth physical recording that is the causal consequence
+> **The class the pool lacked: a high-bandwidth physical recording that is the causal consequence
 > of the hidden variable, published in bulk for a reason unrelated to the label.**
 
-That is a usable specification for a fourth round, and it is the most valuable thing the search
-produced. It is not a claim that no such domain exists — only that this search, framed around
-machine generators, scheduled revelations and decision registers, did not contain one.
+**That class was checked in round 4 and it is not white space.** Every instance probed was already
+occupied — chess clock traces, GNSS SNR, hydrophone recordings paired with AIS, LIGO strain paired
+with auxiliary channels, open radio archives. In one case the occupant is the FDM-1 structure
+itself: AIS used to pseudo-label bulk passive-acoustic recordings for self-supervised learning. And
+the shape has a name and a survey literature — pseudo-labelling a large unlabelled sensor archive
+from weak or independent supervision is the standard playbook of every sensing discipline.
+
+What survives is the narrower claim: the pool contained zero instances of the class, and membership
+in the class is **not** evidence of white space. Each instance still needs its own crowding check.
+The wider claim — that this was "a usable specification" — is withdrawn in `CORRECTIONS.md`.
 
 ---
 
