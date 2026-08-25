@@ -1,0 +1,88 @@
+{
+  "disqualified_by_a_dataset_at_scale": [
+    {
+      "largest_dataset": 187959002,
+      "name": "Inverse Linking / compile-unit partitioning",
+      "note": "Fails HARDER under the new lens. An open oracle exists at 100,768 binaries and 43,312,875 labelled functions, plus Decompile-Bench at 2,000,000 pairs. Good evidence the effort lens is a real filter, not a resurrection machine."
+    },
+    {
+      "largest_dataset": 152434085,
+      "name": "JVM bytecode build-provenance"
+    },
+    {
+      "largest_dataset": 1272212,
+      "name": "ModelPrint-CMIP"
+    }
+  ],
+  "honest_status": "A SCREEN, not a finding. Needs its own preregistration and measured A1, A2 and F5.",
+  "method": "Re-scanned every G4-checked candidate across rounds 1-3 by the size of the largest OPEN DATASET, rather than by number of efforts.",
+  "no_open_dataset_at_1e6": [
+    {
+      "datasets": 0,
+      "efforts": 4,
+      "name": "Compressed-stream encoder provenance",
+      "status": "THE CURRENT PIVOT. Correct under BOTH lenses - the only round-1 candidate with zero open datasets of any size."
+    },
+    {
+      "datasets": 1,
+      "efforts": 3,
+      "name": "CopybookLM",
+      "status": "STILL DEAD - measured defect independent of crowding: a 50-line rule reached F1 0.768."
+    },
+    {
+      "datasets": 2,
+      "efforts": 7,
+      "name": "EphemErr - GNSS broadcast-ephemeris error nowcasting",
+      "status": "RESURRECTED. Round-2 kill was PURELY crowding (9/10) and no adversary ever ran."
+    },
+    {
+      "datasets": 3,
+      "efforts": 6,
+      "name": "ProcedureNet",
+      "status": "STILL DEAD - G2a and G3 both measured."
+    },
+    {
+      "datasets": 5,
+      "efforts": 7,
+      "name": "Headerless load-layout",
+      "status": "STILL DEAD - A1 measured at 0.1518 bits; ISA curve measured flat from n=128."
+    },
+    {
+      "datasets": 5,
+      "efforts": 4,
+      "name": "Serial-crystallography indexing",
+      "status": "STILL DEAD - G2a, the teacher sees the identical peak list."
+    }
+  ],
+  "process_note": "The commit that first announced this rescan described this artifact before it existed: the writing step failed on a working-directory slip and only the commit ran. Recorded here rather than fixed by rewriting history, because a commit message that promised a file is exactly the kind of small untruth this repository exists to not accumulate.",
+  "recorded_utc": "2026-08-25T18:00:32Z",
+  "resurrected_candidate": {
+    "THE_UNTESTED_RISK": "A2, and it is why this is a LEAD not a finding. Round 2 recorded it as ENTIRELY UNMEASURED. The broadcast URA/SISA index is the operator's own error bound and ships FREE INSIDE THE STUDENT'S INPUT, so a per-satellite mean scaled by age-of-data is an obvious and possibly dominant dumb baseline. Five candidates died at exactly this gate and none expected to.",
+    "asymmetry": "The cleanest in the entire search and the closest structural analogue to VPT in it: the manufacturer LITERALLY OBSERVES THE FUTURE the student must predict, reconstructed days later from a ~500-station global tracking network the student has no access to.",
+    "buyer": "GNSS correction and integrity providers - Swift Navigation, Point One, Trimble RTX, u-blox PointPerfect - selling tighter protection levels to autonomous vehicles and precision agriculture.",
+    "data_verified_this_session": {
+      "manufacturer_truth": {
+        "bytes": 639223,
+        "file": "ESA0OPSFIN_20250010000_01D_05M_ORB.SP3.gz",
+        "source": "http://navigation-office.esa.int/products/gnss-products/2347/",
+        "status": "HTTP 200, content-length confirmed"
+      },
+      "student_input": {
+        "bytes": 1317080,
+        "file": "BRDC00IGS_R_20250010000_01D_MN.rnx.gz",
+        "nav_records_one_day": 13838,
+        "source": "https://igs.bkg.bund.de/root_ftp/IGS/BRDC/2025/001/",
+        "status": "DOWNLOADED AND PARSED"
+      }
+    },
+    "label_factory": "Propagate each broadcast record; difference against the precise SP3/CLK product at matching epochs. One-time download, then zero marginal cost.",
+    "name": "EphemErr - GNSS broadcast-ephemeris error nowcasting",
+    "task": "From the broadcast navigation message alone - what every GNSS receiver on Earth already holds - predict how wrong that message will turn out to be."
+  },
+  "schema": "raise-v1/effort_lens_rescan/1",
+  "the_reframe": {
+    "new_criterion": "find a STUDIED problem with a published small-scale result and NO open dataset at 10^6, where the gap is EFFORT not insight. Under this lens 'crowded' stops disqualifying - a published small-scale result is EVIDENCE THE MECHANISM WORKS. What disqualifies is an open dataset at scale, because the effort is already spent.",
+    "old_criterion": "find an UNSTUDIED problem. Lost five rounds - 99 candidates, 8 adversarial reviews, 4 market-timed candidates, 0 selected.",
+    "why": "FDM-1 is usually misread as an information edge. VPT was published in 2022, screen recordings were not a secret, inverse dynamics models were textbook. What nobody wanted to do was build an 11-million-hour pseudo-labelling pipeline."
+  }
+}
