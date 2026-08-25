@@ -47,7 +47,7 @@
       "threshold": 0.0
     }
   },
-  "frozen": false,
+  "frozen": true,
   "id": "0007",
   "reader": "tools/readers/carve_generalisation_verdict.py",
   "readings": [
@@ -123,5 +123,23 @@
     "why_a_transfer_failure_is_survivable": "Because the label manufacturer is free. If a model must be trained per carve size, the cost is one more compression pass per size, not a new data source. That is the whole point of the FDM-1 shape and it is why this preregistration names that outcome in advance instead of treating it as a defeat.",
     "why_this_is_the_next_question": "0006 showed the output has the SHAPE a forensic use needs. That shape was measured at one window size. The analyst does not choose the window - the carve does - so a result that holds only at 4096 would not survive contact with the setting it was justified by."
   },
-  "title": "Does carved-DEFLATE encoder provenance survive a SHORTER carve - and does a model trained at 4096 bytes transfer to 1024, or must one be trained per carve size?"
+  "title": "Does carved-DEFLATE encoder provenance survive a SHORTER carve - and does a model trained at 4096 bytes transfer to 1024, or must one be trained per carve size?",
+  "reader_sha256": "3c19c08847c1807d6852b63c5259ef17f01d82bb6283b56611536aa19050ded1",
+  "frozen_utc": "2026-08-25T23:22:06Z",
+  "git_commit": "44d212caa047a5dd79ae934b38d663978b7089a5",
+  "git_dirty_at_freeze": false,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1918046,
+      "time_stamp": "2026-08-25T23:21:00.000Z",
+      "output_value": "E17495089AD66645F1CCD83456F69CCA77B56A453F2D0724C9CE5775976E5233A78D9E160963F28F7DB9BF147E56CD43EA5B30BF912CB3EBDB0F8A70E9D5860C"
+    },
+    "drand": {
+      "round": 6408970,
+      "randomness": "5e6b0976442791936ae74eb93a532b956eb44d9125e3a9c170899761b22d5d8b"
+    }
+  },
+  "chain_hash": "40ded1fad14bbfbaab22ec9bac2e95df6fcc445ad49e1e2b65d29dd8854eac30",
+  "chain_prev_hash": "f4ae64ff58d9dfcf2a3614fa1c6db024bca824a627de3285a44be91d95c2d429"
 }

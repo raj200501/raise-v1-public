@@ -131,10 +131,32 @@
       "reader_sha256": "ed8666f696306d09514ccffda2834ed88f8df92b64dd13775614f21ab44891aa",
       "seq": 6,
       "slug": "deflate-operational-output"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "5e6b0976442791936ae74eb93a532b956eb44d9125e3a9c170899761b22d5d8b",
+          "round": 6408970
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "E17495089AD66645F1CCD83456F69CCA77B56A453F2D0724C9CE5775976E5233A78D9E160963F28F7DB9BF147E56CD43EA5B30BF912CB3EBDB0F8A70E9D5860C",
+          "pulse": 1918046,
+          "time_stamp": "2026-08-25T23:21:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-25T23:22:06Z",
+      "hash": "40ded1fad14bbfbaab22ec9bac2e95df6fcc445ad49e1e2b65d29dd8854eac30",
+      "id": "0007",
+      "prev_hash": "f4ae64ff58d9dfcf2a3614fa1c6db024bca824a627de3285a44be91d95c2d429",
+      "reader": "tools/readers/carve_generalisation_verdict.py",
+      "reader_sha256": "3c19c08847c1807d6852b63c5259ef17f01d82bb6283b56611536aa19050ded1",
+      "seq": 7,
+      "slug": "carve-size-generalisation"
     }
   ],
-  "entries": 6,
-  "head": "f4ae64ff58d9dfcf2a3614fa1c6db024bca824a627de3285a44be91d95c2d429",
+  "entries": 7,
+  "head": "40ded1fad14bbfbaab22ec9bac2e95df6fcc445ad49e1e2b65d29dd8854eac30",
   "problems": 0,
   "schema": "raise-v1/prereg_status/1",
   "verified": true
