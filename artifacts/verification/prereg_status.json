@@ -65,10 +65,32 @@
       "reader_sha256": "77384d4f958aa0dbd63c6165499367e820d2fbc1414f0ed39f1f7d82853586e5",
       "seq": 3,
       "slug": "pivot-deflate-curve"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "949e4400c8381d3037cfef7400d3d6482b1666228237b6a1868888de58d4bb5d",
+          "round": 6408302
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "A0C8CEA7022DECEC981729A5B15D1D05B301C33F949B2B663402A2937EB2D242E973EEDDEFF73030502F23223CA6FE46AA301977E8390382CDB689BFFD329397",
+          "pulse": 1917713,
+          "time_stamp": "2026-08-25T17:48:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-25T17:48:24Z",
+      "hash": "1f08d8841fe5dfc0d4d9c7870c19db39837cfccd720f917e3a76cb5a2e363f13",
+      "id": "0004",
+      "prev_hash": "684923ba30b11d805e6117c22b56c40445fdbda9ff63d94b922adc051681f637",
+      "reader": "tools/readers/market_timing_verdict.py",
+      "reader_sha256": "c08cdab2ba44acc3f8efa1e2e0b99887fe39cd06da7cd0ee2d49f8605d348c4c",
+      "seq": 4,
+      "slug": "market-timing-search"
     }
   ],
-  "entries": 3,
-  "head": "684923ba30b11d805e6117c22b56c40445fdbda9ff63d94b922adc051681f637",
+  "entries": 4,
+  "head": "1f08d8841fe5dfc0d4d9c7870c19db39837cfccd720f917e3a76cb5a2e363f13",
   "problems": 0,
   "schema": "raise-v1/prereg_status/1",
   "verified": true
