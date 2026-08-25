@@ -79,8 +79,29 @@ def features_one(frag: bytes) -> np.ndarray:
     return np.concatenate([
         hist, pairh, runs,
         np.array([ones, byte_ent, distinct] + ent_stats + lags, dtype=np.float64),
-        _align_stats(bits), _stored_block_signal(a),
+        _align_stats(bits), _stored_block_signal(a), _align_hist(bits, ALIGN_BINS),
     ])
+
+
+def _align_hist(bits: np.ndarray, nb: int = 64) -> np.ndarray:
+    """Full byte histograms at every bit alignment, coarsened to `nb` bins per alignment.
+
+    v2 took five summary statistics per alignment and gained nothing. The hypothesis for v3 is that
+    the summary was the problem, not the idea: Huffman code lengths shape which bit patterns recur,
+    and a mean-and-entropy summary discards exactly that shape. This keeps the histogram.
+    """
+    out = np.empty(8 * nb, dtype=np.float64)
+    n = bits.size // 8 * 8
+    shift = 256 // nb
+    for off in range(8):
+        b = bits[off: off + n - 8]
+        if b.size < 64:
+            out[off * nb:(off + 1) * nb] = 0.0
+            continue
+        v = np.packbits(b[: b.size // 8 * 8]) // shift
+        c = np.bincount(v, minlength=nb).astype(np.float64)[:nb]
+        out[off * nb:(off + 1) * nb] = c / max(c.sum(), 1.0)
+    return out
 
 
 def _align_stats(bits: np.ndarray) -> np.ndarray:
@@ -131,7 +152,8 @@ def _stored_block_signal(a: np.ndarray) -> np.ndarray:
     return np.array([n_comp, n_comp / max(a.size, 1), runs])
 
 
-N_FEATURES = 256 + NBUCKET_PAIR + BIT_RUN_BUCKETS * 2 + 3 + 6 + 8 + 40 + 3
+ALIGN_BINS = 64
+N_FEATURES = 256 + NBUCKET_PAIR + BIT_RUN_BUCKETS * 2 + 3 + 6 + 8 + 40 + 3 + 8 * ALIGN_BINS
 
 
 def features_many(frags) -> np.ndarray:

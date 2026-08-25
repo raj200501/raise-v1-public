@@ -1,0 +1,49 @@
+{
+  "eval_protocol": "grouped by source chunk throughout; 26 classes; chance 0.0385; n_train 100000; n_eval 26000; baselines trained on the SAME data as the model",
+  "failed_hypotheses": [
+    {
+      "hypothesis": "DEFLATE is bit-packed, so Huffman codes do not respect byte boundaries and a byte-aligned histogram of entropy-coded data is near-uniform by construction. Reading the fragment at all 8 bit alignments and taking entropy, chi-square, top-1 and top-5 mass and support per alignment - 40 features - plus a stored-block LEN/NLEN complement detector, should expose structure the byte-aligned view cannot see.",
+      "id": "v2-bit-alignment-summaries",
+      "kept": "Yes. The 43 features are retained because they cost 0.14 ms per fragment and are not harmful, but they are recorded as having earned nothing.",
+      "result": {
+        "v1_553_features": {
+          "hgb": 0.1482,
+          "rf": 0.1543
+        },
+        "v2_596_features": {
+          "hgb": 0.1485,
+          "rf": 0.1506
+        }
+      },
+      "verdict": "NO IMPROVEMENT. RandomForest went slightly DOWN (0.1543 -> 0.1506) and HGB moved 0.1482 -> 0.1485, inside noise. The hypothesis as implemented is not supported.",
+      "what_it_suggests": "All four model classes cluster at 0.13-0.15 regardless of features, which is the signature of a FEATURE ceiling rather than a model problem. Either the bit-alignment idea is wrong, or five summary statistics per alignment discard exactly the shape that matters - which is what v3 tests by keeping the histograms instead of summarising them."
+    }
+  ],
+  "model_selection": {
+    "candidates": {
+      "extratrees": "0.1248 at n=20000",
+      "hgb": "0.1290 at n=20000",
+      "mlp": "0.0913 at n=20000 - clearly the wrong class here",
+      "randomforest": "0.1383 at n=20000"
+    },
+    "chosen": "hgb",
+    "honest_caveat": "If HGB does NOT overtake RF at the top rung, this choice cost the study accuracy, and that will be visible because both curves are recorded here.",
+    "reasoning": "RandomForest is better at every size measured, but it is rising at roughly +0.021 per decade against HGB's +0.029, and the gap has already narrowed from 0.0151 at n=10^4 to 0.0072 at n=10^5. For a SCALING study the steeper model is the right instrument, not the one that happens to lead at a tenth of target scale. HGB is also histogram-based and fits in memory at 10^6 where a RandomForest with 150 unpruned trees would not. The choice is recorded here and written into every artifact as model_class so it cannot be revisited silently.",
+    "scaling_v1_features": {
+      "hgb": {
+        "10000": 0.1182,
+        "100000": 0.1471,
+        "30000": 0.13
+      },
+      "rf": {
+        "10000": 0.1333,
+        "100000": 0.1543,
+        "30000": 0.1462
+      }
+    }
+  },
+  "open_question": "Every number above is measured at n=10^5. The preregistered margin clause is evaluated at the TOP RUNG, and the study is specified to 10^6. The margin has therefore NOT yet been tested at the scale the thesis is about. The baselines are capacity-limited and will saturate; the model is not. Whether that opens the margin is the actual experiment.",
+  "recorded_utc": "2026-08-25T16:15:38Z",
+  "schema": "raise-v1/pivot_engineering_log/1",
+  "why": "Model and feature choices for the scaled run are made ONCE on pilot data and then held fixed. This records every choice and every FAILED hypothesis, so the selection cannot be quietly re-run after seeing a number, and so a hypothesis that did not work does not vanish because it was inconvenient."
+}
