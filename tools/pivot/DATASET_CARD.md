@@ -75,6 +75,9 @@ rather than encoder identification.
 | Best trivial baseline | frozen set: logistic 0.1392; expanded set: depth16_tree 0.1812 |
 | Scaling slope, 95% interval | +0.0491 accuracy/decade, 95% CI [+0.0485, +0.0497] over 2.9031 decades |
 | Verdict from the frozen reader | **CURVE_ESTABLISHED** |
+| Top-1 / top-3 / top-5 at the top rung | 0.2395 / 0.4497 / 0.5694 |
+| Accuracy on the most-confident decile | 0.7922 (26000 fragments) |
+| Operational verdict (preregistration 0006) | **OUTPUT_USABLE** |
 
 ## Licence
 

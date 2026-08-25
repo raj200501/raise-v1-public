@@ -13,6 +13,20 @@ interval cannot come from the four points alone. So:
     is stated rather than hidden (with R rungs there are R! orderings, so the smallest
     attainable p-value is 1/R!; with four rungs that is 1/24).
 
+WHAT THE INTERVAL DOES NOT COVER, stated because the intervals come out tight enough to be
+over-read. Bootstrapping the evaluation examples measures ONE source of uncertainty: how much the
+slope would move if a different sample of evaluation items had been drawn from the same
+distribution. It does NOT cover
+
+  - seed variance          one seed is trained per rung; a re-run with another seed is not sampled
+  - manufacture variance   one corpus is built; a differently drawn corpus is not sampled
+  - model-class choice     one class is held fixed across rungs, by design, and not varied
+
+So an interval like [0.0485, 0.0497] means "given this corpus, this seed and this model class, the
+slope is pinned to about a thousandth by the evaluation set". It does not mean the slope of the
+underlying phenomenon is known to a thousandth. A reader wanting that needs repeated seeds and
+repeated corpora, neither of which this instrument has been run with.
+
 Two fits are reported, and the preregistration names which one is primary:
   points_per_decade : mean score      regressed on log10(n_units)
   error_exponent    : log10(1 - score) regressed on log10(n_units)   [power law on error]
@@ -120,6 +134,12 @@ def fit(rungs: list[dict], n_boot: int = 2000, seed: int = 0) -> dict:
         "eval_set_size": int(m),
         "bootstrap_resamples": int(n_boot),
         "bootstrap_seed": int(seed),
+        "interval_covers": "evaluation-example sampling only",
+        "interval_does_not_cover": ("seed variance (one seed per rung), corpus-manufacture variance "
+                                    "(one corpus), and model-class choice (one class held fixed by "
+                                    "design). A tight interval here pins the slope GIVEN this "
+                                    "corpus, seed and model class; it does not pin the slope of the "
+                                    "underlying phenomenon."),
         "rungs": [{"name": names[i], "n_units": int(ns[i]), "mean_score": float(means[i])}
                   for i in range(len(ns))],
         "primary_fit": {

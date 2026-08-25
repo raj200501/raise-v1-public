@@ -402,6 +402,66 @@
       "json_path": "$.by_gate.topk.total",
       "reverify": "python3 tests/mutation_test.py",
       "value": 14
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_topk.json",
+      "claim": "Preregistration 0006's frozen reader returns OUTPUT_USABLE on the carved-DEFLATE model: top-5 accuracy 0.5694 at the top rung, against a 5/26 top-5 chance level of 0.192308.",
+      "class": "primary-verifiable",
+      "id": "topk-verdict",
+      "json_path": "$.top5_accuracy",
+      "reverify": "python3 tools/readers/deflate_topk_verdict.py",
+      "value": 0.5694
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_topk_margins.json",
+      "claim": "The top-5 margin over the best baseline across ALL baselines (a depth-16 tree at 0.461) is 0.1084 - the clause named in advance as a likely failure, because ranking 5 of 26 is far easier than picking 1.",
+      "class": "arithmetic-verifiable",
+      "id": "topk-margin-expanded",
+      "json_path": "$.margins.top5_margin_expanded.value",
+      "value": 0.1084
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_topk.json",
+      "claim": "On the 26000 evaluation fragments the model is most confident about, its accuracy is 0.7922 - above the 0.50 absolute usability floor frozen before the measurement.",
+      "class": "primary-verifiable",
+      "id": "topk-selective",
+      "json_path": "$.selective_top_decile_accuracy",
+      "reverify": "python3 tools/readers/deflate_topk_verdict.py",
+      "value": 0.7922
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_topk_margins.json",
+      "claim": "Scored under the STRICTEST reading fixed before the run - the maximum over all baselines, a depth-16 tree at 0.6937 - the selective margin is 0.0985. Under the looser frozen-set reading it would have been 0.251; the harder reading was chosen while the numbers did not exist.",
+      "class": "arithmetic-verifiable",
+      "id": "topk-selective-margin-strict",
+      "json_path": "$.margins.selective_margin.value",
+      "value": 0.0985
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_topk.json",
+      "claim": "The top-5 curve rises at 0.09853740775642854 accuracy points per decade, roughly twice the top-1 slope of 0.04912072076972296: the operationally useful reading improves faster than the single guess.",
+      "class": "primary-verifiable",
+      "id": "topk-slope",
+      "json_path": "$.top5_slope",
+      "reverify": "python3 tools/pivot/run_topk.py",
+      "value": 0.09853740775642854
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_topk.json",
+      "claim": "With labels shuffled, top-5 accuracy falls to 0.1919 against the 5/26 chance level of 0.192308. A top-5 metric is five times easier to satisfy by luck than top-1, so this control binds harder here than in 0003.",
+      "class": "primary-verifiable",
+      "id": "topk-null-control",
+      "json_path": "$.shuffled_label_top5_accuracy",
+      "reverify": "python3 tools/pivot/run_topk.py",
+      "value": 0.1919
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_topk_verdict.json",
+      "claim": "G5 - a named buyer type - is not cleared by anything in this repository. No buyer has been contacted and none is claimed.",
+      "class": "neither",
+      "id": "g5-not-cleared",
+      "json_path": "$.establishes_a_buyer",
+      "why_not_verifiable": "The absence of a buyer cannot be re-derived from an artifact - it is a statement about what was NOT done, so it carries no measured value and none is asserted. It is filed in the weakest class deliberately rather than dressed up as a finding. The cited artifact's establishes_a_buyer field records the same thing machine-readably, but a reader should note that a self-reported false is evidence of intent, not of fact."
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

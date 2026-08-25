@@ -37,10 +37,33 @@ anything in it: a depth-16 tree at **0.1812**, margin **+0.0583**. Both clear 0.
 commitment to report both was recorded mid-run and anchored to drand round **6408095**, before
 either number was known.
 
+**The output has the shape a forensic use needs, which is a separate preregistered question.**
+Top-1 answers "is the single best guess right", which is the wrong question for an analyst facing 26
+candidate encoders. Preregistration 0006 — frozen and anchored *before any top-k number existed* —
+asked whether the model yields a shortlist and a confidence worth abstaining on. Verdict
+`OUTPUT_USABLE`:
+
+| Reading | Model | Best baseline | Margin |
+|---|---:|---:|---:|
+| Top-5, frozen baseline set | 0.5694 | logistic 0.3951 | **+0.1743** |
+| Top-5, all baselines incl. deep trees | 0.5694 | depth-16 tree 0.4610 | **+0.1084** |
+| Accuracy on the most-confident decile | 0.7922 | depth-16 tree 0.6937 | **+0.0985** |
+
+The shortlist improves about **twice as fast** as the single guess: top-5 slope **+0.0985** per
+decade against top-1's **+0.0491**. Shuffled labels fall to top-5 **0.1919** against 5/26 chance.
+Both clauses written down in advance as the likely failures cleared, and the selective one was
+scored under the strictest reading fixed before the run — the looser reading would have given
+**+0.2510** instead of **+0.0985**.
+
 **Why no existing tool does this.** `preflate` and `grittibanzli` decode the token stream, which
 needs the dynamic Huffman tables at the STREAM START. `precomp` and `list-compresslevel.py`
 brute-force by RECOMPRESSING, which needs the PLAINTEXT. A carved fragment has neither. Three
 GitHub API query formulations returned `total_count: 0`.
+
+**What the tight intervals do not mean.** The bootstrap resamples evaluation examples. It does not
+sample seeds (one per rung), corpora (one was built), or model classes (one, held fixed by design).
+`[0.0977, 0.0993]` pins the slope *given this corpus, seed and model class* — not the slope of the
+underlying phenomenon.
 
 **What it does not establish.** A buyer. The uses this points at — forensic carving of unallocated
 disk, archive recompression, repackaged-APK detection — are narrow, nobody has been contacted, and
@@ -120,7 +143,7 @@ reported, and neither is quoted as the other.
 
 The verification-coverage map is machine-checked and prints its weakest class first, deliberately.
 
-**9 of 46 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
+**10 of 53 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
 including us. Eight are measurements made by subagents inside scratch directories that no longer
 exist, and **that includes measurements the conclusions rest on.** The ninth is worse than
 unverified: it is a figure we published and then failed to reproduce ourselves.

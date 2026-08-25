@@ -1,0 +1,150 @@
+{
+  "baseline_selective_reading": "MAXIMUM over ALL baselines, frozen and expanded alike - the strictest available reading of 0006's wording, fixed before the run in artifacts/pivot/topk_prereg_interpretation.json",
+  "baseline_selective_top_decile": {
+    "best_single_feat": 0.3913,
+    "depth16_tree": 0.6937,
+    "depth3_tree": 0.4731,
+    "depth8_tree": 0.6728,
+    "logistic": 0.5412,
+    "majority": 0.0385,
+    "stratified": 0.0372
+  },
+  "baseline_selective_top_decile_accuracy": 0.6937,
+  "baseline_selective_top_decile_name": "depth16_tree",
+  "baseline_topk": {
+    "best_single_feat": {
+      "top1": 0.0751,
+      "top3": 0.1523,
+      "top5": 0.2294
+    },
+    "depth16_tree": {
+      "top1": 0.1812,
+      "top3": 0.3468,
+      "top5": 0.461
+    },
+    "depth3_tree": {
+      "top1": 0.0969,
+      "top3": 0.1964,
+      "top5": 0.2914
+    },
+    "depth8_tree": {
+      "top1": 0.1459,
+      "top3": 0.2929,
+      "top5": 0.4049
+    },
+    "logistic": {
+      "top1": 0.1392,
+      "top3": 0.2857,
+      "top5": 0.3951
+    },
+    "majority": {
+      "top1": 0.0385,
+      "top3": 0.1154,
+      "top5": 0.1923
+    },
+    "stratified": {
+      "top1": 0.0387,
+      "top3": 0.1157,
+      "top5": 0.1929
+    }
+  },
+  "baselines_trained_on_n": 800000,
+  "best_baseline_expanded_top5": 0.461,
+  "best_baseline_expanded_top5_name": "depth16_tree",
+  "best_trivial_baseline_top5": 0.3951,
+  "best_trivial_baseline_top5_name": "logistic",
+  "carve_bytes": 4096,
+  "chance_top1": 0.038462,
+  "chance_top5": 0.192308,
+  "class_names": [
+    "zlib-1",
+    "zlib-2",
+    "zlib-3",
+    "zlib-4",
+    "zlib-5",
+    "zlib-6",
+    "zlib-7",
+    "zlib-8",
+    "zlib-9",
+    "libdeflate-1",
+    "libdeflate-2",
+    "libdeflate-3",
+    "libdeflate-4",
+    "libdeflate-5",
+    "libdeflate-6",
+    "libdeflate-7",
+    "libdeflate-8",
+    "libdeflate-9",
+    "libdeflate-10",
+    "libdeflate-11",
+    "libdeflate-12",
+    "isal-0",
+    "isal-1",
+    "isal-2",
+    "isal-3",
+    "zopfli"
+  ],
+  "cost": {
+    "cpu_cores": 4,
+    "gpu": "none",
+    "train_seconds_per_rung": [
+      17.7,
+      50.4,
+      264.7,
+      1504.4
+    ]
+  },
+  "decades_spanned": 2.9031,
+  "establishes_a_buyer": false,
+  "model_class": "hgb",
+  "n_classes": 26,
+  "n_eval_fragments": 260000,
+  "n_rungs": 4,
+  "n_train_fragments": 800000,
+  "preregistration": "0006-deflate-operational-output",
+  "rungs": [
+    {
+      "n_units": 1000,
+      "top1": 0.0988,
+      "top3": 0.1997,
+      "top5": 0.2902,
+      "train_seconds": 17.7
+    },
+    {
+      "n_units": 10000,
+      "top1": 0.1415,
+      "top3": 0.2776,
+      "top5": 0.3837,
+      "train_seconds": 50.4
+    },
+    {
+      "n_units": 100000,
+      "top1": 0.1965,
+      "top3": 0.3777,
+      "top5": 0.5012,
+      "train_seconds": 264.7
+    },
+    {
+      "n_units": 800000,
+      "top1": 0.2395,
+      "top3": 0.4497,
+      "top5": 0.5694,
+      "train_seconds": 1504.4
+    }
+  ],
+  "schema": "raise-v1/deflate_topk/1",
+  "seed": 20260825,
+  "selective_decile_n": 26000,
+  "selective_top_decile_accuracy": 0.7922,
+  "shuffled_label_top5_accuracy": 0.1919,
+  "split_is_grouped_by_source": true,
+  "task": "the operational output of the carved-DEFLATE model: a ranked candidate list and a confidence that supports abstention",
+  "top1_accuracy": 0.2395,
+  "top3_accuracy": 0.4497,
+  "top5_accuracy": 0.5694,
+  "top5_permutation_p": 0.041666666666666664,
+  "top5_slope": 0.09853740775642854,
+  "top5_slope_ci95_high": 0.09931301117478637,
+  "top5_slope_ci95_low": 0.09773801505681605,
+  "top5_slope_r2": 0.9942593041683035
+}

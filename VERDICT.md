@@ -146,10 +146,13 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **9 of 46 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **10 of 53 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
-> it is a figure this repository actively tried to reproduce and could not.**
+> it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
+> different kind and belongs here anyway: **the statement that G5 has no buyer.** An absence cannot
+> be re-derived from an artifact, it carries no measured value and none is asserted, and a
+> self-reported `establishes_a_buyer: false` is evidence of intent rather than of fact.
 >
 > **This includes the measurements that close the search.** The Sentinel-1 fit that retires an
 > entire candidate family under L1. The MOT numbers that are the strongest single piece of evidence
@@ -165,9 +168,9 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 | Class | Count | Meaning |
 |---|---:|---|
-| `neither` | **9** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce. |
-| `arithmetic-verifiable` | 7 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 30 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `neither` | **10** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done. |
+| `arithmetic-verifiable` | 9 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
+| `primary-verifiable` | 34 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -253,6 +256,10 @@ footnote.
   after two OOM kills would have been choosing the flattering option under cover of a resource
   constraint. Banked, because the decision went against this study's interest and is otherwise
   invisible.
+- **The 95% interval covers evaluation-example sampling only** — not seed variance (one seed),
+  not corpus-manufacture variance (one corpus), not model-class choice (one class, held fixed by
+  design). `[0.0485, 0.0497]` pins the slope *given this corpus, seed and model class*; it does
+  not pin the slope of the underlying phenomenon. Stated in `tools/scaling.py` so it travels.
 - **One carve size, one seed, one model class.** Generalisation across carve sizes is not
   established. Encoders absent from this box — 7-Zip's deflate, Java's `Deflater`, Go's `flate`,
   the Cloudflare and Windows zlib forks — are not covered.
@@ -277,6 +284,81 @@ repackaged-APK detection — are narrow, and **no buyer has been contacted, none
 nothing here establishes that one would pay.** A rising curve on a task nobody needs is a rising
 curve on a task nobody needs. This is a validated label factory and a validated instrument; it is
 not a business, and the gap between those two things is the honest state of this repository.
+
+---
+
+## G5 attacked directly — `OUTPUT_USABLE`, and it still does not name a buyer
+
+Preregistration 0006, frozen at chain seq 6 and anchored to NIST Beacon pulse **1917953** and drand
+round **6408784** — **before any top-k, calibration or selective-prediction number existed on this
+corpus**. It is a separate preregistration rather than an addition to 0003 precisely because 0003's
+verdict was already known, and bolting a new reading onto a study whose result you have seen is the
+move this instrument exists to prevent.
+
+**The question.** Top-1 accuracy answers "is the single best guess right", which is the wrong
+question for the only buyer type where a *carved* fragment is genuinely the operational setting.
+Archive recompression and repackaged-artifact checks both hold the whole stream and the plaintext,
+so incumbent tools apply there and this task's advantage disappears. Forensic carving of
+unallocated disk does not. For that analyst the deliverable is a shortlist, plus an honest signal of
+when to ignore the tool.
+
+| | |
+|---|---|
+| **Verdict** | `OUTPUT_USABLE` — shape `BOTH HALVES USABLE` |
+| **Emitted by** | `tools/readers/deflate_topk_verdict.py`, frozen and hashed before the measurement |
+| **Artifact** | `artifacts/pivot/deflate_topk.json`, margins in `artifacts/pivot/deflate_topk_margins.json` |
+
+| Reading | Model | Best baseline | Margin | Bar |
+|---|---:|---:|---:|---:|
+| Top-5, **frozen** baseline set | 0.5694 | logistic 0.3951 | **+0.1743** | 0.05 |
+| Top-5, **all** baselines (deep trees included) | 0.5694 | depth-16 tree 0.4610 | **+0.1084** | 0.05 |
+| Accuracy on the most-confident decile | 0.7922 | depth-16 tree 0.6937 | **+0.0985** | 0.05 |
+
+Top-1 **0.2395**, top-3 **0.4497**, top-5 **0.5694**. Null control, labels shuffled: top-5
+**0.1919** against a 5/26 chance of **0.1923** — a top-5 metric is five times easier to satisfy by
+luck than top-1, so this control matters more here, not less. The confident decile is **26000**
+evaluation fragments, so the selective figure is not a small-sample artefact.
+
+**The shortlist improves roughly twice as fast as the single guess.** Top-5 slope **+0.0985**
+accuracy points per decade, 95% interval **[0.0977, 0.0993]**, against the top-1 slope of
+**+0.0491**. Both rise; the operationally useful one rises faster.
+
+### The two clauses written down in advance as the likely failures both cleared
+
+Recorded in the preregistration before the run: *"the two clauses most likely to fail"* were the
+expanded-set top-5 margin — because ranking 5 of 26 is a far easier task than picking 1, so a deep
+tree might close the gap — and the absolute selective floor of **0.5**, because a 0.2395 top-1 model
+can easily have a most-confident decile no better than its average. Neither happened.
+
+The selective clause is the tightest of the three, and it was scored under the **strictest** reading
+available. `artifacts/pivot/topk_prereg_interpretation.json`, drand-anchored before the run,
+resolved "the best trivial baseline" to the **maximum over all baselines** rather than the best of
+the frozen set. Under the looser frozen-set reading the comparison would have been logistic's
+**0.5412** and the margin **+0.2510** rather than **+0.0985**. The harder reading was chosen while
+the numbers did not yet exist, and it still passed.
+
+### What the tight intervals do NOT mean
+
+Both slopes here carry intervals about a thousandth wide, and that is easy to over-read. The paired
+bootstrap resamples **evaluation examples**. It does not sample seeds — one seed is trained per
+rung. It does not sample corpora — one corpus was manufactured. It does not vary the model class,
+which is held fixed across rungs by design. So `[0.0977, 0.0993]` means *given this corpus, this
+seed and this model class, the evaluation set pins the slope to about a thousandth*. It does not
+mean the slope of the underlying phenomenon is known to a thousandth. Repeated seeds and repeated
+corpora would be needed for that, and this instrument has not been run with either. The same caveat
+applies to 0003's slope and is now stated in `tools/scaling.py` so it travels with any future fit.
+
+The top-5 permutation p is again **0.0417**, its arithmetic floor of 1/24 for four rungs, for the
+same reason as before.
+
+### This does not establish a buyer, and could not have
+
+The reader emits `establishes_a_buyer: false` into its own artifact rather than leaving the
+disclaimer in prose. What 0006 shows is that the output has the **shape** a forensic use would
+require: a shortlist that beats every dumb rule, and a confidence signal good enough to abstain on.
+Whether anyone wants that shape is a commercial question, and **no buyer has been contacted, none is
+claimed, and nothing in this repository establishes that one would pay.** G5 remains uncleared. The
+work that would clear it is not work that can be done from inside this container.
 
 ---
 

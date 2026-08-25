@@ -19,6 +19,8 @@ echo "== the instrument =="
 echo
 echo "== the pivot result, read by its frozen reader =="
 "$PY" tools/readers/pivot_deflate_curve.py
+echo
+"$PY" tools/readers/deflate_topk_verdict.py
 
 cat <<'MSG'
 

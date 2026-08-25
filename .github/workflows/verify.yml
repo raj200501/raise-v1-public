@@ -35,6 +35,12 @@ jobs:
       - name: Freshness gate (live numbers must match the CURRENT artifact, not merely exist)
         run: python3 tools/freshness.py
 
+      - name: Frozen readers emit their verdicts from the banked artifacts
+        run: |
+          python3 tools/readers/pivot_deflate_curve.py
+          python3 tools/readers/deflate_topk_verdict.py
+          python3 tools/readers/ephemerr_a2_verdict.py
+
       - name: Mutation report must show zero surviving mutations
         run: |
           python3 - <<'PY'
