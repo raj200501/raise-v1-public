@@ -121,16 +121,17 @@ def main() -> int:
     args = ap.parse_args()
 
     if args.cache and os.path.exists(args.cache):
-        print(f"[1/5] reusing cached corpus {args.cache}", flush=True)
-        z = np.load(args.cache)
+        print(f"[1/5] reusing cached corpus {args.cache} (memory-mapped)", flush=True)
+        z = np.load(args.cache, mmap_mode="r")
         X, y, g, build_s = z["X"], z["y"], z["g"], float(z["build_s"])
-        if args.feature_cols and X.shape[1] > args.feature_cols:
-            X = np.ascontiguousarray(X[:, :args.feature_cols])
+        y = np.asarray(y); g = np.asarray(g)
+        mmapped = True
     else:
         print(f"[1/5] manufacturing from {args.chunks} source chunks "
               f"({args.chunk_size}B each, carving {args.carve}B)...", flush=True)
         X, y, g, build_s = build(args.chunks, args.chunk_size, args.carve, args.src, args.procs,
                                  args.feature_cols)
+        mmapped = False
         if args.cache:
             os.makedirs(os.path.dirname(os.path.abspath(args.cache)), exist_ok=True)
             np.savez(args.cache, X=X, y=y, g=g, build_s=build_s)
@@ -142,9 +143,24 @@ def main() -> int:
     n_ev = max(1, int(len(groups) * args.eval_frac))
     ev_groups = set(groups[:n_ev].tolist())
     is_ev = np.fromiter((int(v) in ev_groups for v in g), bool, len(g))
-    Xe, ye = X[is_ev], y[is_ev]
+    # Materialise the evaluation set and a REORDERED training pool exactly once, so that each rung
+    # is a contiguous VIEW rather than a fresh fancy-index copy. The first attempt at this run was
+    # OOM-killed at the 1M rung (anon-rss 13.9 GB) because the full corpus and a 4.4 GB training
+    # copy were resident simultaneously. Memory-mapping the cache keeps the source out of anon
+    # memory entirely.
     tr = np.nonzero(~is_ev)[0]
     rng.shuffle(tr)
+    ncols = args.feature_cols or X.shape[1]
+    Xe = np.ascontiguousarray(X[np.nonzero(is_ev)[0]][:, :ncols])
+    ye = y[is_ev]
+    Xtr = np.ascontiguousarray(X[tr][:, :ncols])
+    ytr = y[tr]
+    if mmapped:
+        del X, z
+    import gc as _gc
+    _gc.collect()
+    print(f"      materialised: train {Xtr.nbytes/1e9:.2f} GB, eval {Xe.nbytes/1e9:.2f} GB, "
+          f"{ncols} feature columns", flush=True)
     chance = 1.0 / N_CONFIGS
     print(f"[2/5] grouped split: {len(tr)} train / {len(ye)} eval, "
           f"{len(ev_groups)} held-out source chunks, chance={chance:.4f}", flush=True)
@@ -157,8 +173,8 @@ def main() -> int:
     # The baselines are trained on the SAME maximum training data as the top rung. Beating a
     # data-starved baseline would flatter the result, so the baseline is not starved.
     top_rung = max([r for r in args.rungs if r <= len(tr)], default=len(tr))
-    bsub = tr[: min(len(tr), top_rung)]
-    print(f"      (baselines trained on {len(bsub)} fragments - the same as the top rung)", flush=True)
+    nb = min(len(ytr), top_rung)
+    print(f"      (baselines trained on {nb} fragments - the same as the top rung)", flush=True)
     baselines = {}
     for nm, clf in [("majority", DummyClassifier(strategy="most_frequent")),
                     ("stratified", DummyClassifier(strategy="stratified", random_state=0)),
@@ -168,7 +184,7 @@ def main() -> int:
                     ("depth16_tree", DecisionTreeClassifier(max_depth=16, random_state=0)),
                     ("logistic", LogisticRegression(max_iter=400))]:
         t = time.perf_counter()
-        clf.fit(X[bsub], y[bsub])
+        clf.fit(Xtr[:nb], ytr[:nb])
         baselines[nm] = round(float(accuracy_score(ye, clf.predict(Xe))), 4)
         print(f"      {nm:<18} {baselines[nm]:.4f}   ({time.perf_counter()-t:.0f}s)", flush=True)
     # The frozen baseline set (preregistration 0003) is: majority, label-prior sampling,
@@ -188,11 +204,11 @@ def main() -> int:
     print("[4/5] rungs (one fixed model class throughout)...", flush=True)
     rungs, per_ex, skipped, costs = [], [], [], []
     for r in args.rungs:
-        if r > len(tr):
-            skipped.append(r); print(f"      rung {r}: SKIPPED, only {len(tr)} training fragments")
+        if r > len(ytr):
+            skipped.append(r); print(f"      rung {r}: SKIPPED, only {len(ytr)} training fragments")
             continue
         t = time.perf_counter()
-        m = make_model(args.seed, args.model).fit(X[tr[:r]], y[tr[:r]])
+        m = make_model(args.seed, args.model).fit(Xtr[:r], ytr[:r])
         correct = (m.predict(Xe) == ye).astype(np.int8)
         acc = float(correct.mean())
         secs = round(time.perf_counter() - t, 1)
@@ -202,10 +218,10 @@ def main() -> int:
         print(f"      rung {r:>8}: accuracy {acc:.4f}   ({secs}s)", flush=True)
 
     print("[5/5] null control: labels shuffled, identical pipeline...", flush=True)
-    nsub = tr[: min(len(tr), max(args.rungs[0], 20000))]
-    y_sh = y[nsub].copy(); rng.shuffle(y_sh)
+    nn = min(len(ytr), max(args.rungs[0], 20000))
+    y_sh = ytr[:nn].copy(); rng.shuffle(y_sh)
     t = time.perf_counter()
-    m0 = make_model(args.seed, args.model).fit(X[nsub], y_sh)
+    m0 = make_model(args.seed, args.model).fit(Xtr[:nn], y_sh)
     null_acc = round(float((m0.predict(Xe) == ye).mean()), 4)
     print(f"      shuffled-label accuracy {null_acc:.4f}  vs chance {chance:.4f}   "
           f"({time.perf_counter()-t:.0f}s)", flush=True)
@@ -235,9 +251,9 @@ def main() -> int:
         "n_source_chunks": args.chunks, "chunk_size_bytes": args.chunk_size,
         "carve_bytes": args.carve, "n_fragments": int(len(y)),
         "feature_set": (f"first {args.feature_cols} columns" if args.feature_cols else "all"),
-        "n_features": int(X.shape[1]), "seed": args.seed, "model_class": args.model,
+        "n_features": int(Xtr.shape[1]), "seed": args.seed, "model_class": args.model,
         "split_is_grouped_by_source": True,
-        "n_eval_fragments": int(len(ye)), "n_train_fragments": int(len(tr)),
+        "n_eval_fragments": int(len(ye)), "n_train_fragments": int(len(ytr)),
         "n_heldout_source_chunks": int(len(ev_groups)),
         "trivial_baselines": baselines,
         "best_trivial_baseline_name": best_name, "best_trivial_baseline": best_val,
@@ -246,7 +262,7 @@ def main() -> int:
                                  "the plaintext; it degenerates to the majority baseline, which is "
                                  "measured. See artifacts/pivot/prereg_interpretation.json.",
         "best_baseline_expanded_name": exp_name, "best_baseline_expanded": exp_val,
-        "baselines_trained_on_n": int(len(bsub)),
+        "baselines_trained_on_n": int(nb),
         "rungs": rungs, "rungs_skipped": skipped,
         "n_rungs": len(rungs),
         "top_rung_accuracy": rungs[-1]["accuracy"] if rungs else None,
