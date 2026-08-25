@@ -48,20 +48,30 @@ def _one(args):
             np.full(len(labels), idx, dtype=np.int32))
 
 
-def build(n_chunks, chunk_size, carve_len, src_dir, procs):
+def build(n_chunks, chunk_size, carve_len, src_dir, procs, ncols=0):
+    """Preallocated so peak memory is one copy of the corpus, not two.
+
+    A vstack at a million rows briefly holds both the list of blocks and the result, which is the
+    difference between fitting in 15 GB and not.
+    """
     tasks = [(i, FAMILIES[i % len(FAMILIES)], chunk_size, carve_len) for i in range(n_chunks)]
-    Xs, ys, gs = [], [], []
+    ncols = ncols or N_FEATURES
+    cap = n_chunks * N_CONFIGS
+    X = np.empty((cap, ncols), dtype=np.float32)
+    Y = np.empty(cap, dtype=np.int16)
+    G = np.empty(cap, dtype=np.int32)
+    n = 0
     t0 = time.perf_counter()
     with Pool(procs, initializer=_init, initargs=(src_dir,)) as pool:
         for k, (x, y, g) in enumerate(pool.imap_unordered(_one, tasks, chunksize=8), 1):
-            if len(y):
-                Xs.append(x); ys.append(y); gs.append(g)
-            if k % 500 == 0:
-                done = sum(len(v) for v in ys)
-                print(f"    {k}/{n_chunks} chunks, {done} fragments, "
+            m = len(y)
+            if m:
+                X[n:n + m] = x[:, :ncols]; Y[n:n + m] = y; G[n:n + m] = g
+                n += m
+            if k % 2000 == 0:
+                print(f"    {k}/{n_chunks} chunks, {n} fragments, "
                       f"{time.perf_counter()-t0:.0f}s", flush=True)
-    return (np.vstack(Xs), np.concatenate(ys), np.concatenate(gs),
-            round(time.perf_counter() - t0, 1))
+    return X[:n], Y[:n], G[:n], round(time.perf_counter() - t0, 1)
 
 
 def make_model(seed, kind="mlp"):
@@ -105,16 +115,22 @@ def main() -> int:
     ap.add_argument("--tag", default="pilot")
     ap.add_argument("--cache", default=None, help="npz path to cache/reuse the manufactured features")
     ap.add_argument("--model", default="mlp", choices=["mlp", "hgb", "extratrees", "rf"])
+    ap.add_argument("--feature-cols", type=int, default=0,
+                    help="use only the first N feature columns (0 = all). Columns 0..552 are the "
+                         "v1 set; v2 and v3 append to it and both were measured to earn nothing.")
     args = ap.parse_args()
 
     if args.cache and os.path.exists(args.cache):
         print(f"[1/5] reusing cached corpus {args.cache}", flush=True)
         z = np.load(args.cache)
         X, y, g, build_s = z["X"], z["y"], z["g"], float(z["build_s"])
+        if args.feature_cols and X.shape[1] > args.feature_cols:
+            X = np.ascontiguousarray(X[:, :args.feature_cols])
     else:
         print(f"[1/5] manufacturing from {args.chunks} source chunks "
               f"({args.chunk_size}B each, carving {args.carve}B)...", flush=True)
-        X, y, g, build_s = build(args.chunks, args.chunk_size, args.carve, args.src, args.procs)
+        X, y, g, build_s = build(args.chunks, args.chunk_size, args.carve, args.src, args.procs,
+                                 args.feature_cols)
         if args.cache:
             os.makedirs(os.path.dirname(os.path.abspath(args.cache)), exist_ok=True)
             np.savez(args.cache, X=X, y=y, g=g, build_s=build_s)
@@ -218,6 +234,7 @@ def main() -> int:
         "content_families": FAMILIES,
         "n_source_chunks": args.chunks, "chunk_size_bytes": args.chunk_size,
         "carve_bytes": args.carve, "n_fragments": int(len(y)),
+        "feature_set": (f"first {args.feature_cols} columns" if args.feature_cols else "all"),
         "n_features": int(X.shape[1]), "seed": args.seed, "model_class": args.model,
         "split_is_grouped_by_source": True,
         "n_eval_fragments": int(len(ye)), "n_train_fragments": int(len(tr)),
