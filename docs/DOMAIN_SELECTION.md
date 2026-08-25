@@ -162,9 +162,17 @@ Each was derived by measurement, not argument, and each retires a whole family o
 > the same law seen from three sides:
 >
 > **(i) A machine does the labelling** — so the machine is re-runnable, and *re-run-and-compare* is a
-> zero-training decoder. Measured on six CDCL SAT solvers over 1,530 items: the free decoder scores
-> **0.9863**; a learned model on 27 joint features scores **0.2384** at 13,500 rows, rising **+2.8
-> accuracy points per decade**. Closing that gap needs roughly 27 more decades of data.
+> zero-training decoder. **Reproduced independently in this repository** with six real CDCL solvers
+> (`tools/repro/sat_solver_identity.py`): re-solving returns the byte-identical model in 1530 of 1530
+> checks; all six solvers agree on **0 of 3,000** instances, so this is not a zero-capacity channel;
+> the free decoder reaches **0.9857** with no training at all; and a learned model on joint
+> formula-assignment features reaches **0.18** at 13,500 rows against a chance level of **0.1667**.
+>
+> *The originating subagent reported a faster-improving learned arm (0.2384 at the same rung, +2.8
+> accuracy points per decade). That did not reproduce — see `CORRECTIONS.md`. The disagreement runs in
+> the direction that flatters this law, so neither slope figure is quoted as established; what the
+> evidence supports is the qualitative claim, that a free decoder near 0.986 faces a learned model
+> near chance across a gap no realistic quantity of data closes.*
 >
 > **(ii) An institution reveals it on a schedule** — so the revelation channel is a published,
 > well-known data product. That is exactly why the field already built the tool, and why the buyer's

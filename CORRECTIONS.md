@@ -19,6 +19,44 @@ Format:
 
 ---
 
+## 2026-08-25 — Published a scaling-rate figure that our own reproduction does not reproduce
+
+**Claimed.** In `docs/_domain_selection_analysis.md`, under law L3(i): *"a learned model on 27 joint
+features scores **0.2384** at 13,500 rows, rising **+2.8 accuracy points per decade**. Closing that
+gap needs roughly 27 more decades of data."* Repeated in `VERDICT.md` as *"climbs only a couple of
+accuracy points per decade"*. Both were taken from a subagent's measurement and stated as fact.
+
+**Actual.** Re-derived here from scratch with six real CDCL solvers via PySAT
+(`tools/repro/sat_solver_identity.py`, banked in `artifacts/verification/repro_sat_comparison.json`),
+at the same top rung of 13,500 training rows: the learned model reaches **0.1800**, not 0.2384; the
+slope is **+1.21** accuracy points per decade, not +2.8; and the gap closes in **66.6** decades, not
+27. Three other figures from the same subagent *did* reproduce — determinism exactly (1530 of 1530
+re-solves returning the byte-identical model), the free decoder closely (0.9857 against 0.9863), and
+the divergence result more strongly (all six solvers agreed on 0 of 3,000 instances against 0 of 339).
+
+**Size.** One of three headline numbers in one of the three laws that close Phase 0, wrong by more
+than a factor of two on the slope and by a factor of 2.5 on the decades. The qualitative claim — a
+free zero-training decoder near 0.986 against a learned model near the 0.1667 chance level, with a
+gap no realistic quantity of data closes — survives intact and is if anything strengthened.
+
+**Cause, and the part that matters.** The error runs in the direction that *flatters our own
+conclusion*: a weaker learned arm makes law L3(i) look stronger. That is precisely why it cannot be
+quietly corrected by adopting the better-looking number. The most likely explanation is **not** that
+the subagent was wrong but that **the feature set implemented here is worse than the one it used** —
+both of our runs sit barely above chance, which is what an underpowered feature set looks like. The
+subagent's code lived in an ephemeral scratch directory and is gone, so the two implementations
+cannot be diffed and the cause cannot be established. Underlying all of it: a number measured by a
+subagent, in a directory that no longer exists, was written into a published document as though it
+were established.
+
+**Fix.** Three changes, all made. (1) Neither figure is quoted as established anywhere. The documents
+now state the qualitative claim, cite the reproduced numbers as reproduced, and record the subagent's
+as not reproduced. (2) The reproduction ships as runnable code and both runs are banked, including
+the first run that could **not** reach the top rung — kept so the run that did cannot be mistaken for
+the only one. (3) `artifacts/verification/coverage.json` now carries an explicit `neither` row for
+the subagent's SAT figures whose stated reason is that this repository tried to reproduce them and
+could not.
+
 ## 2026-08-25 — Miscounted the ACS PUMS allocation-flag columns, and blamed a subagent for it
 
 **Claimed.** In `artifacts/phase0/reproduction_alloctrace.json`, first version, under

@@ -162,6 +162,51 @@
       "value": -0.0149,
       "artifact": "artifacts/phase0/round3_domain_search.json",
       "why_not_verifiable": "Subagent measurement over a 400 MB slice of a 4.76 GB ITCH file in an ephemeral scratch directory. Not retained, not re-run here."
+    },
+    {
+      "id": "sat-determinism",
+      "class": "primary-verifiable",
+      "claim": "Re-running a CDCL SAT solver on the same instance returns the byte-identical model in 1530 of 1530 checks - so the label is a deterministic function of the instance and the solver.",
+      "value": 1530,
+      "artifact": "artifacts/verification/repro_sat_solver_identity_run2.json",
+      "json_path": "$.determinism.identical",
+      "reverify": "python3 tools/repro/sat_solver_identity.py --instances 3000 --test-frac 0.1"
+    },
+    {
+      "id": "sat-free-decoder",
+      "class": "primary-verifiable",
+      "claim": "The zero-training decoder (re-run all six solvers and compare) identifies the producing solver at 0.9857 over 18,000 items, against a 0.1667 chance level - the measurement behind law L3(i).",
+      "value": 0.9857,
+      "artifact": "artifacts/verification/repro_sat_solver_identity_run2.json",
+      "json_path": "$.free_decoder_rerun_and_compare.accuracy",
+      "reverify": "python3 tools/repro/sat_solver_identity.py --instances 3000 --test-frac 0.1"
+    },
+    {
+      "id": "sat-divergence",
+      "class": "primary-verifiable",
+      "claim": "All six solvers returned the identical model on 0 of 3,000 instances, so the artifact genuinely varies with the label and this is not a zero-capacity channel.",
+      "value": 0,
+      "artifact": "artifacts/verification/repro_sat_solver_identity_run2.json",
+      "json_path": "$.divergence.all_six_agree",
+      "reverify": "python3 tools/repro/sat_solver_identity.py --instances 3000 --test-frac 0.1"
+    },
+    {
+      "id": "sat-learned-top-rung",
+      "class": "primary-verifiable",
+      "claim": "A learned model on 27 joint formula-assignment features reaches 0.18 at 13,500 training rows - barely above the 0.1667 chance level, and 0.8057 below the free decoder.",
+      "value": 0.18,
+      "artifact": "artifacts/verification/repro_sat_solver_identity_run2.json",
+      "json_path": "$.learned_model_curve[3].accuracy",
+      "reverify": "python3 tools/repro/sat_solver_identity.py --instances 3000 --test-frac 0.1"
+    },
+    {
+      "id": "sat-subagent-slope-not-reproduced",
+      "class": "neither",
+      "claim": "The subagent reported the learned model at 0.2384 with a slope of +2.8 accuracy points per decade, closing the gap in about 27 decades. This repository could not reproduce any of the three.",
+      "value": 0.2384,
+      "artifact": "artifacts/verification/repro_sat_comparison.json",
+      "json_path": "$.subagent_reported.learned_curve.13500",
+      "why_not_verifiable": "Actively NOT reproduced, which is worse than merely unverified. Our own run at the same top rung gives 0.1800, +1.21 points per decade and 66.6 decades. The subagent's code lived in an ephemeral scratch directory and is gone, so the implementations cannot be diffed. The difference flatters our conclusion, and the likeliest explanation is that OUR feature set is the weaker one - so neither figure is quoted as established anywhere in this repository."
     }
   ]
 }

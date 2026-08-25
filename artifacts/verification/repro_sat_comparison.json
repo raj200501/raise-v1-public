@@ -1,0 +1,61 @@
+{
+  "agreement": [
+    "Determinism reproduced EXACTLY: 1530 of 1530 re-solves returned the byte-identical model.",
+    "Divergence reproduced and strengthened: all six solvers agreed on 0 of 3000 instances (subagent: 0 of 339).",
+    "The free zero-training decoder reproduced closely: 0.9857 here against 0.9863 reported.",
+    "The DIRECTION of law L3(i) is confirmed: re-run-and-compare needs no training and reaches ~0.986, while a learned model on joint features sits near the 0.1667 chance level."
+  ],
+  "disagreement": {
+    "claim": "the learned model's rate of improvement with data",
+    "non_flattering_reading": "The difference runs in the direction that FLATTERS our conclusion: a weaker learned arm makes law L3(i) look stronger. That is exactly why it must not be quietly adopted. The most likely explanation is not that the subagent was wrong but that the feature set implemented here is WORSE than the one it used - both runs sit barely above the 0.1667 chance level, which is what an underpowered feature set looks like. The subagent's code is gone, so the two cannot be diffed and the cause cannot be established.",
+    "reproduced": "0.1800 at 13500 rows, +1.21 accuracy points per decade, gap closing in 66.6 decades",
+    "status": "NOT REPRODUCED",
+    "subagent": "0.2384 at 13500 rows, +2.8 accuracy points per decade, gap closing in ~27 decades",
+    "what_this_does_and_does_not_license": "It licenses the qualitative claim - a free decoder at ~0.986 against a learned model near chance, with a gap no realistic amount of data closes. It does NOT license either specific points-per-decade figure. Neither +2.8 nor +1.21 should be quoted as established."
+  },
+  "reproduced_run1": {
+    "all_six_agree": 0,
+    "determinism_rate": 1.0,
+    "free_decoder_accuracy": 0.9852,
+    "instances": 2500,
+    "learned_curve": {
+      "300": 0.179,
+      "3000": 0.1713,
+      "900": 0.1707
+    },
+    "limitation": "only 12000 training rows were available, so the subagent's top rung of 13500 could not be run. Not a fair comparison on its own.",
+    "points_per_decade": -0.0077
+  },
+  "reproduced_run2": {
+    "all_six_agree": 0,
+    "chance_accuracy": 0.1667,
+    "decades_to_close_gap": 66.6,
+    "determinism_rate": 1.0,
+    "free_decoder_accuracy": 0.9857,
+    "gap_to_free_decoder": 0.8057,
+    "instances": 3000,
+    "learned_curve": {
+      "13500": 0.18,
+      "300": 0.16,
+      "3000": 0.1739,
+      "900": 0.1733
+    },
+    "points_per_decade": 0.0121
+  },
+  "schema": "raise-v1/repro_comparison/1",
+  "subagent_reported": {
+    "all_six_agree": "0 of 339 instances",
+    "decades_to_close_gap": 27,
+    "determinism": "1530/1530 = 100.00%",
+    "free_decoder_accuracy": 0.9863,
+    "learned_curve": {
+      "13500": 0.2384,
+      "300": 0.192,
+      "3000": 0.2122,
+      "900": 0.2031
+    },
+    "points_per_decade": 0.028,
+    "source": "round 3 scout B, ephemeral scratch directory, no script banked, inputs not retained"
+  },
+  "what": "Independent reproduction of the subagent measurement behind law L3(i), compared against what the subagent reported. Two runs are banked, not one: run 1 could not reach the subagent's top rung and run 2 was launched specifically to make the comparison fair. Both are kept so that the run which reached the top rung cannot be mistaken for the only run."
+}

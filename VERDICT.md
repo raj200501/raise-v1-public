@@ -60,9 +60,13 @@ the MAPQ value set. Only lossy, non-invertible generators are candidates at all.
 ### L3 — For labels to be free at scale, the labelling must already be someone's job or by-product — and there are exactly three ways that happens, each destroying a different gate
 
 **(i) A machine does it.** Then the machine is re-runnable, and *re-run-and-compare* is a
-zero-training decoder. Six CDCL SAT solvers, same instance, models kept and trajectories discarded:
-the free decoder identifies the producing solver where a learned model on joint formula-assignment
-features is near chance and climbs only a couple of accuracy points per decade of data.
+zero-training decoder. Six CDCL SAT solvers, same instance, models kept and trajectories discarded —
+**reproduced independently here, and the only law whose evidence is primary-verifiable.** Re-solving
+returns the byte-identical model in 1530 of 1530 checks; all six solvers agree on 0 of 3,000
+instances; the free decoder reaches 0.9857 with zero training rows; a learned model on joint features
+reaches 0.18 at 13,500 rows against 0.1667 chance. The originating subagent reported a
+faster-improving learned arm and **that part did not reproduce** — filed in `CORRECTIONS.md`, and
+neither slope figure is quoted as established.
 
 **(ii) An institution reveals it on a schedule.** Then the revelation channel is a published,
 well-known data product — which is precisely why the field already built the tool, and why the
@@ -117,6 +121,7 @@ machine generators, scheduled revelations and decision registers, did not contai
 | Phase 3 (credibility artifact) | Partially delivered. The *instrument* ships and reproduces; the intended open dataset or weights do not exist. | n/a |
 | Round 3 screener's own arithmetic | Reported 11 adversarial reviews. Recounted from the banked artifacts: **8**. The screener's candidate total of 99 is correct. | arithmetic-verifiable |
 | Our own allocation-flag count | Recorded 76 against a subagent's 77 and filed it as *the subagent's* discrepancy. The subagent was right. Filed in `CORRECTIONS.md` at full size. | primary-verifiable |
+| **A scaling-rate figure we published** | Stated the learned SAT arm at 0.2384 and +2.8 points per decade. Our own reproduction gives 0.18 and +1.21, in the direction that flatters our conclusion. **Not reproduced.** Filed in `CORRECTIONS.md`. | neither |
 
 ---
 
@@ -127,9 +132,10 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **8 of 19 claims — the largest class — are in `neither`.** They can be neither re-derived nor
-> re-run by anyone, including us. Every one is a subagent measurement made inside an ephemeral
-> scratch directory that no longer exists, with no script banked and no inputs retained.
+> **9 of 24 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> including us. Eight are subagent measurements made inside ephemeral scratch directories that no
+> longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
+> it is a figure this repository actively tried to reproduce and could not.**
 >
 > **This includes the measurements that close the search.** The Sentinel-1 fit that retires an
 > entire candidate family under L1. The MOT numbers that are the strongest single piece of evidence
@@ -137,14 +143,17 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 > to take a subagent's word for those is left with the laws unproven, and would be right to.
 >
 > Two of the load-bearing measurements have since been pulled out of that class by re-deriving them
-> here from public data with shipped code — the census leak and the SAT-solver decoder. The rest
-> have not been, and are marked accordingly rather than quietly upgraded.
+> here from public data with shipped code — the census leak and the SAT-solver decoder. Reproducing
+> the second one **contradicted a figure this repository had already published**, in the direction
+> that flattered its own conclusion. That is filed in `CORRECTIONS.md` at full size rather than
+> resolved by adopting the better-looking number. The rest have not been re-derived, and are marked
+> accordingly rather than quietly upgraded.
 
 | Class | Count | Meaning |
 |---|---:|---|
-| `neither` | **8** | Cannot be re-derived or re-run. Asserted from a source we cannot reproduce. |
+| `neither` | **9** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce. |
 | `arithmetic-verifiable` | 5 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 6 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `primary-verifiable` | 10 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 ---
 

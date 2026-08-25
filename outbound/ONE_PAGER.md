@@ -56,15 +56,19 @@ None of the 99 candidates had it. That is a usable specification, not a consolat
 
 The verification-coverage map is machine-checked and prints its weakest class first, deliberately.
 
-**8 of 19 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
-including us. They are measurements made by subagents inside scratch directories that no longer
-exist. **That includes measurements the conclusions rest on.** Two of the load-bearing ones have
-since been pulled out of that class by re-deriving them here from public data with shipped code.
-The rest have not been, and are labelled accordingly rather than quietly upgraded.
+**9 of 24 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
+including us. Eight are measurements made by subagents inside scratch directories that no longer
+exist, and **that includes measurements the conclusions rest on.** The ninth is worse than
+unverified: it is a figure we published and then failed to reproduce ourselves.
 
-A dated corrections ledger records claims withdrawn or revised, including one filed against this
-repository's own verification work when it manufactured a discrepancy against a subagent that
-turned out to be right.
+Two of the load-bearing measurements have since been pulled out of that class by re-deriving them
+here from public data with shipped code. Doing so on the second one **contradicted a number this
+repository had already published, in the direction that flattered its own conclusion.** It is filed
+in the corrections ledger at full size rather than resolved by adopting the better-looking figure,
+and neither version of it is quoted as established anywhere.
+
+The ledger also carries a correction filed against this repository's own verification work, for
+manufacturing a discrepancy against a subagent that turned out to be right.
 
 ## Verify it yourself, on a cold clone
 
