@@ -1,0 +1,171 @@
+{
+  "by_gate": {
+    "claimcheck": {
+      "detected": 8,
+      "total": 8
+    },
+    "prereg": {
+      "detected": 9,
+      "total": 9
+    }
+  },
+  "cases": [
+    {
+      "detected": true,
+      "evidence": "CLAIMCHECK: PASS",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "claimcheck",
+      "mutation": "control-unmutated-passes",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "CLAIMCHECK: FAIL - 1 number(s) in outbound copy do not trace to an artifact.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "claimcheck",
+      "mutation": "fabricated-number-in-doc",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "CLAIMCHECK: FAIL - 3 number(s) in outbound copy do not trace to an artifact.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "claimcheck",
+      "mutation": "backing-artifact-deleted",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "CLAIMCHECK: FAIL - 1 number(s) in outbound copy do not trace to an artifact.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "claimcheck",
+      "mutation": "precision-overclaim",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "CLAIMCHECK: FAIL - 1 number(s) in outbound copy do not trace to an artifact.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "claimcheck",
+      "mutation": "number-hidden-in-code-fence-is-still-checked",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "CLAIMCHECK: FAIL - 1 number(s) in outbound copy do not trace to an artifact.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "claimcheck",
+      "mutation": "claim-adjacent-to-url-not-swallowed",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "claimcheck: allowlist line lacks a reason: '0.981'",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "claimcheck",
+      "mutation": "allowlist-entry-without-reason-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "CLAIMCHECK: PASS",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "claimcheck",
+      "mutation": "allowlist-with-reason-admits-exactly-that-number",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=c7627eb36a0653cc)",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "prereg",
+      "mutation": "control-clean-chain-verifies",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "  - entry 1 (prereg/0001-seed.json): sealed content changed after freezing",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "prereg",
+      "mutation": "sealed-bar-edited-after-freeze",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "      frozen=fc0a9be52ad3891f now=86218bfb82067c9f",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "prereg",
+      "mutation": "reader-edited-after-freeze",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - entry 1 (prereg/0001-seed.json): sealed content changed after freezing",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "prereg",
+      "mutation": "reading-definition-swapped-after-freeze",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - entry 1 (prereg/0001-seed.json): sealed content changed after freezing",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "prereg",
+      "mutation": "chain-entry-hash-tampered",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 7c85459c7add29db (chain order broken)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "prereg",
+      "mutation": "prereg-inserted-out-of-order",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - prereg/0001-seed.json: marked frozen but absent from the chain",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "prereg",
+      "mutation": "frozen-file-absent-from-chain",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  The reader must be written BEFORE the data exists. That is the whole point.",
+      "exit_code": 3,
+      "expected": "fail",
+      "gate": "prereg",
+      "mutation": "freeze-refuses-when-reader-does-not-exist",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "/tmp/tmpjk69xcj2/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "prereg",
+      "mutation": "double-freeze-refused",
+      "observed": "fail"
+    }
+  ],
+  "detected": 17,
+  "schema": "raise-v1/mutation_report/1",
+  "survived": 0,
+  "total_mutations": 17
+}
