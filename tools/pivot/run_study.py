@@ -92,7 +92,11 @@ def make_model(seed, kind="mlp"):
         #
         # The revert restores the class chosen on PILOT data before any full-run number existed, so
         # it is undoing a memory-motivated deviation rather than selecting a setting by its result.
-        # Memory is instead solved by capping the top rung, below.
+        # Memory is solved instead by (a) materialising the pool as float64 so sklearn's internal
+        # conversion never happens, and (b) passing an EXPLICIT validation set so fit() skips its
+        # own train_test_split. sklearn's HGB uses X_DTYPE=float64, so a float32 pool is silently
+        # doubled and then copied again by the split: 7.09 + 7.09 + 0.89 = 15.07 GB at the top rung
+        # against a 13.94 GB cgroup ceiling, which is every one of the four OOMs.
         return HistGradientBoostingClassifier(max_iter=200, learning_rate=0.15,
                                               max_leaf_nodes=63, early_stopping=True,
                                               n_iter_no_change=10, random_state=seed)
@@ -166,15 +170,16 @@ def main() -> int:
     # whatever it is handed, so an oversized pool is paid for twice at the largest fit.
     need = min(len(tr), max(args.rungs))
     tr = tr[:need]
-    Xe = np.ascontiguousarray(X[np.nonzero(is_ev)[0]][:, :ncols])
+    # float64 up front: sklearn's HGB converts internally otherwise, doubling peak memory.
+    Xe = np.ascontiguousarray(X[np.nonzero(is_ev)[0]][:, :ncols], dtype=np.float64)
     ye = y[is_ev]
-    Xtr = np.ascontiguousarray(X[tr][:, :ncols])
+    Xtr = np.ascontiguousarray(X[tr][:, :ncols], dtype=np.float64)
     ytr = y[tr]
     if mmapped:
         del X, z
     import gc as _gc
     _gc.collect()
-    print(f"      materialised: train {Xtr.nbytes/1e9:.2f} GB, eval {Xe.nbytes/1e9:.2f} GB, "
+    print(f"      materialised float64: train {Xtr.nbytes/1e9:.2f} GB, eval {Xe.nbytes/1e9:.2f} GB, "
           f"{ncols} feature columns", flush=True)
     chance = 1.0 / N_CONFIGS
     print(f"[2/5] grouped split: {len(tr)} train / {len(ye)} eval, "
@@ -223,7 +228,15 @@ def main() -> int:
             skipped.append(r); print(f"      rung {r}: SKIPPED, only {len(ytr)} training fragments")
             continue
         t = time.perf_counter()
-        m = make_model(args.seed, args.model).fit(Xtr[:r], ytr[:r])
+        m = make_model(args.seed, args.model)
+        if args.model == "hgb":
+            # Explicit validation set carved from the rung's OWN data as contiguous views, so the
+            # rung's data budget is honest and no copy is made. This reproduces what sklearn's
+            # internal 10% split would do, without the 7 GB it costs.
+            k = max(1, int(r * 0.9))
+            m.fit(Xtr[:k], ytr[:k], X_val=Xtr[k:r], y_val=ytr[k:r])
+        else:
+            m.fit(Xtr[:r], ytr[:r])
         correct = (m.predict(Xe) == ye).astype(np.int8)
         acc = float(correct.mean())
         secs = round(time.perf_counter() - t, 1)
@@ -236,7 +249,12 @@ def main() -> int:
     nn = min(len(ytr), max(args.rungs[0], 20000))
     y_sh = ytr[:nn].copy(); rng.shuffle(y_sh)
     t = time.perf_counter()
-    m0 = make_model(args.seed, args.model).fit(Xtr[:nn], y_sh)
+    m0 = make_model(args.seed, args.model)
+    if args.model == "hgb":
+        k0 = max(1, int(nn * 0.9))
+        m0.fit(Xtr[:k0], y_sh[:k0], X_val=Xtr[k0:nn], y_val=y_sh[k0:nn])
+    else:
+        m0.fit(Xtr[:nn], y_sh)
     null_acc = round(float((m0.predict(Xe) == ye).mean()), 4)
     print(f"      shuffled-label accuracy {null_acc:.4f}  vs chance {chance:.4f}   "
           f"({time.perf_counter()-t:.0f}s)", flush=True)
