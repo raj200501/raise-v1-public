@@ -1,0 +1,36 @@
+{
+  "adversarial_reviews": 4,
+  "agent_errors": 0,
+  "agents_run": 15,
+  "candidates_generated": 36,
+  "crowding_scores": {
+    "Compressed-stream encoder provenance: identifying the encode": 2,
+    "CopybookLM: record-layout induction from undocumented fixed-": 2,
+    "Headerless load-layout recovery: base address, ISA and secti": 6,
+    "Inverse Linking: compile-unit (object-file) partitioning of ": 8,
+    "JVM bytecode build-provenance: predicting compiler implement": 3,
+    "ProcedureNet: recovering coded flight procedures and ARINC 4": 5,
+    "Serial-crystallography indexing from sparse Bragg peak lists": 4
+  },
+  "distinct_venues": 99,
+  "g4_checks_run": 7,
+  "g4_verdicts": {
+    "Compressed-stream encoder provenance: identifying the encode": "PASS",
+    "CopybookLM: record-layout induction from undocumented fixed-": "PASS",
+    "Headerless load-layout recovery: base address, ISA and secti": "MARGINAL",
+    "Inverse Linking: compile-unit (object-file) partitioning of ": "FAIL",
+    "JVM bytecode build-provenance: predicting compiler implement": "PASS",
+    "ProcedureNet: recovering coded flight procedures and ARINC 4": "MARGINAL",
+    "Serial-crystallography indexing from sparse Bragg peak lists": "PASS"
+  },
+  "recorded_searches": 109,
+  "rejected_at_screen": 29,
+  "round": 1,
+  "schema": "raise-v1/domain_search_summary/1",
+  "survivors_after_screen": 7,
+  "verdict_counts": {
+    "BACKUP": 2,
+    "REJECT": 2,
+    "SELECT": 0
+  }
+}
