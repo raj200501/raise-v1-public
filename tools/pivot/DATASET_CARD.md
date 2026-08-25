@@ -67,14 +67,14 @@ rather than encoder identification.
 
 | | |
 |---|---|
-| Fragments | PENDING |
+| Fragments | 1,300,000 (800,000 train / 260,000 eval, grouped by source chunk) |
 | Classes | 26 |
 | Chance accuracy | 0.0385 |
 | Distinct-stream rate (A1) | 22.27 of 26, collision rate 0.143 |
-| Null control (shuffled labels) | PENDING |
-| Best trivial baseline | PENDING |
-| Scaling slope, 95% interval | PENDING |
-| Verdict from the frozen reader | PENDING |
+| Null control (shuffled labels) | 0.0389 vs chance 0.038462 — passes (tolerance 0.02) |
+| Best trivial baseline | frozen set: logistic 0.1392; expanded set: depth16_tree 0.1812 |
+| Scaling slope, 95% interval | +0.0491 accuracy/decade, 95% CI [+0.0485, +0.0497] over 2.9031 decades |
+| Verdict from the frozen reader | **CURVE_ESTABLISHED** |
 
 ## Licence
 

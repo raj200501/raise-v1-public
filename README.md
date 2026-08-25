@@ -11,10 +11,22 @@ cherry-pick, plus one shipped open artifact a stranger can reproduce from a cold
 | Phase | What it is | State |
 |---|---|---|
 | 0 | Domain selection against five hard gates | **terminated — NO VIABLE DOMAIN FOUND** (rounds 1–3, and round 4 agreed) |
-| 1 | Falsify the data thesis cheaply | not started — there is no thesis to falsify |
-| 2 | The scaling curve | one real curve fitted — **on a domain that cannot be selected** |
-| 3 | Ship the credibility artifact | partial — the *instrument* ships; no dataset or weights exist |
+| 1 | Falsify the data thesis cheaply | delivered on the pivot — null control, grouped split and baseline floor all measured first |
+| 2 | The scaling curve | **`CURVE_ESTABLISHED`** on carved-DEFLATE encoder provenance — +0.0491/decade over 2.9031 decades |
+| 3 | Ship the credibility artifact | partial — the instrument and the manufacture-and-measure pipeline ship; the 5.8 GB corpus is not committed |
 | 4 | The evidence package (`VERDICT.md`, `CORRECTIONS.md`, coverage map) | delivered |
+
+**There is a curve, and it does not make the thesis fundable.** The pivot — recovering which of
+26 DEFLATE (implementation, level) configurations produced a window carved from the *middle* of a
+compressed stream, with no header, no stream start and no plaintext — clears every preregistered
+clause: four rungs over 2.9031 decades, a slope of **+0.0491** accuracy points per decade with a
+95% interval of **[0.0485, 0.0497]**, a null control at chance, and a margin over the best trivial
+baseline of **+0.1003** under the frozen baseline set and **+0.0583** under the stricter one that
+adds deep trees. Both clear the 0.05 frozen before the corpus existed.
+
+What it does not clear is **G5, a named buyer type**. No buyer has been contacted and none is
+claimed. A rising curve on a task nobody needs is a rising curve on a task nobody needs, and the
+gap between a validated label factory and a business is the honest state of this repository.
 
 **Phase 0 terminated with no domain selected.** 99 candidates across three rounds, 8 put through
 adversarial review with default posture REJECT, 0 SELECT. A fourth round, authorised afterwards

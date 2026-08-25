@@ -1,4 +1,12 @@
 {
+  "a_cheaper_option_declined_because_it_flattered_the_result": {
+    "measured_effect_on_the_margin": {
+      "v1_553_frozen_margin": 0.0751,
+      "v3_1108_frozen_margin": 0.0723
+    },
+    "option": "restrict to the first 553 feature columns (the v1 set), roughly halving memory",
+    "why_declined": "The cheaper feature set produces a LARGER frozen-set margin, and it does so by WEAKENING the baselines rather than by improving the model. Adopting it after two OOM kills would have been choosing the option that flatters the study under cover of a resource constraint. The memory problem was solved on the full 1108-column set instead. Recorded because the decision went against this study's interest and would otherwise be invisible."
+  },
   "eval_protocol": "grouped by source chunk throughout; 26 classes; chance 0.0385; n_train 100000; n_eval 26000; baselines trained on the SAME data as the model",
   "failed_hypotheses": [
     {
@@ -43,7 +51,18 @@
     }
   },
   "open_question": "Every number above is measured at n=10^5. The preregistered margin clause is evaluated at the TOP RUNG, and the study is specified to 10^6. The margin has therefore NOT yet been tested at the scale the thesis is about. The baselines are capacity-limited and will saturate; the model is not. Whether that opens the margin is the actual experiment.",
+  "permutation_p_is_at_its_floor": {
+    "floor": 0.041666666666666664,
+    "value": 0.041666666666666664,
+    "why": "An exact permutation test over 4 rungs has 4! = 24 orderings, so the smallest attainable p-value is 1/24. The reported p IS that floor. It therefore says the observed ordering is the most extreme of the 24 possible; it does NOT say p could have been smaller with the same data. Any reading of it as 'just under 0.05' is wrong - more rungs, not a better result, is what would lower it."
+  },
   "recorded_utc": "2026-08-25T16:15:38Z",
   "schema": "raise-v1/pivot_engineering_log/1",
+  "top_rung_was_set_by_memory_not_by_result": {
+    "oom_history": "Six attempts. Five were killed at a ~13.9 GB ceiling. The dominant cause was found only on the fifth: np.load(path, mmap_mode='r') SILENTLY IGNORES mmap_mode for a .npz, so the 5.76 GB corpus that the code claimed to be memory-mapping was fully resident the whole time. Secondary cause, real but smaller: sklearn's HGB uses X_DTYPE=float64 and silently widens a float32 pool, then its internal train_test_split copies it again. Fixed by mapping the STORED zip entry in place (tools/pivot/npzmap.py), gathering rows chunkwise in ascending source order, widening to float64 up front, passing an explicit validation set, and holding the evaluation block at float32 with per-chunk widening. Peak 11.69 GB, as projected.",
+    "top_rung": 800000,
+    "training_pool_available": 1040000,
+    "why": "The top rung is 800,000 of the 1,040,000 training fragments available after the grouped split. The cap was NOT chosen for its accuracy - it was set during OOM debugging, before any 800,000-fragment number existed, and the run that produced it was the first one to survive. 1k->800k is 2.9031 decades, above the preregistered 2.0, so the frozen scope is met without the cap doing any work for the verdict."
+  },
   "why": "Model and feature choices for the scaled run are made ONCE on pilot data and then held fixed. This records every choice and every FAILED hypothesis, so the selection cannot be quietly re-run after seeing a number, and so a hypothesis that did not work does not vanish because it was inconvenient."
 }

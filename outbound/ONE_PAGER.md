@@ -1,19 +1,56 @@
-# raise-v1 — an instrument, and the negative result it produced
+# raise-v1 — a preregistered instrument, a curve that clears it, and no buyer
 
 ## What this is, and what it is not
 
-**It is** a preregistered evaluation instrument, and one negative finding produced by running it.
+**It is** a preregistered evaluation instrument, built and frozen before any of the numbers it
+reports existed, and designed so that each of its gates can be shown to fail on demand.
 
-**It is not** a scaling curve that means anything about the world. One has now been fitted, with
-an honest interval — deliberately on a domain that *cannot be selected*, so that there was no
-incentive to flatter it. No domain cleared the five gates, so no curve here is a claim about the
-world.
+**It is** a scaling curve that clears every clause frozen before its corpus existed —
+`CURVE_ESTABLISHED`, **+0.0491** accuracy points per decade over **2.9031** decades, margin
+**+0.1003** frozen and **+0.0583** under the stricter reading, both above the preregistered 0.05.
 
-There are no customers, no users and no partners, and nothing here claims otherwise.
+**It is not** a fundable thesis. The task has no established buyer, none has been contacted, and
+none is claimed. There are no customers, no users and no partners.
 
 ---
 
-## The finding
+## The result
+
+Take a window from the MIDDLE of a DEFLATE stream — no header, no stream start, no plaintext, not
+even the stream length — and recover which of **26** (implementation, level) configurations produced
+it. The label factory is free and unbounded: compress any bytes under every configuration and the
+label *is* the configuration you used.
+
+| Rung | 1000 | 10000 | 100000 | 800000 |
+|---|---:|---:|---:|---:|
+| Accuracy | 0.0988 | 0.1415 | 0.1965 | **0.2395** |
+
+Chance is **0.038462** across 26 classes. The split is grouped by source chunk, so no source bytes
+straddle train and evaluation — a random split would measure content memorisation instead, and the
+archived trial killed a candidate on exactly that, watching 0.4873 collapse to 0.1531. Labels
+shuffled, the identical pipeline retrained, falls to **0.0389**.
+
+Every trivial baseline was trained on the same 800000 fragments as the top rung, so none is
+starved. Best of the **preregistered** set: logistic at **0.1392**, margin **+0.1003**. Best of the
+stricter set that adds deep trees, which are *not* in the frozen list and are stronger than
+anything in it: a depth-16 tree at **0.1812**, margin **+0.0583**. Both clear 0.05, and the
+commitment to report both was recorded mid-run and anchored to drand round **6408095**, before
+either number was known.
+
+**Why no existing tool does this.** `preflate` and `grittibanzli` decode the token stream, which
+needs the dynamic Huffman tables at the STREAM START. `precomp` and `list-compresslevel.py`
+brute-force by RECOMPRESSING, which needs the PLAINTEXT. A carved fragment has neither. Three
+GitHub API query formulations returned `total_count: 0`.
+
+**What it does not establish.** A buyer. The uses this points at — forensic carving of unallocated
+disk, archive recompression, repackaged-APK detection — are narrow, nobody has been contacted, and
+nothing measured here says anyone would pay. The permutation p of **0.0417** is exactly its
+arithmetic floor of 1/24 for four rungs and must not be read as "just under 0.05". The top rung was
+capped at 800000 by memory during OOM debugging, before any 800000-fragment number existed.
+
+---
+
+## How the search got here
 
 A search for a domain in which to reproduce the FDM-1 structure — abundant unlabelled corpus, a
 mechanism that manufactures labels at near-zero marginal cost, a curve that rises with data — was
@@ -74,14 +111,16 @@ three-rung dataset for violating its own preregistered scope; it then fitted a r
 excluding zero; and it **rejected the candidate anyway**, because the measured margin over the best
 trivial baseline was **0.0313** against a **0.05** frozen before the data existed.
 
-So there is now one real, interval-bounded scaling curve here. It is a validation of the instrument,
-on a domain that cannot be used, that fails its own margin. It is not a result about the world.
+That curve is a validation of the instrument, on a domain that cannot be used, that fails its own
+margin. It is **not** the curve at the top of this page — that one is on the DEFLATE corpus, clears
+every clause, and came out of the archived trial rather than out of Phase 0 selection. Both are
+reported, and neither is quoted as the other.
 
 ## The part that should be read first
 
 The verification-coverage map is machine-checked and prints its weakest class first, deliberately.
 
-**9 of 37 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
+**9 of 45 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
 including us. Eight are measurements made by subagents inside scratch directories that no longer
 exist, and **that includes measurements the conclusions rest on.** The ninth is worse than
 unverified: it is a figure we published and then failed to reproduce ourselves.

@@ -322,6 +322,77 @@
       "json_path": "$.by_gate.freshness.total",
       "reverify": "python3 tests/mutation_test.py",
       "value": 9
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_curve.json",
+      "claim": "Accuracy on carved-DEFLATE encoder provenance rises at 0.04912072076972296 accuracy points per decade of manufactured fragments, over 2.9031 decades and four rungs, with a paired-bootstrap 95% lower bound of 0.048538069937032 that excludes zero.",
+      "class": "primary-verifiable",
+      "id": "deflate-curve-slope",
+      "json_path": "$.slope",
+      "reverify": "python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --tag full",
+      "value": 0.04912072076972296
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_curve.json",
+      "claim": "At 800000 manufactured fragments the model reaches 0.2395 accuracy across 26 classes, against a 0.038462 chance level, on an evaluation set grouped by source chunk.",
+      "class": "primary-verifiable",
+      "id": "deflate-top-rung",
+      "json_path": "$.top_rung_accuracy",
+      "reverify": "python3 tools/readers/pivot_deflate_curve.py",
+      "value": 0.2395
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_curve.json",
+      "claim": "The margin over the best PREREGISTERED trivial baseline (logistic regression, 0.1392, trained on the same 800000 fragments as the top rung) is 0.1003, above the 0.05 frozen before the corpus existed.",
+      "class": "primary-verifiable",
+      "id": "deflate-margin-frozen",
+      "json_path": "$.margin_over_frozen_baseline",
+      "reverify": "python3 tools/readers/pivot_deflate_curve.py",
+      "value": 0.1003
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_curve.json",
+      "claim": "Under the STRICTER reading that adds depth-8 and depth-16 trees to the baseline set - trees that are not in the frozen list and are stronger than anything in it - the margin is 0.0583, which also clears 0.05.",
+      "class": "primary-verifiable",
+      "id": "deflate-margin-expanded",
+      "json_path": "$.margin_over_expanded_baseline",
+      "reverify": "python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --tag full",
+      "value": 0.0583
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_curve.json",
+      "claim": "With labels shuffled and the identical pipeline retrained, accuracy falls to 0.0389 against a chance level of 0.038462 - the pipeline is reading the label and not an artefact of the split.",
+      "class": "primary-verifiable",
+      "id": "deflate-null-control",
+      "json_path": "$.shuffled_label_accuracy",
+      "reverify": "python3 tools/readers/pivot_deflate_curve.py",
+      "value": 0.0389
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_curve.json",
+      "claim": "The exact permutation test reports p = 0.041666666666666664, which is exactly its arithmetic floor of 1/24 for four rungs. It states that the observed ordering is the most extreme of the 24 available; it does not mean 'just under 0.05'.",
+      "class": "arithmetic-verifiable",
+      "id": "deflate-permutation-p-at-floor",
+      "json_path": "$.permutation_p",
+      "value": 0.041666666666666664
+    },
+    {
+      "artifact": "artifacts/ephemerr/a2_result.json",
+      "claim": "EphemErr fails its A2 clause: a learned AUC of 0.9821 against a per-satellite historical mean of 0.9363 is a margin of 0.0458, below the 0.05 frozen before the data existed.",
+      "class": "primary-verifiable",
+      "id": "ephemerr-a2-margin",
+      "json_path": "$.margin_over_best_baseline",
+      "reverify": "python3 tools/readers/ephemerr_a2_verdict.py",
+      "value": 0.0458
+    },
+    {
+      "artifact": "artifacts/ephemerr/a2_result.json",
+      "claim": "The pre-run analysis expected the broadcast accuracy index (URA/SISA) to be the dominant trivial baseline; it measures 0.5037, a coin. The actual killer was satellite identity, at 0.9363.",
+      "class": "primary-verifiable",
+      "id": "ephemerr-real-killer-was-identity",
+      "json_path": "$.baseline_aucs.ura_index_alone",
+      "reverify": "python3 tools/readers/ephemerr_a2_verdict.py",
+      "value": 0.5037
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",
