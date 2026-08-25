@@ -2,12 +2,12 @@
   "claims": [
     {
       "artifact": "artifacts/verification/mutation_report.json",
-      "claim": "Every gate in this repository is shown capable of failing: 81 deliberate mutations across 9 gates, 81 detected, 0 survived.",
+      "claim": "Every gate in this repository is shown capable of failing: 96 deliberate mutations across 10 gates, 96 detected, 0 survived.",
       "class": "primary-verifiable",
       "id": "mutations-detected",
       "json_path": "$.detected",
       "reverify": "python3 tests/mutation_test.py",
-      "value": 81
+      "value": 96
     },
     {
       "artifact": "artifacts/verification/mutation_report.json",
@@ -462,6 +462,24 @@
       "id": "g5-not-cleared",
       "json_path": "$.establishes_a_buyer",
       "why_not_verifiable": "The absence of a buyer cannot be re-derived from an artifact - it is a statement about what was NOT done, so it carries no measured value and none is asserted. It is filed in the weakest class deliberately rather than dressed up as a finding. The cited artifact's establishes_a_buyer field records the same thing machine-readably, but a reader should note that a self-reported false is evidence of intent, not of fact."
+    },
+    {
+      "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "The carve-generalisation gate of preregistration 0007 is shown capable of failing by 15 deliberate mutations, all detected - two of which check WHICH of its three verdicts is emitted, not merely that the study failed, and one of which rejects a transfer arm whose two corpora share source chunks.",
+      "class": "primary-verifiable",
+      "id": "carve-gate-mutations",
+      "json_path": "$.by_gate.carve.total",
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 15
+    },
+    {
+      "artifact": "artifacts/pivot/carve_channel_capacity.json",
+      "claim": "The byte-identity collision ceiling barely moves with carve size: 20.9125 distinct streams of 26 at a 4096-byte window against 20.79 at 512, over 400 source chunks whose seeds are disjoint from every training corpus. Whatever fails at a shorter carve is therefore a modelling limit, not an information limit.",
+      "class": "primary-verifiable",
+      "id": "carve-information-ceiling",
+      "json_path": "$.by_carve.4096.mean_distinct_streams_of_26",
+      "reverify": "python3 tools/pivot/a1_carve_sweep.py",
+      "value": 20.9125
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

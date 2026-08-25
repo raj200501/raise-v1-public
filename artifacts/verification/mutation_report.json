@@ -116,7 +116,7 @@
     },
     {
       "detected": true,
-      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=205a2f1ae115397a)",
+      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=a8fa6a3ad7618b4e)",
       "exit_code": 0,
       "expected": "pass",
       "gate": "prereg",
@@ -161,7 +161,7 @@
     },
     {
       "detected": true,
-      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 78ec70971d1dc01f (chain order broken)",
+      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 110c67c454377d87 (chain order broken)",
       "exit_code": 1,
       "expected": "fail",
       "gate": "prereg",
@@ -188,7 +188,7 @@
     },
     {
       "detected": true,
-      "evidence": "/tmp/tmp9riecrnp/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
+      "evidence": "/tmp/tmpjoxlvw5b/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
       "exit_code": 2,
       "expected": "fail",
       "gate": "prereg",

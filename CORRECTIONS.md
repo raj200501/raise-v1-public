@@ -19,6 +19,58 @@ Format:
 
 ---
 
+## 2026-08-25 — Broke CI with a stale mutation count for the THIRD time, after building the gate that catches it
+
+**What happened.** I added 15 mutation tests for preregistration 0007's gate, took the suite from
+81 to 96, and committed without updating the three places that carry that count: the
+`mutations-detected` claim in `coverage.json`, the row in `VERDICT.md`, and the line in
+`outbound/ONE_PAGER.md`. CI went red on `raj200501/raise-v1#1`.
+
+**Why this one is worse than the first two.** The instrument caught it. `tests/mutation_test.py`
+has carried a guard for exactly this since the first occurrence, and it printed exactly what it was
+designed to print:
+
+```
+!! artifacts/verification/coverage.json claims 81 mutations, this run has 96.
+!! Update the 'mutations-detected' claim or tools/coverage.py will fail and CI will go red.
+```
+
+**I did not see it, because I piped that command through
+`grep -E "carve |MUTATION REPORT"` to keep the output short.** The filter I chose to read the
+result with dropped the warning the result came with. Then I committed without running the gate
+suite, because I had run *the tests* and treated that as the same thing.
+
+So this is not a third instance of forgetting a number. It is the first instance of **defeating my
+own instrument for convenience** — the warning existed, fired correctly, and was discarded by the
+reader rather than missed by the writer.
+
+**Size.** One CI cycle on an open pull request, and no published number was wrong for longer than
+it took to notice — the gates that failed are the ones that stopped it reaching anyone. Against
+that: the third occurrence of one bug class, with the second occurrence's fix in place and working.
+A guard that a hurried reader can filter out of view is not a guard, and I am the hurried reader it
+has to survive.
+
+**Fix, in two parts.**
+
+1. **The warning is now an exit code.** `tests/mutation_test.py` returns 1 when the banked claim
+   disagrees with the run. An exit code cannot be grepped away. Verified by temporarily setting the
+   claim to a wrong value and confirming the suite fails, rather than by assuming it would.
+
+2. **`tools/gates.sh` runs every gate in one command**, in the order CI runs them, and CI now
+   invokes that same script instead of listing the steps separately — so local and CI cannot drift
+   apart, and "I ran the tests" stops being a different act from "I ran the gates".
+
+   The script distinguishes a **pending** reader from a broken one: a frozen reader whose artifact
+   does not exist yet exits 2, which is the normal state between freezing a preregistration and
+   measuring it, and it is reported by name rather than treated as a failure. That leniency is safe
+   only because a deleted result artifact is still caught elsewhere — every banked result is cited
+   by a claim in the coverage map, and `coverage.py` fails on a claim whose artifact is missing.
+
+**What it does not fix.** `gates.sh` has to actually be run. Nothing in this repository forces it
+before a commit, and a pre-commit hook would live outside the committed tree where CI cannot see
+it. The honest statement is that the guard now fails loudly in two places instead of one, and that
+the remaining failure mode is a person skipping the command — which is what happened here.
+
 ## 2026-08-25 — Published three stale numbers in `VERDICT.md`, and the outbound gate passed all three
 
 **What was published.** Three numbers in `VERDICT.md` describing the current state of the

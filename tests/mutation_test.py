@@ -1030,17 +1030,20 @@ def main() -> int:
         fh.write("\n")
 
     # Guard: the coverage map hard-codes this count in a claim. Adding a mutation without updating
-    # that claim turns CI red, and the failure is easy to miss because it surfaces one gate later.
-    # Warn here, loudly, at the moment the count changes. coverage.py remains the actual gate.
+    # that claim turns CI red one gate later, where it is easy to miss.
+    #
+    # This was a WARNING and it failed three times. The third time is why it is now an EXIT CODE:
+    # the warning printed exactly as designed, and it was filtered out of view by a grep over this
+    # command's own output before the commit went out. A signal that a hurried reader can drop is
+    # not a guard. An exit code cannot be grepped away.
+    stale_claim = None
     cov = os.path.join(REPO, "artifacts", "verification", "coverage.json")
     if os.path.exists(cov):
         try:
             claims = json.load(open(cov))["claims"]
             claimed = next((c.get("value") for c in claims if c.get("id") == "mutations-detected"), None)
             if claimed is not None and int(claimed) != len(results):
-                print(f"\n!! artifacts/verification/coverage.json claims {claimed} mutations, this run "
-                      f"has {len(results)}.\n!! Update the 'mutations-detected' claim or "
-                      f"tools/coverage.py will fail and CI will go red.\n")
+                stale_claim = (int(claimed), len(results))
         except Exception:  # noqa: BLE001
             pass
 
@@ -1055,6 +1058,13 @@ def main() -> int:
         print(f"\nSURVIVING MUTATIONS ({len(survived)}) - these gates have holes:")
         for r in survived:
             print(f"  - {r['gate']}: {r['mutation']}")
+        return 1
+    if stale_claim:
+        claimed, actual = stale_claim
+        print(f"\nMUTATION COUNT IS STALE: artifacts/verification/coverage.json claims {claimed}, "
+              f"this run has {actual}.")
+        print("Update the 'mutations-detected' claim, and the rows in VERDICT.md and "
+              "outbound/ONE_PAGER.md that carry the same count, before committing.")
         return 1
     return 0
 

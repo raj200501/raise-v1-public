@@ -1,0 +1,34 @@
+{
+  "by_carve": {
+    "1024": {
+      "chunks_used": 400,
+      "collision_rate": 0.1998,
+      "mean_distinct_streams_of_26": 20.805,
+      "seconds": 61.6
+    },
+    "2048": {
+      "chunks_used": 400,
+      "collision_rate": 0.1978,
+      "mean_distinct_streams_of_26": 20.8575,
+      "seconds": 61.3
+    },
+    "4096": {
+      "chunks_used": 400,
+      "collision_rate": 0.1957,
+      "mean_distinct_streams_of_26": 20.9125,
+      "seconds": 60.1
+    },
+    "512": {
+      "chunks_used": 400,
+      "collision_rate": 0.2004,
+      "mean_distinct_streams_of_26": 20.79,
+      "seconds": 61.3
+    }
+  },
+  "chunk_size": 32768,
+  "n_chunks_sampled": 400,
+  "n_configs": 26,
+  "schema": "raise-v1/carve_channel_capacity/1",
+  "source_chunk_seeds": "900000..900399, disjoint from every corpus used for training",
+  "why": "Run BEFORE preregistration 0007 is frozen and before any model is trained at a shorter carve. If\ntwo encoders produce byte-identical windows far more often at 1024 than at 4096, there is an\ninformation CEILING that no volume of manufactured data can pass, and that has to be known before\nspending hours measuring against it. This measures the input, never the outcome."
+}

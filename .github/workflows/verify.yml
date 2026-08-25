@@ -17,29 +17,8 @@ jobs:
       - name: Install dependency floors
         run: python3 -m pip install --quiet -r requirements.txt
 
-      - name: Preflight (interpreter + dependency floors)
-        run: python3 tools/preflight.py
-
-      - name: Preregistration chain (order, sealed fields, reader hashes)
-        run: python3 tools/prereg.py verify
-
-      - name: Mutation tests (proof the gates can fail)
-        run: python3 tests/mutation_test.py
-
-      - name: Verification-coverage map
-        run: python3 tools/coverage.py
-
-      - name: Outbound-copy gate (outbound copy AND the verdict itself)
-        run: python3 tools/claimcheck.py outbound VERDICT.md
-
-      - name: Freshness gate (live numbers must match the CURRENT artifact, not merely exist)
-        run: python3 tools/freshness.py
-
-      - name: Frozen readers emit their verdicts from the banked artifacts
-        run: |
-          python3 tools/readers/pivot_deflate_curve.py
-          python3 tools/readers/deflate_topk_verdict.py
-          python3 tools/readers/ephemerr_a2_verdict.py
+      - name: Every gate, in one command (tools/gates.sh - the same script run locally)
+        run: bash tools/gates.sh
 
       - name: Mutation report must show zero surviving mutations
         run: |
