@@ -4,9 +4,10 @@
 
 **It is** a preregistered evaluation instrument, and one negative finding produced by running it.
 
-**It is not** a scaling curve. There is no curve in this repository. The machinery to fit one and
-put an honest interval around it is built and mutation-tested; no real slope has been fitted,
-because no domain survived selection.
+**It is not** a scaling curve that means anything about the world. One has now been fitted, with
+an honest interval — deliberately on a domain that *cannot be selected*, so that there was no
+incentive to flatter it. No domain cleared the five gates, so no curve here is a claim about the
+world.
 
 There are no customers, no users and no partners, and nothing here claims otherwise.
 
@@ -80,7 +81,7 @@ on a domain that cannot be used, that fails its own margin. It is not a result a
 
 The verification-coverage map is machine-checked and prints its weakest class first, deliberately.
 
-**9 of 27 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
+**9 of 37 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
 including us. Eight are measurements made by subagents inside scratch directories that no longer
 exist, and **that includes measurements the conclusions rest on.** The ninth is worse than
 unverified: it is a figure we published and then failed to reproduce ourselves.
@@ -102,10 +103,12 @@ manufacturing a discrepancy against a subagent that turned out to be right.
 git clone <repo> && cd raise-v1
 python3 tools/preflight.py                        # interpreter + dependency floors, cause and fix
 python3 tools/prereg.py verify                    # chain order, sealed fields, reader hashes
-python3 tests/mutation_test.py                    # 58 deliberate mutations, 58 detected, 0 survived
+python3 tests/mutation_test.py                    # 67 deliberate mutations, 67 detected, 0 survived
 python3 tools/coverage.py                         # coverage map, weakest class first
 python3 tools/claimcheck.py outbound VERDICT.md   # every number traces to a banked artifact
+python3 tools/freshness.py                        # every live number equals its CURRENT artifact value
 ```
 
 Two dependencies, both CPU-only. Every command above exits non-zero on failure. This document
-passes the last one with no allowlist entries.
+passes the outbound-copy gate with no allowlist entries, and every live number on it is checked
+against the current artifact by the gate below it.

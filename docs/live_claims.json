@@ -71,6 +71,27 @@
         "detected",
         "survived"
       ]
+    },
+    {
+      "id": "onepager-mutations",
+      "file": "outbound/ONE_PAGER.md",
+      "pattern": "(\\d+) deliberate mutations, (\\d+) detected, (\\d+) survived",
+      "artifact": "artifacts/verification/mutation_report.json",
+      "select": [
+        "total_mutations",
+        "detected",
+        "survived"
+      ]
+    },
+    {
+      "id": "onepager-weakest-row",
+      "file": "outbound/ONE_PAGER.md",
+      "pattern": "\\*\\*(\\d+) of (\\d+) claims are in the weakest class\\*\\*",
+      "artifact": "artifacts/verification/coverage.json",
+      "select": [
+        "claims|count:class=neither",
+        "claims|len"
+      ]
     }
   ]
 }
