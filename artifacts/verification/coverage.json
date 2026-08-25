@@ -5,8 +5,8 @@
     {
       "id": "mutations-detected",
       "class": "primary-verifiable",
-      "claim": "Every gate in this repository is shown capable of failing: 49 deliberate mutations across six gates, 49 detected, 0 survived.",
-      "value": 49,
+      "claim": "Every gate in this repository is shown capable of failing: 58 deliberate mutations across seven gates, 58 detected, 0 survived.",
+      "value": 58,
       "artifact": "artifacts/verification/mutation_report.json",
       "json_path": "$.detected",
       "reverify": "python3 tests/mutation_test.py"
@@ -279,6 +279,42 @@
       "artifact": "artifacts/phase0/round4_measurements.json",
       "json_path": "count of candidates_considered",
       "note": "The reader is shipped and hashed, but its input rests on our run."
+    },
+    {
+      "id": "ephemerr-a2-baseline",
+      "class": "primary-verifiable",
+      "claim": "EphemErr A2: a per-satellite historical mean with ZERO training reaches AUC 0.9363 at predicting which GPS broadcast ephemerides will be badly wrong, on a temporal split. Satellite identity alone nearly owns the label.",
+      "value": 0.9363,
+      "artifact": "artifacts/ephemerr/a2_result.json",
+      "json_path": "$.best_baseline_auc",
+      "reverify": "python3 tools/gnss/a2_test.py"
+    },
+    {
+      "id": "ephemerr-a2-ura-useless",
+      "class": "primary-verifiable",
+      "claim": "The URA/SISA index - which round 2 named as the likely dominant baseline, and which ships free inside the student's input - reaches AUC 0.5037, indistinguishable from a coin. Round 2 named the wrong killer.",
+      "value": 0.5037,
+      "artifact": "artifacts/ephemerr/a2_result.json",
+      "json_path": "$.baseline_aucs.ura_index_alone",
+      "reverify": "python3 tools/gnss/a2_test.py"
+    },
+    {
+      "id": "ephemerr-a2-learned",
+      "class": "primary-verifiable",
+      "claim": "The learned model reaches AUC 0.9821, a real improvement that captures 71.9% of the headroom above the baseline - but the margin is 0.0458 against a frozen 0.05, so A2 FAILS by 0.0042.",
+      "value": 0.9821,
+      "artifact": "artifacts/ephemerr/a2_result.json",
+      "json_path": "$.learned_auc",
+      "reverify": "python3 tools/gnss/a2_test.py"
+    },
+    {
+      "id": "ephemerr-a2-null",
+      "class": "primary-verifiable",
+      "claim": "The EphemErr null control is clean: shuffled labels fall to AUC 0.4804.",
+      "value": 0.4804,
+      "artifact": "artifacts/ephemerr/a2_result.json",
+      "json_path": "$.shuffled_label_auc",
+      "reverify": "python3 tools/gnss/a2_test.py"
     }
   ]
 }

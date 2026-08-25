@@ -12,6 +12,10 @@
       "detected": 8,
       "total": 8
     },
+    "ephemerr-a2": {
+      "detected": 9,
+      "total": 9
+    },
     "pivot-curve": {
       "detected": 11,
       "total": 11
@@ -100,7 +104,7 @@
     },
     {
       "detected": true,
-      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=a59accb73e318313)",
+      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=6c3247e7c7604df3)",
       "exit_code": 0,
       "expected": "pass",
       "gate": "prereg",
@@ -145,7 +149,7 @@
     },
     {
       "detected": true,
-      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 09261e331015ff93 (chain order broken)",
+      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 6f723b0014ad0586 (chain order broken)",
       "exit_code": 1,
       "expected": "fail",
       "gate": "prereg",
@@ -172,7 +176,7 @@
     },
     {
       "detected": true,
-      "evidence": "/tmp/tmp2zfal9uo/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
+      "evidence": "/tmp/tmpxa5vtsaj/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
       "exit_code": 2,
       "expected": "fail",
       "gate": "prereg",
@@ -466,10 +470,91 @@
       "gate": "pivot-curve",
       "mutation": "absent-artifact-emits-no-verdict",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=A2_PASSED []",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "ephemerr-a2",
+      "mutation": "control-passing-result-is-accepted",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=A2_FAILED ['auc_margin: 0.9821 - 0.9363 = 0.0458 is below the frozen 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "ephemerr-a2",
+      "mutation": "margin-0.0458-the-real-result-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=A2_FAILED ['auc_margin: 0.9499 - 0.9 = 0.0499 is below the frozen 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "ephemerr-a2",
+      "mutation": "margin-one-ten-thousandth-below-the-bar-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=A2_FAILED ['split_is_temporal is not True - a random split measures memorisation of a slowly varying state, not prediction']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "ephemerr-a2",
+      "mutation": "non-temporal-split-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=A2_FAILED ['null control: shuffled labels reached AUC 0.7, above 0.55']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "ephemerr-a2",
+      "mutation": "null-control-above-0.55-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=A2_FAILED ['scope: n_test_epochs=1000, need >= 20000']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "ephemerr-a2",
+      "mutation": "too-few-test-epochs-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=A2_FAILED ['scope: n_satellites=5, need >= 20']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "ephemerr-a2",
+      "mutation": "too-few-satellites-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=A2_FAILED ['shuffled_label_auc missing']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "ephemerr-a2",
+      "mutation": "missing-null-control-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "ephemerr-a2",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
     }
   ],
-  "detected": 49,
+  "detected": 58,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 49
+  "total_mutations": 58
 }

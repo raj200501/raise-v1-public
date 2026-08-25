@@ -570,6 +570,79 @@ def _(root):
     return run([PY, "tools/readers/pivot_deflate_curve.py"], root)
 
 
+# ---------------------------------------------------------------- EphemErr A2 reader (prereg 0005)
+
+PASSING_A2 = {
+    "learned_auc": 0.99, "best_baseline_auc": 0.90, "best_baseline_name": "per_satellite_mean",
+    "baseline_aucs": {"per_satellite_mean": 0.90}, "shuffled_label_auc": 0.50,
+    "split_is_temporal": True, "n_test_epochs": 50000, "n_satellites": 30, "positive_rate": 0.1,
+}
+
+
+def _a2(root, **ov):
+    os.makedirs(os.path.join(root, "artifacts", "ephemerr"), exist_ok=True)
+    os.makedirs(os.path.join(root, "tools", "readers"), exist_ok=True)
+    shutil.copy(os.path.join(REPO, "tools", "readers", "ephemerr_a2_verdict.py"),
+                os.path.join(root, "tools", "readers", "ephemerr_a2_verdict.py"))
+    d = dict(PASSING_A2)
+    for k, v in ov.items():
+        d.pop(k, None) if v is _DROP else d.__setitem__(k, v)
+    json.dump(d, open(os.path.join(root, "artifacts", "ephemerr", "a2_result.json"), "w"))
+    rc, out = run([PY, "tools/readers/ephemerr_a2_verdict.py"], root)
+    if rc != 0:
+        return rc, out
+    v = json.load(open(os.path.join(root, "artifacts", "ephemerr", "a2_verdict.json")))
+    return (0 if v["verdict"] == "A2_PASSED" else 1), f"verdict={v['verdict']} {v['failed_clauses']}"
+
+
+@case("ephemerr-a2", "control-passing-result-is-accepted", "pass")
+def _(root):
+    return _a2(root)
+
+
+@case("ephemerr-a2", "margin-0.0458-the-real-result-is-rejected", "fail")
+def _(root):
+    return _a2(root, learned_auc=0.9821, best_baseline_auc=0.9363)
+
+
+@case("ephemerr-a2", "margin-one-ten-thousandth-below-the-bar-is-rejected", "fail")
+def _(root):
+    return _a2(root, learned_auc=0.9499, best_baseline_auc=0.90)
+
+
+@case("ephemerr-a2", "non-temporal-split-is-rejected", "fail")
+def _(root):
+    return _a2(root, split_is_temporal=False)
+
+
+@case("ephemerr-a2", "null-control-above-0.55-is-rejected", "fail")
+def _(root):
+    return _a2(root, shuffled_label_auc=0.70)
+
+
+@case("ephemerr-a2", "too-few-test-epochs-is-rejected", "fail")
+def _(root):
+    return _a2(root, n_test_epochs=1000)
+
+
+@case("ephemerr-a2", "too-few-satellites-is-rejected", "fail")
+def _(root):
+    return _a2(root, n_satellites=5)
+
+
+@case("ephemerr-a2", "missing-null-control-is-rejected", "fail")
+def _(root):
+    return _a2(root, shuffled_label_auc=_DROP)
+
+
+@case("ephemerr-a2", "absent-artifact-emits-no-verdict", "fail")
+def _(root):
+    os.makedirs(os.path.join(root, "tools", "readers"), exist_ok=True)
+    shutil.copy(os.path.join(REPO, "tools", "readers", "ephemerr_a2_verdict.py"),
+                os.path.join(root, "tools", "readers", "ephemerr_a2_verdict.py"))
+    return run([PY, "tools/readers/ephemerr_a2_verdict.py"], root)
+
+
 def main() -> int:
     results = []
     for c in CASES:
