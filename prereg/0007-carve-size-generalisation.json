@@ -1,0 +1,127 @@
+{
+  "arms": [
+    "DISJOINT SOURCES AS A VALIDITY CONDITION, not a nicety. Corpus B starts at chunk index 50000, past corpus A's entire range. If the flag saying so is false or absent, the transfer arm is void and the reader says so.",
+    "MATCHED TRAINING RUNG for the transfer arm. Comparing corpus A's 800000-rung model against corpus B's smaller top rung would confound carve size with data volume, and would do so in the direction that flatters transfer.",
+    "TRANSFER IS SCORED AGAINST CORPUS B'S OWN BASELINES. A transfer accuracy that fails to beat the local dumb rules is not transfer, however respectable it looks next to chance.",
+    "NULL CONTROL and GROUPED SPLIT, unchanged from 0003, because a new corpus is a new chance for both to fail and neither is assumed to carry over."
+  ],
+  "bar": {
+    "disjointness": {
+      "direction": "lower_is_better",
+      "passes_if": "corpora_share_source_chunks is False. Not a threshold on quality - a validity condition on the transfer arm, which is void without it.",
+      "threshold": 0
+    },
+    "scope_decades": {
+      "direction": "higher_is_better",
+      "passes_if": "decades_spanned >= 2.0",
+      "threshold": 2.0
+    },
+    "scope_rungs": {
+      "direction": "higher_is_better",
+      "passes_if": "n_rungs >= 4",
+      "threshold": 4
+    },
+    "transfer_margin": {
+      "direction": "higher_is_better",
+      "passes_if": "transfer_top1 - within_best_trivial_baseline >= 0.05, where transfer_top1 is a model trained on corpus A at 100000 and evaluated on corpus B's held-out set, and the baseline is corpus B's OWN. A transfer number that beats nothing local is not evidence of transfer.",
+      "threshold": 0.05
+    },
+    "within_margin_expanded": {
+      "direction": "higher_is_better",
+      "passes_if": "within_top1 - within_best_baseline_expanded >= 0.05, deep trees included, as in 0006 where the expanded reading binds rather than being a footnote",
+      "threshold": 0.05
+    },
+    "within_margin_frozen": {
+      "direction": "higher_is_better",
+      "passes_if": "within_top1 - within_best_trivial_baseline >= 0.05",
+      "threshold": 0.05
+    },
+    "within_null_control": {
+      "direction": "lower_is_better",
+      "passes_if": "within_shuffled_label_accuracy <= chance_accuracy + 0.02",
+      "threshold": 0.02
+    },
+    "within_slope": {
+      "direction": "higher_is_better",
+      "passes_if": "within_slope_ci95_low > 0",
+      "threshold": 0.0
+    }
+  },
+  "frozen": false,
+  "id": "0007",
+  "reader": "tools/readers/carve_generalisation_verdict.py",
+  "readings": [
+    {
+      "json_path": "$.verdict",
+      "name": "verdict",
+      "source_artifact": "artifacts/pivot/carve_generalisation_verdict.json",
+      "unit": "enum{CARVE_ROBUST,CARVE_SIZE_SPECIFIC,CARVE_FAILS}"
+    },
+    {
+      "json_path": "$.within_top1",
+      "name": "within_top1",
+      "source_artifact": "artifacts/pivot/carve_generalisation.json",
+      "unit": "fraction correct at the top rung, carve 1024"
+    },
+    {
+      "json_path": "$.within_best_trivial_baseline",
+      "name": "within_best_trivial_baseline",
+      "source_artifact": "artifacts/pivot/carve_generalisation.json",
+      "unit": "fraction"
+    },
+    {
+      "json_path": "$.within_best_baseline_expanded",
+      "name": "within_best_baseline_expanded",
+      "source_artifact": "artifacts/pivot/carve_generalisation.json",
+      "unit": "fraction"
+    },
+    {
+      "json_path": "$.within_slope_ci95_low",
+      "name": "within_slope_ci95_low",
+      "source_artifact": "artifacts/pivot/carve_generalisation.json",
+      "unit": "accuracy points per decade"
+    },
+    {
+      "json_path": "$.transfer_top1",
+      "name": "transfer_top1",
+      "source_artifact": "artifacts/pivot/carve_generalisation.json",
+      "unit": "fraction correct, corpus-A model on corpus-B evaluation set"
+    },
+    {
+      "json_path": "$.within_shuffled_label_accuracy",
+      "name": "within_shuffled_label_accuracy",
+      "source_artifact": "artifacts/pivot/carve_generalisation.json",
+      "unit": "fraction"
+    },
+    {
+      "json_path": "$.corpora_share_source_chunks",
+      "name": "corpora_share_source_chunks",
+      "source_artifact": "artifacts/pivot/carve_generalisation.json",
+      "unit": "boolean, must be false"
+    }
+  ],
+  "scope": {
+    "corpora": "Corpus A is the existing 4096-byte corpus, source chunk indices 0..49999. Corpus B is new: 1024-byte carve, 25000 chunks at index offset 50000, so the two share NO source chunk. The chunk index IS the generator seed, so overlapping indices would mean identical source bytes and a transfer model scored on content it trained on.",
+    "matched_rung": "The transfer arm trains on corpus A at 100000 - the same rung corpus B is compared at - so the comparison is about carve size and not about data volume. Corpus A's banked 100000-rung top-1 is 0.1965.",
+    "one_line": "A second corpus at a 1024-byte carve, built from source chunks DISJOINT from the first, measured within-size over four rungs, plus a transfer arm at a matched training rung.",
+    "rungs": "Four rungs on corpus B: 1000, 10000, 100000, 500000. That is 2.699 decades.",
+    "seed": "20260825 throughout, as in 0003 and 0006.",
+    "unit": "One carved 1024-byte window from the middle of one compressed stream.",
+    "what_this_does_not_cover": "It does not cover carve sizes other than 1024 and 4096. It does not cover encoders absent from this box. It does not establish a buyer, a customer, a user or a partner, and no outcome here could.",
+    "why_1024": "File carving works in disk clusters, and 1024 is a 4x reduction from the only window size anything in this repository has been measured at. A1 was run on the INPUT before this bar was frozen (artifacts/pivot/carve_channel_capacity.json): the byte-identity collision ceiling barely moves across 4096 -> 512, from 20.9125 distinct streams of 26 down to 20.79. So the information is present at 1024, and anything that fails here is a MODELLING limit rather than an information limit. That is what makes this worth running instead of a foregone conclusion - and it also means a failure cannot be excused as 'the signal is not there'."
+  },
+  "slug": "carve-size-generalisation",
+  "stop_rules": [
+    "Any within-size clause failing is CARVE_FAILS. The information is not recoverable at 1024 and the forensic setting is narrower than the 4096 numbers imply. A1 has already ruled out 'the signal is not there' as an excuse, so this outcome would be a modelling failure and must be reported as one.",
+    "Within-size passing while transfer fails is CARVE_SIZE_SPECIFIC, and BOTH halves of its meaning are published: it is NOT a failure of the label-factory thesis, because the manufacturer is free and one model per carve size costs another compression pass; it IS a failure of the story in which one model reads a whole disk image, and quoting the 4096 numbers at a different window would be quoting them wrongly.",
+    "A within-size failure is never softened to CARVE_SIZE_SPECIFIC, whatever the transfer arm says.",
+    "A missing field reads as failure. Absence is never a pass.",
+    "This cannot revise 0003 or 0006. Those verdicts stand whatever this one says, and no outcome here clears G5."
+  ],
+  "thesis": {
+    "what_would_make_it_fail_honestly": "The feature set includes 512 bit-alignment histogram columns and 40 alignment summary statistics, all estimated from the window. At a quarter of the bytes those estimates are four times noisier, and the transfer arm additionally assumes their DISTRIBUTIONS are comparable across window lengths, which is a stronger assumption than it looks. Transfer failing while within-size holds is the outcome to expect.",
+    "why_a_transfer_failure_is_survivable": "Because the label manufacturer is free. If a model must be trained per carve size, the cost is one more compression pass per size, not a new data source. That is the whole point of the FDM-1 shape and it is why this preregistration names that outcome in advance instead of treating it as a defeat.",
+    "why_this_is_the_next_question": "0006 showed the output has the SHAPE a forensic use needs. That shape was measured at one window size. The analyst does not choose the window - the carve does - so a result that holds only at 4096 would not survive contact with the setting it was justified by."
+  },
+  "title": "Does carved-DEFLATE encoder provenance survive a SHORTER carve - and does a model trained at 4096 bytes transfer to 1024, or must one be trained per carve size?"
+}
