@@ -1,0 +1,91 @@
+{
+  "arms": [
+    "THE NULL CONTROL IS TWO NUMBERS. Train accuracy must be HIGH, proving the control had teeth; evaluation accuracy must be at chance, proving fitting noise does not generalise. Reporting only the second is what 0009 did and it is what CORRECTIONS.md retracts.",
+    "ONLY THE HEAD CHANGES, so any difference is attributable.",
+    "FINGERPRINTED EVALUATION SET, refused rather than assumed.",
+    "BEATS-POOLED IS A CLAUSE. A flatten head that ties the pooled one has answered nothing."
+  ],
+  "bar": {
+    "a2_margin": {
+      "direction": "higher_is_better",
+      "passes_if": "flat_model_top1 - best_trivial_baseline >= 0.05",
+      "threshold": 0.05
+    },
+    "beats_hand_engineered": {
+      "direction": "higher_is_better",
+      "passes_if": "flat_model_top1 > feature_model_top1 strictly",
+      "threshold": 0.0
+    },
+    "beats_pooled": {
+      "direction": "higher_is_better",
+      "passes_if": "flat_model_top1 > pooled_model_top1 strictly. If the head change does nothing, 0009's verdict simply stands and this round has added no information.",
+      "threshold": 0.0
+    },
+    "null_control_is_clean": {
+      "direction": "lower_is_better",
+      "passes_if": "null_eval_top1 <= chance_accuracy + 0.02",
+      "threshold": 0.02
+    },
+    "null_control_is_failable": {
+      "direction": "higher_is_better",
+      "passes_if": "null_train_top1 >= 0.30. THE CLAUSE THIS PREREGISTRATION EXISTS FOR. A null control the model cannot fail carries no information - the same argument tests/mutation_test.py makes about gates, which nobody in this repository had applied to controls until a probe forced it. 0009's control was guaranteed clean by architecture, which is worth nothing.",
+      "threshold": 0.3
+    },
+    "scope_matched": {
+      "direction": "lower_is_better",
+      "passes_if": "n_train == matched_rung, split_is_grouped_by_source is True, and eval_group_fingerprint_matches_0007 is True",
+      "threshold": 0
+    }
+  },
+  "frozen": false,
+  "id": "0010",
+  "opened_in_response_to": "0009 returned BYTE_MODEL_FAILS and published a caveat that its null control's cleanliness might mean the model was too small. CORRECTIONS.md retracts that: a probe holding everything fixed except the final pooling shows a flatten head memorises 5000 shuffled labels to 0.364 train accuracy where the pooled head reaches 0.0486 against 0.0385 chance, at identical convolutional capacity. The pooling averages away per-example identity. That leaves exactly one real question open - whether the pooling hurt the TASK - and this answers it by changing ONLY the head.",
+  "reader": "tools/readers/byte_model_flat_verdict.py",
+  "readings": [
+    {
+      "json_path": "$.verdict",
+      "name": "verdict",
+      "source_artifact": "artifacts/pivot/byte_model_flat_verdict.json",
+      "unit": "enum{BYTE_FLAT_CLEARS,BYTE_FLAT_FAILS}"
+    },
+    {
+      "json_path": "$.flat_model_top1",
+      "name": "flat_model_top1",
+      "source_artifact": "artifacts/pivot/byte_model_flat.json",
+      "unit": "fraction correct"
+    },
+    {
+      "json_path": "$.pooled_model_top1",
+      "name": "pooled_model_top1",
+      "source_artifact": "artifacts/pivot/byte_model_flat.json",
+      "unit": "fraction correct, 0009's model"
+    },
+    {
+      "json_path": "$.null_train_top1",
+      "name": "null_train_top1",
+      "source_artifact": "artifacts/pivot/byte_model_flat.json",
+      "unit": "fraction correct on shuffled TRAINING labels"
+    },
+    {
+      "json_path": "$.null_eval_top1",
+      "name": "null_eval_top1",
+      "source_artifact": "artifacts/pivot/byte_model_flat.json",
+      "unit": "fraction correct on evaluation under shuffled labels"
+    }
+  ],
+  "scope": {
+    "comparability": "The evaluation set must be verified identical to 0007's corpus B by eval-group fingerprint, and the run refuses otherwise. 0007's 0.1165 and 0009's 0.0849 are therefore direct comparisons.",
+    "one_line": "The 0009 model with its global average pool replaced by a flatten, everything else held fixed: same corpus, same 100000 rung, same seed, same grouped split, same convolution stack, same 10 epochs.",
+    "only_the_head_changes": "A win from any other difference would not answer the question asked, so nothing else is varied. The conv stack, optimiser, learning rate, batch size and epoch count are those 0009 used.",
+    "what_this_does_not_cover": "Two architectures now, still one family, one carve, one budget, one seed. A negative does not prove no learned representation works at 1024. It establishes no buyer."
+  },
+  "slug": "byte-model-position-preserving-head",
+  "stop_rules": [
+    "BYTE_FLAT_CLEARS means 0009's negative was an artifact of its head, and every place quoting 0009 must say so.",
+    "BYTE_FLAT_FAILS WITH A FAILABLE CONTROL is a strictly stronger negative than 0009's and must be reported as strengthening L4 further, not as a repeat.",
+    "BYTE_FLAT_FAILS with an UNFAILABLE control settles nothing and must be reported as inconclusive on the exact point this round exists for.",
+    "A missing field reads as failure. Absence is never a pass.",
+    "This cannot revise 0003, 0006, 0007 or 0009."
+  ],
+  "title": "Was 0009's negative an artifact of its pooling? The same byte model with a position-preserving head, and a null control that must prove it can fail."
+}
