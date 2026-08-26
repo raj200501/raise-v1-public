@@ -40,8 +40,9 @@ rule in that case is to take the reading that does not flatter us.
 
 ## What the search actually produced
 
-The useful output is not the absence of a domain. It is three laws, each derived by measurement,
-and a precise statement of the class of problem that would work — which no candidate had.
+The useful output is not the absence of a domain. It is four laws, each derived by measurement —
+three from the search, and a fourth from our own pivot — and a precise statement of the class of
+problem that would work, which no candidate had.
 
 ### L1 — Smooth reprocessing corrections are fitted, not learned
 
@@ -79,6 +80,36 @@ capacity is fixed and small. On the UK MOT archive — no licence problem, no cr
 effective-N problem, roughly 38 million vehicles — an untrained two-term rule scores AUC 0.6553 and
 beats the learned model at every *n* below about 30 thousand; 1.58 orders of magnitude of extra data
 buys 0.0203 AUC; and the same vehicle's own previous outcome predicts its next at AUC 0.5077.
+
+### L4 — A representation made of summary statistics over a fragment binds the result to the fragment's length, and the failure to transfer is total rather than graded
+
+The first three laws came out of the search. This one came out of our own work, which is the only
+reason it is stated with a narrower scope than the others.
+
+Where the student's input is a fragment of variable length and the features are statistics computed
+over that fragment, quality is bound to the length the model was trained at. Measured on the
+carved-DEFLATE task at a matched training rung, shortening the window from 4096 to 1024 bytes:
+
+- **Every feature family degrades by the same factor.** Six subsets, 1024/4096 accuracy ratios of
+  0.5895, 0.5929, 0.6029, 0.6114, 0.6158 and 0.6275 — a spread of **0.038**. There is no family that
+  survives and none that dies, so there is no repairable component.
+- **Transfer is not graded, it is total.** A 4096-trained model on 1024-byte fragments reaches
+  0.0403 against a chance level of 0.038462. Every feature is a window-length-dependent statistic,
+  so the joint distribution at another length is systematically different rather than noisier.
+- **The information loss does not explain it.** The byte-identity ceiling barely moves across the
+  range — 20.9125 distinct streams of 26 at 4096 against 20.79 at 512 — so this is a property of the
+  representation, not of the fragment.
+
+**What it retires.** Any candidate whose student receives a variable-size fragment and whose planned
+representation is hand-engineered statistics over it. The result will hold at one size and the
+buyer, who does not choose the size, will get another.
+
+**Scope, stated because this law is ours and we have the most reason to overstate it.** It is
+measured on one task and one family of hand-engineered statistics. It does **not** establish that a
+*learned* representation over the raw bit sequence would be window-bound, and this repository has
+not tested one. It also does not follow that mixing training lengths would rescue such a task here:
+it could not, because the within-size result at 1024 fails its own margin independently of any
+transfer question.
 
 ### Why VPT escapes and nothing in 99 candidates does
 
@@ -146,7 +177,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **10 of 60 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **10 of 61 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -169,7 +200,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 | Class | Count | Meaning |
 |---|---:|---|
 | `neither` | **10** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done. |
-| `arithmetic-verifiable` | 10 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
+| `arithmetic-verifiable` | 11 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
 | `primary-verifiable` | 40 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
@@ -354,7 +385,7 @@ archived trial killed five candidates on, arriving this time in our own work.
 A diagnostic run after the verdict — **not preregistered, and not a result about the world** —
 asked whether the failure sits in one repairable part of the representation. It does not. At a
 matched 100000 rung, every one of six feature subsets degrades from 4096 to 1024 by a ratio between
-**0.589** and **0.628**: a spread of **0.04**. No family survives the shorter window and no family
+**0.5895** and **0.6275**: a spread of **0.038**. No family survives the shorter window and no family
 dies in it. The whole representation degrades uniformly, which is what happens when every feature is
 a statistical estimate over the window and a quarter of the bytes makes every estimate worse by
 roughly the same factor.

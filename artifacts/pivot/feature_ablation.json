@@ -95,6 +95,18 @@
       596
     ]
   },
+  "ratio_1024_over_4096": {
+    "align_hist_only": 0.5895,
+    "alignment_only": 0.6029,
+    "all": 0.5929,
+    "byte_hist_only": 0.6275,
+    "drop_align_hist": 0.6114,
+    "v1_no_alignment": 0.6158
+  },
+  "ratio_derivation": "each ratio is by_carve.1024.<subset>.accuracy divided by by_carve.4096.<subset>.accuracy; arithmetic only, nothing re-run",
+  "ratio_max": 0.6275,
+  "ratio_min": 0.5895,
+  "ratio_spread": 0.038,
   "rung": 100000,
   "schema": "raise-v1/feature_ablation/1",
   "seed": 20260825,

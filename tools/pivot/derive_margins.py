@@ -131,7 +131,37 @@ def carve_margins() -> int:
     return 0
 
 
+ABL = os.path.join(REPO, "artifacts", "pivot", "feature_ablation.json")
+
+
+def ablation_ratios() -> int:
+    """Bank the 1024/4096 accuracy ratio per feature subset, in place, from banked accuracies.
+
+    These were first computed ad hoc to write prose, and the outbound gate refused the prose because
+    a ratio that exists only in a shell one-liner traces to nothing. Some of the ratios did happen to
+    match unrelated banked values, which is exactly the coincidence that must not be leaned on.
+    """
+    if not os.path.exists(ABL):
+        return 2
+    d = json.load(open(ABL, encoding="utf-8"))
+    a_, b_ = d["by_carve"].get("4096"), d["by_carve"].get("1024")
+    if not a_ or not b_:
+        return 2
+    ratios = {k: round(b_[k]["accuracy"] / a_[k]["accuracy"], 4) for k in a_ if k in b_}
+    d["ratio_1024_over_4096"] = ratios
+    d["ratio_spread"] = round(max(ratios.values()) - min(ratios.values()), 4)
+    d["ratio_min"] = min(ratios.values())
+    d["ratio_max"] = max(ratios.values())
+    d["ratio_derivation"] = ("each ratio is by_carve.1024.<subset>.accuracy divided by "
+                             "by_carve.4096.<subset>.accuracy; arithmetic only, nothing re-run")
+    with open(ABL, "w", encoding="utf-8") as fh:
+        json.dump(d, fh, indent=2, sort_keys=True); fh.write("\n")
+    print(f"  ablation ratios {d['ratio_min']}..{d['ratio_max']}, spread {d['ratio_spread']}")
+    return 0
+
+
 if __name__ == "__main__":
     rc = main()
     carve_margins()
+    ablation_ratios()
     raise SystemExit(rc)
