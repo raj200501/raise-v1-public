@@ -548,6 +548,22 @@
       "json_path": "$.by_gate.c1.total",
       "reverify": "python3 tests/mutation_test.py",
       "value": 14
+    },
+    {
+      "artifact": "artifacts/phase0/c1_falsifier_verdict.json",
+      "claim": "Preregistration 0008 hunted C1's own stated falsifier across 14 candidates spanning all four non-loss withholding modes, default posture REJECT, and returned NO_FALSIFIER_FOUND. 0 candidates cleared.",
+      "class": "primary-verifiable",
+      "id": "c1-falsifier-search",
+      "json_path": "$.n_candidates",
+      "reverify": "python3 tools/readers/c1_falsifier_verdict.py",
+      "value": 14
+    },
+    {
+      "artifact": "artifacts/phase0/c1_falsifier_search.json",
+      "claim": "Refinement of C1: deliberate withholding is documented withholding. Where an institution withholds a transform's input on purpose, disclosure norms make it publish what it did - the placeholder format, the created_by string, the epsilon, the FITS header - so the label ships with the artifact. The label is hidden only where the withholding was accidental, and accidental withholding is loss, which is the forensics case C1 describes.",
+      "class": "neither",
+      "id": "c1-refinement-documented-withholding",
+      "why_not_verifiable": "An argued reading of 14 screened candidates, not a measurement. Filed with C1 in the weakest class. Its falsifier: an institution that deliberately withholds an input while publishing the artifact and NOT documenting the transform."
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

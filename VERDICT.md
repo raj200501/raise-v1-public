@@ -146,6 +146,55 @@ evidence about the search and not proof about the world.
 constraint without naming it, and a conjecture that can be attacked is worth more than an unstated
 assumption that cannot.
 
+### C1's falsifier was hunted under its own preregistration, and not found — which sharpens C1 rather than proving it
+
+`NO_FALSIFIER_FOUND`, from preregistration 0008 (chain seq 8), frozen before a single candidate was
+enumerated. **14** candidates across all four non-loss withholding modes — privacy, regulation,
+physics, commercial — default posture REJECT. None cleared.
+
+**This does not promote C1 to a law**, and the reader emits that sentence into its own artifact so
+it cannot be dropped in summary. A search that fails to find a counterexample is evidence about the
+search. C1 stays labelled C1 and stays in the weakest class.
+
+**Read the substantive blockers, not the mechanical one.** The reader prints the first clause each
+candidate trips, and for most that is the abundance clause — because 0008 held round 4's raised
+standard that an unverified count does not pass, and for most candidates the count was never
+verified first-hand. That makes the mechanical reading of this search weaker than it looks, and it
+is stated here rather than left in the artifact. The decisive objections are recorded per candidate
+in `primary_blocker`, and for the strongest candidates they are substantive:
+
+| Candidate | What actually kills it |
+|---|---|
+| De-identification tool from released clinical notes | The tools emit distinctive surrogate formats — `[**Name**]`, `<NAME>`, `XXX` — so the producer is legible from a regex over placeholder syntax |
+| DP mechanism and epsilon from a published release | Epsilon is **published by policy**, so the label is public and there is no task |
+| Build pipeline from published container layers | OCI image history carries `created_by` strings containing the literal build command |
+| Telescope pipeline from published survey images | The pipeline version ships in the FITS header by universal convention |
+| Execution algorithm from a published trade tape | L3(ii): trade classification is a developed field and the incumbent is good |
+| Redaction tool from FOIA releases | G5: the buyer reconstructs a past release — the **confirming** case for C1, not a falsifier |
+
+### The refinement that came out of it, filed with C1 in the weakest class
+
+Look at the top four rows. In every one, the label is **public** — not hidden, not hard, published.
+And they are public for the same reason in each case:
+
+> **Deliberate withholding is documented withholding.** When an institution withholds a transform's
+> input on purpose — by privacy law, by regulation, by commercial policy — the same disclosure
+> norms that govern the withholding make it publish *what it did*: the placeholder format, the
+> `created_by` string, the epsilon, the header. The label ships with the artifact.
+>
+> The label is genuinely hidden only when the withholding was **accidental**. And accidental
+> withholding is loss, which is the forensics case C1 already describes.
+
+If that is right, C1's falsifier may not merely be rare. The two properties it requires —
+withholding that is deliberate (so the market is not forensics) and a label that is hidden (so
+there is a task) — may be close to mutually exclusive, because what makes withholding deliberate is
+an institution, and institutions document.
+
+This is a refinement of a conjecture by an argued reading of 14 screened candidates. It is **not**
+measured, it is filed alongside C1 in the coverage map's weakest class, and the same falsifier
+applies: an institution that deliberately withholds an input while publishing the artifact and
+*not* documenting the transform.
+
 ### Why VPT escapes and nothing in 99 candidates does
 
 There is a fourth case, and the pool contained zero instances of it. In VPT the label is a
@@ -212,13 +261,14 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **11 of 63 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **12 of 65 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
 > different kind and belongs here anyway: **the statement that G5 has no buyer.** The eleventh is
-> conjecture `C1`, filed here deliberately: it is the most interesting idea in this document and the
-> least supported, and putting it anywhere else would let it be read as a finding.** An absence cannot
+> conjecture `C1` and its refinement, filed here deliberately: between them they are the most
+> interesting idea in this document and the least supported, and putting them anywhere else
+> would let them be read as findings.** An absence cannot
 > be re-derived from an artifact, it carries no measured value and none is asserted, and a
 > self-reported `establishes_a_buyer: false` is evidence of intent rather than of fact.
 >
@@ -236,9 +286,9 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 | Class | Count | Meaning |
 |---|---:|---|
-| `neither` | **11** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; one is an explicitly labelled conjecture. |
+| `neither` | **12** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; two are an explicitly labelled conjecture and its refinement. |
 | `arithmetic-verifiable` | 11 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 41 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `primary-verifiable` | 42 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
