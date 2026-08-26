@@ -84,5 +84,54 @@ def main() -> int:
     return 0
 
 
+CARVE_SRC = os.path.join(REPO, "artifacts", "pivot", "carve_generalisation.json")
+CARVE_OUT = os.path.join(REPO, "artifacts", "pivot", "carve_margins.json")
+
+CARVE_PAIRS = [
+    ("within_margin_frozen", "within_top1", "within_best_trivial_baseline",
+     "top-1 at the shorter carve minus that corpus's best PREREGISTERED baseline"),
+    ("within_margin_expanded", "within_top1", "within_best_baseline_expanded",
+     "top-1 at the shorter carve minus its best baseline over ALL baselines"),
+    ("transfer_margin", "transfer_top1", "within_best_trivial_baseline",
+     "a model trained at the LONGER carve, evaluated on the shorter corpus, minus that corpus's "
+     "own best baseline"),
+    ("carve_size_cost_at_matched_rung", "within_top1_at_matched_rung",
+     "reference_matched_rung_top1",
+     "the same training volume at 1024 versus at 4096 - what the shorter window costs, holding "
+     "data volume fixed"),
+]
+
+
+def carve_margins() -> int:
+    """0007's margins, same arithmetic-only derivation as above."""
+    if not os.path.exists(CARVE_SRC):
+        return 2
+    d = json.load(open(CARVE_SRC, encoding="utf-8"))
+    # The matched-rung accuracy is inside the rungs list rather than a top-level field.
+    matched = next((r["accuracy"] for r in d.get("rungs", [])
+                    if r["n_units"] == d.get("matched_rung")), None)
+    d = dict(d, within_top1_at_matched_rung=matched)
+    out = {"schema": "raise-v1/carve_margins/1",
+           "preregistration": "0007-carve-size-generalisation",
+           "derivation": "each value is a - b over fields of artifacts/pivot/carve_generalisation.json; "
+                         "no model is re-run and no new measurement is made",
+           "bar": 0.05, "margins": {}}
+    for name, a_, b_, why in CARVE_PAIRS:
+        if d.get(a_) is None or d.get(b_) is None:
+            continue
+        v = round(float(d[a_]) - float(d[b_]), 4)
+        out["margins"][name] = {"value": v, "minuend": {"field": a_, "value": d[a_]},
+                                "subtrahend": {"field": b_, "value": d[b_]},
+                                "clears_bar": bool(v >= 0.05), "meaning": why}
+    with open(CARVE_OUT, "w", encoding="utf-8") as fh:
+        json.dump(out, fh, indent=2, sort_keys=True); fh.write("\n")
+    for k, v in out["margins"].items():
+        print(f"  {k:<34} {v['value']:+.4f}   {'clears' if v['clears_bar'] else 'BELOW'} 0.05")
+    print(f"wrote {os.path.relpath(CARVE_OUT, REPO)}")
+    return 0
+
+
 if __name__ == "__main__":
-    raise SystemExit(main())
+    rc = main()
+    carve_margins()
+    raise SystemExit(rc)

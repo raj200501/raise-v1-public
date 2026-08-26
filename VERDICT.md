@@ -146,7 +146,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **10 of 55 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **10 of 59 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -169,8 +169,8 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 | Class | Count | Meaning |
 |---|---:|---|
 | `neither` | **10** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done. |
-| `arithmetic-verifiable` | 9 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 36 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `arithmetic-verifiable` | 10 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
+| `primary-verifiable` | 39 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -284,6 +284,84 @@ repackaged-APK detection — are narrow, and **no buyer has been contacted, none
 nothing here establishes that one would pay.** A rising curve on a task nobody needs is a rising
 curve on a task nobody needs. This is a validated label factory and a validated instrument; it is
 not a business, and the gap between those two things is the honest state of this repository.
+
+---
+
+## `CARVE_FAILS` — the pivot's result is bound to one window size, and the binding is severe
+
+Preregistration 0007, frozen at chain seq 7 before the second corpus existed. **This is the most
+consequential result in this document, and it qualifies the two above it.**
+
+Everything in 0003 and 0006 is measured at a 4096-byte carve. A forensic analyst — the one buyer
+type for which a carved fragment is genuinely the operational setting — does not choose the window;
+the carve does, and file carving works in disk clusters that are frequently smaller. So a second
+corpus was built at **1024** bytes from source chunks **disjoint** from the first, and the same
+protocol re-run.
+
+| | |
+|---|---|
+| **Verdict** | `CARVE_FAILS` |
+| **Emitted by** | `tools/readers/carve_generalisation_verdict.py`, frozen before the corpus existed |
+| **Artifact** | `artifacts/pivot/carve_generalisation.json`, margins in `artifacts/pivot/carve_margins.json` |
+
+| Clause | Bar | Measured | |
+|---|---|---|---|
+| Within-size margin, frozen baseline set | ≥ 0.05 | **+0.0099** | **fail** |
+| Within-size margin, all baselines | ≥ 0.05 | **+0.0099** | **fail** |
+| Transfer margin (4096-trained model, 1024 data) | ≥ 0.05 | **-0.0853** | **fail** |
+| Rungs / decades | 4 / ≥ 2.0 | 4 / 2.699 | pass |
+| Within-size slope 95% lower bound | > 0 | 0.0198 | pass |
+| Null control | ≤ chance + 0.02 | 0.0389 vs 0.038462 | pass |
+| Corpora share source chunks | must be false | false | pass |
+
+### Three findings, in order of how much they cost
+
+**1. At 1024 bytes the model ties a dumb rule.** Top-1 reaches **0.1355** at 500000 manufactured
+fragments against a logistic-regression baseline of **0.1256** — a margin of **+0.0099** where the
+preregistered bar is 0.05. Note which baseline won: at 4096 the strongest was a depth-16 tree at
+0.1812; at 1024 the deep trees are *worse* than logistic (0.1197 and 0.1103), and plain logistic is
+the thing the model fails to separate from.
+
+**2. Holding data volume fixed, the shorter window costs 0.0800.** At the matched 100000 rung,
+**0.1165** at 1024 against **0.1965** at 4096. That single number is larger than the entire margin
+the study needed to clear.
+
+**3. Transfer does not degrade — it collapses to chance.** A model trained at 4096 and evaluated on
+1024-byte fragments scores **0.0403** against a chance level of **0.038462**. It is not a weakened
+model; it is not a model. The feature set carries 512 bit-alignment histogram columns estimated
+from the window, and their distributions at a quarter of the bytes are apparently a different
+distribution rather than a noisier one.
+
+### The excuse this result is not allowed to use
+
+A1 was run on the **input** before the bar was frozen, and it removes the obvious defence. The
+byte-identity collision ceiling barely moves across the range: **20.9125** distinct streams of 26 at
+4096 against **20.79** at 512. The information is present at 1024. **This is a modelling failure,
+not an information failure**, and the preregistration committed this document to saying so in those
+words before the number existed.
+
+### A rising curve that is worthless, which is the whole reason the margin clause exists
+
+The within-size slope is **+0.0204** accuracy points per decade with a 95% lower bound of **0.0198**
+that excludes zero. The curve at 1024 genuinely rises with manufactured data. It rises from a base
+that never separates from logistic regression, and it would need many more decades than exist to get
+anywhere. Had this study been run without an A2 margin clause it would have reported a statistically
+clean positive scaling result on a task the model cannot do. That is exactly the failure the
+archived trial killed five candidates on, arriving this time in our own work.
+
+### What this changes about everything above
+
+`CURVE_ESTABLISHED` and `OUTPUT_USABLE` stand — they were measured correctly and 0007 cannot revise
+them. But both are now **explicitly bound to a 4096-byte window**, and the binding is not a
+technicality:
+
+- Quoting the 4096 numbers as "carved DEFLATE encoder provenance works" is quoting them wrongly. It
+  works *at 4096*.
+- 0006's finding that the output has the shape a forensic use requires is **conditional on a window
+  the forensic setting does not guarantee**. That was the buyer type the whole G5 argument leaned on.
+- The label factory being free does not rescue this. `CARVE_SIZE_SPECIFIC` — train one model per
+  carve size for one more compression pass — was the preregistered survivable outcome. This is not
+  that outcome. At 1024 there is no model worth training, at any volume this study can reach.
 
 ---
 

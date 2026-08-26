@@ -7,10 +7,14 @@ reports existed, and designed so that each of its gates can be shown to fail on 
 
 **It is** a scaling curve that clears every clause frozen before its corpus existed —
 `CURVE_ESTABLISHED`, **+0.0491** accuracy points per decade over **2.9031** decades, margin
-**+0.1003** frozen and **+0.0583** under the stricter reading, both above the preregistered 0.05.
+**+0.1003** frozen and **+0.0583** under the stricter reading, both above the preregistered 0.05 —
+**at a 4096-byte window, and only there.**
 
-**It is not** a fundable thesis. The task has no established buyer, none has been contacted, and
-none is claimed. There are no customers, no users and no partners.
+**It is not** a fundable thesis, and a later preregistration says why in the sharpest available
+terms. At a **1024**-byte carve the same protocol returns `CARVE_FAILS`: the model ties a dumb rule
+(**+0.0099** against a 0.05 bar), and a 4096-trained model evaluated on 1024-byte fragments falls to
+**0.0403** against **0.038462** chance. The task has no established buyer, none has been contacted,
+and none is claimed. There are no customers, no users and no partners.
 
 ---
 
@@ -64,6 +68,26 @@ GitHub API query formulations returned `total_count: 0`.
 sample seeds (one per rung), corpora (one was built), or model classes (one, held fixed by design).
 `[0.0977, 0.0993]` pins the slope *given this corpus, seed and model class* — not the slope of the
 underlying phenomenon.
+
+**And the shape it has is bound to one window size.** Preregistration 0007 built a second corpus
+at **1024** bytes, from source chunks disjoint from the first, and re-ran the protocol. Verdict
+`CARVE_FAILS`. Within-size top-1 **0.1355** against a logistic baseline of **0.1256**. Holding
+training volume fixed at the matched **100000** rung, the shorter window costs **0.08** — more than
+the whole margin the study needed. Transfer to the shorter carve reaches **0.0403** against
+**0.038462** chance: not a weakened model, not a model.
+
+A1 was run on the input *before* that bar was frozen and removes the obvious defence — the
+byte-identity ceiling barely moves, **20.9125** distinct streams of 26 at 4096 against **20.79** at
+512. The information is there at 1024. This is a modelling failure, not an information failure.
+
+Note what the 1024 curve does: it **rises**, at **+0.0204** per decade with a lower bound of
+**0.0198** excluding zero, from a base that never separates from logistic regression. Without an A2
+margin clause this would have been published as a clean positive scaling result on a task the model
+cannot do. That is the failure the archived trial killed five candidates on, arriving in our own
+work.
+
+**So the forensic reading above is conditional on a window the forensic setting does not
+guarantee** — and that was the buyer type the entire G5 argument leaned on.
 
 **What it does not establish.** A buyer. The uses this points at — forensic carving of unallocated
 disk, archive recompression, repackaged-APK detection — are narrow, nobody has been contacted, and
@@ -143,7 +167,7 @@ reported, and neither is quoted as the other.
 
 The verification-coverage map is machine-checked and prints its weakest class first, deliberately.
 
-**10 of 55 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
+**10 of 59 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
 including us. Eight are measurements made by subagents inside scratch directories that no longer
 exist, and **that includes measurements the conclusions rest on.** The ninth is worse than
 unverified: it is a figure we published and then failed to reproduce ourselves.

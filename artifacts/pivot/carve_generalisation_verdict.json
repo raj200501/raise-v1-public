@@ -1,0 +1,36 @@
+{
+  "establishes_a_buyer": false,
+  "meaning": "The information is not recoverable at the shorter carve. The forensic setting is narrower than the 4096 numbers imply.",
+  "preregistration": "0007-carve-size-generalisation",
+  "read": {
+    "carve_bytes": 1024,
+    "chance_accuracy": 0.038462,
+    "corpora_share_source_chunks": false,
+    "decades_spanned": 2.699,
+    "matched_rung": 100000,
+    "n_classes": 26,
+    "n_rungs": 4,
+    "reference_carve_bytes": 4096,
+    "reference_matched_rung_top1": 0.1965,
+    "transfer_top1": 0.0403,
+    "within_best_baseline_expanded": 0.1256,
+    "within_best_baseline_expanded_name": "logistic",
+    "within_best_trivial_baseline": 0.1256,
+    "within_best_trivial_baseline_name": "logistic",
+    "within_shuffled_label_accuracy": 0.0389,
+    "within_slope": 0.020449528758347532,
+    "within_slope_ci95_low": 0.01975813023327274,
+    "within_split_is_grouped_by_source": true,
+    "within_top1": 0.1355
+  },
+  "schema": "raise-v1/carve_generalisation_verdict/1",
+  "source_artifact": "artifacts/pivot/carve_generalisation.json",
+  "transfer_failed_clauses": [
+    "transfer margin: 0.0403 - 0.1256 = -0.0853 is below the preregistered 0.05 \u2014 a model trained at the longer carve does not beat the shorter corpus's own dumb rules"
+  ],
+  "verdict": "CARVE_FAILS",
+  "within_size_failed_clauses": [
+    "within margin (frozen set): 0.1355 - 0.1256 = 0.0099 is below the preregistered 0.05",
+    "within margin (expanded set): 0.1355 - 0.1256 = 0.0099 is below the preregistered 0.05"
+  ]
+}

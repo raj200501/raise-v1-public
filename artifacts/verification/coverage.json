@@ -480,6 +480,41 @@
       "json_path": "$.by_carve.4096.mean_distinct_streams_of_26",
       "reverify": "python3 tools/pivot/a1_carve_sweep.py",
       "value": 20.9125
+    },
+    {
+      "artifact": "artifacts/pivot/carve_generalisation.json",
+      "claim": "At a 1024-byte carve the model reaches 0.1355 top-1 at 500000 manufactured fragments against a logistic-regression baseline of 0.1256 - a margin of 0.0099 where the preregistered bar is 0.05. Verdict CARVE_FAILS.",
+      "class": "primary-verifiable",
+      "id": "carve-within-fails",
+      "json_path": "$.within_top1",
+      "reverify": "python3 tools/readers/carve_generalisation_verdict.py",
+      "value": 0.1355
+    },
+    {
+      "artifact": "artifacts/pivot/carve_margins.json",
+      "claim": "Holding training volume fixed at the matched 100000 rung, shortening the window from 4096 to 1024 bytes costs 0.08 top-1 accuracy - 0.1165 against 0.1965. That is larger than the entire margin the study needed to clear.",
+      "class": "arithmetic-verifiable",
+      "id": "carve-size-cost",
+      "json_path": "$.margins.carve_size_cost_at_matched_rung.value",
+      "value": -0.08
+    },
+    {
+      "artifact": "artifacts/pivot/carve_generalisation.json",
+      "claim": "A model trained at a 4096-byte carve and evaluated on 1024-byte fragments scores 0.0403 against a chance level of 0.038462. Transfer does not degrade, it collapses to chance.",
+      "class": "primary-verifiable",
+      "id": "carve-transfer-collapse",
+      "json_path": "$.transfer_top1",
+      "reverify": "python3 tools/readers/carve_generalisation_verdict.py",
+      "value": 0.0403
+    },
+    {
+      "artifact": "artifacts/pivot/carve_generalisation.json",
+      "claim": "The 1024-byte curve genuinely rises - slope 0.020449528758347532 accuracy points per decade with a 95% lower bound of 0.01975813023327274 excluding zero - from a base that never separates from logistic regression. Without an A2 margin clause this would have been reported as a clean positive scaling result on a task the model cannot do.",
+      "class": "primary-verifiable",
+      "id": "carve-rising-but-worthless",
+      "json_path": "$.within_slope",
+      "reverify": "python3 tools/pivot/run_carve.py",
+      "value": 0.020449528758347532
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

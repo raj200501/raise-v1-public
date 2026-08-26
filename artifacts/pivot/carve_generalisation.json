@@ -1,0 +1,101 @@
+{
+  "carve_bytes": 1024,
+  "chance_accuracy": 0.038462,
+  "class_names": [
+    "zlib-1",
+    "zlib-2",
+    "zlib-3",
+    "zlib-4",
+    "zlib-5",
+    "zlib-6",
+    "zlib-7",
+    "zlib-8",
+    "zlib-9",
+    "libdeflate-1",
+    "libdeflate-2",
+    "libdeflate-3",
+    "libdeflate-4",
+    "libdeflate-5",
+    "libdeflate-6",
+    "libdeflate-7",
+    "libdeflate-8",
+    "libdeflate-9",
+    "libdeflate-10",
+    "libdeflate-11",
+    "libdeflate-12",
+    "isal-0",
+    "isal-1",
+    "isal-2",
+    "isal-3",
+    "zopfli"
+  ],
+  "corpora_share_source_chunks": false,
+  "corpus_a_chunks_used": 50000,
+  "corpus_b_chunk_offset": 50000,
+  "cost": {
+    "build_seconds": 1066.6,
+    "cpu_cores": 4,
+    "gpu": "none",
+    "train_seconds_per_rung": [
+      9.1,
+      19.6,
+      68.6,
+      559.1
+    ]
+  },
+  "decades_spanned": 2.699,
+  "establishes_a_buyer": false,
+  "matched_rung": 100000,
+  "n_classes": 26,
+  "n_eval_fragments": 130000,
+  "n_fragments": 650000,
+  "n_rungs": 4,
+  "preregistration": "0007-carve-size-generalisation",
+  "reference_carve_bytes": 4096,
+  "reference_matched_rung_top1": 0.1965,
+  "rungs": [
+    {
+      "accuracy": 0.0791,
+      "n_units": 1000,
+      "train_seconds": 9.1
+    },
+    {
+      "accuracy": 0.0985,
+      "n_units": 10000,
+      "train_seconds": 19.6
+    },
+    {
+      "accuracy": 0.1165,
+      "n_units": 100000,
+      "train_seconds": 68.6
+    },
+    {
+      "accuracy": 0.1355,
+      "n_units": 500000,
+      "train_seconds": 559.1
+    }
+  ],
+  "schema": "raise-v1/carve_generalisation/1",
+  "transfer_top1": 0.0403,
+  "within_best_baseline_expanded": 0.1256,
+  "within_best_baseline_expanded_name": "logistic",
+  "within_best_trivial_baseline": 0.1256,
+  "within_best_trivial_baseline_name": "logistic",
+  "within_permutation_p": 0.041666666666666664,
+  "within_shuffled_label_accuracy": 0.0389,
+  "within_slope": 0.020449528758347532,
+  "within_slope_ci95_high": 0.021158474374308997,
+  "within_slope_ci95_low": 0.01975813023327274,
+  "within_slope_r2": 0.9932503151599166,
+  "within_split_is_grouped_by_source": true,
+  "within_top1": 0.1355,
+  "within_trivial_baselines": {
+    "best_single_feat": 0.0668,
+    "depth16_tree": 0.1197,
+    "depth3_tree": 0.0769,
+    "depth8_tree": 0.1103,
+    "logistic": 0.1256,
+    "majority": 0.0385,
+    "stratified": 0.0385
+  }
+}
