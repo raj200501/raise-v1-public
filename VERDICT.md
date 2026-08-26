@@ -41,8 +41,8 @@ rule in that case is to take the reading that does not flatter us.
 ## What the search actually produced
 
 The useful output is not the absence of a domain. It is four laws, each derived by measurement —
-three from the search, and a fourth from our own pivot — and a precise statement of the class of
-problem that would work, which no candidate had.
+three from the search, and a fourth from our own pivot — one conjecture that is explicitly *not*
+measured, and a precise statement of the class of problem that would work, which no candidate had.
 
 ### L1 — Smooth reprocessing corrections are fitted, not learned
 
@@ -111,6 +111,41 @@ not tested one. It also does not follow that mixing training lengths would rescu
 it could not, because the within-size result at 1024 fails its own margin independently of any
 transfer question.
 
+### C1 — a CONJECTURE, not a law: withholding the transform's input is what creates the white space, and it is the same thing that makes the market small
+
+Everything above this line is measured. **This is not**, and it is labelled `C1` rather than `L5`
+for that reason. It is an argued reading of this repository's own search record, which is the
+weakest kind of evidence there is — our search, our framing, our blind spots.
+
+The pattern it names is this. The identity-shortcut law says to hunt **transform** label factories
+rather than **record** ones, because a transform's label varies within an entity while a record's
+does not. The carved-DEFLATE task is the one candidate that survived that screen, and it survived
+because the manufacturer's input — the plaintext — is withheld from the student. That withholding is
+precisely why no incumbent tool applies: `preflate` needs the stream start, `precomp` needs the
+plaintext, and a carved fragment has neither. **The withholding is the white space.**
+
+But an artifact examined without the input that produced it, by someone who wants to know what
+produced it, *is* a forensics problem. That is what forensics means. So the same withholding that
+creates the white space also fixes the buyer: someone reconstructing provenance after the fact,
+working on artifacts they did not generate. Those markets are real and they are small, and the
+tooling in them is mature enough that G4 white space usually means the question is narrow rather
+than that it is unclaimed.
+
+If C1 is right, the FDM-1 shape does not fail here for want of a cleverer domain. It fails because
+the property that makes a transform factory *findable* — a withheld input, hence no incumbent — is
+the property that lands it in a low-value market, and the two cannot be separated by searching
+harder.
+
+**What would falsify it.** A transform label factory where the input is withheld for a reason other
+than after-the-fact loss — withheld by privacy, by regulation, by physics, or by commercial
+boundary, with the artifact still published in bulk. Those exist in principle. This repository's 99
+candidates plus round 4 plus the market-timing search contained none that also cleared G4, which is
+evidence about the search and not proof about the world.
+
+**Why it is filed at all.** Because the alternative is to keep running rounds against a structural
+constraint without naming it, and a conjecture that can be attacked is worth more than an unstated
+assumption that cannot.
+
 ### Why VPT escapes and nothing in 99 candidates does
 
 There is a fourth case, and the pool contained zero instances of it. In VPT the label is a
@@ -177,11 +212,13 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **10 of 61 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **11 of 62 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
-> different kind and belongs here anyway: **the statement that G5 has no buyer.** An absence cannot
+> different kind and belongs here anyway: **the statement that G5 has no buyer.** The eleventh is
+> conjecture `C1`, filed here deliberately: it is the most interesting idea in this document and the
+> least supported, and putting it anywhere else would let it be read as a finding.** An absence cannot
 > be re-derived from an artifact, it carries no measured value and none is asserted, and a
 > self-reported `establishes_a_buyer: false` is evidence of intent rather than of fact.
 >
@@ -199,7 +236,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 | Class | Count | Meaning |
 |---|---:|---|
-| `neither` | **10** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done. |
+| `neither` | **11** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; one is an explicitly labelled conjecture. |
 | `arithmetic-verifiable` | 11 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
 | `primary-verifiable` | 40 | A stranger can re-derive it from raw inputs with the shipped code. |
 

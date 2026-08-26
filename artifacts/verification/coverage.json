@@ -532,6 +532,13 @@
       "id": "law-l4-window-bound",
       "json_path": "$.ratio_spread",
       "value": 0.038
+    },
+    {
+      "artifact": "artifacts/pivot/g4_firsthand.json",
+      "claim": "Conjecture C1: withholding the transform's input is what creates the white space for a transform label factory, and is the same property that makes its market a forensics market and therefore small. Explicitly a conjecture, not a measured law.",
+      "class": "neither",
+      "id": "conjecture-c1-withholding",
+      "why_not_verifiable": "It is an argued reading of this repository's own search record - our search, our framing, our blind spots - and not a measurement. No artifact can establish it and none is claimed to. It is filed in the weakest class and labelled C1 rather than L5 so it can never be quoted alongside the four measured laws. The document states what would falsify it: a transform label factory whose input is withheld by privacy, regulation, physics or commercial boundary rather than by after-the-fact loss."
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",
