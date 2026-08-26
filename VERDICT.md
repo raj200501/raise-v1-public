@@ -146,7 +146,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **10 of 59 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **10 of 60 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -170,7 +170,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 |---|---:|---|
 | `neither` | **10** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done. |
 | `arithmetic-verifiable` | 10 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 39 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `primary-verifiable` | 40 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -348,6 +348,27 @@ that never separates from logistic regression, and it would need many more decad
 anywhere. Had this study been run without an A2 margin clause it would have reported a statistically
 clean positive scaling result on a task the model cannot do. That is exactly the failure the
 archived trial killed five candidates on, arriving this time in our own work.
+
+### And it is not localised, so it is not cheaply fixable
+
+A diagnostic run after the verdict — **not preregistered, and not a result about the world** —
+asked whether the failure sits in one repairable part of the representation. It does not. At a
+matched 100000 rung, every one of six feature subsets degrades from 4096 to 1024 by a ratio between
+**0.589** and **0.628**: a spread of **0.04**. No family survives the shorter window and no family
+dies in it. The whole representation degrades uniformly, which is what happens when every feature is
+a statistical estimate over the window and a quarter of the bytes makes every estimate worse by
+roughly the same factor.
+
+**The prior recorded before that run was wrong**, and it is worth recording that it was. It said the
+512 alignment-histogram columns would be the casualty. They are not — because they were never
+carrying much at 4096 either. Dropping all **555** alignment features costs **0.0099** at 4096 and
+**0.0016** at 1024. Roughly half the feature vector buys about one accuracy point where the study
+works and near-nothing where it does not, which extends to v3's histograms the verdict this
+repository already recorded against v2's alignment summaries.
+
+So a model that works at 1024 would need a different *kind* of representation — learning from the
+raw bit sequence rather than from summary statistics over it — not a mended feature family. That is
+a materially larger project than this diagnostic was run to scope, and **it is not started here.**
 
 ### What this changes about everything above
 

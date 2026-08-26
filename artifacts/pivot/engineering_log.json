@@ -64,5 +64,33 @@
     "training_pool_available": 1040000,
     "why": "The top rung is 800,000 of the 1,040,000 training fragments available after the grouped split. The cap was NOT chosen for its accuracy - it was set during OOM debugging, before any 800,000-fragment number existed, and the run that produced it was the first one to survive. 1k->800k is 2.9031 decades, above the preregistered 2.0, so the frozen scope is met without the cap doing any work for the verdict."
   },
-  "why": "Model and feature choices for the scaled run are made ONCE on pilot data and then held fixed. This records every choice and every FAILED hypothesis, so the selection cannot be quietly re-run after seeing a number, and so a hypothesis that did not work does not vanish because it was inconvenient."
+  "why": "Model and feature choices for the scaled run are made ONCE on pilot data and then held fixed. This records every choice and every FAILED hypothesis, so the selection cannot be quietly re-run after seeing a number, and so a hypothesis that did not work does not vanish because it was inconvenient.",
+  "why_1024_fails_is_not_localised": {
+    "finding_1_nothing_collapses_differentially": "Every subset degrades by almost exactly the same factor from 4096 to 1024: the 1024/4096 accuracy ratio runs 0.589 to 0.628 across six subsets, a spread of 0.04. There is no family that survives the shorter window and no family that dies in it. The ENTIRE representation degrades uniformly, which is what one expects if every feature is a statistical estimate over the window and a quarter of the bytes makes every estimate worse by a similar factor.",
+    "finding_2_the_alignment_features_never_earned_their_keep": "Dropping all 555 alignment features costs 0.0099 at 4096 and 0.0016 at 1024. The v2 alignment SUMMARIES were already recorded in this log as having earned nothing; this extends that verdict to v3's alignment HISTOGRAMS, which were built on the hypothesis that summarising was the problem. It was not the problem. Roughly half the feature vector buys about one accuracy point at the window where the study works, and near-nothing at the window where it does not.",
+    "measured": {
+      "same_model_matched_rung_100000": {
+        "1024": {
+          "align_hist_only_512": 0.0988,
+          "alignment_only_555": 0.1031,
+          "all_1108": 0.1165,
+          "byte_hist_only_256": 0.0908,
+          "drop_align_hist_596": 0.1147,
+          "v1_no_alignment_553": 0.1149
+        },
+        "4096": {
+          "align_hist_only_512": 0.1676,
+          "alignment_only_555": 0.171,
+          "all_1108": 0.1965,
+          "byte_hist_only_256": 0.1447,
+          "drop_align_hist_596": 0.1876,
+          "v1_no_alignment_553": 0.1866
+        }
+      }
+    },
+    "not_quotable_as": "evidence about the world. It is an engineering measurement about this repository's own feature set, and any fix it might suggest needs its own preregistration frozen before measurement.",
+    "prior_recorded_before_the_run": "Written into the commit that launched it: 'the 512 alignment-histogram columns are the casualty - at a quarter of the bytes each bin holds a quarter of the counts'. THAT PRIOR WAS WRONG, and it was wrong in a way worth recording: the alignment histograms are not what dies at 1024, because they were never carrying much at 4096 either.",
+    "status": "DIAGNOSTIC, not preregistered. Run after 0007 returned CARVE_FAILS, to ask whether the failure sits in one repairable part of the representation.",
+    "what_this_means_for_a_fix": "There is no repairable component to repair. A model that works at 1024 would need a different KIND of representation - learning from the raw bit sequence rather than from summary statistics over it - not a mended feature family. That is a materially larger project than the one this diagnostic was run to scope, and it is NOT started here. It also re-reads the transfer collapse: the 4096-trained model does not fail at 1024 because one family shifted, but because every feature is a window-length-dependent statistic, so the joint distribution is systematically different rather than noisier."
+  }
 }

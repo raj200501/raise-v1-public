@@ -515,6 +515,15 @@
       "json_path": "$.within_slope",
       "reverify": "python3 tools/pivot/run_carve.py",
       "value": 0.020449528758347532
+    },
+    {
+      "artifact": "artifacts/pivot/feature_ablation.json",
+      "claim": "The 1024-byte failure is not localised to any feature family: at a matched 100000 rung every one of six feature subsets degrades from 4096 to 1024 by a ratio between 0.589 and 0.628, a spread of 0.04. Dropping all 555 alignment features costs 0.0099 at 4096 and 0.0016 at 1024. Diagnostic, not preregistered.",
+      "class": "primary-verifiable",
+      "id": "carve-failure-not-localised",
+      "json_path": "$.by_carve.1024.all.accuracy",
+      "reverify": "python3 tools/pivot/feature_ablation.py",
+      "value": 0.1165
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",
