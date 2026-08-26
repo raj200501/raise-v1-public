@@ -38,7 +38,7 @@
       "threshold": 0
     }
   },
-  "frozen": false,
+  "frozen": true,
   "id": "0008",
   "opened_in_response_to": "A negative result and a conjecture drawn from it. 0007 returned CARVE_FAILS, and conjecture C1 was then filed: that withholding the transform's input is what CREATES a transform factory's white space and is the same property that makes its market a forensics market and therefore small. This round hunts C1's own stated falsifier. Opening a round after a result you did not like is the move this discipline exists to prevent, so it is recorded here in the same field round 4 used, and the bar below does not move down.",
   "reader": "tools/readers/c1_falsifier_verdict.py",
@@ -75,5 +75,23 @@
     "A missing field reads as failure. Absence is never a pass.",
     "This cannot revise 0001, 0002, 0003, 0006 or 0007."
   ],
-  "title": "Does a transform label factory exist whose input is withheld by privacy, regulation, physics or commercial boundary rather than by after-the-fact loss - and that clears G1..G5 while surviving L1..L4?"
+  "title": "Does a transform label factory exist whose input is withheld by privacy, regulation, physics or commercial boundary rather than by after-the-fact loss - and that clears G1..G5 while surviving L1..L4?",
+  "reader_sha256": "abe207e424a6076f6845ab33bf98bfde5dc74ffe82be9b57a0420b09c31e580e",
+  "frozen_utc": "2026-08-26T00:48:20Z",
+  "git_commit": "80aac3ab7cf526f48fcf9a7e2953100f3055520e",
+  "git_dirty_at_freeze": false,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1918133,
+      "time_stamp": "2026-08-26T00:48:00.000Z",
+      "output_value": "5B12B1CBC72E4F1F596356D6EFBE7C9C0D18E002BF7139BFC7F8A5EFA1FA36EAE25AA4DC4827DDAF991047D8C576A225D8EE6B4534AAD1E4915457040D76CD6E"
+    },
+    "drand": {
+      "round": 6409142,
+      "randomness": "979251700b95d654ad69bffcd0eef64ce8c27d6edf39aee652d8e20ebc523acb"
+    }
+  },
+  "chain_hash": "5629a5d4542a25cf892fd5227c9d5ace9730724290b2f032a5a105a503d07a09",
+  "chain_prev_hash": "40ded1fad14bbfbaab22ec9bac2e95df6fcc445ad49e1e2b65d29dd8854eac30"
 }

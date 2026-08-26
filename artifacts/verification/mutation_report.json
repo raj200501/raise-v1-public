@@ -4,6 +4,10 @@
       "detected": 6,
       "total": 6
     },
+    "c1": {
+      "detected": 14,
+      "total": 14
+    },
     "carve": {
       "detected": 15,
       "total": 15
@@ -116,7 +120,7 @@
     },
     {
       "detected": true,
-      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=583cbd35e0492bf0)",
+      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=65eff1b62fb82096)",
       "exit_code": 0,
       "expected": "pass",
       "gate": "prereg",
@@ -161,7 +165,7 @@
     },
     {
       "detected": true,
-      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 78a888a1eb1cbc35 (chain order broken)",
+      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 86d3fd7f64b5216b (chain order broken)",
       "exit_code": 1,
       "expected": "fail",
       "gate": "prereg",
@@ -188,7 +192,7 @@
     },
     {
       "detected": true,
-      "evidence": "/tmp/tmpej2zun4u/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
+      "evidence": "/tmp/tmp79py1lk7/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
       "exit_code": 2,
       "expected": "fail",
       "gate": "prereg",
@@ -905,10 +909,136 @@
       "gate": "carve",
       "mutation": "a-within-size-failure-is-NOT-softened-to-SIZE_SPECIFIC",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=C1_FALSIFIED sel=12",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "c1",
+      "mutation": "control-a-real-falsifier-is-recognised",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "after-the-fact-loss-cannot-falsify-the-conjecture-it-describes",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "unstated-withholding-mechanism-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "abundance-below-1e6-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "an-unverified-abundance-count-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "a-G4-query-that-did-not-return-200-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "a-G4-query-recording-no-status-at-all-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "a-law-claimed-survived-with-no-reason-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "a-law-not-survived-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "a-forensics-buyer-confirms-the-conjecture-rather-than-falsifying-it",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID_SEARCH_TOO_NARROW sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "too-few-candidates-VOIDS-rather-than-returning-a-comforting-negative",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID_SEARCH_TOO_NARROW sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "an-unexamined-withholding-mode-VOIDS-the-search",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "finding-nothing-must-NOT-promote-the-conjecture",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
     }
   ],
-  "detected": 96,
+  "detected": 110,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 96
+  "total_mutations": 110
 }

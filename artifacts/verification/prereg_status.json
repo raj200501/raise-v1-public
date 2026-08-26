@@ -153,10 +153,32 @@
       "reader_sha256": "3c19c08847c1807d6852b63c5259ef17f01d82bb6283b56611536aa19050ded1",
       "seq": 7,
       "slug": "carve-size-generalisation"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "979251700b95d654ad69bffcd0eef64ce8c27d6edf39aee652d8e20ebc523acb",
+          "round": 6409142
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "5B12B1CBC72E4F1F596356D6EFBE7C9C0D18E002BF7139BFC7F8A5EFA1FA36EAE25AA4DC4827DDAF991047D8C576A225D8EE6B4534AAD1E4915457040D76CD6E",
+          "pulse": 1918133,
+          "time_stamp": "2026-08-26T00:48:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-26T00:48:20Z",
+      "hash": "5629a5d4542a25cf892fd5227c9d5ace9730724290b2f032a5a105a503d07a09",
+      "id": "0008",
+      "prev_hash": "40ded1fad14bbfbaab22ec9bac2e95df6fcc445ad49e1e2b65d29dd8854eac30",
+      "reader": "tools/readers/c1_falsifier_verdict.py",
+      "reader_sha256": "abe207e424a6076f6845ab33bf98bfde5dc74ffe82be9b57a0420b09c31e580e",
+      "seq": 8,
+      "slug": "c1-falsifier-search"
     }
   ],
-  "entries": 7,
-  "head": "40ded1fad14bbfbaab22ec9bac2e95df6fcc445ad49e1e2b65d29dd8854eac30",
+  "entries": 8,
+  "head": "5629a5d4542a25cf892fd5227c9d5ace9730724290b2f032a5a105a503d07a09",
   "problems": 0,
   "schema": "raise-v1/prereg_status/1",
   "verified": true

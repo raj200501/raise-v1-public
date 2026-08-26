@@ -991,6 +991,141 @@ def _(root):
     return rc, out
 
 
+# ---------------------------------------------------------------- c1 gate (preregistration 0008)
+#
+# A SEARCH reader. Its failure modes differ from a measurement reader's: the dangerous outcome is
+# not a wrong number but a comforting negative produced by a search too narrow to conclude anything,
+# so breadth is a clause and a narrow search voids rather than returns NO_FALSIFIER_FOUND.
+
+def _c1_cand(**kw):
+    c = {"name": "x", "withholding_mode": "privacy",
+         "withholding_mechanism": "42 U.S.C. 1320d-6 bars disclosure of the underlying records",
+         "withholding_is_after_the_fact_loss": False,
+         "G1_abundance_verified": True, "G1_units": 5_000_000, "G1_source": "named registry",
+         "G1_count_is_verified": True,
+         "G2_manufacturer": True, "G3_monotonicity": True, "G4_white_space_firsthand": True,
+         "G5_buyer_not_forensics": True, "G5_buyer_type": "regulator",
+         "G5_why_not_forensics": "the buyer acts prospectively, gating a release",
+         "G4_queries": [{"q": "a", "http_status": 200, "n_relevant": 0}],
+         "laws_survived": {"L1": True, "L2": True, "L3": True, "L4": True},
+         "law_reasons": {"L1": "r", "L2": "r", "L3": "r", "L4": "r"}}
+    c.update(kw); return c
+
+
+def _c1(root, cands=None):
+    os.makedirs(os.path.join(root, "artifacts", "phase0"), exist_ok=True)
+    if cands is None:
+        cands = [_c1_cand(name=f"c{i}", withholding_mode=m)
+                 for i, m in enumerate(["privacy", "regulation", "physics", "commercial"] * 3)]
+    json.dump({"candidates": cands},
+              open(os.path.join(root, "artifacts", "phase0", "c1_falsifier_search.json"), "w"))
+    shutil.copy(os.path.join(REPO, "tools", "readers", "c1_falsifier_verdict.py"),
+                os.path.join(root, "tools", "readers", "c1_falsifier_verdict.py"))
+    rc, out = run([PY, "tools/readers/c1_falsifier_verdict.py"], root)
+    if rc != 0:
+        return rc, out
+    v = json.load(open(os.path.join(root, "artifacts", "phase0", "c1_falsifier_verdict.json")))
+    return (0 if v["verdict"] == "C1_FALSIFIED" else 1), f"verdict={v['verdict']} sel={v['n_selected']}"
+
+
+def _c1_all(**kw):
+    """Twelve candidates covering all four modes, each mutated the same way."""
+    modes = ["privacy", "regulation", "physics", "commercial"] * 3
+    return [_c1_cand(name=f"c{i}", withholding_mode=m, **kw) for i, m in enumerate(modes)]
+
+
+@case("c1", "control-a-real-falsifier-is-recognised", "pass")
+def _(root):
+    return _c1(root)
+
+
+@case("c1", "after-the-fact-loss-cannot-falsify-the-conjecture-it-describes", "fail")
+def _(root):
+    return _c1(root, _c1_all(withholding_is_after_the_fact_loss=True))
+
+
+@case("c1", "unstated-withholding-mechanism-is-rejected", "fail")
+def _(root):
+    return _c1(root, _c1_all(withholding_mechanism="   "))
+
+
+@case("c1", "abundance-below-1e6-is-rejected", "fail")
+def _(root):
+    return _c1(root, _c1_all(G1_units=999_999))
+
+
+@case("c1", "an-unverified-abundance-count-is-rejected", "fail")
+def _(root):
+    return _c1(root, _c1_all(G1_count_is_verified=False))
+
+
+@case("c1", "a-G4-query-that-did-not-return-200-is-rejected", "fail")
+def _(root):
+    # The archived trial nearly published a white-space claim built on an HTTP 301 with 0 bytes.
+    return _c1(root, _c1_all(G4_queries=[{"q": "a", "http_status": 301, "n_relevant": 0}]))
+
+
+@case("c1", "a-G4-query-recording-no-status-at-all-is-rejected", "fail")
+def _(root):
+    return _c1(root, _c1_all(G4_queries=[{"q": "a", "n_relevant": 0}]))
+
+
+@case("c1", "a-law-claimed-survived-with-no-reason-is-rejected", "fail")
+def _(root):
+    return _c1(root, _c1_all(law_reasons={"L1": "r", "L2": "", "L3": "r", "L4": "r"}))
+
+
+@case("c1", "a-law-not-survived-is-rejected", "fail")
+def _(root):
+    return _c1(root, _c1_all(laws_survived={"L1": True, "L2": True, "L3": False, "L4": True}))
+
+
+@case("c1", "a-forensics-buyer-confirms-the-conjecture-rather-than-falsifying-it", "fail")
+def _(root):
+    return _c1(root, _c1_all(G5_why_not_forensics=""))
+
+
+@case("c1", "too-few-candidates-VOIDS-rather-than-returning-a-comforting-negative", "fail")
+def _(root):
+    rc, out = _c1(root, [_c1_cand(name=f"c{i}", withholding_mode=m, G1_units=1)
+                         for i, m in enumerate(["privacy", "regulation", "physics", "commercial"])])
+    if rc != 0 and "verdict=VOID_SEARCH_TOO_NARROW" not in out:
+        return 0, out + " !! a too-narrow search returned a negative instead of voiding"
+    return rc, out
+
+
+@case("c1", "an-unexamined-withholding-mode-VOIDS-the-search", "fail")
+def _(root):
+    cands = [_c1_cand(name=f"c{i}", withholding_mode=m, G1_units=1)
+             for i, m in enumerate(["privacy", "regulation", "privacy"] * 4)]
+    rc, out = _c1(root, cands)
+    if rc != 0 and "verdict=VOID_SEARCH_TOO_NARROW" not in out:
+        return 0, out + " !! an unexamined mode did not void the search"
+    return rc, out
+
+
+@case("c1", "finding-nothing-must-NOT-promote-the-conjecture", "fail")
+def _(root):
+    # The whole discipline of filing C1 as a conjecture collapses if a failed search reads as
+    # support. The reader must emit the disclaimer into its own artifact, not just print it.
+    rc, out = _c1(root, _c1_all(G1_units=1))
+    if rc == 0:
+        return rc, out
+    v = json.load(open(os.path.join(root, "artifacts", "phase0", "c1_falsifier_verdict.json")))
+    if v.get("verdict") != "NO_FALSIFIER_FOUND":
+        return 0, out + " !! a clean negative was not named NO_FALSIFIER_FOUND"
+    if "not proof" not in str(v.get("no_falsifier_found_does_not_promote_c1", "")):
+        return 0, out + " !! the verdict artifact does not carry the no-promotion disclaimer"
+    return rc, out
+
+
+@case("c1", "absent-artifact-emits-no-verdict", "fail")
+def _(root):
+    shutil.copy(os.path.join(REPO, "tools", "readers", "c1_falsifier_verdict.py"),
+                os.path.join(root, "tools", "readers", "c1_falsifier_verdict.py"))
+    return run([PY, "tools/readers/c1_falsifier_verdict.py"], root)
+
+
 def main() -> int:
     results = []
     for c in CASES:

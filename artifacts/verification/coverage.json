@@ -2,12 +2,12 @@
   "claims": [
     {
       "artifact": "artifacts/verification/mutation_report.json",
-      "claim": "Every gate in this repository is shown capable of failing: 96 deliberate mutations across 10 gates, 96 detected, 0 survived.",
+      "claim": "Every gate in this repository is shown capable of failing: 110 deliberate mutations across 11 gates, 110 detected, 0 survived.",
       "class": "primary-verifiable",
       "id": "mutations-detected",
       "json_path": "$.detected",
       "reverify": "python3 tests/mutation_test.py",
-      "value": 96
+      "value": 110
     },
     {
       "artifact": "artifacts/verification/mutation_report.json",
@@ -539,6 +539,15 @@
       "class": "neither",
       "id": "conjecture-c1-withholding",
       "why_not_verifiable": "It is an argued reading of this repository's own search record - our search, our framing, our blind spots - and not a measurement. No artifact can establish it and none is claimed to. It is filed in the weakest class and labelled C1 rather than L5 so it can never be quoted alongside the four measured laws. The document states what would falsify it: a transform label factory whose input is withheld by privacy, regulation, physics or commercial boundary rather than by after-the-fact loss."
+    },
+    {
+      "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "The C1 falsifier-search gate of preregistration 0008 is shown capable of failing by 14 deliberate mutations, all detected - including one asserting that a search too narrow to conclude anything VOIDS rather than returning a comforting negative, and one asserting that finding no falsifier does not promote the conjecture.",
+      "class": "primary-verifiable",
+      "id": "c1-gate-mutations",
+      "json_path": "$.by_gate.c1.total",
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 14
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",
