@@ -195,6 +195,56 @@ measured, it is filed alongside C1 in the coverage map's weakest class, and the 
 applies: an institution that deliberately withholds an input while publishing the artifact and
 *not* documenting the transform.
 
+### The third tension, and a cap on how much more of this is worth writing
+
+Chasing the refinement's own falsifier — an institution that deliberately withholds an input while
+publishing the artifact and *not* documenting the transform — leads somewhere that closes the
+argument rather than opening it.
+
+Institutions do decline to document when the transform is a competitively valuable secret. But a
+free label manufacturer requires **possessing the transform** — G2 means running it yourself, at
+near-zero marginal cost, as many times as you like. You cannot manufacture labels for a secret you
+do not have. Google's ranking function is the cleanest case: SERPs are published in bulk, the
+algorithm is deliberately undocumented, and the buyer is a large prospective industry — and it fails
+G2 outright, because nobody outside Google can run it.
+
+So:
+
+> **C2 — G2 and G5 pull against each other.** A free label manufacturer requires possessing the
+> transform. Possessing it means it is open or commoditised. And the provenance of a commoditised
+> transform's output is usually worth little to know, because anyone could have produced it and the
+> answer changes nothing the buyer can act on.
+
+That is the carved-DEFLATE story in one line. We possess zlib, zopfli, ISA-L and libdeflate — which
+is exactly why the labels are free, and exactly why knowing which one ran is worth so little.
+
+**C2 has a falsifier and it exists.** A freely runnable transform whose output's provenance
+materially changes a decision someone pays for: TLS stack identification. Every library is
+installable, every handshake is published on the wire in enormous volume, and knowing the stack
+tells you which CVEs apply. It is a real market. **And it is solved by JA3/JA4 — a hash, not a
+learned model** — which is law L3(i) arriving from the other direction: where the label is both free
+and valuable, someone has already built the non-learned tool, because a non-learned tool was
+sufficient.
+
+### The three tensions, together
+
+| The shape needs | Which forces | And that costs |
+|---|---|---|
+| **Free labels** (G2) | possessing the transform | it is commoditised, so its provenance is cheap to know — **C2** |
+| **A hidden label** (a task exists) | the input withheld | deliberate withholding is documented, accidental withholding is loss — **C1 + refinement** |
+| **A valuable label** (G5) | someone acts on it | a non-learned tool already exists, because it was sufficient — **L3(i)** |
+
+Each row is individually escapable. The archived trial found candidates that escaped one, and
+carved-DEFLATE escapes two — free labels *and* a genuinely hidden label. It pays for that with the
+third: the thing it recovers is worth little to know, which is G5, which is the gate it does not
+clear.
+
+**A cap, stated deliberately.** Everything in this section is argument, not measurement, and this
+repository's entire discipline is that those are different. Three conjectures is already more
+unmeasured reasoning than a document like this should carry, and the next round that matters is a
+*measurement* that breaks one of these rows — not a fourth conjecture explaining why they hold. If a
+later round produces more argument and no measurement, that is a signal to stop, not to continue.
+
 ### Why VPT escapes and nothing in 99 candidates does
 
 There is a fourth case, and the pool contained zero instances of it. In VPT the label is a
@@ -261,14 +311,15 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **12 of 65 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **13 of 66 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
 > different kind and belongs here anyway: **the statement that G5 has no buyer.** The eleventh is
-> conjecture `C1` and its refinement, filed here deliberately: between them they are the most
-> interesting idea in this document and the least supported, and putting them anywhere else
-> would let them be read as findings.** An absence cannot
+> conjectures `C1`, its refinement and `C2`, filed here deliberately: between them they are the
+> most interesting reasoning in this document and the least supported, and putting them anywhere
+> else would let them be read as findings. Three of them is already more unmeasured argument than
+> a document like this should carry, which the section itself says out loud.** An absence cannot
 > be re-derived from an artifact, it carries no measured value and none is asserted, and a
 > self-reported `establishes_a_buyer: false` is evidence of intent rather than of fact.
 >
@@ -286,7 +337,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 | Class | Count | Meaning |
 |---|---:|---|
-| `neither` | **12** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; two are an explicitly labelled conjecture and its refinement. |
+| `neither` | **13** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures. |
 | `arithmetic-verifiable` | 11 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
 | `primary-verifiable` | 42 | A stranger can re-derive it from raw inputs with the shipped code. |
 

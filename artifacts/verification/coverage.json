@@ -564,6 +564,13 @@
       "class": "neither",
       "id": "c1-refinement-documented-withholding",
       "why_not_verifiable": "An argued reading of 14 screened candidates, not a measurement. Filed with C1 in the weakest class. Its falsifier: an institution that deliberately withholds an input while publishing the artifact and NOT documenting the transform."
+    },
+    {
+      "artifact": "artifacts/phase0/c1_falsifier_verdict.json",
+      "claim": "Conjecture C2: G2 and G5 pull against each other. A free label manufacturer requires POSSESSING the transform; possessing it means it is open or commoditised; and the provenance of a commoditised transform's output is usually worth little to know. Its falsifier exists - TLS stack identification - and is solved by JA3/JA4, a hash rather than a learned model, which is law L3(i) arriving from the other direction.",
+      "class": "neither",
+      "id": "conjecture-c2-possession",
+      "why_not_verifiable": "Argument, not measurement. Filed in the weakest class with C1 and its refinement. VERDICT.md caps this deliberately: the next round that matters is a MEASUREMENT breaking one of the three tensions, not a fourth conjecture explaining why they hold."
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",
