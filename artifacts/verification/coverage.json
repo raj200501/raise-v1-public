@@ -580,6 +580,23 @@
       "json_path": "$.by_gate.bytemodel.total",
       "reverify": "python3 tests/mutation_test.py",
       "value": 10
+    },
+    {
+      "artifact": "artifacts/pivot/byte_model.json",
+      "claim": "A byte-sequence CNN over raw 1024-byte fragments reaches 0.0849 at the matched 100000 rung - below the 0.0943 of logistic regression on a plain byte histogram, and below the 0.1165 of the hand-engineered feature model it was meant to replace. Seeing byte order did worse than counting bytes. Verdict BYTE_MODEL_FAILS.",
+      "class": "primary-verifiable",
+      "id": "byte-model-fails",
+      "json_path": "$.byte_model_top1",
+      "reverify": "python3 tools/readers/byte_model_verdict.py",
+      "value": 0.0849
+    },
+    {
+      "artifact": "artifacts/pivot/engineering_log.json",
+      "claim": "The 0009 negative carries a stated confound against itself: the shuffled-label loss moves 0.0006 across ten epochs, so the architecture cannot memorise 100000 random labels. That is a clean null control and simultaneously evidence the model may be too small, so part of 'it failed' is 'it was small'.",
+      "class": "arithmetic-verifiable",
+      "id": "byte-model-capacity-confound",
+      "json_path": "$.byte_model_0009_training_trace.null_loss_total_movement",
+      "value": 0.0006
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

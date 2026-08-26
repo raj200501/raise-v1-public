@@ -7,6 +7,38 @@
     "option": "restrict to the first 553 feature columns (the v1 set), roughly halving memory",
     "why_declined": "The cheaper feature set produces a LARGER frozen-set margin, and it does so by WEAKENING the baselines rather than by improving the model. Adopting it after two OOM kills would have been choosing the option that flatters the study under cover of a resource constraint. The memory problem was solved on the full 1108-column set instead. Recorded because the decision went against this study's interest and would otherwise be invisible."
   },
+  "byte_model_0009_training_trace": {
+    "chance_cross_entropy_ln26": 3.2581,
+    "null_loss_per_epoch": [
+      3.2587,
+      3.2582,
+      3.2582,
+      3.2582,
+      3.2582,
+      3.2582,
+      3.2582,
+      3.2582,
+      3.2582,
+      3.2581
+    ],
+    "null_loss_total_movement": 0.0006,
+    "reading_1_it_converged_rather_than_ran_out_of_budget": "The real-label loss falls 3.2587 -> 3.0877 and flattens: the last five epochs move 0.0145 in total, under 0.005 per epoch. So this is a model that converged to a poor solution, not one truncated mid-descent. That makes the negative stronger than a simple 'we ran out of compute'.",
+    "reading_2_the_null_control_is_ALSO_evidence_of_limited_capacity": "The shuffled-label loss never moves from ln(26) at all - 0.0006 across ten epochs. That is a clean null control, and it is simultaneously evidence that this architecture cannot memorise 100000 random labels. A model with no capacity to overfit may simply be too small, so part of 'it failed' is 'it was small'. This confound is real and is stated rather than left implicit.",
+    "real_last_five_epochs_total_drop": 0.0145,
+    "real_loss_per_epoch": [
+      3.2587,
+      3.1949,
+      3.1286,
+      3.1153,
+      3.1075,
+      3.1022,
+      3.0978,
+      3.0942,
+      3.0921,
+      3.0877
+    ],
+    "status": "transcribed from the 0009 run log so the loss trajectory is checkable, not asserted"
+  },
   "eval_protocol": "grouped by source chunk throughout; 26 classes; chance 0.0385; n_train 100000; n_eval 26000; baselines trained on the SAME data as the model",
   "failed_hypotheses": [
     {

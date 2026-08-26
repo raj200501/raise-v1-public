@@ -311,7 +311,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **13 of 67 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **13 of 69 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -338,8 +338,8 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 | Class | Count | Meaning |
 |---|---:|---|
 | `neither` | **13** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures. |
-| `arithmetic-verifiable` | 11 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 43 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `arithmetic-verifiable` | 12 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
+| `primary-verifiable` | 44 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -517,6 +517,48 @@ that never separates from logistic regression, and it would need many more decad
 anywhere. Had this study been run without an A2 margin clause it would have reported a statistically
 clean positive scaling result on a task the model cannot do. That is exactly the failure the
 archived trial killed five candidates on, arriving this time in our own work.
+
+### A learned representation over raw bytes does not rescue it either — `BYTE_MODEL_FAILS`
+
+L4 was written with a scope limit in its own paragraph: it does not establish that a **learned**
+representation over the raw bit sequence would be window-bound, because none had been tested.
+Preregistration 0009 tested one, and this document's cap on further conjecture is why it is a
+measurement rather than a fourth argument.
+
+A small 1D convolutional network — **182842** parameters, a byte embedding, three convolution-and-pool
+stages — trained on the raw 1024-byte fragments at the matched **100000** rung. The evaluation set is
+identical to 0007's by construction *and by check*: the script computes the eval-group fingerprint
+and refuses to run unless it matches corpus B's.
+
+| | Accuracy |
+|---|---:|
+| Byte-sequence CNN | **0.0849** |
+| Hand-engineered features, same rung (0007) | **0.1165** |
+| Logistic regression on a plain byte histogram | **0.0943** |
+| Shuffled-label null control | **0.0385** vs chance 0.038462 |
+
+**Both clauses fail.** The A2 margin is **-0.0094** against a bar of 0.05, and the byte model loses
+to the representation it was meant to replace. The striking part is the middle row: **seeing byte
+order did worse than counting bytes.**
+
+Per the meaning frozen before the run, this **strengthens L4**. The window binding is not an
+artifact of hand engineering.
+
+### Two readings of that negative, and the second one is against us
+
+**It converged rather than running out of budget.** The training loss falls from 3.2587 to 3.0877
+against a chance cross-entropy of ln(26) = **3.2581**, and flattens: the last five epochs move
+**0.0145** in total, under 0.005 each. This is a model that reached a poor solution, not one
+truncated mid-descent.
+
+**But the null control is also evidence of limited capacity, and that cuts against the finding.**
+The shuffled-label loss never moves from chance at all — **0.0006** across ten epochs. That is a
+clean null control, and it simultaneously says this architecture cannot memorise 100000 random
+labels. A model with no capacity to overfit may simply be too small, so part of "it failed" is "it
+was small". The preregistration already fixed the scope — one architecture, one size, one budget —
+and this is the concrete form that limit takes. **A negative here does not prove that no learned
+representation works at 1024.** It proves this one does not, and that the first thing anyone would
+reach for does not.
 
 ### And it is not localised, so it is not cheaply fixable
 
