@@ -4,6 +4,10 @@
       "detected": 6,
       "total": 6
     },
+    "bytemodel": {
+      "detected": 10,
+      "total": 10
+    },
     "c1": {
       "detected": 14,
       "total": 14
@@ -120,7 +124,7 @@
     },
     {
       "detected": true,
-      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=bb0b00d71e5f0f26)",
+      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=3eabc430752bfeee)",
       "exit_code": 0,
       "expected": "pass",
       "gate": "prereg",
@@ -165,7 +169,7 @@
     },
     {
       "detected": true,
-      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 58d451a82a00d897 (chain order broken)",
+      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor f7731d28a4d3b7ff (chain order broken)",
       "exit_code": 1,
       "expected": "fail",
       "gate": "prereg",
@@ -192,7 +196,7 @@
     },
     {
       "detected": true,
-      "evidence": "/tmp/tmp9ub7aou0/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
+      "evidence": "/tmp/tmpwy29ocn1/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
       "exit_code": 2,
       "expected": "fail",
       "gate": "prereg",
@@ -1035,10 +1039,100 @@
       "gate": "c1",
       "mutation": "absent-artifact-emits-no-verdict",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_CLEARS failed=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "bytemodel",
+      "mutation": "control-a-better-representation-is-recognised",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_FAILS failed=['A2 margin: 0.19 - 0.15 = 0.04 is below the preregistered 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "A2-margin-below-bar-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_FAILS failed=[\"beats hand: 0.19 does not exceed the hand-engineered model's 0.2 \u2014 a representation that does not beat the one it replaces is not a better representation\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "clearing-A2-while-LOSING-to-the-model-it-replaces-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_FAILS failed=[\"beats hand: 0.19 does not exceed the hand-engineered model's 0.19 \u2014 a representation that does not beat the one it replaces is not a better representation\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "merely-tying-the-hand-engineered-model-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_FAILS failed=['null control: shuffled labels reached 0.0585, above chance 0.038462 + 0.02']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "null-control-above-chance-catches-a-memorising-network",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_FAILS failed=['split: split_is_grouped_by_source is not True']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "non-grouped-split-is-rejected-however-good-the-numbers",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_FAILS failed=['scope: n_train=500000 does not equal matched_rung=100000; the comparison against the feature model would not be at a matched rung']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "an-unmatched-rung-voids-the-comparison",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_FAILS failed=['beats hand: byte_model_top1 or feature_model_top1 missing']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "a-missing-field-reads-as-failure-not-as-a-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_FAILS failed=['A2 margin: 0.1 - 0.09 = 0.01 is below the preregistered 0.05', \"beats hand: 0.1 does not exceed the hand-engineered model's 0.1165 \u2014 a representation that does not be",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "a-negative-is-reported-as-STRENGTHENING-L4-not-as-inconclusive",
+      "observed": "fail"
     }
   ],
-  "detected": 110,
+  "detected": 120,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 110
+  "total_mutations": 120
 }

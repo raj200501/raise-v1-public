@@ -1126,6 +1126,100 @@ def _(root):
     return run([PY, "tools/readers/c1_falsifier_verdict.py"], root)
 
 
+# ---------------------------------------------------------------- bytemodel gate (prereg 0009)
+#
+# Tests whether 0007's CARVE_FAILS is a property of the window or of the representation. Its
+# distinctive clause is "beats hand": clearing the A2 margin while LOSING to the model it replaces
+# would make the headline false, so that is a gate and not a footnote.
+
+GOOD_BYTE = {
+    "carve_bytes": 1024, "matched_rung": 100000, "n_train": 100000, "n_eval": 130000,
+    "byte_model_top1": 0.19, "feature_model_top1": 0.1165,
+    "best_trivial_baseline": 0.09, "best_trivial_baseline_name": "logistic",
+    "best_baseline_expanded": 0.11, "best_baseline_expanded_name": "depth16_tree",
+    "byte_model_shuffled_top1": 0.0390, "chance_accuracy": 0.038462,
+    "split_is_grouped_by_source": True, "model_params": 182842, "epochs": 10, "n_classes": 26,
+}
+
+
+def _byte(root, art=GOOD_BYTE):
+    os.makedirs(os.path.join(root, "artifacts", "pivot"), exist_ok=True)
+    json.dump(art, open(os.path.join(root, "artifacts", "pivot", "byte_model.json"), "w"))
+    shutil.copy(os.path.join(REPO, "tools", "readers", "byte_model_verdict.py"),
+                os.path.join(root, "tools", "readers", "byte_model_verdict.py"))
+    rc, out = run([PY, "tools/readers/byte_model_verdict.py"], root)
+    if rc != 0:
+        return rc, out
+    v = json.load(open(os.path.join(root, "artifacts", "pivot", "byte_model_verdict.json")))
+    return (0 if v["verdict"] == "BYTE_MODEL_CLEARS" else 1), \
+        f"verdict={v['verdict']} failed={v['failed_clauses']}"
+
+
+def _bmut(**kw):
+    a = dict(GOOD_BYTE); a.update(kw); return a
+
+
+@case("bytemodel", "control-a-better-representation-is-recognised", "pass")
+def _(root):
+    return _byte(root)
+
+
+@case("bytemodel", "A2-margin-below-bar-is-rejected", "fail")
+def _(root):
+    return _byte(root, _bmut(best_trivial_baseline=0.15))
+
+
+@case("bytemodel", "clearing-A2-while-LOSING-to-the-model-it-replaces-is-rejected", "fail")
+def _(root):
+    # The clause that matters: 0.19 clears A2 over a 0.09 baseline, but a feature model at 0.20
+    # means the byte representation is a different way of failing, not a better representation.
+    return _byte(root, _bmut(feature_model_top1=0.20))
+
+
+@case("bytemodel", "merely-tying-the-hand-engineered-model-is-rejected", "fail")
+def _(root):
+    return _byte(root, _bmut(feature_model_top1=0.19))
+
+
+@case("bytemodel", "null-control-above-chance-catches-a-memorising-network", "fail")
+def _(root):
+    return _byte(root, _bmut(byte_model_shuffled_top1=0.0585))
+
+
+@case("bytemodel", "non-grouped-split-is-rejected-however-good-the-numbers", "fail")
+def _(root):
+    return _byte(root, _bmut(split_is_grouped_by_source=False, byte_model_top1=0.95))
+
+
+@case("bytemodel", "an-unmatched-rung-voids-the-comparison", "fail")
+def _(root):
+    # Training on more rows than the feature model saw would make "beats hand" meaningless.
+    return _byte(root, _bmut(n_train=500000))
+
+
+@case("bytemodel", "a-missing-field-reads-as-failure-not-as-a-pass", "fail")
+def _(root):
+    a = dict(GOOD_BYTE); del a["feature_model_top1"]
+    return _byte(root, a)
+
+
+@case("bytemodel", "absent-artifact-emits-no-verdict", "fail")
+def _(root):
+    shutil.copy(os.path.join(REPO, "tools", "readers", "byte_model_verdict.py"),
+                os.path.join(root, "tools", "readers", "byte_model_verdict.py"))
+    return run([PY, "tools/readers/byte_model_verdict.py"], root)
+
+
+@case("bytemodel", "a-negative-is-reported-as-STRENGTHENING-L4-not-as-inconclusive", "fail")
+def _(root):
+    rc, out = _byte(root, _bmut(byte_model_top1=0.10))
+    if rc != 0:
+        v = json.load(open(os.path.join(root, "artifacts", "pivot", "byte_model_verdict.json")))
+        if "strengthens" not in v.get("meaning", ""):
+            return 0, out + " !! a negative did not state that it strengthens L4"
+    return rc, out
+
+
 def main() -> int:
     results = []
     for c in CASES:

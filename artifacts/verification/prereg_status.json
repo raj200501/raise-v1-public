@@ -175,10 +175,32 @@
       "reader_sha256": "abe207e424a6076f6845ab33bf98bfde5dc74ffe82be9b57a0420b09c31e580e",
       "seq": 8,
       "slug": "c1-falsifier-search"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "2a627a2aae7c594df205b67d5b9ba14544e81c3c111dcdde0caa21d74a303ea4",
+          "round": 6409171
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "3C91B6E5533E8014794294D6200F4E0C1A67C0BB37F0DCA4ACFE35EF5678DB83547D477C2CFE8ABFF46E80C4B194CDF2E0730CC05A7BE8C66E19B0A9A8BD5096",
+          "pulse": 1918147,
+          "time_stamp": "2026-08-26T01:02:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-26T01:02:58Z",
+      "hash": "bdbc5953badcd5d68af6863b2b8b9523cd33073f0828e99ef304462e45e7010c",
+      "id": "0009",
+      "prev_hash": "5629a5d4542a25cf892fd5227c9d5ace9730724290b2f032a5a105a503d07a09",
+      "reader": "tools/readers/byte_model_verdict.py",
+      "reader_sha256": "205e83f4d756066d9f5ecbb12ddcb2cff240000e875be422ee6118b60b80b9de",
+      "seq": 9,
+      "slug": "byte-sequence-representation"
     }
   ],
-  "entries": 8,
-  "head": "5629a5d4542a25cf892fd5227c9d5ace9730724290b2f032a5a105a503d07a09",
+  "entries": 9,
+  "head": "bdbc5953badcd5d68af6863b2b8b9523cd33073f0828e99ef304462e45e7010c",
   "problems": 0,
   "schema": "raise-v1/prereg_status/1",
   "verified": true

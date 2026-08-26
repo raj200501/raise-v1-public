@@ -2,12 +2,12 @@
   "claims": [
     {
       "artifact": "artifacts/verification/mutation_report.json",
-      "claim": "Every gate in this repository is shown capable of failing: 110 deliberate mutations across 11 gates, 110 detected, 0 survived.",
+      "claim": "Every gate in this repository is shown capable of failing: 120 deliberate mutations across 12 gates, 120 detected, 0 survived.",
       "class": "primary-verifiable",
       "id": "mutations-detected",
       "json_path": "$.detected",
       "reverify": "python3 tests/mutation_test.py",
-      "value": 110
+      "value": 120
     },
     {
       "artifact": "artifacts/verification/mutation_report.json",
@@ -571,6 +571,15 @@
       "class": "neither",
       "id": "conjecture-c2-possession",
       "why_not_verifiable": "Argument, not measurement. Filed in the weakest class with C1 and its refinement. VERDICT.md caps this deliberately: the next round that matters is a MEASUREMENT breaking one of the three tensions, not a fourth conjecture explaining why they hold."
+    },
+    {
+      "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "The byte-representation gate of preregistration 0009 is shown capable of failing by 10 deliberate mutations, all detected - including one asserting that clearing the A2 margin while LOSING to the model it replaces is rejected, and one asserting that a negative is reported as strengthening L4 rather than as inconclusive.",
+      "class": "primary-verifiable",
+      "id": "bytemodel-gate-mutations",
+      "json_path": "$.by_gate.bytemodel.total",
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 10
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

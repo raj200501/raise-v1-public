@@ -167,7 +167,7 @@ reported, and neither is quoted as the other.
 
 The verification-coverage map is machine-checked and prints its weakest class first, deliberately.
 
-**13 of 66 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
+**13 of 67 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
 including us. Eight are measurements made by subagents inside scratch directories that no longer
 exist, and **that includes measurements the conclusions rest on.** The ninth is worse than
 unverified: it is a figure we published and then failed to reproduce ourselves.
@@ -189,7 +189,7 @@ manufacturing a discrepancy against a subagent that turned out to be right.
 git clone <repo> && cd raise-v1
 python3 tools/preflight.py                        # interpreter + dependency floors, cause and fix
 python3 tools/prereg.py verify                    # chain order, sealed fields, reader hashes
-python3 tests/mutation_test.py                    # 110 deliberate mutations, 110 detected, 0 survived
+python3 tests/mutation_test.py                    # 120 deliberate mutations, 120 detected, 0 survived
 python3 tools/coverage.py                         # coverage map, weakest class first
 python3 tools/claimcheck.py outbound VERDICT.md   # every number traces to a banked artifact
 python3 tools/freshness.py                        # every live number equals its CURRENT artifact value
