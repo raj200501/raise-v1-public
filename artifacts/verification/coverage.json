@@ -591,12 +591,22 @@
       "value": 0.0849
     },
     {
-      "artifact": "artifacts/pivot/engineering_log.json",
-      "claim": "The 0009 negative carries a stated confound against itself: the shuffled-label loss moves 0.0006 across ten epochs, so the architecture cannot memorise 100000 random labels. That is a clean null control and simultaneously evidence the model may be too small, so part of 'it failed' is 'it was small'.",
-      "class": "arithmetic-verifiable",
+      "artifact": "artifacts/pivot/memorisation_probe.json",
+      "claim": "RETRACTED READING, kept for the record: 0009 read its null control's 0.0006 loss movement as evidence the model was too small. A probe shows the cause is the global average pool, which averages away per-example identity - a flatten head at identical convolutional capacity memorises 5000 shuffled labels to 0.364 train accuracy where the pooled head reaches 0.0486. Filed in CORRECTIONS.md.",
+      "class": "primary-verifiable",
       "id": "byte-model-capacity-confound",
-      "json_path": "$.byte_model_0009_training_trace.null_loss_total_movement",
-      "value": 0.0006
+      "json_path": "$.arms.flatten.final_train_acc",
+      "reverify": "python3 tools/pivot/memorisation_probe.py",
+      "value": 0.364
+    },
+    {
+      "artifact": "artifacts/pivot/memorisation_probe.json",
+      "claim": "A null control the model cannot fail carries no information. With a global average pool the network reaches only 0.0486 train accuracy on 5000 shuffled labels after 30 epochs, against 0.0385 chance - so 0009's clean null control was guaranteed by architecture rather than earned. This is the mutation-testing argument, which this repository already made about gates, applied to controls.",
+      "class": "primary-verifiable",
+      "id": "null-control-must-be-failable",
+      "json_path": "$.arms.gap.final_train_acc",
+      "reverify": "python3 tools/pivot/memorisation_probe.py",
+      "value": 0.0486
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

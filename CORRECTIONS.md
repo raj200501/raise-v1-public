@@ -19,6 +19,51 @@ Format:
 
 ---
 
+## 2026-08-26 — Published a reading of our own null control that does not follow, and it understated our own result
+
+**What was published.** The 0009 write-up, in `VERDICT.md` and as a coverage claim, read the null
+control this way:
+
+> The shuffled-label loss never moves from chance at all — **0.0006** across ten epochs. That is a
+> clean null control, and it simultaneously says this architecture cannot memorise 100000 random
+> labels. A model with no capacity to overfit may simply be too small, so part of "it failed" is
+> "it was small".
+
+**Why it does not follow.** A probe holding everything fixed except the final pooling layer:
+
+| head | train accuracy on 5000 **shuffled** labels, 30 epochs |
+|---|---:|
+| global average pool — what 0009 used | 0.0486, against 0.0385 chance |
+| flatten — position preserved | **0.364**, and still climbing steeply from 0.056 at epoch 20 |
+
+Convolutional capacity is identical in both arms. The network could not memorise because a global
+average pool **averages away per-example identity** — two fragments with the same local statistics
+become the same vector, at any parameter count. It was not a shortage of capacity, and "it was
+small" is not a supported reading of that number.
+
+**Size.** One inferential step, in a caveat rather than a headline. But it is the caveat attached to
+a *negative result*, and it is the sentence a reader would use to decide how much the negative is
+worth — so it is load-bearing in the way caveats often are.
+
+**Direction, and why it is worth naming.** This error ran **against us**: it manufactured a
+weakness in our own finding that the evidence did not support, making the 0009 negative sound
+flimsier than it was. Nearly every other entry in this ledger corrects an error that flattered us.
+An unforced hedge is a smaller sin than an unforced boast, but it is the same failure — a statement
+that the measurement did not license — and filing only the flattering ones would make this ledger a
+performance rather than a record.
+
+**What replaces it.** A narrower and better-supported caveat: 0009 tested one architecture whose
+final pooling is a strong inductive bias, and whether that bias hurts the *task* is untested. Local
+byte order may be exactly the right signal and position may be irrelevant, in which case the pool is
+sensible and the negative stands cleanly.
+
+**The generalisable lesson, which this repository should have reached on its own.** A null control
+that the model **cannot fail** carries no information. `tests/mutation_test.py` exists because a gate
+that cannot fail is decoration — and a control that cannot fail is decoration for exactly the same
+reason. That argument was already written down here, applied to gates, and nobody applied it to
+controls. Preregistration 0010 therefore adds a clause requiring a model to *demonstrate* it can
+memorise shuffled labels before its null control is credited.
+
 ## 2026-08-25 — Broke CI with a stale mutation count for the THIRD time, after building the gate that catches it
 
 **What happened.** I added 15 mutation tests for preregistration 0007's gate, took the suite from

@@ -311,7 +311,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **13 of 69 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **13 of 70 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -338,8 +338,8 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 | Class | Count | Meaning |
 |---|---:|---|
 | `neither` | **13** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures. |
-| `arithmetic-verifiable` | 12 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 44 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `arithmetic-verifiable` | 11 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
+| `primary-verifiable` | 46 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -551,14 +551,23 @@ against a chance cross-entropy of ln(26) = **3.2581**, and flattens: the last fi
 **0.0145** in total, under 0.005 each. This is a model that reached a poor solution, not one
 truncated mid-descent.
 
-**But the null control is also evidence of limited capacity, and that cuts against the finding.**
-The shuffled-label loss never moves from chance at all — **0.0006** across ten epochs. That is a
-clean null control, and it simultaneously says this architecture cannot memorise 100000 random
-labels. A model with no capacity to overfit may simply be too small, so part of "it failed" is "it
-was small". The preregistration already fixed the scope — one architecture, one size, one budget —
-and this is the concrete form that limit takes. **A negative here does not prove that no learned
-representation works at 1024.** It proves this one does not, and that the first thing anyone would
-reach for does not.
+**The null control is clean — and reading it as evidence of limited capacity was wrong.** The
+shuffled-label loss never moves from chance at all, **0.0006** across ten epochs. This document
+first read that as "the model may be too small". It does not follow, and the retraction is in
+`CORRECTIONS.md`. A probe holding everything fixed except the final pooling layer reaches
+**0.364** train accuracy on 5000 shuffled labels with a flatten head, against **0.0486** with the
+global average pool 0009 used, at identical convolutional capacity. The network could not memorise
+because average pooling **averages away per-example identity**, not because it lacked capacity.
+
+**The lesson generalises, and this repository should have reached it unaided.** A null control the
+model *cannot fail* carries no information — which is precisely the argument `tests/mutation_test.py`
+already makes about gates, applied to controls by nobody until a probe forced it.
+
+**What survives as the honest caveat** is narrower: 0009 tested one architecture whose final pooling
+is a strong inductive bias, and whether that bias hurts the *task* is untested. Local byte order may
+be exactly the right signal and position irrelevant, in which case the pool is sensible and the
+negative stands cleanly. **A negative here does not prove that no learned representation works at
+1024.** It proves this one does not, and that the first thing anyone would reach for does not.
 
 ### And it is not localised, so it is not cheaply fixable
 
