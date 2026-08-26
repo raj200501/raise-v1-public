@@ -2,12 +2,12 @@
   "claims": [
     {
       "artifact": "artifacts/verification/mutation_report.json",
-      "claim": "Every gate in this repository is shown capable of failing: 120 deliberate mutations across 12 gates, 120 detected, 0 survived.",
+      "claim": "Every gate in this repository is shown capable of failing: 132 deliberate mutations across 13 gates, 132 detected, 0 survived.",
       "class": "primary-verifiable",
       "id": "mutations-detected",
       "json_path": "$.detected",
       "reverify": "python3 tests/mutation_test.py",
-      "value": 120
+      "value": 132
     },
     {
       "artifact": "artifacts/verification/mutation_report.json",
@@ -607,6 +607,15 @@
       "json_path": "$.arms.gap.final_train_acc",
       "reverify": "python3 tools/pivot/memorisation_probe.py",
       "value": 0.0486
+    },
+    {
+      "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "The position-preserving-head gate of preregistration 0010 is shown capable of failing by 12 deliberate mutations, all detected - including one rejecting a null control that is clean but UNFAILABLE, and one asserting such a run is named inconclusive rather than counted as a negative.",
+      "class": "primary-verifiable",
+      "id": "byteflat-gate-mutations",
+      "json_path": "$.by_gate.byteflat.total",
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 12
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

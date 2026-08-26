@@ -58,6 +58,8 @@ def main() -> int:
     ap.add_argument("--threads", type=int, default=4)
     ap.add_argument("--cache", default=os.path.join(REPO, "data", "pivot", "raw_c1024.npz"))
     ap.add_argument("--src", default=os.path.join(REPO, "data", "pivot", "src"))
+    ap.add_argument("--head", default="gap", choices=["gap", "flatten"],
+                    help="gap reproduces 0009; flatten preserves position (0010)")
     ap.add_argument("--out", default=os.path.join(REPO, "artifacts", "pivot", "byte_model.json"))
     args = ap.parse_args()
 
@@ -126,19 +128,25 @@ def main() -> int:
     torch.manual_seed(args.seed); torch.set_num_threads(args.threads)
 
     class ByteCNN(nn.Module):
-        def __init__(self, n_classes=N_CONFIGS, emb=16):
+        """Identical conv stack for both heads. ONLY the head differs, so any difference in the
+        result is attributable to it - which is the entire question 0010 asks."""
+        def __init__(self, n_classes=N_CONFIGS, emb=16, head="gap", seq=None):
             super().__init__()
+            self.head = head
             self.emb = nn.Embedding(256, emb)
             self.net = nn.Sequential(
                 nn.Conv1d(emb, 64, 9, padding=4), nn.ReLU(), nn.MaxPool1d(4),
                 nn.Conv1d(64, 96, 9, padding=4), nn.ReLU(), nn.MaxPool1d(4),
-                nn.Conv1d(96, 128, 9, padding=4), nn.ReLU(), nn.AdaptiveAvgPool1d(1))
-            self.fc = nn.Linear(128, n_classes)
+                nn.Conv1d(96, 128, 9, padding=4), nn.ReLU())
+            self.gap = nn.AdaptiveAvgPool1d(1)
+            self.fc = nn.Linear(128 if head == "gap" else 128 * (seq // 16), n_classes)
         def forward(self, x):
-            return self.fc(self.net(self.emb(x).transpose(1, 2)).squeeze(-1))
+            h = self.net(self.emb(x).transpose(1, 2))
+            h = self.gap(h).squeeze(-1) if self.head == "gap" else h.flatten(1)
+            return self.fc(h)
 
     def train_eval(labels, tag):
-        m = ByteCNN(); opt = torch.optim.Adam(m.parameters(), 1e-3); lf = nn.CrossEntropyLoss()
+        m = ByteCNN(head=args.head, seq=Xtr.shape[1]); opt = torch.optim.Adam(m.parameters(), 1e-3); lf = nn.CrossEntropyLoss()
         yt = torch.from_numpy(labels)
         n = len(labels)
         for ep in range(args.epochs):
@@ -156,19 +164,55 @@ def main() -> int:
             for i in range(0, len(ye), 1024):
                 xb = torch.from_numpy(Xe[i:i + 1024].astype(np.int64))
                 correct += int((m(xb).argmax(1).numpy() == ye[i:i + 1024]).sum())
-        return round(correct / len(ye), 4), sum(p.numel() for p in m.parameters())
+            tr_corr = 0
+            for i in range(0, n, 1024):
+                xb = torch.from_numpy(Xtr[i:i + 1024].astype(np.int64))
+                tr_corr += int((m(xb).argmax(1).numpy() == labels[i:i + 1024]).sum())
+        # TRAIN accuracy is returned because it is the failability half of the null control: a
+        # control the model cannot fail carries no information (CORRECTIONS.md, 2026-08-26).
+        return (round(correct / len(ye), 4), sum(p.numel() for p in m.parameters()),
+                round(tr_corr / n, 4))
 
     print(f"[4/5] byte model, {args.epochs} epochs", flush=True)
-    top1, nparams = train_eval(ytr, "real")
+    top1, nparams, top1_train = train_eval(ytr, "real")
     print(f"      byte model top-1 {top1:.4f}", flush=True)
 
     print("[5/5] null control: labels shuffled, identical training", flush=True)
     y_sh = ytr.copy(); rng.shuffle(y_sh)
-    null1, _ = train_eval(y_sh, "null")
-    print(f"      shuffled-label top-1 {null1:.4f}", flush=True)
+    null1, _, null_train = train_eval(y_sh, "null")
+    print(f"      shuffled-label eval {null1:.4f} | TRAIN {null_train:.4f} "
+          f"(the control is informative only if this is high)", flush=True)
 
     ref = json.load(open(os.path.join(REPO, "artifacts", "pivot", "carve_generalisation.json")))
     feat = next((r["accuracy"] for r in ref["rungs"] if r["n_units"] == args.rung), None)
+    if args.head == "flatten":
+        pooled = json.load(open(os.path.join(REPO, "artifacts", "pivot", "byte_model.json")))
+        flat = {"schema": "raise-v1/byte_model_flat/1",
+                "preregistration": "0010-byte-model-position-preserving-head",
+                "carve_bytes": args.carve, "matched_rung": args.rung,
+                "n_train": int(len(ytr)), "n_eval": int(len(ye)), "n_classes": N_CONFIGS,
+                "chance_accuracy": round(1.0 / N_CONFIGS, 6),
+                "split_is_grouped_by_source": True, "eval_group_fingerprint": fp,
+                "eval_group_fingerprint_matches_0007": True,
+                "flat_model_top1": top1, "flat_model_train_top1": top1_train,
+                "pooled_model_top1": pooled["byte_model_top1"],
+                "feature_model_top1": feat,
+                "null_train_top1": null_train, "null_eval_top1": null1,
+                "trivial_baselines_same_rows": baselines,
+                "best_trivial_baseline": frozen[fname], "best_trivial_baseline_name": fname,
+                "model": "same conv stack as 0009; flatten head instead of global average pool",
+                "model_params": int(nparams), "epochs": args.epochs, "seed": args.seed,
+                "establishes_a_buyer": False}
+        fo = os.path.join(REPO, "artifacts", "pivot", "byte_model_flat.json")
+        with open(fo, "w", encoding="utf-8") as fh:
+            json.dump(flat, fh, indent=2, sort_keys=True); fh.write("\n")
+        print(f"\nflat {top1} | pooled {pooled['byte_model_top1']} | features {feat} | "
+              f"best trivial {frozen[fname]}")
+        print(f"null control: eval {null1} (must be at chance), TRAIN {null_train} "
+              f"(must be high or the control means nothing)")
+        print(f"wrote {os.path.relpath(fo, REPO)}")
+        return 0
+
     out = {"schema": "raise-v1/byte_model/1", "preregistration": "0009-byte-sequence-representation",
            "carve_bytes": args.carve, "matched_rung": args.rung,
            "n_train": int(len(ytr)), "n_eval": int(len(ye)), "n_classes": N_CONFIGS,

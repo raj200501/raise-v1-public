@@ -4,6 +4,10 @@
       "detected": 6,
       "total": 6
     },
+    "byteflat": {
+      "detected": 12,
+      "total": 12
+    },
     "bytemodel": {
       "detected": 10,
       "total": 10
@@ -124,7 +128,7 @@
     },
     {
       "detected": true,
-      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=f4ebff04933a039c)",
+      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=b24728a5a235ebe2)",
       "exit_code": 0,
       "expected": "pass",
       "gate": "prereg",
@@ -169,7 +173,7 @@
     },
     {
       "detected": true,
-      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor c9da31b184030bb3 (chain order broken)",
+      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 3daa0f798e6b06b9 (chain order broken)",
       "exit_code": 1,
       "expected": "fail",
       "gate": "prereg",
@@ -196,7 +200,7 @@
     },
     {
       "detected": true,
-      "evidence": "/tmp/tmp2md0bk4z/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
+      "evidence": "/tmp/tmptp52s3dd/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
       "exit_code": 2,
       "expected": "fail",
       "gate": "prereg",
@@ -1129,10 +1133,118 @@
       "gate": "bytemodel",
       "mutation": "a-negative-is-reported-as-STRENGTHENING-L4-not-as-inconclusive",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_CLEARS failable=True meaning=0009's negative was an artifact of its head. Every place thi",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "byteflat",
+      "mutation": "control-a-head-change-that-works-is-recognised",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=False meaning=Inconclusive on the point 0010 exists to settle: the control",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "an-UNFAILABLE-null-control-is-rejected-however-clean-it-looks",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=False meaning=Inconclusive on the point 0010 exists to settle: the control",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "an-unfailable-control-is-named-INCONCLUSIVE-not-a-negative",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=True meaning=A STRONGER negative than 0009's: this model demonstrably CAN",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "a-failable-control-negative-is-named-STRONGER-than-0009",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=True meaning=A STRONGER negative than 0009's: this model demonstrably CAN",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "a-leaking-null-control-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=True meaning=A STRONGER negative than 0009's: this model demonstrably CAN",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "A2-margin-below-bar-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=True meaning=A STRONGER negative than 0009's: this model demonstrably CAN",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "tying-the-pooled-head-has-answered-nothing-and-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=True meaning=A STRONGER negative than 0009's: this model demonstrably CAN",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "losing-to-the-hand-engineered-model-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=True meaning=A STRONGER negative than 0009's: this model demonstrably CAN",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "an-unfingerprinted-evaluation-set-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=True meaning=A STRONGER negative than 0009's: this model demonstrably CAN",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "an-unmatched-rung-voids-the-comparison",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=False meaning=Inconclusive on the point 0010 exists to settle: the control",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "a-missing-field-reads-as-failure-not-as-a-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
     }
   ],
-  "detected": 120,
+  "detected": 132,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 120
+  "total_mutations": 132
 }

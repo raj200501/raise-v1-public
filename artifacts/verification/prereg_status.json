@@ -197,10 +197,32 @@
       "reader_sha256": "205e83f4d756066d9f5ecbb12ddcb2cff240000e875be422ee6118b60b80b9de",
       "seq": 9,
       "slug": "byte-sequence-representation"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "80c0e6519f2a5c570e5b970a7766e19ff1155dd5be34a4351ed136a023dc2a76",
+          "round": 6409400
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "625E56625B44AA2BF893D92693EEE7286805509A52C0BBE5533EA862E3010EFB0448A3EA9A12340146956B4ADCC274BC39EE85ECEEBB55308D9FD90F06599946",
+          "pulse": 1918261,
+          "time_stamp": "2026-08-26T02:56:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-26T02:57:10Z",
+      "hash": "83707ff010a299d4217cc5bc7e11445992f3ded29e2c1dc1d3e93d464e21b6df",
+      "id": "0010",
+      "prev_hash": "bdbc5953badcd5d68af6863b2b8b9523cd33073f0828e99ef304462e45e7010c",
+      "reader": "tools/readers/byte_model_flat_verdict.py",
+      "reader_sha256": "d3b58c3f7d1d415c0537adaea4a1f523c5dd0ce241701fe6f984f22d905216ca",
+      "seq": 10,
+      "slug": "byte-model-position-preserving-head"
     }
   ],
-  "entries": 9,
-  "head": "bdbc5953badcd5d68af6863b2b8b9523cd33073f0828e99ef304462e45e7010c",
+  "entries": 10,
+  "head": "83707ff010a299d4217cc5bc7e11445992f3ded29e2c1dc1d3e93d464e21b6df",
   "problems": 0,
   "schema": "raise-v1/prereg_status/1",
   "verified": true

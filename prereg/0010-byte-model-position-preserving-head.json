@@ -37,7 +37,7 @@
       "threshold": 0
     }
   },
-  "frozen": false,
+  "frozen": true,
   "id": "0010",
   "opened_in_response_to": "0009 returned BYTE_MODEL_FAILS and published a caveat that its null control's cleanliness might mean the model was too small. CORRECTIONS.md retracts that: a probe holding everything fixed except the final pooling shows a flatten head memorises 5000 shuffled labels to 0.364 train accuracy where the pooled head reaches 0.0486 against 0.0385 chance, at identical convolutional capacity. The pooling averages away per-example identity. That leaves exactly one real question open - whether the pooling hurt the TASK - and this answers it by changing ONLY the head.",
   "reader": "tools/readers/byte_model_flat_verdict.py",
@@ -87,5 +87,23 @@
     "A missing field reads as failure. Absence is never a pass.",
     "This cannot revise 0003, 0006, 0007 or 0009."
   ],
-  "title": "Was 0009's negative an artifact of its pooling? The same byte model with a position-preserving head, and a null control that must prove it can fail."
+  "title": "Was 0009's negative an artifact of its pooling? The same byte model with a position-preserving head, and a null control that must prove it can fail.",
+  "reader_sha256": "d3b58c3f7d1d415c0537adaea4a1f523c5dd0ce241701fe6f984f22d905216ca",
+  "frozen_utc": "2026-08-26T02:57:10Z",
+  "git_commit": "4857d7739a1574d3b6181852842fad213fde6d34",
+  "git_dirty_at_freeze": false,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1918261,
+      "time_stamp": "2026-08-26T02:56:00.000Z",
+      "output_value": "625E56625B44AA2BF893D92693EEE7286805509A52C0BBE5533EA862E3010EFB0448A3EA9A12340146956B4ADCC274BC39EE85ECEEBB55308D9FD90F06599946"
+    },
+    "drand": {
+      "round": 6409400,
+      "randomness": "80c0e6519f2a5c570e5b970a7766e19ff1155dd5be34a4351ed136a023dc2a76"
+    }
+  },
+  "chain_hash": "83707ff010a299d4217cc5bc7e11445992f3ded29e2c1dc1d3e93d464e21b6df",
+  "chain_prev_hash": "bdbc5953badcd5d68af6863b2b8b9523cd33073f0828e99ef304462e45e7010c"
 }

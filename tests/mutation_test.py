@@ -1220,6 +1220,111 @@ def _(root):
     return rc, out
 
 
+# ---------------------------------------------------------------- byteflat gate (prereg 0010)
+#
+# The gate that exists because a null control the model CANNOT FAIL carries no information. That is
+# the mutation-testing argument applied to controls instead of gates, and the clause enforcing it is
+# the reason this reader exists rather than a re-run of 0009's.
+
+GOOD_FLAT = {
+    "carve_bytes": 1024, "matched_rung": 100000, "n_train": 100000, "n_eval": 130000,
+    "flat_model_top1": 0.21, "pooled_model_top1": 0.0849, "feature_model_top1": 0.1165,
+    "best_trivial_baseline": 0.0943, "best_trivial_baseline_name": "logistic",
+    "null_train_top1": 0.62, "null_eval_top1": 0.0389, "chance_accuracy": 0.038462,
+    "split_is_grouped_by_source": True, "eval_group_fingerprint_matches_0007": True,
+    "model_params": 396000, "epochs": 10,
+}
+
+
+def _flat(root, art=GOOD_FLAT):
+    os.makedirs(os.path.join(root, "artifacts", "pivot"), exist_ok=True)
+    json.dump(art, open(os.path.join(root, "artifacts", "pivot", "byte_model_flat.json"), "w"))
+    shutil.copy(os.path.join(REPO, "tools", "readers", "byte_model_flat_verdict.py"),
+                os.path.join(root, "tools", "readers", "byte_model_flat_verdict.py"))
+    rc, out = run([PY, "tools/readers/byte_model_flat_verdict.py"], root)
+    if rc != 0:
+        return rc, out
+    v = json.load(open(os.path.join(root, "artifacts", "pivot",
+                                    "byte_model_flat_verdict.json")))
+    return (0 if v["verdict"] == "BYTE_FLAT_CLEARS" else 1), \
+        f"verdict={v['verdict']} failable={v['null_control_was_failable']} meaning={v['meaning'][:60]}"
+
+
+def _fmut(**kw):
+    a = dict(GOOD_FLAT); a.update(kw); return a
+
+
+@case("byteflat", "control-a-head-change-that-works-is-recognised", "pass")
+def _(root):
+    return _flat(root)
+
+
+@case("byteflat", "an-UNFAILABLE-null-control-is-rejected-however-clean-it-looks", "fail")
+def _(root):
+    # The whole point. Evaluation control at chance, everything else passing, but the model cannot
+    # fit shuffled labels - so the clean control was guaranteed by architecture and means nothing.
+    return _flat(root, _fmut(null_train_top1=0.05))
+
+
+@case("byteflat", "an-unfailable-control-is-named-INCONCLUSIVE-not-a-negative", "fail")
+def _(root):
+    rc, out = _flat(root, _fmut(null_train_top1=0.05))
+    if rc != 0 and "Inconclusive" not in out:
+        return 0, out + " !! an unfailable control was reported as a negative rather than as inconclusive"
+    return rc, out
+
+
+@case("byteflat", "a-failable-control-negative-is-named-STRONGER-than-0009", "fail")
+def _(root):
+    rc, out = _flat(root, _fmut(flat_model_top1=0.09))
+    if rc != 0 and "STRONGER" not in out:
+        return 0, out + " !! a negative with a failable control was not named stronger than 0009"
+    return rc, out
+
+
+@case("byteflat", "a-leaking-null-control-is-rejected", "fail")
+def _(root):
+    return _flat(root, _fmut(null_eval_top1=0.0585))
+
+
+@case("byteflat", "A2-margin-below-bar-is-rejected", "fail")
+def _(root):
+    return _flat(root, _fmut(best_trivial_baseline=0.17))
+
+
+@case("byteflat", "tying-the-pooled-head-has-answered-nothing-and-is-rejected", "fail")
+def _(root):
+    return _flat(root, _fmut(pooled_model_top1=0.21))
+
+
+@case("byteflat", "losing-to-the-hand-engineered-model-is-rejected", "fail")
+def _(root):
+    return _flat(root, _fmut(feature_model_top1=0.25))
+
+
+@case("byteflat", "an-unfingerprinted-evaluation-set-is-rejected", "fail")
+def _(root):
+    return _flat(root, _fmut(eval_group_fingerprint_matches_0007=False))
+
+
+@case("byteflat", "an-unmatched-rung-voids-the-comparison", "fail")
+def _(root):
+    return _flat(root, _fmut(n_train=500000))
+
+
+@case("byteflat", "a-missing-field-reads-as-failure-not-as-a-pass", "fail")
+def _(root):
+    a = dict(GOOD_FLAT); del a["null_train_top1"]
+    return _flat(root, a)
+
+
+@case("byteflat", "absent-artifact-emits-no-verdict", "fail")
+def _(root):
+    shutil.copy(os.path.join(REPO, "tools", "readers", "byte_model_flat_verdict.py"),
+                os.path.join(root, "tools", "readers", "byte_model_flat_verdict.py"))
+    return run([PY, "tools/readers/byte_model_flat_verdict.py"], root)
+
+
 def main() -> int:
     results = []
     for c in CASES:
