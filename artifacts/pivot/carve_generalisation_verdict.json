@@ -19,7 +19,7 @@
     "within_best_trivial_baseline_name": "logistic",
     "within_shuffled_label_accuracy": 0.0389,
     "within_slope": 0.020449528758347532,
-    "within_slope_ci95_low": 0.01975813023327274,
+    "within_slope_ci95_low": 0.019721,
     "within_split_is_grouped_by_source": true,
     "within_top1": 0.1355
   },

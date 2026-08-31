@@ -37,10 +37,10 @@
     "cpu_cores": 4,
     "gpu": "none",
     "train_seconds_per_rung": [
-      9.1,
-      19.6,
-      68.6,
-      559.1
+      11.1,
+      24.5,
+      99.4,
+      751.5
     ]
   },
   "decades_spanned": 2.699,
@@ -57,25 +57,26 @@
     {
       "accuracy": 0.0791,
       "n_units": 1000,
-      "train_seconds": 9.1
+      "train_seconds": 11.1
     },
     {
       "accuracy": 0.0985,
       "n_units": 10000,
-      "train_seconds": 19.6
+      "train_seconds": 24.5
     },
     {
       "accuracy": 0.1165,
       "n_units": 100000,
-      "train_seconds": 68.6
+      "train_seconds": 99.4
     },
     {
       "accuracy": 0.1355,
       "n_units": 500000,
-      "train_seconds": 559.1
+      "train_seconds": 751.5
     }
   ],
   "schema": "raise-v1/carve_generalisation/1",
+  "slope_ci95_note": "CORRECTED (2026-08-31): cluster bootstrap over source chunks, the dependence unit the grouped split declares; fragment-level values retained above. See CORRECTIONS.md and audit_rederivations.json.",
   "transfer_top1": 0.0403,
   "within_best_baseline_expanded": 0.1256,
   "within_best_baseline_expanded_name": "logistic",
@@ -84,8 +85,10 @@
   "within_permutation_p": 0.041666666666666664,
   "within_shuffled_label_accuracy": 0.0389,
   "within_slope": 0.020449528758347532,
-  "within_slope_ci95_high": 0.021158474374308997,
-  "within_slope_ci95_low": 0.01975813023327274,
+  "within_slope_ci95_high": 0.021205,
+  "within_slope_ci95_high_fragment_level_superseded": 0.021158474374308997,
+  "within_slope_ci95_low": 0.019721,
+  "within_slope_ci95_low_fragment_level_superseded": 0.01975813023327274,
   "within_slope_r2": 0.9932503151599166,
   "within_split_is_grouped_by_source": true,
   "within_top1": 0.1355,

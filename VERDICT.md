@@ -322,7 +322,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **14 of 78 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 79 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -352,7 +352,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
 | `arithmetic-verifiable` | 11 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 53 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `primary-verifiable` | 54 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -714,8 +714,8 @@ luck than top-1, so this control matters more here, not less. The confident deci
 evaluation fragments, so the selective figure is not a small-sample artefact.
 
 **The shortlist improves roughly twice as fast as the single guess.** Top-5 slope **+0.0985**
-accuracy points per decade, 95% interval **[0.0977, 0.0993]**, against the top-1 slope of
-**+0.0491**. Both rise; the operationally useful one rises faster.
+accuracy points per decade, cluster-corrected 95% interval **[0.0971, 0.0999]**, against the top-1
+slope of **+0.0491**. Both rise; the operationally useful one rises faster.
 
 ### The two clauses written down in advance as the likely failures both cleared
 
@@ -742,11 +742,13 @@ disclosed at the time. First, as disclosed: the bootstrap does not sample seeds,
 classes. Second, found later by adversarial audit: it resampled evaluation **fragments** as
 independent when they are clusters of 26 sharing a plaintext, understating even the
 evaluation-sampling uncertainty by roughly 45% (0003's corrected interval:
-`artifacts/pivot/audit_rederivations.json`). The top-5 interval `[0.0977, 0.0993]` quoted here has
-the same defect and has **not** been re-derived — its per-example scores were never banked, so
-correcting it requires re-running the measurement. Until then it must be read as anti-conservative,
-and "pins the slope to about a thousandth" — which an earlier version of this section said — was
-false even on its own terms. Filed in `CORRECTIONS.md`.
+`artifacts/pivot/audit_rederivations.json`). The top-5 interval had the same defect; its
+measurement was re-run deterministically (every measured value reproduced bit-exactly), the
+per-example scores are now banked, and the cluster-corrected interval is **[0.0971, 0.0999]**
+against the superseded [0.0977, 0.0993]. The 1024-carve within-size interval was corrected the
+same way, to [0.0197, 0.0212]. All three verdict clauses are unaffected. "Pins the slope to about
+a thousandth" — which an earlier version of this section said — was false even on its own terms.
+Filed in `CORRECTIONS.md`.
 
 The top-5 permutation p is again **0.0417**, its arithmetic floor of 1/24 for four rungs, for the
 same reason as before.

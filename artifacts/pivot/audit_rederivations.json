@@ -12,6 +12,33 @@
     ],
     "unit": "source chunk (n=10000)"
   },
+  "cluster_bootstrap_0006_0007": {
+    "carve_within": {
+      "n_chunks": 5000,
+      "slope": 0.02045,
+      "slope_ci95": [
+        0.019721,
+        0.021205
+      ],
+      "superseded_fragment_level": [
+        0.019758,
+        null
+      ]
+    },
+    "note": "Derived from per-example scores banked by the deterministic re-runs (all measured values reproduced bit-exactly; only timing fields differ). Cluster unit = source chunk, matching the 0003 correction. Both verdict clauses (lower bound > 0) are unaffected.",
+    "topk_top5": {
+      "n_chunks": 10000,
+      "slope": 0.098537,
+      "slope_ci95": [
+        0.097121,
+        0.099902
+      ],
+      "superseded_fragment_level": [
+        0.097738,
+        0.099313
+      ]
+    }
+  },
   "gutenberg_excluded": {
     "n_chunks": 8731,
     "n_eval": 227006,

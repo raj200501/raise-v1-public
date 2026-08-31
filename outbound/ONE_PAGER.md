@@ -73,8 +73,9 @@ first-hand (`artifacts/pivot/g4_github_firsthand.json`).
 **The published intervals were over-tight, twice over.** They never sampled seeds, corpora, or
 model classes — that was disclosed. An audit then found the bootstrap also resampled eval
 *fragments* as independent when they are clusters of 26 sharing a plaintext: the top-1 interval,
-cluster-corrected, is **[0.0482, 0.0500]** (~45% wider; the verdict clause is unaffected), and the
-top-5 interval `[0.0977, 0.0993]` carries the same defect and awaits re-derivation. Both facts are
+cluster-corrected, is **[0.0482, 0.0500]** (~45% wider), and the top-5 and 1024-carve intervals
+have been re-derived the same way — **[0.0971, 0.0999]** and **[0.0197, 0.0212]**. All three
+verdict clauses are unaffected. Both facts are
 in the corrections ledger.
 
 **And the shape it has is bound to one window size.** Preregistration 0007 built a second corpus
@@ -175,7 +176,7 @@ reported, and neither is quoted as the other.
 
 The verification-coverage map is machine-checked and prints its weakest class first, deliberately.
 
-**14 of 78 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
+**14 of 79 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
 including us. Eight are measurements made by subagents inside scratch directories that no longer
 exist, and **that includes measurements the conclusions rest on.** The ninth is worse than
 unverified: it is a figure we published and then failed to reproduce ourselves.

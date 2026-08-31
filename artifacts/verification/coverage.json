@@ -677,6 +677,15 @@
       "json_path": "$.gutenberg_excluded_margins.frozen_set_best.margin",
       "reverify": "python3 tools/pivot/rescore_baselines.py",
       "value": 0.1073
+    },
+    {
+      "artifact": "artifacts/pivot/audit_rederivations.json",
+      "claim": "The 0006 top-5 and 0007 within-size intervals, re-derived at the cluster level after deterministic re-runs banked their per-example scores (every measured value reproduced bit-exactly), are [0.097121, 0.099902] and [0.019721, 0.021205]. All verdict clauses unaffected; no pending anti-conservative interval remains.",
+      "class": "primary-verifiable",
+      "id": "cluster-ci-0006-0007",
+      "json_path": "$.cluster_bootstrap_0006_0007.topk_top5.slope_ci95[0]",
+      "reverify": "python3 tools/readers/deflate_topk_verdict.py",
+      "value": 0.097121
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

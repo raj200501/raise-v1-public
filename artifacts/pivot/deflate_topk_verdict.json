@@ -18,8 +18,8 @@
     "top3_accuracy": 0.4497,
     "top5_accuracy": 0.5694,
     "top5_slope": 0.09853740775642854,
-    "top5_slope_ci95_high": 0.09931301117478637,
-    "top5_slope_ci95_low": 0.09773801505681605
+    "top5_slope_ci95_high": 0.099902,
+    "top5_slope_ci95_low": 0.097121
   },
   "schema": "raise-v1/deflate_topk_verdict/1",
   "shape": "BOTH HALVES USABLE",
