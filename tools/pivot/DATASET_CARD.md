@@ -60,7 +60,7 @@ rather than encoder identification.
 - **Incompressible content caps what is achievable.** Measured: base64 and packed-binary sources
   collapse to roughly 14 distinct streams out of 26, because with nothing to match, encoders
   converge on stored or near-minimal blocks. See `artifacts/pivot/channel_capacity.json`.
-- **One carve size.** Generalisation across carve sizes is not established.
+- **One carve size, and generalisation across carve sizes is now measured and REFUTED.** At a 1024-byte carve the model ties a dumb rule and a 4096-trained model falls to chance (`CARVE_FAILS`, preregistration 0007). Every number on this card is a 4096-byte-window number.
 - **No customer, user or partner.** None is claimed.
 
 ## Numbers
@@ -73,7 +73,7 @@ rather than encoder identification.
 | Distinct-stream rate (A1) | 22.27 of 26, collision rate 0.143 |
 | Null control (shuffled labels) | 0.0389 vs chance 0.038462 — passes (tolerance 0.02) |
 | Best trivial baseline | frozen set: logistic 0.1392; expanded set: depth16_tree 0.1812 |
-| Scaling slope, 95% interval | +0.0491 accuracy/decade, 95% CI [+0.0485, +0.0497] over 2.9031 decades |
+| Scaling slope, 95% interval | +0.0491 accuracy/decade, 95% CI [+0.0482, +0.0500] over 2.9031 decades |
 | Verdict from the frozen reader | **CURVE_ESTABLISHED** |
 | Top-1 / top-3 / top-5 at the top rung | 0.2395 / 0.4497 / 0.5694 |
 | Accuracy on the most-confident decile | 0.7922 (26000 fragments) |
