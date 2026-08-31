@@ -425,6 +425,16 @@ gutenberg than elsewhere, so the leaked family was *depressing* the headline, no
 corpora-disjointness clause — which *strengthens* the transfer finding there: the 4096-trained
 model had seen gutenberg-adjacent bytes and still collapsed to chance. Filed in `CORRECTIONS.md`.
 
+### Where the curve lives — the per-family decomposition
+
+Derived from the banked per-example scores with a cluster bootstrap per family
+(`artifacts/pivot/per_family_curves.json`): the headline slope is a **mixture**. Structured content
+carries the curve — csv **+0.0906**, log **+0.0909**, json **+0.0901**, code **+0.0690** per
+decade, with top-rung accuracies of 0.3888, 0.3756, 0.3581 and 0.2944 against 0.038462 chance —
+while the incompressible families sit near the byte-identity collision ceiling: binary **+0.0097**,
+mixed **+0.0028**. Every family's interval excludes zero, including the ones that make the task
+look hard, and all eight are reported either way.
+
 ### Both readings of the margin, at equal prominence
 
 `artifacts/pivot/prereg_interpretation.json` — recorded mid-run and anchored to drand round
