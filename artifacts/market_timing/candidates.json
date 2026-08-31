@@ -1,0 +1,112 @@
+{
+  "candidates": [
+    {
+      "asymmetry": "A stripped, optimised, LTO-linked binary does not declare which primitives it contains; the build knows exactly.",
+      "asymmetry_holds": true,
+      "buyer": "Every large enterprise and government agency under CNSA 2.0 and EO 14412 timelines. Genuinely enormous and genuinely mandated.",
+      "bytes_per_unit": 2048,
+      "manufacturable": true,
+      "manufacture_mechanism": "Compile binaries against known crypto libraries with known primitives and parameters; the label is the configuration used. Free and exact at unlimited scale.",
+      "market_event": "NIST finalised FIPS 203/204/205, the first post-quantum standards, creating a mandated inventory-and-migrate obligation. Reinforced by Executive Order 14412 'Securing the Nation Against Advanced Cryptographic Attacks' directing CISA and NIST to publish minimum CBOM elements within 270 days.",
+      "market_event_date": "2024-08-13",
+      "market_event_months_ago": 24,
+      "market_event_url": "https://en.wikipedia.org/wiki/Cryptographic_bill_of_materials",
+      "name": "Cryptographic inventory / CBOM from binaries (post-quantum migration)",
+      "open_dataset_at_1e6": null,
+      "post_event_efforts": [
+        "CREBench: Evaluating Large Language Models in Cryptographic Binary Reverse Engineering (arXiv 2604.03750, 2026) - a benchmark for the exact task",
+        "Identification of Cryptographic Algorithms Based on CNN (ACM conference proceedings, 2025)",
+        "USPTO 12229279 and USPTO 12153686, both 'Cryptography bill of materials (CBOM) generation from binary executables' - patents on precisely the proposed task",
+        "FoC published in ACM TOSEM (2025)",
+        "Commercial, funded and shipping: IBM Quantum Safe Explorer; SandboxAQ AQtive Guard, positioned explicitly as large-scale AI-powered discovery; Keyfactor Command Risk Intelligence, which acquired InfoSec Global in 2025 for CBOM-grade cryptographic inventory"
+      ],
+      "post_event_efforts_count": 5,
+      "prior_efforts": [
+        "Automated Identification of Cryptographic Primitives in Binary Programs (2012)",
+        "A Neural Network-Based Approach for Cryptographic Function Detection in Malware (2020)",
+        "FoC: Figure out the Cryptographic Functions in Stripped Binaries with LLMs (arXiv 2403.18403, March 2024 - five months BEFORE the market event, so non-disqualifying by the frozen rule)"
+      ],
+      "verdict_note": "FAILS on post-event efforts, decisively. Two patents, a benchmark, a conference paper and three funded commercial products all postdate the market event by less than 24 months."
+    },
+    {
+      "asymmetry": "The audio does not declare its synthesiser.",
+      "asymmetry_holds": true,
+      "buyer": "Banks, call centres, fraud vendors. Large and growing fast.",
+      "bytes_per_unit": 64000,
+      "manufacturable": true,
+      "manufacture_mechanism": "Synthesise speech with known TTS systems; the label is the system used.",
+      "market_event": "Voice-deepfake fraud becoming a named, funded enterprise threat category",
+      "market_event_date": "UNDATED - could not tie to a specific citable event",
+      "market_event_months_ago": null,
+      "market_event_url": "",
+      "name": "Synthetic speech source tracing (which TTS system generated this audio)",
+      "open_dataset_at_1e6": true,
+      "post_event_efforts": [
+        "MLAAD: 82 synthesis systems across 38 languages and 38 architectures",
+        "DiffSSD: ~200 hours, 70,000 synthetic and 24,226 real samples, 10 TTS systems",
+        "STOPA (arXiv 2505.19644, 2025)",
+        "Interspeech 2025 dedicated special session on source tracing",
+        "Multiple 2026 papers on open-set source tracing and attribution"
+      ],
+      "post_event_efforts_count": 5,
+      "prior_efforts": [
+        "Transformer-Based Speech Synthesizer Attribution in an Open Set Scenario (2022)"
+      ],
+      "verdict_note": "FAILS on both clauses. Open datasets exist at scale AND the field is dense."
+    },
+    {
+      "asymmetry": "Decoded pixels do not declare the encoder settings.",
+      "asymmetry_holds": true,
+      "buyer": "Streaming platforms, ad verification, content provenance. Large.",
+      "bytes_per_unit": 5000000,
+      "manufacturable": true,
+      "manufacture_mechanism": "Encode any video under known encoder/preset/CRF; the label is free and exact.",
+      "market_event": "UNDATED - streaming and ad-verification demand is continuous, not event-driven",
+      "market_event_date": "UNDATED",
+      "market_event_months_ago": null,
+      "market_event_url": "",
+      "name": "Video encoder and settings recovery from decoded video",
+      "open_dataset_at_1e6": null,
+      "post_event_efforts": [
+        "Multi-stage neural network reporting 98.88% accuracy for CRF prediction",
+        "Automatic Generation of H.264 Parameter Sets to Recover Video File Fragments (arXiv 2104.14522) - the carved-fragment version of the task, for video",
+        "LiteVPNet (arXiv 2510.12379)"
+      ],
+      "post_event_efforts_count": 3,
+      "prior_efforts": [
+        "Video double-compression and codec forensics literature"
+      ],
+      "verdict_note": "FAILS. Also fails G6: 5 MB per unit x 1e6 is 5e12 bytes against a 2e10 budget."
+    },
+    {
+      "asymmetry": "Published weights do not declare their ancestry, and the fine-tuner may actively hide it.",
+      "asymmetry_holds": true,
+      "buyer": "Model owners enforcing licences, regulators, platforms. Large and new.",
+      "bytes_per_unit": 4096,
+      "manufacturable": true,
+      "manufacture_mechanism": "Fine-tune known base models; the label is the base you started from.",
+      "market_event": "EU AI Act GPAI obligations applying, with documented-provenance enforcement for high-risk systems beginning August 2026",
+      "market_event_date": "2025-08-02",
+      "market_event_months_ago": 12,
+      "market_event_url": "https://arxiv.org/html/2602.00772",
+      "name": "LLM model provenance (which base model is this fine-tune derived from)",
+      "open_dataset_at_1e6": null,
+      "post_event_efforts": [
+        "Provable Model Provenance Set (arXiv 2602.00772), evaluated on 455 LLMs from Hugging Face",
+        "LineageMark (arXiv 2606.17123)",
+        "Intrinsic Fingerprint of LLMs (arXiv 2507.03014)",
+        "Model Genome: Fingerprinting Whether an LLM Was Trained From Scratch or Derived",
+        "Implicit Identity Technologies for LLMs (arXiv 2605.29245), a survey - the field is mature enough to have surveys"
+      ],
+      "post_event_efforts_count": 5,
+      "prior_efforts": [
+        "Model watermarking literature predating the AI Act"
+      ],
+      "verdict_note": "FAILS decisively. A field with a survey is not an opening."
+    }
+  ],
+  "governed_by": "prereg/0004-market-timing-search.json (frozen before any candidate was examined)",
+  "method": "First-hand web searches in session. No subagents. Four candidates, each with a dated market event, checked for post-event efforts and open datasets at scale.",
+  "schema": "raise-v1/market_timing_candidates/1",
+  "searched_utc": "2026-08-25T17:50:27Z"
+}

@@ -1,0 +1,12 @@
+== assembler FAMILY n=59865 k=20 groups=5914
+   random    ACC 0.7505  balACC 0.3870  | trivial(train-majority) 0.4876  | ntest=11973
+   grouped   ACC 0.5187  balACC 0.2176  | trivial(train-majority) 0.1432  | ntest=32729
+   temporal  ACC 0.6875  balACC 0.3014  | trivial(train-majority) 0.6138  | ntest=11973
+== full METHOD STRING n=53017 k=116 groups=4076
+   random    ACC 0.7117  balACC 0.2808  | trivial(train-majority) 0.5417  | ntest=10604
+   grouped   ACC 0.3892  balACC 0.1151  | trivial(train-majority) 0.1239  | ntest=6821
+   temporal  ACC 0.7630  balACC 0.0428  | trivial(train-majority) 0.7770  | ntest=10137
+== SPAdes VERSION only n=10363 k=47 groups=402
+   random    ACC 0.4856  balACC 0.3607  | trivial(train-majority) 0.1372  | ntest=2073
+   grouped   ACC 0.1025  balACC 0.0589  | trivial(train-majority) 0.0941  | ntest=1883
+   temporal  ACC 0.0320  balACC 0.0313  | trivial(train-majority) 0.0336  | ntest=1907

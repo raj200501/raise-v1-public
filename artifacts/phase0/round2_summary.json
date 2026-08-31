@@ -1,0 +1,17 @@
+{
+  "adversarial_reviews": 4,
+  "agent_errors": 0,
+  "agents_run": 12,
+  "candidates_generated": 37,
+  "g4_fail_skipped": 2,
+  "rejected_at_screen": 33,
+  "round": 2,
+  "round1_leftovers_attacked": 2,
+  "schema": "raise-v1/domain_search_summary/1",
+  "survivors_after_screen": 4,
+  "verdict_counts": {
+    "BACKUP": 0,
+    "REJECT": 4,
+    "SELECT": 0
+  }
+}

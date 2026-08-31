@@ -1,0 +1,109 @@
+{
+  "arms": [
+    "THE NULL CONTROL IS TWO NUMBERS. Train accuracy must be HIGH, proving the control had teeth; evaluation accuracy must be at chance, proving fitting noise does not generalise. Reporting only the second is what 0009 did and it is what CORRECTIONS.md retracts.",
+    "ONLY THE HEAD CHANGES, so any difference is attributable.",
+    "FINGERPRINTED EVALUATION SET, refused rather than assumed.",
+    "BEATS-POOLED IS A CLAUSE. A flatten head that ties the pooled one has answered nothing."
+  ],
+  "bar": {
+    "a2_margin": {
+      "direction": "higher_is_better",
+      "passes_if": "flat_model_top1 - best_trivial_baseline >= 0.05",
+      "threshold": 0.05
+    },
+    "beats_hand_engineered": {
+      "direction": "higher_is_better",
+      "passes_if": "flat_model_top1 > feature_model_top1 strictly",
+      "threshold": 0.0
+    },
+    "beats_pooled": {
+      "direction": "higher_is_better",
+      "passes_if": "flat_model_top1 > pooled_model_top1 strictly. If the head change does nothing, 0009's verdict simply stands and this round has added no information.",
+      "threshold": 0.0
+    },
+    "null_control_is_clean": {
+      "direction": "lower_is_better",
+      "passes_if": "null_eval_top1 <= chance_accuracy + 0.02",
+      "threshold": 0.02
+    },
+    "null_control_is_failable": {
+      "direction": "higher_is_better",
+      "passes_if": "null_train_top1 >= 0.30. THE CLAUSE THIS PREREGISTRATION EXISTS FOR. A null control the model cannot fail carries no information - the same argument tests/mutation_test.py makes about gates, which nobody in this repository had applied to controls until a probe forced it. 0009's control was guaranteed clean by architecture, which is worth nothing.",
+      "threshold": 0.3
+    },
+    "scope_matched": {
+      "direction": "lower_is_better",
+      "passes_if": "n_train == matched_rung, split_is_grouped_by_source is True, and eval_group_fingerprint_matches_0007 is True",
+      "threshold": 0
+    }
+  },
+  "frozen": true,
+  "id": "0010",
+  "opened_in_response_to": "0009 returned BYTE_MODEL_FAILS and published a caveat that its null control's cleanliness might mean the model was too small. CORRECTIONS.md retracts that: a probe holding everything fixed except the final pooling shows a flatten head memorises 5000 shuffled labels to 0.364 train accuracy where the pooled head reaches 0.0486 against 0.0385 chance, at identical convolutional capacity. The pooling averages away per-example identity. That leaves exactly one real question open - whether the pooling hurt the TASK - and this answers it by changing ONLY the head.",
+  "reader": "tools/readers/byte_model_flat_verdict.py",
+  "readings": [
+    {
+      "json_path": "$.verdict",
+      "name": "verdict",
+      "source_artifact": "artifacts/pivot/byte_model_flat_verdict.json",
+      "unit": "enum{BYTE_FLAT_CLEARS,BYTE_FLAT_FAILS}"
+    },
+    {
+      "json_path": "$.flat_model_top1",
+      "name": "flat_model_top1",
+      "source_artifact": "artifacts/pivot/byte_model_flat.json",
+      "unit": "fraction correct"
+    },
+    {
+      "json_path": "$.pooled_model_top1",
+      "name": "pooled_model_top1",
+      "source_artifact": "artifacts/pivot/byte_model_flat.json",
+      "unit": "fraction correct, 0009's model"
+    },
+    {
+      "json_path": "$.null_train_top1",
+      "name": "null_train_top1",
+      "source_artifact": "artifacts/pivot/byte_model_flat.json",
+      "unit": "fraction correct on shuffled TRAINING labels"
+    },
+    {
+      "json_path": "$.null_eval_top1",
+      "name": "null_eval_top1",
+      "source_artifact": "artifacts/pivot/byte_model_flat.json",
+      "unit": "fraction correct on evaluation under shuffled labels"
+    }
+  ],
+  "scope": {
+    "comparability": "The evaluation set must be verified identical to 0007's corpus B by eval-group fingerprint, and the run refuses otherwise. 0007's 0.1165 and 0009's 0.0849 are therefore direct comparisons.",
+    "one_line": "The 0009 model with its global average pool replaced by a flatten, everything else held fixed: same corpus, same 100000 rung, same seed, same grouped split, same convolution stack, same 10 epochs.",
+    "only_the_head_changes": "A win from any other difference would not answer the question asked, so nothing else is varied. The conv stack, optimiser, learning rate, batch size and epoch count are those 0009 used.",
+    "what_this_does_not_cover": "Two architectures now, still one family, one carve, one budget, one seed. A negative does not prove no learned representation works at 1024. It establishes no buyer."
+  },
+  "slug": "byte-model-position-preserving-head",
+  "stop_rules": [
+    "BYTE_FLAT_CLEARS means 0009's negative was an artifact of its head, and every place quoting 0009 must say so.",
+    "BYTE_FLAT_FAILS WITH A FAILABLE CONTROL is a strictly stronger negative than 0009's and must be reported as strengthening L4 further, not as a repeat.",
+    "BYTE_FLAT_FAILS with an UNFAILABLE control settles nothing and must be reported as inconclusive on the exact point this round exists for.",
+    "A missing field reads as failure. Absence is never a pass.",
+    "This cannot revise 0003, 0006, 0007 or 0009."
+  ],
+  "title": "Was 0009's negative an artifact of its pooling? The same byte model with a position-preserving head, and a null control that must prove it can fail.",
+  "reader_sha256": "d3b58c3f7d1d415c0537adaea4a1f523c5dd0ce241701fe6f984f22d905216ca",
+  "frozen_utc": "2026-08-26T02:57:10Z",
+  "git_commit": "4857d7739a1574d3b6181852842fad213fde6d34",
+  "git_dirty_at_freeze": false,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1918261,
+      "time_stamp": "2026-08-26T02:56:00.000Z",
+      "output_value": "625E56625B44AA2BF893D92693EEE7286805509A52C0BBE5533EA862E3010EFB0448A3EA9A12340146956B4ADCC274BC39EE85ECEEBB55308D9FD90F06599946"
+    },
+    "drand": {
+      "round": 6409400,
+      "randomness": "80c0e6519f2a5c570e5b970a7766e19ff1155dd5be34a4351ed136a023dc2a76"
+    }
+  },
+  "chain_hash": "83707ff010a299d4217cc5bc7e11445992f3ded29e2c1dc1d3e93d464e21b6df",
+  "chain_prev_hash": "bdbc5953badcd5d68af6863b2b8b9523cd33073f0828e99ef304462e45e7010c"
+}

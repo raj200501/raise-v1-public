@@ -1,0 +1,89 @@
+{
+  "id": "0002",
+  "slug": "phase0-round4-verdict",
+  "title": "Round 4: does a first-hand, measurement-only search of the class the round-3 finding named select a domain?",
+  "scope": {
+    "one_line": "ONE round. Candidates generated and gated first-hand in session, with no subagents and no workflow fan-out. Depth over breadth: a small number of candidates measured properly rather than a large number argued about.",
+    "corpus": "Public sources reachable from this container, with the licence fetched and recorded.",
+    "seed": "Rounds 1-3, banked at artifacts/phase0/round{1,2,3}_domain_search.json - 99 candidates, 8 adversarial reviews, 0 SELECT - plus the three laws L1/L2/L3 derived from them.",
+    "target_class": "The class the round-3 finding named and the earlier pool contained zero instances of: a HIGH-BANDWIDTH PHYSICAL RECORDING that is the CAUSAL CONSEQUENCE of a hidden variable, published in bulk for a reason unrelated to the label.",
+    "rungs": "At least 3 rungs spanning at least 1.5 orders of magnitude, for the F5 clause.",
+    "what_this_does_not_cover": "It does not cover Phase 1, Phase 2 or any scaling result beyond the mini-curve the F5 clause requires. It does not license a fifth round. It carries NO claim about breadth: one person working in one session cannot match the 99-candidate, ~200-search sweep of rounds 1-3, and a negative result here is therefore WEAKER evidence about the world than 0001's was, while being STRONGER evidence about whichever candidates it actually measures."
+  },
+  "bar": {
+    "domain_selected": {
+      "threshold": 1,
+      "direction": "higher_is_better",
+      "passes_if": "count of candidates satisfying ALL of: g1_verdict=='PASS' and licence_url recorded; g4_verdict=='PASS'; g2a_verified is True; a1_label_entropy_bits > 1.0 (measured); a2_margin_over_best_baseline >= 0.05 (measured); f5_slope_ci95_low > 0 (measured, >=3 rungs spanning >=1.5 decades); g6_bytes_per_unit*1e6 <= 20e9; measured_first_hand is True  >=  1"
+    },
+    "a2_margin": {
+      "threshold": 0.05,
+      "direction": "higher_is_better",
+      "passes_if": "learned score minus best trivial baseline >= 0.05, frozen here before any data exists"
+    },
+    "a1_entropy": {
+      "threshold": 1.0,
+      "direction": "higher_is_better",
+      "passes_if": "measured label entropy > 1.0 bits, so the ELF-base-address failure mode (0.1518 bits) cannot recur"
+    }
+  },
+  "readings": [
+    {
+      "name": "verdict",
+      "unit": "enum{DOMAIN_SELECTED,NO_VIABLE_DOMAIN_FOUND_ROUND4}",
+      "source_artifact": "artifacts/phase0/round4_verdict.json",
+      "json_path": "$.verdict"
+    },
+    {
+      "name": "n_qualifying",
+      "unit": "count of candidates",
+      "source_artifact": "artifacts/phase0/round4_verdict.json",
+      "json_path": "$.n_qualifying"
+    },
+    {
+      "name": "n_candidates_measured",
+      "unit": "count of candidates",
+      "source_artifact": "artifacts/phase0/round4_verdict.json",
+      "json_path": "$.n_candidates_measured"
+    }
+  ],
+  "arms": [
+    "The rival explanation, run as an arm and not a paragraph: for every candidate the DUMBEST non-learned baseline is BUILT AND MEASURED on the real data before any learned number is believed. Five candidates across rounds 1-3 died to exactly this and none of them expected to.",
+    "The free-decoder arm (law L3(i)): where the generator is a machine, re-run-and-compare is measured as a zero-training competitor. A candidate whose generator is deterministic must beat it.",
+    "The closed-form-inverse arm (law L2): where the generator is a transform, the analytic inverse is attempted before any model is trained."
+  ],
+  "stop_rules": [
+    "If the reader emits NO_VIABLE_DOMAIN_FOUND_ROUND4, Phase 0 stays terminated, the result is written to VERDICT.md alongside 0001's, and no fifth round is run under this preregistration.",
+    "If a candidate's dumb baseline is not MEASURED, that candidate does not qualify, however strong its other evidence. An estimate is not a measurement.",
+    "If the generator is deterministic and re-run-and-compare beats the learned model, the candidate is dead by law L3(i) regardless of every other clause.",
+    "If the reader exits non-zero, no verdict is reported and the failure is recorded. Absence never reads as success.",
+    "A candidate failing any single clause fails. There is no aggregate score and no discretion."
+  ],
+  "reader": "tools/readers/phase0_round4_verdict.py",
+  "frozen": true,
+  "opened_in_response_to": {
+    "prior_preregistration": "0001-phase0-terminal-verdict",
+    "prior_verdict": "NO_VIABLE_DOMAIN_FOUND",
+    "plainly": "This round was opened AFTER, and BECAUSE OF, a negative result. That is exactly the move that requires scrutiny, and it is recorded here rather than left to be discovered. It was authorised by the principal, not decided by the process that failed to clear its own bar.",
+    "how_the_bar_moved": "UP, not down. Rounds 1-3 admitted ARGUED evidence and their load-bearing measurements landed in the weakest verification class because subagents made them in scratch directories that no longer exist. This round admits ONLY measurements taken first-hand in session, shipped as runnable code and banked. Four of its seven clauses require a MEASURED value and reject an estimated one however confident the prose around it.",
+    "what_it_cannot_do": "It cannot overturn 0001. 0001 read the evidence of rounds 1-3 and that reading stands. A selection here is a NEW finding on NEW evidence, recorded alongside."
+  },
+  "reader_sha256": "74dbaa7a1bed8892a7d00bc028ac783c37d6b7212ec71f8200c4a5a4ecb585b5",
+  "frozen_utc": "2026-08-25T15:20:35Z",
+  "git_commit": "078f4231ae169d62293fdac381e6a994891f0d9b",
+  "git_dirty_at_freeze": true,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1917565,
+      "time_stamp": "2026-08-25T15:20:00.000Z",
+      "output_value": "9E4B8A86DACE48BAC5ED869DD268A90F2C824B6B5A328461F914869F627CCE74CA2A10FE8F919A141E2CDC7F9EA66BED8337BE6958B6F44210D656D240BF92D0"
+    },
+    "drand": {
+      "round": 6408007,
+      "randomness": "fd2a6ac1f510532cf478241981c324282a7843921998d701aaea0caef616c624"
+    }
+  },
+  "chain_hash": "1bbe94cbcf5134167496d905aeb4bdea6acef4053be299f32e00ac088a85c230",
+  "chain_prev_hash": "cfcc915c6ff65f9c5da0be8f8e70a27add4f75e5455d14c5cf5c58bd6f5ef0dc"
+}

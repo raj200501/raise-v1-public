@@ -1,0 +1,229 @@
+{
+  "chain": [
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "04b143fb1ea89fef7ac5848d7a5e41dfa2025c40d9f9e5c738154bbdafc3885c",
+          "round": 6406735
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "143F35E9774B3F42290B1846E61D127D1876AE446B22C18F7370BC73CD38A54945CB3C5029356FD3B681CFF880238692D55959DB60204EEABBFDD89E4A3EA422",
+          "pulse": 1916929,
+          "time_stamp": "2026-08-25T04:44:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-25T04:44:44Z",
+      "hash": "cfcc915c6ff65f9c5da0be8f8e70a27add4f75e5455d14c5cf5c58bd6f5ef0dc",
+      "id": "0001",
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "reader": "tools/readers/phase0_verdict.py",
+      "reader_sha256": "cd7eed828f7a95a24d39d10d5eccfb38d30fffb022231b9315c56d767bc772c7",
+      "seq": 1,
+      "slug": "phase0-terminal-verdict"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "fd2a6ac1f510532cf478241981c324282a7843921998d701aaea0caef616c624",
+          "round": 6408007
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "9E4B8A86DACE48BAC5ED869DD268A90F2C824B6B5A328461F914869F627CCE74CA2A10FE8F919A141E2CDC7F9EA66BED8337BE6958B6F44210D656D240BF92D0",
+          "pulse": 1917565,
+          "time_stamp": "2026-08-25T15:20:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-25T15:20:35Z",
+      "hash": "1bbe94cbcf5134167496d905aeb4bdea6acef4053be299f32e00ac088a85c230",
+      "id": "0002",
+      "prev_hash": "cfcc915c6ff65f9c5da0be8f8e70a27add4f75e5455d14c5cf5c58bd6f5ef0dc",
+      "reader": "tools/readers/phase0_round4_verdict.py",
+      "reader_sha256": "74dbaa7a1bed8892a7d00bc028ac783c37d6b7212ec71f8200c4a5a4ecb585b5",
+      "seq": 2,
+      "slug": "phase0-round4-verdict"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "57352d609c138d7ddbf8734d6deed465289eccb9876ac9bc853231cd3c29dee3",
+          "round": 6408061
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "DE9DA2502392BA31347746CCB3919B38F76FB19954839A01F18E9EC7A92863704F3FBDE52800F5CB891836E4D8EE85D4A836BAD48923F4034EEDCFD86F78E522",
+          "pulse": 1917592,
+          "time_stamp": "2026-08-25T15:47:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-25T15:47:33Z",
+      "hash": "684923ba30b11d805e6117c22b56c40445fdbda9ff63d94b922adc051681f637",
+      "id": "0003",
+      "prev_hash": "1bbe94cbcf5134167496d905aeb4bdea6acef4053be299f32e00ac088a85c230",
+      "reader": "tools/readers/pivot_deflate_curve.py",
+      "reader_sha256": "77384d4f958aa0dbd63c6165499367e820d2fbc1414f0ed39f1f7d82853586e5",
+      "seq": 3,
+      "slug": "pivot-deflate-curve"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "949e4400c8381d3037cfef7400d3d6482b1666228237b6a1868888de58d4bb5d",
+          "round": 6408302
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "A0C8CEA7022DECEC981729A5B15D1D05B301C33F949B2B663402A2937EB2D242E973EEDDEFF73030502F23223CA6FE46AA301977E8390382CDB689BFFD329397",
+          "pulse": 1917713,
+          "time_stamp": "2026-08-25T17:48:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-25T17:48:24Z",
+      "hash": "1f08d8841fe5dfc0d4d9c7870c19db39837cfccd720f917e3a76cb5a2e363f13",
+      "id": "0004",
+      "prev_hash": "684923ba30b11d805e6117c22b56c40445fdbda9ff63d94b922adc051681f637",
+      "reader": "tools/readers/market_timing_verdict.py",
+      "reader_sha256": "c08cdab2ba44acc3f8efa1e2e0b99887fe39cd06da7cd0ee2d49f8605d348c4c",
+      "seq": 4,
+      "slug": "market-timing-search"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "a2019d6f482e2b8c7a31f156eb130f00423f8a6dc25bffd7fc98a871183ea36a",
+          "round": 6408373
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "C66A62D5B264727BDCA2091D3644F6154B7547A6165979448EF13804B6B4E6A957D9B658D5DA4BE6176BC8DA9E9BE346EFABA48D890C92B781D000EE7A8BA4ED",
+          "pulse": 1917748,
+          "time_stamp": "2026-08-25T18:23:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-25T18:23:55Z",
+      "hash": "8ebe55a595491d5724b71542e8ebfcd0e84f5e992d0a44b607508a5120333856",
+      "id": "0005",
+      "prev_hash": "1f08d8841fe5dfc0d4d9c7870c19db39837cfccd720f917e3a76cb5a2e363f13",
+      "reader": "tools/readers/ephemerr_a2_verdict.py",
+      "reader_sha256": "e7864853109f02159dfb74acf7759371b6511889be5d1fc4af462f4e6360a561",
+      "seq": 5,
+      "slug": "ephemerr-a2"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "87feef852b25db1df6802ce8f57c2c1a47f96d7630fe18d311ab392a5fad8f75",
+          "round": 6408784
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "26157BB7B84AACAB905DD6C8FEA69752142F48E7087E2C722A7CCD27CF478335700773BC4874A65916ED3419D2A16B951EDE6EB92DDCB775C02CFDEDD7386ABD",
+          "pulse": 1917953,
+          "time_stamp": "2026-08-25T21:48:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-25T21:49:05Z",
+      "hash": "f4ae64ff58d9dfcf2a3614fa1c6db024bca824a627de3285a44be91d95c2d429",
+      "id": "0006",
+      "prev_hash": "8ebe55a595491d5724b71542e8ebfcd0e84f5e992d0a44b607508a5120333856",
+      "reader": "tools/readers/deflate_topk_verdict.py",
+      "reader_sha256": "ed8666f696306d09514ccffda2834ed88f8df92b64dd13775614f21ab44891aa",
+      "seq": 6,
+      "slug": "deflate-operational-output"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "5e6b0976442791936ae74eb93a532b956eb44d9125e3a9c170899761b22d5d8b",
+          "round": 6408970
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "E17495089AD66645F1CCD83456F69CCA77B56A453F2D0724C9CE5775976E5233A78D9E160963F28F7DB9BF147E56CD43EA5B30BF912CB3EBDB0F8A70E9D5860C",
+          "pulse": 1918046,
+          "time_stamp": "2026-08-25T23:21:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-25T23:22:06Z",
+      "hash": "40ded1fad14bbfbaab22ec9bac2e95df6fcc445ad49e1e2b65d29dd8854eac30",
+      "id": "0007",
+      "prev_hash": "f4ae64ff58d9dfcf2a3614fa1c6db024bca824a627de3285a44be91d95c2d429",
+      "reader": "tools/readers/carve_generalisation_verdict.py",
+      "reader_sha256": "3c19c08847c1807d6852b63c5259ef17f01d82bb6283b56611536aa19050ded1",
+      "seq": 7,
+      "slug": "carve-size-generalisation"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "979251700b95d654ad69bffcd0eef64ce8c27d6edf39aee652d8e20ebc523acb",
+          "round": 6409142
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "5B12B1CBC72E4F1F596356D6EFBE7C9C0D18E002BF7139BFC7F8A5EFA1FA36EAE25AA4DC4827DDAF991047D8C576A225D8EE6B4534AAD1E4915457040D76CD6E",
+          "pulse": 1918133,
+          "time_stamp": "2026-08-26T00:48:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-26T00:48:20Z",
+      "hash": "5629a5d4542a25cf892fd5227c9d5ace9730724290b2f032a5a105a503d07a09",
+      "id": "0008",
+      "prev_hash": "40ded1fad14bbfbaab22ec9bac2e95df6fcc445ad49e1e2b65d29dd8854eac30",
+      "reader": "tools/readers/c1_falsifier_verdict.py",
+      "reader_sha256": "abe207e424a6076f6845ab33bf98bfde5dc74ffe82be9b57a0420b09c31e580e",
+      "seq": 8,
+      "slug": "c1-falsifier-search"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "2a627a2aae7c594df205b67d5b9ba14544e81c3c111dcdde0caa21d74a303ea4",
+          "round": 6409171
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "3C91B6E5533E8014794294D6200F4E0C1A67C0BB37F0DCA4ACFE35EF5678DB83547D477C2CFE8ABFF46E80C4B194CDF2E0730CC05A7BE8C66E19B0A9A8BD5096",
+          "pulse": 1918147,
+          "time_stamp": "2026-08-26T01:02:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-26T01:02:58Z",
+      "hash": "bdbc5953badcd5d68af6863b2b8b9523cd33073f0828e99ef304462e45e7010c",
+      "id": "0009",
+      "prev_hash": "5629a5d4542a25cf892fd5227c9d5ace9730724290b2f032a5a105a503d07a09",
+      "reader": "tools/readers/byte_model_verdict.py",
+      "reader_sha256": "205e83f4d756066d9f5ecbb12ddcb2cff240000e875be422ee6118b60b80b9de",
+      "seq": 9,
+      "slug": "byte-sequence-representation"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "80c0e6519f2a5c570e5b970a7766e19ff1155dd5be34a4351ed136a023dc2a76",
+          "round": 6409400
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "625E56625B44AA2BF893D92693EEE7286805509A52C0BBE5533EA862E3010EFB0448A3EA9A12340146956B4ADCC274BC39EE85ECEEBB55308D9FD90F06599946",
+          "pulse": 1918261,
+          "time_stamp": "2026-08-26T02:56:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-08-26T02:57:10Z",
+      "hash": "83707ff010a299d4217cc5bc7e11445992f3ded29e2c1dc1d3e93d464e21b6df",
+      "id": "0010",
+      "prev_hash": "bdbc5953badcd5d68af6863b2b8b9523cd33073f0828e99ef304462e45e7010c",
+      "reader": "tools/readers/byte_model_flat_verdict.py",
+      "reader_sha256": "d3b58c3f7d1d415c0537adaea4a1f523c5dd0ce241701fe6f984f22d905216ca",
+      "seq": 10,
+      "slug": "byte-model-position-preserving-head"
+    }
+  ],
+  "entries": 10,
+  "head": "83707ff010a299d4217cc5bc7e11445992f3ded29e2c1dc1d3e93d464e21b6df",
+  "problems": 0,
+  "schema": "raise-v1/prereg_status/1",
+  "verified": true
+}

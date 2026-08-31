@@ -1,0 +1,60 @@
+{
+  "checks": [
+    {
+      "agent_claim": "Maven Central robots.txt forbids AI training and Disallows all, so the JVM bytecode candidate fails G1.",
+      "claim_id": "maven-robots",
+      "effect_on_decision": "None. JVM bytecode candidate remains G1 FAIL.",
+      "first_hand_finding": "Both files fetched and identical. Operative lines: 'User-agent: *' with 'Content-Signal: search=yes,ai-train=no,use=reference' and 'Allow: /'; then named AI crawlers (Amazonbot, Applebot-Extended, Bytespider, CCBot, ClaudeBot, CloudflareBrowserRenderingCrawler, Google-Extended, GPTBot, meta-externalagent) each 'Disallow: /'; then a SECOND 'User-agent: *' group with 'Disallow: /'; then 'Googlebot' 'Allow: /'.",
+      "refinement": "The agent presented the blanket 'User-agent: * Disallow: /' as the operative fact. The file actually contains two conflicting 'User-agent: *' groups (one Allow, one Disallow), so the crawl directive alone is ambiguous under standard robots.txt group-merging. The UNAMBIGUOUS fact is the explicit 'ai-train=no' content signal, which speaks directly to this use. The G1 FAIL conclusion holds and is if anything better supported by the signal than by the Disallow.",
+      "source": "https://repo1.maven.org/robots.txt and https://repo.maven.apache.org/robots.txt",
+      "verdict": "CONFIRMED, WITH A REFINEMENT"
+    },
+    {
+      "agent_claim": "REcover (Karamitas & Kehagias, J. Computer Virology and Hacking Techniques 21(1), 2025) is directly the Inverse Linking task, contributing to a G4 FAIL at crowding 8/10.",
+      "claim_id": "recover-tool",
+      "effect_on_decision": "None. Inverse Linking remains G4 FAIL.",
+      "first_hand_finding": "Repository exists. Self-described as 'a tool for approximately recovering the compile-unit layout from stripped binary executables'. IDAPython plugin plus a CLI analysis tool. Heuristic: estimators, fitness functions including modularity, brute-force search. No ML, no neural component, ships no dataset of its own; evaluates on the DeepBinDiff coreutils-7.6-O3 set. Cites the 2025 J. Comp. Virology paper.",
+      "refinement": "REcover itself being heuristic and dataset-free is arguably white space for a LEARNED version. That does not rescue the candidate: the G4 bar is fewer than ~3 SERIOUS EFFORTS on the problem regardless of method, and seven were found, one of which (LibAM, TOSEM 2023) is already GNN-assisted.",
+      "source": "https://github.com/huku-/recover",
+      "verdict": "CONFIRMED"
+    },
+    {
+      "agent_claim": "microsoft/preflate-rs already fingerprints DEFLATE encoder implementation and parameters in production, falsifying the compressed-stream candidate's white-space claim; but it needs the stream start, so carved mid-stream fragments remain outside it.",
+      "claim_id": "preflate-rs",
+      "effect_on_decision": "Compressed-stream encoder provenance stays BACKUP, not SELECT: the broad task is occupied by a production Microsoft library, and only the no-plaintext no-stream-start fragment regime is genuinely unoccupied.",
+      "first_hand_finding": "Confirmed on both halves. README describes an Estimate stage in which 'the token sequence is analyzed to fingerprint the original compressor: hash algorithm, chain depth, nice-length cutoff, window size, and block-splitting strategy', across zlib (all levels), zlib-ng (most levels), libdeflate, miniz/miniz_oxide and Windows zlib. Crucially the method operates on the DECODED TOKEN SEQUENCE, which requires decoding the stream and therefore requires the stream start (the dynamic Huffman tables). A carved mid-stream fragment is unparseable by that method by construction.",
+      "refinement": "COULD NOT VERIFY the last-updated date of the repository from the fetched content; the agent reported 2026-07-25 and that specific date is unconfirmed here.",
+      "source": "https://github.com/microsoft/preflate-rs",
+      "verdict": "CONFIRMED, BOTH HALVES"
+    },
+    {
+      "agent_claim": "CXIDB deposits are CC0.",
+      "claim_id": "cxidb-cc0",
+      "effect_on_decision": "None.",
+      "first_hand_finding": "Page fetched; 'CC0 waiver' present in the deposit terms.",
+      "refinement": "Licence was the only part checked. The serial-crystallography candidate was killed on G2a, not on licence, and that kill was not re-verified first-hand.",
+      "source": "https://www.cxidb.org/deposit.html",
+      "verdict": "CONFIRMED (licence only)"
+    },
+    {
+      "agent_claim": "Govdocs1 / Digital Corpora files are freely redistributable.",
+      "claim_id": "govdocs1-terms",
+      "effect_on_decision": "None yet.",
+      "first_hand_finding": "Page fetched; the phrase 'freely available for research and may be (to the best of our knowledge) freely redistributed' is present, as is 'freely-redistributable files'.",
+      "refinement": "The hedge 'to the best of our knowledge' is in the source and is carried forward rather than dropped. This is a maintainer's assertion about third-party documents, not a granted licence.",
+      "source": "https://digitalcorpora.org/corpora/file-corpora/files/",
+      "verdict": "CONFIRMED"
+    }
+  ],
+  "n_checks": 5,
+  "n_confirmed": 5,
+  "n_not_reverified": 3,
+  "not_reverified": [
+    "The JVM zero-channel-capacity measurement (345/345 byte-identical class files across javac 17.0.8 and 17.0.13 at --release 8). Re-running it requires downloading four JDKs; it was not re-run here. It is a first-hand measurement by the reviewing agent and is recorded as such, not as independently confirmed.",
+    "The COBOL 50-line-baseline measurement (exact-boundary F1 0.768 from 20 records, 0.782 from 20,000). Not re-run here. Also a first-hand agent measurement on a SYNTHETIC generator the agent wrote, which is a further reason to treat the exact figure as indicative rather than established.",
+    "The crystallography CXIDB 152 stream measurements (444 chunks, 299 indexed, cell constant to 0.2%). Not re-run here."
+  ],
+  "schema": "raise-v1/independent_verification/1",
+  "verified_utc": "2026-08-25T02:21:16Z",
+  "why": "Round-1 candidate kills were made by subagents. A kill is a decision, so the claims that did the killing were re-checked first-hand against primary sources rather than accepted. This records what agreed, what needed refining, and what could not be checked."
+}

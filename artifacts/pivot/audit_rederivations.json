@@ -1,0 +1,98 @@
+{
+  "cluster_bootstrap": {
+    "resamples": 4000,
+    "slope": 0.049121,
+    "slope_ci95": [
+      0.048216,
+      0.050014
+    ],
+    "superseded_fragment_level_ci95": [
+      0.048538,
+      0.04973
+    ],
+    "unit": "source chunk (n=10000)"
+  },
+  "cluster_bootstrap_0006_0007": {
+    "carve_within": {
+      "n_chunks": 5000,
+      "slope": 0.02045,
+      "slope_ci95": [
+        0.019721,
+        0.021205
+      ],
+      "superseded_fragment_level": [
+        0.019758,
+        null
+      ]
+    },
+    "note": "Derived from per-example scores banked by the deterministic re-runs (all measured values reproduced bit-exactly; only timing fields differ). Cluster unit = source chunk, matching the 0003 correction. Both verdict clauses (lower bound > 0) are unaffected.",
+    "topk_top5": {
+      "n_chunks": 10000,
+      "slope": 0.098537,
+      "slope_ci95": [
+        0.097121,
+        0.099902
+      ],
+      "superseded_fragment_level": [
+        0.097738,
+        0.099313
+      ]
+    }
+  },
+  "gutenberg_excluded": {
+    "n_chunks": 8731,
+    "n_eval": 227006,
+    "rung_accuracies": {
+      "1000": 0.1009,
+      "10000": 0.147,
+      "100000": 0.2052,
+      "800000": 0.2511
+    },
+    "slope": 0.052393,
+    "slope_ci95": [
+      0.051417,
+      0.053462
+    ]
+  },
+  "gutenberg_excluded_margins": {
+    "derivation": "model top-rung accuracy on the non-gutenberg eval (banked per-example scores) minus each refit baseline's accuracy on the same non-gutenberg eval (artifacts/pivot/baseline_family_rescore.json). The refit is deterministic: every full-eval baseline value reproduces the original 0003 run exactly.",
+    "expanded_set_best": {
+      "full_eval_margin_for_comparison": 0.0583,
+      "margin": 0.062,
+      "name": "depth16_tree",
+      "value": 0.1891
+    },
+    "frozen_set_best": {
+      "full_eval_margin_for_comparison": 0.1003,
+      "margin": 0.1073,
+      "name": "logistic",
+      "value": 0.1438
+    },
+    "model_top_rung_non_gutenberg": 0.2511,
+    "reading": "BOTH preregistered margins WIDEN when the leaked family is excluded: frozen +0.1073 vs +0.1003, expanded +0.0620 vs +0.0583. The split defect, corrected for, improves the result it contaminated - every baseline is also weaker on gutenberg than elsewhere, so the leak was depressing the headline, not inflating it."
+  },
+  "gutenberg_top_rung_accuracy": 0.1596,
+  "non_gutenberg_top_rung_accuracy": 0.2511,
+  "per_family_n_eval": {
+    "base64": 32864,
+    "binary": 32474,
+    "code": 31850,
+    "csv": 31616,
+    "gutenberg": 32994,
+    "json": 32760,
+    "log": 33254,
+    "mixed": 32188
+  },
+  "per_family_top_rung_accuracy": {
+    "base64": 0.1221,
+    "binary": 0.1049,
+    "code": 0.2944,
+    "csv": 0.3888,
+    "gutenberg": 0.1596,
+    "json": 0.3581,
+    "log": 0.3756,
+    "mixed": 0.1143
+  },
+  "schema": "raise-v1/audit_rederivations/1",
+  "why": "Derived after an adversarial audit confirmed two defects: (1) the paired bootstrap resampled 260000 eval fragments as independent although they are 10000 clusters of 26 fragments sharing a plaintext - the very dependence unit the grouped split declares; (2) gutenberg-family chunks are windows drawn from one shared 7.84 MB pool, so gutenberg source bytes straddle train/eval and the grouped-split guarantee is false for that eighth of the corpus. Everything here is recomputed from the BANKED per-example scores; no model was re-run."
+}

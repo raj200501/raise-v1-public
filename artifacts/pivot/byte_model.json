@@ -1,0 +1,39 @@
+{
+  "batch": 256,
+  "best_baseline_expanded": 0.0943,
+  "best_baseline_expanded_name": "logistic",
+  "best_trivial_baseline": 0.0943,
+  "best_trivial_baseline_name": "logistic",
+  "byte_model_shuffled_top1": 0.0385,
+  "byte_model_top1": 0.0849,
+  "carve_bytes": 1024,
+  "chance_accuracy": 0.038462,
+  "cost": {
+    "build_seconds": 3665.7,
+    "cpu_cores": 4,
+    "gpu": "none"
+  },
+  "epochs": 10,
+  "establishes_a_buyer": false,
+  "eval_group_fingerprint": "cb98419e098f48c0",
+  "eval_group_fingerprint_matches_0007": true,
+  "feature_model_top1": 0.1165,
+  "matched_rung": 100000,
+  "model": "1D CNN over raw bytes: 256-entry embedding, 3 conv+pool stages, GAP, linear",
+  "model_params": 182842,
+  "n_classes": 26,
+  "n_eval": 130000,
+  "n_train": 100000,
+  "preregistration": "0009-byte-sequence-representation",
+  "schema": "raise-v1/byte_model/1",
+  "seed": 20260825,
+  "split_is_grouped_by_source": true,
+  "trivial_baselines_same_rows": {
+    "depth16_tree": 0.0767,
+    "depth3_tree": 0.0547,
+    "depth8_tree": 0.0724,
+    "logistic": 0.0943,
+    "majority": 0.0385,
+    "stratified": 0.0394
+  }
+}

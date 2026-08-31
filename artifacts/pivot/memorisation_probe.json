@@ -1,0 +1,26 @@
+{
+  "arms": {
+    "flatten": {
+      "final_train_acc": 0.364,
+      "final_train_loss": 2.193,
+      "params": 392506,
+      "seconds": 136.9
+    },
+    "gap": {
+      "final_train_acc": 0.0486,
+      "final_train_loss": 3.2282,
+      "params": 182842,
+      "seconds": 136.4
+    }
+  },
+  "chance": 0.0385,
+  "consequence": "The published caveat 'part of it failed is it was small' does not follow and is retracted in CORRECTIONS.md. A null control that a model CANNOT fail carries no information about that model's capacity - which is the same argument this repository already makes about gates, arriving in a place nobody had applied it.",
+  "epochs": 30,
+  "finding": "The inference was WRONG. With a global average pool the network reaches 0.0486 train accuracy on shuffled labels after 30 epochs - barely above the 0.0385 chance level. Replacing ONLY that pool with a flatten reaches 0.364 and is still climbing steeply (0.056 at epoch 20). Convolutional capacity is identical between the two arms. So the inability to memorise is caused by the POOLING, which averages away per-example identity, not by a shortage of capacity.",
+  "labels": "SHUFFLED",
+  "n_fragments": 5000,
+  "question": "0009 reported that its null control passing perfectly might mean the model was too SMALL. This asks whether that inference is sound, by replacing only the final pooling and holding everything else fixed.",
+  "schema": "raise-v1/memorisation_probe/1",
+  "status": "DIAGNOSTIC, not preregistered. Run to test a reading this repository had already published.",
+  "what_stays_open": "Whether global average pooling hurts the TASK is untested. Local byte order may be exactly the right signal and position may be irrelevant, in which case the pool is a sensible inductive bias and 0009's negative stands cleanly."
+}

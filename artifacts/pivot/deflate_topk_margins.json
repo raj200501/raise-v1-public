@@ -1,0 +1,60 @@
+{
+  "bar": 0.05,
+  "derivation": "each value is a - b over fields of artifacts/pivot/deflate_topk.json; no model is re-run and no new measurement is made",
+  "margins": {
+    "selective_margin": {
+      "clears_bar": true,
+      "meaning": "accuracy on the model's own most-confident decile minus the best baseline's accuracy on its own most-confident decile, taking the maximum over ALL baselines",
+      "minuend": {
+        "field": "selective_top_decile_accuracy",
+        "value": 0.7922
+      },
+      "subtrahend": {
+        "field": "baseline_selective_top_decile_accuracy",
+        "value": 0.6937
+      },
+      "value": 0.0985
+    },
+    "selective_margin_under_looser_frozen_set_reading": {
+      "clears_bar": true,
+      "meaning": "NOT the reading used. Recorded so the declined concession is auditable: this is the margin the study would have claimed had 'best trivial baseline' been read as best-of-frozen-set instead of maximum-over-all-baselines.",
+      "minuend": {
+        "field": "selective_top_decile_accuracy",
+        "value": 0.7922
+      },
+      "subtrahend": {
+        "field": "baseline_selective_top_decile.logistic",
+        "value": 0.5412
+      },
+      "value": 0.251
+    },
+    "top5_margin_expanded": {
+      "clears_bar": true,
+      "meaning": "top-5 accuracy minus the best baseline's top-5 over ALL baselines, deep trees included",
+      "minuend": {
+        "field": "top5_accuracy",
+        "value": 0.5694
+      },
+      "subtrahend": {
+        "field": "best_baseline_expanded_top5",
+        "value": 0.461
+      },
+      "value": 0.1084
+    },
+    "top5_margin_frozen": {
+      "clears_bar": true,
+      "meaning": "top-5 accuracy minus the best PREREGISTERED baseline's top-5",
+      "minuend": {
+        "field": "top5_accuracy",
+        "value": 0.5694
+      },
+      "subtrahend": {
+        "field": "best_trivial_baseline_top5",
+        "value": 0.3951
+      },
+      "value": 0.1743
+    }
+  },
+  "preregistration": "0006-deflate-operational-output",
+  "schema": "raise-v1/deflate_topk_margins/1"
+}

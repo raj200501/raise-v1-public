@@ -1,0 +1,144 @@
+{
+  "arms": [
+    "TRIVIAL BASELINES GET THE SAME TREATMENT. Every baseline is scored top-1, top-3 and top-5 from its OWN predict_proba, and its selective accuracy is computed on ITS OWN most-confident decile. Comparing a model's shortlist against a baseline's single guess would be rigged, and is not done.",
+    "NULL CONTROL: labels shuffled, identical pipeline, top-5 must fall to the 5/26 chance level. A top-5 metric is five times easier to satisfy by luck than top-1, so this control matters MORE here than it did in 0003, not less.",
+    "GROUPED SPLIT, unchanged from 0003: the identical evaluation set, so every number here is directly comparable to the top-1 numbers already published.",
+    "THE ABSTENTION ARM IS THE POINT. A model with a good shortlist but meaningless confidence is not usable for the stated setting, because the analyst cannot tell which fragments to trust. selective_absolute is the clause that tests this and it is the one most likely to fail."
+  ],
+  "bar": {
+    "null_control": {
+      "direction": "lower_is_better",
+      "passes_if": "with labels shuffled and the identical pipeline retrained, top-5 accuracy <= 0.2123, which is the 5/26 top-5 chance level for 26 near-balanced classes plus the same 0.02 tolerance 0003 used",
+      "threshold": 0.2123
+    },
+    "scope_decades": {
+      "direction": "higher_is_better",
+      "passes_if": "decades_spanned >= 2.0",
+      "threshold": 2.0
+    },
+    "scope_rungs": {
+      "direction": "higher_is_better",
+      "passes_if": "n_rungs >= 4",
+      "threshold": 4
+    },
+    "selective_absolute": {
+      "direction": "higher_is_better",
+      "passes_if": "accuracy on the model's most-confident decile >= 0.50 - when the tool speaks on the tenth of fragments it is surest about, it is right more often than not. This is an absolute usability floor and it is deliberately set where a top-1 accuracy of 0.2395 gives it a real chance of failing.",
+      "threshold": 0.5
+    },
+    "selective_margin": {
+      "direction": "higher_is_better",
+      "passes_if": "accuracy on the model's own most-confident decile of evaluation fragments, minus the best trivial baseline's accuracy on ITS own most-confident decile, >= 0.05",
+      "threshold": 0.05
+    },
+    "top5_margin": {
+      "direction": "higher_is_better",
+      "passes_if": "top5_accuracy - best_trivial_baseline_top5 >= 0.05",
+      "threshold": 0.05
+    },
+    "top5_margin_expanded": {
+      "direction": "higher_is_better",
+      "passes_if": "top5_accuracy - best_baseline_expanded_top5 >= 0.05, where the expanded set adds the depth-8 and depth-16 trees that are NOT in 0003's frozen baseline list. Both readings are clauses here, not one clause and one footnote - 0003 reported both voluntarily and this preregistration makes that binding.",
+      "threshold": 0.05
+    },
+    "top5_slope": {
+      "direction": "higher_is_better",
+      "passes_if": "paired-bootstrap 95% lower bound of the top-5 accuracy-per-decade slope > 0",
+      "threshold": 0.0
+    }
+  },
+  "frozen": true,
+  "id": "0006",
+  "reader": "tools/readers/deflate_topk_verdict.py",
+  "readings": [
+    {
+      "json_path": "$.verdict",
+      "name": "verdict",
+      "source_artifact": "artifacts/pivot/deflate_topk_verdict.json",
+      "unit": "enum{OUTPUT_USABLE,OUTPUT_NOT_USABLE}"
+    },
+    {
+      "json_path": "$.top5_accuracy",
+      "name": "top5_accuracy",
+      "source_artifact": "artifacts/pivot/deflate_topk.json",
+      "unit": "fraction of evaluation fragments whose true class is in the model's top 5"
+    },
+    {
+      "json_path": "$.best_trivial_baseline_top5",
+      "name": "best_trivial_baseline_top5",
+      "source_artifact": "artifacts/pivot/deflate_topk.json",
+      "unit": "fraction"
+    },
+    {
+      "json_path": "$.best_baseline_expanded_top5",
+      "name": "best_baseline_expanded_top5",
+      "source_artifact": "artifacts/pivot/deflate_topk.json",
+      "unit": "fraction"
+    },
+    {
+      "json_path": "$.selective_top_decile_accuracy",
+      "name": "selective_top_decile_accuracy",
+      "source_artifact": "artifacts/pivot/deflate_topk.json",
+      "unit": "fraction correct on the most-confident 10% of evaluation fragments"
+    },
+    {
+      "json_path": "$.baseline_selective_top_decile_accuracy",
+      "name": "baseline_selective_top_decile_accuracy",
+      "source_artifact": "artifacts/pivot/deflate_topk.json",
+      "unit": "fraction"
+    },
+    {
+      "json_path": "$.top5_slope_ci95_low",
+      "name": "top5_slope_ci95_low",
+      "source_artifact": "artifacts/pivot/deflate_topk.json",
+      "unit": "top-5 accuracy points per decade"
+    },
+    {
+      "json_path": "$.shuffled_label_top5_accuracy",
+      "name": "shuffled_label_top5_accuracy",
+      "source_artifact": "artifacts/pivot/deflate_topk.json",
+      "unit": "fraction"
+    }
+  ],
+  "scope": {
+    "one_line": "The same corpus, the same seed, the same grouped split and the same four rungs as preregistration 0003. Nothing is re-manufactured and nothing is re-split. What changes is what is READ off the model: ranked candidate lists and confidence, instead of top-1 accuracy alone.",
+    "rungs": "The same four: 1000, 10000, 100000, 800000.",
+    "seed": "20260825, identical to 0003. No seed sweep.",
+    "unit": "One carved 4096-byte window from the middle of one compressed stream.",
+    "what_this_does_not_cover": "It does not cover encoders absent from this box. It does not cover carve sizes other than 4096. It does not establish a buyer, a customer, a user, a partner or a deployment, and clearing every clause below would not establish any of them. It says nothing about whether a forensic analyst would use this, only about whether the output has the SHAPE such a use would require.",
+    "what_this_is_for": "G5 - a named buyer type - is the one gate the DEFLATE result does not clear. Of the uses that point at this task, forensic carving of unallocated disk is the only one where a CARVED fragment is genuinely the operational setting: archive recompression and repackaged-artifact checks both have the whole stream and the plaintext, so incumbent tools apply there and this task's advantage disappears. For a forensic analyst the deliverable is not a single guess. It is a shortlist, and an honest signal of when to ignore the tool. This measures whether the model produces those. It does NOT establish a buyer, and clearing this bar would not establish one.",
+    "why_this_is_a_separate_preregistration": "0003's verdict is already known (CURVE_ESTABLISHED, top-1 0.2395). Adding a new reading to a study whose result is known is exactly the move this instrument exists to prevent, so it is frozen as its own preregistration, with its own bar, before any top-k or confidence number exists. No top-k accuracy, no calibration figure and no selective-prediction figure has been computed on this corpus at the time of freezing."
+  },
+  "slug": "deflate-operational-output",
+  "stop_rules": [
+    "Failing any single clause is OUTPUT_NOT_USABLE. There is no aggregate score and no discretion.",
+    "If top-5 clears its margins but the selective clauses fail, the result is reported as exactly that - a usable shortlist with unusable confidence - and NOT as a success with a caveat. That is the most likely partial outcome and naming it in advance is what stops it being spun.",
+    "If the null control's top-5 does not fall to chance, no number from this study is reported at all.",
+    "A missing field reads as failure. Absence is never a pass.",
+    "This preregistration cannot revise, soften or reinterpret 0003. 0003's verdict stands whatever happens here."
+  ],
+  "thesis": {
+    "what_would_make_this_fail_honestly": "The most likely failure is that the deep-tree baseline's top-5 is nearly as good as the model's, because ranking 5 of 26 is a much easier task than picking 1 and the model's advantage may not survive the easier task. That is exactly why the expanded-set top-5 margin is a clause and not a footnote.",
+    "why_abstention_is_the_harder_half": "A shortlist is worth something only if the analyst knows when to ignore it. That requires the model's confidence to track its correctness, which is a strictly stronger property than accuracy and is not implied by it. A 0.2395 top-1 model can easily have a most-confident decile no better than its average.",
+    "why_top_k_is_the_right_reading": "Top-1 accuracy answers 'is the single best guess right', which is the wrong question for the only buyer type where a carved fragment is the real setting. An analyst with 26 possible encoders and a ranked list of 5 has had the candidate set cut by more than five-fold; an analyst with one wrong guess has had it cut by nothing."
+  },
+  "title": "On carved-DEFLATE encoder provenance, is the model's OUTPUT operationally usable - a short candidate list, and a confidence that supports abstention - and does that usability rise with manufactured data?",
+  "reader_sha256": "ed8666f696306d09514ccffda2834ed88f8df92b64dd13775614f21ab44891aa",
+  "frozen_utc": "2026-08-25T21:49:05Z",
+  "git_commit": "faa120eb7dd63bcc579ad33347e743c06b5598e9",
+  "git_dirty_at_freeze": false,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1917953,
+      "time_stamp": "2026-08-25T21:48:00.000Z",
+      "output_value": "26157BB7B84AACAB905DD6C8FEA69752142F48E7087E2C722A7CCD27CF478335700773BC4874A65916ED3419D2A16B951EDE6EB92DDCB775C02CFDEDD7386ABD"
+    },
+    "drand": {
+      "round": 6408784,
+      "randomness": "87feef852b25db1df6802ce8f57c2c1a47f96d7630fe18d311ab392a5fad8f75"
+    }
+  },
+  "chain_hash": "f4ae64ff58d9dfcf2a3614fa1c6db024bca824a627de3285a44be91d95c2d429",
+  "chain_prev_hash": "8ebe55a595491d5724b71542e8ebfcd0e84f5e992d0a44b607508a5120333856"
+}

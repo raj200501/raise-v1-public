@@ -1,0 +1,36 @@
+{
+  "a_calibration_observation_that_does_NOT_change_the_verdict": "An ABSOLUTE margin of 0.05 AUC is a very different bar depending on where the baseline sits. With a baseline at 0.9363, only 0.0637 of headroom exists above it, so demanding 0.05 requires capturing 78% of everything that remains. Against a baseline at 0.60 the same clause would demand an eighth of the headroom. A relative-improvement margin would have been better calibrated. THIS CHANGES NOTHING. Noticing that a bar was badly shaped AFTER seeing that it was missed by 0.0042 is exactly the move preregistration exists to prevent, and the rule that a preregistration is a commitment and not a shield cuts in this direction too. The verdict stands as A2_FAILED. The observation is recorded as guidance for FUTURE preregistrations - prefer a relative margin on a bounded metric - and is not applied retroactively to this one.",
+  "cost": {
+    "cpu_cores": 4,
+    "gpu": "none",
+    "learned_fit_seconds": 802.4,
+    "total_seconds": 857.0
+  },
+  "margin": {
+    "achieved": 0.0458,
+    "best_baseline": 0.9363,
+    "best_baseline_name": "per_satellite_mean",
+    "learned": 0.9821,
+    "required": 0.05,
+    "short_by": 0.0042
+  },
+  "preregistration": "0005-ephemerr-a2",
+  "recorded_utc": "2026-08-25T18:42:41Z",
+  "round_2_named_the_wrong_killer": "Round 2 flagged the URA/SISA index - the operator's own error bound, shipped free inside the student's input - as the likely dominant baseline. It measures AUC 0.5037, indistinguishable from a coin. The actual threat was satellite identity, which round 2 never mentioned and which surfaced only from inspecting per-satellite residuals during pipeline validation. Had the round-2 framing been trusted, the test would have run against a strawman and PASSED.",
+  "schema": "raise-v1/ephemerr_a2_reading/1",
+  "scope_clauses_all_passed": {
+    "n_satellites": 30,
+    "n_test_epochs": 51839,
+    "positive_rate": 0.0991,
+    "split_is_temporal": true,
+    "threshold_metres": 9.1262
+  },
+  "status": "EphemErr joins the other five candidates that died at A2. Phase 0's verdict is unchanged and the DEFLATE pivot remains the only live candidate.",
+  "verdict": "A2_FAILED",
+  "what_did_work": {
+    "null_control": 0.4804,
+    "reading": "Shuffled labels fall to 0.4804. The pipeline is clean and the signal is real.",
+    "the_learned_model_does_beat_the_baseline": "0.9821 against 0.9363 is a genuine improvement: it closes 71.9% of the headroom that remained above the baseline, cutting the gap to a perfect score from 0.0637 to 0.0179. The model is not failing to learn. It is failing a margin."
+  },
+  "what_the_gate_caught": "Satellite identity alone - a per-satellite historical mean with ZERO training - reaches AUC 0.9363 on a temporal split. Knowing only WHICH satellite it is predicts which broadcasts will be badly wrong. That is the sixth time in this project a rule anyone could write by hand has owned most of a label, and the sixth time it was not the rule that was expected."
+}

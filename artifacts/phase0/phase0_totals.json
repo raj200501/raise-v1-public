@@ -1,0 +1,25 @@
+{
+  "derivation": "counted directly from artifacts/phase0/round{1,2,3}_domain_search.json: len(all_candidates) and len(adversarial)+len(round1_leftovers_attacked) per round",
+  "note": "Round 3's screener summary stated '11 adversarial reviews'. Counted from the banked artifacts the figure is 8. The screener's candidate total of 99 is correct. The 8 is used everywhere in this repository and the 11 is not.",
+  "per_round": [
+    {
+      "adversarial_reviews": 4,
+      "candidates": 36,
+      "round": 1
+    },
+    {
+      "adversarial_reviews": 4,
+      "candidates": 37,
+      "round": 2
+    },
+    {
+      "adversarial_reviews": 0,
+      "candidates": 26,
+      "round": 3
+    }
+  ],
+  "schema": "raise-v1/phase0_totals/1",
+  "total_adversarial_reviews": 8,
+  "total_candidates": 99,
+  "total_select": 0
+}

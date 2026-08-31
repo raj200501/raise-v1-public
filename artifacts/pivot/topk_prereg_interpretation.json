@@ -1,0 +1,28 @@
+{
+  "anchor_direction_correction": "CORRECTION (2026-08-31, from an adversarial audit): the drand anchor in this file proves only that the file was written no EARLIER than the anchored round - a not-before proof. The original text cited it as proof that no measurement yet existed, which is a not-AFTER claim the anchor is logically incapable of supporting: nothing stops an author computing numbers first and fetching a fresh round while writing a post-hoc note. The precedence claim therefore rests on the run logs and git history, not on the beacon. Filed in CORRECTIONS.md.",
+  "issues": [
+    {
+      "direction": "Strictly against this study. It raises the bar the result must clear.",
+      "frozen_wording": "selective_margin ... minus the best trivial baseline's accuracy on ITS own most-confident decile",
+      "id": "which-baseline-for-the-selective-clause",
+      "problem": "'best trivial baseline' is ambiguous. 0003 distinguishes a FROZEN baseline set (majority, label-prior, depth-3 tree, logistic) from an EXPANDED set that adds depth-8 and depth-16 trees, and the expanded set is substantially stronger. Reading 'best' as best-of-frozen would make this clause materially easier to clear than reading it as best-of-all.",
+      "resolution": "baseline_selective_top_decile_accuracy is the MAXIMUM over ALL baselines, frozen and expanded alike - the strictest available reading. Every baseline's own selective decile accuracy is also banked individually, so any reader can apply a different standard without re-running anything."
+    },
+    {
+      "direction": "Neutral. It removes a degree of freedom rather than moving the bar.",
+      "frozen_wording": "accuracy on the model's own most-confident decile of evaluation fragments",
+      "id": "tie-breaking-in-the-most-confident-decile",
+      "problem": "A constant classifier (majority, label-prior) assigns every fragment the same confidence, so 'the most-confident decile' is not well defined for it and could be chosen to flatter or to punish it.",
+      "resolution": "Ranking is by descending maximum class probability with ties broken by ascending evaluation index - deterministic, independent of the labels, and identical for every model and baseline. For a constant classifier this yields the first tenth of the evaluation set in its stored order, whose accuracy is an unbiased estimate of that classifier's overall accuracy, which is the correct behaviour: a classifier with no confidence signal should get no benefit from selection."
+    }
+  ],
+  "not_before_anchor": {
+    "drand_round": 6408785,
+    "randomness": "6fcc53c6deea72fbc175676acc93bce260b021aad469dcd547c17f43eca2bf46"
+  },
+  "preregistration": "0006-deflate-operational-output",
+  "recorded_before": "the top-k measurement script was run. No top-k, calibration or selective-prediction number exists on this corpus at the time of recording. The drand anchor below is a not-before proof of that.",
+  "recorded_utc": "2026-08-25T21:50:00Z",
+  "schema": "raise-v1/prereg_interpretation/1",
+  "why": "Operating rule 3: a preregistration is a commitment, not a shield. One clause in 0006 admits two readings, and which one is used changes how hard the bar is. It is resolved now, before the numbers exist, and resolved toward the STRICTER reading."
+}

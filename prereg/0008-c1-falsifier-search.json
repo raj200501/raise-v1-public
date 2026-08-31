@@ -1,0 +1,97 @@
+{
+  "arms": [
+    "DEFAULT POSTURE REJECT, as in rounds 1-4. A candidate selects only by clearing every clause, not by being interesting.",
+    "THE FORENSICS CLAUSE IS THE POINT. G5_why_not_forensics is what separates a falsifier from a confirmation. A candidate whose buyer reconstructs provenance after the fact is C1 working as described, and must be recorded as such rather than counted as a near miss.",
+    "FIRST-HAND G4 WITH RAW STATUS CODES, guarding the specific near-miss the archived trial recorded: an arXiv query returned HTTP 301 with 0 bytes and the parser reported no results, which would have become a false white-space claim built on a failed request.",
+    "BREADTH IS A CLAUSE, NOT A COURTESY. Fewer than 12 candidates, or a withholding mode unexamined, voids the search. A narrow search that finds nothing is not a negative result."
+  ],
+  "authorisation": "Round 4's precedent was to flag a further round as a decision for the principal rather than take it unilaterally. The authorisation here is the principal's STANDING instruction to keep looping until something FDM-1 caliber is found or ruled out - explicit and repeated - rather than a fresh approval sought for this round specifically. That provenance is recorded because it is weaker than round 4's and a reader should be able to see the difference.",
+  "bar": {
+    "G1_abundance_measured": {
+      "direction": "higher_is_better",
+      "passes_if": "G1_units >= 1e6 from a NAMED source with G1_count_is_verified true. An estimate does not clear this, holding round 4's raised standard rather than relaxing it.",
+      "threshold": 1000000
+    },
+    "G4_firsthand": {
+      "direction": "higher_is_better",
+      "passes_if": "every G4 query records an http_status of 200. A failed request that parses to zero results is not evidence of white space - the archived trial nearly published exactly that error and caught it only by inspecting the raw response.",
+      "threshold": 200
+    },
+    "G5_buyer_not_forensics": {
+      "direction": "higher_is_better",
+      "passes_if": "G5_buyer_type is named AND G5_why_not_forensics is given. A buyer reconstructing provenance after the fact CONFIRMS C1 rather than falsifying it, so that clause is the load-bearing one in this whole round.",
+      "threshold": 0
+    },
+    "laws_survived": {
+      "direction": "higher_is_better",
+      "passes_if": "L1, L2, L3 and L4 each marked survived WITH a reason given for each",
+      "threshold": 4
+    },
+    "scope_breadth": {
+      "direction": "higher_is_better",
+      "passes_if": "at least 12 candidates and all four withholding modes represented",
+      "threshold": 12
+    },
+    "withholding_is_non_loss": {
+      "direction": "lower_is_better",
+      "passes_if": "withholding_mode in {privacy, regulation, physics, commercial} AND withholding_is_after_the_fact_loss is False AND withholding_mechanism names the specific legal, physical or commercial mechanism. 'It is sensitive' is not a mechanism.",
+      "threshold": 0
+    }
+  },
+  "frozen": true,
+  "id": "0008",
+  "opened_in_response_to": "A negative result and a conjecture drawn from it. 0007 returned CARVE_FAILS, and conjecture C1 was then filed: that withholding the transform's input is what CREATES a transform factory's white space and is the same property that makes its market a forensics market and therefore small. This round hunts C1's own stated falsifier. Opening a round after a result you did not like is the move this discipline exists to prevent, so it is recorded here in the same field round 4 used, and the bar below does not move down.",
+  "reader": "tools/readers/c1_falsifier_verdict.py",
+  "readings": [
+    {
+      "json_path": "$.verdict",
+      "name": "verdict",
+      "source_artifact": "artifacts/phase0/c1_falsifier_verdict.json",
+      "unit": "enum{C1_FALSIFIED,NO_FALSIFIER_FOUND,VOID_SEARCH_TOO_NARROW}"
+    },
+    {
+      "json_path": "$.n_candidates",
+      "name": "n_candidates",
+      "source_artifact": "artifacts/phase0/c1_falsifier_verdict.json",
+      "unit": "count"
+    },
+    {
+      "json_path": "$.n_selected",
+      "name": "n_selected",
+      "source_artifact": "artifacts/phase0/c1_falsifier_verdict.json",
+      "unit": "count"
+    }
+  ],
+  "scope": {
+    "minimum_breadth": "At least 12 candidates, with all four withholding modes represented. Fewer than that, or a mode unexamined, and the search was too narrow to conclude anything - the reader returns VOID_SEARCH_TOO_NARROW rather than a comforting negative.",
+    "one_line": "Enumerate transform label factories across four NON-LOSS withholding modes, screen each against G1..G5 and L1..L4 with default posture REJECT, and check white space first-hand for anything that survives the screen.",
+    "what_this_does_not_cover": "It cannot prove C1. A search that finds no counterexample is evidence about the search. It does not revisit the 99 candidates of rounds 1-3 or the 5 of round 4, and it does not establish a buyer for anything."
+  },
+  "slug": "c1-falsifier-search",
+  "stop_rules": [
+    "Zero candidates clearing every clause is NO_FALSIFIER_FOUND. C1 stands UNFALSIFIED, which is not the same as supported, and the reader emits that sentence into its own artifact so it cannot be dropped in summary.",
+    "NO_FALSIFIER_FOUND does NOT promote C1 from conjecture to law. C1 stays labelled C1 and stays in the coverage map's weakest class whatever this round returns.",
+    "A candidate that clears everything is C1_FALSIFIED, and C1 must then be withdrawn in CORRECTIONS.md at full size rather than narrowed until it survives.",
+    "A missing field reads as failure. Absence is never a pass.",
+    "This cannot revise 0001, 0002, 0003, 0006 or 0007."
+  ],
+  "title": "Does a transform label factory exist whose input is withheld by privacy, regulation, physics or commercial boundary rather than by after-the-fact loss - and that clears G1..G5 while surviving L1..L4?",
+  "reader_sha256": "abe207e424a6076f6845ab33bf98bfde5dc74ffe82be9b57a0420b09c31e580e",
+  "frozen_utc": "2026-08-26T00:48:20Z",
+  "git_commit": "80aac3ab7cf526f48fcf9a7e2953100f3055520e",
+  "git_dirty_at_freeze": false,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1918133,
+      "time_stamp": "2026-08-26T00:48:00.000Z",
+      "output_value": "5B12B1CBC72E4F1F596356D6EFBE7C9C0D18E002BF7139BFC7F8A5EFA1FA36EAE25AA4DC4827DDAF991047D8C576A225D8EE6B4534AAD1E4915457040D76CD6E"
+    },
+    "drand": {
+      "round": 6409142,
+      "randomness": "979251700b95d654ad69bffcd0eef64ce8c27d6edf39aee652d8e20ebc523acb"
+    }
+  },
+  "chain_hash": "5629a5d4542a25cf892fd5227c9d5ace9730724290b2f032a5a105a503d07a09",
+  "chain_prev_hash": "40ded1fad14bbfbaab22ec9bac2e95df6fcc445ad49e1e2b65d29dd8854eac30"
+}

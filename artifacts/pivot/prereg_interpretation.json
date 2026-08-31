@@ -1,0 +1,28 @@
+{
+  "anchor_direction_correction": "CORRECTION (2026-08-31, from an adversarial audit): the drand anchor in this file proves only that the file was written no EARLIER than the anchored round - a not-before proof. The original text cited it as proof that no measurement yet existed, which is a not-AFTER claim the anchor is logically incapable of supporting: nothing stops an author computing numbers first and fetching a fresh round while writing a post-hoc note. The precedence claim therefore rests on the run logs and git history, not on the beacon. Filed in CORRECTIONS.md.",
+  "issues": [
+    {
+      "direction": "neutral - the baseline would have been constant either way",
+      "frozen_wording": "trivial baselines ... fragment length and compression-ratio only ...",
+      "id": "length-baseline-not-computable",
+      "problem": "Neither quantity exists under the task as defined. Every fragment is a fixed 2048 bytes, so fragment length is a constant and carries zero information. Compression ratio requires the plaintext and the original stream length, both of which the task deliberately withholds from the student - that withholding is the whole reason no incumbent tool applies.",
+      "resolution": "This baseline is recorded as NOT COMPUTABLE rather than silently dropped. Under the task as specified it degenerates exactly to the majority-class baseline, which IS measured. Nothing is lost and the omission is visible."
+    },
+    {
+      "direction": "Deliberately reported in both directions so the reader can apply whichever standard they think correct without having to re-derive anything.",
+      "frozen_wording": "trivial baselines ... a depth-3 tree, and logistic regression",
+      "id": "deep-trees-not-in-the-frozen-set",
+      "problem": "Depth-8 and depth-16 decision trees were added to the baseline set during piloting. They are not in the frozen list. They are also substantially STRONGER than anything in it - a depth-8 tree already reaches 0.1192 against 0.0385 chance - so including them in best_trivial_baseline would raise the bar the study must clear. Cutting the other way: a depth-16 tree over 596 engineered features is not a rule a person writes by hand. It is a weaker learned model, and requiring a 0.05 margin over it tests something other than what the margin clause was written to test.",
+      "resolution": "BOTH are reported and neither is hidden. `best_trivial_baseline`, the field the frozen reader consumes, takes the best of the PREREGISTERED set - majority, label-prior sampling, depth-3 tree, logistic regression - because that is literally what was frozen. The artifact ALSO carries `best_baseline_expanded` and `margin_over_expanded` covering the deep trees, and VERDICT.md gives the expanded reading at least equal prominence. If the study clears the frozen bar but not the expanded one, that is stated in the headline and not in a footnote."
+    }
+  ],
+  "not_before_anchor": {
+    "drand_round": 6408095,
+    "randomness": "fb614d42348a89717adc29723ce531d89d187ac4bc7209154aac92028a56dab8"
+  },
+  "preregistration": "0003-pivot-deflate-curve",
+  "recorded_before": "the v1-vs-v2 feature comparison finished, and therefore before the final baseline and model numbers were known. The drand anchor below is a not-before proof for that.",
+  "recorded_utc": "2026-08-25T16:04:50Z",
+  "schema": "raise-v1/prereg_interpretation/1",
+  "why": "Operating rule 3: a preregistration is a commitment, not a shield. Two places where the frozen wording and its substance come apart were found while the benchmark was still running, and the resolution is recorded now so it cannot be shaped by the numbers."
+}

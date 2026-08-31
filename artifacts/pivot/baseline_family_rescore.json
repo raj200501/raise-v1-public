@@ -1,0 +1,121 @@
+{
+  "baselines": {
+    "best_single_feat": {
+      "full_eval": 0.0751,
+      "gutenberg": 0.0625,
+      "non_gutenberg": 0.0769,
+      "per_family": {
+        "base64": 0.0769,
+        "binary": 0.0769,
+        "code": 0.0769,
+        "csv": 0.0769,
+        "gutenberg": 0.0625,
+        "json": 0.0769,
+        "log": 0.0769,
+        "mixed": 0.0769
+      },
+      "seconds": 63.1
+    },
+    "depth16_tree": {
+      "full_eval": 0.1812,
+      "gutenberg": 0.1268,
+      "non_gutenberg": 0.1891,
+      "per_family": {
+        "base64": 0.1197,
+        "binary": 0.1019,
+        "code": 0.1854,
+        "csv": 0.3121,
+        "gutenberg": 0.1268,
+        "json": 0.2336,
+        "log": 0.2551,
+        "mixed": 0.1174
+      },
+      "seconds": 750.8
+    },
+    "depth3_tree": {
+      "full_eval": 0.0969,
+      "gutenberg": 0.0852,
+      "non_gutenberg": 0.0986,
+      "per_family": {
+        "base64": 0.0769,
+        "binary": 0.0769,
+        "code": 0.0837,
+        "csv": 0.1118,
+        "gutenberg": 0.0852,
+        "json": 0.1122,
+        "log": 0.1132,
+        "mixed": 0.1153
+      },
+      "seconds": 166.4
+    },
+    "depth8_tree": {
+      "full_eval": 0.1459,
+      "gutenberg": 0.1024,
+      "non_gutenberg": 0.1522,
+      "per_family": {
+        "base64": 0.1076,
+        "binary": 0.0897,
+        "code": 0.1111,
+        "csv": 0.2611,
+        "gutenberg": 0.1024,
+        "json": 0.1698,
+        "log": 0.2107,
+        "mixed": 0.1159
+      },
+      "seconds": 412.9
+    },
+    "logistic": {
+      "full_eval": 0.1392,
+      "gutenberg": 0.1074,
+      "non_gutenberg": 0.1438,
+      "per_family": {
+        "base64": 0.072,
+        "binary": 0.0709,
+        "code": 0.1566,
+        "csv": 0.1974,
+        "gutenberg": 0.1074,
+        "json": 0.2141,
+        "log": 0.1828,
+        "mixed": 0.1134
+      },
+      "seconds": 908.9
+    },
+    "majority": {
+      "full_eval": 0.0385,
+      "gutenberg": 0.0385,
+      "non_gutenberg": 0.0385,
+      "per_family": {
+        "base64": 0.0385,
+        "binary": 0.0385,
+        "code": 0.0385,
+        "csv": 0.0385,
+        "gutenberg": 0.0385,
+        "json": 0.0385,
+        "log": 0.0385,
+        "mixed": 0.0385
+      },
+      "seconds": 2.5
+    },
+    "stratified": {
+      "full_eval": 0.0387,
+      "gutenberg": 0.0381,
+      "non_gutenberg": 0.0388,
+      "per_family": {
+        "base64": 0.0384,
+        "binary": 0.0389,
+        "code": 0.0394,
+        "csv": 0.039,
+        "gutenberg": 0.0381,
+        "json": 0.0389,
+        "log": 0.0377,
+        "mixed": 0.0392
+      },
+      "seconds": 0.9
+    }
+  },
+  "n_eval": 260000,
+  "n_eval_gutenberg": 32994,
+  "n_train": 800000,
+  "schema": "raise-v1/baseline_family_rescore/1",
+  "why": "An adversarial audit established that gutenberg-family source bytes straddle the train/eval\nboundary (windows drawn from one shared 7.84 MB pool), so the grouped-split guarantee is false for\nthat eighth of the corpus. The model's banked per-example scores let its accuracy be restated with\ngutenberg excluded; the BASELINES' per-example predictions were never banked, so the margin could\nnot be restated without refitting them. This refits the same baselines on the same rows with the\nsame seeds - deterministic, no tuning - and banks per-family and gutenberg-excluded accuracies."
+}

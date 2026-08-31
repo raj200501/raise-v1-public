@@ -1,0 +1,24 @@
+{
+  "queries": [
+    {
+      "incomplete_results": false,
+      "q": "deflate compression level detection identify encoder",
+      "total_count": 0
+    },
+    {
+      "incomplete_results": false,
+      "q": "zlib compression level fingerprint recompress byte identical",
+      "total_count": 0
+    },
+    {
+      "incomplete_results": false,
+      "q": "deflate parameter detection encoder provenance compressed stream classifier",
+      "total_count": 0
+    }
+  ],
+  "recorded_utc": "2026-08-31T00:30:00Z",
+  "result": "HARD ZERO x3, now first-hand: total_count 0 with incomplete_results false on all three formulations. The round-1 subagent's claim was correct; the mislabelling of its provenance was ours and is filed in CORRECTIONS.md.",
+  "schema": "raise-v1/g4_github_firsthand/1",
+  "venue": "GitHub repository search API, authenticated, via the session's GitHub MCP connector",
+  "why": "An adversarial audit found that VERDICT.md attributed three GitHub total_count:0 queries to the first-hand G4 artifact, when they were in fact a round-1 SUBAGENT's results banked in artifacts/phase0/round1_domain_search.json - exactly the class of evidence this repository refuses to call verified elsewhere. g4_firsthand.json's re-run had covered arXiv, general web and HuggingFace but never repeated the GitHub arm. This closes that gap: the same three query formulations, re-run first-hand through the authenticated GitHub API."
+}

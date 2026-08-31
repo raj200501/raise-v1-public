@@ -1,0 +1,1250 @@
+{
+  "by_gate": {
+    "a2-baseline": {
+      "detected": 6,
+      "total": 6
+    },
+    "byteflat": {
+      "detected": 12,
+      "total": 12
+    },
+    "bytemodel": {
+      "detected": 10,
+      "total": 10
+    },
+    "c1": {
+      "detected": 14,
+      "total": 14
+    },
+    "carve": {
+      "detected": 15,
+      "total": 15
+    },
+    "claimcheck": {
+      "detected": 8,
+      "total": 8
+    },
+    "coverage": {
+      "detected": 8,
+      "total": 8
+    },
+    "ephemerr-a2": {
+      "detected": 9,
+      "total": 9
+    },
+    "freshness": {
+      "detected": 9,
+      "total": 9
+    },
+    "pivot-curve": {
+      "detected": 11,
+      "total": 11
+    },
+    "prereg": {
+      "detected": 9,
+      "total": 9
+    },
+    "scaling": {
+      "detected": 7,
+      "total": 7
+    },
+    "topk": {
+      "detected": 14,
+      "total": 14
+    }
+  },
+  "cases": [
+    {
+      "detected": true,
+      "evidence": "CLAIMCHECK: PASS",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "claimcheck",
+      "mutation": "control-unmutated-passes",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "CLAIMCHECK: FAIL - 1 number(s) in outbound copy do not trace to an artifact.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "claimcheck",
+      "mutation": "fabricated-number-in-doc",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "CLAIMCHECK: FAIL - 3 number(s) in outbound copy do not trace to an artifact.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "claimcheck",
+      "mutation": "backing-artifact-deleted",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "CLAIMCHECK: FAIL - 1 number(s) in outbound copy do not trace to an artifact.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "claimcheck",
+      "mutation": "precision-overclaim",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "CLAIMCHECK: FAIL - 1 number(s) in outbound copy do not trace to an artifact.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "claimcheck",
+      "mutation": "number-hidden-in-code-fence-is-still-checked",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "CLAIMCHECK: FAIL - 1 number(s) in outbound copy do not trace to an artifact.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "claimcheck",
+      "mutation": "claim-adjacent-to-url-not-swallowed",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "claimcheck: allowlist line lacks a reason: '0.981'",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "claimcheck",
+      "mutation": "allowlist-entry-without-reason-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "CLAIMCHECK: PASS",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "claimcheck",
+      "mutation": "allowlist-with-reason-admits-exactly-that-number",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=4cdbe42317adeb42)",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "prereg",
+      "mutation": "control-clean-chain-verifies",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "  - entry 1 (prereg/0001-seed.json): sealed content changed after freezing",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "prereg",
+      "mutation": "sealed-bar-edited-after-freeze",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "      frozen=fc0a9be52ad3891f now=86218bfb82067c9f",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "prereg",
+      "mutation": "reader-edited-after-freeze",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - entry 1 (prereg/0001-seed.json): sealed content changed after freezing",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "prereg",
+      "mutation": "reading-definition-swapped-after-freeze",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - entry 1 (prereg/0001-seed.json): sealed content changed after freezing",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "prereg",
+      "mutation": "chain-entry-hash-tampered",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 8a3e6bb707fc7df6 (chain order broken)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "prereg",
+      "mutation": "prereg-inserted-out-of-order",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - prereg/0001-seed.json: marked frozen but absent from the chain",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "prereg",
+      "mutation": "frozen-file-absent-from-chain",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  The reader must be written BEFORE the data exists. That is the whole point.",
+      "exit_code": 3,
+      "expected": "fail",
+      "gate": "prereg",
+      "mutation": "freeze-refuses-when-reader-does-not-exist",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "/tmp/tmpqkkjbejs/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "prereg",
+      "mutation": "double-freeze-refused",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "positive_slope_survives=True",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "scaling",
+      "mutation": "control-rising-curve-is-called-positive",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "positive_slope_survives=False",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "scaling",
+      "mutation": "flat-curve-is-NOT-called-positive",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "positive_slope_survives=False",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "scaling",
+      "mutation": "declining-curve-is-NOT-called-positive",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "positive_slope_survives=False",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "scaling",
+      "mutation": "tiny-eval-set-must-not-survive-the-interval",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "scaling: REFUSED - 3 rung(s); the preregistered scope requires >= 4",
+      "exit_code": 3,
+      "expected": "fail",
+      "gate": "scaling",
+      "mutation": "three-rungs-refused-by-scope",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "scaling: REFUSED - rungs span 0.903 orders of magnitude; the preregistered scope requires >= 2.0",
+      "exit_code": 3,
+      "expected": "fail",
+      "gate": "scaling",
+      "mutation": "under-two-decades-refused-by-scope",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "scaling: REFUSED - rungs were evaluated on different numbers of examples ([50, 400]); the paired bootstrap requires one shared evaluation set",
+      "exit_code": 3,
+      "expected": "fail",
+      "gate": "scaling",
+      "mutation": "unpaired-eval-sets-refused",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "A2 GATE: PASS - claimed 0.9900 clears the floor",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "a2-baseline",
+      "mutation": "control-strong-model-clears-the-floor",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "A2 GATE: FAIL - claimed 0.5500 does NOT clear the floor 0.8700. The manufactured labels have not been shown to carry learnable signal beyond a rule anyone could write by hand.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "a2-baseline",
+      "mutation": "weak-model-below-floor-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "A2 GATE: FAIL - claimed 0.8550 does NOT clear the floor 0.9000. The manufactured labels have not been shown to carry learnable signal beyond a rule anyone could write by hand.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "a2-baseline",
+      "mutation": "margin-does-real-work-just-above-baseline-still-fails",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "A2 GATE: FAIL - claimed 0.9700 does NOT clear the floor 1.0200. The manufactured labels have not been shown to carry learnable signal beyond a rule anyone could write by hand.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "a2-baseline",
+      "mutation": "degenerate-leaked-label-makes-the-baseline-unbeatable",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "A2 GATE: FAIL - claimed 0.5200 does NOT clear the floor 0.5889. The manufactured labels have not been shown to carry learnable signal beyond a rule anyone could write by hand.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "a2-baseline",
+      "mutation": "pure-noise-labels-cannot-be-cleared",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "--claimed-score requires --margin (the preregistered margin)",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "a2-baseline",
+      "mutation": "claimed-score-without-a-preregistered-margin-is-refused",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "COVERAGE: PASS \u2014 every claim cites an artifact that exists and contains its value; every primary-verifiable claim names a command that exists.",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "coverage",
+      "mutation": "control-coherent-map-passes",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "  - a: cited artifact does not exist: artifacts/does_not_exist.json",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "coverage",
+      "mutation": "claim-citing-a-missing-artifact-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - a: value 0.4242 is not present in artifacts/result.json",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "coverage",
+      "mutation": "value-absent-from-the-cited-artifact-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - a: filed primary-verifiable but names no reverify command",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "coverage",
+      "mutation": "primary-verifiable-without-a-reverify-command-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - a: reverify command references a script that does not exist: tools/repro/ghost.py",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "coverage",
+      "mutation": "primary-verifiable-naming-a-script-that-does-not-exist-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - c: filed 'neither' but gives no reason",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "coverage",
+      "mutation": "neither-without-a-written-reason-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  - b: class 'mostly-verifiable' is not one of ['neither', 'arithmetic-verifiable', 'primary-verifiable']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "coverage",
+      "mutation": "invented-class-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "order neither=67 arithmetic=210 primary=310",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "coverage",
+      "mutation": "weakest-class-is-printed-first",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_ESTABLISHED failed=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "pivot-curve",
+      "mutation": "control-passing-curve-is-established",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['slope: slope_ci95_low=0.0 does not exceed 0 \u2014 the curve is not established as rising']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "flat-slope-interval-touching-zero-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['slope: slope_ci95_low=-0.04 does not exceed 0 \u2014 the curve is not established as rising']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "negative-slope-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['margin: 0.1999 - 0.15 = 0.0499 is below the preregistered 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "margin-just-below-the-frozen-0.05-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['scope: n_rungs=3, need >= 4']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "three-rungs-rejected-by-scope",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['scope: decades_spanned=1.9, need >= 2.0']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "under-two-decades-rejected-by-scope",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['split: split_is_grouped_by_source is not True \u2014 a random split measures content memorisation, not encoder identification']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "ungrouped-split-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['null control: shuffled labels reached 0.2, above chance 0.0385 + 0.02 \u2014 the pipeline is reading something other than the label']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "null-control-above-chance-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['slope: slope_ci95_low missing']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "missing-slope-field-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CURVE_NOT_ESTABLISHED failed=['null control: shuffled_label_accuracy or chance_accuracy missing']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "missing-null-control-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "pivot-curve",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=A2_PASSED []",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "ephemerr-a2",
+      "mutation": "control-passing-result-is-accepted",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=A2_FAILED ['auc_margin: 0.9821 - 0.9363 = 0.0458 is below the frozen 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "ephemerr-a2",
+      "mutation": "margin-0.0458-the-real-result-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=A2_FAILED ['auc_margin: 0.9499 - 0.9 = 0.0499 is below the frozen 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "ephemerr-a2",
+      "mutation": "margin-one-ten-thousandth-below-the-bar-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=A2_FAILED ['split_is_temporal is not True - a random split measures memorisation of a slowly varying state, not prediction']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "ephemerr-a2",
+      "mutation": "non-temporal-split-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=A2_FAILED ['null control: shuffled labels reached AUC 0.7, above 0.55']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "ephemerr-a2",
+      "mutation": "null-control-above-0.55-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=A2_FAILED ['scope: n_test_epochs=1000, need >= 20000']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "ephemerr-a2",
+      "mutation": "too-few-test-epochs-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=A2_FAILED ['scope: n_satellites=5, need >= 20']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "ephemerr-a2",
+      "mutation": "too-few-satellites-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=A2_FAILED ['shuffled_label_auc missing']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "ephemerr-a2",
+      "mutation": "missing-null-control-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "ephemerr-a2",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: PASS",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "freshness",
+      "mutation": "control-current-claims-pass",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (chain)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "freshness",
+      "mutation": "stale-count-that-claimcheck-would-still-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (chain)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "freshness",
+      "mutation": "stale-hash-that-was-true-earlier",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (xclass)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "freshness",
+      "mutation": "stale-count-under-a-filtered-path",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (chain)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "freshness",
+      "mutation": "reworded-claim-is-not-silently-skipped",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (chain, xclass)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "freshness",
+      "mutation": "missing-artifact-is-a-failure-not-a-skip",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (bad)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "freshness",
+      "mutation": "path-that-does-not-resolve-is-a-failure",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (bad)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "freshness",
+      "mutation": "unknown-path-operator-is-a-failure",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (bad)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "freshness",
+      "mutation": "group-count-not-matching-path-count-is-a-failure",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_USABLE shape=BOTH HALVES USABLE failed=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "topk",
+      "mutation": "control-usable-output-passes",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=USABLE CONFIDENCE, SHORTLIST NO BETTER THAN A DUMB RULE failed=['top5 margin (frozen set): 0.52 - 0.48 = 0.04 is below the preregistered 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "top5-margin-over-the-FROZEN-set-below-bar-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=USABLE CONFIDENCE, SHORTLIST NO BETTER THAN A DUMB RULE failed=['top5 margin (expanded set): 0.52 - 0.49 = 0.03 is below the preregistered 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "top5-margin-over-the-EXPANDED-set-below-bar-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=USABLE SHORTLIST, UNUSABLE CONFIDENCE failed=['selective margin: 0.71 - 0.69 = 0.02 is below the preregistered 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "selective-margin-over-the-best-baseline-decile-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=USABLE SHORTLIST, UNUSABLE CONFIDENCE failed=['selective floor: 0.44 is below the preregistered 0.5 \u2014 on the tenth of fragments it is surest about, the tool is wrong mo",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "selective-accuracy-below-the-0.50-usability-floor-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=USABLE CONFIDENCE, SHORTLIST NO BETTER THAN A DUMB RULE failed=['top5 slope: top5_slope_ci95_low=0.0 does not exceed 0']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "top5-slope-lower-bound-touching-zero-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=NEITHER HALF USABLE failed=['null control: shuffled labels reached top-5 0.2124, above the 0.2123 chance-plus-tolerance level \u2014 a top-5 metric is five times easier to s",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "null-control-above-the-5-of-26-chance-level-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=NEITHER HALF USABLE failed=['split: split_is_grouped_by_source is not True']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "non-grouped-split-is-rejected-however-good-the-numbers",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=NEITHER HALF USABLE failed=['scope: n_rungs=3, need >= 4']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "too-few-rungs-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=NEITHER HALF USABLE failed=['scope: decades_spanned=1.9999, need >= 2.0']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "too-few-decades-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=USABLE SHORTLIST, UNUSABLE CONFIDENCE failed=['selective margin: selective_top_decile_accuracy or its baseline is missing', 'selective floor: selective_top_decile_accur",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "a-missing-field-reads-as-failure-not-as-a-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=NEITHER HALF USABLE failed=['split: split_is_grouped_by_source is not True']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "a-true-looking-string-is-not-True",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OUTPUT_NOT_USABLE shape=USABLE SHORTLIST, UNUSABLE CONFIDENCE failed=['selective margin: 0.4 - 0.38 = 0.02 is below the preregistered 0.05', 'selective floor: 0.4 is below the preregistered 0.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "topk",
+      "mutation": "the-partial-outcome-is-NAMED-rather-than-left-spinnable",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_ROBUST within=[] transfer=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "carve",
+      "mutation": "control-robust-result-passes",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['within margin (frozen set): 0.17 - 0.13 = 0.04 is below the preregistered 0.05'] transfer=[\"transfer margin: 0.15 - 0.13 = 0.02 is below the preregistered 0.05 \u2014 a model t",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "within-margin-over-the-frozen-set-below-bar-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['within margin (expanded set): 0.17 - 0.13 = 0.04 is below the preregistered 0.05'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "within-margin-over-the-expanded-set-below-bar-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['within slope: within_slope_ci95_low=0.0 does not exceed 0'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "within-slope-lower-bound-touching-zero-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['null control: shuffled labels reached 0.0585, above chance 0.038462 + 0.02'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "within-null-control-above-chance-plus-tolerance-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['split: within_split_is_grouped_by_source is not True'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "non-grouped-split-is-rejected-however-good-the-numbers",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['scope: n_rungs=3, need >= 4'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "too-few-rungs-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['scope: decades_spanned=1.9999, need >= 2.0'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "too-few-decades-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_SIZE_SPECIFIC within=[] transfer=[\"transfer margin: 0.13 - 0.09 = 0.04 is below the preregistered 0.05 \u2014 a model trained at the longer carve does not beat the shorter corpus's own dumb r",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "transfer-margin-below-bar-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_SIZE_SPECIFIC within=[] transfer=['transfer: corpora_share_source_chunks is not False \u2014 the transfer model may have trained on source bytes present in this evaluation set']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "corpora-sharing-source-chunks-invalidates-the-transfer-arm",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_SIZE_SPECIFIC within=[] transfer=['transfer: corpora_share_source_chunks is not False \u2014 the transfer model may have trained on source bytes present in this evaluation set']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "an-unset-disjointness-flag-reads-as-failure-not-as-a-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['within slope: within_slope_ci95_low missing'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "a-missing-field-reads-as-failure-not-as-a-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_SIZE_SPECIFIC within=[] transfer=[\"transfer margin: 0.13 - 0.09 = 0.04 is below the preregistered 0.05 \u2014 a model trained at the longer carve does not beat the shorter corpus's own dumb r",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "a-transfer-only-failure-is-named-SIZE_SPECIFIC-not-collapsed-to-FAILS",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS within=['within margin (frozen set): 0.1 - 0.09 = 0.01 is below the preregistered 0.05', 'within margin (expanded set): 0.1 - 0.11 = -0.01 is below the preregistered 0.05'] transfe",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve",
+      "mutation": "a-within-size-failure-is-NOT-softened-to-SIZE_SPECIFIC",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=C1_FALSIFIED sel=12",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "c1",
+      "mutation": "control-a-real-falsifier-is-recognised",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "after-the-fact-loss-cannot-falsify-the-conjecture-it-describes",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "unstated-withholding-mechanism-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "abundance-below-1e6-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "an-unverified-abundance-count-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "a-G4-query-that-did-not-return-200-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "a-G4-query-recording-no-status-at-all-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "a-law-claimed-survived-with-no-reason-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "a-law-not-survived-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "a-forensics-buyer-confirms-the-conjecture-rather-than-falsifying-it",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID_SEARCH_TOO_NARROW sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "too-few-candidates-VOIDS-rather-than-returning-a-comforting-negative",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID_SEARCH_TOO_NARROW sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "an-unexamined-withholding-mode-VOIDS-the-search",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_FALSIFIER_FOUND sel=0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "finding-nothing-must-NOT-promote-the-conjecture",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "c1",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_CLEARS failed=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "bytemodel",
+      "mutation": "control-a-better-representation-is-recognised",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_FAILS failed=['A2 margin: 0.19 - 0.15 = 0.04 is below the preregistered 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "A2-margin-below-bar-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_FAILS failed=[\"beats hand: 0.19 does not exceed the hand-engineered model's 0.2 \u2014 a representation that does not beat the one it replaces is not a better representation\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "clearing-A2-while-LOSING-to-the-model-it-replaces-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_FAILS failed=[\"beats hand: 0.19 does not exceed the hand-engineered model's 0.19 \u2014 a representation that does not beat the one it replaces is not a better representation\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "merely-tying-the-hand-engineered-model-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_FAILS failed=['null control: shuffled labels reached 0.0585, above chance 0.038462 + 0.02']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "null-control-above-chance-catches-a-memorising-network",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_FAILS failed=['split: split_is_grouped_by_source is not True']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "non-grouped-split-is-rejected-however-good-the-numbers",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_FAILS failed=['scope: n_train=500000 does not equal matched_rung=100000; the comparison against the feature model would not be at a matched rung']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "an-unmatched-rung-voids-the-comparison",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_FAILS failed=['beats hand: byte_model_top1 or feature_model_top1 missing']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "a-missing-field-reads-as-failure-not-as-a-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_MODEL_FAILS failed=['A2 margin: 0.1 - 0.09 = 0.01 is below the preregistered 0.05', \"beats hand: 0.1 does not exceed the hand-engineered model's 0.1165 \u2014 a representation that does not be",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "bytemodel",
+      "mutation": "a-negative-is-reported-as-STRENGTHENING-L4-not-as-inconclusive",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_CLEARS failable=True meaning=0009's negative was an artifact of its head. Every place thi",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "byteflat",
+      "mutation": "control-a-head-change-that-works-is-recognised",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=False meaning=Inconclusive on the point 0010 exists to settle: the control",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "an-UNFAILABLE-null-control-is-rejected-however-clean-it-looks",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=False meaning=Inconclusive on the point 0010 exists to settle: the control",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "an-unfailable-control-is-named-INCONCLUSIVE-not-a-negative",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=True meaning=A STRONGER negative than 0009's: this model demonstrably CAN",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "a-failable-control-negative-is-named-STRONGER-than-0009",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=True meaning=A STRONGER negative than 0009's: this model demonstrably CAN",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "a-leaking-null-control-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=True meaning=A STRONGER negative than 0009's: this model demonstrably CAN",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "A2-margin-below-bar-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=True meaning=A STRONGER negative than 0009's: this model demonstrably CAN",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "tying-the-pooled-head-has-answered-nothing-and-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=True meaning=A STRONGER negative than 0009's: this model demonstrably CAN",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "losing-to-the-hand-engineered-model-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=True meaning=A STRONGER negative than 0009's: this model demonstrably CAN",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "an-unfingerprinted-evaluation-set-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=True meaning=A STRONGER negative than 0009's: this model demonstrably CAN",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "an-unmatched-rung-voids-the-comparison",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=BYTE_FLAT_FAILS failable=False meaning=Inconclusive on the point 0010 exists to settle: the control",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "a-missing-field-reads-as-failure-not-as-a-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "byteflat",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
+    }
+  ],
+  "detected": 132,
+  "schema": "raise-v1/mutation_report/1",
+  "survived": 0,
+  "total_mutations": 132
+}

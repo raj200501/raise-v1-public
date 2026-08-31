@@ -1,0 +1,542 @@
+{
+  "candidates": [
+    {
+      "G1_abundance_verified": false,
+      "G1_count_is_verified": false,
+      "G1_source": "MIMIC-IV-Note v2.2 discharge+radiology notes",
+      "G1_units": 2650000,
+      "G2_manufacturer": true,
+      "G3_monotonicity": false,
+      "G4_queries": [
+        {
+          "bytes": 788,
+          "http_status": 200,
+          "n_results": 0,
+          "q": "all:\"de-identification\" AND all:\"tool identification\"",
+          "titles": [],
+          "venue": "arxiv"
+        },
+        {
+          "bytes": 8240,
+          "http_status": 200,
+          "n_results": 3,
+          "q": "abs:\"de-identification\" AND abs:provenance",
+          "titles": [
+            "An Easy-to-use and Robust Approach for the Differentially Private De-Identification of Clinical Textual Docume",
+            "Transparency-First Medical Language Models: Datasheets, Model Cards, and End-to-End Data Provenance for Clinic",
+            "De-Identification of French Unstructured Clinical Notes for Machine Learning Tasks"
+          ],
+          "venue": "arxiv"
+        },
+        {
+          "http_status": 403,
+          "q": "identify which de-identification tool produced clinical text",
+          "repos": [],
+          "total_count": null,
+          "venue": "github"
+        }
+      ],
+      "G4_white_space_firsthand": false,
+      "G5_buyer_not_forensics": true,
+      "G5_buyer_type": "hospitals validating a de-identification vendor",
+      "G5_why_not_forensics": "the buyer acts prospectively, choosing a vendor rather than reconstructing a past release",
+      "law_reasons": {
+        "L1": "no agency reprocessing arc",
+        "L2": "transform is lossy and not analytically invertible",
+        "L3": "the manufacturer's input is unavailable, so re-run-and-compare is unavailable",
+        "L4": "input is not a variable-size fragment summarised by window statistics"
+      },
+      "laws_survived": {
+        "L1": true,
+        "L2": true,
+        "L3": true,
+        "L4": true
+      },
+      "name": "De-identification pipeline recovery from released clinical notes",
+      "primary_blocker": "G3 AND the trivial baseline: de-identification tools emit DISTINCTIVE SURROGATE FORMATS ([**Name**], <NAME>, XXX), so the producing tool is legible from a regex over placeholder syntax. The artifact carries an explicit marker of its own producer. Also G1 unverified here and MIMIC is credentialed rather than open bulk, and the GitHub arm of the G4 check returned 403 so white space was NOT established first-hand.",
+      "withholding_is_after_the_fact_loss": false,
+      "withholding_mechanism": "HIPAA 45 CFR 164.514 bars release of the identifiers; the pre-de-identification text is withheld by law",
+      "withholding_mode": "privacy"
+    },
+    {
+      "G1_abundance_verified": false,
+      "G1_count_is_verified": false,
+      "G1_source": "US Census 2020 DHC published cell counts",
+      "G1_units": 1000000000,
+      "G2_manufacturer": true,
+      "G3_monotonicity": false,
+      "G4_queries": [
+        {
+          "bytes": 9204,
+          "http_status": 200,
+          "n_results": 3,
+          "q": "abs:\"differential privacy\" AND abs:audit AND abs:epsilon",
+          "titles": [
+            "Picture the Epsilon: Pursuing Identity-Level Privacy Guarantees for Images",
+            "Epsilon*: Privacy Metric for Machine Learning Models",
+            "Ball Differential Privacy: How to Mitigate Data Reconstruction with Less Noise"
+          ],
+          "venue": "arxiv"
+        }
+      ],
+      "G4_white_space_firsthand": true,
+      "G5_buyer_not_forensics": true,
+      "G5_buyer_type": "data users assessing whether a release is fit for a decision",
+      "G5_why_not_forensics": "the buyer acts prospectively on a release they are about to rely on",
+      "law_reasons": {
+        "L1": "no agency reprocessing arc",
+        "L2": "transform is lossy and not analytically invertible",
+        "L3": "FAILS: the institution publishes epsilon by policy",
+        "L4": "input is not a variable-size fragment summarised by window statistics"
+      },
+      "laws_survived": {
+        "L1": true,
+        "L2": true,
+        "L3": false,
+        "L4": true
+      },
+      "name": "Differential-privacy mechanism and epsilon from a published release",
+      "primary_blocker": "G3 and L3(ii): the epsilon and mechanism are PUBLISHED by policy, so the label is public and there is no task. Where it is not published the auditing field is active - StatDP, DP-Sniper, membership-inference audits - so G4 also fails.",
+      "withholding_is_after_the_fact_loss": false,
+      "withholding_mechanism": "Title 13 U.S.C. 9 bars disclosure of the underlying census microdata",
+      "withholding_mode": "privacy"
+    },
+    {
+      "G1_abundance_verified": false,
+      "G1_count_is_verified": false,
+      "G1_source": "aggregate of public synthetic health/finance releases",
+      "G1_units": 1000000,
+      "G2_manufacturer": true,
+      "G3_monotonicity": true,
+      "G4_queries": [
+        {
+          "bytes": 21889,
+          "http_status": 200,
+          "n_results": 9,
+          "q": "abs:\"synthetic data\" AND abs:\"generator\" AND abs:\"identify which\"",
+          "titles": [
+            "ReMIA: a Powerful and Efficient Alternative to Membership Inference Attacks against Synthetic Data Generators",
+            "Causal Effect Identification in Heterogeneous Environments from Higher-Order Moments",
+            "WinSyn: A High Resolution Testbed for Synthetic Data",
+            "Estimating problem difficulty without ground truth using Large Language Model comparisons",
+            "A Factorial Study of Synthetic Data Generation for Low-Resource Machine Translation using Grammar Books",
+            "Associative Memories to Accelerate Approximate Nearest Neighbor Search",
+            "Directed Information Graphs",
+            "Assessing and Prioritizing Ransomware Risk Based on Historical Victim Data"
+          ],
+          "venue": "arxiv"
+        }
+      ],
+      "G4_white_space_firsthand": true,
+      "G5_buyer_not_forensics": true,
+      "G5_buyer_type": "recipients assessing a synthetic release's fitness",
+      "G5_why_not_forensics": "the buyer acts prospectively before using the data",
+      "law_reasons": {
+        "L1": "no agency reprocessing arc",
+        "L2": "transform is lossy and not analytically invertible",
+        "L3": "the manufacturer's input is unavailable, so re-run-and-compare is unavailable",
+        "L4": "input is not a variable-size fragment summarised by window statistics"
+      },
+      "laws_survived": {
+        "L1": true,
+        "L2": true,
+        "L3": true,
+        "L4": true
+      },
+      "name": "Synthetic-data generator identification from a published synthetic dataset",
+      "primary_blocker": "G4: 9 arXiv hits on generator identification and synthetic-data detection, plus an active membership-inference literature. Not white space. G1 also not verified from a single named source at 1e6.",
+      "withholding_is_after_the_fact_loss": false,
+      "withholding_mechanism": "the real records are withheld under the data-sharing agreement that motivated synthesising them",
+      "withholding_mode": "privacy"
+    },
+    {
+      "G1_abundance_verified": false,
+      "G1_count_is_verified": false,
+      "G1_source": "published aggregate query endpoints",
+      "G1_units": 100000,
+      "G2_manufacturer": true,
+      "G3_monotonicity": true,
+      "G4_queries": [],
+      "G4_white_space_firsthand": false,
+      "G5_buyer_not_forensics": true,
+      "G5_buyer_type": "auditors",
+      "G5_why_not_forensics": "prospective assessment of a live endpoint",
+      "law_reasons": {
+        "L1": "no agency reprocessing arc",
+        "L2": "transform is lossy and not analytically invertible",
+        "L3": "the manufacturer's input is unavailable, so re-run-and-compare is unavailable",
+        "L4": "input is not a variable-size fragment summarised by window statistics"
+      },
+      "laws_survived": {
+        "L1": true,
+        "L2": true,
+        "L3": true,
+        "L4": true
+      },
+      "name": "Query-budget policy recovery from a published statistics API's answers",
+      "primary_blocker": "G1: nowhere near 1e6 distinct published answers from any single named source, and no first-hand G4 check was run because the abundance clause already fails.",
+      "withholding_is_after_the_fact_loss": false,
+      "withholding_mechanism": "the underlying microdata is withheld by the same statute that permits only aggregate answers",
+      "withholding_mode": "privacy"
+    },
+    {
+      "G1_abundance_verified": false,
+      "G1_count_is_verified": false,
+      "G1_source": "aggregate FOIA reading rooms and PACER",
+      "G1_units": 1000000,
+      "G2_manufacturer": true,
+      "G3_monotonicity": false,
+      "G4_queries": [
+        {
+          "bytes": 35350,
+          "http_status": 200,
+          "n_results": 14,
+          "q": "abs:redaction AND abs:tool AND abs:document",
+          "titles": [
+            "Transforming Redaction: How AI is Revolutionizing Data Protection",
+            "C-sanitized: a privacy model for document redaction and sanitization",
+            "AI-Driven Document Redaction in UK Public Authorities: Implementation Gaps, Regulatory Challenges, and the Hum",
+            "RedactionBench",
+            "Redactable Blockchain in the Permissionless Setting",
+            "zkTax: A pragmatic way to support zero-knowledge tax disclosures",
+            "BodhiPromptShield: Pre-Inference Prompt Mediation for Suppressing Privacy Propagation in LLM/VLM Agents",
+            "Analysis of the Pennsylvania Additive Classification Tool: Biases and Important Features"
+          ],
+          "venue": "arxiv"
+        }
+      ],
+      "G4_white_space_firsthand": true,
+      "G5_buyer_not_forensics": false,
+      "G5_buyer_type": "transparency organisations and journalists",
+      "G5_why_not_forensics": "",
+      "law_reasons": {
+        "L1": "no agency reprocessing arc",
+        "L2": "transform is lossy and not analytically invertible",
+        "L3": "the manufacturer's input is unavailable, so re-run-and-compare is unavailable",
+        "L4": "input is not a variable-size fragment summarised by window statistics"
+      },
+      "laws_survived": {
+        "L1": true,
+        "L2": true,
+        "L3": true,
+        "L4": true
+      },
+      "name": "Redaction-tool identification from published FOIA and court releases",
+      "primary_blocker": "G5: the buyer reconstructs what was withheld in a past release, which is provenance reconstruction after the fact - this CONFIRMS C1 rather than falsifying it. Also G3: redaction tools leave producer metadata in the PDF, and 14 arXiv hits show the area is worked.",
+      "withholding_is_after_the_fact_loss": false,
+      "withholding_mechanism": "FOIA exemptions 5 U.S.C. 552(b) require the withheld text to stay withheld",
+      "withholding_mode": "regulation"
+    },
+    {
+      "G1_abundance_verified": false,
+      "G1_count_is_verified": true,
+      "G1_source": "ClinicalTrials.gov studies with posted results",
+      "G1_units": 60000,
+      "G2_manufacturer": true,
+      "G3_monotonicity": true,
+      "G4_queries": [],
+      "G4_white_space_firsthand": false,
+      "G5_buyer_not_forensics": true,
+      "G5_buyer_type": "regulators and meta-analysts",
+      "G5_why_not_forensics": "prospective assessment of a result about to be relied on",
+      "law_reasons": {
+        "L1": "no agency reprocessing arc",
+        "L2": "transform is lossy and not analytically invertible",
+        "L3": "the manufacturer's input is unavailable, so re-run-and-compare is unavailable",
+        "L4": "input is not a variable-size fragment summarised by window statistics"
+      },
+      "laws_survived": {
+        "L1": true,
+        "L2": true,
+        "L3": true,
+        "L4": true
+      },
+      "name": "Analysis-plan recovery from published clinical-trial summary results",
+      "primary_blocker": "G1: about 60000 results-posted studies, two orders of magnitude below the 1e6 bar.",
+      "withholding_is_after_the_fact_loss": false,
+      "withholding_mechanism": "42 CFR 11 requires summary results while patient-level data stays withheld",
+      "withholding_mode": "regulation"
+    },
+    {
+      "G1_abundance_verified": false,
+      "G1_count_is_verified": false,
+      "G1_source": "NYSE TAQ consolidated tape",
+      "G1_units": 1000000000,
+      "G2_manufacturer": true,
+      "G3_monotonicity": true,
+      "G4_queries": [
+        {
+          "bytes": 5932,
+          "http_status": 200,
+          "n_results": 2,
+          "q": "abs:\"execution algorithm\" AND abs:classification AND abs:trade",
+          "titles": [
+            "MI-BMInet: An Efficient Convolutional Neural Network for Motor Imagery Brain--Machine Interfaces with EEG Chan",
+            "Extracting information from the signature of a financial data stream"
+          ],
+          "venue": "arxiv"
+        }
+      ],
+      "G4_white_space_firsthand": true,
+      "G5_buyer_not_forensics": true,
+      "G5_buyer_type": "buy-side firms evaluating brokers before routing",
+      "G5_why_not_forensics": "the buyer acts prospectively, deciding where to route the next order",
+      "law_reasons": {
+        "L1": "no agency reprocessing arc",
+        "L2": "transform is lossy and not analytically invertible",
+        "L3": "FAILS: L3(ii) - the institution reveals on a schedule and the field built the tool",
+        "L4": "input is not a variable-size fragment summarised by window statistics"
+      },
+      "laws_survived": {
+        "L1": true,
+        "L2": true,
+        "L3": false,
+        "L4": true
+      },
+      "name": "Execution-algorithm identification from a published trade tape",
+      "primary_blocker": "L3(ii) and G4: trade and order classification is a developed microstructure field (Lee-Ready, BVC, and a large ML literature). The incumbent exists and is good. TAQ is also paid access rather than open bulk.",
+      "withholding_is_after_the_fact_loss": false,
+      "withholding_mechanism": "Reg NMS requires the tape; the broker's algorithm and the parent order stay proprietary",
+      "withholding_mode": "regulation"
+    },
+    {
+      "G1_abundance_verified": false,
+      "G1_count_is_verified": true,
+      "G1_source": "EPA GHGRP reporting facilities per year",
+      "G1_units": 8000,
+      "G2_manufacturer": true,
+      "G3_monotonicity": true,
+      "G4_queries": [],
+      "G4_white_space_firsthand": false,
+      "G5_buyer_not_forensics": true,
+      "G5_buyer_type": "regulators",
+      "G5_why_not_forensics": "prospective enforcement targeting",
+      "law_reasons": {
+        "L1": "no agency reprocessing arc",
+        "L2": "transform is lossy and not analytically invertible",
+        "L3": "the manufacturer's input is unavailable, so re-run-and-compare is unavailable",
+        "L4": "input is not a variable-size fragment summarised by window statistics"
+      },
+      "laws_survived": {
+        "L1": true,
+        "L2": true,
+        "L3": true,
+        "L4": true
+      },
+      "name": "Emissions-model recovery from mandatory facility disclosures",
+      "primary_blocker": "G1: roughly 8000 facilities per year, three orders of magnitude below the bar.",
+      "withholding_is_after_the_fact_loss": false,
+      "withholding_mechanism": "40 CFR 98 mandates the filing while the facility's raw process data stays confidential business information",
+      "withholding_mode": "regulation"
+    },
+    {
+      "G1_abundance_verified": false,
+      "G1_count_is_verified": false,
+      "G1_source": "open radio, seismic and hydrophone archives",
+      "G1_units": 1000000,
+      "G2_manufacturer": true,
+      "G3_monotonicity": true,
+      "G4_queries": [],
+      "G4_white_space_firsthand": false,
+      "G5_buyer_not_forensics": true,
+      "G5_buyer_type": "instrument operators",
+      "G5_why_not_forensics": "prospective calibration monitoring",
+      "law_reasons": {
+        "L1": "no agency reprocessing arc",
+        "L2": "transform is lossy and not analytically invertible",
+        "L3": "FAILS: round 4 measured this class as occupied at every instance probed",
+        "L4": "input is not a variable-size fragment summarised by window statistics"
+      },
+      "laws_survived": {
+        "L1": true,
+        "L2": true,
+        "L3": false,
+        "L4": true
+      },
+      "name": "Instrument-configuration recovery from published sensor archives",
+      "primary_blocker": "Round 4 already checked this class first-hand and found it occupied everywhere - chess clock traces, GNSS SNR, hydrophone-AIS pairs, LIGO auxiliary channels. Re-running it here would be re-asking a question this repository has already answered against itself.",
+      "withholding_is_after_the_fact_loss": false,
+      "withholding_mechanism": "the physical excitation no longer exists and cannot be re-presented to the instrument",
+      "withholding_mode": "physics"
+    },
+    {
+      "G1_abundance_verified": false,
+      "G1_count_is_verified": false,
+      "G1_source": "public survey image archives",
+      "G1_units": 1000000000,
+      "G2_manufacturer": true,
+      "G3_monotonicity": true,
+      "G4_queries": [],
+      "G4_white_space_firsthand": false,
+      "G5_buyer_not_forensics": false,
+      "G5_buyer_type": "survey astronomers",
+      "G5_why_not_forensics": "",
+      "law_reasons": {
+        "L1": "no agency reprocessing arc",
+        "L2": "transform is lossy and not analytically invertible",
+        "L3": "the manufacturer's input is unavailable, so re-run-and-compare is unavailable",
+        "L4": "input is not a variable-size fragment summarised by window statistics"
+      },
+      "laws_survived": {
+        "L1": true,
+        "L2": true,
+        "L3": true,
+        "L4": true
+      },
+      "name": "Telescope processing-pipeline recovery from published survey images",
+      "primary_blocker": "G5: the pipeline version is recorded in the FITS header by universal convention, so the label ships with the artifact and there is no task. Where it does not, the buyer is reconstructing how a past image was processed - again after-the-fact provenance, confirming C1.",
+      "withholding_is_after_the_fact_loss": false,
+      "withholding_mechanism": "the photons are gone; the raw exposure is often retained but the atmosphere is not reproducible",
+      "withholding_mode": "physics"
+    },
+    {
+      "G1_abundance_verified": false,
+      "G1_count_is_verified": false,
+      "G1_source": "open inverse-problem benchmark archives",
+      "G1_units": 1000000,
+      "G2_manufacturer": true,
+      "G3_monotonicity": false,
+      "G4_queries": [],
+      "G4_white_space_firsthand": false,
+      "G5_buyer_not_forensics": true,
+      "G5_buyer_type": "modellers",
+      "G5_why_not_forensics": "prospective forecasting",
+      "law_reasons": {
+        "L1": "no agency reprocessing arc",
+        "L2": "FAILS: most such inverses are analytically or numerically well-posed",
+        "L3": "the manufacturer's input is unavailable, so re-run-and-compare is unavailable",
+        "L4": "input is not a variable-size fragment summarised by window statistics"
+      },
+      "laws_survived": {
+        "L1": true,
+        "L2": false,
+        "L3": true,
+        "L4": true
+      },
+      "name": "Excitation recovery from a published response archive",
+      "primary_blocker": "L2: classical inverse problems have closed-form or well-conditioned numerical inverses, which is exactly the family L2 retires, and the literature is enormous.",
+      "withholding_is_after_the_fact_loss": false,
+      "withholding_mechanism": "the exciting event is a one-time physical occurrence that cannot be repeated",
+      "withholding_mode": "physics"
+    },
+    {
+      "G1_abundance_verified": false,
+      "G1_count_is_verified": false,
+      "G1_source": "Docker Hub public image layers",
+      "G1_units": 10000000,
+      "G2_manufacturer": true,
+      "G3_monotonicity": false,
+      "G4_queries": [
+        {
+          "bytes": 3040,
+          "http_status": 200,
+          "n_results": 1,
+          "q": "abs:\"container image\" AND abs:\"build\" AND abs:provenance",
+          "titles": [
+            "Attesting LLM Pipelines: Enforcing Verifiable Training and Release Claims"
+          ],
+          "venue": "arxiv"
+        },
+        {
+          "bytes": 800,
+          "http_status": 200,
+          "n_results": 0,
+          "q": "all:\"builder identification\" OR all:\"build tool provenance\"",
+          "titles": [],
+          "venue": "arxiv"
+        }
+      ],
+      "G4_white_space_firsthand": true,
+      "G5_buyer_not_forensics": true,
+      "G5_buyer_type": "supply-chain security teams gating a deployment",
+      "G5_why_not_forensics": "the buyer acts prospectively, deciding whether to admit an image",
+      "law_reasons": {
+        "L1": "no agency reprocessing arc",
+        "L2": "transform is lossy and not analytically invertible",
+        "L3": "the manufacturer's input is unavailable, so re-run-and-compare is unavailable",
+        "L4": "input is not a variable-size fragment summarised by window statistics"
+      },
+      "laws_survived": {
+        "L1": true,
+        "L2": true,
+        "L3": true,
+        "L4": true
+      },
+      "name": "Build-pipeline identification from published container layers",
+      "primary_blocker": "G3 and the trivial baseline: OCI image history carries created_by strings that contain the literal build command, so the producer is legible without learning anything. G1 also not verified from a named count, and the GitHub arm of the check returned 403.",
+      "withholding_is_after_the_fact_loss": false,
+      "withholding_mechanism": "for commercial images the source and Dockerfile are private while the layers are published",
+      "withholding_mode": "commercial"
+    },
+    {
+      "G1_abundance_verified": false,
+      "G1_count_is_verified": false,
+      "G1_source": "public interaction-log datasets",
+      "G1_units": 100000000,
+      "G2_manufacturer": true,
+      "G3_monotonicity": true,
+      "G4_queries": [],
+      "G4_white_space_firsthand": false,
+      "G5_buyer_not_forensics": true,
+      "G5_buyer_type": "auditors and off-policy evaluators",
+      "G5_why_not_forensics": "prospective policy assessment",
+      "law_reasons": {
+        "L1": "no agency reprocessing arc",
+        "L2": "transform is lossy and not analytically invertible",
+        "L3": "FAILS: off-policy evaluation is a large, mature field built for exactly this",
+        "L4": "input is not a variable-size fragment summarised by window statistics"
+      },
+      "laws_survived": {
+        "L1": true,
+        "L2": true,
+        "L3": false,
+        "L4": true
+      },
+      "name": "Recommender-policy recovery from a published interaction log",
+      "primary_blocker": "L3 and G4: off-policy evaluation and logging-policy estimation is a large established field. The incumbent exists and is strong.",
+      "withholding_is_after_the_fact_loss": false,
+      "withholding_mechanism": "the serving policy and user features are the platform's proprietary assets",
+      "withholding_mode": "commercial"
+    },
+    {
+      "G1_abundance_verified": false,
+      "G1_count_is_verified": false,
+      "G1_source": "crawled web image responses",
+      "G1_units": 1000000000,
+      "G2_manufacturer": true,
+      "G3_monotonicity": false,
+      "G4_queries": [],
+      "G4_white_space_firsthand": false,
+      "G5_buyer_not_forensics": false,
+      "G5_buyer_type": "web-performance and ad-verification vendors",
+      "G5_why_not_forensics": "",
+      "law_reasons": {
+        "L1": "no agency reprocessing arc",
+        "L2": "transform is lossy and not analytically invertible",
+        "L3": "the manufacturer's input is unavailable, so re-run-and-compare is unavailable",
+        "L4": "input is not a variable-size fragment summarised by window statistics"
+      },
+      "laws_survived": {
+        "L1": true,
+        "L2": true,
+        "L3": true,
+        "L4": true
+      },
+      "name": "Delivery-pipeline identification from optimised web assets",
+      "primary_blocker": "G5: identifying which pipeline processed an asset you did not create is provenance reconstruction after the fact - the confirming case for C1, not a falsifier. Delivered assets also carry explicit encoder metadata in most formats.",
+      "withholding_is_after_the_fact_loss": false,
+      "withholding_mechanism": "the original asset belongs to the customer and is not published alongside the delivered one",
+      "withholding_mode": "commercial"
+    }
+  ],
+  "honest_limits": [
+    "The GitHub arm of the G4 check returned HTTP 403 for every attempt in this round - rate-limited or blocked from this container. Under 0008's frozen clause that means white space was NOT established first-hand for any candidate whose check included it, and those candidates cannot SELECT. That is the clause working: an incomplete check is not evidence of white space.",
+    "arXiv queries all returned HTTP 200 with real response bodies, including a 788-byte empty result set, which is what distinguishes a genuine zero from the 301-with-0-bytes failure the archived trial nearly published as white space.",
+    "No patent search was run, which round 4 established as a demonstrated blind spot.",
+    "Several candidates were screened out on paper before any G4 query, because an earlier clause already failed. Their G4_queries lists are empty and they are recorded as unchecked rather than as white space."
+  ],
+  "method": "Enumerate transform label factories across the four NON-LOSS withholding modes C1 names as its falsifier, screen each against G1..G5 and L1..L4 with default posture REJECT, and check white space first-hand for those surviving the paper screen.",
+  "preregistration": "0008-c1-falsifier-search",
+  "recorded_utc": "2026-08-26T01:00:00Z",
+  "schema": "raise-v1/c1_falsifier_search/1"
+}

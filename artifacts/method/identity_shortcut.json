@@ -1,0 +1,53 @@
+{
+  "THE_CRITERION_THIS_YIELDS": "THE LABEL MUST VARY WITHIN ENTITY. The same entity must produce both positive and negative labels frequently, so that knowing the entity tells you little. This is cheap to test BEFORE any model is built: compute the label's conditional entropy given entity identity, H(label | entity). If it is close to zero, a per-entity lookup owns the task and the candidate is already dead.",
+  "honest_limits": [
+    "Six cases is six cases. The law is a generalisation from this project's own graveyard and has not been tested against candidates outside it.",
+    "H(label | entity) is proposed as a cheap pre-screen and has NOT itself been validated as predictive - it is a restatement of what the six deaths had in common, not an independent test.",
+    "The DEFLATE candidate has not yet cleared its own bar; its 1M rung is still running. If it fails, the transform-versus-record distinction still stands as a description of the six deaths but loses its one positive example."
+  ],
+  "recorded_utc": "2026-08-25T19:22:52Z",
+  "schema": "raise-v1/identity_shortcut_law/1",
+  "the_current_candidate_passes_it": "Carved DEFLATE has this by construction: the SAME source bytes are compressed under all 26 configurations, so the label varies completely within source chunk and entity identity carries nothing. The measured baselines bear it out - 0.0966 for a depth-3 tree and 0.1813 for a depth-16 tree against 26 classes, where an identity shortcut would have produced something near 1.0. That was not designed in deliberately; it fell out of the label factory being a TRANSFORM applied to a fixed input rather than a RECORD kept about an entity.",
+  "the_pattern": "In every one of the six, the winning dumb rule exploited a COARSE IDENTITY carried by the unit - which satellite, which project, which respondent, which architecture, which solver. The label was largely a property of that entity rather than of the fine structure the thesis was about. Not one of the six was predicted correctly in advance; on EphemErr, round 2 named URA/SISA, which measured AUC 0.5037, while the actual killer went unmentioned.",
+  "the_six_deaths": [
+    {
+      "candidate": "CopybookLM (COBOL record layout)",
+      "identity_used": "the field's TYPE class, constant per column",
+      "killer": "a ~50-line nibble-range rule",
+      "score": "F1 0.768"
+    },
+    {
+      "candidate": "Headerless firmware (ISA)",
+      "identity_used": "the ARCHITECTURE, constant per binary",
+      "killer": "nearest-centroid on a byte histogram, NO training loop",
+      "score": "93.9% over 11 classes"
+    },
+    {
+      "candidate": "AllocTrace (census allocation)",
+      "identity_used": "the RESPONDENT's nonresponse pattern, constant per person",
+      "killer": "an 8-line rule, ZERO training records",
+      "score": "AUC 0.8297"
+    },
+    {
+      "candidate": "AssemblyProv (genome assembler)",
+      "identity_used": "the BIOPROJECT, and the label is a project-level constant",
+      "killer": "a ~15-line regex over contig names",
+      "score": "+30 accuracy points"
+    },
+    {
+      "candidate": "SAT solver identity",
+      "identity_used": "the SOLVER is re-runnable, so identity is directly recoverable",
+      "killer": "re-run all six solvers and compare",
+      "score": "0.9857"
+    },
+    {
+      "candidate": "EphemErr (GNSS ephemeris error)",
+      "identity_used": "the SATELLITE, and error is near-constant per satellite",
+      "killer": "a per-satellite historical mean, ZERO training",
+      "score": "AUC 0.9363"
+    }
+  ],
+  "title": "The identity shortcut: why six candidates died at A2, and the one property that predicts it",
+  "what_to_hunt_next": "Label factories that are TRANSFORMS, not RECORDS. A transform applied to a fixed input generates many labels per entity by construction and cannot have an identity shortcut. A record kept about an entity generates one label per entity and always does. Every one of the six deaths was a RECORD. The one survivor is a TRANSFORM.",
+  "why_this_is_structural_and_not_bad_luck": "Free labels exist at scale precisely BECAUSE some institution already records them - and institutions record per ENTITY: per satellite, per project, per respondent, per package. So the very property that makes a label free at scale is the property that makes it correlate with entity identity. The label factory and the identity shortcut have the same cause. That is why 'manufacturable labels' and 'a dumb rule cannot own it' pull against each other, and it explains six deaths that each looked like an unlucky one-off."
+}

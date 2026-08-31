@@ -1,0 +1,101 @@
+{
+  "arms": [
+    "TRIVIAL BASELINES ON THE SAME ROWS. Not the 500000-row baselines from 0007 - the byte model trains on 100000, so its baselines do too.",
+    "NULL CONTROL: labels shuffled, identical training, must fall to chance. A network with 183000 parameters on 100000 examples can memorise, and this is the arm that catches it.",
+    "THE BEATS-HAND CLAUSE. Clearing A2 while losing to the hand-engineered model would mean the byte model is a different way of failing, not a better representation.",
+    "IDENTICAL EVALUATION SET, by construction rather than by approximation - same chunks, same carve, same seed, same grouping as 0007's corpus B."
+  ],
+  "bar": {
+    "a2_margin": {
+      "direction": "higher_is_better",
+      "passes_if": "byte_model_top1 - best_trivial_baseline >= 0.05, with the baselines trained on the SAME rows as the byte model. Beating a starved baseline would flatter it.",
+      "threshold": 0.05
+    },
+    "beats_hand_engineered": {
+      "direction": "higher_is_better",
+      "passes_if": "byte_model_top1 > feature_model_top1 strictly. A representation that does not beat the one it replaces is not a better representation, and clearing A2 while losing to the feature model would make the headline false.",
+      "threshold": 0.0
+    },
+    "null_control": {
+      "direction": "lower_is_better",
+      "passes_if": "byte_model_shuffled_top1 <= chance_accuracy + 0.02",
+      "threshold": 0.02
+    },
+    "scope_matched": {
+      "direction": "lower_is_better",
+      "passes_if": "n_train == matched_rung and split_is_grouped_by_source is True",
+      "threshold": 0
+    }
+  },
+  "frozen": true,
+  "id": "0009",
+  "opened_in_response_to": "0007 returned CARVE_FAILS, and law L4 was written from it. L4's own scope paragraph states the limit this preregistration tests: it does NOT establish that a LEARNED representation over the raw bit sequence would be window-bound, and none had been tested. VERDICT.md also capped further conjecture with the rule that the next round that matters is a MEASUREMENT breaking one of the three tensions, not a fourth argument. This is that measurement.",
+  "reader": "tools/readers/byte_model_verdict.py",
+  "readings": [
+    {
+      "json_path": "$.verdict",
+      "name": "verdict",
+      "source_artifact": "artifacts/pivot/byte_model_verdict.json",
+      "unit": "enum{BYTE_MODEL_CLEARS,BYTE_MODEL_FAILS}"
+    },
+    {
+      "json_path": "$.byte_model_top1",
+      "name": "byte_model_top1",
+      "source_artifact": "artifacts/pivot/byte_model.json",
+      "unit": "fraction correct"
+    },
+    {
+      "json_path": "$.feature_model_top1",
+      "name": "feature_model_top1",
+      "source_artifact": "artifacts/pivot/byte_model.json",
+      "unit": "fraction correct, 0007's model at the same rung"
+    },
+    {
+      "json_path": "$.best_trivial_baseline",
+      "name": "best_trivial_baseline",
+      "source_artifact": "artifacts/pivot/byte_model.json",
+      "unit": "fraction correct, trained on the same rows"
+    },
+    {
+      "json_path": "$.byte_model_shuffled_top1",
+      "name": "byte_model_shuffled_top1",
+      "source_artifact": "artifacts/pivot/byte_model.json",
+      "unit": "fraction correct"
+    }
+  ],
+  "scope": {
+    "exact_comparability": "The byte corpus is built from the SAME source chunks (25000 at offset 50000), the SAME carve (1024), the SAME seed (20260825) and the SAME grouping as 0007's corpus B. The held-out fragments are therefore identical, and 0007's 0.1165 at the 100000 rung is a direct comparison rather than an approximate one.",
+    "matched_rung": "100000, the rung 0007 measured at 0.1165 on hand-engineered features.",
+    "model": "A small 1D convolutional network over the byte sequence: a 256-entry embedding, three convolution-and-pool stages, global average pooling, a linear head. About 183000 parameters. It is chosen because it sees ORDER, which every one of the 1108 hand-engineered features discards, and because it fits the CPU budget - measured at 489 samples per second on 4 threads before this was frozen.",
+    "one_line": "One byte-level sequence model, trained on the raw 1024-byte fragments, at the same rung and on the same grouped split as 0007's corpus B, so its number sits directly beside the hand-engineered model's.",
+    "seed": "20260825, as throughout.",
+    "what_this_does_not_cover": "One architecture, one size, one carve, one seed. A negative does not prove that NO learned representation works at 1024 - it shows that this one does not, on this budget. It does not revisit 4096, does not test transfer, and establishes no buyer."
+  },
+  "slug": "byte-sequence-representation",
+  "stop_rules": [
+    "BYTE_MODEL_FAILS strengthens L4 and must be reported as strengthening it: the window binding is not an artifact of hand engineering.",
+    "BYTE_MODEL_CLEARS means L4's scope limit was the important part, and every place this repository quotes CARVE_FAILS must then say that it is specific to a summary-statistic representation.",
+    "A negative here does NOT prove that no learned representation works at 1024. One architecture, one budget. The document must say so.",
+    "A missing field reads as failure. Absence is never a pass.",
+    "This cannot revise 0003, 0006 or 0007."
+  ],
+  "title": "Is the 1024-byte carve failure a property of the WINDOW, or of the hand-engineered representation? A learned model over the raw byte sequence, at a matched rung.",
+  "reader_sha256": "205e83f4d756066d9f5ecbb12ddcb2cff240000e875be422ee6118b60b80b9de",
+  "frozen_utc": "2026-08-26T01:02:58Z",
+  "git_commit": "fae87d06cd68ecebe1e7b435b06b3cded8ccd6b9",
+  "git_dirty_at_freeze": false,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1918147,
+      "time_stamp": "2026-08-26T01:02:00.000Z",
+      "output_value": "3C91B6E5533E8014794294D6200F4E0C1A67C0BB37F0DCA4ACFE35EF5678DB83547D477C2CFE8ABFF46E80C4B194CDF2E0730CC05A7BE8C66E19B0A9A8BD5096"
+    },
+    "drand": {
+      "round": 6409171,
+      "randomness": "2a627a2aae7c594df205b67d5b9ba14544e81c3c111dcdde0caa21d74a303ea4"
+    }
+  },
+  "chain_hash": "bdbc5953badcd5d68af6863b2b8b9523cd33073f0828e99ef304462e45e7010c",
+  "chain_prev_hash": "5629a5d4542a25cf892fd5227c9d5ace9730724290b2f032a5a105a503d07a09"
+}

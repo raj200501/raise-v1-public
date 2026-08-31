@@ -1,0 +1,60 @@
+{
+  "bar": 0.05,
+  "derivation": "each value is a - b over fields of artifacts/pivot/carve_generalisation.json; no model is re-run and no new measurement is made",
+  "margins": {
+    "carve_size_cost_at_matched_rung": {
+      "clears_bar": false,
+      "meaning": "the same training volume at 1024 versus at 4096 - what the shorter window costs, holding data volume fixed",
+      "minuend": {
+        "field": "within_top1_at_matched_rung",
+        "value": 0.1165
+      },
+      "subtrahend": {
+        "field": "reference_matched_rung_top1",
+        "value": 0.1965
+      },
+      "value": -0.08
+    },
+    "transfer_margin": {
+      "clears_bar": false,
+      "meaning": "a model trained at the LONGER carve, evaluated on the shorter corpus, minus that corpus's own best baseline",
+      "minuend": {
+        "field": "transfer_top1",
+        "value": 0.0403
+      },
+      "subtrahend": {
+        "field": "within_best_trivial_baseline",
+        "value": 0.1256
+      },
+      "value": -0.0853
+    },
+    "within_margin_expanded": {
+      "clears_bar": false,
+      "meaning": "top-1 at the shorter carve minus its best baseline over ALL baselines",
+      "minuend": {
+        "field": "within_top1",
+        "value": 0.1355
+      },
+      "subtrahend": {
+        "field": "within_best_baseline_expanded",
+        "value": 0.1256
+      },
+      "value": 0.0099
+    },
+    "within_margin_frozen": {
+      "clears_bar": false,
+      "meaning": "top-1 at the shorter carve minus that corpus's best PREREGISTERED baseline",
+      "minuend": {
+        "field": "within_top1",
+        "value": 0.1355
+      },
+      "subtrahend": {
+        "field": "within_best_trivial_baseline",
+        "value": 0.1256
+      },
+      "value": 0.0099
+    }
+  },
+  "preregistration": "0007-carve-size-generalisation",
+  "schema": "raise-v1/carve_margins/1"
+}

@@ -1,0 +1,693 @@
+{
+  "claims": [
+    {
+      "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "Every gate in this repository is shown capable of failing: 132 deliberate mutations across 13 gates, 132 detected, 0 survived.",
+      "class": "primary-verifiable",
+      "id": "mutations-detected",
+      "json_path": "$.detected",
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 132
+    },
+    {
+      "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "No mutation survived, i.e. no gate has a known hole.",
+      "class": "primary-verifiable",
+      "id": "mutations-survived",
+      "json_path": "$.survived",
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 0
+    },
+    {
+      "artifact": "artifacts/verification/prereg_status.json",
+      "claim": "The preregistration hash chain verifies: sealed fields unchanged, chain order intact, and the frozen reader's sha256 unchanged since it was frozen.",
+      "class": "primary-verifiable",
+      "id": "prereg-chain-verifies",
+      "json_path": "$.entries",
+      "reverify": "python3 tools/prereg.py verify",
+      "value": 1
+    },
+    {
+      "artifact": "artifacts/phase0/reproduction_alloctrace.json",
+      "claim": "The ACS PUMS 2023 1-Year California person file contains 392,318 records, reproduced first-hand from the public corpus.",
+      "class": "primary-verifiable",
+      "id": "census-repro-records",
+      "json_path": "$.reproduced.n_records",
+      "reverify": "python3 tools/repro/census_leak_check.py",
+      "value": 392318
+    },
+    {
+      "artifact": "artifacts/phase0/reproduction_alloctrace.json",
+      "claim": "A ONE-LINE rule (ANC == 4) with ZERO training records predicts the allocation of six unrelated census fields at mean AUC 0.8026 - the measurement that killed round 2's strongest candidate.",
+      "class": "primary-verifiable",
+      "id": "census-repro-auc",
+      "json_path": "$.reproduced.mean_auc_six_flags",
+      "reverify": "python3 tools/repro/census_leak_check.py",
+      "value": 0.8026
+    },
+    {
+      "artifact": "artifacts/phase0/reproduction_alloctrace.json",
+      "claim": "FANCP fires on 0 of 392,318 records, confirming ACS never imputes ancestry and therefore publishes the ancestry nonresponse code verbatim inside the student's own input.",
+      "class": "primary-verifiable",
+      "id": "census-repro-fancp",
+      "json_path": "$.reproduced.fancp_distribution.0",
+      "reverify": "python3 tools/repro/census_leak_check.py",
+      "value": 392318
+    },
+    {
+      "artifact": "artifacts/phase0/phase0_totals.json",
+      "claim": "99 candidate domains were generated across three rounds before any was selected.",
+      "class": "arithmetic-verifiable",
+      "id": "total-candidates",
+      "json_path": "$.total_candidates",
+      "note": "Counted directly from the three banked round artifacts. The counting is arithmetic; the underlying candidate lists rest on our run.",
+      "value": 99
+    },
+    {
+      "artifact": "artifacts/phase0/phase0_totals.json",
+      "claim": "8 candidates were subjected to adversarial review with default posture REJECT.",
+      "class": "arithmetic-verifiable",
+      "id": "total-adversarial",
+      "json_path": "$.total_adversarial_reviews",
+      "note": "Round 3's own screener summary said 11. Recounted from the banked artifacts the figure is 8, and 8 is what this repository uses.",
+      "value": 8
+    },
+    {
+      "artifact": "artifacts/phase0/phase0_totals.json",
+      "claim": "Zero candidates received an adversarial SELECT.",
+      "class": "arithmetic-verifiable",
+      "id": "total-select",
+      "json_path": "$.total_select",
+      "value": 0
+    },
+    {
+      "artifact": "artifacts/phase0/phase0_verdict.json",
+      "claim": "The frozen reader for preregistration 0001 emitted NO_VIABLE_DOMAIN_FOUND.",
+      "class": "arithmetic-verifiable",
+      "id": "phase0-verdict",
+      "json_path": "$.verdict",
+      "note": "The reader is shipped and hashed, but its INPUT (the round-3 search artifact) rests on our run and a stranger cannot re-derive it.",
+      "value": "NO_VIABLE_DOMAIN_FOUND"
+    },
+    {
+      "artifact": "artifacts/phase0/round1_summary.json",
+      "claim": "109 white-space searches were recorded across 99 distinct venues in round 1.",
+      "class": "arithmetic-verifiable",
+      "id": "round1-searches",
+      "json_path": "$.recorded_searches",
+      "value": 109
+    },
+    {
+      "artifact": "artifacts/phase0/round1_domain_search.json",
+      "claim": "javac 17.0.8 and javac 17.0.13 at --release 8 produced 345 of 345 BYTE-IDENTICAL class files - the measurement that established zero channel capacity and killed the JVM build-provenance candidate.",
+      "class": "neither",
+      "id": "javac-identical",
+      "value": 345,
+      "why_not_verifiable": "Measured by a subagent inside an ephemeral scratch directory that no longer exists. No script was banked, the four JDK downloads were not retained, and it was not re-run here. The claim is a first-hand agent measurement, not an independently confirmed one."
+    },
+    {
+      "artifact": "artifacts/phase0/round2_domain_search.json",
+      "claim": "The ELF load base address carries H = 0.1518 bits over 838 real multi-architecture Debian binaries (0x0 is 98.45%), which killed the headerless-firmware candidate's uncrowded half.",
+      "class": "neither",
+      "id": "elf-base-entropy",
+      "value": 0.1518,
+      "why_not_verifiable": "Subagent measurement in an ephemeral scratch directory. The ~480 .deb downloads were not retained and no script was banked. Not re-run here."
+    },
+    {
+      "artifact": "artifacts/phase0/round3_domain_search.json",
+      "claim": "On the UK MOT archive an untrained two-term rule (age/10 + mileage/100000) scores AUC 0.6553 and beats the learned model at every n below about 3x10^4.",
+      "class": "neither",
+      "id": "mot-untrained-rule",
+      "value": 0.6553,
+      "why_not_verifiable": "Subagent measurement over a multi-gigabyte download in an ephemeral scratch directory. Not retained, no script banked, not re-run here. It is the strongest single piece of evidence for law L3(iii) and it sits in the weakest verification class."
+    },
+    {
+      "artifact": "artifacts/phase0/round3_domain_search.json",
+      "claim": "The same vehicle's own previous MOT outcome predicts its next outcome at AUC 0.5077 - very nearly a closed channel.",
+      "class": "neither",
+      "id": "mot-prior-outcome",
+      "value": 0.5077,
+      "why_not_verifiable": "Same subagent, same ephemeral scratch directory, same absence of a banked script."
+    },
+    {
+      "artifact": "artifacts/phase0/round2_domain_search.json",
+      "claim": "A cubic polynomial plus a once-per-revolution sinusoid explains 0.946 to 0.994 of Sentinel-1 orbit-correction residual variance in eight of nine component-arcs - the basis of law L1.",
+      "class": "neither",
+      "id": "sentinel1-fit",
+      "value": 0.994,
+      "why_not_verifiable": "Subagent measurement on three real orbit arcs in an ephemeral scratch directory. Not retained, not re-run here. Law L1 retires an entire candidate family on the strength of it."
+    },
+    {
+      "artifact": "artifacts/phase0/round1_domain_search.json",
+      "claim": "A ~50-line non-learned rule reached exact-boundary F1 0.768 on COBOL record-layout induction, where 20,000 training records bought 1.4 more points.",
+      "class": "neither",
+      "id": "cobol-dumb-f1",
+      "value": 0.768,
+      "why_not_verifiable": "Subagent measurement AND, additionally, measured against a synthetic generator the same subagent wrote - so even the original is indicative rather than established. Not re-run here."
+    },
+    {
+      "artifact": "artifacts/phase0/round2_domain_search.json",
+      "claim": "The real SPAdes version pair 3.11.1 vs 3.15.5 scored balanced accuracy 0.503, LOWER than the null pair 3.13.0 vs 3.13.1 at 0.566 - i.e. inside its own confound floor.",
+      "class": "neither",
+      "id": "assemblyprov-confound",
+      "value": 0.503,
+      "why_not_verifiable": "The SPECIFIC pairwise figures (0.503 for the real pair against 0.566 for the null pair) rest on ten taxa and on full contig data, of which only three taxa of METADATA are banked - so those exact numbers cannot be re-derived here. What HAS been re-derived from the banked inputs is the finding they support: the split leak and the confound. See the three asm-* claims in the primary-verifiable class. This row is narrower than the other 'neither' rows: its inputs survived, unlike every other subagent measurement in this project."
+    },
+    {
+      "artifact": "artifacts/phase0/round3_domain_search.json",
+      "claim": "On NASDAQ ITCH hidden-liquidity prediction the dumbest rule (give every symbol the market-wide fraction) scores R^2 = -0.0149, i.e. worse than the cross-sectional mean - the best F2 result Phase 0 produced, on a candidate that died anyway on G1 and G4.",
+      "class": "neither",
+      "id": "darkfill-negative-r2",
+      "value": -0.0149,
+      "why_not_verifiable": "Subagent measurement over a 400 MB slice of a 4.76 GB ITCH file in an ephemeral scratch directory. Not retained, not re-run here."
+    },
+    {
+      "artifact": "artifacts/verification/repro_sat_solver_identity_run2.json",
+      "claim": "Re-running a CDCL SAT solver on the same instance returns the byte-identical model in 1530 of 1530 checks - so the label is a deterministic function of the instance and the solver.",
+      "class": "primary-verifiable",
+      "id": "sat-determinism",
+      "json_path": "$.determinism.identical",
+      "reverify": "python3 tools/repro/sat_solver_identity.py --instances 3000 --test-frac 0.1",
+      "value": 1530
+    },
+    {
+      "artifact": "artifacts/verification/repro_sat_solver_identity_run2.json",
+      "claim": "The zero-training decoder (re-run all six solvers and compare) identifies the producing solver at 0.9857 over 18,000 items, against a 0.1667 chance level - the measurement behind law L3(i).",
+      "class": "primary-verifiable",
+      "id": "sat-free-decoder",
+      "json_path": "$.free_decoder_rerun_and_compare.accuracy",
+      "reverify": "python3 tools/repro/sat_solver_identity.py --instances 3000 --test-frac 0.1",
+      "value": 0.9857
+    },
+    {
+      "artifact": "artifacts/verification/repro_sat_solver_identity_run2.json",
+      "claim": "All six solvers returned the identical model on 0 of 3,000 instances, so the artifact genuinely varies with the label and this is not a zero-capacity channel.",
+      "class": "primary-verifiable",
+      "id": "sat-divergence",
+      "json_path": "$.divergence.all_six_agree",
+      "reverify": "python3 tools/repro/sat_solver_identity.py --instances 3000 --test-frac 0.1",
+      "value": 0
+    },
+    {
+      "artifact": "artifacts/verification/repro_sat_solver_identity_run2.json",
+      "claim": "A learned model on 27 joint formula-assignment features reaches 0.18 at 13,500 training rows - barely above the 0.1667 chance level, and 0.8057 below the free decoder.",
+      "class": "primary-verifiable",
+      "id": "sat-learned-top-rung",
+      "json_path": "$.learned_model_curve[3].accuracy",
+      "reverify": "python3 tools/repro/sat_solver_identity.py --instances 3000 --test-frac 0.1",
+      "value": 0.18
+    },
+    {
+      "artifact": "artifacts/verification/repro_sat_comparison.json",
+      "claim": "The subagent reported the learned model at 0.2384 with a slope of +2.8 accuracy points per decade, closing the gap in about 27 decades. This repository could not reproduce any of the three.",
+      "class": "neither",
+      "id": "sat-subagent-slope-not-reproduced",
+      "json_path": "$.subagent_reported.learned_curve.13500",
+      "value": 0.2384,
+      "why_not_verifiable": "Actively NOT reproduced, which is worse than merely unverified. Our own run at the same top rung gives 0.1800, +1.21 points per decade and 66.6 decades. The subagent's code lived in an ephemeral scratch directory and is gone, so the implementations cannot be diffed. The difference flatters our conclusion, and the likeliest explanation is that OUR feature set is the weaker one - so neither figure is quoted as established anywhere in this repository."
+    },
+    {
+      "artifact": "artifacts/verification/repro_assembly_splits.json",
+      "claim": "Predicting the full assembly method string on a TEMPORAL split scores 0.4765 against a train-majority constant at 0.4805 - it loses outright to a constant. Re-derived from banked public NCBI inputs.",
+      "class": "primary-verifiable",
+      "id": "asm-temporal-loses-to-constant",
+      "json_path": "$.results['full METHOD STRING'][2].accuracy",
+      "reverify": "python3 tools/repro/assembly_provenance_splits.py",
+      "value": 0.4765
+    },
+    {
+      "artifact": "artifacts/verification/repro_assembly_splits.json",
+      "claim": "The same task falls from 0.4873 accuracy on a random split to 0.1531 when whole BioProjects are held out, because the label is close to a project-level constant.",
+      "class": "primary-verifiable",
+      "id": "asm-grouped-collapse",
+      "json_path": "$.results['full METHOD STRING'][1].accuracy",
+      "reverify": "python3 tools/repro/assembly_provenance_splits.py",
+      "value": 0.1531
+    },
+    {
+      "artifact": "artifacts/verification/repro_assembly_splits.json",
+      "claim": "A FAKE label built from an arbitrary BioProject partition INSIDE a single assembler version is itself predictable at balanced accuracy 0.7772 against its own chance level of 0.5 - so contiguity features carry project-batch signal that has nothing to do with which assembler ran.",
+      "class": "primary-verifiable",
+      "id": "asm-null-control",
+      "json_path": "$.null_control_max_balanced_accuracy_binary",
+      "reverify": "python3 tools/repro/assembly_provenance_splits.py",
+      "value": 0.7772
+    },
+    {
+      "artifact": "artifacts/phase0/round4_lichess_pipeline_validation.json",
+      "claim": "On 400,000 real Lichess player-side units the rating-band label carries 1.97 bits of entropy, comfortably clearing the 1.0-bit floor frozen in preregistration 0002.",
+      "class": "primary-verifiable",
+      "id": "lichess-entropy",
+      "json_path": "$.a1_label_entropy_bits",
+      "reverify": "python3 tools/repro/lichess_clock_curve.py --rungs 1000 10000 100000 300000",
+      "value": 1.97
+    },
+    {
+      "artifact": "artifacts/phase0/round4_lichess_pipeline_validation.json",
+      "claim": "The best trivial baseline on that task is a logistic regression at 0.4293 accuracy, against a majority-class baseline of 0.4188.",
+      "class": "primary-verifiable",
+      "id": "lichess-best-baseline",
+      "json_path": "$.best_baseline.accuracy",
+      "reverify": "python3 tools/repro/lichess_clock_curve.py --rungs 1000 10000 100000 300000",
+      "value": 0.4293
+    },
+    {
+      "artifact": "artifacts/phase0/round4_lichess_scaling_fit.json",
+      "claim": "THE FIRST REAL SCALING CURVE IN THIS REPOSITORY: +0.0338 accuracy points per decade of data over four rungs spanning 2.4771 orders of magnitude, with a paired-bootstrap 95% interval of [0.0306, 0.0369] that excludes zero and r2 0.9794. On a domain that CANNOT be selected. The stored value is the unrounded slope.",
+      "class": "primary-verifiable",
+      "id": "lichess-slope",
+      "json_path": "$.primary_fit.slope",
+      "reverify": "python3 tools/scaling.py artifacts/phase0/round4_lichess_rung_scores.json --boot 2000",
+      "value": 0.03379452190383932
+    },
+    {
+      "artifact": "artifacts/phase0/round4_lichess_pipeline_validation.json",
+      "claim": "That same candidate FAILS the A2 clause: its margin over the best trivial baseline is 0.0313, below the 0.05 frozen in preregistration 0002 before the data existed. The gate rejected it on real data.",
+      "class": "primary-verifiable",
+      "id": "lichess-a2-margin-fails",
+      "json_path": "$.a2_margin_over_best_baseline",
+      "reverify": "python3 tools/repro/lichess_clock_curve.py --rungs 1000 10000 100000 300000",
+      "value": 0.0313
+    },
+    {
+      "artifact": "artifacts/phase0/round4_measurements.json",
+      "claim": "Round 4's frozen reader emitted NO_VIABLE_DOMAIN_FOUND_ROUND4 over 5 candidates considered and 1 measured.",
+      "class": "arithmetic-verifiable",
+      "id": "round4-verdict",
+      "json_path": "count of candidates_considered",
+      "note": "The reader is shipped and hashed, but its input rests on our run.",
+      "value": 5
+    },
+    {
+      "artifact": "artifacts/ephemerr/a2_result.json",
+      "claim": "EphemErr A2: a per-satellite historical mean with ZERO training reaches AUC 0.9363 at predicting which GPS broadcast ephemerides will be badly wrong, on a temporal split. Satellite identity alone nearly owns the label.",
+      "class": "primary-verifiable",
+      "id": "ephemerr-a2-baseline",
+      "json_path": "$.best_baseline_auc",
+      "reverify": "python3 tools/gnss/a2_test.py",
+      "value": 0.9363
+    },
+    {
+      "artifact": "artifacts/ephemerr/a2_result.json",
+      "claim": "The URA/SISA index - which round 2 named as the likely dominant baseline, and which ships free inside the student's input - reaches AUC 0.5037, indistinguishable from a coin. Round 2 named the wrong killer.",
+      "class": "primary-verifiable",
+      "id": "ephemerr-a2-ura-useless",
+      "json_path": "$.baseline_aucs.ura_index_alone",
+      "reverify": "python3 tools/gnss/a2_test.py",
+      "value": 0.5037
+    },
+    {
+      "artifact": "artifacts/ephemerr/a2_result.json",
+      "claim": "The learned model reaches AUC 0.9821, a real improvement that captures 71.9% of the headroom above the baseline - but the margin is 0.0458 against a frozen 0.05, so A2 FAILS by 0.0042.",
+      "class": "primary-verifiable",
+      "id": "ephemerr-a2-learned",
+      "json_path": "$.learned_auc",
+      "reverify": "python3 tools/gnss/a2_test.py",
+      "value": 0.9821
+    },
+    {
+      "artifact": "artifacts/ephemerr/a2_result.json",
+      "claim": "The EphemErr null control is clean: shuffled labels fall to AUC 0.4804.",
+      "class": "primary-verifiable",
+      "id": "ephemerr-a2-null",
+      "json_path": "$.shuffled_label_auc",
+      "reverify": "python3 tools/gnss/a2_test.py",
+      "value": 0.4804
+    },
+    {
+      "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "The freshness gate - which fails a number that is real but no longer current, a class the outbound-copy gate structurally cannot catch - is itself shown capable of failing by 9 deliberate mutations, all detected.",
+      "class": "primary-verifiable",
+      "id": "freshness-gate-mutations",
+      "json_path": "$.by_gate.freshness.total",
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 9
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_curve.json",
+      "claim": "Accuracy on carved-DEFLATE encoder provenance rises at 0.04912072076972296 accuracy points per decade of manufactured fragments, over 2.9031 decades and four rungs, with a paired-bootstrap 95% lower bound of 0.048538069937032 that excludes zero.",
+      "class": "primary-verifiable",
+      "id": "deflate-curve-slope",
+      "json_path": "$.slope",
+      "reverify": "python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --tag full",
+      "value": 0.04912072076972296
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_curve.json",
+      "claim": "At 800000 manufactured fragments the model reaches 0.2395 accuracy across 26 classes, against a 0.038462 chance level, on an evaluation set grouped by source chunk.",
+      "class": "primary-verifiable",
+      "id": "deflate-top-rung",
+      "json_path": "$.top_rung_accuracy",
+      "reverify": "python3 tools/readers/pivot_deflate_curve.py",
+      "value": 0.2395
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_curve.json",
+      "claim": "The margin over the best PREREGISTERED trivial baseline (logistic regression, 0.1392, trained on the same 800000 fragments as the top rung) is 0.1003, above the 0.05 frozen before the corpus existed.",
+      "class": "primary-verifiable",
+      "id": "deflate-margin-frozen",
+      "json_path": "$.margin_over_frozen_baseline",
+      "reverify": "python3 tools/readers/pivot_deflate_curve.py",
+      "value": 0.1003
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_curve.json",
+      "claim": "Under the STRICTER reading that adds depth-8 and depth-16 trees to the baseline set - trees that are not in the frozen list and are stronger than anything in it - the margin is 0.0583, which also clears 0.05.",
+      "class": "primary-verifiable",
+      "id": "deflate-margin-expanded",
+      "json_path": "$.margin_over_expanded_baseline",
+      "reverify": "python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --tag full",
+      "value": 0.0583
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_curve.json",
+      "claim": "With labels shuffled and the identical pipeline retrained, accuracy falls to 0.0389 against a chance level of 0.038462 - the pipeline is reading the label and not an artefact of the split.",
+      "class": "primary-verifiable",
+      "id": "deflate-null-control",
+      "json_path": "$.shuffled_label_accuracy",
+      "reverify": "python3 tools/readers/pivot_deflate_curve.py",
+      "value": 0.0389
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_curve.json",
+      "claim": "The exact permutation test reports p = 0.041666666666666664, which is exactly its arithmetic floor of 1/24 for four rungs. It states that the observed ordering is the most extreme of the 24 available; it does not mean 'just under 0.05'.",
+      "class": "arithmetic-verifiable",
+      "id": "deflate-permutation-p-at-floor",
+      "json_path": "$.permutation_p",
+      "value": 0.041666666666666664
+    },
+    {
+      "artifact": "artifacts/ephemerr/a2_result.json",
+      "claim": "EphemErr fails its A2 clause: a learned AUC of 0.9821 against a per-satellite historical mean of 0.9363 is a margin of 0.0458, below the 0.05 frozen before the data existed.",
+      "class": "primary-verifiable",
+      "id": "ephemerr-a2-margin",
+      "json_path": "$.margin_over_best_baseline",
+      "reverify": "python3 tools/readers/ephemerr_a2_verdict.py",
+      "value": 0.0458
+    },
+    {
+      "artifact": "artifacts/ephemerr/a2_result.json",
+      "claim": "The pre-run analysis expected the broadcast accuracy index (URA/SISA) to be the dominant trivial baseline; it measures 0.5037, a coin. The actual killer was satellite identity, at 0.9363.",
+      "class": "primary-verifiable",
+      "id": "ephemerr-real-killer-was-identity",
+      "json_path": "$.baseline_aucs.ura_index_alone",
+      "reverify": "python3 tools/readers/ephemerr_a2_verdict.py",
+      "value": 0.5037
+    },
+    {
+      "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "The operational-output gate of preregistration 0006 is shown capable of failing by 14 deliberate mutations, all detected - including one asserting that a partial outcome (usable shortlist, unusable confidence) is NAMED by the reader rather than left spinnable.",
+      "class": "primary-verifiable",
+      "id": "topk-gate-mutations",
+      "json_path": "$.by_gate.topk.total",
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 14
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_topk.json",
+      "claim": "Preregistration 0006's frozen reader returns OUTPUT_USABLE on the carved-DEFLATE model: top-5 accuracy 0.5694 at the top rung, against a 5/26 top-5 chance level of 0.192308.",
+      "class": "primary-verifiable",
+      "id": "topk-verdict",
+      "json_path": "$.top5_accuracy",
+      "reverify": "python3 tools/readers/deflate_topk_verdict.py",
+      "value": 0.5694
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_topk_margins.json",
+      "claim": "The top-5 margin over the best baseline across ALL baselines (a depth-16 tree at 0.461) is 0.1084 - the clause named in advance as a likely failure, because ranking 5 of 26 is far easier than picking 1.",
+      "class": "arithmetic-verifiable",
+      "id": "topk-margin-expanded",
+      "json_path": "$.margins.top5_margin_expanded.value",
+      "value": 0.1084
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_topk.json",
+      "claim": "On the 26000 evaluation fragments the model is most confident about, its accuracy is 0.7922 - above the 0.50 absolute usability floor frozen before the measurement.",
+      "class": "primary-verifiable",
+      "id": "topk-selective",
+      "json_path": "$.selective_top_decile_accuracy",
+      "reverify": "python3 tools/readers/deflate_topk_verdict.py",
+      "value": 0.7922
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_topk_margins.json",
+      "claim": "Scored under the STRICTEST reading fixed before the run - the maximum over all baselines, a depth-16 tree at 0.6937 - the selective margin is 0.0985. Under the looser frozen-set reading it would have been 0.251; the harder reading was chosen while the numbers did not exist.",
+      "class": "arithmetic-verifiable",
+      "id": "topk-selective-margin-strict",
+      "json_path": "$.margins.selective_margin.value",
+      "value": 0.0985
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_topk.json",
+      "claim": "The top-5 curve rises at 0.09853740775642854 accuracy points per decade, roughly twice the top-1 slope of 0.04912072076972296: the operationally useful reading improves faster than the single guess.",
+      "class": "primary-verifiable",
+      "id": "topk-slope",
+      "json_path": "$.top5_slope",
+      "reverify": "python3 tools/pivot/run_topk.py",
+      "value": 0.09853740775642854
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_topk.json",
+      "claim": "With labels shuffled, top-5 accuracy falls to 0.1919 against the 5/26 chance level of 0.192308. A top-5 metric is five times easier to satisfy by luck than top-1, so this control binds harder here than in 0003.",
+      "class": "primary-verifiable",
+      "id": "topk-null-control",
+      "json_path": "$.shuffled_label_top5_accuracy",
+      "reverify": "python3 tools/pivot/run_topk.py",
+      "value": 0.1919
+    },
+    {
+      "artifact": "artifacts/pivot/deflate_topk_verdict.json",
+      "claim": "G5 - a named buyer type - is not cleared by anything in this repository. No buyer has been contacted and none is claimed.",
+      "class": "neither",
+      "id": "g5-not-cleared",
+      "json_path": "$.establishes_a_buyer",
+      "why_not_verifiable": "The absence of a buyer cannot be re-derived from an artifact - it is a statement about what was NOT done, so it carries no measured value and none is asserted. It is filed in the weakest class deliberately rather than dressed up as a finding. The cited artifact's establishes_a_buyer field records the same thing machine-readably, but a reader should note that a self-reported false is evidence of intent, not of fact."
+    },
+    {
+      "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "The carve-generalisation gate of preregistration 0007 is shown capable of failing by 15 deliberate mutations, all detected - two of which check WHICH of its three verdicts is emitted, not merely that the study failed, and one of which rejects a transfer arm whose two corpora share source chunks.",
+      "class": "primary-verifiable",
+      "id": "carve-gate-mutations",
+      "json_path": "$.by_gate.carve.total",
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 15
+    },
+    {
+      "artifact": "artifacts/pivot/carve_channel_capacity.json",
+      "claim": "The byte-identity collision ceiling barely moves with carve size: 20.9125 distinct streams of 26 at a 4096-byte window against 20.79 at 512, over 400 source chunks whose seeds are disjoint from every training corpus. Whatever fails at a shorter carve is therefore a modelling limit, not an information limit.",
+      "class": "primary-verifiable",
+      "id": "carve-information-ceiling",
+      "json_path": "$.by_carve.4096.mean_distinct_streams_of_26",
+      "reverify": "python3 tools/pivot/a1_carve_sweep.py",
+      "value": 20.9125
+    },
+    {
+      "artifact": "artifacts/pivot/carve_generalisation.json",
+      "claim": "At a 1024-byte carve the model reaches 0.1355 top-1 at 500000 manufactured fragments against a logistic-regression baseline of 0.1256 - a margin of 0.0099 where the preregistered bar is 0.05. Verdict CARVE_FAILS.",
+      "class": "primary-verifiable",
+      "id": "carve-within-fails",
+      "json_path": "$.within_top1",
+      "reverify": "python3 tools/readers/carve_generalisation_verdict.py",
+      "value": 0.1355
+    },
+    {
+      "artifact": "artifacts/pivot/carve_margins.json",
+      "claim": "Holding training volume fixed at the matched 100000 rung, shortening the window from 4096 to 1024 bytes costs 0.08 top-1 accuracy - 0.1165 against 0.1965. That is larger than the entire margin the study needed to clear.",
+      "class": "arithmetic-verifiable",
+      "id": "carve-size-cost",
+      "json_path": "$.margins.carve_size_cost_at_matched_rung.value",
+      "value": -0.08
+    },
+    {
+      "artifact": "artifacts/pivot/carve_generalisation.json",
+      "claim": "A model trained at a 4096-byte carve and evaluated on 1024-byte fragments scores 0.0403 against a chance level of 0.038462. Transfer does not degrade, it collapses to chance.",
+      "class": "primary-verifiable",
+      "id": "carve-transfer-collapse",
+      "json_path": "$.transfer_top1",
+      "reverify": "python3 tools/readers/carve_generalisation_verdict.py",
+      "value": 0.0403
+    },
+    {
+      "artifact": "artifacts/pivot/carve_generalisation.json",
+      "claim": "The 1024-byte curve genuinely rises - slope 0.020449528758347532 accuracy points per decade with a 95% lower bound of 0.01975813023327274 excluding zero - from a base that never separates from logistic regression. Without an A2 margin clause this would have been reported as a clean positive scaling result on a task the model cannot do.",
+      "class": "primary-verifiable",
+      "id": "carve-rising-but-worthless",
+      "json_path": "$.within_slope",
+      "reverify": "python3 tools/pivot/run_carve.py",
+      "value": 0.020449528758347532
+    },
+    {
+      "artifact": "artifacts/pivot/feature_ablation.json",
+      "claim": "The 1024-byte failure is not localised to any feature family: at a matched 100000 rung every one of six feature subsets degrades from 4096 to 1024 by a ratio between 0.5895 and 0.6275, a spread of 0.038. Dropping all 555 alignment features costs 0.0099 at 4096 and 0.0016 at 1024. Diagnostic, not preregistered.",
+      "class": "primary-verifiable",
+      "id": "carve-failure-not-localised",
+      "json_path": "$.by_carve.1024.all.accuracy",
+      "reverify": "python3 tools/pivot/feature_ablation.py",
+      "value": 0.1165
+    },
+    {
+      "artifact": "artifacts/pivot/feature_ablation.json",
+      "claim": "Law L4: a representation made of summary statistics over a fragment binds the result to the fragment length. The 1024/4096 degradation ratio has a spread of 0.038 across six feature subsets - uniform, with no family surviving and none dying.",
+      "class": "arithmetic-verifiable",
+      "id": "law-l4-window-bound",
+      "json_path": "$.ratio_spread",
+      "value": 0.038
+    },
+    {
+      "artifact": "artifacts/pivot/g4_firsthand.json",
+      "claim": "Conjecture C1: withholding the transform's input is what creates the white space for a transform label factory, and is the same property that makes its market a forensics market and therefore small. Explicitly a conjecture, not a measured law.",
+      "class": "neither",
+      "id": "conjecture-c1-withholding",
+      "why_not_verifiable": "It is an argued reading of this repository's own search record - our search, our framing, our blind spots - and not a measurement. No artifact can establish it and none is claimed to. It is filed in the weakest class and labelled C1 rather than L5 so it can never be quoted alongside the four measured laws. The document states what would falsify it: a transform label factory whose input is withheld by privacy, regulation, physics or commercial boundary rather than by after-the-fact loss."
+    },
+    {
+      "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "The C1 falsifier-search gate of preregistration 0008 is shown capable of failing by 14 deliberate mutations, all detected - including one asserting that a search too narrow to conclude anything VOIDS rather than returning a comforting negative, and one asserting that finding no falsifier does not promote the conjecture.",
+      "class": "primary-verifiable",
+      "id": "c1-gate-mutations",
+      "json_path": "$.by_gate.c1.total",
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 14
+    },
+    {
+      "artifact": "artifacts/phase0/c1_falsifier_verdict.json",
+      "claim": "Preregistration 0008 hunted C1's own stated falsifier across 14 candidates spanning all four non-loss withholding modes, default posture REJECT, and returned NO_FALSIFIER_FOUND. 0 candidates cleared.",
+      "class": "primary-verifiable",
+      "id": "c1-falsifier-search",
+      "json_path": "$.n_candidates",
+      "reverify": "python3 tools/readers/c1_falsifier_verdict.py",
+      "value": 14
+    },
+    {
+      "artifact": "artifacts/phase0/c1_falsifier_search.json",
+      "claim": "Refinement of C1: deliberate withholding is documented withholding. Where an institution withholds a transform's input on purpose, disclosure norms make it publish what it did - the placeholder format, the created_by string, the epsilon, the FITS header - so the label ships with the artifact. The label is hidden only where the withholding was accidental, and accidental withholding is loss, which is the forensics case C1 describes.",
+      "class": "neither",
+      "id": "c1-refinement-documented-withholding",
+      "why_not_verifiable": "An argued reading of 14 screened candidates, not a measurement. Filed with C1 in the weakest class. Its falsifier: an institution that deliberately withholds an input while publishing the artifact and NOT documenting the transform."
+    },
+    {
+      "artifact": "artifacts/phase0/c1_falsifier_verdict.json",
+      "claim": "Conjecture C2: G2 and G5 pull against each other. A free label manufacturer requires POSSESSING the transform; possessing it means it is open or commoditised; and the provenance of a commoditised transform's output is usually worth little to know. Its falsifier exists - TLS stack identification - and is solved by JA3/JA4, a hash rather than a learned model, which is law L3(i) arriving from the other direction.",
+      "class": "neither",
+      "id": "conjecture-c2-possession",
+      "why_not_verifiable": "Argument, not measurement. Filed in the weakest class with C1 and its refinement. VERDICT.md caps this deliberately: the next round that matters is a MEASUREMENT breaking one of the three tensions, not a fourth conjecture explaining why they hold."
+    },
+    {
+      "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "The byte-representation gate of preregistration 0009 is shown capable of failing by 10 deliberate mutations, all detected - including one asserting that clearing the A2 margin while LOSING to the model it replaces is rejected, and one asserting that a negative is reported as strengthening L4 rather than as inconclusive.",
+      "class": "primary-verifiable",
+      "id": "bytemodel-gate-mutations",
+      "json_path": "$.by_gate.bytemodel.total",
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 10
+    },
+    {
+      "artifact": "artifacts/pivot/byte_model.json",
+      "claim": "A byte-sequence CNN over raw 1024-byte fragments reaches 0.0849 at the matched 100000 rung - below the 0.0943 of logistic regression on a plain byte histogram, and below the 0.1165 of the hand-engineered feature model it was meant to replace. Seeing byte order did worse than counting bytes. Verdict BYTE_MODEL_FAILS.",
+      "class": "primary-verifiable",
+      "id": "byte-model-fails",
+      "json_path": "$.byte_model_top1",
+      "reverify": "python3 tools/readers/byte_model_verdict.py",
+      "value": 0.0849
+    },
+    {
+      "artifact": "artifacts/pivot/memorisation_probe.json",
+      "claim": "RETRACTED READING, kept for the record: 0009 read its null control's 0.0006 loss movement as evidence the model was too small. A probe shows the cause is the global average pool, which averages away per-example identity - a flatten head at identical convolutional capacity memorises 5000 shuffled labels to 0.364 train accuracy where the pooled head reaches 0.0486. Filed in CORRECTIONS.md.",
+      "class": "primary-verifiable",
+      "id": "byte-model-capacity-confound",
+      "json_path": "$.arms.flatten.final_train_acc",
+      "reverify": "python3 tools/pivot/memorisation_probe.py",
+      "value": 0.364
+    },
+    {
+      "artifact": "artifacts/pivot/memorisation_probe.json",
+      "claim": "A null control the model cannot fail carries no information. With a global average pool the network reaches only 0.0486 train accuracy on 5000 shuffled labels after 30 epochs, against 0.0385 chance - so 0009's clean null control was guaranteed by architecture rather than earned. This is the mutation-testing argument, which this repository already made about gates, applied to controls.",
+      "class": "primary-verifiable",
+      "id": "null-control-must-be-failable",
+      "json_path": "$.arms.gap.final_train_acc",
+      "reverify": "python3 tools/pivot/memorisation_probe.py",
+      "value": 0.0486
+    },
+    {
+      "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "The position-preserving-head gate of preregistration 0010 is shown capable of failing by 12 deliberate mutations, all detected - including one rejecting a null control that is clean but UNFAILABLE, and one asserting such a run is named inconclusive rather than counted as a negative.",
+      "class": "primary-verifiable",
+      "id": "byteflat-gate-mutations",
+      "json_path": "$.by_gate.byteflat.total",
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 12
+    },
+    {
+      "artifact": "artifacts/pivot/byte_model_flat.json",
+      "claim": "Preregistration 0010's flatten-head model reaches 0.0385 - exactly chance - on real labels under the recipe frozen from 0009, and 0.0393 train accuracy on shuffled labels, so its null control never became failable and the frozen reader names the round inconclusive on the exact point it exists to settle.",
+      "class": "primary-verifiable",
+      "id": "byteflat-inconclusive",
+      "json_path": "$.flat_model_top1",
+      "reverify": "python3 tools/readers/byte_model_flat_verdict.py",
+      "value": 0.0385
+    },
+    {
+      "artifact": "artifacts/pivot/byte_model_flat_verdict.json",
+      "claim": "Methodological finding from 0010: 'change only the head' was chosen for attributability, and it is what made the round inconclusive - a training recipe tuned under one architecture is not architecture-neutral, so freezing it privileges the incumbent. A fair comparison must preregister a recipe search per architecture.",
+      "class": "neither",
+      "id": "frozen-recipes-privilege-the-incumbent",
+      "why_not_verifiable": "An inference from one inconclusive run, not a measurement. Filed in the weakest class; its test - a preregistered per-head recipe search - is stated and was not run in this container."
+    },
+    {
+      "artifact": "artifacts/verification/adversarial_audit.json",
+      "claim": "An adversarial audit of 54 agents across six hostile lenses filed 24 findings; 13 survived double refutation, three critical, and every gate in this repository passed while all thirteen defects were live. The full record, rejected findings included, is banked so the filter itself can be audited.",
+      "class": "primary-verifiable",
+      "id": "audit-13-confirmed",
+      "json_path": "$.n_confirmed",
+      "reverify": "python3 -c \"import json; d=json.load(open('artifacts/verification/adversarial_audit.json')); assert d['n_confirmed']==len(d['confirmed'])\"",
+      "value": 13
+    },
+    {
+      "artifact": "artifacts/pivot/audit_rederivations.json",
+      "claim": "The 0003 slope interval, corrected by a cluster bootstrap over the 10000 source chunks the grouped split declares as the dependence unit, is [0.048216, 0.050014] - about 45% wider than the superseded fragment-level interval. The verdict clause is unaffected.",
+      "class": "primary-verifiable",
+      "id": "cluster-bootstrap-correction",
+      "json_path": "$.cluster_bootstrap.slope_ci95[0]",
+      "reverify": "python3 tools/readers/pivot_deflate_curve.py",
+      "value": 0.048216
+    },
+    {
+      "artifact": "artifacts/pivot/audit_rederivations.json",
+      "claim": "The gutenberg split defect ran against the headline: gutenberg top-rung accuracy is 0.1596 against 0.2511 for the seven non-leaking families, and excluding it raises every rung and steepens the slope to 0.052393.",
+      "class": "primary-verifiable",
+      "id": "gutenberg-leak-direction",
+      "json_path": "$.gutenberg_top_rung_accuracy",
+      "reverify": "python3 -c \"import json; json.load(open('artifacts/pivot/audit_rederivations.json'))\"",
+      "value": 0.1596
+    },
+    {
+      "artifact": "artifacts/pivot/g4_github_firsthand.json",
+      "claim": "The three GitHub white-space queries, previously a round-1 subagent's results mislabelled first-hand, have been re-run genuinely first-hand through the authenticated API: total_count 0 with incomplete_results false on all three formulations.",
+      "class": "primary-verifiable",
+      "id": "g4-github-now-firsthand",
+      "json_path": "$.queries[0].total_count",
+      "reverify": "python3 -c \"import json; d=json.load(open('artifacts/pivot/g4_github_firsthand.json')); assert all(q['total_count']==0 for q in d['queries'])\"",
+      "value": 0
+    },
+    {
+      "artifact": "artifacts/pivot/audit_rederivations.json",
+      "claim": "With the leaked gutenberg family excluded from evaluation and every baseline refit and re-scored on the same subset, both preregistered margins WIDEN: frozen-set 0.1073 against the published 0.1003, expanded-set 0.062 against 0.0583. The split defect was depressing the headline, not inflating it.",
+      "class": "primary-verifiable",
+      "id": "gutenberg-excluded-margins-widen",
+      "json_path": "$.gutenberg_excluded_margins.frozen_set_best.margin",
+      "reverify": "python3 tools/pivot/rescore_baselines.py",
+      "value": 0.1073
+    },
+    {
+      "artifact": "artifacts/pivot/audit_rederivations.json",
+      "claim": "The 0006 top-5 and 0007 within-size intervals, re-derived at the cluster level after deterministic re-runs banked their per-example scores (every measured value reproduced bit-exactly), are [0.097121, 0.099902] and [0.019721, 0.021205]. All verdict clauses unaffected; no pending anti-conservative interval remains.",
+      "class": "primary-verifiable",
+      "id": "cluster-ci-0006-0007",
+      "json_path": "$.cluster_bootstrap_0006_0007.topk_top5.slope_ci95[0]",
+      "reverify": "python3 tools/readers/deflate_topk_verdict.py",
+      "value": 0.097121
+    }
+  ],
+  "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",
+  "schema": "raise-v1/coverage_map/1"
+}

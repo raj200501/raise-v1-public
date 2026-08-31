@@ -1,0 +1,6 @@
+# Dependency floors for the instrument. Floors, not pins: tools/preflight.py checks the floor
+# and names the fix when it is not met. CPU-only by design, and deliberately minimal - every
+# entry here is a thing a cold clone must install before it can verify anything, so nothing goes
+# in until something actually imports it.
+numpy>=1.26
+scikit-learn>=1.3

@@ -1,0 +1,28 @@
+{
+  "establishes_a_buyer": false,
+  "failed_clauses": [],
+  "preregistration": "0006-deflate-operational-output",
+  "read": {
+    "baseline_selective_top_decile_accuracy": 0.6937,
+    "best_baseline_expanded_top5": 0.461,
+    "best_baseline_expanded_top5_name": "depth16_tree",
+    "best_trivial_baseline_top5": 0.3951,
+    "best_trivial_baseline_top5_name": "logistic",
+    "decades_spanned": 2.9031,
+    "n_classes": 26,
+    "n_rungs": 4,
+    "selective_top_decile_accuracy": 0.7922,
+    "shuffled_label_top5_accuracy": 0.1919,
+    "split_is_grouped_by_source": true,
+    "top1_accuracy": 0.2395,
+    "top3_accuracy": 0.4497,
+    "top5_accuracy": 0.5694,
+    "top5_slope": 0.09853740775642854,
+    "top5_slope_ci95_high": 0.099902,
+    "top5_slope_ci95_low": 0.097121
+  },
+  "schema": "raise-v1/deflate_topk_verdict/1",
+  "shape": "BOTH HALVES USABLE",
+  "source_artifact": "artifacts/pivot/deflate_topk.json",
+  "verdict": "OUTPUT_USABLE"
+}

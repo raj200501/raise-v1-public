@@ -1,0 +1,30 @@
+name: verify
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  instrument:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependency floors
+        run: python3 -m pip install --quiet -r requirements.txt
+
+      - name: Every gate, in one command (tools/gates.sh - the same script run locally)
+        run: bash tools/gates.sh
+
+      - name: Mutation report must show zero surviving mutations
+        run: |
+          python3 - <<'PY'
+          import json, sys
+          r = json.load(open("artifacts/verification/mutation_report.json"))
+          print(f"{r['detected']}/{r['total_mutations']} detected, {r['survived']} survived")
+          sys.exit(1 if r["survived"] else 0)
+          PY

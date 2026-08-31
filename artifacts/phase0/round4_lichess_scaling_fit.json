@@ -1,0 +1,65 @@
+{
+  "bootstrap_resamples": 2000,
+  "bootstrap_seed": 0,
+  "eval_set_size": 20000,
+  "metric": "accuracy on a shared held-out evaluation set",
+  "n_rungs": 4,
+  "orders_of_magnitude_spanned": 2.4771,
+  "permutation_test": {
+    "definition": "exact test over all orderings of the rung means against log10(n_units)",
+    "n_permutations": 24,
+    "note": "with this many rungs the p-value is coarse; the bootstrap interval is the primary evidence and the permutation test is a sanity check",
+    "p_value": 0.041666666666666664,
+    "smallest_attainable_p": 0.041666666666666664
+  },
+  "primary_fit": {
+    "definition": "mean score regressed on log10(n_units); units = score points per 10x data",
+    "intercept": 0.28107976073533014,
+    "name": "points_per_decade",
+    "positive_slope_survives": true,
+    "r2": 0.9794473704361031,
+    "slope": 0.03379452190383932,
+    "slope_ci95": [
+      0.03059246757235225,
+      0.03687297607402506
+    ],
+    "slope_ci95_excludes_zero": true
+  },
+  "rungs": [
+    {
+      "mean_score": 0.3815,
+      "n_units": 1000,
+      "name": "rung1000"
+    },
+    {
+      "mean_score": 0.4155,
+      "n_units": 10000,
+      "name": "rung10000"
+    },
+    {
+      "mean_score": 0.4574,
+      "n_units": 100000,
+      "name": "rung100000"
+    },
+    {
+      "mean_score": 0.46055,
+      "n_units": 300000,
+      "name": "rung300000"
+    }
+  ],
+  "schema": "raise-v1/scaling_fit/1",
+  "secondary_fit": {
+    "definition": "log10(1 - mean score) regressed on log10(n_units); more negative = faster error decay",
+    "intercept": -0.13261355111711595,
+    "name": "error_exponent",
+    "negative_slope_survives": true,
+    "r2": 0.9795658586387244,
+    "slope": -0.025461320701737705,
+    "slope_ci95": [
+      -0.027794912023123005,
+      -0.023008923182299783
+    ]
+  },
+  "source_artifact": "artifacts/phase0/round4_lichess_rung_scores.json",
+  "source_artifact_sha256": "455dfc3d71a5453a19a6607934888f8e79e17df9efc8aa27166c12f799e2fee1"
+}

@@ -1,0 +1,114 @@
+{
+  "by_carve": {
+    "1024": {
+      "align_hist_only": {
+        "accuracy": 0.0988,
+        "n_features": 512,
+        "seconds": 39.5
+      },
+      "alignment_only": {
+        "accuracy": 0.1031,
+        "n_features": 555,
+        "seconds": 40.4
+      },
+      "all": {
+        "accuracy": 0.1165,
+        "n_features": 1108,
+        "seconds": 77.6
+      },
+      "byte_hist_only": {
+        "accuracy": 0.0908,
+        "n_features": 256,
+        "seconds": 22.4
+      },
+      "drop_align_hist": {
+        "accuracy": 0.1147,
+        "n_features": 596,
+        "seconds": 48.2
+      },
+      "v1_no_alignment": {
+        "accuracy": 0.1149,
+        "n_features": 553,
+        "seconds": 40.2
+      }
+    },
+    "4096": {
+      "align_hist_only": {
+        "accuracy": 0.1676,
+        "n_features": 512,
+        "seconds": 120.5
+      },
+      "alignment_only": {
+        "accuracy": 0.171,
+        "n_features": 555,
+        "seconds": 104.7
+      },
+      "all": {
+        "accuracy": 0.1965,
+        "n_features": 1108,
+        "seconds": 242.7
+      },
+      "byte_hist_only": {
+        "accuracy": 0.1447,
+        "n_features": 256,
+        "seconds": 44.2
+      },
+      "drop_align_hist": {
+        "accuracy": 0.1876,
+        "n_features": 596,
+        "seconds": 66.3
+      },
+      "v1_no_alignment": {
+        "accuracy": 0.1866,
+        "n_features": 553,
+        "seconds": 58.1
+      }
+    }
+  },
+  "families": {
+    "align_hist": [
+      596,
+      1108
+    ],
+    "align_stats": [
+      553,
+      593
+    ],
+    "bit_runs": [
+      512,
+      536
+    ],
+    "byte_hist": [
+      0,
+      256
+    ],
+    "pair_hash": [
+      256,
+      512
+    ],
+    "scalars": [
+      536,
+      553
+    ],
+    "stored_block": [
+      593,
+      596
+    ]
+  },
+  "ratio_1024_over_4096": {
+    "align_hist_only": 0.5895,
+    "alignment_only": 0.6029,
+    "all": 0.5929,
+    "byte_hist_only": 0.6275,
+    "drop_align_hist": 0.6114,
+    "v1_no_alignment": 0.6158
+  },
+  "ratio_derivation": "each ratio is by_carve.1024.<subset>.accuracy divided by by_carve.4096.<subset>.accuracy; arithmetic only, nothing re-run",
+  "ratio_max": 0.6275,
+  "ratio_min": 0.5895,
+  "ratio_spread": 0.038,
+  "rung": 100000,
+  "schema": "raise-v1/feature_ablation/1",
+  "seed": 20260825,
+  "status": "DIAGNOSTIC ONLY. Not preregistered, not a result, and not quotable as one. Any fix it suggests needs its own preregistration frozen before measurement."
+}

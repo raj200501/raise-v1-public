@@ -1,0 +1,29 @@
+{
+  "evidence": "Five rounds. 99 candidates hunting unstudied problems, two large-market probes, and four market-timed candidates under preregistration 0004. Zero selected in every round.",
+  "finding_1": {
+    "claim": "Large buyer implies crowded. The hole exists where the money is not.",
+    "evidence": "Carved-DEFLATE has a hole because forensic fragment attribution is a small market. Every large-market probe closed: speech source tracing has MLAAD, DiffSSD, STOPA and an Interspeech special session; video parameter recovery has 98.88% CRF prediction and an H.264 fragment-parameter paper; LLM provenance has a survey, which means the field is mature."
+  },
+  "finding_2": {
+    "claim": "The timing window is SHORTER than the time it takes to observe it.",
+    "consequence": "TIMING IS NOT AN EDGE FOR A SOLO FOUNDER. It only looks like one in hindsight.",
+    "evidence": "Post-quantum cryptography is the cleanest case. NIST finalised FIPS 203/204/205 on 2024-08-13. Within 24 months: two USPTO patents specifically on CBOM generation from binary executables, a benchmark (CREBench), a conference paper, and three funded commercial products - IBM Quantum Safe Explorer, SandboxAQ AQtive Guard, Keyfactor, which acquired InfoSec Global in 2025 for exactly this. The market was dateable and the field had already moved.",
+    "mechanism": "A market event is PUBLIC INFORMATION, SYMMETRIC TO EVERYONE. Regulations are announced years ahead. Standards processes are public. Everyone receives the same signal at the same time, and the well-capitalised receive it first because they employ people whose job is to watch. By the time an event is citable, you are already late."
+  },
+  "finding_3": {
+    "access": "The founder has no proprietary corpus. Closed.",
+    "capability": "Open in principle, but requires a technical edge over well-funded teams.",
+    "claim": "That leaves ACCESS and CAPABILITY - and a fourth that the FDM-1 story is usually misread as excluding.",
+    "the_fourth": "EFFORT. FDM-1's moat was probably not information and not capability. VPT was published in 2022. Screen recordings were not a secret. Inverse dynamics models were textbook. What nobody wanted to do was build an 11-million-hour pseudo-labelling pipeline. The barrier was WILLINGNESS TO DO AN EXPENSIVE, UNGLAMOROUS, INDUSTRIAL-SCALE DATA JOB THAT WAS FULLY VISIBLE TO EVERYONE.",
+    "why_it_matters": "This is the only escape a solo founder with no data and no capital actually controls, and it is the one the search was never aimed at. Rounds 1-4 hunted information edges - unstudied problems - and lost every time, because information is the thing a solo founder is worst positioned to have."
+  },
+  "honest_limits": [
+    "Four candidates is not a market survey. The finding that timing is closed rests on one clean case (post-quantum) and three weaker ones.",
+    "The claim that FDM-1's moat was effort rather than information is an INTERPRETATION of a public story, not a measurement. It is not verifiable from here and is labelled as interpretation.",
+    "This is a screen, not an experiment. Nothing here has been measured."
+  ],
+  "recorded_utc": "2026-08-25T17:51:16Z",
+  "schema": "raise-v1/strategic_finding/1",
+  "the_bind_restated": "An effort edge is bounded by what others will out-spend. Large market implies a funded player will out-effort you. Small market implies you can win but the prize is small. The only target that escapes both is a LARGE market where the required effort is DISPROPORTIONATE TO THE APPARENT PAYOFF, so funded players do not bother. That is a much narrower and much better-specified thing to look for than 'white space', and it is what a sixth round should hunt if there is one.",
+  "title": "Why the timing escape is closed for a solo founder, and what is left"
+}

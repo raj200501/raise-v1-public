@@ -1,0 +1,175 @@
+{
+  "establishes_a_buyer": false,
+  "n_candidates": 14,
+  "n_selected": 0,
+  "no_falsifier_found_does_not_promote_c1": "A search that fails to find a counterexample is evidence about the search, not proof of the conjecture. C1 stays in the coverage map's weakest class regardless of this verdict, and stays labelled C1 rather than L5.",
+  "per_candidate": [
+    {
+      "fails": [
+        "G1_abundance_verified is not True",
+        "G3_monotonicity is not True",
+        "G4_white_space_firsthand is not True",
+        "G1_count_is_verified is not True - an estimate does not clear this clause",
+        "a G4 query returned http_status 403, not 200"
+      ],
+      "name": "De-identification pipeline recovery from released clinical notes",
+      "selects": false,
+      "withholding_mode": "privacy"
+    },
+    {
+      "fails": [
+        "G1_abundance_verified is not True",
+        "G3_monotonicity is not True",
+        "G1_count_is_verified is not True - an estimate does not clear this clause",
+        "L3 not survived"
+      ],
+      "name": "Differential-privacy mechanism and epsilon from a published release",
+      "selects": false,
+      "withholding_mode": "privacy"
+    },
+    {
+      "fails": [
+        "G1_abundance_verified is not True",
+        "G1_count_is_verified is not True - an estimate does not clear this clause"
+      ],
+      "name": "Synthetic-data generator identification from a published synthetic dataset",
+      "selects": false,
+      "withholding_mode": "privacy"
+    },
+    {
+      "fails": [
+        "G1_abundance_verified is not True",
+        "G4_white_space_firsthand is not True",
+        "G1_units=100000 below 1e6 or not a number",
+        "G1_count_is_verified is not True - an estimate does not clear this clause",
+        "G4_queries missing - white space must be checked first-hand"
+      ],
+      "name": "Query-budget policy recovery from a published statistics API's answers",
+      "selects": false,
+      "withholding_mode": "privacy"
+    },
+    {
+      "fails": [
+        "G1_abundance_verified is not True",
+        "G3_monotonicity is not True",
+        "G5_buyer_not_forensics is not True",
+        "G1_count_is_verified is not True - an estimate does not clear this clause",
+        "G5_why_not_forensics is empty - a buyer reconstructing provenance after the fact confirms C1 rather than falsifying it"
+      ],
+      "name": "Redaction-tool identification from published FOIA and court releases",
+      "selects": false,
+      "withholding_mode": "regulation"
+    },
+    {
+      "fails": [
+        "G1_abundance_verified is not True",
+        "G4_white_space_firsthand is not True",
+        "G1_units=60000 below 1e6 or not a number",
+        "G4_queries missing - white space must be checked first-hand"
+      ],
+      "name": "Analysis-plan recovery from published clinical-trial summary results",
+      "selects": false,
+      "withholding_mode": "regulation"
+    },
+    {
+      "fails": [
+        "G1_abundance_verified is not True",
+        "G1_count_is_verified is not True - an estimate does not clear this clause",
+        "L3 not survived"
+      ],
+      "name": "Execution-algorithm identification from a published trade tape",
+      "selects": false,
+      "withholding_mode": "regulation"
+    },
+    {
+      "fails": [
+        "G1_abundance_verified is not True",
+        "G4_white_space_firsthand is not True",
+        "G1_units=8000 below 1e6 or not a number",
+        "G4_queries missing - white space must be checked first-hand"
+      ],
+      "name": "Emissions-model recovery from mandatory facility disclosures",
+      "selects": false,
+      "withholding_mode": "regulation"
+    },
+    {
+      "fails": [
+        "G1_abundance_verified is not True",
+        "G4_white_space_firsthand is not True",
+        "G1_count_is_verified is not True - an estimate does not clear this clause",
+        "G4_queries missing - white space must be checked first-hand",
+        "L3 not survived"
+      ],
+      "name": "Instrument-configuration recovery from published sensor archives",
+      "selects": false,
+      "withholding_mode": "physics"
+    },
+    {
+      "fails": [
+        "G1_abundance_verified is not True",
+        "G4_white_space_firsthand is not True",
+        "G5_buyer_not_forensics is not True",
+        "G1_count_is_verified is not True - an estimate does not clear this clause",
+        "G4_queries missing - white space must be checked first-hand",
+        "G5_why_not_forensics is empty - a buyer reconstructing provenance after the fact confirms C1 rather than falsifying it"
+      ],
+      "name": "Telescope processing-pipeline recovery from published survey images",
+      "selects": false,
+      "withholding_mode": "physics"
+    },
+    {
+      "fails": [
+        "G1_abundance_verified is not True",
+        "G3_monotonicity is not True",
+        "G4_white_space_firsthand is not True",
+        "G1_count_is_verified is not True - an estimate does not clear this clause",
+        "G4_queries missing - white space must be checked first-hand",
+        "L2 not survived"
+      ],
+      "name": "Excitation recovery from a published response archive",
+      "selects": false,
+      "withholding_mode": "physics"
+    },
+    {
+      "fails": [
+        "G1_abundance_verified is not True",
+        "G3_monotonicity is not True",
+        "G1_count_is_verified is not True - an estimate does not clear this clause"
+      ],
+      "name": "Build-pipeline identification from published container layers",
+      "selects": false,
+      "withholding_mode": "commercial"
+    },
+    {
+      "fails": [
+        "G1_abundance_verified is not True",
+        "G4_white_space_firsthand is not True",
+        "G1_count_is_verified is not True - an estimate does not clear this clause",
+        "G4_queries missing - white space must be checked first-hand",
+        "L3 not survived"
+      ],
+      "name": "Recommender-policy recovery from a published interaction log",
+      "selects": false,
+      "withholding_mode": "commercial"
+    },
+    {
+      "fails": [
+        "G1_abundance_verified is not True",
+        "G3_monotonicity is not True",
+        "G4_white_space_firsthand is not True",
+        "G5_buyer_not_forensics is not True",
+        "G1_count_is_verified is not True - an estimate does not clear this clause",
+        "G4_queries missing - white space must be checked first-hand",
+        "G5_why_not_forensics is empty - a buyer reconstructing provenance after the fact confirms C1 rather than falsifying it"
+      ],
+      "name": "Delivery-pipeline identification from optimised web assets",
+      "selects": false,
+      "withholding_mode": "commercial"
+    }
+  ],
+  "preregistration": "0008-c1-falsifier-search",
+  "schema": "raise-v1/c1_falsifier_verdict/1",
+  "scope_failures": [],
+  "source_artifact": "artifacts/phase0/c1_falsifier_search.json",
+  "verdict": "NO_FALSIFIER_FOUND"
+}

@@ -1,0 +1,20 @@
+{
+  "failed_clauses": [],
+  "preregistration": "0003-pivot-deflate-curve",
+  "read": {
+    "best_trivial_baseline": 0.1392,
+    "chance_accuracy": 0.038462,
+    "decades_spanned": 2.9031,
+    "n_classes": 26,
+    "n_rungs": 4,
+    "shuffled_label_accuracy": 0.0389,
+    "slope": 0.04912072076972296,
+    "slope_ci95_high": 0.050014,
+    "slope_ci95_low": 0.048216,
+    "split_is_grouped_by_source": true,
+    "top_rung_accuracy": 0.2395
+  },
+  "schema": "raise-v1/pivot_deflate_verdict/1",
+  "source_artifact": "artifacts/pivot/deflate_curve.json",
+  "verdict": "CURVE_ESTABLISHED"
+}

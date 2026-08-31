@@ -1,0 +1,6 @@
+# Extra dependencies for the carved-DEFLATE label factory. Separate from requirements.txt so a
+# cold clone can verify every gate without installing three compression libraries.
+# zlib needs nothing - it is in the Python standard library and is one of the four implementations.
+zopfli>=0.2
+isal>=1.6
+deflate>=0.7

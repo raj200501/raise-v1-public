@@ -1,0 +1,30 @@
+{
+  "establishes_a_buyer": false,
+  "failed_clauses": [
+    "A2 margin: 0.0849 - 0.0943 = -0.0094 is below the preregistered 0.05",
+    "beats hand: 0.0849 does not exceed the hand-engineered model's 0.1165 \u2014 a representation that does not beat the one it replaces is not a better representation"
+  ],
+  "meaning": "L4 strengthens. The window binding is not an artifact of hand engineering: a model that sees byte ORDER - the thing every existing feature discards - does not rescue it either.",
+  "preregistration": "0009-byte-sequence-representation",
+  "read": {
+    "best_baseline_expanded": 0.0943,
+    "best_baseline_expanded_name": "logistic",
+    "best_trivial_baseline": 0.0943,
+    "best_trivial_baseline_name": "logistic",
+    "byte_model_shuffled_top1": 0.0385,
+    "byte_model_top1": 0.0849,
+    "carve_bytes": 1024,
+    "chance_accuracy": 0.038462,
+    "epochs": 10,
+    "feature_model_top1": 0.1165,
+    "matched_rung": 100000,
+    "model_params": 182842,
+    "n_classes": 26,
+    "n_eval": 130000,
+    "n_train": 100000,
+    "split_is_grouped_by_source": true
+  },
+  "schema": "raise-v1/byte_model_verdict/1",
+  "source_artifact": "artifacts/pivot/byte_model.json",
+  "verdict": "BYTE_MODEL_FAILS"
+}

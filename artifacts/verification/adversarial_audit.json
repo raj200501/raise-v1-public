@@ -1,0 +1,269 @@
+{
+  "confirmed": [
+    {
+      "file": "tools/scaling.py",
+      "lens": "statistics",
+      "quoted_text": "idx = rng.integers(0, m, size=m)         # paired resample: same items for every rung",
+      "severity": "critical",
+      "survives": true,
+      "title": "Paired bootstrap treats 260,000 eval fragments as independent, but they are 10,000 clusters of 26 correlated fragments \u2014 every published slope CI is anti-conservative",
+      "votes": [
+        "Verified as real, undisclosed, and actionable. (1) Structure confirmed: corpus.py's chunk_fragments emits the 26 config-fragments of each source chunk consecutively and run_study.py's grouped split preserves order, so the 260,000-fragment eval set in artifacts/pivot/deflate_rung_scores.json is 10,00",
+        "Verified against the banked artifacts. (1) The quoted i.i.d. resample line exists at tools/scaling.py:115 and resamples m=260,000 fragments. (2) The cluster structure is confirmed by the repo's own code: tools/pivot/corpus.py makes exactly 26 fragments per source chunk and run_study.py splits groupe"
+      ],
+      "why_wrong": "The eval set is 10,000 held-out source chunks x 26 configs: the 26 fragments of one chunk share the same plaintext, so their correctness indicators are correlated (chunk content difficulty). I confirmed this from the banked artifacts/pivot/deflate_rung_scores.json: the eval array is contiguous blocks of 26 per chunk, with within-block correctness correlation 0.140 vs 0.016 across block boundaries at the top rung, and the variance of 26-block means is 2.72x the independent-Bernoulli value. The i.i.d. resample over m fragments therefore understates uncertainty; a cluster bootstrap over the 10,000 chunks (the unit the study's own grouped split declares to be the dependence unit) gives a 95% slope CI of [0.0483, 0.0500] vs the banked [0.04854, 0.04973] \u2014 about 45% wider. The same defect propagates to the top-5 CI [0.0977, 0.0993] (0006), the 1024-carve within CI (0007), and the round-4 curve. The extensively-disclosed caveats (seed, corpus, model class) do not cover this: scaling.py asserts the interval correctly covers 'evaluation-example sampling only', and VERDICT.md states 'the evaluation set pins the slope to about a thousandth', which is false even given this corpus, seed and model class. (The verdicts themselves survive \u2014 the cluster-corrected lower bound is still > 0 \u2014 but the published intervals and the 'pins to about a thousandth' claim are wrong as stated.)"
+    },
+    {
+      "file": "VERDICT.md",
+      "lens": "statistics",
+      "quoted_text": "**It contains no scaling curve that means anything.** One real curve has now been fitted, with a real interval, on real data \u2014 but on a domain that is G4-dead",
+      "severity": "major",
+      "survives": true,
+      "title": "VERDICT.md's closing section flatly contradicts its own headline result \u2014 an undisclosed instance of the repository's known stale-claim bug",
+      "votes": [
+        "Verified real and undisclosed. VERDICT.md:808-811's closing bullet (\"It contains no scaling curve that means anything. One real curve has now been fitted... G4-dead... fails its own preregistered A2 margin... says nothing about the world\") describes only the round-4 instrument-validation curve (prer",
+        "Verified real and undisclosed. VERDICT.md line 808 (\"It contains no scaling curve that means anything... One real curve has now been fitted... says nothing about the world\") flatly contradicts the same document's headline (line 358: \"The first curve in this repository that is a claim about the world"
+      ],
+      "why_wrong": "The same document, ~450 lines earlier, headlines CURVE_ESTABLISHED as 'The first curve in this repository that is a claim about the world rather than a test of the instrument', lists it under 'Passed' as 'a real curve on a real task', and README.md/ONE_PAGER.md lead with it. The closing bullet denies that curve exists twice over: 'no scaling curve that means anything' contradicts the CURVE_ESTABLISHED framing, and 'One real curve has now been fitted' miscounts \u2014 the repository banks at least four fitted, interval-bounded curves (0003 top-1, 0006 top-5, 0007 within-size at 1024, and the round-4 validation curve). The sentence describes only the round-4 instrument-validation curve and clearly predates the pivot (chain seq 2 vs seq 3). CORRECTIONS.md documents this exact bug class twice ('kept being published after they stopped being true') and built tools/freshness.py for it, but only registry-listed numbers are guarded; this stale prose claim is not disclosed anywhere and is precisely the side-by-side quote a hostile reviewer would use to argue the document cannot be trusted to describe its own contents."
+    },
+    {
+      "file": "VERDICT.md",
+      "lens": "statistics",
+      "quoted_text": "**Every feature family degrades by the same factor.** Six subsets, 1024/4096 accuracy ratios of\n  0.5895, 0.5929, 0.6029, 0.6114, 0.6158 and 0.6275",
+      "severity": "minor",
+      "survives": true,
+      "title": "L4's lead evidence bullet 'Every feature family degrades by the same factor' misdescribes overlapping subsets as families, and quotes a diagnostic whose own artifact forbids quoting it as a result",
+      "votes": [
+        "Verified against the primary sources. (1) The quoted VERDICT.md L4 bullet (lines 93-95) and the six ratios match artifacts/pivot/feature_ablation.json exactly; I recomputed all six ratios from by_carve accuracies and they check. (2) tools/pivot/feature_ablation.py lines 33-50 confirm the six SUBSETS",
+        "Verified against the primary artifact and VERDICT.md. (1) artifacts/pivot/feature_ablation.json measures six overlapping subsets (one is 'all', 1108 cols; drop_align_hist and v1_no_alignment are near-complements sharing most columns), while its own 'families' field defines seven disjoint families by"
+      ],
+      "why_wrong": "The six ratios in artifacts/pivot/feature_ablation.json are not per-family measurements: they are overlapping unions \u2014 one of the six is 'all' (the entire 1108-column set), and two are complements (drop_align_hist, v1_no_alignment) sharing most columns with each other and with 'all'. The artifact itself defines seven disjoint families (byte_hist, pair_hash, bit_runs, scalars, align_stats, stored_block, align_hist), and four of them (pair_hash, bit_runs, scalars, stored_block) were never measured alone, so 'There is no family that survives and none that dies, so there is no repairable component' is not established \u2014 a single family could die or survive inside those unions unobserved, and the near-equality of ratios is partly mechanical because the subsets share most of their columns. Compounding it, the artifact's own status field reads 'DIAGNOSTIC ONLY. Not preregistered, not a result, and not quotable as one' \u2014 yet these ratios are the first evidential bullet of L4, one of the document's four laws 'derived by measurement'. The later CARVE_FAILS section does label the diagnostic as post-hoc, but the L4 statement carries no such caveat and overstates subsets as families either way."
+    },
+    {
+      "file": "VERDICT.md",
+      "lens": "consistency",
+      "quoted_text": "**Incompressible content caps what is achievable.** Base64 and packed-binary sources collapse to roughly 22.27 distinct streams of 26.",
+      "severity": "major",
+      "survives": true,
+      "title": "VERDICT.md attributes the overall A1 rate (22.27) to base64/packed-binary content, which actually collapses to ~14",
+      "votes": [
+        "Verified against primary sources. VERDICT.md line 435-436 states \"Base64 and packed-binary sources collapse to roughly 22.27 distinct streams of 26\", but artifacts/pivot/channel_capacity.json gives per_family mean_distinct of 14.667 (base64) and 14.75 (binary); 22.261 is the artifact's overall_mean_",
+        "Verified against primary sources. VERDICT.md lines 435-436 state \"Base64 and packed-binary sources collapse to roughly 22.27 distinct streams of 26,\" but artifacts/pivot/channel_capacity.json gives per_family mean_distinct of 14.667 (base64) and 14.75 (binary); 22.261 is the artifact's overall_mean_"
+      ],
+      "why_wrong": "Its own artifact, artifacts/pivot/channel_capacity.json, says the opposite: per_family mean_distinct is 14.667 for base64 and 14.75 for binary; 22.261 ('22.27 of 26') is the overall_mean_distinct_streams across ALL eight content families, and the artifact's own 'reading' field says 'base64 and binary content collapse to roughly 14 distinct streams'. The dataset card agrees with the artifact ('collapse to roughly 14 distinct streams out of 26', tools/pivot/DATASET_CARD.md line 61-62, citing the same artifact). So VERDICT.md's limitations bullet swaps in the corpus-average number for the worst-family number, understating the incompressible-content cap by ~8 of 26 classes - an error in the direction that flatters the task, sitting inside the very section titled 'What is weak about it, stated here rather than left to be found'. Not disclosed anywhere in CORRECTIONS.md."
+    },
+    {
+      "file": "VERDICT.md",
+      "lens": "consistency",
+      "quoted_text": "Two of the load-bearing measurements have since been pulled out of that class by re-deriving them here from public data with shipped code \u2014 the census leak and the SAT-solver decoder.",
+      "severity": "major",
+      "survives": true,
+      "title": "VERDICT.md coverage blockquote contradicts itself 13 lines later: 'Two' vs 'Three of the four' measurements pulled out of the weakest class",
+      "votes": [
+        "Verified real, undisclosed, and actionable. VERDICT.md line 331 (the verification-coverage blockquote) says \"Two of the load-bearing measurements have since been pulled out of that class ... the census leak and the SAT-solver decoder,\" while line 344 of the same section says \"Three of the four load-",
+        "Verified as real, undisclosed, and actionable. VERDICT.md line 331 (inside the live 'weakest row, stated loudest' blockquote, not a dated/frozen quote) says 'Two of the load-bearing measurements have since been pulled out of that class... The rest have not been re-derived', while line 344 of the sam"
+      ],
+      "why_wrong": "Line 344 of the same document says 'Three of the four load-bearing subagent measurements have now been pulled out of the weakest class by re-deriving them here \u2014 the census leak, the SAT decoder, and the assembly-provenance split leak', and outbound/ONE_PAGER.md also says 'Three of the four load-bearing measurements have since been pulled out of that class'. The Passed table confirms the third re-derivation ('Assembly-provenance split leak re-derived ... primary-verifiable'). So the 'Two' sentence inside the flagship 'weakest row, stated loudest' blockquote is stale. This is precisely the bug class the repository claims to have mechanized away - CORRECTIONS.md's 2026-08-25 entry says tools/freshness.py was built because 'a stale number is caught, not just a fabricated one' after stale counts shipped twice - yet this stale count sits unregistered in the verification-coverage section itself, the section a reader uses to decide how much to trust everything else. The specific instance is not disclosed in CORRECTIONS.md."
+    },
+    {
+      "file": "VERDICT.md",
+      "lens": "overclaim",
+      "quoted_text": "White space is real and was verified first-hand rather than asserted: three GitHub API query formulations returned `total_count: 0`, and the four tools that do exist \u2014 `preflate`, `precomp`, `grittibanzli`, `list-compresslevel.py` \u2014 each need something a carved fragment does not have, either the stream start or the plaintext. That is recorded with its own honest limits in `artifacts/pivot/g4_firsthand.json`",
+      "severity": "critical",
+      "survives": true,
+      "title": "G4 white space: 'verified first-hand' GitHub total_count:0 queries are a round-1 subagent's, absent from the cited first-hand artifact",
+      "votes": [
+        "Verified against primary sources: artifacts/pivot/g4_firsthand.json contains 13 searches (7 arXiv, 2 web, 3 HuggingFace, 1 unreachable encode.su) and zero GitHub queries, while VERDICT.md:444-448 attributes the three GitHub total_count:0 zeros to that first-hand artifact (\"verified first-hand rather",
+        "Verified, not refuted. (1) VERDICT.md lines 444-449 say white space \"was verified first-hand rather than asserted: three GitHub API query formulations returned total_count: 0... That is recorded with its own honest limits in artifacts/pivot/g4_firsthand.json.\" (2) g4_firsthand.json contains 13 searc"
+      ],
+      "why_wrong": "artifacts/pivot/g4_firsthand.json contains 13 recorded searches \u2014 7 arXiv API, 2 general web, 3 HuggingFace, 1 unreachable (encode.su) \u2014 and NOT ONE GitHub query. The three total_count:0 GitHub queries actually live in artifacts/phase0/round1_domain_search.json ('HARD ZERO x3. GitHub's own API returned total_count: 0 for all three formulations'), produced under round 1's method of '1 agent per survivor' \u2014 i.e. a subagent search. g4_firsthand.json's own 'why' field states it exists precisely because 'the white-space claim had only ever been made by a round-1 subagent... so this was re-run first-hand' \u2014 yet the first-hand re-run never repeated the GitHub search. So the GitHub zeros are exactly the class of subagent evidence the repository elsewhere refuses to call verified, here relabelled 'verified first-hand' in both VERDICT.md and outbound/ONE_PAGER.md ('Three GitHub API query formulations returned `total_count: 0`.'). The same sentence also contradicts its cited artifact on a count: 'the four tools that do exist' vs the artifact's '\"non_learned_tools\": 5' (it omits koutto/compression-identifier, which the artifact lists)."
+    },
+    {
+      "file": "VERDICT.md",
+      "lens": "overclaim",
+      "quoted_text": "**Every feature family degrades by the same factor.** Six subsets, 1024/4096 accuracy ratios of 0.5895, 0.5929, 0.6029, 0.6114, 0.6158 and 0.6275 \u2014 a spread of **0.038**. There is no family that survives and none that dies, so there is no repairable component.",
+      "severity": "major",
+      "survives": true,
+      "title": "L4's headline evidence is an artifact that declares itself 'DIAGNOSTIC ONLY... not quotable as one', quoted as a law 'derived by measurement'",
+      "votes": [
+        "Verified against primaries. (1) VERDICT.md line 43 frames L4 as one of \"four laws, each derived by measurement\", and line 116 asserts \"Everything above this line is measured\"; L4's first bullet carries no diagnostic flag. (2) All six ratios in the bullet recompute exactly from artifacts/pivot/featur",
+        "Verified real and undisclosed. (1) The quoted L4 bullet (VERDICT.md:93-95) reproduces verbatim the ratios and 0.038 spread from artifacts/pivot/feature_ablation.json, whose status field reads exactly \"DIAGNOSTIC ONLY. Not preregistered, not a result, and not quotable as one.\" \u2014 yet it is presented a"
+      ],
+      "why_wrong": "This is the first bullet of law L4, introduced under 'four laws, each derived by measurement'. Its numbers come verbatim from artifacts/pivot/feature_ablation.json, whose own status field reads: 'DIAGNOSTIC ONLY. Not preregistered, not a result, and not quotable as one.' VERDICT.md concedes this status only 500 lines later, in the 0007 section ('A diagnostic run after the verdict \u2014 not preregistered, and not a result about the world'), but the law statement itself carries no such flag \u2014 a reader of L4 is given post-hoc, non-preregistered diagnostics as measured law. The universal quantifier is also stronger than the artifact: its 'families' dict names SEVEN feature families (align_hist, align_stats, bit_runs, byte_hist, pair_hash, scalars, stored_block), of which only two (align_hist, byte_hist) were tested in isolation; the six quoted subsets are overlapping unions \u2014 one of them is the full set 'all' \u2014 so 'every feature family degrades by the same factor' and 'no family survives and none dies' are not established for pair_hash, bit_runs, scalars or stored_block individually."
+    },
+    {
+      "file": "VERDICT.md",
+      "lens": "overclaim",
+      "quoted_text": "Two of the load-bearing measurements have since been pulled out of that class by re-deriving them here from public data with shipped code \u2014 the census leak and the SAT-solver decoder. ... The rest have not been re-derived",
+      "severity": "minor",
+      "survives": true,
+      "title": "VERDICT contradicts itself in adjacent paragraphs: 'Two... pulled out / the rest have not been re-derived' vs 'Three of the four... pulled out'",
+      "votes": [
+        "Verified as real, undisclosed, and actionable. VERDICT.md line 331 states \"Two of the load-bearing measurements have since been pulled out of that class ... the census leak and the SAT-solver decoder\" and line 335 \"The rest have not been re-derived\", while line 344 of the same document states \"Three",
+        "Verified against the files and git history. VERDICT.md line 331 says \"Two of the load-bearing measurements have since been pulled out of that class... the census leak and the SAT-solver decoder\" and line 335 \"The rest have not been re-derived,\" while line 344 says \"Three of the four load-bearing sub"
+      ],
+      "why_wrong": "Fourteen lines later the same document states: 'Three of the four load-bearing subagent measurements have now been pulled out of the weakest class by re-deriving them here \u2014 the census leak, the SAT decoder, and the assembly-provenance split leak.' The blockquote's 'Two' is stale, and its 'The rest have not been re-derived' is false \u2014 coverage.json confirms asm-temporal-loses-to-constant is primary-verifiable. This is exactly the stale-number bug class CORRECTIONS.md logs twice ('kept being published after they stopped being true') and claims to have fixed with tools/freshness.py; running that gate today passes (9 registered claims, 0 stale) because this sentence was never registered \u2014 demonstrating the ledger's own disclosed loophole ('a live number nobody registers is still unguarded') with a live, undisclosed third instance sitting in the flagship document."
+    },
+    {
+      "file": "artifacts/pivot/topk_prereg_interpretation.json",
+      "lens": "prereg",
+      "quoted_text": "No top-k, calibration or selective-prediction number exists on this corpus at the time of recording. The drand anchor below is a not-before proof of that.",
+      "severity": "major",
+      "survives": true,
+      "title": "Not-before anchors are cited as proof of the opposite temporal direction \u2014 that measurements did not yet exist",
+      "votes": [
+        "Verified real, undisclosed, and actionable. The quoted text exists verbatim (artifacts/pivot/topk_prereg_interpretation.json line 23; parallel wording in artifacts/pivot/prereg_interpretation.json line 23). The repo's own machinery documentation (tools/prereg.py lines 12-15, docs/OPERATING_RULES.md ",
+        "Verified as real and undisclosed. Both cited files contain the exact quoted text, and the logic is genuinely inverted: past drand rounds are permanently public, so an embedded round proves only that the file was written no earlier than that round; it cannot bound the writing time from above and ther"
+      ],
+      "why_wrong": "A drand round embedded in a file proves only that the file was written no EARLIER than that round (not-before) \u2014 exactly and only what tools/prereg.py and docs/OPERATING_RULES.md correctly claim for chain entries. It is logically incapable of proving 'no number exists at the time of recording', which is a not-AFTER claim: nothing stops an author from computing the numbers first and then fetching a fresh drand round while writing a post-hoc 'interpretation'. The same inversion appears in artifacts/pivot/prereg_interpretation.json ('The drand anchor below is a not-before proof for that', where 'that' is 'recorded before... the final baseline and model numbers were known'). These interpretation notes are load-bearing \u2014 they resolve which baseline set the frozen margin clauses use for the CURVE_ESTABLISHED and OUTPUT_USABLE verdicts \u2014 yet the only actual evidence they predate the measurements is mutable local git metadata, the very thing the beacon machinery was built to avoid relying on. The repository never discloses that the anchor direction is wrong for this use."
+    },
+    {
+      "file": "prereg/0003-pivot-deflate-curve.json",
+      "lens": "methodology",
+      "quoted_text": "GROUPED SPLIT as the rival explanation run as an arm: fragments carved from the same source bytes never straddle the train/eval boundary, so content memorisation cannot be mistaken for encoder identification.",
+      "severity": "critical",
+      "survives": true,
+      "title": "Grouped split does not deliver its guarantee: Gutenberg source bytes massively straddle train/eval and both corpora",
+      "votes": [
+        "Verified real, undisclosed, and actionable. Recomputed deterministically from the repo: the gutenberg pool is 7,842,627 bytes (data/pivot/src, 10 files); corpus.py line 149 draws each 32,768-byte gutenberg chunk at random.Random(idx).randrange(0, len(real)-size) from that shared pool. Reproducing th",
+        "Verified real, undisclosed, and actionable. Code check: tools/pivot/corpus.py make_chunk draws every gutenberg chunk as a 32768-byte window at rng.randrange(0, len(real)-size) over the concatenated data/pivot/src pool, measured at exactly 7,842,627 bytes; run_study.py groups the split by chunk index"
+      ],
+      "why_wrong": "The guarantee is enforced by grouping on chunk INDEX, but for the 'gutenberg' family (1 of 8 families, FAMILIES[i%8] in tools/pivot/run_study.py) make_chunk in tools/pivot/corpus.py draws every chunk as a 32768-byte window at a uniformly random offset from ONE shared pool: `off = rng.randrange(0, len(real) - size)` over the concatenation of data/pivot/src (10 files totalling 7,842,627 bytes). Corpus A has 6,250 gutenberg chunks x 32,768 B = 204.8 MB of windows drawn from a 7.84 MB pool \u2014 mean coverage ~26x \u2014 so each of the ~1,250 held-out gutenberg chunks overlaps, in expectation, ~40 training chunks' windows (and ~2-3 exact-duplicate offset pairs are expected by the birthday bound). 'No source bytes straddle train and evaluation' (repeated verbatim in run_study.py line 6 and outbound/ONE_PAGER.md line 32-33) is therefore literally false for one eighth of the corpus, the reader's 'Split grouped by source \u2014 pass' row in VERDICT.md certifies a property the mechanism does not provide, and the null control cannot catch it (shuffling labels breaks the label link, not content leakage). The same defect voids 0007's frozen validity condition: prereg 0007 asserts 'the two share NO source chunk. The chunk index IS the generator seed, so overlapping indices would mean identical source bytes' \u2014 but corpus B's 3,125 gutenberg chunks at offset 50000 are drawn from the exact same 7.84 MB pool as corpus A's, so the corpora share source bytes wholesale despite `corpora_share_source_chunks: false` passing. Nothing in CORRECTIONS.md, the DATASET_CARD, or the VERDICT caveats discloses this; the docs affirmatively claim the opposite."
+    },
+    {
+      "file": "VERDICT.md",
+      "lens": "methodology",
+      "quoted_text": "Base64 and packed-binary sources collapse to roughly 22.27 distinct streams of 26.",
+      "severity": "minor",
+      "survives": true,
+      "title": "VERDICT misquotes its own banked artifact: 22.27 is the all-family mean, not the base64/binary collapse figure (which is ~14.7)",
+      "votes": [
+        "Verified against the primary artifact. VERDICT.md:435-436 states \"Base64 and packed-binary sources collapse to roughly 22.27 distinct streams of 26,\" but artifacts/pivot/channel_capacity.json gives base64 mean_distinct 14.667 and binary 14.75; 22.261 is overall_mean_distinct_streams across all eight",
+        "Verified in full. VERDICT.md line 435-436 does say \"Base64 and packed-binary sources collapse to roughly 22.27 distinct streams of 26,\" while artifacts/pivot/channel_capacity.json gives base64 mean_distinct 14.667 and binary 14.75; 22.261 is overall_mean_distinct_streams across all eight families, a"
+      ],
+      "why_wrong": "The banked artifact this traces to, artifacts/pivot/channel_capacity.json, gives base64 mean_distinct 14.667 and binary 14.75; 22.261 ('22.27') is `overall_mean_distinct_streams`, the average across all eight content families, and the artifact's own reading says 'base64 and binary content collapse to roughly 14 distinct streams'. The DATASET_CARD quotes ~14 correctly, so VERDICT.md \u2014 the flagship document in a repository whose stated rule is that every number traces to a banked artifact \u2014 attaches the wrong banked number to the claim, and in the flattering direction: it understates the disclosed limitation (an incompressible-content ceiling of ~14/26, collision rate ~0.46, reads instead as a mild 22/26). It also demonstrates a live hole in the claimcheck gate the repo itself diagnosed for staleness: 22.27 genuinely appears in a banked artifact at the stated precision, just for a different quantity, so number-existence checking passes a misattributed figure."
+    },
+    {
+      "file": "VERDICT.md",
+      "lens": "diligence",
+      "quoted_text": "Every feature family degrades by the same factor.** Six subsets, 1024/4096 accuracy ratios of 0.5895, 0.5929, 0.6029, 0.6114, 0.6158 and 0.6275 \u2014 a spread of **0.038**. There is no family that survives and none that dies, so there is no repairable component.",
+      "severity": "major",
+      "survives": true,
+      "title": "L4 is presented as a law 'derived by measurement' whose lead evidence bullet comes from a run the same document labels 'not a result about the world'",
+      "votes": [
+        "Verified and not disclosed at the point of use. VERDICT.md line 43 frames the laws as \"each derived by measurement\" and line 116 puts L4 on the \"Everything above this line is measured\" side; L4's lead bullet (lines 93-95) quotes the six ratios 0.5895-0.6275, spread 0.038, \"no repairable component.\" ",
+        "Verified real and undisclosed. The six ratios in VERDICT.md's L4 lead bullet (lines 93-95: 0.5895...0.6275, spread 0.038) come from artifacts/pivot/feature_ablation.json \u2014 recomputed from the artifact's raw accuracies (0.0988/0.1676=0.5895, 0.1165/0.1965=0.5929) \u2014 and that artifact's own status fiel"
+      ],
+      "why_wrong": "VERDICT.md introduces the laws with 'four laws, each derived by measurement' and 'Everything above this line is measured.' But the first evidence bullet of L4 \u2014 the uniform-degradation ratios that carry L4's distinctive claim ('no repairable component', degradation is a property of the representation class, not of one feature family) \u2014 is sourced from artifacts/pivot/feature_ablation.json, which the same document, 470 lines later, introduces as: 'A diagnostic run after the verdict \u2014 not preregistered, and not a result about the world.' The identical six numbers (0.5895\u20260.6275, spread 0.038) appear in both places. So the package's own epistemic taxonomy classifies L4's headline evidence as post-hoc diagnosis exempt from the frozen-bar discipline, while the laws section presents it as law-grade measurement with no such flag \u2014 in a repository whose entire pitch is that the difference between preregistered measurement and post-hoc reading is the product. The preregistered parts of L4 (0007's within-size fail and transfer collapse) establish only that this task fails at 1024; the generalising 'every summary-statistic representation binds to fragment length, uniformly, irreparably' \u2014 the part that makes it a law that 'retires' candidate classes \u2014 rests on the run the document itself disclaims."
+    },
+    {
+      "file": "VERDICT.md",
+      "lens": "diligence",
+      "quoted_text": "It does **not** establish that a *learned* representation over the raw bit sequence would be window-bound, and this repository has not tested one.",
+      "severity": "minor",
+      "survives": true,
+      "title": "L4's scope paragraph flatly contradicts the 0009 section of the same document \u2014 a live instance of the stale-prose bug class the package claims to have fixed, in the flagship file, outside the freshness gate's reach",
+      "votes": [
+        "Verified real and undisclosed. VERDICT.md line ~109 (L4 scope paragraph) asserts \"this repository has not tested one\" [learned representation over raw bits], while lines 523-525 of the same document state \"Preregistration 0009 tested one\" and report BYTE_MODEL_FAILS as strengthening L4 (0010 tested ",
+        "Verified real, undisclosed, and actionable. (1) The quoted sentence exists verbatim at VERDICT.md:107-110 (\"It does **not** establish that a *learned* representation over the raw bit sequence would be window-bound, and this repository has not tested one\") and the contradicting passage exists at VERD"
+      ],
+      "why_wrong": "Four hundred lines later the same document says the opposite in the same words: 'L4 was written with a scope limit in its own paragraph: it does not establish that a **learned** representation over the raw bit sequence would be window-bound, because none had been tested. Preregistration 0009 tested one' \u2014 and reports BYTE_MODEL_FAILS as strengthening L4. The scope sentence in the L4 section was never updated after 0009 ran (the section WAS updated for other post-0007 material, since its bullets already cite the 1024 results), so VERDICT.md simultaneously asserts the test has and has not been done. This is precisely the failure class the repository has filed three corrections about ('Published three stale numbers in VERDICT.md\u2026', 'Broke CI with a stale mutation count for the THIRD time') and built tools/freshness.py to catch \u2014 and it demonstrates the disclosed limitation ('a live number nobody registers is still unguarded') is not hypothetical: prose claims are unregistered, so the gate suite passes green (verified: freshness.py, claimcheck, coverage all PASS) while the document that 'exists to be the honest summary' contradicts itself about the evidentiary status of one of its four laws."
+    }
+  ],
+  "method": "54 agents: six hostile lenses (statistics, cross-document consistency, overclaim, preregistration integrity, methodology, hostile diligence), each finding then attacked by two independent refuters instructed to refute anything wrong, vague, or already disclosed; a finding survives only if BOTH fail to refute it.",
+  "n_confirmed": 13,
+  "n_raw_findings": 24,
+  "n_rejected": 11,
+  "recorded_utc": "2026-08-31T00:45:00Z",
+  "rejected": [
+    {
+      "lens": "statistics",
+      "title": "'The information is present at 1024 ... a modelling failure, not an information failure' is a non sequitur from the A1 collision probe",
+      "votes": [
+        "The finding's affirming-the-consequent charge fails on the mechanics of the probe. The 26 encoder configs are deterministic functions of the source chunk (tools/pivot/a1_carve_sweep.py), so within-chunk byte-distinctness of carved windows makes the (chunk, config)->window map injective in the config",
+        "The finding's load-bearing premise is factually false on the repository's own record. It claims \"cross-chunk class-conditional separability ... was never measured\" and that \"the information is present at 1024\" rests solely on the A1 collision probe. But prereg 0007's within-size arm is precisely tha"
+      ]
+    },
+    {
+      "lens": "consistency",
+      "title": "Dataset card still presents the result as carve-size-agnostic; never updated for CARVE_FAILS",
+      "votes": [
+        "Verified real and undisclosed. The card (tools/pivot/DATASET_CARD.md) contains exactly the quoted text; its Numbers table carries both positive verdicts (CURVE_ESTABLISHED, OUTPUT_USABLE with 0.2395/0.4497/0.5694 and 0.7922) while containing no '4096', no mention of prereg 0007, and no CARVE_FAILS. ",
+        "The finding's load-bearing claims are wrong. (1) The attacked sentence is not \"now false\": CARVE_FAILS means generalisation was tested and affirmatively NOT established, so the sentence remains true \u2014 and the identical sentence still appears in VERDICT.md:432-433 (\"One carve size, one seed, one mode"
+      ]
+    },
+    {
+      "lens": "consistency",
+      "title": "L4's scope paragraph still says no learned representation was tested, three sections before the same document reports testing one (BYTE_MODEL_FAILS)",
+      "votes": [
+        "The finding fails twice over. (1) No real contradiction: the L4 sentence (VERDICT.md lines 108-110) is scoped to window-binding \u2014 \"would be window-bound, and this repository has not tested one\" \u2014 and prereg/0009-byte-sequence-representation.json's frozen scope states 0009 \"does not revisit 4096, doe",
+        "The alleged inconsistency is disclosed and reconciled inside the same document: VERDICT.md's 0009 section (lines 523-526) explicitly quotes the L4 scope clause, states it was written \"because none had been tested,\" and reports that \"Preregistration 0009 tested one,\" with the frozen meaning that the "
+      ]
+    },
+    {
+      "lens": "overclaim",
+      "title": "L1 asserts 'They are curve fits' for six product families from one fitted product \u2014 its own round-2 artifact only hedges 'broadly A2-dead'",
+      "votes": [
+        "The finding fails on its facts and on disclosure. (1) It claims the round-2 artifact \"only hedges 'broadly A2-dead'\" \u2014 but that hedge is one candidate's g3_risk field; the same banked artifact's summary states \"Family (a) is now measured dead as a class, not argued dead\" and \"it should be treated as",
+        "The finding fails on its central factual premises. (1) L1 does not rest on one fitted product: the same banked artifact (artifacts/phase0/round2_domain_search.json) contains a second independent MEASURED kill on the tide-gauge member \u2014 \"NOAA CO-OPS preliminary-to-verified water level [MEASURED KILL]"
+      ]
+    },
+    {
+      "lens": "prereg",
+      "title": "Prereg 0003 claims a frozen carve size that was never frozen; the decisive parameter was chosen post-freeze on measured accuracy",
+      "votes": [
+        "Verified in full. Prereg 0003 contains no carve size yet claims \"the one frozen here\"; git shows the freeze at 15:47:33Z and commit e02c508 at 16:39:27Z locking \"CARVE SIZE 4096, not 2048. This is the whole lever\" on the quoted accuracy comparison (0.1555 vs 0.1946); the frozen-side interpretation a",
+        "The finding's facts check out but its charge does not. (1) It mischaracterizes the protocol. Prereg 0003 froze the BAR, the reader, and the scope before the confirmatory corpus existed \u2014 it deliberately did not freeze hyperparameters. Carve size, model, and features were selected in an exploratory p"
+      ]
+    },
+    {
+      "lens": "prereg",
+      "title": "'Frozen and hashed before the corpus existed' is contradicted by the freeze commit itself, which contains a manufactured corpus and trained-model scores",
+      "votes": [
+        "The finding's git facts are accurate but its conclusion of \"contradiction\" fails on three grounds. (1) Wrong referent: \"the corpus\" in tools/readers/pivot_deflate_curve.py line 4 and in VERDICT.md line 371 is the study corpus the reader judges \u2014 artifacts/pivot/deflate_curve.json (carve_bytes 4096, ",
+        "The finding conflates two distinct corpora. The corpus the frozen reader judges \u2014 the referent of 'frozen and hashed before the corpus existed' in VERDICT.md (Artifact: artifacts/pivot/deflate_curve.json, tag 'full', 4096-byte carve, 1,300,000 fragments, 4 rungs) \u2014 first enters git at commit 71b3254"
+      ]
+    },
+    {
+      "lens": "prereg",
+      "title": "VERDICT.md overstates the interpretation note's precedence: 'before the baseline and model numbers were known' while the note itself quotes a measured baseline",
+      "votes": [
+        "The finding collapses on context and on disclosure. (1) The referent of the definite article: VERDICT.md's sentence (lines 396-397) introduces the margin table directly below it, so \"the baseline and model numbers\" refers to the numbers being presented \u2014 logistic 0.1392, depth-16 0.1812, top-rung 0.",
+        "The finding fails on three checks. (1) The precedence claim in VERDICT.md is true for the numbers it actually refers to. The sentence at VERDICT.md:396-397 introduces the margin table two lines below it (frozen: logistic 0.1392, margin +0.1003; expanded: depth-16 0.1812, margin +0.0583); \"the baseli"
+      ]
+    },
+    {
+      "lens": "methodology",
+      "title": "A1's collision metric cannot support 'the information is present at 1024 / modelling failure, not information failure'",
+      "votes": [
+        "All three legs of the finding fail on inspection. (1) The \"undisclosed insensitivity\" claim is false: the metric is explicitly named \"the byte-identity collision ceiling\" at the point of inference in VERDICT.md, and prereg/0007-carve-size-generalisation.json scope.why_1024 lays out the full reasonin",
+        "Two of the finding's three supporting legs fail verification and the third is a semantic dispute with a framing the repository discloses in the very sentence quoted. (1) The alleged length-censoring confound is empirically false: recomputing on the A1 seed range (900000+, all 8 content families, 60 "
+      ]
+    },
+    {
+      "lens": "methodology",
+      "title": "Model class and feature set were selected on data that overlaps the frozen 0003/0006 evaluation set",
+      "votes": [
+        "Verified, undisclosed, and actionable. (1) Mechanics check out: corpus.py chunk_fragments seeds random.Random with the chunk index, so chunk i is byte-identical source content in every corpus; at the selection-lock commit e02c508 run_study.py hardcoded range(n_chunks) (the --chunk-offset flag did no",
+        "The data-flow premise checks out, but the alleged defect \u2014 contamination that could inflate the frozen 0003/0006 verdicts \u2014 is contradicted by the repository's own banked numbers, and the residual is a hygiene observation with no pathway to the verdicts. What I verified: run_study.py does default --"
+      ]
+    },
+    {
+      "lens": "diligence",
+      "title": "A frozen preregistration (0010) that could overturn the BYTE_MODEL_FAILS headline is armed, unrun, and undisclosed in every narrative document",
+      "votes": [
+        "Every load-bearing factual premise of the finding is false against the actual repository state. (1) \"No artifacts/pivot/byte_model_flat*.json exists \u2014 the experiment was never run\": both /home/user/raise-v1/artifacts/pivot/byte_model_flat.json and byte_model_flat_verdict.json exist and contain a com",
+        "Every load-bearing factual claim in the finding is false on inspection. (1) \"No artifacts/pivot/byte_model_flat*.json exists \u2014 the experiment was never run\": both /home/user/raise-v1/artifacts/pivot/byte_model_flat.json and byte_model_flat_verdict.json exist, banked with a completed run (flat_model_"
+      ]
+    },
+    {
+      "lens": "diligence",
+      "title": "L3(i) still quotes the 0.18 learned-arm figure as law evidence after the corrections ledger concluded that number most likely measures the repo's own underpowered feature set",
+      "votes": [
+        "The finding restates a disclosed weakness and fails a materiality check. (1) Its central claim \u2014 that the level discrepancy is undisclosed because \"neither slope figure is quoted as established\" covers only slopes \u2014 is false: VERDICT.md's own results table (line 303) discloses the level explicitly (",
+        "Refuted on three verified grounds. (1) No substantive distortion: L3(i)'s contrast is 0.9857 (free decoder) vs a learned arm near 0.1667 chance; using the subagent's better-featured 0.2384 instead of 0.18 leaves the gap essentially unchanged (0.7473 vs 0.8057), so the 'dramatic contrast' is not an a"
+      ]
+    }
+  ],
+  "schema": "raise-v1/adversarial_audit/1"
+}

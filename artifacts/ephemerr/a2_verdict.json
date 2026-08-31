@@ -1,0 +1,26 @@
+{
+  "failed_clauses": [
+    "auc_margin: 0.9821 - 0.9363 = 0.0458 is below the frozen 0.05"
+  ],
+  "preregistration": "0005-ephemerr-a2",
+  "read": {
+    "baseline_aucs": {
+      "global_mean": 0.5,
+      "per_satellite_mean": 0.9363,
+      "per_satellite_mean_plus_age": 0.924,
+      "ura_index_alone": 0.5037
+    },
+    "best_baseline_auc": 0.9363,
+    "best_baseline_name": "per_satellite_mean",
+    "learned_auc": 0.9821,
+    "n_satellites": 30,
+    "n_test_epochs": 51839,
+    "positive_rate": 0.0991,
+    "shuffled_label_auc": 0.4804,
+    "split_is_temporal": true
+  },
+  "schema": "raise-v1/ephemerr_a2_verdict/1",
+  "source_artifact": "artifacts/ephemerr/a2_result.json",
+  "verdict": "A2_FAILED",
+  "what_passing_means": "Clears ONE gate. The scaling curve, G4 under the effort lens and the buyer all remain untested."
+}

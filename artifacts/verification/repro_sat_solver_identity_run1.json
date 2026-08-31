@@ -1,0 +1,81 @@
+{
+  "cost": {
+    "cpu_cores": 4,
+    "data_generation_seconds": 412.9,
+    "total_seconds": 858.9
+  },
+  "determinism": {
+    "checks": 1530,
+    "identical": 1530,
+    "rate": 1.0
+  },
+  "divergence": {
+    "all_six_agree": 0,
+    "instances": 2500,
+    "pairwise_identical": {
+      "Cadical153|Glucose42": 8,
+      "Cadical153|Lingeling": 9,
+      "Cadical153|MapleChrono": 6,
+      "Cadical153|Mergesat3": 8,
+      "Cadical153|Minisat22": 9,
+      "Glucose42|Lingeling": 8,
+      "Glucose42|MapleChrono": 12,
+      "Glucose42|Mergesat3": 54,
+      "Glucose42|Minisat22": 42,
+      "Lingeling|MapleChrono": 5,
+      "Lingeling|Mergesat3": 11,
+      "Lingeling|Minisat22": 8,
+      "MapleChrono|Mergesat3": 14,
+      "Minisat22|MapleChrono": 19,
+      "Minisat22|Mergesat3": 56
+    }
+  },
+  "free_decoder_rerun_and_compare": {
+    "accuracy": 0.9852,
+    "correct": 14778,
+    "items": 15000,
+    "seconds": 400.1,
+    "tie_rate": 0.0272,
+    "training_rows_required": 0
+  },
+  "gap_to_free_decoder": 0.8139,
+  "learned_model_curve": [
+    {
+      "accuracy": 0.179,
+      "fit_seconds": 0.89,
+      "n_rows": 300
+    },
+    {
+      "accuracy": 0.1707,
+      "fit_seconds": 2.5,
+      "n_rows": 900
+    },
+    {
+      "accuracy": 0.1713,
+      "fit_seconds": 2.59,
+      "n_rows": 3000
+    }
+  ],
+  "learned_points_per_decade": -0.0077,
+  "schema": "raise-v1/repro_sat_solver_identity/1",
+  "setup": {
+    "chance_accuracy": 0.1667,
+    "clause_ratio": 4.1,
+    "instances_generated": 2999,
+    "instances_satisfiable": 2500,
+    "n_classes": 6,
+    "n_clauses": 492,
+    "n_vars": 120,
+    "rows": 15000,
+    "seed": 20260825,
+    "solvers": [
+      "Cadical153",
+      "Glucose42",
+      "Lingeling",
+      "Minisat22",
+      "MapleChrono",
+      "Mergesat3"
+    ]
+  },
+  "what": "Load-bearing reproduction for law L3(i): when a machine does the labelling, re-run-and-compare is a zero-training decoder that a learned model cannot approach."
+}
