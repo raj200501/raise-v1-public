@@ -1,5 +1,85 @@
 {
   "baselines": {
+    "best_single_feat": {
+      "full_eval": 0.0751,
+      "gutenberg": 0.0625,
+      "non_gutenberg": 0.0769,
+      "per_family": {
+        "base64": 0.0769,
+        "binary": 0.0769,
+        "code": 0.0769,
+        "csv": 0.0769,
+        "gutenberg": 0.0625,
+        "json": 0.0769,
+        "log": 0.0769,
+        "mixed": 0.0769
+      },
+      "seconds": 63.1
+    },
+    "depth16_tree": {
+      "full_eval": 0.1812,
+      "gutenberg": 0.1268,
+      "non_gutenberg": 0.1891,
+      "per_family": {
+        "base64": 0.1197,
+        "binary": 0.1019,
+        "code": 0.1854,
+        "csv": 0.3121,
+        "gutenberg": 0.1268,
+        "json": 0.2336,
+        "log": 0.2551,
+        "mixed": 0.1174
+      },
+      "seconds": 750.8
+    },
+    "depth3_tree": {
+      "full_eval": 0.0969,
+      "gutenberg": 0.0852,
+      "non_gutenberg": 0.0986,
+      "per_family": {
+        "base64": 0.0769,
+        "binary": 0.0769,
+        "code": 0.0837,
+        "csv": 0.1118,
+        "gutenberg": 0.0852,
+        "json": 0.1122,
+        "log": 0.1132,
+        "mixed": 0.1153
+      },
+      "seconds": 166.4
+    },
+    "depth8_tree": {
+      "full_eval": 0.1459,
+      "gutenberg": 0.1024,
+      "non_gutenberg": 0.1522,
+      "per_family": {
+        "base64": 0.1076,
+        "binary": 0.0897,
+        "code": 0.1111,
+        "csv": 0.2611,
+        "gutenberg": 0.1024,
+        "json": 0.1698,
+        "log": 0.2107,
+        "mixed": 0.1159
+      },
+      "seconds": 412.9
+    },
+    "logistic": {
+      "full_eval": 0.1392,
+      "gutenberg": 0.1074,
+      "non_gutenberg": 0.1438,
+      "per_family": {
+        "base64": 0.072,
+        "binary": 0.0709,
+        "code": 0.1566,
+        "csv": 0.1974,
+        "gutenberg": 0.1074,
+        "json": 0.2141,
+        "log": 0.1828,
+        "mixed": 0.1134
+      },
+      "seconds": 908.9
+    },
     "majority": {
       "full_eval": 0.0385,
       "gutenberg": 0.0385,

@@ -668,6 +668,15 @@
       "json_path": "$.queries[0].total_count",
       "reverify": "python3 -c \"import json; d=json.load(open('artifacts/pivot/g4_github_firsthand.json')); assert all(q['total_count']==0 for q in d['queries'])\"",
       "value": 0
+    },
+    {
+      "artifact": "artifacts/pivot/audit_rederivations.json",
+      "claim": "With the leaked gutenberg family excluded from evaluation and every baseline refit and re-scored on the same subset, both preregistered margins WIDEN: frozen-set 0.1073 against the published 0.1003, expanded-set 0.062 against 0.0583. The split defect was depressing the headline, not inflating it.",
+      "class": "primary-verifiable",
+      "id": "gutenberg-excluded-margins-widen",
+      "json_path": "$.gutenberg_excluded_margins.frozen_set_best.margin",
+      "reverify": "python3 tools/pivot/rescore_baselines.py",
+      "value": 0.1073
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

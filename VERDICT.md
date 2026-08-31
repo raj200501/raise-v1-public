@@ -322,7 +322,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **14 of 77 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 78 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -352,7 +352,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
 | `arithmetic-verifiable` | 11 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 52 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `primary-verifiable` | 53 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -416,7 +416,12 @@ than for it: gutenberg is among the hardest families (top-rung accuracy **0.1596
 **0.2511** for the other seven), and excluding it from evaluation **raises** every rung and
 steepens the slope to **+0.0524** `[0.0514, 0.0535]` (`artifacts/pivot/audit_rederivations.json`).
 So the leak existed, the claim was wrong, and honouring it would have made the result look
-better, not worse. The same shared pool also voids the byte-level reading of 0007's
+better, not worse. The full restatement is now measured on both sides: refitting every baseline
+(deterministic — each full-eval value reproduces the original run exactly) and scoring on the
+non-gutenberg evaluation, **both preregistered margins widen**: frozen-set **+0.1073** against the
+published +0.1003, expanded-set **+0.0620** against +0.0583. Every baseline is also weaker on
+gutenberg than elsewhere, so the leaked family was *depressing* the headline, not inflating it
+(`artifacts/pivot/baseline_family_rescore.json`). The same shared pool also voids the byte-level reading of 0007's
 corpora-disjointness clause — which *strengthens* the transfer finding there: the 4096-trained
 model had seen gutenberg-adjacent bytes and still collapsed to chance. Filed in `CORRECTIONS.md`.
 
