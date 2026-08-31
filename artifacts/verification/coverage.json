@@ -689,12 +689,12 @@
     },
     {
       "artifact": "artifacts/pivot/per_family_curves.json",
-      "claim": "The headline slope is a mixture: on structured content the curve rises at roughly 0.09 per decade (csv 0.090644, log 0.090937, json 0.090127) with top-rung accuracy about ten times chance, while incompressible families sit near the collision ceiling (mixed 0.002754). Every family's cluster interval excludes zero and is reported either way.",
+      "claim": "The headline slope is a mixture: on structured content the curve rises at roughly 0.09 per decade (csv 0.090631, log 0.090943, json 0.090131) with top-rung accuracy about ten times chance, while incompressible families sit near the collision ceiling (mixed 0.002837). Every family's cluster interval excludes zero and is reported either way.",
       "class": "primary-verifiable",
       "id": "per-family-slopes",
       "json_path": "$.families.csv.slope",
       "reverify": "python3 -c \"import json; json.load(open('artifacts/pivot/per_family_curves.json'))\"",
-      "value": 0.090644
+      "value": 0.090631
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",
