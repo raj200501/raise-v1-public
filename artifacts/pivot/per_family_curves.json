@@ -1,0 +1,135 @@
+{
+  "derivation": "per-family accuracy per rung and per-family slope with a cluster bootstrap over that family's eval chunks, all from the banked per-example scores of the 0003 run; no model re-run. Cluster unit = source chunk, per the audit's correction.",
+  "families": {
+    "base64": {
+      "ci_excludes_zero": true,
+      "n_chunks": 1264,
+      "n_eval": 32864,
+      "rung_accuracies": {
+        "1000": 0.0843,
+        "10000": 0.0969,
+        "100000": 0.1153,
+        "800000": 0.1221
+      },
+      "slope": 0.013613,
+      "slope_ci95": [
+        0.012559,
+        0.014672
+      ]
+    },
+    "binary": {
+      "ci_excludes_zero": true,
+      "n_chunks": 1249,
+      "n_eval": 32474,
+      "rung_accuracies": {
+        "1000": 0.0778,
+        "10000": 0.0816,
+        "100000": 0.0947,
+        "800000": 0.1049
+      },
+      "slope": 0.009697,
+      "slope_ci95": [
+        0.008653,
+        0.010683
+      ]
+    },
+    "code": {
+      "ci_excludes_zero": true,
+      "n_chunks": 1225,
+      "n_eval": 31850,
+      "rung_accuracies": {
+        "1000": 0.0978,
+        "10000": 0.1438,
+        "100000": 0.2248,
+        "800000": 0.2944
+      },
+      "slope": 0.068996,
+      "slope_ci95": [
+        0.067179,
+        0.070751
+      ]
+    },
+    "csv": {
+      "ci_excludes_zero": true,
+      "n_chunks": 1216,
+      "n_eval": 31616,
+      "rung_accuracies": {
+        "1000": 0.1261,
+        "10000": 0.2389,
+        "100000": 0.3288,
+        "800000": 0.3888
+      },
+      "slope": 0.090631,
+      "slope_ci95": [
+        0.088685,
+        0.092607
+      ]
+    },
+    "gutenberg": {
+      "ci_excludes_zero": true,
+      "n_chunks": 1269,
+      "n_eval": 32994,
+      "rung_accuracies": {
+        "1000": 0.0845,
+        "10000": 0.1035,
+        "100000": 0.1366,
+        "800000": 0.1596
+      },
+      "slope": 0.026609,
+      "slope_ci95": [
+        0.025261,
+        0.027949
+      ]
+    },
+    "json": {
+      "ci_excludes_zero": true,
+      "n_chunks": 1260,
+      "n_eval": 32760,
+      "rung_accuracies": {
+        "1000": 0.1003,
+        "10000": 0.1685,
+        "100000": 0.2711,
+        "800000": 0.3581
+      },
+      "slope": 0.090131,
+      "slope_ci95": [
+        0.088266,
+        0.092032
+      ]
+    },
+    "log": {
+      "ci_excludes_zero": true,
+      "n_chunks": 1279,
+      "n_eval": 33254,
+      "rung_accuracies": {
+        "1000": 0.1144,
+        "10000": 0.1873,
+        "100000": 0.2875,
+        "800000": 0.3756
+      },
+      "slope": 0.090943,
+      "slope_ci95": [
+        0.089233,
+        0.092691
+      ]
+    },
+    "mixed": {
+      "ci_excludes_zero": true,
+      "n_chunks": 1238,
+      "n_eval": 32188,
+      "rung_accuracies": {
+        "1000": 0.1059,
+        "10000": 0.1135,
+        "100000": 0.1154,
+        "800000": 0.1143
+      },
+      "slope": 0.002837,
+      "slope_ci95": [
+        0.001958,
+        0.003719
+      ]
+    }
+  },
+  "reading": "The curve lives in structured content: csv, log, json and code carry both the highest accuracies and the steepest slopes. Incompressible families (base64, binary, mixed) sit near the A1 collision ceiling with shallow slopes. Every family's slope interval is reported either way.",
+  "schema": "raise-v1/per_family_curves/1"
+}
