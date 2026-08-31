@@ -1,0 +1,41 @@
+{
+  "baselines": {
+    "majority": {
+      "full_eval": 0.0385,
+      "gutenberg": 0.0385,
+      "non_gutenberg": 0.0385,
+      "per_family": {
+        "base64": 0.0385,
+        "binary": 0.0385,
+        "code": 0.0385,
+        "csv": 0.0385,
+        "gutenberg": 0.0385,
+        "json": 0.0385,
+        "log": 0.0385,
+        "mixed": 0.0385
+      },
+      "seconds": 2.5
+    },
+    "stratified": {
+      "full_eval": 0.0387,
+      "gutenberg": 0.0381,
+      "non_gutenberg": 0.0388,
+      "per_family": {
+        "base64": 0.0384,
+        "binary": 0.0389,
+        "code": 0.0394,
+        "csv": 0.039,
+        "gutenberg": 0.0381,
+        "json": 0.0389,
+        "log": 0.0377,
+        "mixed": 0.0392
+      },
+      "seconds": 0.9
+    }
+  },
+  "n_eval": 260000,
+  "n_eval_gutenberg": 32994,
+  "n_train": 800000,
+  "schema": "raise-v1/baseline_family_rescore/1",
+  "why": "An adversarial audit established that gutenberg-family source bytes straddle the train/eval\nboundary (windows drawn from one shared 7.84 MB pool), so the grouped-split guarantee is false for\nthat eighth of the corpus. The model's banked per-example scores let its accuracy be restated with\ngutenberg excluded; the BASELINES' per-example predictions were never banked, so the margin could\nnot be restated without refitting them. This refits the same baselines on the same rows with the\nsame seeds - deterministic, no tuning - and banks per-family and gutenberg-excluded accuracies."
+}
