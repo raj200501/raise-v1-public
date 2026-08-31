@@ -32,7 +32,9 @@ none of them: the gates verify that numbers trace, match, and stay current — n
 evaluation fragments as independent. They are 10000 clusters of 26 fragments sharing a plaintext —
 the *exact dependence unit the grouped split declares*. Measured within-chunk correctness
 correlation: 0.140, against 0.016 across boundaries. Every published slope interval was
-anti-conservative by roughly 45%. Corrected by a cluster bootstrap over chunks: 0003's interval
+anti-conservative - the audit's on-the-spot estimate said roughly 45%, the corrected widths say
+about half again as wide, and this ledger keeps both. Corrected by a cluster bootstrap over
+chunks: 0003's interval
 [0.0485, 0.0497] becomes **[0.0482, 0.0500]** (`artifacts/pivot/audit_rederivations.json`); the
 verdict clause is unaffected; "pins the slope to about a thousandth" was false and is retracted.
 The 0006 top-5 and 0007 intervals carry the same defect and are marked anti-conservative pending

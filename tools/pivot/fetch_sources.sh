@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# Fetch the public-domain source bytes the label factory compresses.
-# Project Gutenberg texts, chosen for prose diversity. Public domain in the United States.
+# Fetch the Project Gutenberg source bytes the label factory compresses, chosen for prose
+# diversity. NOT uniformly public domain: pg5200 (Metamorphosis) self-identifies as a
+# COPYRIGHTED Project Gutenberg eBook - see docs/compliance/LICENSE_AUDIT.md before
+# redistributing anything derived from these bytes.
 set -euo pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/data/pivot/src"
 mkdir -p "$DIR"

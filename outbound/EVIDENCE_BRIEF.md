@@ -31,7 +31,8 @@ is a **4096-byte-window** number; at 1024 bytes the task fails its own bar.
 Slope **+0.0491** accuracy points per decade over **2.9031** decades, r² **0.9978**. The 95%
 interval is a **cluster bootstrap over the 10000 held-out source chunks** — the dependence unit the
 grouped split declares — giving **[0.0482, 0.0500]**. An adversarial audit found the originally
-published fragment-level interval anti-conservative by ~45%; the superseded values are retained in
+published fragment-level interval anti-conservative (about half again as wide once corrected); the
+superseded values are retained in
 the artifact beside the corrected ones. Null control: shuffled labels fall to **0.0389**.
 
 Margins over trivial baselines trained on the same 800000 fragments as the top rung:
@@ -113,7 +114,7 @@ rerun would have said something different. It would not have.
 Beacon 2.0 and drand; readers frozen by sha256 before their data existed. **134** deliberate
 mutations across **13** gates, **134** detected, **0** survived — every gate provably capable of
 failing. **8** corrections filed against this work at full size, including a **54-agent
-adversarial audit** whose 13 confirmed findings (three critical) were each fixed by measurement,
+adversarial audit** whose 13 confirmed findings (three critical) were each fixed — the load-bearing ones by new measurement,
 with the audit record banked — rejected findings included — so the filter itself can be audited.
 
 ## Verify on a cold clone

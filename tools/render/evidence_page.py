@@ -27,6 +27,7 @@ fverd   = J("pivot", "byte_model_flat_verdict.json")
 fam     = J("pivot", "per_family_curves.json")
 red     = J("pivot", "audit_rederivations.json")
 cap     = J("pivot", "carve_channel_capacity.json")
+cap2    = J("pivot", "channel_capacity.json")
 audit   = J("verification", "adversarial_audit.json")
 mut     = J("verification", "mutation_report.json")
 prereg  = J("verification", "prereg_status.json")
@@ -243,8 +244,9 @@ artifact.</figcaption></figure>
 <h2>Where the curve lives</h2>
 <p class="sub">The headline is a mixture, and the decomposition is the sharpest statistic in the
 package: structured content carries the curve at roughly twice the headline rate; incompressible
-content sits at the measured collision ceiling ({cap["by_carve"]["4096"]["mean_distinct_streams_of_26"]}
-distinct streams of 26 at this carve).</p>
+content sits at its own measured collision ceiling ({cap2["per_family"]["base64"]["mean_distinct"]}
+and {cap2["per_family"]["binary"]["mean_distinct"]} distinct streams of 26 for base64 and binary;
+the mean across all eight families is {cap["by_carve"]["4096"]["mean_distinct_streams_of_26"]}).</p>
 <figure>{chartB}
 <figcaption>Per-family slope from the banked per-example scores, cluster-bootstrapped within each
 family's held-out chunks. Right column: that family's top-rung accuracy. The gutenberg row is the
@@ -285,7 +287,7 @@ inflated. Defect and direction are filed together in the corrections ledger.</p>
 <div class="tile"><div class="v">{len(prereg["chain"])}</div><div class="k">preregistrations, hash-chained; entry N carries entry N−1's hash; NIST Beacon + drand anchors</div></div>
 <div class="tile"><div class="v">{mut["detected"]}/{mut["total_mutations"]}</div><div class="k">deliberate mutations detected across {len(mut["by_gate"])} gates — every gate provably able to fail</div></div>
 <div class="tile"><div class="v">{n_corrections}</div><div class="k">corrections filed against this work at full size, none softened</div></div>
-<div class="tile"><div class="v">{audit["n_confirmed"]}/{audit["n_raw_findings"]}</div><div class="k">adversarial-audit findings confirmed by double refutation ({audit_reject} rejected, record banked) — all fixed by measurement</div></div>
+<div class="tile"><div class="v">{audit["n_confirmed"]}/{audit["n_raw_findings"]}</div><div class="k">adversarial-audit findings confirmed by double refutation ({audit_reject} rejected, record banked) — every finding fixed, the load-bearing ones by new measurement</div></div>
 <div class="tile"><div class="v">{cov_neither}/{cov_n}</div><div class="k">claims in the coverage map's weakest class — published loudest, on purpose</div></div>
 </div>
 

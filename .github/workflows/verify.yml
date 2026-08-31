@@ -20,6 +20,11 @@ jobs:
       - name: Every gate, in one command (tools/gates.sh - the same script run locally)
         run: bash tools/gates.sh
 
+      - name: Corpus determinism probe (small slice built twice + order-shuffled, hashes must match)
+        run: |
+          python3 -m pip install --quiet -r requirements-pivot.txt
+          python3 tools/ci/determinism_probe.py
+
       - name: Mutation report must show zero surviving mutations
         run: |
           python3 - <<'PY'

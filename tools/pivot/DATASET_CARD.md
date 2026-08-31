@@ -81,5 +81,5 @@ rather than encoder identification.
 
 ## Licence
 
-Source bytes are public domain (Project Gutenberg) or synthetic. The fragments are mechanical
+Source bytes are Project Gutenberg texts or synthetic. The compliance audit (docs/compliance/LICENSE_AUDIT.md) found they are NOT uniformly public domain: one file, pg5200 (Metamorphosis), self-identifies as a copyrighted Project Gutenberg eBook with its licence terms stripped from the repo copy, and eight of ten files carry no licence text. An earlier version of this line said "public domain" without having checked. The fragments are mechanical
 derivatives of those bytes. Code is Apache-2.0.

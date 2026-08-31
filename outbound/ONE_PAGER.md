@@ -73,7 +73,7 @@ first-hand (`artifacts/pivot/g4_github_firsthand.json`).
 **The published intervals were over-tight, twice over.** They never sampled seeds, corpora, or
 model classes — that was disclosed. An audit then found the bootstrap also resampled eval
 *fragments* as independent when they are clusters of 26 sharing a plaintext: the top-1 interval,
-cluster-corrected, is **[0.0482, 0.0500]** (~45% wider), and the top-5 and 1024-carve intervals
+cluster-corrected, is **[0.0482, 0.0500]** (about half again as wide), and the top-5 and 1024-carve intervals
 have been re-derived the same way — **[0.0971, 0.0999]** and **[0.0197, 0.0212]**. All three
 verdict clauses are unaffected. Both facts are
 in the corrections ledger.

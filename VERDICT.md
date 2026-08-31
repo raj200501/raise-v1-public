@@ -484,7 +484,7 @@ footnote.
   260000 eval fragments as independent, but they are 10000 clusters of 26 fragments sharing a
   plaintext — the dependence unit this study's own grouped split declares. Measured within-chunk
   correctness correlation is 0.140 against 0.016 across chunk boundaries. The corrected interval,
-  from a cluster bootstrap over the 10000 chunks, is **[0.0482, 0.0500]** — about 45% wider than
+  from a cluster bootstrap over the 10000 chunks, is **[0.0482, 0.0500]** — about half again as wide as
   the superseded [0.0485, 0.0497] — and the verdict clause (lower bound > 0) is unaffected.
   Found by adversarial audit; derivation in `artifacts/pivot/audit_rederivations.json`, filed in
   `CORRECTIONS.md`. The interval still covers evaluation sampling only — not seed variance, not
@@ -762,7 +762,7 @@ The intervals published here were **doubly** over-tight, and only one of the two
 disclosed at the time. First, as disclosed: the bootstrap does not sample seeds, corpora, or model
 classes. Second, found later by adversarial audit: it resampled evaluation **fragments** as
 independent when they are clusters of 26 sharing a plaintext, understating even the
-evaluation-sampling uncertainty by roughly 45% (0003's corrected interval:
+evaluation-sampling uncertainty by roughly half (0003's corrected interval:
 `artifacts/pivot/audit_rederivations.json`). The top-5 interval had the same defect; its
 measurement was re-run deterministically (every measured value reproduced bit-exactly), the
 per-example scores are now banked, and the cluster-corrected interval is **[0.0971, 0.0999]**

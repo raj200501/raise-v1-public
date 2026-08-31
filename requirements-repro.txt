@@ -2,3 +2,8 @@
 # Kept separate so the core instrument's dependency floor stays low and a cold clone can
 # verify the gates without installing a SAT solver stack.
 python-sat>=1.8
+
+# Found by the compliance audit: imported by tools/pivot/run_byte_model.py and
+# tools/repro/lichess_clock_curve.py but previously undeclared.
+torch>=2.13
+zstandard>=0.25
