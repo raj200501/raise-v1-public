@@ -9,8 +9,8 @@
     "n_rungs": 4,
     "shuffled_label_accuracy": 0.0389,
     "slope": 0.04912072076972296,
-    "slope_ci95_high": 0.04972978299592983,
-    "slope_ci95_low": 0.048538069937032,
+    "slope_ci95_high": 0.050014,
+    "slope_ci95_low": 0.048216,
     "split_is_grouped_by_source": true,
     "top_rung_accuracy": 0.2395
   },

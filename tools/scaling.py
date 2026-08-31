@@ -9,6 +9,17 @@ interval cannot come from the four points alone. So:
   - the interval comes from bootstrapping the EVALUATION EXAMPLES (paired across rungs, so
     the resampling respects that all rungs saw the same items), refitting the slope on each
     resample;
+
+DEFECT, found by adversarial audit (2026-08-31) and filed in CORRECTIONS.md: resampling
+EXAMPLES treats them as independent, but this repository's corpora carve 26 fragments from
+each source chunk - fragments that share a plaintext and whose correctness indicators are
+correlated (measured within-chunk correlation 0.140 at the top rung, vs 0.016 across chunk
+boundaries). The grouped split itself declares the chunk to be the dependence unit, and this
+fitter ignored that very unit, understating every published interval by roughly 45%. The
+corrected intervals come from a CLUSTER bootstrap over chunks
+(artifacts/pivot/audit_rederivations.json); a caller with group labels should resample
+groups, not rows. The fragment-level interval this file produces is ANTI-CONSERVATIVE
+whenever the per-example data is clustered, which here is always.
   - a separate exact permutation test over rung orderings gives a p-value whose granularity
     is stated rather than hidden (with R rungs there are R! orderings, so the smallest
     attainable p-value is 1/R!; with four rungs that is 1/24).
@@ -134,7 +145,9 @@ def fit(rungs: list[dict], n_boot: int = 2000, seed: int = 0) -> dict:
         "eval_set_size": int(m),
         "bootstrap_resamples": int(n_boot),
         "bootstrap_seed": int(seed),
-        "interval_covers": "evaluation-example sampling only",
+        "interval_covers": ("evaluation-example sampling only, treating examples as independent "
+                            "- ANTI-CONSERVATIVE under the clustered eval sets this repository "
+                            "uses; see the DEFECT note in this module and CORRECTIONS.md"),
         "interval_does_not_cover": ("seed variance (one seed per rung), corpus-manufacture variance "
                                     "(one corpus), and model-class choice (one class held fixed by "
                                     "design). A tight interval here pins the slope GIVEN this "

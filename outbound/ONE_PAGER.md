@@ -29,10 +29,14 @@ label *is* the configuration you used.
 |---|---:|---:|---:|---:|
 | Accuracy | 0.0988 | 0.1415 | 0.1965 | **0.2395** |
 
-Chance is **0.038462** across 26 classes. The split is grouped by source chunk, so no source bytes
-straddle train and evaluation — a random split would measure content memorisation instead, and the
-archived trial killed a candidate on exactly that, watching 0.4873 collapse to 0.1531. Labels
-shuffled, the identical pipeline retrained, falls to **0.0389**.
+Chance is **0.038462** across 26 classes. The split is grouped by source chunk — a random split
+would measure content memorisation instead, and the archived trial killed a candidate on exactly
+that, watching 0.4873 collapse to 0.1531. An adversarial audit found the guarantee is **incomplete
+for one of eight content families**: gutenberg chunks are windows drawn from one shared byte pool,
+so gutenberg bytes straddle the boundary. The measured impact runs *against* the headline —
+gutenberg is among the hardest families (0.1596 vs 0.2511 elsewhere), and excluding it raises every
+rung and steepens the slope to **+0.0524**. Labels shuffled, the identical pipeline retrained,
+falls to **0.0389**. Details and derivation are in `VERDICT.md` and the corrections ledger.
 
 Every trivial baseline was trained on the same 800000 fragments as the top rung, so none is
 starved. Best of the **preregistered** set: logistic at **0.1392**, margin **+0.1003**. Best of the
@@ -62,12 +66,16 @@ scored under the strictest reading fixed before the run — the looser reading w
 **Why no existing tool does this.** `preflate` and `grittibanzli` decode the token stream, which
 needs the dynamic Huffman tables at the STREAM START. `precomp` and `list-compresslevel.py`
 brute-force by RECOMPRESSING, which needs the PLAINTEXT. A carved fragment has neither. Three
-GitHub API query formulations returned `total_count: 0`.
+GitHub API query formulations return `total_count: 0` — re-run first-hand through the
+authenticated GitHub API after an audit found the original zeros were a subagent's, mislabelled
+first-hand (`artifacts/pivot/g4_github_firsthand.json`).
 
-**What the tight intervals do not mean.** The bootstrap resamples evaluation examples. It does not
-sample seeds (one per rung), corpora (one was built), or model classes (one, held fixed by design).
-`[0.0977, 0.0993]` pins the slope *given this corpus, seed and model class* — not the slope of the
-underlying phenomenon.
+**The published intervals were over-tight, twice over.** They never sampled seeds, corpora, or
+model classes — that was disclosed. An audit then found the bootstrap also resampled eval
+*fragments* as independent when they are clusters of 26 sharing a plaintext: the top-1 interval,
+cluster-corrected, is **[0.0482, 0.0500]** (~45% wider; the verdict clause is unaffected), and the
+top-5 interval `[0.0977, 0.0993]` carries the same defect and awaits re-derivation. Both facts are
+in the corrections ledger.
 
 **And the shape it has is bound to one window size.** Preregistration 0007 built a second corpus
 at **1024** bytes, from source chunks disjoint from the first, and re-ran the protocol. Verdict
@@ -167,7 +175,7 @@ reported, and neither is quoted as the other.
 
 The verification-coverage map is machine-checked and prints its weakest class first, deliberately.
 
-**14 of 73 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
+**14 of 77 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
 including us. Eight are measurements made by subagents inside scratch directories that no longer
 exist, and **that includes measurements the conclusions rest on.** The ninth is worse than
 unverified: it is a figure we published and then failed to reproduce ourselves.

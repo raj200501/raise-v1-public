@@ -632,6 +632,42 @@
       "class": "neither",
       "id": "frozen-recipes-privilege-the-incumbent",
       "why_not_verifiable": "An inference from one inconclusive run, not a measurement. Filed in the weakest class; its test - a preregistered per-head recipe search - is stated and was not run in this container."
+    },
+    {
+      "artifact": "artifacts/verification/adversarial_audit.json",
+      "claim": "An adversarial audit of 54 agents across six hostile lenses filed 24 findings; 13 survived double refutation, three critical, and every gate in this repository passed while all thirteen defects were live. The full record, rejected findings included, is banked so the filter itself can be audited.",
+      "class": "primary-verifiable",
+      "id": "audit-13-confirmed",
+      "json_path": "$.n_confirmed",
+      "reverify": "python3 -c \"import json; d=json.load(open('artifacts/verification/adversarial_audit.json')); assert d['n_confirmed']==len(d['confirmed'])\"",
+      "value": 13
+    },
+    {
+      "artifact": "artifacts/pivot/audit_rederivations.json",
+      "claim": "The 0003 slope interval, corrected by a cluster bootstrap over the 10000 source chunks the grouped split declares as the dependence unit, is [0.048216, 0.050014] - about 45% wider than the superseded fragment-level interval. The verdict clause is unaffected.",
+      "class": "primary-verifiable",
+      "id": "cluster-bootstrap-correction",
+      "json_path": "$.cluster_bootstrap.slope_ci95[0]",
+      "reverify": "python3 tools/readers/pivot_deflate_curve.py",
+      "value": 0.048216
+    },
+    {
+      "artifact": "artifacts/pivot/audit_rederivations.json",
+      "claim": "The gutenberg split defect ran against the headline: gutenberg top-rung accuracy is 0.1596 against 0.2511 for the seven non-leaking families, and excluding it raises every rung and steepens the slope to 0.052393.",
+      "class": "primary-verifiable",
+      "id": "gutenberg-leak-direction",
+      "json_path": "$.gutenberg_top_rung_accuracy",
+      "reverify": "python3 -c \"import json; json.load(open('artifacts/pivot/audit_rederivations.json'))\"",
+      "value": 0.1596
+    },
+    {
+      "artifact": "artifacts/pivot/g4_github_firsthand.json",
+      "claim": "The three GitHub white-space queries, previously a round-1 subagent's results mislabelled first-hand, have been re-run genuinely first-hand through the authenticated API: total_count 0 with incomplete_results false on all three formulations.",
+      "class": "primary-verifiable",
+      "id": "g4-github-now-firsthand",
+      "json_path": "$.queries[0].total_count",
+      "reverify": "python3 -c \"import json; d=json.load(open('artifacts/pivot/g4_github_firsthand.json')); assert all(q['total_count']==0 for q in d['queries'])\"",
+      "value": 0
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

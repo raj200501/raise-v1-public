@@ -1,0 +1,54 @@
+{
+  "cluster_bootstrap": {
+    "resamples": 4000,
+    "slope": 0.049121,
+    "slope_ci95": [
+      0.048216,
+      0.050014
+    ],
+    "superseded_fragment_level_ci95": [
+      0.048538,
+      0.04973
+    ],
+    "unit": "source chunk (n=10000)"
+  },
+  "gutenberg_excluded": {
+    "n_chunks": 8731,
+    "n_eval": 227006,
+    "rung_accuracies": {
+      "1000": 0.1009,
+      "10000": 0.147,
+      "100000": 0.2052,
+      "800000": 0.2511
+    },
+    "slope": 0.052393,
+    "slope_ci95": [
+      0.051417,
+      0.053462
+    ]
+  },
+  "gutenberg_top_rung_accuracy": 0.1596,
+  "non_gutenberg_top_rung_accuracy": 0.2511,
+  "per_family_n_eval": {
+    "base64": 32864,
+    "binary": 32474,
+    "code": 31850,
+    "csv": 31616,
+    "gutenberg": 32994,
+    "json": 32760,
+    "log": 33254,
+    "mixed": 32188
+  },
+  "per_family_top_rung_accuracy": {
+    "base64": 0.1221,
+    "binary": 0.1049,
+    "code": 0.2944,
+    "csv": 0.3888,
+    "gutenberg": 0.1596,
+    "json": 0.3581,
+    "log": 0.3756,
+    "mixed": 0.1143
+  },
+  "schema": "raise-v1/audit_rederivations/1",
+  "why": "Derived after an adversarial audit confirmed two defects: (1) the paired bootstrap resampled 260000 eval fragments as independent although they are 10000 clusters of 26 fragments sharing a plaintext - the very dependence unit the grouped split declares; (2) gutenberg-family chunks are windows drawn from one shared 7.84 MB pool, so gutenberg source bytes straddle train/eval and the grouped-split guarantee is false for that eighth of the corpus. Everything here is recomputed from the BANKED per-example scores; no model was re-run."
+}

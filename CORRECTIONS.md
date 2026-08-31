@@ -19,6 +19,82 @@ Format:
 
 ---
 
+## 2026-08-31 — An adversarial audit found 13 defects the instrument missed, three of them critical
+
+Fifty-four independent review agents were run against this repository — six hostile lenses, every
+finding then attacked by two refuters instructed to kill anything wrong, vague, or already
+disclosed. Twenty-four findings were filed; **thirteen survived double refutation**. Every one was
+real. They are listed at full size because the instrument this repository is built around checked
+none of them: the gates verify that numbers trace, match, and stay current — not that the
+*reasoning between the numbers* is sound.
+
+**1. (critical) The bootstrap contradicted the split.** `tools/scaling.py` resampled 260000
+evaluation fragments as independent. They are 10000 clusters of 26 fragments sharing a plaintext —
+the *exact dependence unit the grouped split declares*. Measured within-chunk correctness
+correlation: 0.140, against 0.016 across boundaries. Every published slope interval was
+anti-conservative by roughly 45%. Corrected by a cluster bootstrap over chunks: 0003's interval
+[0.0485, 0.0497] becomes **[0.0482, 0.0500]** (`artifacts/pivot/audit_rederivations.json`); the
+verdict clause is unaffected; "pins the slope to about a thousandth" was false and is retracted.
+The 0006 top-5 and 0007 intervals carry the same defect and are marked anti-conservative pending
+re-derivation — their per-example scores were never banked, which is itself part of this defect.
+
+**2. (critical) The grouped split promised something its mechanism does not provide.** For seven of
+eight content families the chunk index determines the bytes. For gutenberg, every chunk is a
+32768-byte window at a random offset into one shared 7.84 MB pool — ~26× coverage — so gutenberg
+source bytes straddle train/eval, and "fragments carved from the same source bytes never straddle
+the boundary", frozen into preregistration 0003 and repeated in three documents, is false for an
+eighth of the corpus. The same pool-sharing voids the byte-level reading of 0007's
+corpora-disjointness clause. Measured impact, from banked per-example scores: gutenberg is among
+the *hardest* families (0.1596 vs 0.2511), excluding it raises every rung and steepens the slope to
++0.0524 [0.0514, 0.0535] — the defect ran against the headline, which is luck, not process. The
+0007 reading strengthens: the transfer model had seen gutenberg-adjacent bytes and still collapsed
+to chance.
+
+**3. (critical) Subagent evidence relabelled "first-hand".** The three GitHub `total_count: 0`
+queries supporting the G4 white-space claim lived in a round-1 subagent's artifact; the first-hand
+re-run (`g4_firsthand.json`) never repeated the GitHub arm, and VERDICT.md attributed the zeros to
+it anyway — the precise class of evidence this repository refuses to call verified, promoted by
+sloppy citation. The queries have now been re-run genuinely first-hand through the authenticated
+API: hard zero, all three, `incomplete_results: false` (`g4_github_firsthand.json`). The claim was
+true; the provenance was not. The same sentence also said "four tools" where its artifact lists
+five.
+
+**4. (major) A not-before anchor cited as a not-after proof.** Both interpretation notes claimed
+their drand anchor proved "no number existed at the time of recording". A beacon round proves only
+that a file was written no *earlier* — nothing stops computing first and anchoring afterwards. The
+notes' precedence rests on run logs and commit history, and both artifacts now say so in their own
+text.
+
+**5. (major) The closing section denied the headline.** "It contains no scaling curve that means
+anything" survived three sweeps of the stale-claim bug class this repository built a gate for —
+because the freshness gate guards registered numbers, and this was prose. The repository banks four
+fitted curves; the closing bullet described one.
+
+**6–8. (major/minor) Numbers misattributed or contradictory in prose.** 22.27 — the all-family mean
+distinct-stream rate — was attributed to base64/binary content, which actually collapses to ~14.7,
+inside the section titled "what is weak about it"; an error in the flattering direction. "Two"
+load-bearing measurements re-derived in one paragraph, "three of the four" thirteen lines later.
+L4's scope note still said no learned representation had been tested after 0009 and 0010 had run.
+
+**9–12. (major/minor) L4's evidence was overstated three ways.** Its lead bullet called six
+overlapping subsets "families" (four of the seven disjoint families were never measured alone, and
+part of the ratio uniformity is mechanical column-sharing); it quoted a diagnostic whose own
+artifact says "not quotable as a result" without carrying that label; and a law "derived by
+measurement" leaned on that diagnostic for its lead evidence. L4 now leads with its two
+preregistered halves (transfer collapse, ceiling stability) and quotes the diagnostic with its
+label attached.
+
+**What was fixed, what was not, and what this says about the instrument.** All thirteen are
+corrected in place; the two derivations are banked; the G4 gap was closed by measurement rather
+than by weakening the claim. Not fixed: the 0006/0007 intervals await re-derivation with banked
+per-example scores. The meta-finding is the uncomfortable one: **every gate passed while all
+thirteen defects were live.** The gates check mechanical honesty. Reasoning between numbers — a
+bootstrap contradicting a split, an anchor cited backwards, a guarantee whose mechanism covers
+seven families of eight — has no gate, and the only check that caught any of it was adversarial
+review by agents instructed to kill the package. That check is now part of the record, and its
+eleven *rejected* findings are retained alongside the thirteen confirmed, so the filter itself can
+be audited.
+
 ## 2026-08-26 — Published a reading of our own null control that does not follow, and it understated our own result
 
 **What was published.** The 0009 write-up, in `VERDICT.md` and as a coverage claim, read the null

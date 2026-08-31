@@ -1,4 +1,5 @@
 {
+  "anchor_direction_correction": "CORRECTION (2026-08-31, from an adversarial audit): the drand anchor in this file proves only that the file was written no EARLIER than the anchored round - a not-before proof. The original text cited it as proof that no measurement yet existed, which is a not-AFTER claim the anchor is logically incapable of supporting: nothing stops an author computing numbers first and fetching a fresh round while writing a post-hoc note. The precedence claim therefore rests on the run logs and git history, not on the beacon. Filed in CORRECTIONS.md.",
   "issues": [
     {
       "direction": "Strictly against this study. It raises the bar the result must clear.",

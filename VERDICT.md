@@ -90,9 +90,18 @@ Where the student's input is a fragment of variable length and the features are 
 over that fragment, quality is bound to the length the model was trained at. Measured on the
 carved-DEFLATE task at a matched training rung, shortening the window from 4096 to 1024 bytes:
 
-- **Every feature family degrades by the same factor.** Six subsets, 1024/4096 accuracy ratios of
-  0.5895, 0.5929, 0.6029, 0.6114, 0.6158 and 0.6275 — a spread of **0.038**. There is no family that
-  survives and none that dies, so there is no repairable component.
+- **Transfer is total, and the ceiling does not explain it** — the two preregistered halves of the
+  evidence, banked under 0007: a 4096-trained model reaches 0.0403 on 1024-byte fragments against
+  0.038462 chance, while the byte-identity ceiling barely moves (20.9125 → 20.79 distinct of 26).
+- **Uniform degradation across feature subsets** — supporting evidence from a **diagnostic that is
+  not preregistered and whose artifact says "not quotable as a result"**, quoted here with that
+  label because L4's claim leans on it: six *overlapping subsets* (one is the full set; two are
+  near-complements) degrade by ratios 0.5895–0.6275, a spread of 0.038. They are subsets, **not**
+  the seven disjoint families the artifact defines — four of those (pair-hash, bit-runs, scalars,
+  stored-block) were never measured alone, so "no family survives and none dies" is established
+  only up to that resolution, and part of the ratio uniformity is mechanical column-sharing. An
+  earlier version of this bullet called the subsets "families" and carried no diagnostic label;
+  caught by adversarial audit, filed in `CORRECTIONS.md`.
 - **Transfer is not graded, it is total.** A 4096-trained model on 1024-byte fragments reaches
   0.0403 against a chance level of 0.038462. Every feature is a window-length-dependent statistic,
   so the joint distribution at another length is systematically different rather than noisier.
@@ -105,11 +114,13 @@ representation is hand-engineered statistics over it. The result will hold at on
 buyer, who does not choose the size, will get another.
 
 **Scope, stated because this law is ours and we have the most reason to overstate it.** It is
-measured on one task and one family of hand-engineered statistics. It does **not** establish that a
-*learned* representation over the raw bit sequence would be window-bound, and this repository has
-not tested one. It also does not follow that mixing training lengths would rescue such a task here:
-it could not, because the within-size result at 1024 fails its own margin independently of any
-transfer question.
+measured on one task and one family of hand-engineered statistics. When first written it noted that
+no *learned* representation had been tested; two have since been tried under their own
+preregistrations — 0009's byte CNN failed against its bars, and 0010's corrected-head variant came
+back inconclusive — so the honest current statement is: one small learned architecture did not
+rescue the task, and nothing tested rules out that a larger or differently-shaped one would. It
+also does not follow that mixing training lengths would rescue such a task here: it could not,
+because the within-size result at 1024 fails its own margin independently of any transfer question.
 
 ### C1 — a CONJECTURE, not a law: withholding the transform's input is what creates the white space, and it is the same thing that makes the market small
 
@@ -311,7 +322,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **14 of 73 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 77 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -328,18 +339,20 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 > for L3(iii). The javac byte-identity result. The ELF base-address entropy. A reader who declines
 > to take a subagent's word for those is left with the laws unproven, and would be right to.
 >
-> Two of the load-bearing measurements have since been pulled out of that class by re-deriving them
-> here from public data with shipped code — the census leak and the SAT-solver decoder. Reproducing
-> the second one **contradicted a figure this repository had already published**, in the direction
-> that flattered its own conclusion. That is filed in `CORRECTIONS.md` at full size rather than
-> resolved by adopting the better-looking number. The rest have not been re-derived, and are marked
-> accordingly rather than quietly upgraded.
+> Three of the four load-bearing measurements have since been pulled out of that class by
+> re-deriving them here from public data with shipped code — the census leak, the SAT-solver
+> decoder, and the assembly-provenance split leak. Reproducing the second one **contradicted a
+> figure this repository had already published**, in the direction that flattered its own
+> conclusion. That is filed in `CORRECTIONS.md` at full size rather than resolved by adopting the
+> better-looking number. The rest have not been re-derived, and are marked accordingly rather than
+> quietly upgraded. (An earlier version of this paragraph said "two" while the section below it
+> said "three of the four" — caught by adversarial audit.)
 
 | Class | Count | Meaning |
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
 | `arithmetic-verifiable` | 11 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 48 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `primary-verifiable` | 52 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -385,11 +398,27 @@ compression call.
 | Decades | ≥ 2.0 | 2.9031 | pass |
 | Slope 95% lower bound | > 0 | 0.0485 | pass |
 | Margin over best trivial baseline | ≥ 0.05 | **0.1003** | pass |
-| Split grouped by source | required | yes | pass |
+| Split grouped by source | required | yes* | pass |
 | Null control | ≤ chance + 0.02 | 0.0389 vs 0.038462 | pass |
 
-Slope **+0.0491** accuracy points per decade, paired-bootstrap 95% interval
-**[0.0485, 0.0497]**, r² **0.9978**, against a chance level of **0.038462** across 26 classes.
+Slope **+0.0491** accuracy points per decade, cluster-bootstrap 95% interval **[0.0482, 0.0500]**
+(corrected — see the weakness list), r² **0.9978**, against a chance level of **0.038462** across
+26 classes.
+
+*\*The split clause needs an asterisk, found by adversarial audit.* The split groups by chunk
+**index**, and for seven of eight content families the chunk index fully determines the bytes, so
+the guarantee holds. For the **gutenberg** family, every chunk is a 32768-byte window drawn at a
+random offset from one shared 7.84 MB pool — so gutenberg source **bytes** straddle the train/eval
+boundary at roughly 26× coverage, and the sentence "fragments carved from the same source bytes
+never straddle the boundary", frozen into the preregistration and repeated in three documents, is
+**false for one eighth of the corpus**. The measured impact runs *against* the headline rather
+than for it: gutenberg is among the hardest families (top-rung accuracy **0.1596** against
+**0.2511** for the other seven), and excluding it from evaluation **raises** every rung and
+steepens the slope to **+0.0524** `[0.0514, 0.0535]` (`artifacts/pivot/audit_rederivations.json`).
+So the leak existed, the claim was wrong, and honouring it would have made the result look
+better, not worse. The same shared pool also voids the byte-level reading of 0007's
+corpora-disjointness clause — which *strengthens* the transfer finding there: the 4096-trained
+model had seen gutenberg-adjacent bytes and still collapsed to chance. Filed in `CORRECTIONS.md`.
 
 ### Both readings of the margin, at equal prominence
 
@@ -425,15 +454,23 @@ footnote.
   after two OOM kills would have been choosing the flattering option under cover of a resource
   constraint. Banked, because the decision went against this study's interest and is otherwise
   invisible.
-- **The 95% interval covers evaluation-example sampling only** — not seed variance (one seed),
-  not corpus-manufacture variance (one corpus), not model-class choice (one class, held fixed by
-  design). `[0.0485, 0.0497]` pins the slope *given this corpus, seed and model class*; it does
-  not pin the slope of the underlying phenomenon. Stated in `tools/scaling.py` so it travels.
+- **The published 95% interval was anti-conservative, and is corrected.** The bootstrap resampled
+  260000 eval fragments as independent, but they are 10000 clusters of 26 fragments sharing a
+  plaintext — the dependence unit this study's own grouped split declares. Measured within-chunk
+  correctness correlation is 0.140 against 0.016 across chunk boundaries. The corrected interval,
+  from a cluster bootstrap over the 10000 chunks, is **[0.0482, 0.0500]** — about 45% wider than
+  the superseded [0.0485, 0.0497] — and the verdict clause (lower bound > 0) is unaffected.
+  Found by adversarial audit; derivation in `artifacts/pivot/audit_rederivations.json`, filed in
+  `CORRECTIONS.md`. The interval still covers evaluation sampling only — not seed variance, not
+  corpus-manufacture variance, not model-class choice.
 - **One carve size, one seed, one model class.** Generalisation across carve sizes is not
   established. Encoders absent from this box — 7-Zip's deflate, Java's `Deflater`, Go's `flate`,
   the Cloudflare and Windows zlib forks — are not covered.
 - **Incompressible content caps what is achievable.** Base64 and packed-binary sources collapse to
-  roughly 22.27 distinct streams of 26. Some fragments carry no recoverable signal at all.
+  roughly **14** distinct streams of 26 (14.667 and 14.75 respectively); 22.27 is the mean across
+  all eight content families, which an earlier version of this bullet wrongly attributed to the
+  worst families — an error in the flattering direction, inside this very section. Caught by
+  adversarial audit; filed in `CORRECTIONS.md`. Some fragments carry no recoverable signal at all.
 
 ### G5 is the gate this does not clear, and no amount of curve fixes it
 
@@ -441,12 +478,17 @@ The five gates are abundance, a label manufacturer, scale monotonicity, white sp
 buyer type**. This result settles the first four. It does not settle the fifth, and this document
 does not claim it does.
 
-White space is real and was verified first-hand rather than asserted: three GitHub API query
-formulations returned `total_count: 0`, and the four tools that do exist — `preflate`, `precomp`,
-`grittibanzli`, `list-compresslevel.py` — each need something a carved fragment does not have,
-either the stream start or the plaintext. That is recorded with its own honest limits in
-`artifacts/pivot/g4_firsthand.json`, including that encode.su was unreachable from this container
-and was not searched, and that no patent search was run.
+White space was verified first-hand across arXiv, the general web and HuggingFace
+(`artifacts/pivot/g4_firsthand.json`). The three GitHub `total_count: 0` queries this document
+previously folded into that claim were in fact a **round-1 subagent's** results — exactly the class
+of evidence this repository refuses to call verified elsewhere, relabelled "first-hand" here. The
+audit caught it, and the queries have now been re-run genuinely first-hand through the
+authenticated GitHub API: **`total_count: 0`, `incomplete_results: false`, on all three
+formulations** (`artifacts/pivot/g4_github_firsthand.json`). The **five** non-learned tools that do
+exist — `preflate`, `precomp`, `grittibanzli`, `list-compresslevel.py`, and
+`koutto/compression-identifier` (type only) — each need something a carved fragment does not have.
+The honest limits stand: encode.su was unreachable and was not searched, and no patent search was
+run.
 
 But the buyers this points at — forensic carving of unallocated disk, archive recompression,
 repackaged-APK detection — are narrow, and **no buyer has been contacted, none is claimed, and
@@ -678,22 +720,28 @@ tree might close the gap — and the absolute selective floor of **0.5**, becaus
 can easily have a most-confident decile no better than its average. Neither happened.
 
 The selective clause is the tightest of the three, and it was scored under the **strictest** reading
-available. `artifacts/pivot/topk_prereg_interpretation.json`, drand-anchored before the run,
-resolved "the best trivial baseline" to the **maximum over all baselines** rather than the best of
-the frozen set. Under the looser frozen-set reading the comparison would have been logistic's
+available. `artifacts/pivot/topk_prereg_interpretation.json` resolved "the best trivial baseline"
+to the **maximum over all baselines** rather than the best of the frozen set. That note carries a
+drand anchor, and an audit correctly observed the anchor proves only **not-before** — it cannot
+prove the numbers did not yet exist, which is a not-after claim; nothing in beacon arithmetic stops
+an author computing first and anchoring afterwards. The precedence of the note over the
+measurements therefore rests on the run logs and commit history, not on the beacon, and both
+interpretation artifacts now carry that correction in their own text. Under the looser frozen-set reading the comparison would have been logistic's
 **0.5412** and the margin **+0.2510** rather than **+0.0985**. The harder reading was chosen while
 the numbers did not yet exist, and it still passed.
 
 ### What the tight intervals do NOT mean
 
-Both slopes here carry intervals about a thousandth wide, and that is easy to over-read. The paired
-bootstrap resamples **evaluation examples**. It does not sample seeds — one seed is trained per
-rung. It does not sample corpora — one corpus was manufactured. It does not vary the model class,
-which is held fixed across rungs by design. So `[0.0977, 0.0993]` means *given this corpus, this
-seed and this model class, the evaluation set pins the slope to about a thousandth*. It does not
-mean the slope of the underlying phenomenon is known to a thousandth. Repeated seeds and repeated
-corpora would be needed for that, and this instrument has not been run with either. The same caveat
-applies to 0003's slope and is now stated in `tools/scaling.py` so it travels with any future fit.
+The intervals published here were **doubly** over-tight, and only one of the two reasons was
+disclosed at the time. First, as disclosed: the bootstrap does not sample seeds, corpora, or model
+classes. Second, found later by adversarial audit: it resampled evaluation **fragments** as
+independent when they are clusters of 26 sharing a plaintext, understating even the
+evaluation-sampling uncertainty by roughly 45% (0003's corrected interval:
+`artifacts/pivot/audit_rederivations.json`). The top-5 interval `[0.0977, 0.0993]` quoted here has
+the same defect and has **not** been re-derived — its per-example scores were never banked, so
+correcting it requires re-running the measurement. Until then it must be read as anti-conservative,
+and "pins the slope to about a thousandth" — which an earlier version of this section said — was
+false even on its own terms. Filed in `CORRECTIONS.md`.
 
 The top-5 permutation p is again **0.0417**, its arithmetic floor of 1/24 for four rungs, for the
 same reason as before.
@@ -833,10 +881,14 @@ not a judgement that was made.
 
 - **It does not establish that a viable domain does not exist.** It establishes that a search of
   99 candidates across three framings did not find one, and it names the framing that was missing.
-- **It contains no scaling curve that means anything.** One real curve has now been fitted, with a
-  real interval, on real data — but on a domain that is G4-dead, that fails its own preregistered
-  A2 margin, and that was chosen *because* it could not be selected. It validates the instrument
-  and says nothing about the world.
+- **It contains four fitted, interval-bounded curves, and exactly one of them is a claim about
+  the world** — the carved-DEFLATE curve of preregistration 0003, valid at a 4096-byte window and
+  only there (0007). The round-4 curve validates the instrument on a G4-dead domain; the 0006
+  top-5 curve reads the same models operationally; the 1024-carve curve rises from a base that
+  never separates from a dumb rule. An earlier version of this bullet said "no scaling curve that
+  means anything" — prose written before the pivot that survived three sweeps of the exact
+  stale-claim bug this repository built a gate for. Found by adversarial audit; filed in
+  `CORRECTIONS.md`.
 - **It has no customers, no users and no partners.** None are claimed anywhere.
 - **Most of its findings rest on subagent measurements** that have not been independently
   reproduced, as the coverage map states in detail.
