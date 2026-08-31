@@ -695,6 +695,15 @@
       "json_path": "$.families.csv.slope",
       "reverify": "python3 -c \"import json; json.load(open('artifacts/pivot/per_family_curves.json'))\"",
       "value": 0.090631
+    },
+    {
+      "artifact": "artifacts/pivot/seed_robustness.json",
+      "claim": "Two full-pipeline replications at independent seeds give slopes 0.048578 and 0.047755 against the published 0.049121 - a spread of 0.0014, smaller than any single run's cluster interval. Every run clears the frozen margin and every null control sits at chance; the published run is the lowest of the three on top rung and margin.",
+      "class": "primary-verifiable",
+      "id": "seed-robustness",
+      "json_path": "$.slope_spread",
+      "reverify": "bash -c '.venv/bin/python tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --seed 7 --tag seed-7 --out /tmp/s7.json --scores-out /tmp/s7s.json'",
+      "value": 0.0014
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

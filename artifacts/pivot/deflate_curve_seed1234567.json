@@ -1,0 +1,126 @@
+{
+  "baselines_trained_on_n": 800000,
+  "best_baseline_expanded": 0.1807,
+  "best_baseline_expanded_name": "depth16_tree",
+  "best_trivial_baseline": 0.1315,
+  "best_trivial_baseline_name": "logistic",
+  "carve_bytes": 4096,
+  "chance_accuracy": 0.038462,
+  "chunk_size_bytes": 32768,
+  "class_names": [
+    "zlib-1",
+    "zlib-2",
+    "zlib-3",
+    "zlib-4",
+    "zlib-5",
+    "zlib-6",
+    "zlib-7",
+    "zlib-8",
+    "zlib-9",
+    "libdeflate-1",
+    "libdeflate-2",
+    "libdeflate-3",
+    "libdeflate-4",
+    "libdeflate-5",
+    "libdeflate-6",
+    "libdeflate-7",
+    "libdeflate-8",
+    "libdeflate-9",
+    "libdeflate-10",
+    "libdeflate-11",
+    "libdeflate-12",
+    "isal-0",
+    "isal-1",
+    "isal-2",
+    "isal-3",
+    "zopfli"
+  ],
+  "content_families": [
+    "gutenberg",
+    "base64",
+    "binary",
+    "code",
+    "csv",
+    "json",
+    "log",
+    "mixed"
+  ],
+  "cost": {
+    "build_seconds": 3415.5,
+    "cpu_cores": 4,
+    "gpu": "none",
+    "train_seconds_per_rung": [
+      13.6,
+      57.8,
+      168.2,
+      1562.1
+    ]
+  },
+  "decades_spanned": 2.9031,
+  "feature_set": "all",
+  "free_decoder_arm": "UNAVAILABLE BY CONSTRUCTION. Law L3(i)'s re-run-and-compare attack requires re-running the compressor on the plaintext. A carved fragment does not contain the plaintext, so the zero-training decoder that beat every learned model on SAT solvers cannot be built here.",
+  "frozen_baseline_set": [
+    "majority",
+    "stratified",
+    "depth3_tree",
+    "logistic"
+  ],
+  "length_ratio_baseline": "NOT COMPUTABLE - fragments are fixed-length and the ratio needs the plaintext; it degenerates to the majority baseline, which is measured. See artifacts/pivot/prereg_interpretation.json.",
+  "margin_over_expanded_baseline": 0.0608,
+  "margin_over_frozen_baseline": 0.11,
+  "model_class": "hgb",
+  "n_classes": 26,
+  "n_eval_fragments": 260000,
+  "n_features": 1108,
+  "n_fragments": 1300000,
+  "n_heldout_source_chunks": 10000,
+  "n_rungs": 4,
+  "n_source_chunks": 50000,
+  "n_train_fragments": 800000,
+  "permutation_p": 0.041666666666666664,
+  "preregistration": "0003-pivot-deflate-curve",
+  "rungs": [
+    {
+      "accuracy": 0.1007,
+      "n_units": 1000,
+      "train_seconds": 13.6
+    },
+    {
+      "accuracy": 0.1456,
+      "n_units": 10000,
+      "train_seconds": 57.8
+    },
+    {
+      "accuracy": 0.1875,
+      "n_units": 100000,
+      "train_seconds": 168.2
+    },
+    {
+      "accuracy": 0.2415,
+      "n_units": 800000,
+      "train_seconds": 1562.1
+    }
+  ],
+  "rungs_skipped": [],
+  "schema": "raise-v1/pivot_deflate_curve/1",
+  "seed": 1234567,
+  "shuffled_label_accuracy": 0.0377,
+  "slope": 0.04775468584303893,
+  "slope_ci95_high": 0.048325551725632646,
+  "slope_ci95_low": 0.047179982256754356,
+  "slope_r2": 0.9938804733855064,
+  "split_is_grouped_by_source": true,
+  "student_input": "4096 bytes carved from the middle of the stream. No header, no stream start, no plaintext, and NOT the stream length.",
+  "tag": "seed-1234567",
+  "task": "recover the (implementation, level) that produced a carved DEFLATE fragment",
+  "top_rung_accuracy": 0.2415,
+  "trivial_baselines": {
+    "best_single_feat": 0.0751,
+    "depth16_tree": 0.1807,
+    "depth3_tree": 0.097,
+    "depth8_tree": 0.1463,
+    "logistic": 0.1315,
+    "majority": 0.0385,
+    "stratified": 0.0388
+  }
+}

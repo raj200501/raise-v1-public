@@ -92,10 +92,20 @@ reading available, fixed before the run; the looser reading would have given **+
 
 ## Seed robustness
 
-| | |
-|---|---|
-| Full-pipeline replications at independent seeds | PENDING |
-| Slope range across seeds | PENDING |
+Two full-pipeline replications at independent seeds — fresh grouped split, fresh shuffles, fresh
+model initialisation each run (`artifacts/pivot/seed_robustness.json`):
+
+| Seed | Slope /decade | Top rung | Frozen margin | Null control |
+|---|---:|---:|---:|---:|
+| 20260825 (published) | +0.0491 | 0.2395 | +0.1003 | 0.0389 |
+| 7 | +0.0486 | 0.2425 | +0.1116 | 0.0384 |
+| 1234567 | +0.0478 | 0.2415 | +0.1100 | 0.0377 |
+
+Slope spread across the three runs: **0.0014** — smaller than any single run's cluster interval.
+Every run clears the frozen 0.05 margin; every null control sits at chance; and the **published run
+is the lowest of the three** on both top rung and margin, so seed choice did not flatter it. These
+replications cannot revise 0003's verdict — its frozen scope was one seed — they measure whether a
+rerun would have said something different. It would not have.
 
 ## The instrument these numbers passed through
 

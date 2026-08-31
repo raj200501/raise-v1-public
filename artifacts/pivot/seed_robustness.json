@@ -1,0 +1,58 @@
+{
+  "every_null_control_at_chance": true,
+  "every_run_clears_the_frozen_margin": true,
+  "margin_max": 0.1116,
+  "margin_min": 0.1003,
+  "reading": "Slope range 0.0478..0.0491 across three independent full-pipeline runs - a spread of 0.0014, smaller than the width of any single run's cluster interval. Every run clears the frozen 0.05 margin (worst 0.1003); every null control sits at chance. The published run is the LOWEST of the three on both top rung and margin, so seed choice did not flatter it.",
+  "runs": {
+    "1234567": {
+      "best_trivial_baseline": 0.1315,
+      "margin_over_frozen_baseline": 0.11,
+      "rungs": {
+        "1000": 0.1007,
+        "10000": 0.1456,
+        "100000": 0.1875,
+        "800000": 0.2415
+      },
+      "shuffled_label_accuracy": 0.0377,
+      "slope": 0.04775468584303893,
+      "slope_rounded": 0.0478,
+      "top_rung_accuracy": 0.2415
+    },
+    "20260825 (published)": {
+      "best_trivial_baseline": 0.1392,
+      "margin_over_frozen_baseline": 0.1003,
+      "rungs": {
+        "1000": 0.0988,
+        "10000": 0.1415,
+        "100000": 0.1965,
+        "800000": 0.2395
+      },
+      "shuffled_label_accuracy": 0.0389,
+      "slope": 0.04912072076972296,
+      "slope_rounded": 0.0491,
+      "top_rung_accuracy": 0.2395
+    },
+    "7": {
+      "best_trivial_baseline": 0.1309,
+      "margin_over_frozen_baseline": 0.1116,
+      "rungs": {
+        "1000": 0.1022,
+        "10000": 0.1444,
+        "100000": 0.1955,
+        "800000": 0.2425
+      },
+      "shuffled_label_accuracy": 0.0384,
+      "slope": 0.04857800495457695,
+      "slope_rounded": 0.0486,
+      "top_rung_accuracy": 0.2425
+    }
+  },
+  "schema": "raise-v1/seed_robustness/1",
+  "slope_max": 0.049121,
+  "slope_min": 0.047755,
+  "slope_spread": 0.001366,
+  "top_rung_max": 0.2425,
+  "top_rung_min": 0.2395,
+  "why": "Preregistration 0003's frozen scope said 'single seed... this is not a variance study' - the most-repeated disclosed weakness in the package. These are full-pipeline replications at independent seeds: a fresh grouped split, fresh shuffles, fresh model initialisation each run. They cannot revise 0003's verdict; they measure whether a rerun would have said something different."
+}

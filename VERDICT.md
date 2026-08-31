@@ -322,7 +322,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **14 of 80 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 81 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -352,7 +352,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
 | `arithmetic-verifiable` | 11 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 55 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `primary-verifiable` | 56 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -434,6 +434,17 @@ decade, with top-rung accuracies of 0.3888, 0.3756, 0.3581 and 0.2944 against 0.
 while the incompressible families sit near the byte-identity collision ceiling: binary **+0.0097**,
 mixed **+0.0028**. Every family's interval excludes zero, including the ones that make the task
 look hard, and all eight are reported either way.
+
+### Would a rerun have said something different? Measured: no
+
+0003's frozen scope said *"single seed... this is not a variance study"* — the most-repeated
+disclosed weakness in the package. It is now measured (`artifacts/pivot/seed_robustness.json`): two
+additional full-pipeline runs at independent seeds — fresh grouped split, fresh shuffles, fresh
+initialisation — give slopes of **+0.0486** and **+0.0478** against the published **+0.0491**, a
+spread of **0.0014**; margins **+0.1116** and **+0.1100** against the published **+0.1003**; null
+controls **0.0384** and **0.0377**, both at chance. Every run clears every clause, and the published
+run is the *lowest* of the three on top rung and margin. These replications cannot revise 0003's
+verdict; they close its stated weakness.
 
 ### Both readings of the margin, at equal prominence
 
