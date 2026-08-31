@@ -207,6 +207,14 @@ def main() -> int:
     }
     with open(args.out, "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=2, sort_keys=True); fh.write("\n")
+    scores_out = os.path.join(REPO, "artifacts", "pivot", "topk_rung_scores.json")
+    with open(scores_out, "w") as fh:
+        json.dump({"schema": "raise-v1/rung_scores/1",
+                   "metric": "top-5 hit on a shared held-out evaluation set, grouped by source chunk",
+                   "eval_chunk_ids": np.asarray(g[ev]).tolist(),
+                   "rungs": per_ex_top5}, fh)
+    print(f"wrote {os.path.relpath(scores_out, REPO)}  (banked so the interval can be re-derived "
+          f"at the cluster level - the audit found fragment-level intervals anti-conservative)")
     print(f"\nwrote {os.path.relpath(args.out, REPO)}")
     return 0
 

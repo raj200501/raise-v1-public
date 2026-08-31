@@ -197,6 +197,12 @@ def main() -> int:
                  "train_seconds_per_rung": [r["train_seconds"] for r in rungs],
                  "cpu_cores": args.procs, "gpu": "none"},
     }
+    scores_out = os.path.join(REPO, "artifacts", "pivot", "carve_rung_scores.json")
+    with open(scores_out, "w") as fh:
+        json.dump({"schema": "raise-v1/rung_scores/1",
+                   "metric": "top-1 on corpus B's held-out evaluation set, grouped by source chunk",
+                   "eval_chunk_ids": np.asarray(gb[ev_b]).tolist(),
+                   "rungs": per_ex}, fh)
     with open(args.out, "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=2, sort_keys=True); fh.write("\n")
     print(f"\nwithin-size top1 {out['within_top1']} | transfer {transfer} | "
