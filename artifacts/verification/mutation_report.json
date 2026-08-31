@@ -21,8 +21,8 @@
       "total": 15
     },
     "claimcheck": {
-      "detected": 8,
-      "total": 8
+      "detected": 10,
+      "total": 10
     },
     "coverage": {
       "detected": 8,
@@ -128,7 +128,25 @@
     },
     {
       "detected": true,
-      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=5a53815e77223cfe)",
+      "evidence": "CLAIMCHECK: PASS",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "claimcheck",
+      "mutation": "svg-geometry-is-scrubbed-so-a-rendered-chart-can-pass",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "CLAIMCHECK: FAIL - 1 number(s) in outbound copy do not trace to an artifact.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "claimcheck",
+      "mutation": "a-fabricated-number-in-svg-TEXT-is-still-caught",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=86c579b0f732face)",
       "exit_code": 0,
       "expected": "pass",
       "gate": "prereg",
@@ -173,7 +191,7 @@
     },
     {
       "detected": true,
-      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor f7a12f7496b72215 (chain order broken)",
+      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor dbae2714d0308768 (chain order broken)",
       "exit_code": 1,
       "expected": "fail",
       "gate": "prereg",
@@ -200,7 +218,7 @@
     },
     {
       "detected": true,
-      "evidence": "/tmp/tmp97dmecv0/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
+      "evidence": "/tmp/tmppv63jt4r/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
       "exit_code": 2,
       "expected": "fail",
       "gate": "prereg",
@@ -1243,8 +1261,8 @@
       "observed": "fail"
     }
   ],
-  "detected": 132,
+  "detected": 134,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 132
+  "total_mutations": 134
 }

@@ -100,8 +100,8 @@ reading available, fixed before the run; the looser reading would have given **+
 ## The instrument these numbers passed through
 
 **10** preregistrations, hash-chained (entry *N* carries entry *N−1*'s hash) and anchored to NIST
-Beacon 2.0 and drand; readers frozen by sha256 before their data existed. **132** deliberate
-mutations across **13** gates, **132** detected, **0** survived — every gate provably capable of
+Beacon 2.0 and drand; readers frozen by sha256 before their data existed. **134** deliberate
+mutations across **13** gates, **134** detected, **0** survived — every gate provably capable of
 failing. **8** corrections filed against this work at full size, including a **54-agent
 adversarial audit** whose 13 confirmed findings (three critical) were each fixed by measurement,
 with the audit record banked — rejected findings included — so the filter itself can be audited.

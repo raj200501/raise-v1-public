@@ -13,6 +13,8 @@ Principled exclusions, each of which is itself covered by a mutation test:
   - digits inside a URL          (a URL is an address, not a claim)
   - markdown ordered-list markers at line start
   - long hex strings (>=16 hex chars): commit ids and digests
+  - SVG/HTML geometry attributes (x= y= points= viewBox= style=): where a mark is drawn is not a
+    claim; the TEXT a chart displays still is, and is still checked
   - text on a line ending with the marker  <!-- claimcheck:ignore-line REASON -->
 
 Exit codes: 0 all numbers backed; 1 unbacked numbers found; 2 usage/config error.
@@ -37,6 +39,12 @@ ALLOWLIST = os.path.join(REPO_ROOT, "docs", "claimcheck_allowlist.tsv")
 
 NUM_RE = re.compile(r"(?<![\w.])(-?\d+(?:\.\d+)?)(?:[eE]([+-]?\d+))?(?![\w])")
 URL_RE = re.compile(r"(?:https?://|www\.)\S+")
+# SVG/HTML geometry attributes: coordinates are where a mark is DRAWN, not a claim about the world.
+# Only the quoted attribute VALUE is blanked; numbers in element text content - chart labels, which
+# ARE claims - still reach the extractor. A style="" span is layout for the same reason.
+GEOM_RE = re.compile(
+    r'\b(?:x|y|x1|x2|y1|y2|cx|cy|r|rx|ry|dx|dy|width|height|points|viewBox|offset|style)='
+    r'"[^"]*"')
 HEX_RE = re.compile(r"\b[0-9a-fA-F]{16,}\b")
 OL_RE = re.compile(r"^(\s*)(\d+)([.)]\s)")
 IGNORE_LINE_RE = re.compile(r"<!--\s*claimcheck:ignore-line\b")
@@ -151,6 +159,7 @@ def backed(token: str, banked: set[float]) -> bool:
 def scrub(line: str) -> str:
     """Blank out spans that are addresses/identifiers rather than claims."""
     line = URL_RE.sub(lambda m: " " * len(m.group(0)), line)
+    line = GEOM_RE.sub(lambda m: " " * len(m.group(0)), line)
     line = HEX_RE.sub(lambda m: " " * len(m.group(0)), line)
     m = OL_RE.match(line)
     if m:

@@ -150,6 +150,25 @@ def _(root):
     return run([PY, "tools/claimcheck.py", doc], root)
 
 
+@case("claimcheck", "svg-geometry-is-scrubbed-so-a-rendered-chart-can-pass", "pass")
+def _(root):
+    doc = seed_claimcheck(root)
+    with open(os.path.join(root, "docs", "chart.html"), "w") as fh:
+        fh.write('<svg viewBox="0 0 720 320"><circle cx="137.8" cy="229.9" r="4.5"/>'
+                 '<text x="574.0" y="45.3">0.412</text></svg>\n')
+    return run([PY, "tools/claimcheck.py", os.path.join(root, "docs", "chart.html")], root)
+
+
+@case("claimcheck", "a-fabricated-number-in-svg-TEXT-is-still-caught", "fail")
+def _(root):
+    # The geometry scrub must not become a hole: what a chart DISPLAYS is a claim. 0.981 is drawn
+    # at a scrubbed coordinate but its text content traces to nothing, and must still fail.
+    doc = seed_claimcheck(root)
+    with open(os.path.join(root, "docs", "chart.html"), "w") as fh:
+        fh.write('<svg viewBox="0 0 720 320"><text x="574.0" y="45.3">0.981</text></svg>\n')
+    return run([PY, "tools/claimcheck.py", os.path.join(root, "docs", "chart.html")], root)
+
+
 # ---------------------------------------------------------------- prereg chain gate
 
 @case("prereg", "control-clean-chain-verifies", "pass")

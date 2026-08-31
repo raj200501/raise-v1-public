@@ -1,0 +1,90 @@
+{
+  "corpora": {
+    "data/pivot/carve_c1024.npz": {
+      "X": {
+        "dtype": "float32",
+        "sha256": "5a0658d1abae09c4785a1512bb81d806aef3ada061512c5a824f622a5be3bcc8",
+        "shape": [
+          650000,
+          1108
+        ]
+      },
+      "g": {
+        "dtype": "int32",
+        "sha256": "0076adaf1d717f2ea2327016a650b5e67b0771f12e08ac21129022ee30687b54",
+        "shape": [
+          650000
+        ]
+      },
+      "y": {
+        "dtype": "int16",
+        "sha256": "7f008413fd5bff9a308ade8fa5769533c5ac557f66ce0f5789a664ac88316c73",
+        "shape": [
+          650000
+        ]
+      }
+    },
+    "data/pivot/full_c4096.npz": {
+      "X": {
+        "dtype": "float32",
+        "sha256": "a28a2d403d40c64405fe15747399f1317fd984155702797590c58fb0cef0f8ea",
+        "shape": [
+          1300000,
+          1108
+        ]
+      },
+      "g": {
+        "dtype": "int32",
+        "sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9",
+        "shape": [
+          1300000
+        ]
+      },
+      "y": {
+        "dtype": "int16",
+        "sha256": "2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093",
+        "shape": [
+          1300000
+        ]
+      }
+    },
+    "data/pivot/raw_c1024.npz": {
+      "X": {
+        "dtype": "uint8",
+        "sha256": "c6854bd132c3942c34aa8f22396b1a61a0e005ccbba732db053a3dc2ba290424",
+        "shape": [
+          650000,
+          1024
+        ]
+      },
+      "g": {
+        "dtype": "int32",
+        "sha256": "8e81f5926902f88dd5dee912bb0af1fde72628edd0b3adf19ecbb5561099f180",
+        "shape": [
+          650000
+        ]
+      },
+      "y": {
+        "dtype": "int16",
+        "sha256": "7f008413fd5bff9a308ade8fa5769533c5ac557f66ce0f5789a664ac88316c73",
+        "shape": [
+          650000
+        ]
+      }
+    }
+  },
+  "schema": "raise-v1/corpus_manifest/1",
+  "sources_sha256": {
+    "pg11.txt": "a3a27f8edbf7fcd9b8ba8435494440e24952deaa3e2f2d65192d4cb7ca403754",
+    "pg1342.txt": "a5666f87abf2cbfdaa27ea8c73bd284da9649b9a2ab27b4e6c8f6aeab1bd1c88",
+    "pg1661.txt": "b9c105a5c0cf9fcb37c7d0211658851ed56074519c9455d15e20f04c0c5a3174",
+    "pg1952.txt": "0604e2f8ab0a7acf9a7e1ea647e59eafcae7ed5d75c5cc985772c032d8655acb",
+    "pg2600.txt": "e4bcf9042609b62c7de72a6f1b311f54c412943a9d641b7efcf79a464b5f31c8",
+    "pg2701.txt": "0670d7bb10b99d05f095a28942801aa74d4921d1b34dbdc76900e2c4c2bd2189",
+    "pg5200.txt": "6b023bfbb6c951841325554a588b6d88a8cf5d117d52fd3ffb2790c1089caf77",
+    "pg74.txt": "fe74f3e43a7c0a0d0189b40ce966ce73795559b63076ccc0ea2e8ba2b9a9b213",
+    "pg84.txt": "06c37d2c52d208d3d81eb12c3b10b5edbd7728b73554325ddceadbe2fb427e77",
+    "pg98.txt": "e3dfeb67feb904ac0f73a35204a175c58248422c2be8556802cb8820d958d67c"
+  },
+  "why": "The corpora (5.4 GB and friends) are not committed; a cold clone re-manufactures them with the\nshipped tools. Every \"a stranger can re-derive it\" claim therefore rests on the rebuild actually\nmatching ours - which until this manifest existed could not be checked, only assumed. Hashes cover\nthe ARRAY CONTENTS (X, y, g), not the .npz container, because the container embeds a build-time\nfield that legitimately differs between runs."
+}

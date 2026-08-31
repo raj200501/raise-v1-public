@@ -1,0 +1,171 @@
+<title>raise-v1 Evidence Ledger</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
+:root {
+  --ground:#FAF9F6; --surface:#FFFFFF; --ink:#1A1D21; --ink2:#5A6068; --hair:#E4E1DA;
+  --acc:#00875F; --acc-soft:#00875F1A; --bad:#B4472E; --bad-soft:#B4472E14; --inc:#8A7A2E;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --ground:#14171A; --surface:#1C2126; --ink:#ECEDEA; --ink2:#9AA1A8; --hair:#2A3036;
+  --acc:#2FA98C; --acc-soft:#2FA98C22; --bad:#D0654A; --bad-soft:#D0654A1F; --inc:#C4B15A;
+} }
+:root[data-theme="dark"] {
+  --ground:#14171A; --surface:#1C2126; --ink:#ECEDEA; --ink2:#9AA1A8; --hair:#2A3036;
+  --acc:#2FA98C; --acc-soft:#2FA98C22; --bad:#D0654A; --bad-soft:#D0654A1F; --inc:#C4B15A;
+}
+body { background:var(--ground); color:var(--ink); font:16px/1.6 'Source Sans 3',system-ui,sans-serif;
+  margin:0; -webkit-font-smoothing:antialiased; }
+main { max-width:860px; margin:0 auto; padding:48px 24px 96px; }
+.eyebrow { font:500 12px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--acc); }
+h1 { font:700 clamp(34px,6vw,52px)/1.08 'Spectral',Georgia,serif; margin:.35em 0 .3em; text-wrap:balance; }
+.dek { font-size:18px; color:var(--ink2); max-width:62ch; margin:0 0 8px; }
+.provenance { font:400 12.5px/1.7 var(--mono); color:var(--ink2); border-top:1px solid var(--hair);
+  border-bottom:1px solid var(--hair); padding:10px 0; margin:26px 0 0; }
+h2 { font:600 26px/1.2 'Spectral',Georgia,serif; margin:64px 0 6px; text-wrap:balance; }
+h2 + .sub { color:var(--ink2); margin:0 0 20px; max-width:66ch; }
+p { max-width:66ch; }
+.mono, td.mono { font-family:var(--mono); font-size:.92em; }
+.mut { color:var(--ink2); }
+.ledger { display:flex; flex-direction:column; gap:10px; margin:22px 0; }
+.chip { display:grid; grid-template-columns:28px auto max-content; grid-template-areas:"m n p" "m note note";
+  gap:2px 12px; align-items:baseline; background:var(--surface); border:1px solid var(--hair);
+  border-left:4px solid var(--acc); border-radius:6px; padding:12px 16px; }
+.chip.bad { border-left-color:var(--bad); } .chip.inc { border-left-color:var(--inc); }
+.chip .mark { grid-area:m; font:500 18px/1 var(--mono); color:var(--acc); }
+.chip.bad .mark { color:var(--bad); } .chip.inc .mark { color:var(--inc); }
+.chip .vname { font:500 15px var(--mono); } .chip .vpr { grid-area:p; font:400 12px var(--mono); color:var(--ink2); }
+.chip .vnote { grid-area:note; color:var(--ink2); font-size:14.5px; }
+.tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin:26px 0; }
+.tile { background:var(--surface); border:1px solid var(--hair); border-radius:6px; padding:16px 18px; }
+.tile .v { font:500 26px/1.15 var(--mono); font-variant-numeric:tabular-nums; }
+.tile .k { font-size:13px; color:var(--ink2); margin-top:4px; line-height:1.4; }
+figure { margin:26px 0; background:var(--surface); border:1px solid var(--hair); border-radius:6px;
+  padding:20px 16px 8px; overflow-x:auto; }
+figcaption { font-size:13.5px; color:var(--ink2); padding:8px 8px 10px; max-width:70ch; }
+svg { display:block; width:100%; height:auto; }
+svg text { font-family:var(--mono); fill:var(--ink2); }
+.grid { stroke:var(--hair); stroke-width:1; } .zero { stroke:var(--ink2); stroke-width:1.25; }
+.tick { font-size:11.5px; } .rowlbl { font-size:12.5px; fill:var(--ink); }
+.line { fill:none; stroke:var(--acc); stroke-width:2.25; stroke-linecap:round; }
+.dot { fill:var(--acc); stroke:var(--surface); stroke-width:2; }
+.ci { stroke:var(--acc); stroke-width:2.5; opacity:.45; stroke-linecap:round; }
+.ref { stroke:var(--ink2); stroke-width:1; stroke-dasharray:3 4; opacity:.7; }
+.reflbl { font-size:11px; } .endlbl { font-size:13px; fill:var(--ink); font-weight:500; }
+.hit { fill:transparent; } .tip { opacity:0; pointer-events:none; transition:opacity .12s; }
+.tip rect { fill:var(--ink); opacity:.92; } .tip text { fill:var(--ground); font-size:11.5px; }
+.pt:hover .tip, .pt:focus .tip { opacity:1; } .pt:focus { outline:none; }
+table { border-collapse:collapse; margin:18px 0; width:100%; max-width:640px;
+  font-variant-numeric:tabular-nums; }
+th { font:500 12px var(--mono); text-transform:uppercase; letter-spacing:.08em; color:var(--ink2);
+  text-align:left; padding:8px 14px 8px 0; border-bottom:1px solid var(--ink2); }
+td { padding:9px 14px 9px 0; border-bottom:1px solid var(--hair); }
+.panel { background:var(--bad-soft); border:1px solid var(--hair); border-left:4px solid var(--bad);
+  border-radius:6px; padding:6px 20px; margin:22px 0; }
+.panel.good { background:var(--acc-soft); border-left-color:var(--acc); }
+.pending { font-family:var(--mono); color:var(--ink2); }
+pre { background:var(--surface); border:1px solid var(--hair); border-radius:6px; padding:16px 18px;
+  overflow-x:auto; font:400 13.5px/1.7 var(--mono); }
+a { color:var(--acc); }
+@media (prefers-reduced-motion: reduce) { .tip { transition:none; } }
+</style>
+<main>
+<div class="eyebrow">Preregistered evidence · every number read from a banked artifact</div>
+<h1>raise-v1 Evidence Ledger</h1>
+<p class="dek">One task, measured under bars frozen before the data existed: recover which of 26
+DEFLATE implementation-and-level configurations produced a window carved from the middle of a
+compressed stream — no header, no stream start, no plaintext. Passes and failures at the same size.</p>
+<div class="provenance">chain head 83707ff010a299d4 · 10 preregistrations, hash-chained, beacon-anchored · rendered from artifacts at 302aa93 · this page is regenerated by tools/render/evidence_page.py and gated by claimcheck</div>
+
+<h2>The verdicts</h2>
+<p class="sub">Emitted by readers frozen by sha256 before their data existed. A failed clause fails
+the study; there is no aggregate score and no discretion.</p>
+<div class="ledger"><div class="chip ok"><span class="mark">✓</span><span class="vname">CURVE_ESTABLISHED</span><span class="vpr">prereg 0003</span><span class="vnote">slope +0.0491/decade, cluster CI [0.048216, 0.050014]</span></div><div class="chip ok"><span class="mark">✓</span><span class="vname">OUTPUT_USABLE</span><span class="vpr">prereg 0006</span><span class="vnote">top-5 0.5694, confident-decile 0.7922</span></div><div class="chip bad"><span class="mark">✕</span><span class="vname">CARVE_FAILS</span><span class="vpr">prereg 0007</span><span class="vnote">margin +0.0099 at 1024 B; transfer 0.0403 ≈ chance</span></div><div class="chip bad"><span class="mark">✕</span><span class="vname">BYTE_MODEL_FAILS</span><span class="vpr">prereg 0009</span><span class="vnote">byte CNN 0.0849 loses to byte-histogram logistic 0.0943</span></div><div class="chip inc"><span class="mark">◦</span><span class="vname">BYTE_FLAT_FAILS</span><span class="vpr">prereg 0010</span><span class="vnote">inconclusive: the null control never became failable, and the reader says so</span></div></div>
+
+<h2>The headline curve</h2>
+<p class="sub">Quality against the volume of manufactured labels — the FDM-1 question. Chance is
+0.038462 across 26 classes; the null control (labels shuffled, identical pipeline) falls to
+0.0389.</p>
+<div class="tiles">
+<div class="tile"><div class="v">+0.0491</div><div class="k">accuracy per decade of data · cluster 95% CI [0.048216, 0.050014] · r² 0.9978</div></div>
+<div class="tile"><div class="v">0.2395</div><div class="k">top rung, 800,000 fragments · 6.2× chance</div></div>
+<div class="tile"><div class="v">+0.1003</div><div class="k">margin over the frozen baseline set (bar: 0.05) · stricter reading +0.0583</div></div>
+</div>
+<figure><svg viewBox="0 0 720 320" role="img" aria-label="Accuracy against manufactured fragments, log scale">
+<line x1="56" x2="588" y1="229.9" y2="229.9" class="grid"/><text x="48" y="233.9" class="tick" text-anchor="end">0.05</text><line x1="56" x2="588" y1="183.9" y2="183.9" class="grid"/><text x="48" y="187.9" class="tick" text-anchor="end">0.10</text><line x1="56" x2="588" y1="137.8" y2="137.8" class="grid"/><text x="48" y="141.8" class="tick" text-anchor="end">0.15</text><line x1="56" x2="588" y1="91.7" y2="91.7" class="grid"/><text x="48" y="95.7" class="tick" text-anchor="end">0.20</text><line x1="56" x2="588" y1="45.6" y2="45.6" class="grid"/><text x="48" y="49.6" class="tick" text-anchor="end">0.25</text><text x="88.7" y="294" class="tick" text-anchor="middle">1k</text><text x="252.4" y="294" class="tick" text-anchor="middle">10k</text><text x="416.1" y="294" class="tick" text-anchor="middle">100k</text><text x="564.0" y="294" class="tick" text-anchor="middle">800k</text>
+<line x1="56" x2="588" y1="109.0" y2="109.0" class="ref"/><text x="596" y="113.0" class="reflbl">best baseline 0.1812</text><line x1="56" x2="588" y1="147.7" y2="147.7" class="ref"/><text x="596" y="151.7" class="reflbl">frozen best 0.1392</text><line x1="56" x2="588" y1="240.6" y2="240.6" class="ref"/><text x="596" y="244.6" class="reflbl">chance 0.038462</text>
+<polyline points="88.7,185.0 252.4,145.6 416.1,94.9 564.0,55.3" class="line"/><g class="pt" tabindex="0"><circle cx="88.7" cy="185.0" r="4.5" class="dot"/><circle cx="88.7" cy="185.0" r="12" class="hit"/><g class="tip"><rect x="42.7" y="145.0" width="92" height="26" rx="4"/><text x="88.7" y="162.0" text-anchor="middle">1,000 · 0.0988</text></g></g><g class="pt" tabindex="0"><circle cx="252.4" cy="145.6" r="4.5" class="dot"/><circle cx="252.4" cy="145.6" r="12" class="hit"/><g class="tip"><rect x="206.4" y="105.6" width="92" height="26" rx="4"/><text x="252.4" y="122.6" text-anchor="middle">10,000 · 0.1415</text></g></g><g class="pt" tabindex="0"><circle cx="416.1" cy="94.9" r="4.5" class="dot"/><circle cx="416.1" cy="94.9" r="12" class="hit"/><g class="tip"><rect x="370.1" y="54.9" width="92" height="26" rx="4"/><text x="416.1" y="71.9" text-anchor="middle">100,000 · 0.1965</text></g></g><g class="pt" tabindex="0"><circle cx="564.0" cy="55.3" r="4.5" class="dot"/><circle cx="564.0" cy="55.3" r="12" class="hit"/><g class="tip"><rect x="518.0" y="15.3" width="92" height="26" rx="4"/><text x="564.0" y="32.3" text-anchor="middle">800,000 · 0.2395</text></g></g>
+<text x="574.0" y="45.3" class="endlbl">0.2395</text>
+<text x="322" y="314" class="tick" text-anchor="middle">manufactured fragments (log scale)</text></svg>
+<figcaption>Accuracy at four preregistered rungs spanning 2.9031 decades. Dashed
+lines: the best trivial baseline of the frozen set (logistic
+0.1392), the best across all baselines (depth-16 tree 0.1812) — every baseline trained on the same
+800,000 fragments as the top rung — and chance. Interval corrected to a
+cluster bootstrap over source chunks after an adversarial audit; superseded values retained in the
+artifact.</figcaption></figure>
+
+<h2>Where the curve lives</h2>
+<p class="sub">The headline is a mixture, and the decomposition is the sharpest statistic in the
+package: structured content carries the curve at roughly twice the headline rate; incompressible
+content sits at the measured collision ceiling (20.9125
+distinct streams of 26 at this carve).</p>
+<figure><svg viewBox="0 0 720 342" role="img" aria-label="Per-family slope with cluster bootstrap intervals">
+<line y1="24" y2="308" x1="138.2" x2="138.2" class="grid"/><text x="138.2" y="324" class="tick" text-anchor="middle">+0.00</text><line y1="24" y2="308" x1="290.0" x2="290.0" class="grid"/><text x="290.0" y="324" class="tick" text-anchor="middle">+0.03</text><line y1="24" y2="308" x1="441.7" x2="441.7" class="grid"/><text x="441.7" y="324" class="tick" text-anchor="middle">+0.06</text><line y1="24" y2="308" x1="593.4" x2="593.4" class="grid"/><text x="593.4" y="324" class="tick" text-anchor="middle">+0.09</text><line x1="138.2" x2="138.2" y1="24" y2="308" class="zero"/><g class="pt" tabindex="0"><text x="108" y="51.0" class="rowlbl" text-anchor="end">log</text><line x1="589.5" x2="607.0" y1="47.0" y2="47.0" class="ci"/><circle cx="598.2" cy="47.0" r="5" class="dot"/><rect x="118" y="30.0" width="526" height="34" class="hit"/><text x="652" y="51.0" class="reflbl">top 0.3756</text><g class="tip"><rect x="514.2" y="7.0" width="168" height="26" rx="4"/><text x="598.2" y="24.0" text-anchor="middle">+0.0909  [+0.0892, +0.0927]</text></g></g><g class="pt" tabindex="0"><text x="108" y="85.0" class="rowlbl" text-anchor="end">csv</text><line x1="586.8" x2="606.6" y1="81.0" y2="81.0" class="ci"/><circle cx="596.6" cy="81.0" r="5" class="dot"/><rect x="118" y="64.0" width="526" height="34" class="hit"/><text x="652" y="85.0" class="reflbl">top 0.3888</text><g class="tip"><rect x="512.6" y="41.0" width="168" height="26" rx="4"/><text x="596.6" y="58.0" text-anchor="middle">+0.0906  [+0.0887, +0.0926]</text></g></g><g class="pt" tabindex="0"><text x="108" y="119.0" class="rowlbl" text-anchor="end">json</text><line x1="584.7" x2="603.7" y1="115.0" y2="115.0" class="ci"/><circle cx="594.1" cy="115.0" r="5" class="dot"/><rect x="118" y="98.0" width="526" height="34" class="hit"/><text x="652" y="119.0" class="reflbl">top 0.3581</text><g class="tip"><rect x="510.1" y="75.0" width="168" height="26" rx="4"/><text x="594.1" y="92.0" text-anchor="middle">+0.0901  [+0.0883, +0.0920]</text></g></g><g class="pt" tabindex="0"><text x="108" y="153.0" class="rowlbl" text-anchor="end">code</text><line x1="478.0" x2="496.1" y1="149.0" y2="149.0" class="ci"/><circle cx="487.2" cy="149.0" r="5" class="dot"/><rect x="118" y="132.0" width="526" height="34" class="hit"/><text x="652" y="153.0" class="reflbl">top 0.2944</text><g class="tip"><rect x="403.2" y="109.0" width="168" height="26" rx="4"/><text x="487.2" y="126.0" text-anchor="middle">+0.0690  [+0.0672, +0.0708]</text></g></g><g class="pt" tabindex="0"><text x="108" y="187.0" class="rowlbl" text-anchor="end">gutenberg</text><line x1="266.0" x2="279.6" y1="183.0" y2="183.0" class="ci"/><circle cx="272.8" cy="183.0" r="5" class="dot"/><rect x="118" y="166.0" width="526" height="34" class="hit"/><text x="652" y="187.0" class="reflbl">top 0.1596</text><g class="tip"><rect x="188.8" y="143.0" width="168" height="26" rx="4"/><text x="272.8" y="160.0" text-anchor="middle">+0.0266  [+0.0253, +0.0279]</text></g></g><g class="pt" tabindex="0"><text x="108" y="221.0" class="rowlbl" text-anchor="end">base64</text><line x1="201.8" x2="212.4" y1="217.0" y2="217.0" class="ci"/><circle cx="207.1" cy="217.0" r="5" class="dot"/><rect x="118" y="200.0" width="526" height="34" class="hit"/><text x="652" y="221.0" class="reflbl">top 0.1221</text><g class="tip"><rect x="123.1" y="177.0" width="168" height="26" rx="4"/><text x="207.1" y="194.0" text-anchor="middle">+0.0136  [+0.0126, +0.0147]</text></g></g><g class="pt" tabindex="0"><text x="108" y="255.0" class="rowlbl" text-anchor="end">binary</text><line x1="182.0" x2="192.3" y1="251.0" y2="251.0" class="ci"/><circle cx="187.3" cy="251.0" r="5" class="dot"/><rect x="118" y="234.0" width="526" height="34" class="hit"/><text x="652" y="255.0" class="reflbl">top 0.1049</text><g class="tip"><rect x="103.3" y="211.0" width="168" height="26" rx="4"/><text x="187.3" y="228.0" text-anchor="middle">+0.0097  [+0.0087, +0.0107]</text></g></g><g class="pt" tabindex="0"><text x="108" y="289.0" class="rowlbl" text-anchor="end">mixed</text><line x1="148.1" x2="157.0" y1="285.0" y2="285.0" class="ci"/><circle cx="152.6" cy="285.0" r="5" class="dot"/><rect x="118" y="268.0" width="526" height="34" class="hit"/><text x="652" y="289.0" class="reflbl">top 0.1143</text><g class="tip"><rect x="68.6" y="245.0" width="168" height="26" rx="4"/><text x="152.6" y="262.0" text-anchor="middle">+0.0028  [+0.0020, +0.0037]</text></g></g>
+<text x="381" y="340" class="tick" text-anchor="middle">accuracy points per decade of manufactured data (dot = estimate, bar = cluster 95% CI)</text></svg>
+<figcaption>Per-family slope from the banked per-example scores, cluster-bootstrapped within each
+family's held-out chunks. Right column: that family's top-rung accuracy. The gutenberg row is the
+family whose source bytes leaked across the split — the audit measured the leak's effect as running
+<em>against</em> the headline (excluding it widens both margins, to +0.1073
+and +0.062).</figcaption></figure>
+
+<h2>The operational reading</h2>
+<p class="sub">Preregistration 0006, frozen before any top-k number existed: does the model yield a
+shortlist and a confidence worth abstaining on?</p>
+<div class="tiles">
+<div class="tile"><div class="v">0.5694</div><div class="k">top-5 accuracy · margin +0.1084 over the best baseline's own top-5</div></div>
+<div class="tile"><div class="v">0.7922</div><div class="k">accuracy on the most-confident decile (26,000 fragments) · baseline decile 0.6937</div></div>
+<div class="tile"><div class="v">+0.0985</div><div class="k">top-5 slope per decade, cluster CI [0.097121, 0.099902] — the shortlist improves ~2× faster than the single guess</div></div>
+</div>
+
+<h2>The boundaries, measured with the same instrument</h2>
+<div class="panel">
+<p><strong>The result is bound to a 4096-byte window.</strong> At a 1024-byte carve the same
+protocol returns <span class="mono">CARVE_FAILS</span>: within-size top-1
+0.1355 against its own best baseline 0.1256
+(margin below the 0.05 bar), and a 4096-trained model transfers at 0.0403 —
+chance. The byte-identity ceiling barely moves across carve sizes, so this is a modelling failure
+and is reported as one. Two learned byte-sequence attempts (preregs 0009, 0010) did not rescue it.</p>
+</div>
+<div class="panel good">
+<p><strong>And the leak correction ran against us.</strong> When an adversarial audit found source
+bytes straddling the split for one of eight families, the measured effect of honouring the broken
+guarantee was that both margins <em>widened</em> — the published numbers had been depressed, not
+inflated. Defect and direction are filed together in the corrections ledger.</p>
+</div>
+
+<h2>Seed robustness</h2>
+<p class="pending">PENDING — two full-pipeline replications are running; rows fill from artifacts or stay pending.</p>
+
+<h2>The instrument the numbers passed through</h2>
+<div class="tiles">
+<div class="tile"><div class="v">10</div><div class="k">preregistrations, hash-chained; entry N carries entry N−1's hash; NIST Beacon + drand anchors</div></div>
+<div class="tile"><div class="v">134/134</div><div class="k">deliberate mutations detected across 13 gates — every gate provably able to fail</div></div>
+<div class="tile"><div class="v">8</div><div class="k">corrections filed against this work at full size, none softened</div></div>
+<div class="tile"><div class="v">13/24</div><div class="k">adversarial-audit findings confirmed by double refutation (11 rejected, record banked) — all fixed by measurement</div></div>
+<div class="tile"><div class="v">14/80</div><div class="k">claims in the coverage map's weakest class — published loudest, on purpose</div></div>
+</div>
+
+<h2>What is not claimed</h2>
+<p>No customer, no user, no partner, <strong>no buyer</strong>. The buyer gate is uncleared, filed
+in the weakest verification class, and no measurement here could have cleared it. The structural
+reasons this family of tasks resists buyers are stated as labelled conjectures with falsifiers —
+never as findings.</p>
+
+<h2>Verify without trusting us</h2>
+<pre>git clone &lt;repo&gt; &amp;&amp; cd raise-v1
+bash tools/gates.sh                              # every gate, one command, non-zero on any failure
+python3 tools/pivot/corpus_manifest.py --check   # prove a rebuilt corpus is byte-identical</pre>
+<p class="mut" style="font-size:14px">Two dependencies, CPU-only. The full record — the 99-candidate
+search that found nothing, four measured laws, three conjectures, and eight corrections — is in the
+repository this page was rendered from.</p>
+</main>
