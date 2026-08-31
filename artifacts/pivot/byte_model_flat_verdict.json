@@ -1,0 +1,33 @@
+{
+  "establishes_a_buyer": false,
+  "failed_clauses": [
+    "A2 margin: 0.0385 - 0.0943 = -0.0558 is below 0.05",
+    "beats hand: 0.0385 does not exceed 0.1165",
+    "beats pooled: 0.0385 does not exceed 0.0849 \u2014 the head change did nothing and 0009's verdict simply stands",
+    "control failable: null_train_top1=0.0393 is below 0.3 \u2014 the model cannot fit shuffled labels, so a clean null control would be guaranteed by architecture and would carry no information"
+  ],
+  "meaning": "Inconclusive on the point 0010 exists to settle: the control was not shown failable, so this run repeats 0009's weakness rather than removing it.",
+  "null_control_was_failable": false,
+  "preregistration": "0010-byte-model-position-preserving-head",
+  "read": {
+    "best_trivial_baseline": 0.0943,
+    "best_trivial_baseline_name": "logistic",
+    "carve_bytes": 1024,
+    "chance_accuracy": 0.038462,
+    "epochs": 10,
+    "eval_group_fingerprint_matches_0007": true,
+    "feature_model_top1": 0.1165,
+    "flat_model_top1": 0.0385,
+    "matched_rung": 100000,
+    "model_params": 392506,
+    "n_eval": 130000,
+    "n_train": 100000,
+    "null_eval_top1": 0.0385,
+    "null_train_top1": 0.0393,
+    "pooled_model_top1": 0.0849,
+    "split_is_grouped_by_source": true
+  },
+  "schema": "raise-v1/byte_model_flat_verdict/1",
+  "source_artifact": "artifacts/pivot/byte_model_flat.json",
+  "verdict": "BYTE_FLAT_FAILS"
+}

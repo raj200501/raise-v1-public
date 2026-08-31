@@ -311,7 +311,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **13 of 71 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 73 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -337,9 +337,9 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 | Class | Count | Meaning |
 |---|---:|---|
-| `neither` | **13** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures. |
+| `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
 | `arithmetic-verifiable` | 11 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 47 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `primary-verifiable` | 48 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -568,6 +568,34 @@ is a strong inductive bias, and whether that bias hurts the *task* is untested. 
 be exactly the right signal and position irrelevant, in which case the pool is sensible and the
 negative stands cleanly. **A negative here does not prove that no learned representation works at
 1024.** It proves this one does not, and that the first thing anyone would reach for does not.
+
+### The corrected-head round came back INCONCLUSIVE — and the reason is itself a finding
+
+Preregistration 0010 replaced the global average pool with a flatten — the one change the probe
+said mattered — holding everything else frozen: same corpus, same rung, same seed, same
+convolution stack, same optimiser, same 10 epochs. Its new clause required the null control to
+*prove it can fail* (`null_train_top1 ≥ 0.30`) before being credited.
+
+| | Accuracy |
+|---|---:|
+| Flatten-head CNN, real labels | **0.0385** — exactly chance |
+| Pooled-head CNN (0009), same recipe | 0.0849 |
+| Hand-engineered features, same rung | 0.1165 |
+| Null control, train accuracy on shuffled labels | **0.0393** — the control never became failable |
+
+**Verdict `BYTE_FLAT_FAILS`, named by the frozen reader as inconclusive on the exact point the
+round exists to settle.** Under the frozen recipe the flatten head does not train *at all* at this
+scale — chance on real labels and on shuffled labels alike — even though the identical head
+memorised 5000 shuffled labels at 30 epochs in the probe. About 3900 optimisation steps never left
+the plateau the probe crossed in ~400.
+
+**The methodological tension is worth more than the number.** "Change only the head" was chosen so
+any difference would be attributable — and that constraint is what produced the inconclusive
+result, because a training recipe tuned under one architecture is not architecture-neutral, and
+freezing it privileges the incumbent. A fair 0011 would have to preregister a *recipe search* per
+head, not a shared recipe; that is recorded here as the open question, and it is not run in this
+container. The failable-control clause did exactly its job: without it, this run would have
+published another architecture-guaranteed clean control as if it meant something.
 
 ### And it is not localised, so it is not cheaply fixable
 

@@ -616,6 +616,22 @@
       "json_path": "$.by_gate.byteflat.total",
       "reverify": "python3 tests/mutation_test.py",
       "value": 12
+    },
+    {
+      "artifact": "artifacts/pivot/byte_model_flat.json",
+      "claim": "Preregistration 0010's flatten-head model reaches 0.0385 - exactly chance - on real labels under the recipe frozen from 0009, and 0.0393 train accuracy on shuffled labels, so its null control never became failable and the frozen reader names the round inconclusive on the exact point it exists to settle.",
+      "class": "primary-verifiable",
+      "id": "byteflat-inconclusive",
+      "json_path": "$.flat_model_top1",
+      "reverify": "python3 tools/readers/byte_model_flat_verdict.py",
+      "value": 0.0385
+    },
+    {
+      "artifact": "artifacts/pivot/byte_model_flat_verdict.json",
+      "claim": "Methodological finding from 0010: 'change only the head' was chosen for attributability, and it is what made the round inconclusive - a training recipe tuned under one architecture is not architecture-neutral, so freezing it privileges the incumbent. A fair comparison must preregister a recipe search per architecture.",
+      "class": "neither",
+      "id": "frozen-recipes-privilege-the-incumbent",
+      "why_not_verifiable": "An inference from one inconclusive run, not a measurement. Filed in the weakest class; its test - a preregistered per-head recipe search - is stated and was not run in this container."
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",
