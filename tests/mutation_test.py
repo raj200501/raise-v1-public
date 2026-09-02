@@ -1017,9 +1017,18 @@ def _(root):
 # must clear with the gutenberg family excluded - the family whose shared byte pool voids the
 # disjointness guarantee. Both must be shown to fail on their own.
 
+_MANIFEST = json.load(open(os.path.join(REPO, "artifacts", "pivot", "corpus_manifest.json")))
 GOOD_CARVE2048 = {
     "preregistration": "0011-carve-2048-boundary",
-    "carve_bytes": 2048, "reference_carve_bytes": 4096, "matched_rung": 100000,
+    "carve_bytes": 2048, "carve_bytes_source": "cache metadata written at build time",
+    "chunk_size": 32768, "eval_frac": 0.2,
+    "sources_sha256": dict(_MANIFEST["sources_sha256"]),
+    "reference_y_sha256": _MANIFEST["corpora"]["data/pivot/full_c4096.npz"]["y"]["sha256"],
+    "reference_g_sha256": _MANIFEST["corpora"]["data/pivot/full_c4096.npz"]["g"]["sha256"],
+    "reference_carve_bytes": 4096, "matched_rung": 100000,
+    "transfer_model_top1_on_reference_eval": 0.1965,
+    "within_slope_bootstrap_unit": "cluster", "within_slope_n_clusters": 5000,
+    "within_slope_bootstrap_resamples": 2000,
     "seed": 20260825, "n_source_chunks": 25000,
     "rungs": [{"n_units": 1000, "accuracy": 0.06}, {"n_units": 10000, "accuracy": 0.10},
               {"n_units": 100000, "accuracy": 0.14}, {"n_units": 500000, "accuracy": 0.17}],
@@ -1039,7 +1048,7 @@ GOOD_CARVE2048 = {
     "reference_matched_rung_top1": 0.1965,
     "chance_accuracy": 0.038462, "within_shuffled_label_accuracy": 0.0390,
     "within_split_is_grouped_by_source": True, "corpora_share_source_chunks": False,
-    "n_shared_source_chunks": 0, "corpus_b_chunk_offset": 75000,
+    "n_shared_source_chunks": 0, "corpus_b_chunk_offset": 75000, "corpus_b_chunk_id_max": 99999,
     "n_classes": 26,
 }
 
@@ -1201,7 +1210,83 @@ def _(root):
 @case("carve2048", "an-offset-inside-corpus-B-range-is-rejected-whatever-the-flag-says", "fail")
 def _(root):
     # 50000 is past corpus A (so the script's flag would be False) but inside corpus B's range.
-    return _carve2048(root, _c2mut(corpus_b_chunk_offset=50000, corpora_share_source_chunks=False))
+    return _carve2048(root, _c2mut(corpus_b_chunk_offset=50000, corpus_b_chunk_id_max=74999,
+                                   corpora_share_source_chunks=False))
+
+
+@case("carve2048", "a-corpus-redrawn-at-a-higher-offset-is-VOID-the-sealed-draw-is-exact", "fail")
+def _(root):
+    # Past both earlier corpora, disjoint, 25000 chunks - and not the preregistered draw.
+    rc, out = _carve2048(root, _c2mut(corpus_b_chunk_offset=80000, corpus_b_chunk_id_max=104999))
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! a redrawn corpus was read as a result"
+    return rc, out
+
+
+@case("carve2048", "a-legacy-cache-whose-carve-comes-from-the-command-line-is-VOID", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(carve_bytes_source="command line - legacy cache without build "
+                                                      "metadata; the chunk-id range below is "
+                                                      "measured from the data regardless"))
+
+
+@case("carve2048", "a-different-eval-fraction-or-chunk-size-is-VOID", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(eval_frac=0.1, chunk_size=16384))
+
+
+@case("carve2048", "sources-that-do-not-hash-to-the-banked-edition-are-VOID", "fail")
+def _(root):
+    src = dict(GOOD_CARVE2048["sources_sha256"]); src["pg1342.txt"] = "81300b79" + "0" * 56
+    rc, out = _carve2048(root, _c2mut(sources_sha256=src))
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! a corpus built from other source bytes was read as a result"
+    return rc, out
+
+
+@case("carve2048", "a-transfer-model-trained-on-an-unbanked-corpus-A-is-VOID", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(reference_g_sha256="0" * 64))
+
+
+@case("carve2048", "a-transfer-model-that-does-not-reproduce-corpus-A-is-VOID", "fail")
+def _(root):
+    # It should score 0.1965 on corpus A's own evaluation set; 0.17 means it is not that model.
+    rc, out = _carve2048(root, _c2mut(transfer_model_top1_on_reference_eval=0.17))
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! a mis-trained transfer model was read as a transfer result"
+    return rc, out
+
+
+@case("carve2048", "a-fragment-level-slope-interval-in-the-gated-field-is-VOID", "fail")
+def _(root):
+    rc, out = _carve2048(root, _c2mut(within_slope_bootstrap_unit="example",
+                                      within_slope_n_clusters=None))
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! an anti-conservative interval was gated on as if it were the cluster one"
+    return rc, out
+
+
+@case("carve2048", "a-margin-that-prints-as-exactly-0.0500-passes-not-a-float-artefact", "pass")
+def _(root):
+    # 0.1756 - 0.1256 is 0.05000000000000002 or 0.04999999999999999 depending on the platform;
+    # the reader compares the difference rounded to 6 decimals, so it is exactly the bar and passes.
+    return _carve2048(root, _c2mut(within_top1=0.1756, within_top1_non_gutenberg=0.1756,
+                                   within_best_trivial_baseline=0.1256,
+                                   within_best_baseline_expanded=0.1256,
+                                   within_best_baseline_expanded_non_gutenberg=0.1256,
+                                   within_best_trivial_baseline_non_gutenberg=0.1256,
+                                   transfer_top1=0.1756, transfer_top1_non_gutenberg=0.1756))
+
+
+@case("carve2048", "a-margin-that-prints-as-0.0499-fails-not-a-float-artefact", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(within_top1=0.1755, within_top1_non_gutenberg=0.1756,
+                                   within_best_trivial_baseline=0.1256,
+                                   within_best_baseline_expanded=0.1256,
+                                   within_best_baseline_expanded_non_gutenberg=0.1256,
+                                   within_best_trivial_baseline_non_gutenberg=0.1256,
+                                   transfer_top1=0.1756, transfer_top1_non_gutenberg=0.1756))
 
 
 @case("carve2048", "an-unset-disjointness-flag-reads-as-failure-not-as-a-pass", "fail")
@@ -1274,6 +1359,70 @@ def _(root):
     if rc != 0 and ("verdict=VOID" not in out or "boundary=not bracketed by this run" not in out):
         return 0, out + " !! a scope failure was read as a result about the boundary"
     return rc, out
+
+
+# ---------------------------------------------------------------- scaling gate (the slope fitter)
+#
+# Since 2026-09-02 the fitter performs the cluster bootstrap that 0011's slope clause gates on.
+# The gate here is the fitter's own refusal and labelling: clustered evaluation rows must widen the
+# interval, a groups array that does not match the evaluation set must be refused, and the unit
+# must be labelled from what was done, not from what was asked.
+
+def _scaling_scores(n_clusters=200, per=26, seed=0, drop_groups=False, bad_len=False):
+    import random
+    rng = random.Random(seed)
+    m = n_clusters * per
+    ids = [c for c in range(n_clusters) for _ in range(per)]
+    rungs = []
+    for k, n in enumerate((1000, 10000, 100000, 1000000)):
+        # strongly clustered: every fragment of a chunk shares the chunk's outcome
+        p = 0.05 + 0.05 * k
+        chunk_ok = [1 if rng.random() < p else 0 for _ in range(n_clusters)]
+        rungs.append({"n_units": n, "per_example": [chunk_ok[c] for c in ids]})
+    d = {"rungs": rungs}
+    if not drop_groups:
+        d["eval_chunk_ids"] = ids[:-1] if bad_len else ids
+    return d
+
+
+def _scaling(root, scores):
+    os.makedirs(os.path.join(root, "tools"), exist_ok=True)
+    for f in ("scaling.py", "chainlib.py"):
+        shutil.copy(os.path.join(REPO, "tools", f), os.path.join(root, "tools", f))
+    p = os.path.join(root, "scores.json"); json.dump(scores, open(p, "w"))
+    return run([PY, "tools/scaling.py", p, "--out", "fit.json"], root)
+
+
+@case("scaling", "control-clustered-rows-widen-the-interval-and-it-is-labelled-cluster", "pass")
+def _(root):
+    rc, out = _scaling(root, _scaling_scores())
+    if rc != 0:
+        return rc, out
+    rc2, out2 = _scaling(root, _scaling_scores(drop_groups=True))
+    c = json.load(open(os.path.join(root, "fit.json")))
+    if rc2 != 0:
+        return rc2, out2
+    # fit.json now holds the example-level fit; re-run the cluster one last so both are read
+    rc, out = _scaling(root, _scaling_scores()); k = json.load(open(os.path.join(root, "fit.json")))
+    wc = k["primary_fit"]["slope_ci95"][1] - k["primary_fit"]["slope_ci95"][0]
+    we = c["primary_fit"]["slope_ci95"][1] - c["primary_fit"]["slope_ci95"][0]
+    ok = k["bootstrap_unit"] == "cluster" and c["bootstrap_unit"] == "example" and wc > we * 1.5
+    return (0 if ok else 1), (f"cluster width {wc:.5f} unit={k['bootstrap_unit']} n_clusters="
+                              f"{k['n_clusters']} | example width {we:.5f} unit={c['bootstrap_unit']}")
+
+
+@case("scaling", "a-groups-array-that-does-not-match-the-evaluation-set-is-refused", "fail")
+def _(root):
+    rc, out = _scaling(root, _scaling_scores(bad_len=True))
+    if rc == 0:
+        return 0, out + " !! a mismatched groups array was silently accepted"
+    return rc, out
+
+
+@case("scaling", "fewer-than-four-rungs-is-refused", "fail")
+def _(root):
+    sc = _scaling_scores(); sc["rungs"] = sc["rungs"][:3]
+    return _scaling(root, sc)
 
 
 # ---------------------------------------------------------------- c1 gate (preregistration 0008)

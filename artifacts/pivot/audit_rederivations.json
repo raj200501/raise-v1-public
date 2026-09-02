@@ -22,7 +22,7 @@
       ],
       "superseded_fragment_level": [
         0.019758,
-        null
+        0.021158
       ]
     },
     "note": "Derived from per-example scores banked by the deterministic re-runs (all measured values reproduced bit-exactly; only timing fields differ). Cluster unit = source chunk, matching the 0003 correction. Both verdict clauses (lower bound > 0) are unaffected.",
@@ -37,7 +37,8 @@
         0.097738,
         0.099313
       ]
-    }
+    },
+    "provenance_2026-09-02": "The cluster intervals above are reproduced exactly by tools/scaling.py fit(groups=eval_chunk_ids, n_boot=4000, seed=20260825) on the banked score files (verified 2026-09-02); the re-derivation used 4000 resamples, not the fitter's default 2000, and did not record it until now. The carve_within superseded upper bound was null in this artifact until 2026-09-02; it is now the value banked in carve_generalisation.json."
   },
   "gutenberg_excluded": {
     "n_chunks": 8731,

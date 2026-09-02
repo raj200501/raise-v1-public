@@ -21,8 +21,8 @@
       "total": 15
     },
     "carve2048": {
-      "detected": 32,
-      "total": 32
+      "detected": 41,
+      "total": 41
     },
     "claimcheck": {
       "detected": 10,
@@ -49,8 +49,8 @@
       "total": 9
     },
     "scaling": {
-      "detected": 7,
-      "total": 7
+      "detected": 10,
+      "total": 10
     },
     "topk": {
       "detected": 14,
@@ -150,7 +150,7 @@
     },
     {
       "detected": true,
-      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=dab0fe73b110020a)",
+      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=f29dff8bf12c6410)",
       "exit_code": 0,
       "expected": "pass",
       "gate": "prereg",
@@ -195,7 +195,7 @@
     },
     {
       "detected": true,
-      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor b3236058a1416e2b (chain order broken)",
+      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor 5141aa2ffb796ada (chain order broken)",
       "exit_code": 1,
       "expected": "fail",
       "gate": "prereg",
@@ -222,7 +222,7 @@
     },
     {
       "detected": true,
-      "evidence": "/tmp/tmpl1inzcjs/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
+      "evidence": "/tmp/tmpflvnusmv/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
       "exit_code": 2,
       "expected": "fail",
       "gate": "prereg",
@@ -1153,6 +1153,87 @@
       "exit_code": 1,
       "expected": "fail",
       "gate": "carve2048",
+      "mutation": "a-corpus-redrawn-at-a-higher-offset-is-VOID-the-sealed-draw-is-exact",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "a-legacy-cache-whose-carve-comes-from-the-command-line-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "a-different-eval-fraction-or-chunk-size-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "sources-that-do-not-hash-to-the-banked-edition-are-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "a-transfer-model-trained-on-an-unbanked-corpus-A-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "a-transfer-model-that-does-not-reproduce-corpus-A-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "a-fragment-level-slope-interval-in-the-gated-field-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_ROBUST boundary=(1024, 2048] within=[] transfer=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "carve2048",
+      "mutation": "a-margin-that-prints-as-exactly-0.0500-passes-not-a-float-artefact",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_FAILS boundary=(2048, 4096] within=['within margin (frozen set): 0.1755 - 0.1256 = 0.0499 is below the preregistered 0.05', 'within margin (expanded set): 0.1755 - 0.1256 = 0.0499 is bel",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "a-margin-that-prints-as-0.0499-fails-not-a-float-artefact",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
       "mutation": "an-unset-disjointness-flag-reads-as-failure-not-as-a-pass",
       "observed": "fail"
     },
@@ -1226,6 +1307,33 @@
       "expected": "fail",
       "gate": "carve2048",
       "mutation": "a-scope-failure-is-named-VOID-and-brackets-no-boundary",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "cluster width 0.04201 unit=cluster n_clusters=200 | example width 0.00808 unit=example",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "scaling",
+      "mutation": "control-clustered-rows-widen-the-interval-and-it-is-labelled-cluster",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "scaling: REFUSED - groups has 5199 entries but the evaluation set has 5200",
+      "exit_code": 3,
+      "expected": "fail",
+      "gate": "scaling",
+      "mutation": "a-groups-array-that-does-not-match-the-evaluation-set-is-refused",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "scaling: REFUSED - 3 rung(s); the preregistered scope requires >= 4",
+      "exit_code": 3,
+      "expected": "fail",
+      "gate": "scaling",
+      "mutation": "fewer-than-four-rungs-is-refused",
       "observed": "fail"
     },
     {
@@ -1553,8 +1661,8 @@
       "observed": "fail"
     }
   ],
-  "detected": 166,
+  "detected": 178,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 166
+  "total_mutations": 178
 }

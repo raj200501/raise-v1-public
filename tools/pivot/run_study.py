@@ -312,8 +312,12 @@ def main() -> int:
     if len(rungs) >= 4:
         sys.path.insert(0, os.path.join(REPO, "tools"))
         from scaling import fit as fit_curve
+        # Cluster bootstrap over the held-out source chunks (the dependence unit the grouped split
+        # declares), per CORRECTIONS.md 2026-08-31; runs before 2026-09-02 banked the fragment-level
+        # interval and are labelled as such.
         fit = fit_curve([{"n_units": r["n_units"], "per_example": p["per_example"]}
-                         for r, p in zip(rungs, per_ex)], n_boot=2000, seed=args.seed)
+                         for r, p in zip(rungs, per_ex)], n_boot=2000, seed=args.seed,
+                        groups=np.asarray(g[ev]))
 
     out = {
         "schema": "raise-v1/pivot_deflate_curve/1",
@@ -359,6 +363,8 @@ def main() -> int:
         out["slope"] = fit["primary_fit"]["slope"]
         out["slope_ci95_low"] = fit["primary_fit"]["slope_ci95"][0]
         out["slope_ci95_high"] = fit["primary_fit"]["slope_ci95"][1]
+        out["slope_ci95_unit"] = fit["bootstrap_unit"]
+        out["slope_ci95_n_clusters"] = fit["n_clusters"]
         out["slope_r2"] = fit["primary_fit"]["r2"]
         out["permutation_p"] = fit["permutation_test"]["p_value"]
     else:

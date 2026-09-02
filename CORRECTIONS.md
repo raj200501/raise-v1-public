@@ -91,6 +91,12 @@ would *overwrite* the banked 0007 artifacts rather than re-derive the interval.
 `reverify` names the frozen reader and the cluster re-derivation; `tools/scaling.py` now performs
 the cluster bootstrap itself (`fit(groups=…)`) so future runs bank the corrected interval as the
 primary one and the fragment-level one as superseded, in the script, not in a post-hoc patch.
+Two more defects in the same correction, found by the second review pass and fixed the same day:
+`audit_rederivations.json` banked the 0007 superseded interval's upper bound as `null` (now the
+value from `carve_generalisation.json`), and the re-derivation had used 4000 bootstrap resamples
+without recording it — verified today by reproducing both banked cluster intervals exactly at
+4000 and not at the fitter's default 2000; the artifact now says so. The two seed-replication
+artifacts, whose intervals are fragment-level, now carry a label saying so; no value changed.
 
 ---
 

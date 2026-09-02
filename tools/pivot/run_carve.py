@@ -17,6 +17,7 @@ script asserts it and writes the flag the frozen reader checks.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import sys
@@ -83,13 +84,17 @@ def main() -> int:
             # and that is recorded in the artifact rather than papered over.
             if "carve" in z.files:
                 cache_carve, cache_off = int(z["carve"]), int(z["chunk_offset"])
-                if cache_carve != args.carve or cache_off != args.chunk_offset:
-                    print(f"REFUSING: cache was built at carve {cache_carve}, offset {cache_off}; "
-                          f"the command line says carve {args.carve}, offset {args.chunk_offset}.",
+                cache_chunk_size = int(z["chunk_size"])
+                if (cache_carve != args.carve or cache_off != args.chunk_offset
+                        or cache_chunk_size != args.chunk_size):
+                    print(f"REFUSING: cache was built at carve {cache_carve}, offset {cache_off}, "
+                          f"chunk size {cache_chunk_size}; the command line says carve {args.carve}, "
+                          f"offset {args.chunk_offset}, chunk size {args.chunk_size}.",
                           file=sys.stderr)
                     return 3
                 carve_source = "cache metadata written at build time"
             else:
+                cache_chunk_size = args.chunk_size
                 carve_source = ("command line - legacy cache without build metadata; the chunk-id "
                                 "range below is measured from the data regardless")
     else:
@@ -102,8 +107,14 @@ def main() -> int:
                  chunk_offset=args.chunk_offset, chunk_size=args.chunk_size)
         del Xb
         Xb = npz_memmap(args.cache, "X")
+        cache_chunk_size = args.chunk_size
         carve_source = "cache metadata written at build time"
     ncols = Xb.shape[1]
+    # The source files the corpus was built from, hashed as they are on disk now, so the reader can
+    # tie the run to the banked manifest (tools/pivot/pin_sources.py keeps them at that edition).
+    sources_sha256 = {f: hashlib.sha256(open(os.path.join(args.src, f), "rb").read()).hexdigest()
+                      for f in sorted(os.listdir(args.src))
+                      if os.path.isfile(os.path.join(args.src, f))}
     chunk_id_min, chunk_id_max = int(gb.min()), int(gb.max())
     if chunk_id_min < args.chunk_offset:
         print(f"REFUSING: the corpus contains chunk id {chunk_id_min}, below the stated offset "
@@ -200,9 +211,17 @@ def main() -> int:
     ref_chunk_id_max = int(ga.max())
     print(f"      corpus A chunk ids up to {ref_chunk_id_max}; shared with corpus B: {n_shared}",
           flush=True)
-    _, tr_a, _ = grouped_split(ya, ga, args.seed, args.eval_frac, args.matched_rung)
+    def _arr_sha(a):                     # same digest as tools/pivot/corpus_manifest.py
+        return hashlib.sha256(np.ascontiguousarray(a).tobytes()).hexdigest()
+    reference_y_sha256, reference_g_sha256 = _arr_sha(ya), _arr_sha(ga)
+    ev_a, tr_a, _ = grouped_split(ya, ga, args.seed, args.eval_frac, args.matched_rung)
     Xtra = fill_f64(np.empty((len(tr_a), ncols), np.float64), Xa, tr_a, ncols)
     ytra = np.asarray(ya[tr_a])
+    # Corpus A's own evaluation rows, so the transfer model can be checked against the model it
+    # is supposed to be: it must reproduce A's banked matched-rung accuracy before its score on
+    # corpus B means anything.
+    Xea = fill_f32(np.empty((len(ev_a), ncols), np.float32), Xa, ev_a, ncols)
+    yea = np.asarray(ya[ev_a])
     del Xa
     t = time.perf_counter()
     ma = make_model(args.seed, "hgb"); ka = max(1, int(len(ytra) * 0.9))
@@ -212,7 +231,9 @@ def main() -> int:
     transfer_excl = excl(ok_t); transfer_fam = by_family(ok_t)
     print(f"      transfer top-1 {transfer:.4f}  ({time.perf_counter()-t:.0f}s)", flush=True)
     n_train_a = int(len(ytra))
-    del Xtra
+    transfer_self = round(float((predict_chunked(ma, Xea) == yea).mean()), 4)
+    print(f"      transfer model on corpus A's own evaluation set: {transfer_self:.4f}", flush=True)
+    del Xtra, Xea
 
     print("[6/6] slope", flush=True)
     sys.path.insert(0, os.path.join(REPO, "tools"))
@@ -230,6 +251,10 @@ def main() -> int:
         "schema": "raise-v1/carve_generalisation/1",
         "preregistration": args.preregistration,
         "carve_bytes": args.carve, "carve_bytes_source": carve_source,
+        "chunk_size": cache_chunk_size, "eval_frac": args.eval_frac,
+        "sources_sha256": sources_sha256,
+        "reference_cache": os.path.relpath(args.reference_cache, REPO),
+        "reference_y_sha256": reference_y_sha256, "reference_g_sha256": reference_g_sha256,
         "reference_carve_bytes": args.reference_carve,
         "matched_rung": args.matched_rung,
         "n_classes": N_CONFIGS, "class_names": CONFIG_NAMES,
@@ -249,6 +274,7 @@ def main() -> int:
         "within_matched_rung_top1": next((r["accuracy"] for r in rungs
                                           if r["n_units"] == args.matched_rung), None),
         "transfer_n_train": n_train_a,
+        "transfer_model_top1_on_reference_eval": transfer_self,
         "within_split_is_grouped_by_source": split_is_grouped,
         "within_trivial_baselines": baselines,
         "within_best_trivial_baseline": frozen[fname], "within_best_trivial_baseline_name": fname,
@@ -274,6 +300,9 @@ def main() -> int:
         "within_slope": fit["primary_fit"]["slope"],
         "within_slope_ci95_low": fit["primary_fit"]["slope_ci95"][0],
         "within_slope_ci95_high": fit["primary_fit"]["slope_ci95"][1],
+        "within_slope_bootstrap_unit": fit["bootstrap_unit"],
+        "within_slope_n_clusters": fit["n_clusters"],
+        "within_slope_bootstrap_resamples": fit["bootstrap_resamples"],
         "within_slope_ci95_note": (f"cluster bootstrap over {fit['n_clusters']} held-out source "
                                    f"chunks, paired across rungs, {fit['bootstrap_resamples']} "
                                    f"resamples; the fragment-level interval is banked beside it "

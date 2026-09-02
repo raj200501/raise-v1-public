@@ -122,5 +122,6 @@
     "logistic": 0.1309,
     "majority": 0.0385,
     "stratified": 0.0379
-  }
+  },
+  "slope_ci95_unit": "example-level (fragment) bootstrap - anti-conservative under the clustered evaluation set (CORRECTIONS.md 2026-08-31); a cluster-corrected interval was derived only for the published seed's run. Label added 2026-09-02; no measured value changed."
 }

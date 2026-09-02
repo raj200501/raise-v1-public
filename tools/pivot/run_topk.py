@@ -168,7 +168,7 @@ def main() -> int:
     print("[5/5] top-5 slope", flush=True)
     sys.path.insert(0, os.path.join(REPO, "tools"))
     from scaling import fit as fit_curve
-    fit = fit_curve(per_ex_top5, n_boot=2000, seed=args.seed)
+    fit = fit_curve(per_ex_top5, n_boot=2000, seed=args.seed, groups=np.asarray(g[ev]))
 
     out = {
         "schema": "raise-v1/deflate_topk/1",
@@ -199,6 +199,7 @@ def main() -> int:
         "top5_slope": fit["primary_fit"]["slope"],
         "top5_slope_ci95_low": fit["primary_fit"]["slope_ci95"][0],
         "top5_slope_ci95_high": fit["primary_fit"]["slope_ci95"][1],
+        "top5_slope_ci95_unit": fit["bootstrap_unit"],
         "top5_slope_r2": fit["primary_fit"]["r2"],
         "top5_permutation_p": fit["permutation_test"]["p_value"],
         "establishes_a_buyer": False,

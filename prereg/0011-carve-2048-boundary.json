@@ -24,7 +24,7 @@
     },
     "scope_parameters_sealed": {
       "direction": "equality",
-      "passes_if": "preregistration == '0011-carve-2048-boundary'; seed == 20260825; the rung ladder is exactly [1000, 10000, 100000, 500000]; n_source_chunks == 25000 (measured as the number of distinct chunk ids in corpus C); within_baselines_trained_on_n == 500000; matched_rung == 100000; transfer_n_train == 100000 (the number of corpus-A rows the transfer model was actually fitted on, banked by the script). Any mismatch is VOID: a run under other parameters is a different preregistration.",
+      "passes_if": "preregistration == '0011-carve-2048-boundary'; seed == 20260825; chunk_size == 32768 and carve_bytes == 2048, both read back from the corpus cache's build metadata (carve_bytes_source must say so; a legacy cache is VOID); eval_frac == 0.2; the rung ladder is exactly [1000, 10000, 100000, 500000]; n_source_chunks == 25000 (the number of distinct chunk ids in corpus C); within_baselines_trained_on_n == 500000; matched_rung == 100000; transfer_n_train == 100000 (corpus-A rows the transfer model was actually fitted on). Any mismatch is VOID: a run under other parameters is a different preregistration.",
       "threshold": 0
     },
     "scope_rungs": {
@@ -54,7 +54,7 @@
     },
     "within_slope": {
       "direction": "higher_is_better",
-      "passes_if": "within_slope_ci95_low > 0, cluster bootstrap over held-out source chunks (tools/scaling.py as corrected 2026-08-31)",
+      "passes_if": "within_slope_ci95_low > 0, where the interval is the CLUSTER bootstrap over the 5000 held-out source chunks computed by tools/scaling.py fit(groups=eval chunk ids) with 2000 resamples at seed 20260825 - the script banks within_slope_bootstrap_unit == 'cluster', within_slope_n_clusters == 5000 and within_slope_bootstrap_resamples == 2000, and the reader requires all three (a fragment-level interval in that field is VOID). The fitter's cluster branch was added on 2026-09-02, after the 2026-08-31 audit that called for it; the 0006/0007 cluster intervals in audit_rederivations.json were re-derived with 4000 resamples, which that artifact now records.",
       "threshold": 0.0
     },
     "within_null_control": {
@@ -63,8 +63,8 @@
       "threshold": 0.02
     },
     "disjointness": {
-      "direction": "higher_is_better",
-      "passes_if": "n_shared_source_chunks == 0 AND corpora_share_source_chunks is False AND corpus_b_chunk_offset >= 75000. All three are MEASURED by the script from the corpora's chunk-id arrays (the count of chunk ids shared with corpus A, and the smallest chunk id present in corpus C), not echoed from its command line; the reader additionally requires the smallest id to lie past BOTH earlier corpora. A validity condition: a corpus that fails it was not the preregistered corpus, and the run is VOID. For the gutenberg family this is a chunk-id guarantee only, not a byte-level one, which is what the gutenberg-excluded clauses are for.",
+      "direction": "equality",
+      "passes_if": "n_shared_source_chunks == 0 AND corpora_share_source_chunks is False AND the MEASURED chunk-id range of corpus C is exactly 75000..99999 (corpus_b_chunk_offset == 75000, corpus_b_chunk_id_max == 99999). All are measured by the script from the corpora's chunk-id arrays, not echoed from its command line. Exact, not a lower bound: the sealed corpus is this draw and no other, so it cannot be redrawn at a higher offset and re-read. A validity condition: a corpus that fails it was not the preregistered corpus and the run is VOID. For the gutenberg family this is a chunk-id guarantee only, not a byte-level one, which is what the gutenberg-excluded clauses are for.",
       "threshold": 75000
     },
     "transfer_margin": {
@@ -81,6 +81,21 @@
       "direction": "lower_is_better",
       "passes_if": "No validity clause fails: scope (carve_bytes == 2048, reference_carve_bytes == 4096, n_rungs >= 4, decades_spanned >= 2.0), within_split_is_grouped_by_source is True, null control within tolerance, and every field the reader needs present and finite (NaN and inf read as absent). A validity failure is VOID - no boundary bracketed, not a negative - so that a broken run can never be spun as a result in either direction.",
       "threshold": 0
+    },
+    "inputs_tied_to_the_banked_corpora": {
+      "direction": "equality",
+      "passes_if": "sources_sha256 - the script's own hashes of the ten source files it read - equals the banked sources_sha256 in artifacts/pivot/corpus_manifest.json, and reference_y_sha256 / reference_g_sha256 - the script's hashes of corpus A's label and chunk-id arrays - equal the banked hashes of data/pivot/full_c4096.npz in the same manifest. Otherwise VOID: the corpus was not built from the banked sources, or the transfer model was not trained on the banked corpus A.",
+      "threshold": 0
+    },
+    "transfer_model_reproduces_corpus_A": {
+      "direction": "lower_is_better",
+      "passes_if": "abs(transfer_model_top1_on_reference_eval - reference_matched_rung_top1) <= 0.01, where the first is the transfer model's own accuracy on corpus A's held-out set and the second is corpus A's banked 100000-rung accuracy (0.1965). The recipe and seed are the same, so the model must be the same model to within rounding; if it is not, a transfer failure would be a retraining failure in disguise, and the run is VOID.",
+      "threshold": 0.01
+    },
+    "margin_arithmetic": {
+      "direction": "equality",
+      "passes_if": "Every margin clause compares round(a - b, 6) against 0.05 - 1e-9, where a and b are the banked accuracies (rounded to 4 decimals by the script). A margin the artifact prints as 0.0500 therefore passes, and one printed as 0.0499 fails; the binary-float representation of the difference decides nothing.",
+      "threshold": 0.05
     }
   },
   "readings": [
@@ -197,6 +212,42 @@
       "unit": "chunk index, must be >= 75000",
       "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
       "json_path": "$.corpus_b_chunk_offset"
+    },
+    {
+      "name": "transfer_model_top1_on_reference_eval",
+      "unit": "fraction correct of the transfer model on corpus A's own held-out set; must be within 0.01 of 0.1965",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.transfer_model_top1_on_reference_eval"
+    },
+    {
+      "name": "corpus_b_chunk_id_max",
+      "unit": "largest chunk id present in corpus C, measured; must be 99999",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.corpus_b_chunk_id_max"
+    },
+    {
+      "name": "within_slope_bootstrap_unit",
+      "unit": "string; must be 'cluster'",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.within_slope_bootstrap_unit"
+    },
+    {
+      "name": "within_slope_n_clusters",
+      "unit": "count of held-out source chunks the interval resamples; must be 5000",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.within_slope_n_clusters"
+    },
+    {
+      "name": "sources_sha256",
+      "unit": "map of source file to sha256, hashed by the script; must equal the banked manifest",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.sources_sha256"
+    },
+    {
+      "name": "reference_y_sha256",
+      "unit": "sha256 of corpus A's label array as loaded; must equal the banked manifest",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.reference_y_sha256"
     }
   ],
   "arms": [
@@ -216,7 +267,8 @@
     "A missing or non-finite field reads as VOID. Absence is never a pass and never a fail. In particular a run that did not score the gutenberg-excluded rows is VOID, not a failure of the task.",
     "The within-size slope interval is the cluster-bootstrap interval the script computes over held-out source chunks; the fragment-level interval is banked beside it, labelled superseded, and is never the one the reader gates on.",
     "If the run cannot complete under the container's memory or disk (the 800000 rung of 0003 was capped by a ~13.9 GB ceiling), the result is NOT RUN, filed as such, and nothing in the recipe is changed to make it fit. A smaller top rung is a different preregistration.",
-    "This cannot revise 0003, 0006 or 0007. Those verdicts stand whatever this one says, and no outcome here clears G5."
+    "This cannot revise 0003, 0006 or 0007. Those verdicts stand whatever this one says, and no outcome here clears G5.",
+    "The corpus is one draw: chunk ids 75000..99999 exactly. If the build yields any other range or any other count of distinct chunks, the run is VOID and is NOT re-drawn at another offset under this preregistration; a re-draw is a new preregistration with this one's VOID on the record."
   ],
   "thesis": {
     "what_would_make_it_fail_honestly": "Not a mechanism - the record has one and it says the failure is NOT localised: artifacts/pivot/feature_ablation.json found every one of six feature subsets degrades from 4096 to 1024 by a ratio between 0.5895 and 0.6275, and the alignment columns in particular carry little (VERDICT.md, 'it is not localised, so it is not cheaply fixable'). The expectation rests on the two banked points alone: the matched-rung accuracy fell by 0.0800 from 4096 to 1024 and the margin fell from +0.0583 to +0.0099, and 2048 sits between them. The boundary is expected to lie above 2048; no claim is made about why.",
@@ -224,5 +276,6 @@
     "what_neither_outcome_means": "Neither outcome names a buyer. The milestone map's own kill for the forensic use case - buyers whose carves are predominantly below the working boundary - is a fact about buyers, and this run measures the boundary, not the buyers."
   },
   "reader": "tools/readers/carve2048_verdict.py",
-  "frozen": false
+  "frozen": false,
+  "invocation": "python3 tools/pivot/run_carve.py --carve 2048 --chunks 25000 --chunk-offset 75000 --cache data/pivot/carve_c2048.npz --out artifacts/pivot/carve_generalisation_2048.json --scores-out artifacts/pivot/carve_rung_scores_2048.json --preregistration 0011-carve-2048-boundary (then python3 tools/readers/carve2048_verdict.py). Every other flag at its default: --rungs 1000 10000 100000 500000, --matched-rung 100000, --seed 20260825, --eval-frac 0.2, --chunk-size 32768, --reference-cache data/pivot/full_c4096.npz. The script's defaults for --out/--scores-out are 0007's banked paths, which is why the paths are spelled out here; the reader rejects an artifact stamped with any other preregistration."
 }

@@ -2,12 +2,12 @@
   "claims": [
     {
       "artifact": "artifacts/verification/mutation_report.json",
-      "claim": "Every gate in this repository is shown capable of failing: 166 deliberate mutations across 14 gates, 166 detected, 0 survived.",
+      "claim": "Every gate in this repository is shown capable of failing: 178 deliberate mutations across 14 gates, 178 detected, 0 survived.",
       "class": "primary-verifiable",
       "id": "mutations-detected",
       "json_path": "$.detected",
       "reverify": "python3 tests/mutation_test.py",
-      "value": 166
+      "value": 178
     },
     {
       "artifact": "artifacts/verification/mutation_report.json",
@@ -474,12 +474,21 @@
     },
     {
       "artifact": "artifacts/verification/mutation_report.json",
-      "claim": "The carve-boundary gate of preregistration 0011 (2048-byte carve) is shown capable of failing by 32 deliberate mutations, all detected - including ones asserting that a run under any sealed parameter other than the preregistered one (stamp, seed, ladder, chunk count, matched rung, rows the transfer model was actually fitted on) is VOID rather than read; that a gutenberg-excluded margin below the bar in EITHER arm is rejected while the full-set margin clears; that NaN reads as absence; and that a scope failure brackets no boundary.",
+      "claim": "The carve-boundary gate of preregistration 0011 (2048-byte carve) is shown capable of failing by 41 deliberate mutations, all detected - including ones asserting that a run under any sealed parameter other than the preregistered one (stamp, seed, ladder, chunk count, eval fraction, chunk size, matched rung, rows the transfer model was actually fitted on) is VOID rather than read; that a corpus redrawn at another offset, built from other source bytes, or transferred from an unbanked corpus A is VOID; that a transfer model which does not reproduce corpus A's banked accuracy is VOID; that a fragment-level interval in the gated slope field is VOID; that a gutenberg-excluded margin below the bar in EITHER arm is rejected while the full-set margin clears; that NaN reads as absence; that a scope failure brackets no boundary; and that a margin printing as 0.0500 passes while 0.0499 fails.",
       "class": "primary-verifiable",
       "id": "carve2048-gate-mutations",
       "json_path": "$.by_gate.carve2048.total",
       "reverify": "python3 tests/mutation_test.py",
-      "value": 32
+      "value": 41
+    },
+    {
+      "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "The slope fitter (tools/scaling.py) is a gate: 10 deliberate mutations, all detected - seven for its scope refusals and interval labelling, and three added 2026-09-02 when it took over the cluster bootstrap that 0011's slope clause gates on: clustered evaluation rows must widen the interval and be labelled 'cluster', a groups array that does not match the evaluation set is refused, and fewer than four rungs is refused.",
+      "class": "primary-verifiable",
+      "id": "scaling-gate-mutations",
+      "json_path": "$.by_gate.scaling.total",
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 10
     },
     {
       "artifact": "artifacts/pivot/carve_channel_capacity.json",

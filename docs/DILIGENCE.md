@@ -74,7 +74,7 @@ python3 tools/pivot/corpus_manifest.py --check       # prove a rebuilt corpus is
 ```
 
 Corpora rebuild deterministically from shipped sources and generators; the manifest banks
-content hashes of every array so the rebuild is *proven* identical, not assumed. 166 mutations across 14 gates certify every gate can fail
+content hashes of every array so the rebuild is *proven* identical, not assumed. 178 mutations across 14 gates certify every gate can fail
 (that count is checked against the mutation report by `tools/freshness.py`, because an earlier
 version of this sentence said 132 while the artifact said 134); the reproduction that matters most — the audit — is
 banked with its kill-list included.

@@ -15,11 +15,12 @@ EXAMPLES treats them as independent, but this repository's corpora carve 26 frag
 each source chunk - fragments that share a plaintext and whose correctness indicators are
 correlated (measured within-chunk correlation 0.140 at the top rung, vs 0.016 across chunk
 boundaries). The grouped split itself declares the chunk to be the dependence unit, and this
-fitter ignored that very unit, understating every published interval by roughly 45%. The
-corrected intervals come from a CLUSTER bootstrap over chunks
-(artifacts/pivot/audit_rederivations.json); a caller with group labels should resample
-groups, not rows. The fragment-level interval this file produces is ANTI-CONSERVATIVE
-whenever the per-example data is clustered, which here is always.
+fitter ignored that very unit, understating the headline 0003 interval by roughly half again
+(the 0006 and 0007 intervals by less; every pair is banked side by side in
+artifacts/pivot/audit_rederivations.json). Since 2026-09-02 this file performs the CLUSTER
+bootstrap itself when a caller passes group labels (fit(groups=...)); a caller that has them
+and does not pass them gets the fragment-level interval, which is ANTI-CONSERVATIVE whenever
+the per-example data is clustered, which here is always, and must label it as such.
   - a separate exact permutation test over rung orderings gives a p-value whose granularity
     is stated rather than hidden (with R rungs there are R! orderings, so the smallest
     attainable p-value is 1/R!; with four rungs that is 1/24).
@@ -222,7 +223,10 @@ def main() -> int:
 
     with open(args.scores, encoding="utf-8") as fh:
         payload = json.load(fh)
-    result = fit(payload["rungs"], n_boot=args.boot, seed=args.seed)
+    # Score files written since the 2026-08-31 audit carry the evaluation rows' source-chunk ids;
+    # when they are present the CLI fits the cluster interval, never the fragment-level one.
+    groups = payload.get("eval_chunk_ids")
+    result = fit(payload["rungs"], n_boot=args.boot, seed=args.seed, groups=groups)
     result["source_artifact"] = os.path.relpath(os.path.abspath(args.scores), REPO_ROOT)
     result["source_artifact_sha256"] = sha256_file(args.scores)
     for k in ("cost", "arms", "metric", "provenance"):
