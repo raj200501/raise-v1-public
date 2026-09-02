@@ -276,6 +276,24 @@
     "what_neither_outcome_means": "Neither outcome names a buyer. The milestone map's own kill for the forensic use case - buyers whose carves are predominantly below the working boundary - is a fact about buyers, and this run measures the boundary, not the buyers."
   },
   "reader": "tools/readers/carve2048_verdict.py",
-  "frozen": false,
-  "invocation": "python3 tools/pivot/run_carve.py --carve 2048 --chunks 25000 --chunk-offset 75000 --cache data/pivot/carve_c2048.npz --out artifacts/pivot/carve_generalisation_2048.json --scores-out artifacts/pivot/carve_rung_scores_2048.json --preregistration 0011-carve-2048-boundary (then python3 tools/readers/carve2048_verdict.py). Every other flag at its default: --rungs 1000 10000 100000 500000, --matched-rung 100000, --seed 20260825, --eval-frac 0.2, --chunk-size 32768, --reference-cache data/pivot/full_c4096.npz. The script's defaults for --out/--scores-out are 0007's banked paths, which is why the paths are spelled out here; the reader rejects an artifact stamped with any other preregistration."
+  "frozen": true,
+  "invocation": "python3 tools/pivot/run_carve.py --carve 2048 --chunks 25000 --chunk-offset 75000 --cache data/pivot/carve_c2048.npz --out artifacts/pivot/carve_generalisation_2048.json --scores-out artifacts/pivot/carve_rung_scores_2048.json --preregistration 0011-carve-2048-boundary (then python3 tools/readers/carve2048_verdict.py). Every other flag at its default: --rungs 1000 10000 100000 500000, --matched-rung 100000, --seed 20260825, --eval-frac 0.2, --chunk-size 32768, --reference-cache data/pivot/full_c4096.npz. The script's defaults for --out/--scores-out are 0007's banked paths, which is why the paths are spelled out here; the reader rejects an artifact stamped with any other preregistration.",
+  "reader_sha256": "9a19b8bc0213c3cbca7996ebe7e177c10513aba10ddd8fd8c4c6f2ef84b60c2c",
+  "frozen_utc": "2026-09-02T19:28:44Z",
+  "git_commit": "d0a2eb2f185c0606f93c5d0533ec03067b76096c",
+  "git_dirty_at_freeze": false,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1924204,
+      "time_stamp": "2026-09-02T19:28:00.000Z",
+      "output_value": "EF8AF8CF811B483440D5D1497D448A461A65DB6B3D39A70AABD63A648442B19AE73AB6B74C8756CE62AB45A7501FE8E3DC2A3B448536EE07CC6DCAE55EAB9035"
+    },
+    "drand": {
+      "round": 6431543,
+      "randomness": "6ebd7f7dc089c3cfa65165b0b4d86c44e03374fc9eb748fd8302e2299fb17be8"
+    }
+  },
+  "chain_hash": "1757ec1e1878f23459d4a04c72404bfb3e0ef8ef20ec72f8738d901cbf0cb813",
+  "chain_prev_hash": "83707ff010a299d4217cc5bc7e11445992f3ded29e2c1dc1d3e93d464e21b6df"
 }

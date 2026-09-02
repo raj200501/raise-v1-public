@@ -46,7 +46,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 
 **The discipline came first.**
 
-> Before any measurement, we built the thing that would keep us honest. 10 preregistrations,
+> Before any measurement, we built the thing that would keep us honest. 11 preregistrations,
 > hash-chained so nothing can be silently inserted between two that already exist, each anchored
 > to public randomness beacons — NIST and drand — with the verdict-emitting readers frozen by
 > sha256 before their data existed. Then we proved the instrument itself can fail:

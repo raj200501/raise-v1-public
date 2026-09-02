@@ -219,10 +219,32 @@
       "reader_sha256": "d3b58c3f7d1d415c0537adaea4a1f523c5dd0ce241701fe6f984f22d905216ca",
       "seq": 10,
       "slug": "byte-model-position-preserving-head"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "6ebd7f7dc089c3cfa65165b0b4d86c44e03374fc9eb748fd8302e2299fb17be8",
+          "round": 6431543
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "EF8AF8CF811B483440D5D1497D448A461A65DB6B3D39A70AABD63A648442B19AE73AB6B74C8756CE62AB45A7501FE8E3DC2A3B448536EE07CC6DCAE55EAB9035",
+          "pulse": 1924204,
+          "time_stamp": "2026-09-02T19:28:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-09-02T19:28:44Z",
+      "hash": "1757ec1e1878f23459d4a04c72404bfb3e0ef8ef20ec72f8738d901cbf0cb813",
+      "id": "0011",
+      "prev_hash": "83707ff010a299d4217cc5bc7e11445992f3ded29e2c1dc1d3e93d464e21b6df",
+      "reader": "tools/readers/carve2048_verdict.py",
+      "reader_sha256": "9a19b8bc0213c3cbca7996ebe7e177c10513aba10ddd8fd8c4c6f2ef84b60c2c",
+      "seq": 11,
+      "slug": "carve-2048-boundary"
     }
   ],
-  "entries": 10,
-  "head": "83707ff010a299d4217cc5bc7e11445992f3ded29e2c1dc1d3e93d464e21b6df",
+  "entries": 11,
+  "head": "1757ec1e1878f23459d4a04c72404bfb3e0ef8ef20ec72f8738d901cbf0cb813",
   "problems": 0,
   "schema": "raise-v1/prereg_status/1",
   "verified": true
