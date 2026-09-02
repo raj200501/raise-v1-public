@@ -96,6 +96,11 @@ data/        corpora fetched by the shipped scripts; not committed
 
 ## Licence
 
+**Public mirror:** https://github.com/raj200501/raise-v1-public — regenerated from this repository's `main`
+with four GNSS product files and one e-mail address filtered out of history (its `docs/PUBLIC_MIRROR.md`
+maps every preregistration's frozen commit to the mirror's); every artifact, reader, gate and document is
+identical.
+
 Apache-2.0 (full text in `LICENSE`, copyright in `NOTICE`), for the code and for `outbound/`
 alike. Data and dependency licences are recorded per-corpus in `docs/compliance/LICENSE_AUDIT.md`
 — with the upstream licence texts and a hash manifest of every fetched source under
