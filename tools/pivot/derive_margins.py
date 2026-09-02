@@ -102,33 +102,70 @@ CARVE_PAIRS = [
 ]
 
 
-def carve_margins() -> int:
-    """0007's margins, same arithmetic-only derivation as above."""
-    if not os.path.exists(CARVE_SRC):
+CARVE2048_SRC = os.path.join(REPO, "artifacts", "pivot", "carve_generalisation_2048.json")
+CARVE2048_OUT = os.path.join(REPO, "artifacts", "pivot", "carve_margins_2048.json")
+
+CARVE2048_PAIRS = CARVE_PAIRS[:3] + [
+    ("within_margin_expanded_gutenberg_excluded", "within_top1_non_gutenberg",
+     "within_best_baseline_expanded_non_gutenberg",
+     "top-1 at 2048 minus its best baseline over ALL baselines, both scored on the evaluation rows "
+     "whose source family is not gutenberg - the rows the chunk-id disjointness guarantee covers"),
+    ("transfer_margin_gutenberg_excluded", "transfer_top1_non_gutenberg",
+     "within_best_trivial_baseline_non_gutenberg",
+     "the 4096-trained model on 2048-byte fragments minus corpus C's own best preregistered "
+     "baseline, both on the non-gutenberg rows"),
+    ("carve_size_cost_at_matched_rung", "within_top1_at_matched_rung",
+     "reference_matched_rung_top1",
+     "the same training volume at 2048 versus at 4096 - what the shorter window costs, holding "
+     "data volume fixed"),
+    ("carve_size_gain_over_1024_at_matched_rung", "within_top1_at_matched_rung",
+     "carve1024_matched_rung_top1",
+     "the same training volume at 2048 versus at 1024 (the banked 0007 matched-rung accuracy) - "
+     "what the longer window buys back, holding data volume fixed"),
+]
+
+
+def carve_margins(src=CARVE_SRC, out_path=CARVE_OUT, prereg="0007-carve-size-generalisation",
+                  pairs=CARVE_PAIRS, extra=None) -> int:
+    """0007's margins (and, with the 2048 arguments, 0011's), same arithmetic-only derivation."""
+    if not os.path.exists(src):
         return 2
-    d = json.load(open(CARVE_SRC, encoding="utf-8"))
+    d = json.load(open(src, encoding="utf-8"))
     # The matched-rung accuracy is inside the rungs list rather than a top-level field.
     matched = next((r["accuracy"] for r in d.get("rungs", [])
                     if r["n_units"] == d.get("matched_rung")), None)
-    d = dict(d, within_top1_at_matched_rung=matched)
+    d = dict(d, within_top1_at_matched_rung=matched, **(extra or {}))
     out = {"schema": "raise-v1/carve_margins/1",
-           "preregistration": "0007-carve-size-generalisation",
-           "derivation": "each value is a - b over fields of artifacts/pivot/carve_generalisation.json; "
+           "preregistration": prereg,
+           "derivation": f"each value is a - b over fields of {os.path.relpath(src, REPO)}; "
                          "no model is re-run and no new measurement is made",
            "bar": 0.05, "margins": {}}
-    for name, a_, b_, why in CARVE_PAIRS:
+    for name, a_, b_, why in pairs:
         if d.get(a_) is None or d.get(b_) is None:
             continue
         v = round(float(d[a_]) - float(d[b_]), 4)
         out["margins"][name] = {"value": v, "minuend": {"field": a_, "value": d[a_]},
                                 "subtrahend": {"field": b_, "value": d[b_]},
                                 "clears_bar": bool(v >= 0.05), "meaning": why}
-    with open(CARVE_OUT, "w", encoding="utf-8") as fh:
+    with open(out_path, "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=2, sort_keys=True); fh.write("\n")
     for k, v in out["margins"].items():
-        print(f"  {k:<34} {v['value']:+.4f}   {'clears' if v['clears_bar'] else 'BELOW'} 0.05")
-    print(f"wrote {os.path.relpath(CARVE_OUT, REPO)}")
+        print(f"  {k:<44} {v['value']:+.4f}   {'clears' if v['clears_bar'] else 'BELOW'} 0.05")
+    print(f"wrote {os.path.relpath(out_path, REPO)}")
     return 0
+
+
+def carve2048_margins() -> int:
+    """0011's margins: the 0007 pairs plus the gutenberg-excluded readings in both arms and the
+    matched-rung comparison against BOTH banked sizes (4096 from deflate_curve.json via the
+    artifact's reference_matched_rung_top1; 1024 from carve_generalisation.json's rungs)."""
+    if not os.path.exists(CARVE_SRC):
+        return 2
+    c1024 = json.load(open(CARVE_SRC, encoding="utf-8"))
+    m1024 = next((r["accuracy"] for r in c1024.get("rungs", [])
+                  if r["n_units"] == c1024.get("matched_rung")), None)
+    return carve_margins(CARVE2048_SRC, CARVE2048_OUT, "0011-carve-2048-boundary", CARVE2048_PAIRS,
+                         extra={"carve1024_matched_rung_top1": m1024})
 
 
 ABL = os.path.join(REPO, "artifacts", "pivot", "feature_ablation.json")
@@ -163,5 +200,6 @@ def ablation_ratios() -> int:
 if __name__ == "__main__":
     rc = main()
     carve_margins()
+    carve2048_margins()
     ablation_ratios()
     raise SystemExit(rc)

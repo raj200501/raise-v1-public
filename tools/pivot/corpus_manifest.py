@@ -17,7 +17,8 @@ from npzmap import npz_memmap
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 OUT = os.path.join(REPO, "artifacts", "pivot", "corpus_manifest.json")
-CORPORA = ["data/pivot/full_c4096.npz", "data/pivot/carve_c1024.npz", "data/pivot/raw_c1024.npz"]
+CORPORA = ["data/pivot/full_c4096.npz", "data/pivot/carve_c1024.npz", "data/pivot/raw_c1024.npz",
+           "data/pivot/carve_c2048.npz"]
 
 def digest(path):
     rec = {}

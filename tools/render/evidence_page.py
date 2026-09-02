@@ -32,6 +32,10 @@ audit   = J("verification", "adversarial_audit.json")
 mut     = J("verification", "mutation_report.json")
 prereg  = J("verification", "prereg_status.json")
 covmap  = J("verification", "coverage.json")
+# 0011 (2048-byte carve) is rendered only once its artifact and verdict exist.
+_c2048p = A("pivot", "carve_generalisation_2048.json"); _v2048p = A("pivot", "carve_generalisation_2048_verdict.json")
+c2048 = json.load(open(_c2048p, encoding="utf-8")) if os.path.exists(_c2048p) else None
+v2048 = json.load(open(_v2048p, encoding="utf-8")) if os.path.exists(_v2048p) else None
 
 git_head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO,
                           capture_output=True, text=True).stdout.strip()
@@ -118,7 +122,21 @@ chips = "".join([
  chip(cverd["verdict"], "fail", "0007", f'margin +{carve["within_top1"]-carve["within_best_trivial_baseline"]:.4f} at 1024 B; transfer {carve["transfer_top1"]} ≈ chance'),
  chip(bverd["verdict"], "fail", "0009", f'byte CNN {byte9["byte_model_top1"]} loses to byte-histogram logistic {byte9["best_trivial_baseline"]}'),
  chip(fverd["verdict"], "inc", "0010", "inconclusive: the null control never became failable, and the reader says so"),
-])
+] + ([chip(v2048["verdict"], {"CARVE_ROBUST": "pass", "CARVE_SIZE_SPECIFIC": "fail", "CARVE_FAILS": "fail", "VOID": "inc"}[v2048["verdict"]], "0011",
+           (f'2048 B: within-size top-1 {c2048["within_top1"]} vs best baseline {c2048["within_best_baseline_expanded"]}; '
+            f'transfer {c2048["transfer_top1"]}; boundary {v2048["boundary_bytes"]}') if v2048["verdict"] != "VOID"
+           else f'VOID: {"; ".join(v2048["validity_failed_clauses"])[:140]}')] if v2048 else []))
+
+boundary_2048 = ""
+if c2048 and v2048 and v2048["verdict"] != "VOID":
+    boundary_2048 = (f'<p><strong>The boundary is now bracketed to a factor of two.</strong> Preregistration 0011 '
+                     f'built a third corpus at a <strong>2048</strong>-byte carve, disjoint by chunk id from both '
+                     f'earlier corpora, under the 0007 protocol: verdict <span class="mono">{v2048["verdict"]}</span>, '
+                     f'within-size top-1 {c2048["within_top1"]} against its best baseline '
+                     f'{c2048["within_best_baseline_expanded"]}, transfer from 4096 at {c2048["transfer_top1"]}, '
+                     f'matched-rung accuracy {c2048["within_matched_rung_top1"]} against {c2048["reference_matched_rung_top1"]} '
+                     f'at 4096. The window boundary for this recipe lies in <span class="mono">{v2048["boundary_bytes"]}</span> '
+                     f'bytes, each size under its own measured protocol.</p>')
 
 # ---------------------------------------------------------------- seed panel
 if seeds:
@@ -271,6 +289,7 @@ protocol returns <span class="mono">CARVE_FAILS</span>: within-size top-1
 (margin below the 0.05 bar), and a 4096-trained model transfers at {carve["transfer_top1"]} —
 chance. The byte-identity ceiling barely moves across carve sizes, so this is a modelling failure
 and is reported as one. Two learned byte-sequence attempts (preregs 0009, 0010) did not rescue it.</p>
+{boundary_2048}
 </div>
 <div class="panel good">
 <p><strong>And the leak correction ran against us.</strong> When an adversarial audit found source
