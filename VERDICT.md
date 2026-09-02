@@ -297,7 +297,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 | SAT free decoder re-derived | 0.9857 with zero training rows, against 0.1667 chance | primary-verifiable |
 | Assembly-provenance split leak re-derived | temporal split 0.4765 **loses** to a 0.4805 constant | primary-verifiable |
 | Assembly-provenance confound re-derived | a fake BioProject partition is predictable at 0.7772 | primary-verifiable |
-| **Carved-DEFLATE scaling curve** | **`CURVE_ESTABLISHED`** — +0.0491/decade, 95% CI [0.0485, 0.0497], over 2.9031 decades; margin +0.1003 frozen and +0.0583 stricter, both above 0.05 | primary-verifiable |
+| **Carved-DEFLATE scaling curve** | **`CURVE_ESTABLISHED`** — +0.0491/decade, cluster-corrected 95% CI [0.048216, 0.050014], over 2.9031 decades; margin +0.1003 frozen and +0.0583 stricter, both above 0.05 | primary-verifiable |
 
 ### Failed, or did not reach a conclusion
 
@@ -396,7 +396,7 @@ compression call.
 |---|---|---|---|
 | Rungs | ≥ 4 | 4 | pass |
 | Decades | ≥ 2.0 | 2.9031 | pass |
-| Slope 95% lower bound | > 0 | 0.0485 | pass |
+| Slope 95% lower bound (cluster bootstrap) | > 0 | 0.048216 | pass |
 | Margin over best trivial baseline | ≥ 0.05 | **0.1003** | pass |
 | Split grouped by source | required | yes* | pass |
 | Null control | ≤ chance + 0.02 | 0.0389 vs 0.038462 | pass |

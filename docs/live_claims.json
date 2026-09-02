@@ -137,6 +137,35 @@
         "detected",
         "survived"
       ]
+    },
+    {
+      "id": "readme-headline-interval",
+      "file": "README.md",
+      "pattern": "cluster-corrected 95% interval of \\*\\*\\[([0-9.]+), ([0-9.]+)\\]\\*\\*",
+      "artifact": "artifacts/pivot/deflate_curve.json",
+      "select": [
+        "slope_ci95_low",
+        "slope_ci95_high"
+      ]
+    },
+    {
+      "id": "verdict-summary-interval",
+      "file": "VERDICT.md",
+      "pattern": "cluster-corrected 95% CI \\[([0-9.]+), ([0-9.]+)\\], over 2.9031 decades",
+      "artifact": "artifacts/pivot/deflate_curve.json",
+      "select": [
+        "slope_ci95_low",
+        "slope_ci95_high"
+      ]
+    },
+    {
+      "id": "verdict-clause-lower-bound",
+      "file": "VERDICT.md",
+      "pattern": "\\| Slope 95% lower bound \\(cluster bootstrap\\) \\| > 0 \\| ([0-9.]+) \\| pass \\|",
+      "artifact": "artifacts/pivot/deflate_curve.json",
+      "select": [
+        "slope_ci95_low"
+      ]
     }
   ]
 }

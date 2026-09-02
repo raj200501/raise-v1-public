@@ -20,7 +20,7 @@ cherry-pick, plus one shipped open artifact a stranger can reproduce from a cold
 26 DEFLATE (implementation, level) configurations produced a window carved from the *middle* of a
 compressed stream, with no header, no stream start and no plaintext — clears every preregistered
 clause: four rungs over 2.9031 decades, a slope of **+0.0491** accuracy points per decade with a
-95% interval of **[0.0485, 0.0497]**, a null control at chance, and a margin over the best trivial
+cluster-corrected 95% interval of **[0.048216, 0.050014]**, a null control at chance, and a margin over the best trivial
 baseline of **+0.1003** under the frozen baseline set and **+0.0583** under the stricter one that
 adds deep trees. Both clear the 0.05 frozen before the corpus existed.
 
@@ -94,12 +94,14 @@ trial/       archived work that did not select: the full 99-candidate search, ke
 data/        corpora fetched by the shipped scripts; not committed
 ```
 
-## Licence
+## Public mirror
 
 **Public mirror:** https://github.com/raj200501/raise-v1-public — regenerated from this repository's `main`
 with four GNSS product files and one e-mail address filtered out of history (its `docs/PUBLIC_MIRROR.md`
 maps every preregistration's frozen commit to the mirror's); every artifact, reader, gate and document is
 identical.
+
+## Licence
 
 Apache-2.0 (full text in `LICENSE`, copyright in `NOTICE`), for the code and for `outbound/`
 alike. Data and dependency licences are recorded per-corpus in `docs/compliance/LICENSE_AUDIT.md`

@@ -19,6 +19,32 @@ Format:
 
 ---
 
+## 2026-09-02 — The same superseded interval, three more places: the 0003 headline bound in README and in VERDICT's summary and clause tables
+
+**Claimed:** `README.md`: "a 95% interval of **[0.0485, 0.0497]**"; `VERDICT.md`, the results
+summary table: "95% CI [0.0485, 0.0497]"; `VERDICT.md`, the `CURVE_ESTABLISHED` clause table:
+"Slope 95% lower bound … 0.0485".
+
+**Actual:** those are the fragment-level values the 2026-08-31 audit superseded. The banked
+cluster-bootstrap interval in `artifacts/pivot/deflate_curve.json` is **[0.048216, 0.050014]**
+(`slope_ci95_low`, `slope_ci95_high`), which the outbound brief, the one-pager and the evidence
+page already quote. Found an hour after the previous entry, while wiring the mirror's README; the
+previous entry's sweep covered the 1024 interval and missed the 4096 one it sat beside.
+
+**Size:** three sentences; the lower bound moves from 0.0485 to 0.0482; the verdict clause is
+unaffected.
+
+**Cause:** the same as the entry above — superseded values stay banked, so the claim gate keeps
+passing them — plus a sweep that searched for one number and not for the class.
+
+**Fix:** all three now quote the six-decimal banked values with "cluster-corrected" beside them,
+and all three are registered with `tools/freshness.py` (`readme-headline-interval`,
+`verdict-summary-interval`, `verdict-clause-lower-bound`), so the next divergence fails a gate
+instead of waiting to be noticed. A repository-wide search for every `*_superseded` value quoted
+outside a sentence that labels it superseded was run and found no further instance.
+
+---
+
 ## 2026-09-02 — A cold clone no longer rebuilds one of ten sources byte-identically; the claim was true on 2026-08-25 and silently false by 2026-09-02
 
 **Claimed:** "the corpora themselves are not committed; a cold clone re-manufactures them and checks
