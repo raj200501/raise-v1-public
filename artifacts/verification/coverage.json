@@ -2,12 +2,12 @@
   "claims": [
     {
       "artifact": "artifacts/verification/mutation_report.json",
-      "claim": "Every gate in this repository is shown capable of failing: 134 deliberate mutations across 13 gates, 134 detected, 0 survived.",
+      "claim": "Every gate in this repository is shown capable of failing: 153 deliberate mutations across 14 gates, 153 detected, 0 survived.",
       "class": "primary-verifiable",
       "id": "mutations-detected",
       "json_path": "$.detected",
       "reverify": "python3 tests/mutation_test.py",
-      "value": 134
+      "value": 153
     },
     {
       "artifact": "artifacts/verification/mutation_report.json",
@@ -471,6 +471,15 @@
       "json_path": "$.by_gate.carve.total",
       "reverify": "python3 tests/mutation_test.py",
       "value": 15
+    },
+    {
+      "artifact": "artifacts/verification/mutation_report.json",
+      "claim": "The carve-boundary gate of preregistration 0011 (2048-byte carve) is shown capable of failing by 19 deliberate mutations, all detected - including one rejecting a corpus whose offset lies inside corpus B's range whatever the disjointness flag says, one rejecting a gutenberg-excluded margin below the bar while the full-set margin clears, and two checking that each negative verdict is named and bracketed correctly rather than softened.",
+      "class": "primary-verifiable",
+      "id": "carve2048-gate-mutations",
+      "json_path": "$.by_gate.carve2048.total",
+      "reverify": "python3 tests/mutation_test.py",
+      "value": 19
     },
     {
       "artifact": "artifacts/pivot/carve_channel_capacity.json",

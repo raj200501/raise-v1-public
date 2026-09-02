@@ -13,8 +13,8 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > yet**. Here is how we got both halves of that sentence.
 >
 > Before we measured anything, we built the instrument. Bars frozen and hash-chained before the
-> data existed, verdict readers frozen by hash, and every gate proven able to fail — 134
-> deliberate mutations, 134 detected, 0 survived.
+> data existed, verdict readers frozen by hash, and every gate proven able to fail —
+> 153 deliberate mutations, 153 detected, 0 survived.
 >
 > Then we ran the search the thesis demanded: 99 candidate domains over three rounds, 8 through
 > adversarial review with default posture reject, 0 selected. We published that negative under a
@@ -49,8 +49,8 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > Before any measurement, we built the thing that would keep us honest. 10 preregistrations,
 > hash-chained so nothing can be silently inserted between two that already exist, each anchored
 > to public randomness beacons — NIST and drand — with the verdict-emitting readers frozen by
-> sha256 before their data existed. Then we proved the instrument itself can fail: 134 deliberate
-> mutations across 13 gates, 134 detected, 0 survived. A gate that cannot fail is decoration, so
+> sha256 before their data existed. Then we proved the instrument itself can fail:
+> 153 deliberate mutations across 14 gates, 153 detected, 0 survived. A gate that cannot fail is decoration, so
 > we broke every one on purpose and checked that it noticed.
 
 **The search, and the negative we published.**
@@ -120,7 +120,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 
 > So here is the honest inventory. A validated instrument that reproduces on a cold clone. One
 > real curve with its boundaries measured by the same instrument. A corrections ledger that costs
-> us something to keep. A verification map that prints its weakest class first — 14 of 81 claims
+> us something to keep. A verification map that prints its weakest class first — 14 of 82 claims
 > we ourselves cannot currently re-derive, and it says so. And no buyer yet: G5, a named buyer
 > type, is the gate this work has not cleared, and no result in the repository could have cleared
 > it, because that work happens outside the repository. We are raising to do exactly that work,
@@ -176,7 +176,7 @@ allows and explicitly hedged where it does not.
 > the record itself rather than discovered by you.
 
 **"What did you get wrong?"**
-> 8 corrections at full size, including a published figure our own reproduction contradicted, an
+> 10 corrections at full size, including a published figure our own reproduction contradicted, an
 > instrument warning I personally grepped out of view, and 13 audit findings — the pattern being
 > that our gates check mechanical honesty, not reasoning, which the ledger states out loud.
 

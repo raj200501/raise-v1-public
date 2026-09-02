@@ -92,6 +92,51 @@
         "claims|count:class=neither",
         "claims|len"
       ]
+    },
+    {
+      "id": "diligence-mutations",
+      "file": "docs/DILIGENCE.md",
+      "pattern": "(\\d+) mutations across (\\d+) gates certify every gate can fail",
+      "artifact": "artifacts/verification/mutation_report.json",
+      "select": [
+        "total_mutations",
+        "by_gate|len"
+      ]
+    },
+    {
+      "id": "brief-mutations",
+      "file": "outbound/EVIDENCE_BRIEF.md",
+      "pattern": "\\*\\*(\\d+)\\*\\* deliberate mutations across \\*\\*(\\d+)\\*\\* gates, \\*\\*(\\d+)\\*\\* detected, \\*\\*(\\d+)\\*\\* survived",
+      "artifact": "artifacts/verification/mutation_report.json",
+      "select": [
+        "total_mutations",
+        "by_gate|len",
+        "detected",
+        "survived"
+      ]
+    },
+    {
+      "id": "narrative-mutations-short",
+      "file": "outbound/NARRATIVE.md",
+      "pattern": "(\\d+) deliberate mutations, (\\d+) detected, (\\d+) survived",
+      "artifact": "artifacts/verification/mutation_report.json",
+      "select": [
+        "total_mutations",
+        "detected",
+        "survived"
+      ]
+    },
+    {
+      "id": "narrative-mutations-gates",
+      "file": "outbound/NARRATIVE.md",
+      "pattern": "(\\d+) deliberate mutations across (\\d+) gates, (\\d+) detected, (\\d+) survived",
+      "artifact": "artifacts/verification/mutation_report.json",
+      "select": [
+        "total_mutations",
+        "by_gate|len",
+        "detected",
+        "survived"
+      ]
     }
   ]
 }

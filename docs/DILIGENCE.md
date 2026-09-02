@@ -59,7 +59,7 @@ PR was merged with a merge commit, preserving it.
 
 ## "What did you get wrong?"
 
-`CORRECTIONS.md`: eight entries at full size, including a published figure our own reproduction
+`CORRECTIONS.md`: ten entries at full size, including a published figure our own reproduction
 contradicted, an instrument warning grepped out of view before a commit, a wrong reading of our own
 null control (an error *against* us, filed anyway), and the audit's thirteen findings. The pattern
 of what the gates missed is stated there: they check mechanical honesty, not reasoning between
@@ -69,10 +69,12 @@ numbers.
 
 ```
 bash tools/gates.sh                                  # every gate, one command, exit non-zero on failure
+bash tools/pivot/fetch_sources.sh                    # fetch sources; pin_sources.py fails unless they hash to the banked edition
 python3 tools/pivot/corpus_manifest.py --check       # prove a rebuilt corpus is byte-identical to ours
 ```
 
 Corpora rebuild deterministically from shipped sources and generators; the manifest banks
-content hashes of every array so the rebuild is *proven* identical, not assumed. 132 mutations
-across 13 gates certify every gate can fail; the reproduction that matters most — the audit — is
+content hashes of every array so the rebuild is *proven* identical, not assumed. 153 mutations across 14 gates certify every gate can fail
+(that count is checked against the mutation report by `tools/freshness.py`, because an earlier
+version of this sentence said 132 while the artifact said 134); the reproduction that matters most — the audit — is
 banked with its kill-list included.

@@ -1,0 +1,27 @@
+{
+  "schema": "raise-v1/source_pins/1",
+  "why": "The corpora are rebuilt from Project Gutenberg files that gutenberg.org can, and does, re-edit in place. artifacts/pivot/corpus_manifest.json banks the sha256 of the exact source bytes the corpora were built from; this file records how to get back to those bytes from an upstream edition that has since changed, so a cold clone still rebuilds byte-identically. Every edit here is a transcription-level difference in a public-domain text, recorded verbatim in both directions. An upstream edition NOT listed here is a hard failure of tools/pivot/pin_sources.py, never a silent substitution - the measurements stand as banked, but the rebuild-is-identical claim would then be false for that file and must be said so.",
+  "banked_manifest": "artifacts/pivot/corpus_manifest.json",
+  "pins": {
+    "pg1342.txt": {
+      "known_upstream_editions": {
+        "81300b79e8a8d65ac530a97578417d06137e3bbc90622a10a65e5036183d2500": {
+          "observed_at": "https://www.gutenberg.org/files/1342/1342-0.txt",
+          "observed_utc_date": "2026-09-02",
+          "line_edits": [
+            {
+              "line": 1133,
+              "from": "“He is just what a young man ought to be,” said she, “sensible,",
+              "to": "“He is just what a young-man ought to be,” said she, “sensible,"
+            },
+            {
+              "line": 3483,
+              "from": "Mr. Wickham was as far beyond them all in person, countenance, air, and",
+              "to": "Mr, Wickham was as far beyond them all in person, countenance, air, and"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,82 @@
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+International GNSS Service  
+Data and Product Disclaimer and Terms of Use 
+5 August 2020 
+ 
+ 
+  
+
+Background 
+Since 1993, the International GNSS Service (IGS) has carried out its mission to advocate for and provide 
+freely and openly available high-precision GNSS data, as well as derived operational data products, 
+including satellite ephemerides, Earth rotation parameters, station coordinates, satellite and station 
+clock biases, station troposphere estimates, worldwide ionosphere maps, etc. The IGS is a self-governed, 
+voluntary federation of contributing organizations from around the world that collectively operate a 
+global infrastructure of tracking stations, data centers and analysis centers to provide high quality GNSS 
+data products. Each participating organization contributes its own resources, and there is no central 
+source of funding.  
+  
+The IGS products and station data are provided openly for the benefit of all scientific, educational, and 
+commercial users. For 25 years, IGS data and products have been made openly available for use without 
+restriction, and continue to be offered free of cost or obligation. In turn, users are encouraged to 
+participate in the IGS, or otherwise contribute by promoting its values, standards, goals and advancing 
+its strategic plan.  
+  
+The IGS operates as a voluntary federation that is self-governed by its participants (Associate Members) 
+through an elected Governing Board. The IGS is a service of the International Asso­ciation of Geodesy 
+(IAG), one of the associations of the International Union of Geodesy and Geophysics (IUGG), and a key 
+component of the Global Geodetic Observing System (GGOS). The IGS is also a participating member of 
+the ISC World Data System (WDS), established by the International Science Council (ISC; formerly ICSU) 
+to create a common globally interoperable distributed data system that incorporates emerging 
+technologies and multidisciplinary scientific data activities. 
+ 
+International research is increasingly dependent on access to quality-assured data across multiple 
+scientific domains, in particular to tackle the pressing challenges of sustainability and the resilient 
+management of our planet (an element of GGOS). In unison with the concept of Open Data, it is vital 
+that the data underlying scientific research are properly preserved and fully and openly shared to 
+facilitate scrutiny and reuse. The IGS meets these challenges via its internationally distributed Global 
+Data Centers.  
+  
+Disclaimer 
+  
+The IGS continuously monitors the accuracy of its products through inter-comparison of results between 
+Analysis Centers. IGS strives to deliver its products on a highly available, best efforts basis. Due to the 
+volunteer nature of its work, IGS makes no guarantee of the quality, reliability, usability, availability, or 
+suitability of any IGS data and products for any particular purpose. IGS data and products should not be 
+used for any life-critical functions. Users assume all risks and liabilities, direct or indirect, associated with 
+any use of IGS data and products. 
+ 
+Though IGS uses the best technical standards to control its website, material on this website may 
+inadvertently include technical inaccuracies or other errors. Users are encouraged to report errors or 
+inaccuracies to the IGS Central Bureau. Please note that users browse and use the website at their own 
+risk. IGS does not warrant that the functional aspects of the website will be uninterrupted or error free 
+or that this website, or the server that makes it available, are free of viruses or other harmful 
+components. IGS may change material on the website without prior notice.  
+  
+The IGS website contains links and references to third-party websites that are provided for the 
+convenience and interest of the IGS user community and this implies neither responsibility for, nor 
+approval of, information contained in these websites, nor for the accuracy, quality and completeness of 
+any accessible data and metadata.  
+  
+IGS makes no warranty, either express or implied, as to the accuracy, availability or content of 
+information, text, graphics which are not under the 'igs.org' domain. IGS makes no warranty, either 
+express or implied, as to the accuracy, availability, completeness and quality of the GNSS or any other 
+data or metadata accessible through the IGS website. 
+  
+Attribution 
+  
+By accessing data, products, and any other information from the IGS, users agree to appropriately cite 
+and attribute these resources to providers and their sponsors, acknowledgment of IGS and its 
+contributing organizations, and to adherence to professional and ethical standards. 
+  
+Terms of Use 
+ 
+Access to, and use of IGS data, products, and other information constitutes acceptance of the 
+aforementioned information. 

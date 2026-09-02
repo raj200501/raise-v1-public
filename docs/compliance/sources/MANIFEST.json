@@ -1,0 +1,198 @@
+{
+  "schema": "raise-v1/compliance_sources/1",
+  "fetched_utc_date": "2026-09-02",
+  "how": "curl -sS -A raise-v1-research/1.0 from the repository container through its egress proxy; sha256 of the bytes received. Files marked in sources/ are committed verbatim; the rest are hashed only.",
+  "sources": [
+    {
+      "url": "https://www.gutenberg.org/cache/epub/5200/pg5200.txt",
+      "sha256": "0933283a19a4daaef0d412e8f69c74fae126b0a946cb74b8f3c783a8e869830d",
+      "bytes": 141933,
+      "note": "current PG copy of eBook #5200 (full header + licence); body text differs from the banked edition"
+    },
+    {
+      "url": "https://www.gutenberg.org/files/5200/5200-0.txt",
+      "sha256": "6b023bfbb6c951841325554a588b6d88a8cf5d117d52fd3ffb2790c1089caf77",
+      "bytes": 119999,
+      "note": "PG files/ path; byte-identical to the banked source pg5200.txt"
+    },
+    {
+      "url": "https://www.gutenberg.org/ebooks/5200",
+      "sha256": "f811882a001d2808cbcd02b19214b80cb9f716105a22f7283a29116a77cdc182",
+      "bytes": 23103,
+      "note": "catalog page: 'Copyrighted. Read the copyright notice inside this book for details.'"
+    },
+    {
+      "url": "https://www.gutenberg.org/files/1342/1342-0.txt",
+      "sha256": "81300b79e8a8d65ac530a97578417d06137e3bbc90622a10a65e5036183d2500",
+      "bytes": 738046,
+      "note": "PG files/ path; differs from the banked pg1342.txt in two lines (see CORRECTIONS.md)"
+    },
+    {
+      "url": "https://igs.org/wp-content/uploads/2020/09/IGS-Data-and-Product-Disclaimer-and-Terms-of-Use-200805.pdf",
+      "sha256": "7b4e253c24073af930c38ac65b30ae5208850c4a5681a0e2c6bbf388e72f8226",
+      "bytes": 132839,
+      "note": "IGS Data and Product Disclaimer and Terms of Use, 5 August 2020 (3 pages); text extracted with pypdf into sources/"
+    },
+    {
+      "url": "https://igs.org/data-access/",
+      "sha256": "5ab0846814b09beb760f1735c01c998925bcb930c2713e6e58608c33b5d1688b",
+      "bytes": 1063573,
+      "note": "IGS data-access page linking the terms PDF"
+    },
+    {
+      "url": "https://igs.bkg.bund.de/impressum",
+      "sha256": "3a2235ccd9b9425f8d4ba0dba0f270367d2dd104750802f3cda53bb85000a220",
+      "bytes": 19529,
+      "note": "BKG GDC Impressum: liability disclaimer only; no data-licence text"
+    },
+    {
+      "url": "https://igs.bkg.bund.de/access",
+      "sha256": "dfb7624e9d0245d135f201f485fe5f20138e78a1f72c7d293c820614b91d59ae",
+      "bytes": 20890,
+      "note": "BKG GDC archive-access page: download mechanics only; no data-licence text"
+    },
+    {
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/BRDC/2025/001/BRDC00IGS_R_20250010000_01D_MN.rnx.gz",
+      "sha256": "92f95dd39dce6736e1fb685dff0fbde50b6af7b3e6b1c997ce19349eaf93e79e",
+      "bytes": 1317080,
+      "note": "re-fetched broadcast file; byte-identical to data/gnss/brdc_001.rnx.gz"
+    },
+    {
+      "url": "http://navigation-office.esa.int/GNSS_based_products.html",
+      "sha256": "10390b65781f86a191c945c12ee67733e7245175c3856d33bf2428057381bc6f",
+      "bytes": 51298,
+      "note": "ESA Navigation Support Office: 'Our latest published products are freely available'; links Terms and Conditions"
+    },
+    {
+      "url": "https://www.esa.int/Services/Terms_and_conditions",
+      "sha256": "3b1a3b3aa13c2e5b96301031691b22017ef279d1b529eb7a37cebb843883615f",
+      "bytes": 16926,
+      "note": "ESA website terms: Copyrights section restricts website contents to personal, non-commercial use and forbids redistribution"
+    },
+    {
+      "url": "https://www.ncbi.nlm.nih.gov/home/about/policies/",
+      "sha256": "8ad8f6f186ca51ec73a5fb8935ecfa17b8cbaad300b7025b381898ab72621869",
+      "bytes": 38936,
+      "note": "NCBI Website and Data Usage Policies: Molecular Data Usage section"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/intel/isa-l/master/LICENSE",
+      "sha256": "bc8fd4a3d031e65e05e9c9e2add2c3f336ce527fa85c1e31031c808b58216217",
+      "bytes": 1600,
+      "note": "upstream ISA-L licence (BSD-3-Clause); byte-identical to the copy bundled in the isal wheel"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/pysathq/pysat/master/solvers/prepare.py",
+      "sha256": "8b7470a97f988148f48e6651a72532599cd9b6ca7791c796e98443ea02818d82",
+      "bytes": 41113,
+      "note": "pysat's list of upstream solver source URLs"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/arminbiere/cadical/rel-1.5.3/LICENSE",
+      "sha256": "567442be4473f961e8eecbe83a380218a0786e8a5f2f593e308191fc4170a6f1",
+      "bytes": 1357,
+      "note": "CaDiCaL 1.5.3 licence (MIT)"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/audemard/glucose/4.2.1/LICENSE",
+      "sha256": "2ed7b6410b7b79ce1fb80160693bff299320acd8fa484f4d6e711821f429d347",
+      "bytes": 1072,
+      "note": "Glucose 4.2.1 licence (MIT)"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/conp-solutions/mergesat/v3.0/LICENSE",
+      "sha256": "5aa511c1e8664fbc3440498ebb08a5907b3df961a3724d203eb5d6be4ae89013",
+      "bytes": 1568,
+      "note": "MergeSat 3.0 licence (MIT-form, several copyright holders)"
+    },
+    {
+      "url": "http://minisat.se/downloads/minisat-2.2.0.tar.gz",
+      "sha256": "92957d851cdc3baddfe07b5fc80ed5a0237c489d0c52ae72f62844b3b46d7808",
+      "bytes": 43879,
+      "note": "MiniSat 2.2.0 source archive; LICENSE inside (MIT)"
+    },
+    {
+      "url": "http://fmv.jku.at/lingeling/lingeling-bbc-9230380-160707-druplig-009.tar.gz",
+      "sha256": "13dcc57cd21224b124b33e7baf7e21b0b4a4248ca32d741df08272f475540f02",
+      "bytes": 501731,
+      "note": "Lingeling bbc source archive; COPYING inside: evaluation and research use only, NOT commercial"
+    },
+    {
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "bytes": 11358,
+      "note": "canonical Apache-2.0 text, now the repository LICENSE"
+    },
+    {
+      "url": "https://www.gutenberg.org/ebooks/1342",
+      "sha256": "e47882337b9e5c68c2f20aaade7621dd7c178c8bb308a8c3267e46ff758c0ea5",
+      "bytes": 24269,
+      "note": "PG catalog page; copyright-status line: 'Public domain in the USA.'"
+    },
+    {
+      "url": "https://www.gutenberg.org/ebooks/2701",
+      "sha256": "4165446367b28a237b52db3df9c26405fa908d85ebdb0f9408997af4e9f498b5",
+      "bytes": 24783,
+      "note": "PG catalog page; copyright-status line: 'Public domain in the USA.'"
+    },
+    {
+      "url": "https://www.gutenberg.org/ebooks/84",
+      "sha256": "4dbe2f3277885e85d5e892706bd8ebd96206ed6850dfca3dd3f6cc431979d925",
+      "bytes": 24912,
+      "note": "PG catalog page; copyright-status line: 'Public domain in the USA.'"
+    },
+    {
+      "url": "https://www.gutenberg.org/ebooks/1661",
+      "sha256": "cfdadc2e31c54f998a7dddde66606dab4fa652010719f13b2f21c3c0a5e22b74",
+      "bytes": 24415,
+      "note": "PG catalog page; copyright-status line: 'Public domain in the USA.'"
+    },
+    {
+      "url": "https://www.gutenberg.org/ebooks/98",
+      "sha256": "40438c0e4f9ece9a7a641f0f71160b16471e34c00eeeefc47b04808ea8abd383",
+      "bytes": 24243,
+      "note": "PG catalog page; copyright-status line: 'Public domain in the USA.'"
+    },
+    {
+      "url": "https://www.gutenberg.org/ebooks/2600",
+      "sha256": "f7be56e46404795bc56216f0335bce0eb295d035d1b4aea161040e2622ede396",
+      "bytes": 24521,
+      "note": "PG catalog page; copyright-status line: 'Public domain in the USA.'"
+    },
+    {
+      "url": "https://www.gutenberg.org/ebooks/1952",
+      "sha256": "5397da00e2b2624a359c436efc0dd5366d1a6a7813ce76274fa4d3527bdb311c",
+      "bytes": 23574,
+      "note": "PG catalog page; copyright-status line: 'Public domain in the USA.'"
+    },
+    {
+      "url": "https://www.gutenberg.org/ebooks/11",
+      "sha256": "4d7c622910c47f63997e4f04ccfff03c569fbfb5995b0ddb7442e10f2473d83d",
+      "bytes": 23864,
+      "note": "PG catalog page; copyright-status line: 'Public domain in the USA.'"
+    },
+    {
+      "url": "https://www.gutenberg.org/ebooks/74",
+      "sha256": "4dfba428ca6043d679f749a8dd00cccad2cb87ce635e0c694aa48be22fde3992",
+      "bytes": 24619,
+      "note": "PG catalog page; copyright-status line: 'Public domain in the USA.'"
+    }
+  ],
+  "unreachable": [
+    {
+      "url": "http://sat2018.forsyte.tuwien.ac.at/solvers/main_and_glucose_hack/MapleLCMDistChronoBT.zip",
+      "result": "HTTP 503, then connection reset over https",
+      "note": "pysat's declared source for MapleChrono; its licence could not be fetched"
+    },
+    {
+      "url": "https://igs.ign.fr/pub/igs/products/2347/",
+      "result": "connection reset",
+      "note": "IGN data centre, probed for ESA final products"
+    },
+    {
+      "url": "http://web.archive.org/cdx/search/cdx?url=gutenberg.org/files/1342/1342-0.txt",
+      "result": "blocked by the container's egress policy",
+      "note": "could not check whether an archived copy of the banked pg1342 edition exists"
+    }
+  ]
+}

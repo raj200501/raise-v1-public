@@ -96,5 +96,9 @@ data/        corpora fetched by the shipped scripts; not committed
 
 ## Licence
 
-Apache-2.0 (see `LICENSE`). Data licences are recorded per-corpus in `docs/` and are not
-assumed to be the same as the code licence.
+Apache-2.0 (full text in `LICENSE`, copyright in `NOTICE`), for the code and for `outbound/`
+alike. Data and dependency licences are recorded per-corpus in `docs/compliance/LICENSE_AUDIT.md`
+— with the upstream licence texts and a hash manifest of every fetched source under
+`docs/compliance/sources/` — and are not assumed to be the same as the code licence. One
+component used only by an archived Phase-0 reproduction (Lingeling, via `python-sat`) is licensed
+for evaluation and research use only; it is not in the product path and must not ship in one.

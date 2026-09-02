@@ -45,7 +45,8 @@ All compute below is priced from these banked fields (4 CPU cores, `gpu: "none"`
 
 Corpus sizes are banked as array shapes and dtypes in `artifacts/pivot/corpus_manifest.json`
 (the corpora themselves are not committed; a cold clone re-manufactures them and checks the
-hashes):
+hashes — after `tools/pivot/pin_sources.py` has verified the fetched sources are the banked
+edition, because gutenberg.org re-edits files in place; CORRECTIONS.md 2026-09-02):
 
 | Corpus | Shape | Element size |
 |---|---|---|

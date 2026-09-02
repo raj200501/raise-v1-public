@@ -25,7 +25,7 @@ import time
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from corpus import CONFIG_NAMES, N_CONFIGS  # noqa: E402
+from corpus import CONFIG_NAMES, FAMILIES, N_CONFIGS  # noqa: E402
 from npzmap import fill_f32, fill_f64, npz_memmap  # noqa: E402
 from run_study import _rss_gb, build, make_model, predict_chunked  # noqa: E402
 
@@ -60,6 +60,9 @@ def main() -> int:
     ap.add_argument("--src", default=os.path.join(REPO, "data", "pivot", "src"))
     ap.add_argument("--out", default=os.path.join(REPO, "artifacts", "pivot",
                                                   "carve_generalisation.json"))
+    ap.add_argument("--scores-out", default=os.path.join(REPO, "artifacts", "pivot",
+                                                         "carve_rung_scores.json"))
+    ap.add_argument("--preregistration", default="0007-carve-size-generalisation")
     args = ap.parse_args()
 
     disjoint = args.chunk_offset >= args.reference_chunks_used
@@ -89,6 +92,18 @@ def main() -> int:
     ev_b, tr_b, rng = grouped_split(yb, gb, args.seed, args.eval_frac, max(args.rungs))
     Xe = fill_f32(np.empty((len(ev_b), ncols), np.float32), Xb, ev_b, ncols)
     ye = np.asarray(yb[ev_b])
+    # The gutenberg family draws its chunks from ONE shared byte pool, so "disjoint source chunks"
+    # is a guarantee about the seven synthetic families only (CORRECTIONS.md 2026-08-31, defect 2).
+    # Every accuracy below is therefore also banked with gutenberg excluded, so a reader can bind a
+    # clause to the rows the guarantee actually covers.
+    fam_ev = np.array([FAMILIES[int(v) % len(FAMILIES)] for v in gb[ev_b]])
+    non_gut = fam_ev != "gutenberg"
+
+    def by_family(correct):
+        return {f: round(float(correct[fam_ev == f].mean()), 4) for f in FAMILIES}
+
+    def excl(correct):
+        return round(float(correct[non_gut].mean()), 4)
     Xtr = fill_f64(np.empty((len(tr_b), ncols), np.float64), Xb, tr_b, ncols)
     ytr = np.asarray(yb[tr_b])
     del Xb
@@ -101,7 +116,7 @@ def main() -> int:
     from sklearn.tree import DecisionTreeClassifier
     nb = len(ytr)
     print(f"[3/6] corpus B trivial baselines (trained on {nb}, same as the top rung)", flush=True)
-    baselines = {}
+    baselines, baselines_excl, baselines_fam = {}, {}, {}
     for nm, clf in [("majority", DummyClassifier(strategy="most_frequent")),
                     ("stratified", DummyClassifier(strategy="stratified", random_state=0)),
                     ("best_single_feat", DecisionTreeClassifier(max_depth=1, random_state=0)),
@@ -111,11 +126,16 @@ def main() -> int:
                     ("logistic", LogisticRegression(max_iter=400))]:
         t = time.perf_counter()
         clf.fit(Xtr[:nb], ytr[:nb])
-        baselines[nm] = round(float((predict_chunked(clf, Xe) == ye).mean()), 4)
+        ok = (predict_chunked(clf, Xe) == ye)
+        baselines[nm] = round(float(ok.mean()), 4)
+        baselines_excl[nm] = excl(ok); baselines_fam[nm] = by_family(ok)
         print(f"      {nm:<18} {baselines[nm]:.4f}  ({time.perf_counter()-t:.0f}s, "
               f"RSS {_rss_gb():.2f} GB)", flush=True)
     frozen = {k: v for k, v in baselines.items() if k in FROZEN_SET}
     fname = max(frozen, key=frozen.get); ename = max(baselines, key=baselines.get)
+    frozen_excl = {k: v for k, v in baselines_excl.items() if k in FROZEN_SET}
+    fname_excl = max(frozen_excl, key=frozen_excl.get)
+    ename_excl = max(baselines_excl, key=baselines_excl.get)
 
     print("[4/6] corpus B rungs", flush=True)
     rungs, per_ex = [], []
@@ -128,6 +148,8 @@ def main() -> int:
         m.fit(Xtr[:k], ytr[:k], X_val=Xtr[k:r], y_val=ytr[k:r])
         correct = (predict_chunked(m, Xe) == ye).astype(np.int8)
         rungs.append({"n_units": int(r), "accuracy": round(float(correct.mean()), 4),
+                      "accuracy_non_gutenberg": excl(correct),
+                      "per_family": by_family(correct),
                       "train_seconds": round(time.perf_counter() - t, 1)})
         per_ex.append({"n_units": int(r), "per_example": correct.tolist()})
         print(f"      rung {r:>7}: {rungs[-1]['accuracy']:.4f}  "
@@ -153,7 +175,9 @@ def main() -> int:
     t = time.perf_counter()
     ma = make_model(args.seed, "hgb"); ka = max(1, int(len(ytra) * 0.9))
     ma.fit(Xtra[:ka], ytra[:ka], X_val=Xtra[ka:], y_val=ytra[ka:])
-    transfer = round(float((predict_chunked(ma, Xe) == ye).mean()), 4)
+    ok_t = (predict_chunked(ma, Xe) == ye)
+    transfer = round(float(ok_t.mean()), 4)
+    transfer_excl = excl(ok_t); transfer_fam = by_family(ok_t)
     print(f"      transfer top-1 {transfer:.4f}  ({time.perf_counter()-t:.0f}s)", flush=True)
     del Xtra
 
@@ -167,7 +191,7 @@ def main() -> int:
                         if r["n_units"] == args.matched_rung), None)
     out = {
         "schema": "raise-v1/carve_generalisation/1",
-        "preregistration": "0007-carve-size-generalisation",
+        "preregistration": args.preregistration,
         "carve_bytes": args.carve, "reference_carve_bytes": args.reference_carve,
         "matched_rung": args.matched_rung,
         "n_classes": N_CONFIGS, "class_names": CONFIG_NAMES,
@@ -185,6 +209,17 @@ def main() -> int:
         "within_shuffled_label_accuracy": null_acc,
         "transfer_top1": transfer,
         "reference_matched_rung_top1": ref_matched,
+        "n_eval_non_gutenberg": int(non_gut.sum()),
+        "within_top1_non_gutenberg": rungs[-1]["accuracy_non_gutenberg"] if rungs else None,
+        "within_trivial_baselines_non_gutenberg": baselines_excl,
+        "within_best_trivial_baseline_non_gutenberg": frozen_excl[fname_excl],
+        "within_best_trivial_baseline_non_gutenberg_name": fname_excl,
+        "within_best_baseline_expanded_non_gutenberg": baselines_excl[ename_excl],
+        "within_best_baseline_expanded_non_gutenberg_name": ename_excl,
+        "within_per_family_top_rung": rungs[-1]["per_family"] if rungs else None,
+        "within_per_family_baselines": baselines_fam,
+        "transfer_top1_non_gutenberg": transfer_excl,
+        "transfer_per_family": transfer_fam,
         "rungs": rungs, "n_rungs": len(rungs),
         "decades_spanned": fit["orders_of_magnitude_spanned"],
         "within_slope": fit["primary_fit"]["slope"],
@@ -197,7 +232,7 @@ def main() -> int:
                  "train_seconds_per_rung": [r["train_seconds"] for r in rungs],
                  "cpu_cores": args.procs, "gpu": "none"},
     }
-    scores_out = os.path.join(REPO, "artifacts", "pivot", "carve_rung_scores.json")
+    scores_out = args.scores_out
     with open(scores_out, "w") as fh:
         json.dump({"schema": "raise-v1/rung_scores/1",
                    "metric": "top-1 on corpus B's held-out evaluation set, grouped by source chunk",

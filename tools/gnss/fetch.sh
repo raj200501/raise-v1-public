@@ -3,6 +3,15 @@
 #   student input : broadcast navigation message (BKG)
 #   manufacturer  : precise orbit + precise clock, reconstructed days later by ESA from a global
 #                   tracking network the receiver has no access to
+#
+# Terms (docs/compliance/LICENSE_AUDIT.md, 2026-09-02 follow-up): the broadcast file is an IGS
+# product served by BKG, an IGS Global Data Center, under the IGS Data and Product Disclaimer and
+# Terms of Use (docs/compliance/sources/IGS_Data_and_Product_Disclaimer_and_Terms_of_Use_200805.txt):
+# open to scientific, educational and commercial users, no cost or obligation, attribution
+# required. Attribution: International GNSS Service (IGS) and its contributing organizations;
+# BKG GNSS Data Center. The ESA final products are ESA's IGS Analysis Center products served from
+# ESA's own web server, whose linked terms are ESA's general website terms; whether those govern
+# the product directory COULD NOT be verified - see the audit. Nothing fetched here is committed.
 set -uo pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/data/gnss"
 mkdir -p "$DIR"

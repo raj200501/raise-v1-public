@@ -19,6 +19,75 @@ Format:
 
 ---
 
+## 2026-09-02 — A cold clone no longer rebuilds one of ten sources byte-identically; the claim was true on 2026-08-25 and silently false by 2026-09-02
+
+**Claimed:** "the corpora themselves are not committed; a cold clone re-manufactures them and checks
+the hashes" (`docs/strategy/MILESTONES.md`, the corpus-size table); "Corpora rebuild
+deterministically from shipped sources and generators; the manifest banks content hashes of every
+array so the rebuild is *proven* identical, not assumed" (`docs/DILIGENCE.md`, last section);
+"the corpus manifest proves a rebuilt corpus byte-identical" (`outbound/NARRATIVE.md`).
+
+**Actual:** On 2026-09-02 all ten Project Gutenberg sources were re-fetched from the exact URL
+`tools/pivot/fetch_sources.sh` uses. Nine hash-matched the banked
+`artifacts/pivot/corpus_manifest.json` (`sources_sha256`). **`pg1342.txt` did not**: gutenberg.org
+now serves an edition differing in two lines — "young-man" has become "young man" and "Mr," has
+become "Mr." — at the same byte length, sha256 `81300b79…` against the banked `a5666f87…`. A cold
+clone run that day would have fetched the new edition, spent the corpus build (3415.5 banked seconds
+at 4096) manufacturing gutenberg-family windows from slightly different bytes, and failed
+`corpus_manifest.py --check` at the end, with no earlier signal. The banked measurements are
+untouched — they were made on the banked bytes, which are on disk and hash-match — but the sentence
+"a stranger can rebuild it byte-identically" was false for one file for some unknown part of the
+eight days since the manifest was written, and nothing in the instrument would have said so until
+an hour into a stranger's rebuild.
+
+**Size:** one of ten source files; two lines of one novel; the whole of the reproducibility claim
+for the gutenberg family, which is one eighth of every corpus.
+
+**Cause:** the fetch script downloaded without checking against the manifest it exists to satisfy.
+The manifest checks the *corpus*, at the end of an hour's build, not the *sources*, at the start.
+And nobody re-fetched between 2026-08-25 and 2026-09-02, so the drift was found by a compliance
+re-check, not by the reproducibility gate.
+
+**Fix:** `tools/pivot/pin_sources.py`, run by `fetch_sources.sh` after every download: each source
+must hash to the banked value; a later upstream edition recorded in `tools/pivot/source_pins.json`
+is converted back to the banked bytes by its recorded line edits (both directions written
+verbatim, and the script refuses to edit a line that is not the recorded upstream text); any other
+edition is a hard exit 1 naming the file and this ledger. Exercised three ways before commit: banked
+sources pass; today's upstream pg1342 is pinned back to `a5666f87…` byte-for-byte; a fabricated
+unknown edition fails. **COULD NOT VERIFY** whether an archived copy of the banked pg1342 edition
+exists (the Internet Archive is blocked by this container's egress policy); if gutenberg.org
+changes pg1342 again in a way not recorded here, the rebuild will fail loudly, which is the
+correct behaviour and will be filed here again.
+
+---
+
+## 2026-09-02 — Said "all fixed here" about six red-team findings; one of them was not
+
+**Claimed:** commit `a42d0c7`, message: "RESEARCH QA (accepted): docs/qa/NEW_DOCS_REVIEW.md — six
+verified findings against the post-audit documents, all fixed here."
+
+**Actual:** Finding 2 of that review — `docs/DILIGENCE.md` saying "132 mutations across 13 gates"
+against an artifact saying 134 — was not fixed. The commit did not touch `docs/DILIGENCE.md` at
+all (`git show a42d0c7 -- docs/DILIGENCE.md` is empty). The wrong integer stood for two more days
+in the section titled "Can my engineer verify any of this without trusting you?", until it was
+found again on 2026-09-02 while a fourteenth gate was being added (the sentence now reads 153
+across 14, and is registered). This is the stale-mutation-count error class filed three times on
+2026-08-25 — and this time the review *found it*, the fix *was claimed*, and the fix was not made.
+
+**Size:** one of six findings claimed fixed; one integer; in the verification section of the
+diligence map.
+
+**Cause:** the commit message's fix list was written from the review document, not from the diff.
+A review is not a fix, and a message that says "fixed" without a hunk behind it is the same class
+of claim this ledger exists for.
+
+**Fix:** `docs/live_claims.json` now carries the DILIGENCE sentence (`diligence-mutations`) and the
+EVIDENCE_BRIEF and NARRATIVE sentences that quote the same count, so `tools/freshness.py` fails on
+the next divergence anywhere they appear. The instrument cannot check a commit message; that part
+is a rule — name the hunk — and it is recorded here as a rule, not dressed as a gate.
+
+---
+
 ## 2026-08-31 — An adversarial audit found 13 defects the instrument missed, three of them critical
 
 Fifty-four independent review agents were run against this repository — six hostile lenses, every

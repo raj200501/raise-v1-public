@@ -1,0 +1,167 @@
+{
+  "id": "0011",
+  "slug": "carve-2048-boundary",
+  "title": "Where, between 1024 and 4096 bytes, does carved-DEFLATE encoder provenance stop clearing its bar? A third corpus at a 2048-byte carve, disjoint from both earlier corpora, under the 0007 protocol plus a gutenberg-excluded margin clause.",
+  "scope": {
+    "one_line": "One corpus at a 2048-byte carve, built from 25000 source chunks at index offset 75000 (past corpus A's 0..49999 and corpus B's 50000..74999), one seed, four rungs, measured within-size and with a transfer arm at a matched training rung. It locates the window boundary of the established result to a factor of two and does nothing else.",
+    "corpora": "Corpus A is the existing 4096-byte corpus, source chunk indices 0..49999. Corpus B is the existing 1024-byte corpus, indices 50000..74999. Corpus C is new: 2048-byte carve, 25000 chunks at index offset 75000, so C shares NO chunk index with A or B. The chunk index IS the generator seed for the seven synthetic content families. For the gutenberg family it is NOT a byte-level guarantee - every gutenberg chunk is a window at a random offset into one shared pool (CORRECTIONS.md 2026-08-31, defect 2) - which is why this preregistration adds a clause on the gutenberg-excluded rows rather than repeating 0007's sentence as if the audit had not happened.",
+    "matched_rung": "The transfer arm trains on corpus A at 100000, the same rung corpus C is compared at, so the comparison is about carve size and not data volume. Corpus A's banked 100000-rung top-1 is 0.1965; corpus B's was 0.1165 at 1024.",
+    "rungs": "Four rungs on corpus C: 1000, 10000, 100000, 500000. That is 2.699 decades, as in 0007.",
+    "seed": "20260825 throughout, as in 0003, 0006 and 0007.",
+    "unit": "One carved 2048-byte window from the middle of one compressed stream.",
+    "model_and_features": "The 0003 recipe unchanged: HistGradientBoosting on the 1108-column hand-engineered feature set, explicit validation split, the seven-baseline ladder up to depth-16 trees and logistic regression trained on the same rows as the top rung, null control on shuffled labels. Nothing is tuned for 2048. A recipe change would make this a different question.",
+    "why_2048": "The record holds two carve sizes and a scope sentence between them: 4096 clears (0003, margins +0.1003 frozen and +0.0583 expanded), 1024 ties a dumb rule (0007, +0.0099), and 'valid only at a 4096-byte window' is currently a two-point statement with the boundary unmeasured across a factor of four. 2048 is the geometric midpoint; one run bounds the boundary to a factor of two either way. The information-side prerequisite is already banked from 512 to 4096 (carve_channel_capacity.json: 20.79 to 20.9125 distinct streams of 26), so a failure here is a modelling result, not an information result, exactly as at 1024.",
+    "why_now_despite_the_milestone_sequencing": "docs/strategy/MILESTONES.md sequences M3's carve-size arm after M4's buyer evidence, so that sizes are measured because buyers report them. No buyer has reported a size; this run does not pretend one has. It is run because the boundary of the record's own scope statement is a property of the record, not of a buyer, and because its cost is one banked 1024 ladder (1066.6 build seconds, 11.1-751.5 train seconds per rung, 4 cores, no GPU). If a buyer later reports sizes, those sizes are M3's; this one is the record's.",
+    "expected_outcome_stated_in_advance": "CARVE_FAILS is the expected result. The matched-rung accuracy fell by 0.0800 from 4096 to 1024 and the expanded margin fell from +0.0583 to +0.0099; a margin roughly midway between those two banked values sits below the 0.05 bar. A pass at 2048 would be the surprising outcome, and it is the outcome this preregistration is written so that it cannot be manufactured: the bar is not lowered, the recipe is not tuned, and the gutenberg-excluded clause makes the bar stricter than 0007's, not looser.",
+    "what_this_does_not_cover": "Carve sizes other than 2048 (and the banked 1024 and 4096). Encoders absent from the 26-configuration box. Learned representations (0009, 0010). It does not fix the gutenberg pool leak - it bounds it with a clause. It does not establish a buyer, a customer, a user or a partner, and no outcome here could; establishes_a_buyer is emitted False unconditionally."
+  },
+  "bar": {
+    "scope_carve": {
+      "direction": "higher_is_better",
+      "passes_if": "carve_bytes == 2048 and reference_carve_bytes == 4096. The reader is frozen for this size; an artifact at any other size is rejected, not read.",
+      "threshold": 2048
+    },
+    "scope_rungs": {
+      "direction": "higher_is_better",
+      "passes_if": "n_rungs >= 4",
+      "threshold": 4
+    },
+    "scope_decades": {
+      "direction": "higher_is_better",
+      "passes_if": "decades_spanned >= 2.0",
+      "threshold": 2.0
+    },
+    "within_margin_frozen": {
+      "direction": "higher_is_better",
+      "passes_if": "within_top1 - within_best_trivial_baseline >= 0.05, baselines trained on the same rows as the top rung",
+      "threshold": 0.05
+    },
+    "within_margin_expanded": {
+      "direction": "higher_is_better",
+      "passes_if": "within_top1 - within_best_baseline_expanded >= 0.05, deep trees included",
+      "threshold": 0.05
+    },
+    "within_margin_expanded_gutenberg_excluded": {
+      "direction": "higher_is_better",
+      "passes_if": "within_top1_non_gutenberg - within_best_baseline_expanded_non_gutenberg >= 0.05, both scored on the evaluation rows whose source family is not gutenberg - the rows the chunk-index disjointness guarantee actually covers. New in 0011. A missing field is a failure.",
+      "threshold": 0.05
+    },
+    "within_slope": {
+      "direction": "higher_is_better",
+      "passes_if": "within_slope_ci95_low > 0, cluster bootstrap over held-out source chunks (tools/scaling.py as corrected 2026-08-31)",
+      "threshold": 0.0
+    },
+    "within_null_control": {
+      "direction": "lower_is_better",
+      "passes_if": "within_shuffled_label_accuracy <= chance_accuracy + 0.02",
+      "threshold": 0.02
+    },
+    "disjointness": {
+      "direction": "lower_is_better",
+      "passes_if": "corpora_share_source_chunks is False AND corpus_b_chunk_offset >= 75000. Checked by offset against BOTH earlier corpora, not only by the flag the script sets. A validity condition on the transfer arm, which is void without it.",
+      "threshold": 75000
+    },
+    "transfer_margin": {
+      "direction": "higher_is_better",
+      "passes_if": "transfer_top1 - within_best_trivial_baseline >= 0.05, where transfer_top1 is a model trained on corpus A at 100000 and evaluated on corpus C's held-out set, and the baseline is corpus C's OWN.",
+      "threshold": 0.05
+    }
+  },
+  "readings": [
+    {
+      "name": "verdict",
+      "unit": "enum{CARVE_ROBUST,CARVE_SIZE_SPECIFIC,CARVE_FAILS}",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048_verdict.json",
+      "json_path": "$.verdict"
+    },
+    {
+      "name": "boundary_bytes",
+      "unit": "half-open interval of carve sizes in bytes, bracketed with the banked 1024 and 4096 verdicts",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048_verdict.json",
+      "json_path": "$.boundary_bytes"
+    },
+    {
+      "name": "within_top1",
+      "unit": "fraction correct at the top rung, carve 2048",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.within_top1"
+    },
+    {
+      "name": "within_best_trivial_baseline",
+      "unit": "fraction",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.within_best_trivial_baseline"
+    },
+    {
+      "name": "within_best_baseline_expanded",
+      "unit": "fraction",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.within_best_baseline_expanded"
+    },
+    {
+      "name": "within_top1_non_gutenberg",
+      "unit": "fraction correct at the top rung on evaluation rows whose family is not gutenberg",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.within_top1_non_gutenberg"
+    },
+    {
+      "name": "within_best_baseline_expanded_non_gutenberg",
+      "unit": "fraction, same rows",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.within_best_baseline_expanded_non_gutenberg"
+    },
+    {
+      "name": "within_slope_ci95_low",
+      "unit": "accuracy points per decade",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.within_slope_ci95_low"
+    },
+    {
+      "name": "within_shuffled_label_accuracy",
+      "unit": "fraction",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.within_shuffled_label_accuracy"
+    },
+    {
+      "name": "transfer_top1",
+      "unit": "fraction correct, corpus-A model at the matched rung on corpus-C evaluation set",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.transfer_top1"
+    },
+    {
+      "name": "corpora_share_source_chunks",
+      "unit": "boolean, must be false",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.corpora_share_source_chunks"
+    },
+    {
+      "name": "corpus_b_chunk_offset",
+      "unit": "chunk index, must be >= 75000",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.corpus_b_chunk_offset"
+    }
+  ],
+  "arms": [
+    "WITHIN-SIZE at 2048: four rungs, grouped split by source chunk, the seven-baseline ladder trained on the same rows as the top rung, null control on shuffled labels, cluster-bootstrap slope. Unchanged from 0007 except for the carve length.",
+    "TRANSFER at a MATCHED rung: corpus A's model at 100000, scored on corpus C's held-out set against corpus C's OWN baselines. A transfer number that beats nothing local is not transfer.",
+    "GUTENBERG-EXCLUDED reading of the within-size expanded margin, on the rows the disjointness guarantee actually covers. This is the rival explanation 'the margin is carried by leaked bytes' run as a clause, not a paragraph.",
+    "DISJOINTNESS BY OFFSET against both earlier corpora. The script's flag only compares against corpus A; the reader checks the offset itself.",
+    "PER-FAMILY accuracies at the top rung, for the model and for every baseline, are banked alongside so the decomposition at 2048 can be published the way per_family_curves.json publishes it at 4096. They carry no clause."
+  ],
+  "stop_rules": [
+    "Any within-size clause failing is CARVE_FAILS, and the boundary is placed in (2048, 4096]: the task holds at 4096 and at no shorter window this repository has measured. This is the expected outcome and it will be published at the same size as a pass would have been.",
+    "Within-size passing while transfer fails is CARVE_SIZE_SPECIFIC, boundary in (1024, 2048], and BOTH halves of its meaning are published: not a failure of the label-factory thesis (one model per carve size costs one compression pass), and a failure of the one-model-reads-a-whole-disk-image story.",
+    "Both passing is CARVE_ROBUST, boundary in (1024, 2048]. It does not license quoting the 4096 numbers at 2048; the 2048 numbers are quoted at 2048.",
+    "A within-size failure is never softened to CARVE_SIZE_SPECIFIC, whatever the transfer arm says.",
+    "A missing field reads as failure. Absence is never a pass. In particular a run that did not score the gutenberg-excluded rows fails the gutenberg-excluded clause.",
+    "If the run cannot complete under the container's memory or disk (the 800000 rung of 0003 was capped by a ~13.9 GB ceiling), the result is NOT RUN, filed as such, and nothing in the recipe is changed to make it fit. A smaller top rung is a different preregistration.",
+    "This cannot revise 0003, 0006 or 0007. Those verdicts stand whatever this one says, and no outcome here clears G5."
+  ],
+  "thesis": {
+    "what_would_make_it_fail_honestly": "The feature set is 512 bit-alignment histogram columns and 40 alignment summary statistics estimated from the window. At half the bytes the estimates are twice as noisy as at 4096; 0007 showed that at a quarter of the bytes the model no longer separates from logistic regression. The boundary is expected to lie above 2048.",
+    "what_a_pass_would_mean": "That the 0007 collapse is steep and late rather than gradual - the recipe holds at 2048 and loses everything between 2048 and 1024. That would narrow, not remove, the CARVE_FAILS scope, and the transfer arm would then say whether one model or two is needed across the working range.",
+    "what_neither_outcome_means": "Neither outcome names a buyer. The milestone map's own kill for the forensic use case - buyers whose carves are predominantly below the working boundary - is a fact about buyers, and this run measures the boundary, not the buyers."
+  },
+  "reader": "tools/readers/carve2048_verdict.py",
+  "frozen": false
+}

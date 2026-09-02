@@ -1,5 +1,15 @@
 # Licensing and data-provenance audit
 
+**Status, 2026-09-02:** the five COULD NOT VERIFY items of the 2026-08-31 audit below were
+re-checked first-hand against the upstream documents (fetched from this container, hashed into
+`docs/compliance/sources/MANIFEST.json`, licence texts committed verbatim under
+`docs/compliance/sources/`). Three are resolved, two are narrowed, three new findings were made
+(F11–F13, one of them a non-commercial licence inside the venv), and the 2026-08-31 text is kept
+unchanged as the record of what was known then. See **§5, the 2026-09-02 follow-up**, and the
+**updated consolidated list** at the end.
+
+---
+
 Date: 2026-08-31. Auditor: Compliance department lead. Method: every claim below was
 verified first-hand against this repository — a file and line, a command run from the repo
 root, or a hash comparison. Nothing is asserted from memory. Where the repository does not
@@ -239,6 +249,187 @@ sha256sum data/pivot/src/*.txt                       # compare to artifacts/pivo
 head -2 data/pivot/src/pg5200.txt                    # the COPYRIGHTED banner
 grep -n "FULL LICENSE" data/pivot/src/*.txt          # only pg1661, pg2600
 grep -m1 "^License" .venv/lib/*/site-packages/*.dist-info/METADATA
-git ls-files data/gnss                               # the 4 committed product files
+git ls-files data/gnss                               # the 4 committed product files (untracked on 2026-09-02; see §5.4)
 grep -n licence artifacts/ephemerr/pipeline_validation.json
+```
+
+---
+
+## 5. Follow-up, 2026-09-02 — the COULD NOT VERIFY list, re-checked at the source
+
+Method: each upstream document was fetched from this container with
+`curl -A raise-v1-research/1.0` on 2026-09-02 and its sha256 recorded in
+`docs/compliance/sources/MANIFEST.json` (which also lists the three hosts that could not be
+reached and why). Licence texts are committed verbatim under `docs/compliance/sources/`. Every
+quotation below is copied from the fetched bytes, not from memory. This section makes no legal
+determination; it records what the documents say and what this repository does.
+
+### 5.1 pg5200 (Metamorphosis) — item 1: **RESOLVED as to the terms in the file; one residual**
+
+- The Project Gutenberg catalog page for eBook #5200 states: *"Copyrighted. Read the copyright
+  notice inside this book for details."* The catalog pages for the other nine IDs each state
+  *"Public domain in the USA."* (all ten pages hashed in the manifest).
+- The current PG copy (`cache/epub/5200/pg5200.txt`, header committed as
+  `sources/pg5200_header_as_served_2026-09-02.txt`) carries the standard §1.E.1 sentence, then
+  *"\*\*\* This is a COPYRIGHTED Project Gutenberg eBook. Details Below. \*\*\*"*, and
+  *"Translator: David Wyllie"*. The "details below" are the full Project Gutenberg License. Its
+  §1.E.3 (committed verbatim in `sources/pg5200_licence_1E_clauses_as_served_2026-09-02.txt`)
+  reads: *"If an individual Project Gutenberg electronic work is posted with the permission of the
+  copyright holder, your use and distribution must comply with both paragraphs 1.E.1 through
+  1.E.7 and any additional terms imposed by the copyright holder. Additional terms will be linked
+  to the Project Gutenberg License for all works posted with the permission of the copyright holder
+  found at the beginning of this work."*
+- **No additional terms appear at the beginning of the work**, in the current copy or in the banked
+  copy (`grep -n "©\|(C)\|non-commercial\|Wyllie"` matches only the translator line in both).
+- So the terms that bind are §1.E.1–1.E.7: no fee for access or copies (§1.E.7), the licence
+  kept attached (§1.E.4), the §1.E.1 sentence displayed on any copy (§1.E.1, §1.E.5). This
+  repository distributes neither the file nor the corpus (both gitignored); the file it measured is
+  the `files/5200/5200-0.txt` edition, re-fetched today byte-identical to the banked hash
+  (`6b023bfb…`), whose two-line banner and missing licence are how gutenberg.org serves that path.
+- **Residual COULD NOT VERIFY:** whether the copyright holder imposes terms anywhere other than
+  the file (nothing is linked from the file or the catalog page), and whether training on
+  compressed windows of the text is within §1.E.7 for a company — a legal judgement this audit
+  does not make. **Recommendation:** any *future* corpus should replace pg5200 with a text whose
+  catalog status is "Public domain in the USA."; the banked corpora stay as measured, because the
+  chain binds them and because the gutenberg family's contribution is banked separately
+  (gutenberg-excluded margins in `artifacts/pivot/audit_rederivations.json`).
+- Incidentally: the `cache/epub` copy's body text differs from the `files/` edition (the header
+  says "Most recently updated: June 9, 2026"). Irrelevant to the terms; relevant to reproducibility
+  — see §5.6.
+
+### 5.2 Public-domain status of the other nine editions — item 2: **RESOLVED to the extent PG asserts it**
+
+Each of the nine catalog pages (IDs 11, 74, 84, 98, 1342, 1661, 1952, 2600, 2701) states *"Public
+domain in the USA."* That is Project Gutenberg's own status line for the specific edition it
+serves, which is what the 2026-08-31 audit asked for. It is a statement about the United States;
+the §1.E.1 sentence itself says users elsewhere must check local law. Not re-verified beyond PG's
+assertion.
+
+### 5.3 Native components in `isal` and `python-sat` — item 3: **RESOLVED for ISA-L and five of six solvers; one finding; one unreachable**
+
+- **ISA-L:** the wheel bundles `isal/isa-l/LICENSE`, which is **byte-identical** (sha256
+  `bc8fd4a3…`) to upstream `intel/isa-l` `LICENSE`: BSD-3-Clause, "Copyright(c) 2011-2024 Intel
+  Corporation". Committed as `sources/isa-l_LICENSE_BSD-3-Clause.txt`.
+- **python-sat:** the wheel compiles the solvers listed in pysat's `solvers/prepare.py` (fetched,
+  hashed). `tools/repro/sat_solver_identity.py` uses six: Cadical153, Glucose42, Lingeling,
+  Minisat22, MapleChrono, Mergesat3. Upstream licences, fetched from the sources pysat declares:
+
+  | Solver (pysat name) | Upstream licence | Committed as |
+  |---|---|---|
+  | CaDiCaL 1.5.3 | MIT | `sources/cadical-1.5.3_LICENSE.txt` |
+  | Glucose 4.2.1 | MIT (Gilles Audemard, 2023) | `sources/glucose-4.2.1_LICENSE.txt` |
+  | MiniSat 2.2.0 | MIT-form (Eén, Sörensson) | `sources/minisat-2.2.0_LICENSE.txt` |
+  | MergeSat 3.0 | MIT-form, several copyright holders | `sources/mergesat-3.0_LICENSE.txt` |
+  | **Lingeling** bbc-9230380-160707 | **evaluation and research use only; not commercial** | `sources/lingeling-bbc-9230380-160707_COPYING.txt` |
+  | MapleLCMDistChronoBT | **COULD NOT VERIFY** — pysat's declared source returned HTTP 503, then a connection reset | — |
+
+  **F11 — Lingeling is not permissively licensed.** Its `COPYING` states, verbatim: *"Permission
+  is hereby granted, free of charge, to use this software for evaluation and research purposes.
+  This license does not allow this software to be used in a commercial context."* and *"All other
+  usage is reserved."* Where it is used here: only `tools/repro/sat_solver_identity.py`, the
+  reproduction of a Phase-0 **kill** (the SAT-solver-identity candidate), which is evaluation and
+  research use. It is **not in the product path** — nothing in the DEFLATE pivot imports pysat.
+  It must not ship in anything commercial; if the company ever productises code touching pysat,
+  Lingeling is dropped first. `README.md` now says so.
+  **F13 — the venv contains it regardless of use:** python-sat's wheel bundles the compiled
+  solvers, so `pysolvers.cpython-311-x86_64-linux-gnu.so` in the venv contains Lingeling whether
+  or not it is called. Redistributing the venv or the wheel would redistribute it.
+  On MapleChrono: MergeSat's own `LICENSE` lists "Maple_LCM_Dist_Chrono -- Copyright (c) 2018,
+  Vadim Ryvchin, Alexander Nadel" among the code it incorporates under MIT terms; that
+  corroborates but is not MapleChrono's own licence file, so the row stays COULD NOT VERIFY.
+
+### 5.4 IGS / BKG / ESA GNSS products — item 4: **RESOLVED for IGS and BKG; NARROWED for ESA; files untracked**
+
+- **IGS.** The *IGS Data and Product Disclaimer and Terms of Use* (5 August 2020; PDF sha256
+  `7b4e253c…`, linked from `igs.org/data-access/`; text extracted with pypdf and committed as
+  `sources/IGS_Data_and_Product_Disclaimer_and_Terms_of_Use_200805.txt`) states, verbatim: *"The
+  IGS products and station data are provided openly for the benefit of all scientific,
+  educational, and commercial users. For 25 years, IGS data and products have been made openly
+  available for use without restriction, and continue to be offered free of cost or obligation."*
+  Attribution: *"By accessing data, products, and any other information from the IGS, users agree
+  to appropriately cite and attribute these resources to providers and their sponsors,
+  acknowledgment of IGS and its contributing organizations, and to adherence to professional and
+  ethical standards."* Terms of use: *"Access to, and use of IGS data, products, and other
+  information constitutes acceptance of the aforementioned information."* Commercial use is
+  therefore expressly within scope; attribution is the obligation.
+- **BKG.** The broadcast file `BRDC00IGS_R_…` is an IGS product served by BKG, an IGS Global Data
+  Center. BKG's GDC site carries no data-licence text of its own: the Impressum is a liability
+  disclaimer and the archive-access page is download mechanics (both fetched and hashed). The file
+  re-fetched today is **byte-identical** to `data/gnss/brdc_001.rnx.gz` (sha256 `92f95dd3…`).
+- **ESA.** The Navigation Support Office page says *"Our latest published products are freely
+  available on our web page"*, and its "Terms and Conditions" link resolves to ESA's general
+  website terms, whose Copyrights section says, verbatim: *"The contents of the ESA website are
+  intended for the personal and non-commercial use of its users. ESA grants permission to users to
+  visit the site, and to download and copy information, images, documents and materials from the
+  website for users' personal non-commercial use. ESA does not grant the right to resell or
+  redistribute any information, documents, images or material from its website or to compile or
+  create derivative works from material on its website."* The `ESA0OPSFIN` products are ESA's
+  **IGS Analysis Center** products, which the IGS distributes through its data centres under the
+  IGS terms above — but BKG's IGS products directory for GPS week 2347 does not carry the
+  ESA-named files (HTTP 404) and the IGN data centre was unreachable, so they could not be
+  re-sourced under IGS terms today. **COULD NOT VERIFY whether ESA's website terms govern the
+  product directory.** Recommendation: before any commercial use of ESA products, obtain them from
+  an IGS data centre or put the question to the Navigation Support Office in writing.
+- **Actions taken in this commit.** The four product files are **untracked** (`git rm --cached`;
+  they remain on disk and gitignored, and the history that contains them — commit `b185129`,
+  5.5 MB — is deliberately not rewritten, because commit order is this repository's precedence
+  record). `tools/gnss/fetch.sh` now states the terms and the attribution. The EphemErr result is
+  banked and unchanged.
+- **Attribution adopted:** GNSS products — International GNSS Service (IGS) and its contributing
+  organizations; broadcast navigation via the BKG GNSS Data Center; precise orbit and clock
+  products by the ESA/ESOC Navigation Support Office.
+
+### 5.5 `data/asmprov/` NCBI metadata — item 5: **RESOLVED as to NCBI's own terms**
+
+NCBI's *Website and Data Usage Policies and Disclaimers* page (fetched, sha256 `8ad8f6f1…`)
+states, verbatim: *"Information that is created by or for the US government on this site is within
+the public domain."* and, under Molecular Data Usage — which names the Assembly database among
+those covered — *"NCBI itself places no restrictions on the use or distribution of the data
+contained therein. Nor do we accept data when the submitter has requested restrictions on reuse or
+redistribution. However, some submitters of the original data (or the country of origin of such
+data) may claim patent, copyright, or other intellectual property rights in all or a portion of the
+data (that has been submitted). NCBI is not in a position to assess the validity of such claims"*.
+The committed files are assembly *metadata* records (accession, organism, submitter, statistics),
+not sequence. **Residual COULD NOT VERIFY:** submitter-level IP claims, per record — NCBI itself
+says it cannot assess them, and this audit did not attempt to for 239,744 records.
+
+### 5.6 New finding — F12: upstream edition drift breaks the byte-identical rebuild
+
+Re-fetching all ten sources from the URL `fetch_sources.sh` uses: nine hash-match the banked
+manifest; **`pg1342.txt` does not** (two typographic lines changed upstream). Filed at full size in
+`CORRECTIONS.md` 2026-09-02; fixed by `tools/pivot/pin_sources.py` and `source_pins.json`. Whether
+an archived copy of the banked edition exists **COULD NOT be verified** — the Internet Archive is
+blocked by this container's egress policy.
+
+### 5.7 Earlier findings closed
+
+- **F5** (undeclared imports): `requirements-repro.txt` now declares `torch>=2.13` and
+  `zstandard>=0.25`.
+- **F9** (LICENSE form): `LICENSE` is now the canonical Apache-2.0 text (sha256 `cfc7749b…`,
+  fetched from apache.org); the copyright line moved to `NOTICE`.
+- **F10** (outbound prose licence): decided — Apache-2.0, deliberately; stated in
+  `outbound/README.md`.
+
+## Updated consolidated COULD NOT VERIFY list (2026-09-02)
+
+1. Any pg5200 copyright-holder terms that exist *outside* the file — none are linked from the
+   file or the catalog page (§5.1).
+2. Whether ESA's general website terms govern the product directory at
+   `navigation-office.esa.int/products/` (§5.4).
+3. The licence of MapleLCMDistChronoBT from its declared source, which was unreachable (§5.3).
+4. Submitter-level IP claims on individual NCBI assembly records (§5.5).
+5. Whether an archived copy of the banked pg1342 edition exists (§5.6).
+
+Resolved since 2026-08-31: the pg5200 terms as stated in the file; the public-domain status PG
+asserts for the other nine editions; ISA-L and five of six SAT solver licences; the IGS and BKG
+terms basis, with attribution recorded; NCBI's own terms for `data/asmprov/`; F5, F9, F10.
+
+## Reproducing the follow-up
+
+```
+cat docs/compliance/sources/MANIFEST.json                          # every URL, sha256, byte count, and the unreachable hosts
+python3 tools/pivot/pin_sources.py                                 # sources hash to the banked edition (or are pinned back to it)
+grep -n "commercial" docs/compliance/sources/lingeling-*_COPYING.txt
+grep -n "commercial" docs/compliance/sources/IGS_Data_and_Product_Disclaimer_and_Terms_of_Use_200805.txt
+git ls-files data/gnss                                             # now empty
 ```

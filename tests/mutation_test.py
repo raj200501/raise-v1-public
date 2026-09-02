@@ -1010,6 +1010,163 @@ def _(root):
     return rc, out
 
 
+# ---------------------------------------------------------------- carve2048 gate (preregistration 0011)
+#
+# The 0007 protocol at the midpoint carve, with two clauses 0007 did not have: the corpus must sit
+# past BOTH earlier corpora by offset (not only by the flag the script sets), and the expanded margin
+# must clear with the gutenberg family excluded - the family whose shared byte pool voids the
+# disjointness guarantee. Both must be shown to fail on their own.
+
+GOOD_CARVE2048 = {
+    "carve_bytes": 2048, "reference_carve_bytes": 4096, "matched_rung": 100000,
+    "n_rungs": 4, "decades_spanned": 2.6990,
+    "within_top1": 0.17, "within_best_trivial_baseline": 0.09,
+    "within_best_trivial_baseline_name": "logistic",
+    "within_best_baseline_expanded": 0.11,
+    "within_best_baseline_expanded_name": "depth16_tree",
+    "within_top1_non_gutenberg": 0.18,
+    "within_best_baseline_expanded_non_gutenberg": 0.115,
+    "within_best_baseline_expanded_non_gutenberg_name": "depth16_tree",
+    "within_slope": 0.04, "within_slope_ci95_low": 0.035,
+    "transfer_top1": 0.15, "reference_matched_rung_top1": 0.1965,
+    "chance_accuracy": 0.038462, "within_shuffled_label_accuracy": 0.0390,
+    "within_split_is_grouped_by_source": True, "corpora_share_source_chunks": False,
+    "corpus_b_chunk_offset": 75000,
+    "n_classes": 26,
+}
+
+
+def _carve2048(root, art=GOOD_CARVE2048):
+    os.makedirs(os.path.join(root, "artifacts", "pivot"), exist_ok=True)
+    json.dump(art, open(os.path.join(root, "artifacts", "pivot",
+                                     "carve_generalisation_2048.json"), "w"))
+    shutil.copy(os.path.join(REPO, "tools", "readers", "carve2048_verdict.py"),
+                os.path.join(root, "tools", "readers", "carve2048_verdict.py"))
+    rc, out = run([PY, "tools/readers/carve2048_verdict.py"], root)
+    if rc != 0:
+        return rc, out
+    v = json.load(open(os.path.join(root, "artifacts", "pivot",
+                                    "carve_generalisation_2048_verdict.json")))
+    ok = v["verdict"] == "CARVE_ROBUST"
+    return (0 if ok else 1), (f"verdict={v['verdict']} boundary={v['boundary_bytes']} "
+                              f"within={v['within_size_failed_clauses']} "
+                              f"transfer={v['transfer_failed_clauses']}")
+
+
+def _c2mut(**kw):
+    a = dict(GOOD_CARVE2048); a.update(kw); return a
+
+
+@case("carve2048", "control-robust-result-passes", "pass")
+def _(root):
+    return _carve2048(root)
+
+
+@case("carve2048", "within-margin-over-the-frozen-set-below-bar-is-rejected", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(within_best_trivial_baseline=0.13))
+
+
+@case("carve2048", "within-margin-over-the-expanded-set-below-bar-is-rejected", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(within_best_baseline_expanded=0.13))
+
+
+@case("carve2048", "gutenberg-excluded-margin-below-bar-is-rejected-even-when-the-full-margin-clears", "fail")
+def _(root):
+    # Full-set margin 0.06 clears; the rows the disjointness guarantee actually covers do not.
+    return _carve2048(root, _c2mut(within_best_baseline_expanded_non_gutenberg=0.14))
+
+
+@case("carve2048", "a-missing-gutenberg-excluded-field-reads-as-failure-not-as-a-pass", "fail")
+def _(root):
+    a = _c2mut(); del a["within_top1_non_gutenberg"]
+    return _carve2048(root, a)
+
+
+@case("carve2048", "within-slope-lower-bound-touching-zero-is-rejected", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(within_slope_ci95_low=0.0))
+
+
+@case("carve2048", "within-null-control-above-chance-plus-tolerance-is-rejected", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(within_shuffled_label_accuracy=0.0585))
+
+
+@case("carve2048", "non-grouped-split-is-rejected-however-good-the-numbers", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(within_split_is_grouped_by_source=False, within_top1=0.95,
+                                   within_top1_non_gutenberg=0.95))
+
+
+@case("carve2048", "too-few-rungs-is-rejected", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(n_rungs=3))
+
+
+@case("carve2048", "too-few-decades-is-rejected", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(decades_spanned=1.9999))
+
+
+@case("carve2048", "the-wrong-carve-size-is-rejected-the-reader-is-frozen-for-2048", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(carve_bytes=1024))
+
+
+@case("carve2048", "transfer-margin-below-bar-is-rejected", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(transfer_top1=0.13))
+
+
+@case("carve2048", "corpora-sharing-source-chunks-invalidates-the-transfer-arm", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(corpora_share_source_chunks=True, transfer_top1=0.60))
+
+
+@case("carve2048", "an-offset-inside-corpus-B-range-is-rejected-whatever-the-flag-says", "fail")
+def _(root):
+    # 50000 is past corpus A (so the script's flag would be False) but inside corpus B's range.
+    return _carve2048(root, _c2mut(corpus_b_chunk_offset=50000, corpora_share_source_chunks=False))
+
+
+@case("carve2048", "an-unset-disjointness-flag-reads-as-failure-not-as-a-pass", "fail")
+def _(root):
+    a = _c2mut(); del a["corpora_share_source_chunks"]
+    return _carve2048(root, a)
+
+
+@case("carve2048", "a-missing-field-reads-as-failure-not-as-a-pass", "fail")
+def _(root):
+    a = _c2mut(); del a["within_top1"]
+    return _carve2048(root, a)
+
+
+@case("carve2048", "absent-artifact-emits-no-verdict", "fail")
+def _(root):
+    shutil.copy(os.path.join(REPO, "tools", "readers", "carve2048_verdict.py"),
+                os.path.join(root, "tools", "readers", "carve2048_verdict.py"))
+    return run([PY, "tools/readers/carve2048_verdict.py"], root)
+
+
+@case("carve2048", "a-transfer-only-failure-is-named-SIZE_SPECIFIC-with-the-boundary-below-2048", "fail")
+def _(root):
+    rc, out = _carve2048(root, _c2mut(transfer_top1=0.13))
+    if rc != 0 and ("verdict=CARVE_SIZE_SPECIFIC" not in out or "boundary=(1024, 2048]" not in out):
+        return 0, out + " !! a transfer-only failure was not named SIZE_SPECIFIC with the right boundary"
+    return rc, out
+
+
+@case("carve2048", "a-within-size-failure-is-NOT-softened-and-places-the-boundary-above-2048", "fail")
+def _(root):
+    rc, out = _carve2048(root, _c2mut(within_top1=0.10, within_top1_non_gutenberg=0.10,
+                                      transfer_top1=0.10))
+    if rc != 0 and ("verdict=CARVE_FAILS" not in out or "boundary=(2048, 4096]" not in out):
+        return 0, out + " !! a within-size failure was softened or mis-bracketed"
+    return rc, out
+
+
 # ---------------------------------------------------------------- c1 gate (preregistration 0008)
 #
 # A SEARCH reader. Its failure modes differ from a measurement reader's: the dangerous outcome is
