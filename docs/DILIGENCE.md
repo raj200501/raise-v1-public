@@ -59,7 +59,7 @@ PR was merged with a merge commit, preserving it.
 
 ## "What did you get wrong?"
 
-`CORRECTIONS.md`: eleven entries at full size, including a published figure our own reproduction
+`CORRECTIONS.md`: twelve entries at full size, including a published figure our own reproduction
 contradicted, an instrument warning grepped out of view before a commit, a wrong reading of our own
 null control (an error *against* us, filed anyway), and the audit's thirteen findings. The pattern
 of what the gates missed is stated there: they check mechanical honesty, not reasoning between
