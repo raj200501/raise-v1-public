@@ -300,9 +300,10 @@ never as findings.</p>
 <h2>Verify without trusting us</h2>
 <pre>git clone &lt;repo&gt; &amp;&amp; cd raise-v1
 bash tools/gates.sh                              # every gate, one command, non-zero on any failure
+bash tools/pivot/fetch_sources.sh                # sources must hash to the banked edition, or it fails
 python3 tools/pivot/corpus_manifest.py --check   # prove a rebuilt corpus is byte-identical</pre>
 <p class="mut" style="font-size:14px">Two dependencies, CPU-only. The full record — the 99-candidate
-search that found nothing, four measured laws, three conjectures, and eight corrections — is in the
+search that found nothing, four measured laws, three conjectures, and {n_corrections} corrections — is in the
 repository this page was rendered from.</p>
 </main>'''
 
