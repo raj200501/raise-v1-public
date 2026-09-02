@@ -288,7 +288,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 
 | Result | Value | Class |
 |---|---|---|
-| Every gate can be shown to fail | 153 mutations, 153 detected, 0 survived | primary-verifiable |
+| Every gate can be shown to fail | 166 mutations, 166 detected, 0 survived | primary-verifiable |
 | A number that is real but STALE is caught, not just a fabricated one | `tools/freshness.py`, 9 mutations | primary-verifiable |
 | Preregistration chain verifies, reader unchanged since freeze | 10 entries, head `83707ff0…` | primary-verifiable |
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |
@@ -547,7 +547,7 @@ protocol re-run.
 | Within-size margin, all baselines | ≥ 0.05 | **+0.0099** | **fail** |
 | Transfer margin (4096-trained model, 1024 data) | ≥ 0.05 | **-0.0853** | **fail** |
 | Rungs / decades | 4 / ≥ 2.0 | 4 / 2.699 | pass |
-| Within-size slope 95% lower bound | > 0 | 0.0198 | pass |
+| Within-size slope 95% lower bound (cluster bootstrap) | > 0 | 0.0197 | pass |
 | Null control | ≤ chance + 0.02 | 0.0389 vs 0.038462 | pass |
 | Corpora share source chunks | must be false | false | pass |
 
@@ -579,7 +579,7 @@ words before the number existed.
 
 ### A rising curve that is worthless, which is the whole reason the margin clause exists
 
-The within-size slope is **+0.0204** accuracy points per decade with a 95% lower bound of **0.0198**
+The within-size slope is **+0.0204** accuracy points per decade with a cluster-corrected 95% lower bound of **0.0197**
 that excludes zero. The curve at 1024 genuinely rises with manufactured data. It rises from a base
 that never separates from logistic regression, and it would need many more decades than exist to get
 anywhere. Had this study been run without an A2 margin clause it would have reported a statistically

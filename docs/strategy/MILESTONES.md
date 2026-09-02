@@ -75,9 +75,11 @@ capacity. Prereg 0010 changed only the head — and under 0009's frozen recipe t
 head never trained at all: 0.0385 on real labels, exactly chance, with a null control that
 never became failable (0.0393 train against the frozen 0.30 bar). `VERDICT.md` states the
 open question in its own words: *"A fair 0011 would have to preregister a recipe search per
-head, not a shared recipe."* This milestone is that 0011.
+head, not a shared recipe."* This milestone is that preregistration. (Its id is whatever the
+chain assigns when it is frozen; 0011 was taken on 2026-09-02 by the 2048-byte carve-boundary
+run, so the "0011" in the quoted sentence is a placeholder, not a promise.)
 
-**Preregistration it needs.** A prereg 0011 freezing: the per-head recipe search space
+**Preregistration it needs.** A preregistration freezing: the per-head recipe search space
 (schedules, batch sizes, epoch budgets) *symmetrically for both heads*; the same
 eval-group fingerprint refusal 0009 and 0010 used (the run refuses unless the evaluation
 set matches 0007's corpus B); 0010's failable-null clause carried over (`null_train_top1`

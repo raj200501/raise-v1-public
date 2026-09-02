@@ -21,8 +21,8 @@
       "total": 15
     },
     "carve2048": {
-      "detected": 19,
-      "total": 19
+      "detected": 32,
+      "total": 32
     },
     "claimcheck": {
       "detected": 10,
@@ -150,7 +150,7 @@
     },
     {
       "detected": true,
-      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=80e9bb5177171204)",
+      "evidence": "PREREG CHAIN VERIFY: PASS (1 entry, head=dab0fe73b110020a)",
       "exit_code": 0,
       "expected": "pass",
       "gate": "prereg",
@@ -195,7 +195,7 @@
     },
     {
       "detected": true,
-      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor b80eeec00ad0152b (chain order broken)",
+      "evidence": "  - entry 1: prev_hash 0000000000000000 != actual predecessor b3236058a1416e2b (chain order broken)",
       "exit_code": 1,
       "expected": "fail",
       "gate": "prereg",
@@ -222,7 +222,7 @@
     },
     {
       "detected": true,
-      "evidence": "/tmp/tmp5yoa5lns/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
+      "evidence": "/tmp/tmpl1inzcjs/repo/prereg/0001-seed.json is already frozen; preregistrations are append-only",
       "exit_code": 2,
       "expected": "fail",
       "gate": "prereg",
@@ -951,11 +951,92 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=CARVE_FAILS boundary=(2048, 4096] within=['within margin (frozen set): 0.17 - 0.13 = 0.04 is below the preregistered 0.05'] transfer=[\"transfer margin: 0.15 - 0.13 = 0.02 is below the preregis",
+      "evidence": "verdict=CARVE_FAILS boundary=(2048, 4096] within=['within margin (frozen set): 0.17 - 0.13 = 0.04 is below the preregistered 0.05'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "carve2048",
       "mutation": "within-margin-over-the-frozen-set-below-bar-is-rejected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "the-wrong-reference-carve-size-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "an-artifact-stamped-with-another-preregistration-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "a-different-seed-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "a-different-rung-ladder-is-VOID-even-with-four-rungs",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "a-corpus-with-the-wrong-chunk-count-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "baselines-not-trained-on-the-top-rung-are-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "an-unmatched-matched-rung-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "a-transfer-model-fitted-on-more-rows-than-the-matched-rung-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "a-nonzero-shared-chunk-count-is-VOID-whatever-the-flag-says",
       "observed": "fail"
     },
     {
@@ -978,7 +1059,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=CARVE_FAILS boundary=(2048, 4096] within=['within margin (expanded, gutenberg excluded): within_top1_non_gutenberg or within_best_baseline_expanded_non_gutenberg missing \u2014 the rows the disjoin",
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "carve2048",
@@ -996,7 +1077,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=CARVE_FAILS boundary=(2048, 4096] within=['null control: shuffled labels reached 0.0585, above chance 0.038462 + 0.02'] transfer=[]",
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "carve2048",
@@ -1005,7 +1086,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=CARVE_FAILS boundary=(2048, 4096] within=['split: within_split_is_grouped_by_source is not True'] transfer=[]",
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "carve2048",
@@ -1014,7 +1095,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=CARVE_FAILS boundary=(2048, 4096] within=['scope: n_rungs=3, need >= 4'] transfer=[]",
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "carve2048",
@@ -1023,7 +1104,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=CARVE_FAILS boundary=(2048, 4096] within=['scope: decades_spanned=1.9999, need >= 2.0'] transfer=[]",
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "carve2048",
@@ -1032,7 +1113,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=CARVE_FAILS boundary=(2048, 4096] within=['scope: carve_bytes=1024, this reader is frozen for 2048'] transfer=[]",
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "carve2048",
@@ -1050,16 +1131,16 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=CARVE_SIZE_SPECIFIC boundary=(1024, 2048] within=[] transfer=['transfer: corpora_share_source_chunks is not False \u2014 the transfer model may have trained on source bytes present in this evaluati",
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "carve2048",
-      "mutation": "corpora-sharing-source-chunks-invalidates-the-transfer-arm",
+      "mutation": "corpora-sharing-source-chunks-is-VOID-not-a-transfer-result",
       "observed": "fail"
     },
     {
       "detected": true,
-      "evidence": "verdict=CARVE_SIZE_SPECIFIC boundary=(1024, 2048] within=[] transfer=[\"transfer: corpus_b_chunk_offset=50000 is not >= 75000; the corpus is not past BOTH earlier corpora's chunk ranges, whatever the d",
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "carve2048",
@@ -1068,7 +1149,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=CARVE_SIZE_SPECIFIC boundary=(1024, 2048] within=[] transfer=['transfer: corpora_share_source_chunks is not False \u2014 the transfer model may have trained on source bytes present in this evaluati",
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "carve2048",
@@ -1077,7 +1158,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=CARVE_FAILS boundary=(2048, 4096] within=['within margin: within_top1 or within_best_trivial_baseline missing', 'within margin (expanded): within_top1 or within_best_baseline_expanded missing'",
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "carve2048",
@@ -1109,6 +1190,42 @@
       "expected": "fail",
       "gate": "carve2048",
       "mutation": "a-within-size-failure-is-NOT-softened-and-places-the-boundary-above-2048",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=CARVE_SIZE_SPECIFIC boundary=(1024, 2048] within=[] transfer=['transfer margin (gutenberg excluded): 0.13 - 0.092 = 0.038 is below the preregistered 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "gutenberg-excluded-transfer-margin-below-bar-is-rejected-even-when-the-full-margin-clears",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "a-missing-gutenberg-excluded-transfer-field-is-VOID-not-a-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "a-NaN-field-reads-as-VOID-not-as-a-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID boundary=not bracketed by this run within=[] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "carve2048",
+      "mutation": "a-scope-failure-is-named-VOID-and-brackets-no-boundary",
       "observed": "fail"
     },
     {
@@ -1436,8 +1553,8 @@
       "observed": "fail"
     }
   ],
-  "detected": 153,
+  "detected": 166,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 153
+  "total_mutations": 166
 }

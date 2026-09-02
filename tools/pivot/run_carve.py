@@ -77,19 +77,45 @@ def main() -> int:
         Xb = npz_memmap(args.cache, "X")
         with np.load(args.cache) as z:
             yb = np.asarray(z["y"]); gb = np.asarray(z["g"]); build_s = float(z["build_s"])
+            # A cache built at one carve length silently reused at another would bank a
+            # carve_bytes that is an echo of the command line, not a property of the data. Caches
+            # written since 0011 carry their build parameters; a legacy cache (0007's) does not,
+            # and that is recorded in the artifact rather than papered over.
+            if "carve" in z.files:
+                cache_carve, cache_off = int(z["carve"]), int(z["chunk_offset"])
+                if cache_carve != args.carve or cache_off != args.chunk_offset:
+                    print(f"REFUSING: cache was built at carve {cache_carve}, offset {cache_off}; "
+                          f"the command line says carve {args.carve}, offset {args.chunk_offset}.",
+                          file=sys.stderr)
+                    return 3
+                carve_source = "cache metadata written at build time"
+            else:
+                carve_source = ("command line - legacy cache without build metadata; the chunk-id "
+                                "range below is measured from the data regardless")
     else:
         print(f"[1/6] manufacturing corpus B: carve {args.carve}, {args.chunks} chunks at "
               f"offset {args.chunk_offset}", flush=True)
         Xb, yb, gb, build_s = build(args.chunks, args.chunk_size, args.carve, args.src,
                                     args.procs, 0, args.chunk_offset)
         os.makedirs(os.path.dirname(args.cache), exist_ok=True)
-        np.savez(args.cache, X=Xb, y=yb, g=gb, build_s=build_s)
+        np.savez(args.cache, X=Xb, y=yb, g=gb, build_s=build_s, carve=args.carve,
+                 chunk_offset=args.chunk_offset, chunk_size=args.chunk_size)
         del Xb
         Xb = npz_memmap(args.cache, "X")
+        carve_source = "cache metadata written at build time"
     ncols = Xb.shape[1]
-    print(f"      {len(yb)} fragments, {ncols} features, {build_s}s", flush=True)
+    chunk_id_min, chunk_id_max = int(gb.min()), int(gb.max())
+    if chunk_id_min < args.chunk_offset:
+        print(f"REFUSING: the corpus contains chunk id {chunk_id_min}, below the stated offset "
+              f"{args.chunk_offset}.", file=sys.stderr)
+        return 3
+    print(f"      {len(yb)} fragments, {ncols} features, {build_s}s; chunk ids "
+          f"{chunk_id_min}..{chunk_id_max} (measured from the data)", flush=True)
 
     ev_b, tr_b, rng = grouped_split(yb, gb, args.seed, args.eval_frac, max(args.rungs))
+    # The grouped-split flag is MEASURED: no source chunk may appear on both sides.
+    split_is_grouped = bool(np.intersect1d(np.unique(gb[ev_b]), np.unique(gb[tr_b])).size == 0)
+    n_source_chunks = int(np.unique(gb).size)
     Xe = fill_f32(np.empty((len(ev_b), ncols), np.float32), Xb, ev_b, ncols)
     ye = np.asarray(yb[ev_b])
     # The gutenberg family draws its chunks from ONE shared byte pool, so "disjoint source chunks"
@@ -168,6 +194,12 @@ def main() -> int:
     Xa = npz_memmap(args.reference_cache, "X")
     with np.load(args.reference_cache) as z:
         ya = np.asarray(z["y"]); ga = np.asarray(z["g"])
+    # Disjointness is MEASURED here, from the two corpora's chunk ids, not echoed from the
+    # command line: the flag the reader gates on is the count of shared chunk ids being zero.
+    n_shared = int(np.intersect1d(np.unique(gb), np.unique(ga)).size)
+    ref_chunk_id_max = int(ga.max())
+    print(f"      corpus A chunk ids up to {ref_chunk_id_max}; shared with corpus B: {n_shared}",
+          flush=True)
     _, tr_a, _ = grouped_split(ya, ga, args.seed, args.eval_frac, args.matched_rung)
     Xtra = fill_f64(np.empty((len(tr_a), ncols), np.float64), Xa, tr_a, ncols)
     ytra = np.asarray(ya[tr_a])
@@ -179,12 +211,17 @@ def main() -> int:
     transfer = round(float(ok_t.mean()), 4)
     transfer_excl = excl(ok_t); transfer_fam = by_family(ok_t)
     print(f"      transfer top-1 {transfer:.4f}  ({time.perf_counter()-t:.0f}s)", flush=True)
+    n_train_a = int(len(ytra))
     del Xtra
 
     print("[6/6] slope", flush=True)
     sys.path.insert(0, os.path.join(REPO, "tools"))
     from scaling import fit as fit_curve
-    fit = fit_curve(per_ex, n_boot=2000, seed=args.seed)
+    # Primary interval: cluster bootstrap over held-out source chunks, the dependence unit the
+    # grouped split declares (CORRECTIONS.md 2026-08-31, defect 1). The fragment-level interval is
+    # banked beside it, labelled superseded, so the two can be compared but not confused.
+    fit = fit_curve(per_ex, n_boot=2000, seed=args.seed, groups=np.asarray(gb[ev_b]))
+    fit_frag = fit_curve(per_ex, n_boot=2000, seed=args.seed)
 
     ref = json.load(open(os.path.join(REPO, "artifacts", "pivot", "deflate_curve.json")))
     ref_matched = next((r["accuracy"] for r in ref["rungs"]
@@ -192,15 +229,27 @@ def main() -> int:
     out = {
         "schema": "raise-v1/carve_generalisation/1",
         "preregistration": args.preregistration,
-        "carve_bytes": args.carve, "reference_carve_bytes": args.reference_carve,
+        "carve_bytes": args.carve, "carve_bytes_source": carve_source,
+        "reference_carve_bytes": args.reference_carve,
         "matched_rung": args.matched_rung,
         "n_classes": N_CONFIGS, "class_names": CONFIG_NAMES,
         "chance_accuracy": round(chance, 6),
-        "corpora_share_source_chunks": not disjoint,
-        "corpus_b_chunk_offset": args.chunk_offset,
+        "corpora_share_source_chunks": n_shared > 0,
+        "n_shared_source_chunks": n_shared,
+        "corpus_b_chunk_offset": chunk_id_min,
+        "corpus_b_chunk_offset_source": "smallest chunk id present in corpus B, measured from its g array",
+        "corpus_b_chunk_id_max": chunk_id_max,
+        "corpus_a_chunk_id_max": ref_chunk_id_max,
         "corpus_a_chunks_used": args.reference_chunks_used,
         "n_fragments": int(len(yb)), "n_eval_fragments": int(len(ye)),
-        "within_split_is_grouped_by_source": True,
+        "n_source_chunks": n_source_chunks,
+        "seed": args.seed,
+        "rungs_requested": [int(r) for r in args.rungs],
+        "within_baselines_trained_on_n": int(nb),
+        "within_matched_rung_top1": next((r["accuracy"] for r in rungs
+                                          if r["n_units"] == args.matched_rung), None),
+        "transfer_n_train": n_train_a,
+        "within_split_is_grouped_by_source": split_is_grouped,
         "within_trivial_baselines": baselines,
         "within_best_trivial_baseline": frozen[fname], "within_best_trivial_baseline_name": fname,
         "within_best_baseline_expanded": baselines[ename],
@@ -225,6 +274,12 @@ def main() -> int:
         "within_slope": fit["primary_fit"]["slope"],
         "within_slope_ci95_low": fit["primary_fit"]["slope_ci95"][0],
         "within_slope_ci95_high": fit["primary_fit"]["slope_ci95"][1],
+        "within_slope_ci95_note": (f"cluster bootstrap over {fit['n_clusters']} held-out source "
+                                   f"chunks, paired across rungs, {fit['bootstrap_resamples']} "
+                                   f"resamples; the fragment-level interval is banked beside it "
+                                   f"as superseded"),
+        "within_slope_ci95_low_fragment_level_superseded": fit_frag["primary_fit"]["slope_ci95"][0],
+        "within_slope_ci95_high_fragment_level_superseded": fit_frag["primary_fit"]["slope_ci95"][1],
         "within_slope_r2": fit["primary_fit"]["r2"],
         "within_permutation_p": fit["permutation_test"]["p_value"],
         "establishes_a_buyer": False,

@@ -1,25 +1,31 @@
 {
   "id": "0011",
   "slug": "carve-2048-boundary",
-  "title": "Where, between 1024 and 4096 bytes, does carved-DEFLATE encoder provenance stop clearing its bar? A third corpus at a 2048-byte carve, disjoint from both earlier corpora, under the 0007 protocol plus a gutenberg-excluded margin clause.",
+  "title": "Where, between 1024 and 4096 bytes, does carved-DEFLATE encoder provenance stop clearing its bar? A third corpus at a 2048-byte carve, disjoint by chunk id from both earlier corpora (a byte-level guarantee for seven of eight content families, not for gutenberg), under the 0007 protocol plus gutenberg-excluded margin clauses in both arms.",
   "scope": {
-    "one_line": "One corpus at a 2048-byte carve, built from 25000 source chunks at index offset 75000 (past corpus A's 0..49999 and corpus B's 50000..74999), one seed, four rungs, measured within-size and with a transfer arm at a matched training rung. It locates the window boundary of the established result to a factor of two and does nothing else.",
+    "one_line": "One corpus at a 2048-byte carve, built from 25000 source chunks at index offset 75000 (past corpus A's 0..49999 and corpus B's 50000..74999), one seed, four rungs, measured within-size and with a transfer arm at a matched training rung. It locates, to a factor of two, the window boundary at which the 0007 protocol's bar clears at its 500000-fragment top rung, and does nothing else.",
+    "naming_note": "The measurement script (tools/pivot/run_carve.py) calls whatever corpus it builds 'corpus B' in its field names - corpus_b_chunk_offset, corpus_b_chunk_id_max - because it was written for 0007. In this preregistration the new corpus is corpus C; the field names are the script's and refer to corpus C throughout.",
     "corpora": "Corpus A is the existing 4096-byte corpus, source chunk indices 0..49999. Corpus B is the existing 1024-byte corpus, indices 50000..74999. Corpus C is new: 2048-byte carve, 25000 chunks at index offset 75000, so C shares NO chunk index with A or B. The chunk index IS the generator seed for the seven synthetic content families. For the gutenberg family it is NOT a byte-level guarantee - every gutenberg chunk is a window at a random offset into one shared pool (CORRECTIONS.md 2026-08-31, defect 2) - which is why this preregistration adds a clause on the gutenberg-excluded rows rather than repeating 0007's sentence as if the audit had not happened.",
-    "matched_rung": "The transfer arm trains on corpus A at 100000, the same rung corpus C is compared at, so the comparison is about carve size and not data volume. Corpus A's banked 100000-rung top-1 is 0.1965; corpus B's was 0.1165 at 1024.",
+    "matched_rung": "The transfer arm trains on corpus A at exactly 100000 rows (the script banks the count it actually used, and the reader checks it) and is evaluated on corpus C's held-out set. Its margin is scored against corpus C's OWN baselines, which - as in 0007 - are trained on the top rung's 500000 rows, not on 100000: a deliberately harder comparison for transfer, stated here so it is not mistaken for a like-for-like one. The like-for-like size comparison is corpus C's own accuracy at its 100000 rung (banked as within_matched_rung_top1) against corpus A's banked 0.1965 and corpus B's banked 0.1165 at the same rung.",
     "rungs": "Four rungs on corpus C: 1000, 10000, 100000, 500000. That is 2.699 decades, as in 0007.",
     "seed": "20260825 throughout, as in 0003, 0006 and 0007.",
     "unit": "One carved 2048-byte window from the middle of one compressed stream.",
     "model_and_features": "The 0003 recipe unchanged: HistGradientBoosting on the 1108-column hand-engineered feature set, explicit validation split, the seven-baseline ladder up to depth-16 trees and logistic regression trained on the same rows as the top rung, null control on shuffled labels. Nothing is tuned for 2048. A recipe change would make this a different question.",
-    "why_2048": "The record holds two carve sizes and a scope sentence between them: 4096 clears (0003, margins +0.1003 frozen and +0.0583 expanded), 1024 ties a dumb rule (0007, +0.0099), and 'valid only at a 4096-byte window' is currently a two-point statement with the boundary unmeasured across a factor of four. 2048 is the geometric midpoint; one run bounds the boundary to a factor of two either way. The information-side prerequisite is already banked from 512 to 4096 (carve_channel_capacity.json: 20.79 to 20.9125 distinct streams of 26), so a failure here is a modelling result, not an information result, exactly as at 1024.",
-    "why_now_despite_the_milestone_sequencing": "docs/strategy/MILESTONES.md sequences M3's carve-size arm after M4's buyer evidence, so that sizes are measured because buyers report them. No buyer has reported a size; this run does not pretend one has. It is run because the boundary of the record's own scope statement is a property of the record, not of a buyer, and because its cost is one banked 1024 ladder (1066.6 build seconds, 11.1-751.5 train seconds per rung, 4 cores, no GPU). If a buyer later reports sizes, those sizes are M3's; this one is the record's.",
-    "expected_outcome_stated_in_advance": "CARVE_FAILS is the expected result. The matched-rung accuracy fell by 0.0800 from 4096 to 1024 and the expanded margin fell from +0.0583 to +0.0099; a margin roughly midway between those two banked values sits below the 0.05 bar. A pass at 2048 would be the surprising outcome, and it is the outcome this preregistration is written so that it cannot be manufactured: the bar is not lowered, the recipe is not tuned, and the gutenberg-excluded clause makes the bar stricter than 0007's, not looser.",
+    "why_2048": "The record holds two carve sizes and a scope sentence between them: 4096 clears (0003, margins +0.1003 frozen and +0.0583 expanded, at an 800000-fragment top rung), 1024 ties a dumb rule (0007, +0.0099, at a 500000-fragment top rung), and 'valid only at a 4096-byte window' is currently a two-point statement with the boundary unmeasured across a factor of four. 2048 is the geometric midpoint; one run under the 0007 protocol (top rung 500000) bounds, to a factor of two, the size at which that protocol's bar clears. The two protocols' top rungs differ (800000 at 4096, 500000 at 1024 and here), which is why the size comparison this preregistration commits to is at the matched 100000 rung, where all three sizes are measured under the same recipe. The information-side prerequisite is already banked from 512 to 4096 (carve_channel_capacity.json: 20.79 to 20.9125 distinct streams of 26), so a failure here is a modelling result, not an information result, exactly as at 1024.",
+    "why_now_despite_the_milestone_sequencing": "docs/strategy/MILESTONES.md sequences M3's carve-size arm after M4's buyer evidence, so that sizes are measured because buyers report them. This run deviates from that sequencing, and the deviation is stated as one: no buyer has reported a size, this run does not pretend one has, and M3 proper - the sizes buyers report - still waits for M4. The deviation is accepted because the boundary of the record's own scope statement is a property of the record whatever any buyer says, and because the cost is small. EXTRAPOLATION: on the order of one banked 1024 ladder - 1066.6 build seconds and 11.1-751.5 train seconds per rung on 4 cores, no GPU - basis: same fragment count, same pipeline, carve length between the two banked points; the actual cost will be banked in this run's cost block.",
+    "expected_outcome_stated_in_advance": "CARVE_FAILS is the expected result. The matched-rung accuracy fell by 0.0800 from 4096 to 1024 and the expanded margin fell from +0.0583 to +0.0099; a margin roughly midway between those two banked values sits below the 0.05 bar. A pass at 2048 would be the surprising outcome, and it is the outcome this preregistration is written so that it cannot be manufactured: the bar is not lowered, the recipe is not tuned, and every added clause can only add a way to fail. The gutenberg-excluded clauses are not expected to be the binding ones - on the 0003 record excluding gutenberg widened the margins, so they are expected to be the slackest of the margin readings - they are there so that a margin carried by leaked rows cannot pass, not because they are expected to bite.",
     "what_this_does_not_cover": "Carve sizes other than 2048 (and the banked 1024 and 4096). Encoders absent from the 26-configuration box. Learned representations (0009, 0010). It does not fix the gutenberg pool leak - it bounds it with a clause. It does not establish a buyer, a customer, a user or a partner, and no outcome here could; establishes_a_buyer is emitted False unconditionally."
   },
   "bar": {
     "scope_carve": {
-      "direction": "higher_is_better",
-      "passes_if": "carve_bytes == 2048 and reference_carve_bytes == 4096. The reader is frozen for this size; an artifact at any other size is rejected, not read.",
+      "direction": "equality",
+      "passes_if": "carve_bytes == 2048 and reference_carve_bytes == 4096. The reader is frozen for this size; an artifact at any other size is VOID, not read. carve_bytes is taken from the corpus cache's build metadata (the script refuses a cache built at another carve or offset) and the artifact records its source.",
       "threshold": 2048
+    },
+    "scope_parameters_sealed": {
+      "direction": "equality",
+      "passes_if": "preregistration == '0011-carve-2048-boundary'; seed == 20260825; the rung ladder is exactly [1000, 10000, 100000, 500000]; n_source_chunks == 25000 (measured as the number of distinct chunk ids in corpus C); within_baselines_trained_on_n == 500000; matched_rung == 100000; transfer_n_train == 100000 (the number of corpus-A rows the transfer model was actually fitted on, banked by the script). Any mismatch is VOID: a run under other parameters is a different preregistration.",
+      "threshold": 0
     },
     "scope_rungs": {
       "direction": "higher_is_better",
@@ -57,28 +63,80 @@
       "threshold": 0.02
     },
     "disjointness": {
-      "direction": "lower_is_better",
-      "passes_if": "corpora_share_source_chunks is False AND corpus_b_chunk_offset >= 75000. Checked by offset against BOTH earlier corpora, not only by the flag the script sets. A validity condition on the transfer arm, which is void without it.",
+      "direction": "higher_is_better",
+      "passes_if": "n_shared_source_chunks == 0 AND corpora_share_source_chunks is False AND corpus_b_chunk_offset >= 75000. All three are MEASURED by the script from the corpora's chunk-id arrays (the count of chunk ids shared with corpus A, and the smallest chunk id present in corpus C), not echoed from its command line; the reader additionally requires the smallest id to lie past BOTH earlier corpora. A validity condition: a corpus that fails it was not the preregistered corpus, and the run is VOID. For the gutenberg family this is a chunk-id guarantee only, not a byte-level one, which is what the gutenberg-excluded clauses are for.",
       "threshold": 75000
     },
     "transfer_margin": {
       "direction": "higher_is_better",
       "passes_if": "transfer_top1 - within_best_trivial_baseline >= 0.05, where transfer_top1 is a model trained on corpus A at 100000 and evaluated on corpus C's held-out set, and the baseline is corpus C's OWN.",
       "threshold": 0.05
+    },
+    "transfer_margin_gutenberg_excluded": {
+      "direction": "higher_is_better",
+      "passes_if": "transfer_top1_non_gutenberg - within_best_trivial_baseline_non_gutenberg >= 0.05, both scored on corpus C's evaluation rows whose family is not gutenberg. New in 0011: a 4096-trained model has seen gutenberg-adjacent bytes whatever the chunk ids say, so the transfer reading that the disjointness guarantee actually covers is this one.",
+      "threshold": 0.05
+    },
+    "validity_first": {
+      "direction": "lower_is_better",
+      "passes_if": "No validity clause fails: scope (carve_bytes == 2048, reference_carve_bytes == 4096, n_rungs >= 4, decades_spanned >= 2.0), within_split_is_grouped_by_source is True, null control within tolerance, and every field the reader needs present and finite (NaN and inf read as absent). A validity failure is VOID - no boundary bracketed, not a negative - so that a broken run can never be spun as a result in either direction.",
+      "threshold": 0
     }
   },
   "readings": [
     {
       "name": "verdict",
-      "unit": "enum{CARVE_ROBUST,CARVE_SIZE_SPECIFIC,CARVE_FAILS}",
+      "unit": "enum{CARVE_ROBUST,CARVE_SIZE_SPECIFIC,CARVE_FAILS,VOID}",
       "source_artifact": "artifacts/pivot/carve_generalisation_2048_verdict.json",
       "json_path": "$.verdict"
     },
     {
       "name": "boundary_bytes",
-      "unit": "half-open interval of carve sizes in bytes, bracketed with the banked 1024 and 4096 verdicts",
+      "unit": "half-open interval of carve sizes in bytes, bracketed with the banked 1024 and 4096 verdicts; 'not bracketed by this run' under VOID",
       "source_artifact": "artifacts/pivot/carve_generalisation_2048_verdict.json",
       "json_path": "$.boundary_bytes"
+    },
+    {
+      "name": "within_best_trivial_baseline_non_gutenberg",
+      "unit": "fraction, evaluation rows whose family is not gutenberg, best of the frozen baseline set",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.within_best_trivial_baseline_non_gutenberg"
+    },
+    {
+      "name": "transfer_top1_non_gutenberg",
+      "unit": "fraction correct, corpus-A model at the matched rung on corpus-C evaluation rows whose family is not gutenberg",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.transfer_top1_non_gutenberg"
+    },
+    {
+      "name": "n_shared_source_chunks",
+      "unit": "count of chunk ids present in both corpus A and corpus C, measured; must be 0",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.n_shared_source_chunks"
+    },
+    {
+      "name": "within_matched_rung_top1",
+      "unit": "fraction correct at corpus C's 100000 rung - the like-for-like size comparison against 0.1965 (4096) and 0.1165 (1024)",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.within_matched_rung_top1"
+    },
+    {
+      "name": "transfer_n_train",
+      "unit": "count of corpus-A rows the transfer model was fitted on; must be 100000",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.transfer_n_train"
+    },
+    {
+      "name": "within_split_is_grouped_by_source",
+      "unit": "boolean, measured: no source chunk appears on both sides of the split; must be true",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.within_split_is_grouped_by_source"
+    },
+    {
+      "name": "seed",
+      "unit": "integer; must be 20260825",
+      "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "json_path": "$.seed"
     },
     {
       "name": "within_top1",
@@ -144,8 +202,9 @@
   "arms": [
     "WITHIN-SIZE at 2048: four rungs, grouped split by source chunk, the seven-baseline ladder trained on the same rows as the top rung, null control on shuffled labels, cluster-bootstrap slope. Unchanged from 0007 except for the carve length.",
     "TRANSFER at a MATCHED rung: corpus A's model at 100000, scored on corpus C's held-out set against corpus C's OWN baselines. A transfer number that beats nothing local is not transfer.",
-    "GUTENBERG-EXCLUDED reading of the within-size expanded margin, on the rows the disjointness guarantee actually covers. This is the rival explanation 'the margin is carried by leaked bytes' run as a clause, not a paragraph.",
-    "DISJOINTNESS BY OFFSET against both earlier corpora. The script's flag only compares against corpus A; the reader checks the offset itself.",
+    "GUTENBERG-EXCLUDED readings of the within-size expanded margin AND of the transfer margin, on the rows the disjointness guarantee actually covers. This is the rival explanation 'the margin is carried by leaked bytes' run as a clause in both arms, not a paragraph.",
+    "DISJOINTNESS MEASURED, not echoed: the script counts chunk ids shared between corpus A and corpus C from their g arrays and banks the smallest chunk id present; the reader requires zero shared and a smallest id past both earlier corpora.",
+    "VALIDITY FIRST: a run with the wrong scope, a non-grouped split, a leaking null control, or a missing or non-finite field is VOID and brackets nothing. A broken run must not be readable as either a pass or a fail.",
     "PER-FAMILY accuracies at the top rung, for the model and for every baseline, are banked alongside so the decomposition at 2048 can be published the way per_family_curves.json publishes it at 4096. They carry no clause."
   ],
   "stop_rules": [
@@ -153,12 +212,14 @@
     "Within-size passing while transfer fails is CARVE_SIZE_SPECIFIC, boundary in (1024, 2048], and BOTH halves of its meaning are published: not a failure of the label-factory thesis (one model per carve size costs one compression pass), and a failure of the one-model-reads-a-whole-disk-image story.",
     "Both passing is CARVE_ROBUST, boundary in (1024, 2048]. It does not license quoting the 4096 numbers at 2048; the 2048 numbers are quoted at 2048.",
     "A within-size failure is never softened to CARVE_SIZE_SPECIFIC, whatever the transfer arm says.",
-    "A missing field reads as failure. Absence is never a pass. In particular a run that did not score the gutenberg-excluded rows fails the gutenberg-excluded clause.",
+    "A validity failure is VOID: no boundary bracketed, no negative claimed, no positive claimed. VOID is published as VOID, with the failed validity clause named, and is never counted as a CARVE_FAILS or quoted as evidence about the boundary.",
+    "A missing or non-finite field reads as VOID. Absence is never a pass and never a fail. In particular a run that did not score the gutenberg-excluded rows is VOID, not a failure of the task.",
+    "The within-size slope interval is the cluster-bootstrap interval the script computes over held-out source chunks; the fragment-level interval is banked beside it, labelled superseded, and is never the one the reader gates on.",
     "If the run cannot complete under the container's memory or disk (the 800000 rung of 0003 was capped by a ~13.9 GB ceiling), the result is NOT RUN, filed as such, and nothing in the recipe is changed to make it fit. A smaller top rung is a different preregistration.",
     "This cannot revise 0003, 0006 or 0007. Those verdicts stand whatever this one says, and no outcome here clears G5."
   ],
   "thesis": {
-    "what_would_make_it_fail_honestly": "The feature set is 512 bit-alignment histogram columns and 40 alignment summary statistics estimated from the window. At half the bytes the estimates are twice as noisy as at 4096; 0007 showed that at a quarter of the bytes the model no longer separates from logistic regression. The boundary is expected to lie above 2048.",
+    "what_would_make_it_fail_honestly": "Not a mechanism - the record has one and it says the failure is NOT localised: artifacts/pivot/feature_ablation.json found every one of six feature subsets degrades from 4096 to 1024 by a ratio between 0.5895 and 0.6275, and the alignment columns in particular carry little (VERDICT.md, 'it is not localised, so it is not cheaply fixable'). The expectation rests on the two banked points alone: the matched-rung accuracy fell by 0.0800 from 4096 to 1024 and the margin fell from +0.0583 to +0.0099, and 2048 sits between them. The boundary is expected to lie above 2048; no claim is made about why.",
     "what_a_pass_would_mean": "That the 0007 collapse is steep and late rather than gradual - the recipe holds at 2048 and loses everything between 2048 and 1024. That would narrow, not remove, the CARVE_FAILS scope, and the transfer arm would then say whether one model or two is needed across the working range.",
     "what_neither_outcome_means": "Neither outcome names a buyer. The milestone map's own kill for the forensic use case - buyers whose carves are predominantly below the working boundary - is a fact about buyers, and this run measures the boundary, not the buyers."
   },

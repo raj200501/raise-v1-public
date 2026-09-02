@@ -59,7 +59,7 @@ PR was merged with a merge commit, preserving it.
 
 ## "What did you get wrong?"
 
-`CORRECTIONS.md`: ten entries at full size, including a published figure our own reproduction
+`CORRECTIONS.md`: eleven entries at full size, including a published figure our own reproduction
 contradicted, an instrument warning grepped out of view before a commit, a wrong reading of our own
 null control (an error *against* us, filed anyway), and the audit's thirteen findings. The pattern
 of what the gates missed is stated there: they check mechanical honesty, not reasoning between
@@ -74,7 +74,7 @@ python3 tools/pivot/corpus_manifest.py --check       # prove a rebuilt corpus is
 ```
 
 Corpora rebuild deterministically from shipped sources and generators; the manifest banks
-content hashes of every array so the rebuild is *proven* identical, not assumed. 153 mutations across 14 gates certify every gate can fail
+content hashes of every array so the rebuild is *proven* identical, not assumed. 166 mutations across 14 gates certify every gate can fail
 (that count is checked against the mutation report by `tools/freshness.py`, because an earlier
 version of this sentence said 132 while the artifact said 134); the reproduction that matters most — the audit — is
 banked with its kill-list included.

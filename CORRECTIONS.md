@@ -61,6 +61,39 @@ correct behaviour and will be filed here again.
 
 ---
 
+## 2026-09-02 — Quoted the superseded 1024-carve slope bound after banking its replacement
+
+**Claimed:** `VERDICT.md`, the `CARVE_FAILS` clause table and the "rising curve that is worthless"
+paragraph: "Within-size slope 95% lower bound … 0.0198"; `outbound/ONE_PAGER.md`: "a lower bound
+of **0.0198** excluding zero"; `artifacts/verification/coverage.json`, claim
+`carve-rising-but-worthless`: "a 95% lower bound of 0.01975813023327274".
+
+**Actual:** 0.0198 is the fragment-level bound the 2026-08-31 audit found anti-conservative. Its
+replacement — the cluster-bootstrap bound over held-out source chunks, **0.019721**, which rounds
+to **0.0197** — was banked the same day in `artifacts/pivot/carve_generalisation.json`
+(`within_slope_ci95_low`) with the old value kept beside it as
+`within_slope_ci95_low_fragment_level_superseded`. The three sentences kept quoting the
+superseded one. The claim gate passed them because the superseded value is still banked — exactly
+the "real but no longer current" class the freshness gate exists for, and none of the three
+sentences was registered with it.
+
+**Size:** one ten-thousandth of an accuracy point per decade, in three places; no clause changes.
+The size is not the point. The point is that the audit's correction was banked and then not
+propagated, by the same hands, on the same day.
+
+**Cause:** the audit re-derivation wrote the corrected fields into the artifact and a paragraph
+into VERDICT.md about the correction, but did not sweep the document for the old number. Found on
+2026-09-02 by a pre-freeze review of preregistration 0011, which noticed that the coverage
+claim's `reverify` command was also wrong: it named the default `run_carve.py` invocation, which
+would *overwrite* the banked 0007 artifacts rather than re-derive the interval.
+
+**Fix:** the three sentences now quote 0.0197 and say "cluster-corrected"; the coverage claim's
+`reverify` names the frozen reader and the cluster re-derivation; `tools/scaling.py` now performs
+the cluster bootstrap itself (`fit(groups=…)`) so future runs bank the corrected interval as the
+primary one and the fragment-level one as superseded, in the script, not in a post-hoc patch.
+
+---
+
 ## 2026-09-02 — Said "all fixed here" about six red-team findings; one of them was not
 
 **Claimed:** commit `a42d0c7`, message: "RESEARCH QA (accepted): docs/qa/NEW_DOCS_REVIEW.md — six

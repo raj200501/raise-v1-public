@@ -90,7 +90,7 @@ byte-identity ceiling barely moves, **20.9125** distinct streams of 26 at 4096 a
 512. The information is there at 1024. This is a modelling failure, not an information failure.
 
 Note what the 1024 curve does: it **rises**, at **+0.0204** per decade with a lower bound of
-**0.0198** excluding zero, from a base that never separates from logistic regression. Without an A2
+**0.0197** (cluster-corrected) excluding zero, from a base that never separates from logistic regression. Without an A2
 margin clause this would have been published as a clean positive scaling result on a task the model
 cannot do. That is the failure the archived trial killed five candidates on, arriving in our own
 work.
@@ -198,7 +198,7 @@ manufacturing a discrepancy against a subagent that turned out to be right.
 git clone <repo> && cd raise-v1
 python3 tools/preflight.py                        # interpreter + dependency floors, cause and fix
 python3 tools/prereg.py verify                    # chain order, sealed fields, reader hashes
-python3 tests/mutation_test.py                    # 153 deliberate mutations, 153 detected, 0 survived
+python3 tests/mutation_test.py                    # 166 deliberate mutations, 166 detected, 0 survived
 python3 tools/coverage.py                         # coverage map, weakest class first
 python3 tools/claimcheck.py outbound VERDICT.md   # every number traces to a banked artifact
 python3 tools/freshness.py                        # every live number equals its CURRENT artifact value

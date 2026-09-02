@@ -93,7 +93,16 @@ def _refuse(msg: str):
     raise SystemExit(SCOPE_REFUSAL)
 
 
-def fit(rungs: list[dict], n_boot: int = 2000, seed: int = 0) -> dict:
+def fit(rungs: list[dict], n_boot: int = 2000, seed: int = 0, groups=None) -> dict:
+    """Slope of mean score on log10(n_units), with a paired bootstrap interval.
+
+    groups: optional array of length eval_set_size giving each evaluation example's cluster id
+    (here: its source chunk). When given, the bootstrap resamples CLUSTERS with replacement - the
+    dependence unit the grouped split declares - and the interval is the cluster-level one the
+    2026-08-31 audit called for. When omitted, the bootstrap resamples examples and the interval
+    is fragment-level and ANTI-CONSERVATIVE under clustering (see the DEFECT note above); callers
+    that bank a fragment-level interval must label it as such.
+    """
     ns = np.array([r["n_units"] for r in rungs], dtype=float)
     order = np.argsort(ns)
     ns = ns[order]
@@ -122,11 +131,33 @@ def fit(rungs: list[dict], n_boot: int = 2000, seed: int = 0) -> dict:
     rng = np.random.default_rng(seed)
     boot_ppd = np.empty(n_boot)
     boot_ee = np.empty(n_boot)
-    for b in range(n_boot):
-        idx = rng.integers(0, m, size=m)         # paired resample: same items for every rung
-        bm = S[:, idx].mean(axis=1)
-        boot_ppd[b] = _ols(logn, bm)[0]
-        boot_ee[b] = _ols(logn, _error_transform(bm))[0]
+    if groups is not None:
+        g = np.asarray(groups)
+        if len(g) != m:
+            _refuse(f"groups has {len(g)} entries but the evaluation set has {m}")
+        _, gi = np.unique(g, return_inverse=True)
+        n_groups = int(gi.max()) + 1
+        counts = np.bincount(gi, minlength=n_groups).astype(float)
+        sums = np.vstack([np.bincount(gi, weights=S[r], minlength=n_groups)
+                          for r in range(S.shape[0])])          # rungs x clusters
+        for b in range(n_boot):
+            idx = rng.integers(0, n_groups, size=n_groups)     # paired resample of CLUSTERS
+            bm = sums[:, idx].sum(axis=1) / counts[idx].sum()
+            boot_ppd[b] = _ols(logn, bm)[0]
+            boot_ee[b] = _ols(logn, _error_transform(bm))[0]
+        covers = (f"cluster bootstrap: {n_groups} evaluation clusters (source chunks) resampled "
+                  f"with replacement, paired across rungs - the dependence unit the grouped split "
+                  f"declares, per the 2026-08-31 correction")
+    else:
+        n_groups = None
+        for b in range(n_boot):
+            idx = rng.integers(0, m, size=m)         # paired resample: same items for every rung
+            bm = S[:, idx].mean(axis=1)
+            boot_ppd[b] = _ols(logn, bm)[0]
+            boot_ee[b] = _ols(logn, _error_transform(bm))[0]
+        covers = ("evaluation-example sampling only, treating examples as independent "
+                  "- ANTI-CONSERVATIVE under the clustered eval sets this repository "
+                  "uses; see the DEFECT note in this module and CORRECTIONS.md")
 
     def ci(a):
         return [float(np.percentile(a, 2.5)), float(np.percentile(a, 97.5))]
@@ -145,9 +176,9 @@ def fit(rungs: list[dict], n_boot: int = 2000, seed: int = 0) -> dict:
         "eval_set_size": int(m),
         "bootstrap_resamples": int(n_boot),
         "bootstrap_seed": int(seed),
-        "interval_covers": ("evaluation-example sampling only, treating examples as independent "
-                            "- ANTI-CONSERVATIVE under the clustered eval sets this repository "
-                            "uses; see the DEFECT note in this module and CORRECTIONS.md"),
+        "bootstrap_unit": "cluster" if groups is not None else "example",
+        "n_clusters": n_groups,
+        "interval_covers": covers,
         "interval_does_not_cover": ("seed variance (one seed per rung), corpus-manufacture variance "
                                     "(one corpus), and model-class choice (one class held fixed by "
                                     "design). A tight interval here pins the slope GIVEN this "

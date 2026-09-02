@@ -2,12 +2,12 @@
   "claims": [
     {
       "artifact": "artifacts/verification/mutation_report.json",
-      "claim": "Every gate in this repository is shown capable of failing: 153 deliberate mutations across 14 gates, 153 detected, 0 survived.",
+      "claim": "Every gate in this repository is shown capable of failing: 166 deliberate mutations across 14 gates, 166 detected, 0 survived.",
       "class": "primary-verifiable",
       "id": "mutations-detected",
       "json_path": "$.detected",
       "reverify": "python3 tests/mutation_test.py",
-      "value": 153
+      "value": 166
     },
     {
       "artifact": "artifacts/verification/mutation_report.json",
@@ -474,12 +474,12 @@
     },
     {
       "artifact": "artifacts/verification/mutation_report.json",
-      "claim": "The carve-boundary gate of preregistration 0011 (2048-byte carve) is shown capable of failing by 19 deliberate mutations, all detected - including one rejecting a corpus whose offset lies inside corpus B's range whatever the disjointness flag says, one rejecting a gutenberg-excluded margin below the bar while the full-set margin clears, and two checking that each negative verdict is named and bracketed correctly rather than softened.",
+      "claim": "The carve-boundary gate of preregistration 0011 (2048-byte carve) is shown capable of failing by 32 deliberate mutations, all detected - including ones asserting that a run under any sealed parameter other than the preregistered one (stamp, seed, ladder, chunk count, matched rung, rows the transfer model was actually fitted on) is VOID rather than read; that a gutenberg-excluded margin below the bar in EITHER arm is rejected while the full-set margin clears; that NaN reads as absence; and that a scope failure brackets no boundary.",
       "class": "primary-verifiable",
       "id": "carve2048-gate-mutations",
       "json_path": "$.by_gate.carve2048.total",
       "reverify": "python3 tests/mutation_test.py",
-      "value": 19
+      "value": 32
     },
     {
       "artifact": "artifacts/pivot/carve_channel_capacity.json",
@@ -518,11 +518,11 @@
     },
     {
       "artifact": "artifacts/pivot/carve_generalisation.json",
-      "claim": "The 1024-byte curve genuinely rises - slope 0.020449528758347532 accuracy points per decade with a 95% lower bound of 0.01975813023327274 excluding zero - from a base that never separates from logistic regression. Without an A2 margin clause this would have been reported as a clean positive scaling result on a task the model cannot do.",
+      "claim": "The 1024-byte curve genuinely rises - slope 0.020449528758347532 accuracy points per decade with a cluster-corrected 95% lower bound of 0.019721 excluding zero (the fragment-level 0.01975813023327274 is banked beside it as superseded) - from a base that never separates from logistic regression. Without an A2 margin clause this would have been reported as a clean positive scaling result on a task the model cannot do.",
       "class": "primary-verifiable",
       "id": "carve-rising-but-worthless",
       "json_path": "$.within_slope",
-      "reverify": "python3 tools/pivot/run_carve.py",
+      "reverify": "python3 tools/readers/carve_generalisation_verdict.py   # reads the banked artifact; the cluster interval is re-derived from artifacts/pivot/carve_rung_scores.json by tools/scaling.py fit(groups=eval_chunk_ids)",
       "value": 0.020449528758347532
     },
     {

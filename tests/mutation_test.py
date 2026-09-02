@@ -1018,20 +1018,28 @@ def _(root):
 # disjointness guarantee. Both must be shown to fail on their own.
 
 GOOD_CARVE2048 = {
+    "preregistration": "0011-carve-2048-boundary",
     "carve_bytes": 2048, "reference_carve_bytes": 4096, "matched_rung": 100000,
+    "seed": 20260825, "n_source_chunks": 25000,
+    "rungs": [{"n_units": 1000, "accuracy": 0.06}, {"n_units": 10000, "accuracy": 0.10},
+              {"n_units": 100000, "accuracy": 0.14}, {"n_units": 500000, "accuracy": 0.17}],
+    "within_baselines_trained_on_n": 500000, "transfer_n_train": 100000,
     "n_rungs": 4, "decades_spanned": 2.6990,
     "within_top1": 0.17, "within_best_trivial_baseline": 0.09,
     "within_best_trivial_baseline_name": "logistic",
     "within_best_baseline_expanded": 0.11,
     "within_best_baseline_expanded_name": "depth16_tree",
     "within_top1_non_gutenberg": 0.18,
+    "within_best_trivial_baseline_non_gutenberg": 0.092,
+    "within_best_trivial_baseline_non_gutenberg_name": "logistic",
     "within_best_baseline_expanded_non_gutenberg": 0.115,
     "within_best_baseline_expanded_non_gutenberg_name": "depth16_tree",
     "within_slope": 0.04, "within_slope_ci95_low": 0.035,
-    "transfer_top1": 0.15, "reference_matched_rung_top1": 0.1965,
+    "transfer_top1": 0.15, "transfer_top1_non_gutenberg": 0.155,
+    "reference_matched_rung_top1": 0.1965,
     "chance_accuracy": 0.038462, "within_shuffled_label_accuracy": 0.0390,
     "within_split_is_grouped_by_source": True, "corpora_share_source_chunks": False,
-    "corpus_b_chunk_offset": 75000,
+    "n_shared_source_chunks": 0, "corpus_b_chunk_offset": 75000,
     "n_classes": 26,
 }
 
@@ -1064,7 +1072,68 @@ def _(root):
 
 @case("carve2048", "within-margin-over-the-frozen-set-below-bar-is-rejected", "fail")
 def _(root):
-    return _carve2048(root, _c2mut(within_best_trivial_baseline=0.13))
+    # transfer_top1 is raised so that ONLY the frozen-set within clause fails (isolating).
+    rc, out = _carve2048(root, _c2mut(within_best_trivial_baseline=0.13, transfer_top1=0.30))
+    if rc != 0 and "verdict=CARVE_FAILS" not in out:
+        return 0, out + " !! the frozen-set within clause did not produce CARVE_FAILS on its own"
+    return rc, out
+
+
+@case("carve2048", "the-wrong-reference-carve-size-is-VOID", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(reference_carve_bytes=2048))
+
+
+@case("carve2048", "an-artifact-stamped-with-another-preregistration-is-VOID", "fail")
+def _(root):
+    rc, out = _carve2048(root, _c2mut(preregistration="0007-carve-size-generalisation"))
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! a foreign preregistration stamp was read as a result"
+    return rc, out
+
+
+@case("carve2048", "a-different-seed-is-VOID", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(seed=7))
+
+
+@case("carve2048", "a-different-rung-ladder-is-VOID-even-with-four-rungs", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(rungs=[{"n_units": 1000}, {"n_units": 10000},
+                                          {"n_units": 100000}, {"n_units": 400000}]))
+
+
+@case("carve2048", "a-corpus-with-the-wrong-chunk-count-is-VOID", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(n_source_chunks=24999))
+
+
+@case("carve2048", "baselines-not-trained-on-the-top-rung-are-VOID", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(within_baselines_trained_on_n=100000))
+
+
+@case("carve2048", "an-unmatched-matched-rung-is-VOID", "fail")
+def _(root):
+    return _carve2048(root, _c2mut(matched_rung=800000, transfer_n_train=800000))
+
+
+@case("carve2048", "a-transfer-model-fitted-on-more-rows-than-the-matched-rung-is-VOID", "fail")
+def _(root):
+    # matched_rung says 100000 but the script banks that it actually fitted on 800000 rows.
+    rc, out = _carve2048(root, _c2mut(transfer_n_train=800000, transfer_top1=0.60,
+                                      transfer_top1_non_gutenberg=0.60))
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! an over-trained transfer model was read as a result"
+    return rc, out
+
+
+@case("carve2048", "a-nonzero-shared-chunk-count-is-VOID-whatever-the-flag-says", "fail")
+def _(root):
+    rc, out = _carve2048(root, _c2mut(n_shared_source_chunks=3, corpora_share_source_chunks=False))
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! shared chunks were read as a transfer result instead of VOID"
+    return rc, out
 
 
 @case("carve2048", "within-margin-over-the-expanded-set-below-bar-is-rejected", "fail")
@@ -1120,9 +1189,13 @@ def _(root):
     return _carve2048(root, _c2mut(transfer_top1=0.13))
 
 
-@case("carve2048", "corpora-sharing-source-chunks-invalidates-the-transfer-arm", "fail")
+@case("carve2048", "corpora-sharing-source-chunks-is-VOID-not-a-transfer-result", "fail")
 def _(root):
-    return _carve2048(root, _c2mut(corpora_share_source_chunks=True, transfer_top1=0.60))
+    rc, out = _carve2048(root, _c2mut(corpora_share_source_chunks=True, n_shared_source_chunks=3,
+                                      transfer_top1=0.60, transfer_top1_non_gutenberg=0.60))
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! overlapping corpora were read as a transfer result instead of VOID"
+    return rc, out
 
 
 @case("carve2048", "an-offset-inside-corpus-B-range-is-rejected-whatever-the-flag-says", "fail")
@@ -1161,9 +1234,45 @@ def _(root):
 @case("carve2048", "a-within-size-failure-is-NOT-softened-and-places-the-boundary-above-2048", "fail")
 def _(root):
     rc, out = _carve2048(root, _c2mut(within_top1=0.10, within_top1_non_gutenberg=0.10,
-                                      transfer_top1=0.10))
+                                      transfer_top1=0.10, transfer_top1_non_gutenberg=0.10))
     if rc != 0 and ("verdict=CARVE_FAILS" not in out or "boundary=(2048, 4096]" not in out):
         return 0, out + " !! a within-size failure was softened or mis-bracketed"
+    return rc, out
+
+
+@case("carve2048", "gutenberg-excluded-transfer-margin-below-bar-is-rejected-even-when-the-full-margin-clears", "fail")
+def _(root):
+    # Full-row transfer margin 0.06 clears; on the rows the disjointness guarantee covers it does not.
+    return _carve2048(root, _c2mut(transfer_top1_non_gutenberg=0.13))
+
+
+@case("carve2048", "a-missing-gutenberg-excluded-transfer-field-is-VOID-not-a-pass", "fail")
+def _(root):
+    a = _c2mut(); del a["transfer_top1_non_gutenberg"]
+    rc, out = _carve2048(root, a)
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! a missing field was read as a result rather than as VOID"
+    return rc, out
+
+
+@case("carve2048", "a-NaN-field-reads-as-VOID-not-as-a-pass", "fail")
+def _(root):
+    # json.dump writes NaN as a bare token and json.load reads it back; a reader that only checks
+    # the field's TYPE would let NaN through every inequality, since every comparison with NaN
+    # is False - including the ones that would have failed the clause.
+    rc, out = _carve2048(root, _c2mut(within_top1=float("nan")))
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! a NaN was read as a result rather than as VOID"
+    return rc, out
+
+
+@case("carve2048", "a-scope-failure-is-named-VOID-and-brackets-no-boundary", "fail")
+def _(root):
+    # Too few rungs is not evidence that the task fails at 2048. A reader that turned it into
+    # CARVE_FAILS would publish a boundary the data never measured.
+    rc, out = _carve2048(root, _c2mut(n_rungs=3))
+    if rc != 0 and ("verdict=VOID" not in out or "boundary=not bracketed by this run" not in out):
+        return 0, out + " !! a scope failure was read as a result about the boundary"
     return rc, out
 
 
