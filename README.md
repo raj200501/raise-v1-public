@@ -12,7 +12,7 @@ cherry-pick, plus one shipped open artifact a stranger can reproduce from a cold
 |---|---|---|
 | 0 | Domain selection against five hard gates | **terminated — NO VIABLE DOMAIN FOUND** (rounds 1–3, and round 4 agreed) |
 | 1 | Falsify the data thesis cheaply | delivered on the pivot — null control, grouped split and baseline floor all measured first |
-| 2 | The scaling curve | **`CURVE_ESTABLISHED`** at a 4096-byte carve — +0.0491/decade over 2.9031 decades. **`CARVE_FAILS`** at 1024. |
+| 2 | The scaling curve | **`CURVE_ESTABLISHED`** at a 4096-byte carve — +0.0491/decade over 2.9031 decades. **`CARVE_FAILS`** at 1024 and at 2048; boundary (2048, 4096]. |
 | 3 | Ship the credibility artifact | partial — the instrument and the manufacture-and-measure pipeline ship; the 5.8 GB corpus is not committed |
 | 4 | The evidence package (`VERDICT.md`, `CORRECTIONS.md`, coverage map) | delivered |
 
@@ -28,7 +28,10 @@ adds deep trees. Both clear the 0.05 frozen before the corpus existed.
 carve and returned `CARVE_FAILS`: the model ties a dumb rule, and a 4096-trained model falls to
 chance on the shorter window. The information is present at 1024 — the byte-identity ceiling barely
 moves — so this is a modelling failure, and the forensic setting the buyer argument leaned on does
-not guarantee the window the result needs.
+not guarantee the window the result needs. A third preregistration measured the midpoint: at
+2048 bytes the model reaches 0.1741 against logistic regression at 0.1266 — a margin of +0.0475,
+0.0025 short of the 0.05 bar — and +0.0294 against a depth-16 tree, with transfer from 4096 at
+0.0455 against 0.038462 chance. The window boundary of this recipe is bracketed to (2048, 4096].
 
 What it also does not clear is **G5, a named buyer type**. No buyer has been contacted and none is
 claimed. A rising curve on a task nobody needs is a rising curve on a task nobody needs, and the

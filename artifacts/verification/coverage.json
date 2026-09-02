@@ -722,6 +722,70 @@
       "json_path": "$.slope_spread",
       "reverify": "bash -c '.venv/bin/python tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --seed 7 --tag seed-7 --out /tmp/s7.json --scores-out /tmp/s7s.json'",
       "value": 0.0014
+    },
+    {
+      "artifact": "artifacts/pivot/carve_generalisation_2048_verdict.json",
+      "claim": "At a 2048-byte carve the frozen 0011 reader emits CARVE_FAILS with every validity clause passing, bracketing the window boundary of the bar-clearing result to (2048, 4096] under each size's own measured protocol.",
+      "class": "primary-verifiable",
+      "id": "carve2048-verdict",
+      "json_path": "$.verdict",
+      "reverify": "python3 tools/readers/carve2048_verdict.py",
+      "value": "CARVE_FAILS"
+    },
+    {
+      "artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "claim": "At 2048 bytes the model reaches 0.1741 top-1 at 500000 manufactured fragments against a logistic-regression baseline of 0.1266 and a depth-16 tree at 0.1447, both trained on the same rows.",
+      "class": "primary-verifiable",
+      "id": "carve2048-within",
+      "json_path": "$.within_top1",
+      "reverify": "python3 tools/pivot/run_carve.py --carve 2048 --chunks 25000 --chunk-offset 75000 --cache data/pivot/carve_c2048.npz --out artifacts/pivot/carve_generalisation_2048.json --scores-out artifacts/pivot/carve_rung_scores_2048.json --preregistration 0011-carve-2048-boundary",
+      "value": 0.1741
+    },
+    {
+      "artifact": "artifacts/pivot/carve_margins_2048.json",
+      "claim": "The 2048 within-size margin over the frozen baseline set is +0.0475 - 0.0025 short of the 0.05 bar - and +0.0294 over all baselines; both fail the preregistered clause, and the gutenberg-excluded reading (+0.0308) fails it too.",
+      "class": "arithmetic-verifiable",
+      "id": "carve2048-margins",
+      "json_path": "$.margins.within_margin_frozen.value",
+      "note": "Subtraction over banked fields of carve_generalisation_2048.json by tools/pivot/derive_margins.py; the frozen reader computes the same differences and cannot be edited to emit them.",
+      "reverify": "python3 tools/pivot/derive_margins.py",
+      "value": 0.0475
+    },
+    {
+      "artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "claim": "A model trained at 4096 bytes on the matched 100000 rung and evaluated on 2048-byte fragments scores 0.0455 against 0.038462 chance, after reproducing corpus A's banked 0.1965 on corpus A's own held-out set to the fourth decimal - so the transfer failure is not a retraining failure.",
+      "class": "primary-verifiable",
+      "id": "carve2048-transfer",
+      "json_path": "$.transfer_top1",
+      "reverify": "python3 tools/readers/carve2048_verdict.py",
+      "value": 0.0455
+    },
+    {
+      "artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "claim": "Holding training volume fixed at the matched 100000 rung, accuracy is 0.1461 at 2048 bytes against 0.1965 at 4096 and 0.1165 at 1024: the shorter window costs 0.0504 and the longer one buys back 0.0296 (carve_margins_2048.json).",
+      "class": "primary-verifiable",
+      "id": "carve2048-matched-rung",
+      "json_path": "$.within_matched_rung_top1",
+      "reverify": "python3 tools/readers/carve2048_verdict.py",
+      "value": 0.1461
+    },
+    {
+      "artifact": "artifacts/pivot/carve_generalisation_2048.json",
+      "claim": "The 2048 curve rises at 0.0316 accuracy points per decade with a cluster-bootstrap 95% lower bound of 0.0307 over the 5000 held-out source chunks - computed by the measurement script itself, not patched afterwards - from a base that does not clear its margin.",
+      "class": "primary-verifiable",
+      "id": "carve2048-slope",
+      "json_path": "$.within_slope_ci95_low",
+      "reverify": "python3 tools/readers/carve2048_verdict.py",
+      "value": 0.03068861068748717
+    },
+    {
+      "artifact": "artifacts/pivot/corpus_manifest.json",
+      "claim": "The 2048-byte corpus is banked by content hash like the other three, so a rebuilt corpus C is proven byte-identical rather than assumed.",
+      "class": "primary-verifiable",
+      "id": "corpus-manifest-2048",
+      "json_path": "$.corpora.data/pivot/carve_c2048.npz.X.dtype",
+      "reverify": "python3 tools/pivot/corpus_manifest.py --check",
+      "value": "float32"
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

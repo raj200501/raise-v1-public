@@ -146,7 +146,9 @@ def carve_margins(src=CARVE_SRC, out_path=CARVE_OUT, prereg="0007-carve-size-gen
         v = round(float(d[a_]) - float(d[b_]), 4)
         out["margins"][name] = {"value": v, "minuend": {"field": a_, "value": d[a_]},
                                 "subtrahend": {"field": b_, "value": d[b_]},
-                                "clears_bar": bool(v >= 0.05), "meaning": why}
+                                "clears_bar": bool(v >= 0.05),
+                                "distance_to_bar": round(0.05 - v, 4),
+                                "meaning": why}
     with open(out_path, "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=2, sort_keys=True); fh.write("\n")
     for k, v in out["margins"].items():

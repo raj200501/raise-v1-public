@@ -39,8 +39,11 @@ ten times chance, near-flat on incompressible families sitting at the measured c
 
 **No, and that is preregistered and published**: `CARVE_FAILS` at 1024 bytes (prereg 0007), with
 transfer collapsing to chance, an information-ceiling measurement ruling out the easy excuse, and
-two learned-representation attempts (0009, 0010) that did not rescue it. Every number in this
-repository is a 4096-byte-window number and the documents say so.
+two learned-representation attempts (0009, 0010) that did not rescue it. At 2048 bytes (prereg
+0011, expected outcome stated before the corpus existed) it fails again — +0.0475 against the 0.05
+bar on the frozen set, +0.0294 against all baselines, transfer from 4096 at 0.0455 — so the
+boundary of the working window is bracketed to (2048, 4096]. Every number in this repository is a
+4096-byte-window number and the documents say so.
 
 ## "Who buys it?"
 

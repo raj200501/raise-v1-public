@@ -26,8 +26,8 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > clearing margins frozen in advance.
 >
 > Then we measured where our own result breaks, and published that with the same confidence: at a
-> 1024-byte carve the same protocol fails its own bar. Every number I will ever quote you is a
-> 4096-byte-window number.
+> 1024-byte carve the same protocol fails its own bar, and at 2048 it fails by 0.0025. Every
+> number I will ever quote you is a 4096-byte-window number.
 >
 > Then we ran 54 adversarial agents against the whole record. 13 findings survived refutation; all
 > 13 were fixed by measurement and the full audit is published, rejected findings included.
@@ -100,7 +100,11 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > which its frozen reader states rather than counting it either way. So: every number I have
 > quoted is a 4096-byte-window number, and the forensic setting does not guarantee that window.
 > That caveat is in every document we ship, because it is the most important sentence in the
-> record.
+> record. We then measured the midpoint under a third preregistration, with the expected
+> outcome written down first: at 2048 bytes the model reaches 0.1741 against a logistic baseline
+> of 0.1266 — +0.0475 against the 0.05 bar, 0.0025 short — and transfer from 4096 lands at
+> 0.0455. The boundary of our result is bracketed to (2048, 4096], and the near-miss is
+> published at the same size as the misses.
 
 **The audit we invited, and what it found.**
 
@@ -120,7 +124,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 
 > So here is the honest inventory. A validated instrument that reproduces on a cold clone. One
 > real curve with its boundaries measured by the same instrument. A corrections ledger that costs
-> us something to keep. A verification map that prints its weakest class first — 14 of 83 claims
+> us something to keep. A verification map that prints its weakest class first — 14 of 90 claims
 > we ourselves cannot currently re-derive, and it says so. And no buyer yet: G5, a named buyer
 > type, is the gate this work has not cleared, and no result in the repository could have cleared
 > it, because that work happens outside the repository. We are raising to do exactly that work,
@@ -161,9 +165,9 @@ allows and explicitly hedged where it does not.
 > decomposition rather than letting the headline mixture speak for the whole task.
 
 **"Does it survive realistic carve sizes?"**
-> No — at 1024 bytes the model ties a dumb rule and transfer collapses to chance, we preregistered
-> that test ourselves, it failed, and every number we quote is a 4096-byte-window number labelled
-> as such.
+> No — at 1024 bytes the model ties a dumb rule, at 2048 it misses the bar by 0.0025, and transfer
+> collapses to chance at both; we preregistered those tests ourselves, they failed, and every
+> number we quote is a 4096-byte-window number labelled as such.
 
 **"Who buys it?"**
 > No one yet — no buyer has been contacted, none is claimed, and that gap is filed in our

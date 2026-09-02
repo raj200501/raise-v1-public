@@ -1,0 +1,106 @@
+{
+  "bar": 0.05,
+  "derivation": "each value is a - b over fields of artifacts/pivot/carve_generalisation_2048.json; no model is re-run and no new measurement is made",
+  "margins": {
+    "carve_size_cost_at_matched_rung": {
+      "clears_bar": false,
+      "distance_to_bar": 0.1004,
+      "meaning": "the same training volume at 2048 versus at 4096 - what the shorter window costs, holding data volume fixed",
+      "minuend": {
+        "field": "within_top1_at_matched_rung",
+        "value": 0.1461
+      },
+      "subtrahend": {
+        "field": "reference_matched_rung_top1",
+        "value": 0.1965
+      },
+      "value": -0.0504
+    },
+    "carve_size_gain_over_1024_at_matched_rung": {
+      "clears_bar": false,
+      "distance_to_bar": 0.0204,
+      "meaning": "the same training volume at 2048 versus at 1024 (the banked 0007 matched-rung accuracy) - what the longer window buys back, holding data volume fixed",
+      "minuend": {
+        "field": "within_top1_at_matched_rung",
+        "value": 0.1461
+      },
+      "subtrahend": {
+        "field": "carve1024_matched_rung_top1",
+        "value": 0.1165
+      },
+      "value": 0.0296
+    },
+    "transfer_margin": {
+      "clears_bar": false,
+      "distance_to_bar": 0.1311,
+      "meaning": "a model trained at the LONGER carve, evaluated on the shorter corpus, minus that corpus's own best baseline",
+      "minuend": {
+        "field": "transfer_top1",
+        "value": 0.0455
+      },
+      "subtrahend": {
+        "field": "within_best_trivial_baseline",
+        "value": 0.1266
+      },
+      "value": -0.0811
+    },
+    "transfer_margin_gutenberg_excluded": {
+      "clears_bar": false,
+      "distance_to_bar": 0.1354,
+      "meaning": "the 4096-trained model on 2048-byte fragments minus corpus C's own best preregistered baseline, both on the non-gutenberg rows",
+      "minuend": {
+        "field": "transfer_top1_non_gutenberg",
+        "value": 0.0461
+      },
+      "subtrahend": {
+        "field": "within_best_trivial_baseline_non_gutenberg",
+        "value": 0.1315
+      },
+      "value": -0.0854
+    },
+    "within_margin_expanded": {
+      "clears_bar": false,
+      "distance_to_bar": 0.0206,
+      "meaning": "top-1 at the shorter carve minus its best baseline over ALL baselines",
+      "minuend": {
+        "field": "within_top1",
+        "value": 0.1741
+      },
+      "subtrahend": {
+        "field": "within_best_baseline_expanded",
+        "value": 0.1447
+      },
+      "value": 0.0294
+    },
+    "within_margin_expanded_gutenberg_excluded": {
+      "clears_bar": false,
+      "distance_to_bar": 0.0192,
+      "meaning": "top-1 at 2048 minus its best baseline over ALL baselines, both scored on the evaluation rows whose source family is not gutenberg - the rows the chunk-id disjointness guarantee covers",
+      "minuend": {
+        "field": "within_top1_non_gutenberg",
+        "value": 0.1819
+      },
+      "subtrahend": {
+        "field": "within_best_baseline_expanded_non_gutenberg",
+        "value": 0.1511
+      },
+      "value": 0.0308
+    },
+    "within_margin_frozen": {
+      "clears_bar": false,
+      "distance_to_bar": 0.0025,
+      "meaning": "top-1 at the shorter carve minus that corpus's best PREREGISTERED baseline",
+      "minuend": {
+        "field": "within_top1",
+        "value": 0.1741
+      },
+      "subtrahend": {
+        "field": "within_best_trivial_baseline",
+        "value": 0.1266
+      },
+      "value": 0.0475
+    }
+  },
+  "preregistration": "0011-carve-2048-boundary",
+  "schema": "raise-v1/carve_margins/1"
+}

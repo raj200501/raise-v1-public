@@ -13,14 +13,14 @@ plaintext — measured under bars frozen and hash-chained **before the data exis
 - a scaling curve that clears every preregistered clause (`CURVE_ESTABLISHED`, prereg 0003);
 - an operationally usable output — shortlist plus abstention — under its own preregistration
   (`OUTPUT_USABLE`, 0006);
-- and its own boundaries, measured with equal force (`CARVE_FAILS` at 1024 bytes, 0007;
-  `BYTE_MODEL_FAILS`, 0009).
+- and its own boundaries, measured with equal force (`CARVE_FAILS` at 1024 bytes, 0007, and
+  at 2048 bytes, 0011 — boundary bracketed to (2048, 4096]; `BYTE_MODEL_FAILS`, 0009).
 
 ## What is not claimed
 
 **No customer, no user, no partner, no buyer.** G5 — a named buyer type — is uncleared, filed in
 the verification map's weakest class, and no result here could have cleared it. Every number below
-is a **4096-byte-window** number; at 1024 bytes the task fails its own bar.
+is a **4096-byte-window** number; at 1024 and at 2048 bytes the task fails its own bar.
 
 ## The headline curve, with corrected statistics
 
@@ -87,6 +87,12 @@ reading available, fixed before the run; the looser reading would have given **+
   4096-trained model transfers at **0.0403** — chance. The information is present at 1024 (the
   collision ceiling barely moves: 20.9125 → 20.79 across 4096 → 512), so this is a modelling
   failure and is reported as one.
+- **2048-byte carve: `CARVE_FAILS`, by 0.0025.** Within-size margin **+0.0475** over the frozen
+  baseline set against the 0.05 bar, **+0.0294** over all baselines, **+0.0308** with the leaked
+  family excluded; matched-rung accuracy **0.1461** against **0.1965** at 4096 and **0.1165** at
+  1024; transfer from 4096 at **0.0455**, from a model that first reproduced its banked **0.1965**
+  on corpus A. Slope **+0.0316** per decade, cluster interval **[0.0307, 0.0326]**. Every validity
+  clause passed. The window boundary of this recipe is bracketed to (2048, 4096].
 - **A byte-sequence CNN does not rescue it** (0009): 0.0849 against the hand-engineered 0.1165 and
   a byte-histogram logistic at 0.0943. A corrected-head variant (0010) was inconclusive under its
   frozen recipe, and its reader says so rather than counting it either way.

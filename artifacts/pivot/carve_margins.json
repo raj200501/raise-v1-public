@@ -4,6 +4,7 @@
   "margins": {
     "carve_size_cost_at_matched_rung": {
       "clears_bar": false,
+      "distance_to_bar": 0.13,
       "meaning": "the same training volume at 1024 versus at 4096 - what the shorter window costs, holding data volume fixed",
       "minuend": {
         "field": "within_top1_at_matched_rung",
@@ -17,6 +18,7 @@
     },
     "transfer_margin": {
       "clears_bar": false,
+      "distance_to_bar": 0.1353,
       "meaning": "a model trained at the LONGER carve, evaluated on the shorter corpus, minus that corpus's own best baseline",
       "minuend": {
         "field": "transfer_top1",
@@ -30,6 +32,7 @@
     },
     "within_margin_expanded": {
       "clears_bar": false,
+      "distance_to_bar": 0.0401,
       "meaning": "top-1 at the shorter carve minus its best baseline over ALL baselines",
       "minuend": {
         "field": "within_top1",
@@ -43,6 +46,7 @@
     },
     "within_margin_frozen": {
       "clears_bar": false,
+      "distance_to_bar": 0.0401,
       "meaning": "top-1 at the shorter carve minus that corpus's best PREREGISTERED baseline",
       "minuend": {
         "field": "within_top1",

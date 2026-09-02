@@ -23,6 +23,9 @@ raise spent this way buys answers — including the answer "stop" — not activi
   (margin +0.0099 against a bar of 0.05), and a 4096-trained model transfers at 0.0403 —
   chance. The information is present (byte-identity ceiling 20.79 of 26 at 512 bytes
   against 20.9125 at 4096); the representation is what fails.
+- `CARVE_FAILS` at 2048 too (prereg 0011, run 2026-09-02 ahead of M4 with the deviation stated in
+  the preregistration): frozen-set margin +0.0475 against 0.05, stricter margin +0.0294, transfer
+  0.0455. The boundary of the working window is bracketed to (2048, 4096].
 - `BYTE_MODEL_FAILS` / `BYTE_FLAT_FAILS` (preregs 0009, 0010): one small learned
   representation did not rescue 1024, and the corrected-head round came back inconclusive
   because a training recipe tuned under one architecture privileged the incumbent.
@@ -156,9 +159,11 @@ COULD NOT VERIFY.
 **What it answers.** How far the established result extends beyond its box. Prereg 0003's
 own scope paragraph names what is uncovered: *"encoders absent from this box, notably
 7-Zip's deflate, Java's Deflater, Go's flate and the Cloudflare and Windows zlib forks"*,
-and *"carve sizes other than the one frozen here."* Today there are exactly two measured
-sizes — 4096 (works, margin +0.1003 frozen and +0.0583 stricter) and 1024 (fails, margin
-+0.0099) — and nothing between or beyond them. The information-side prerequisite is already
+and *"carve sizes other than the one frozen here."* Today there are three measured
+sizes — 4096 (works, margin +0.1003 frozen and +0.0583 stricter), 2048 (fails by 0.0025 on the
+frozen set, +0.0475, and by more on the stricter one, +0.0294; prereg 0011) and 1024 (fails,
+margin +0.0099) — the boundary is bracketed to (2048, 4096], and nothing is measured beyond
+4096 or below 1024. The information-side prerequisite is already
 banked down to 512 bytes: the byte-identity ceiling is 20.79 distinct streams of 26 at 512
 against 20.9125 at 4096, so any per-size failure is a modelling result, not an information
 result, exactly as 0007 was forced to say.
@@ -259,7 +264,9 @@ figure is invented for it; see COULD NOT VERIFY.
   per training round) because its answer — is 1024 dead or merely mistrained — determines
   which buyers M4's forensic thread can serve.
 - **M3's carve-size arm follows M4's carve-size evidence**: measure the sizes buyers
-  actually report, not sizes chosen for convenience.
+  actually report, not sizes chosen for convenience. (The 2048 run of 2026-09-02 was a
+  deliberate exception, made to bound the record's own scope statement; its preregistration says
+  so and M3 proper still waits for M4.)
 - **M2 runs only if M4 finds a live buyer type at a working carve size.** One more decade
   of a curve nobody needs is the exact thing 0007 taught this repository to stop
   producing: a statistically clean positive scaling result on a task that fails its

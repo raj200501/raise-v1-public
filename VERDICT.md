@@ -108,6 +108,10 @@ carved-DEFLATE task at a matched training rung, shortening the window from 4096 
 - **The information loss does not explain it.** The byte-identity ceiling barely moves across the
   range — 20.9125 distinct streams of 26 at 4096 against 20.79 at 512 — so this is a property of the
   representation, not of the fragment.
+- **Measured a second time, at 2048 bytes (0011).** Transfer lands at 0.0455 against 0.038462
+  chance from a model that reproduced its own 4096 accuracy of 0.1965 first, and the within-size
+  margin fails on every reading — by 0.0025 on the frozen set, by more on the stricter ones. L4
+  rests on two shorter sizes, not one.
 
 **What it retires.** Any candidate whose student receives a variable-size fragment and whose planned
 representation is hand-engineered statistics over it. The result will hold at one size and the
@@ -306,6 +310,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 | **Phase 0 domain selection** | **Terminated with no domain. 99 candidates, 8 adversarial reviews, 0 SELECT.** | arithmetic-verifiable |
 | Phase 1 (falsify the data thesis) | Delivered on the pivot, not on a selected domain. The null control, the grouped split and the trivial-baseline floor were all measured before any learned number was believed. | primary-verifiable |
 | Phase 2 (the scaling curve) | **Delivered on the pivot.** `CURVE_ESTABLISHED` over 2.9031 decades, both margins clearing 0.05. It is a real curve on a real task — and on a domain that reached it through the archived trial rather than through Phase 0 selection, and that still has no buyer. | primary-verifiable |
+| **2048-byte carve (0011)** | **`CARVE_FAILS`** — top-1 0.1741 against logistic 0.1266 (+0.0475, 0.0025 short of the bar) and against a depth-16 tree at 0.1447 (+0.0294); transfer from 4096 at 0.0455. The window boundary is bracketed to (2048, 4096]. Expected outcome, stated in the preregistration before the corpus existed. | primary-verifiable |
 | Phase 3 (credibility artifact) | Partially delivered. The *instrument* ships and reproduces, and the manufacture-and-measure pipeline ships with it; the corpus itself is 5.8 GB and is not committed, so a stranger must re-manufacture rather than download. | n/a |
 | Round 3 screener's own arithmetic | Reported 11 adversarial reviews. Recounted from the banked artifacts: **8**. The screener's candidate total of 99 is correct. | arithmetic-verifiable |
 | Our own allocation-flag count | Recorded 76 against a subagent's 77 and filed it as *the subagent's* discrepancy. The subagent was right. Filed in `CORRECTIONS.md` at full size. | primary-verifiable |
@@ -322,7 +327,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **14 of 83 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 90 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -351,8 +356,8 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 | Class | Count | Meaning |
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
-| `arithmetic-verifiable` | 11 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 58 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `arithmetic-verifiable` | 12 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
+| `primary-verifiable` | 64 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -585,6 +590,75 @@ that never separates from logistic regression, and it would need many more decad
 anywhere. Had this study been run without an A2 margin clause it would have reported a statistically
 clean positive scaling result on a task the model cannot do. That is exactly the failure the
 archived trial killed five candidates on, arriving this time in our own work.
+
+### The boundary, bracketed — `CARVE_FAILS` at 2048 too (preregistration 0011)
+
+Preregistration 0011, frozen at chain seq 11 (NIST Beacon pulse 1924204, drand round 6431543)
+before the third corpus existed, after two adversarial review rounds whose 60 findings are the
+reason its reader returns `VOID` for anything it cannot vouch for. The expected outcome was written
+into the preregistration before the data: `CARVE_FAILS`. A third corpus at **2048** bytes — 25000
+source chunks at ids 75000..99999, disjoint by chunk id from both earlier corpora — under the 0007
+protocol plus gutenberg-excluded margin clauses in **both** arms.
+
+| | |
+|---|---|
+| **Verdict** | `CARVE_FAILS` — boundary **(2048, 4096]** |
+| **Emitted by** | `tools/readers/carve2048_verdict.py`, frozen before the corpus existed |
+| **Artifact** | `artifacts/pivot/carve_generalisation_2048.json`, margins in `artifacts/pivot/carve_margins_2048.json` |
+| **Validity** | every sealed parameter checked and passed: chunk-id range measured 75000..99999, 0 shared chunks with corpus A, the ten sources and corpus A's arrays hash-match the banked manifest, and the transfer model scored **0.1965** on corpus A's own held-out set — corpus A's banked matched-rung accuracy to the fourth decimal |
+
+| Clause | Bar | Measured | |
+|---|---|---|---|
+| Within-size margin, frozen baseline set | ≥ 0.05 | **+0.0475** | **fail**, by 0.0025 |
+| Within-size margin, all baselines | ≥ 0.05 | **+0.0294** | **fail** |
+| Within-size margin, all baselines, gutenberg excluded | ≥ 0.05 | **+0.0308** | **fail** |
+| Transfer margin (4096-trained model, 2048 data) | ≥ 0.05 | **-0.0811** | **fail** |
+| Transfer margin, gutenberg excluded | ≥ 0.05 | **-0.0854** | **fail** |
+| Within-size slope 95% lower bound (cluster bootstrap, 5000 chunks) | > 0 | 0.0307 | pass |
+| Null control | ≤ chance + 0.02 | 0.0391 vs 0.038462 | pass |
+| Rungs / decades | 4 / ≥ 2.0 | 4 / 2.699 | pass |
+
+**1. It misses by 0.0025 on the frozen set, and by much more on the stricter one.** Top-1 reaches
+**0.1741** at 500000 fragments against logistic regression at **0.1266**: a margin of **+0.0475**
+where the bar is 0.05. The three frozen-set margins now read **+0.0099** at 1024, **+0.0475** at
+2048 and **+0.1003** at 4096. The stricter reading is not close: the depth-16 tree reaches
+**0.1447** at 2048 (it was **0.1103** at 1024 and **0.1812** at 4096), for a margin of **+0.0294**.
+Excluding the gutenberg family — the rows the chunk-id disjointness guarantee does not cover —
+moves the stricter margin to **+0.0308**, so the near-miss is not carried by leaked rows either.
+
+**2. Holding data volume fixed, each halving of the window costs about the same.** At the matched
+100000 rung: **0.1165** at 1024, **0.1461** at 2048, **0.1965** at 4096. The step from 2048 to 4096
+is worth **0.0504**; the step from 1024 to 2048 is worth **0.0296**.
+
+**3. Transfer collapses again, and this time the collapse is certified.** The 4096-trained model
+scores **0.0455** on 2048-byte fragments against **0.038462** chance (**0.0461** with gutenberg
+excluded), having first reproduced corpus A's banked **0.1965** on corpus A's own evaluation set.
+Retraining is not the explanation; the representation is. L4 now rests on two shorter sizes, not
+one.
+
+**4. The 2048 curve rises, from a base that does not clear.** Slope **+0.0316** per decade with a
+cluster-bootstrap interval of **[0.0307, 0.0326]** over the 5000 held-out chunks, r² **0.9919**,
+between 1024's **+0.0204** and 4096's **+0.0491**. Rungs: **0.0882**, **0.1140**, **0.1461**,
+**0.1741**. Per family at the top rung: csv **0.2915**, log **0.2482**, json **0.2359**, code
+**0.1945**, gutenberg **0.1208**, mixed **0.1098**, base64 **0.103**, binary **0.0925** — the
+same ordering as at 4096, compressed.
+
+**5. The scope sentence is now a measurement.** "Valid only at a 4096-byte window" was a two-point
+statement with the boundary unmeasured across a factor of four. It is now bracketed to
+**(2048, 4096]**, each size under its own measured protocol (4096 at an 800000-fragment top rung
+in 0003; 1024 and 2048 at 500000). Nothing here says what happens above 4096 or below 1024.
+
+**Cost, banked.** Corpus build **1564.0** seconds on 4 cores, no GPU; training **12.1**, **26.0**,
+**125.5** and **1036.0** seconds per rung. Three earlier attempts were killed by container
+restarts — two during the corpus build, one during the baselines — and the fourth reused the
+corpus cache the third had written; the reader checks that cache's build metadata, not the
+command line, which is why a reused cache is safe to trust.
+
+**What it does not establish.** A buyer. Anything about a different recipe at 2048: a frozen-set
+margin 0.0025 short of the bar is exactly the gap a per-head recipe search might close, and that
+is a new preregistration (M1's question at a second size), not a footnote to this one. The
+stricter margin, +0.0294 against the deep tree, is not a gap a recipe search should be expected
+to close.
 
 ### A learned representation over raw bytes does not rescue it either — `BYTE_MODEL_FAILS`
 

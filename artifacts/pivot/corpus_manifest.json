@@ -24,6 +24,30 @@
         ]
       }
     },
+    "data/pivot/carve_c2048.npz": {
+      "X": {
+        "dtype": "float32",
+        "sha256": "691b5f1293c60dda05721e43d83ae6a0b5fc94e25e8d85b95d6fb8080d7a350b",
+        "shape": [
+          650000,
+          1108
+        ]
+      },
+      "g": {
+        "dtype": "int32",
+        "sha256": "070a4b086f8f7bb84d8c730bb7963525a3fa8ddb4c862dba209a765e8c406c0c",
+        "shape": [
+          650000
+        ]
+      },
+      "y": {
+        "dtype": "int16",
+        "sha256": "7f008413fd5bff9a308ade8fa5769533c5ac557f66ce0f5789a664ac88316c73",
+        "shape": [
+          650000
+        ]
+      }
+    },
     "data/pivot/full_c4096.npz": {
       "X": {
         "dtype": "float32",

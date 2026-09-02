@@ -1,0 +1,31 @@
+{
+  "schema": "raise-v1/engineering_log_0011/1",
+  "why": "Three attempts at the preregistered 0011 run were killed by container restarts (exit 137, uptime reset) that this session could neither predict nor prevent; the fourth reused the corpus cache the third had written. Nothing here is a measurement; it is the record of how the measurement was obtained.",
+  "attempts": [
+    {
+      "name": "attempt1",
+      "lines": 5,
+      "last_line": "8000/25000 chunks, 208000 fragments, 521s",
+      "outcome": "killed by a container restart"
+    },
+    {
+      "name": "attempt2",
+      "lines": 7,
+      "last_line": "12000/25000 chunks, 312000 fragments, 797s",
+      "outcome": "killed by a container restart"
+    },
+    {
+      "name": "attempt3",
+      "lines": 22,
+      "last_line": "depth16_tree       0.1447  (395s, RSS 5.10 GB)",
+      "outcome": "killed by a container restart"
+    },
+    {
+      "name": "attempt4",
+      "lines": 34,
+      "last_line": "wrote artifacts/pivot/carve_generalisation_2048.json",
+      "outcome": "wrote the artifact",
+      "note": "reused data/pivot/carve_c2048.npz written by attempt 3 (build_s 1564.0); run niced with 3 BLAS threads; the reader checks the cache's build metadata"
+    }
+  ]
+}
