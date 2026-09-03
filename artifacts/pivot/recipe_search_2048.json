@@ -1,15 +1,15 @@
 {
-  "best_expanded_for_bar": 0.1465,
-  "best_expanded_head": "deep_tree",
-  "best_expanded_non_gutenberg_for_bar": 0.1529,
-  "best_expanded_non_gutenberg_head": "deep_tree",
-  "best_expanded_non_gutenberg_searched": 0.1529,
-  "best_expanded_searched": 0.1465,
-  "best_frozen_for_bar": 0.0985,
-  "best_frozen_head": "depth3_tree",
-  "best_frozen_non_gutenberg_for_bar": 0.1013,
-  "best_frozen_non_gutenberg_searched": 0.1013,
-  "best_frozen_searched": 0.0985,
+  "best_expanded_for_bar": 0.1886,
+  "best_expanded_head": "logistic",
+  "best_expanded_non_gutenberg_for_bar": 0.1975,
+  "best_expanded_non_gutenberg_head": "logistic",
+  "best_expanded_non_gutenberg_searched": 0.1975,
+  "best_expanded_searched": 0.1886,
+  "best_frozen_for_bar": 0.1886,
+  "best_frozen_head": "logistic",
+  "best_frozen_non_gutenberg_for_bar": 0.1975,
+  "best_frozen_non_gutenberg_searched": 0.1975,
+  "best_frozen_searched": 0.1886,
   "chance_accuracy": 0.038462,
   "class_names": [
     "zlib-1",
@@ -57,12 +57,13 @@
     "n_source_chunks": 25000
   },
   "cost": {
-    "banked_fit_seconds_total": 20004.1,
+    "banked_fit_seconds_total": 20623.3,
     "checkpoints": "artifacts/pivot/recipe_search_2048_ckpt",
     "confirmatory_interruptions": {
       "best_single_feat": 0,
       "deep_tree": 0,
       "depth3_tree": 0,
+      "logistic": 0,
       "majority": 0,
       "stratified": 0
     },
@@ -70,6 +71,7 @@
       "best_single_feat": 36.1,
       "deep_tree": 366.8,
       "depth3_tree": 81.1,
+      "logistic": 619.2,
       "majority": 0.0,
       "stratified": 0.0
     },
@@ -77,7 +79,7 @@
     "logistic_l1_refit_seconds": 503.7,
     "null_seconds": null,
     "selection_seconds_total": 17895.9,
-    "wall_seconds_this_invocation": 2152.7
+    "wall_seconds_this_invocation": 2780.2
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -236,6 +238,60 @@
       "top1": 0.0985,
       "top1_non_gutenberg": 0.1013,
       "utc": "2026-09-03T17:56:14Z",
+      "val": null
+    },
+    "logistic": {
+      "block_refills": [
+        {
+          "order": "canonical",
+          "probe_ok": true,
+          "utc": "2026-09-03T18:14:11Z"
+        }
+      ],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "threads": 3
+      },
+      "family": "logistic",
+      "fit_info": {
+        "n_iter": 500
+      },
+      "fit_rows_sha256": "c716babc84a83fbc0a05b3b65a04614b171e20fa2653a02024e80ff7526d6c9d",
+      "fit_rows_sorted_sha256": "45729322ca18dcd5041ff475ebf1bd30f48460be0ae0d143557fe26f0bc2ef2b",
+      "head": "logistic",
+      "heartbeat_max_rss_gb": 8.4,
+      "id": "L3",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 500000,
+      "params": {
+        "C": 1.0,
+        "max_iter": 1000
+      },
+      "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+      "per_family": {
+        "base64": 0.0902,
+        "binary": 0.0862,
+        "code": 0.2316,
+        "csv": 0.279,
+        "gutenberg": 0.1278,
+        "json": 0.2975,
+        "log": 0.2834,
+        "mixed": 0.1131
+      },
+      "rss_gb": 8.3,
+      "ru_maxrss_gb": 12.63,
+      "scaled": true,
+      "seconds": 619.2,
+      "seed": 20260825,
+      "stage": "confirmatory",
+      "status": "fit",
+      "top1": 0.1886,
+      "top1_non_gutenberg": 0.1975,
+      "utc": "2026-09-03T18:03:44Z",
       "val": null
     },
     "majority": {
@@ -1328,6 +1384,33 @@
       "rss_gb": 8.3,
       "seconds": 366.8,
       "utc": "2026-09-03T18:03:43Z"
+    },
+    {
+      "event": "selection_bound",
+      "fingerprint": "85f9b184279e778e",
+      "name": "confirm_logistic",
+      "pid": 4663,
+      "rss_gb": 8.3,
+      "selection_sha256": "555095287b346c9b5c7197cca9b997e05de00ade9024fd0785edc1fb2834ad91",
+      "utc": "2026-09-03T18:03:44Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "85f9b184279e778e",
+      "name": "confirm_logistic",
+      "pid": 4663,
+      "rss_gb": 8.3,
+      "utc": "2026-09-03T18:03:44Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "85f9b184279e778e",
+      "name": "confirm_logistic",
+      "pid": 4663,
+      "rss_gb": 8.3,
+      "seconds": 619.2,
+      "utc": "2026-09-03T18:14:11Z"
     }
   ],
   "logistic_l1_refit": {
@@ -1379,7 +1462,6 @@
   },
   "logistic_l1_refit_top1": 0.1266,
   "missing_roles": [
-    "logistic",
     "null",
     "model"
   ],
