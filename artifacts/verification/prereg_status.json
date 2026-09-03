@@ -263,10 +263,32 @@
       "reader_sha256": "c3dc012eab1d89849a23a991d7f4fc08f192cc2ceafcba9144f3f15d8de22b97",
       "seq": 12,
       "slug": "recipe-search-2048"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "375196872592857b219ae320a2786d81593a779f9605025558ec57b8bb3dc326",
+          "round": 6434427
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "535286C52235BECF589FED5B8B4357527F2E5A9D164CC895184E284E95EEFDD3DAD232BB4415775ED69879D597D5AF0C3A5792DF05818B8006AE8F3B01880245",
+          "pulse": 1925646,
+          "time_stamp": "2026-09-03T19:30:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-09-03T19:30:49Z",
+      "hash": "d3c5e812e3686c7cfe414ad9533bbc4cd292c7838ca77d1630f36beb0faadd3d",
+      "id": "0013",
+      "prev_hash": "4a230b96e43441aab07b07363c6243b931ca48b449b90080c91343c24c63afbf",
+      "reader": "tools/readers/recipe2048_reread_verdict.py",
+      "reader_sha256": "6c52ddfe62e3258cded4d880004c76717ebd3d3b1d8388020b21abddc0bf646f",
+      "seq": 13,
+      "slug": "recipe-search-2048-reread"
     }
   ],
-  "entries": 12,
-  "head": "4a230b96e43441aab07b07363c6243b931ca48b449b90080c91343c24c63afbf",
+  "entries": 13,
+  "head": "d3c5e812e3686c7cfe414ad9533bbc4cd292c7838ca77d1630f36beb0faadd3d",
   "problems": 0,
   "schema": "raise-v1/prereg_status/1",
   "verified": true

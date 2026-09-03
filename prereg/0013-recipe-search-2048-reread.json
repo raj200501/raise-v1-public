@@ -20,18 +20,65 @@
       "passes_if": "Every validity, control and margin clause of prereg/0012-recipe-search-2048.json, applied unchanged by the successor reader, whose only behavioural change is that second-stage records are expected in roster order. The reader's diff against 0012's reader is the whole specification of the change.",
       "threshold": 0
     },
-    "margin_frozen": {"direction": "higher_is_better", "passes_if": "round(final_top1 - best_frozen_for_bar, 6) >= 0.05 - 1e-9; on the known numbers 0.0234, fails.", "threshold": 0.05},
-    "margin_expanded": {"direction": "higher_is_better", "passes_if": "round(final_top1 - best_expanded_for_bar, 6) >= 0.05 - 1e-9; on the known numbers 0.0234, fails.", "threshold": 0.05},
-    "margin_expanded_gutenberg_excluded": {"direction": "higher_is_better", "passes_if": "round(final_top1_non_gutenberg - best_expanded_non_gutenberg_for_bar, 6) >= 0.05 - 1e-9; on the known numbers 0.0248, fails.", "threshold": 0.05}
+    "margin_frozen": {
+      "direction": "higher_is_better",
+      "passes_if": "round(final_top1 - best_frozen_for_bar, 6) >= 0.05 - 1e-9; on the known numbers 0.0234, fails.",
+      "threshold": 0.05
+    },
+    "margin_expanded": {
+      "direction": "higher_is_better",
+      "passes_if": "round(final_top1 - best_expanded_for_bar, 6) >= 0.05 - 1e-9; on the known numbers 0.0234, fails.",
+      "threshold": 0.05
+    },
+    "margin_expanded_gutenberg_excluded": {
+      "direction": "higher_is_better",
+      "passes_if": "round(final_top1_non_gutenberg - best_expanded_non_gutenberg_for_bar, 6) >= 0.05 - 1e-9; on the known numbers 0.0248, fails.",
+      "threshold": 0.05
+    }
   },
   "readings": [
-    {"name": "verdict", "unit": "enum{RECIPE_FAILS,RECIPE_CLEARS,VOID}", "source_artifact": "artifacts/pivot/recipe_search_2048_reread_verdict.json", "json_path": "$.verdict"},
-    {"name": "reads_artifact_of", "unit": "the preregistration stamp of the artifact read; must be 0012-recipe-search-2048", "source_artifact": "artifacts/pivot/recipe_search_2048_reread_verdict.json", "json_path": "$.reads_artifact_of"},
-    {"name": "boundary_bytes", "unit": "text", "source_artifact": "artifacts/pivot/recipe_search_2048_reread_verdict.json", "json_path": "$.boundary_bytes"},
-    {"name": "margin_failed_clauses", "unit": "list of the failed margin clauses with their arithmetic", "source_artifact": "artifacts/pivot/recipe_search_2048_reread_verdict.json", "json_path": "$.margin_failed_clauses"},
-    {"name": "validity_failed_clauses", "unit": "list; must be empty for a non-VOID verdict", "source_artifact": "artifacts/pivot/recipe_search_2048_reread_verdict.json", "json_path": "$.validity_failed_clauses"},
-    {"name": "final_top1", "unit": "fraction, from 0012's artifact (0.212 known)", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.final_top1"},
-    {"name": "best_expanded_for_bar", "unit": "fraction, from 0012's artifact (0.1886 known)", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.best_expanded_for_bar"}
+    {
+      "name": "verdict",
+      "unit": "enum{RECIPE_FAILS,RECIPE_CLEARS,VOID}",
+      "source_artifact": "artifacts/pivot/recipe_search_2048_reread_verdict.json",
+      "json_path": "$.verdict"
+    },
+    {
+      "name": "reads_artifact_of",
+      "unit": "the preregistration stamp of the artifact read; must be 0012-recipe-search-2048",
+      "source_artifact": "artifacts/pivot/recipe_search_2048_reread_verdict.json",
+      "json_path": "$.reads_artifact_of"
+    },
+    {
+      "name": "boundary_bytes",
+      "unit": "text",
+      "source_artifact": "artifacts/pivot/recipe_search_2048_reread_verdict.json",
+      "json_path": "$.boundary_bytes"
+    },
+    {
+      "name": "margin_failed_clauses",
+      "unit": "list of the failed margin clauses with their arithmetic",
+      "source_artifact": "artifacts/pivot/recipe_search_2048_reread_verdict.json",
+      "json_path": "$.margin_failed_clauses"
+    },
+    {
+      "name": "validity_failed_clauses",
+      "unit": "list; must be empty for a non-VOID verdict",
+      "source_artifact": "artifacts/pivot/recipe_search_2048_reread_verdict.json",
+      "json_path": "$.validity_failed_clauses"
+    },
+    {
+      "name": "final_top1",
+      "unit": "fraction, from 0012's artifact (0.212 known)",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.final_top1"
+    },
+    {
+      "name": "best_expanded_for_bar",
+      "unit": "fraction, from 0012's artifact (0.1886 known)",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.best_expanded_for_bar"
+    }
   ],
   "arms": [
     "ONE ARM: the successor reader on 0012's banked artifact, selection file and scores file, unchanged.",
@@ -50,6 +97,24 @@
     "what_neither_outcome_means": "Neither names a buyer. Neither revises 0011. RECIPE_FAILS says that none of these eight model recipes clears against a symmetric baseline search under this protocol, not that no recipe exists."
   },
   "reader": "tools/readers/recipe2048_reread_verdict.py",
-  "frozen": false,
-  "invocation": "python3 tools/readers/recipe2048_reread_verdict.py — no runner, no fit, no scoring; the reader reads artifacts/pivot/recipe_search_2048.json, artifacts/pivot/recipe_search_2048_selection.json and artifacts/pivot/recipe_search_2048_scores.json as committed and writes artifacts/pivot/recipe_search_2048_reread_verdict.json."
+  "frozen": true,
+  "invocation": "python3 tools/readers/recipe2048_reread_verdict.py \u2014 no runner, no fit, no scoring; the reader reads artifacts/pivot/recipe_search_2048.json, artifacts/pivot/recipe_search_2048_selection.json and artifacts/pivot/recipe_search_2048_scores.json as committed and writes artifacts/pivot/recipe_search_2048_reread_verdict.json.",
+  "reader_sha256": "6c52ddfe62e3258cded4d880004c76717ebd3d3b1d8388020b21abddc0bf646f",
+  "frozen_utc": "2026-09-03T19:30:49Z",
+  "git_commit": "8699160b0da90eb05b349038c48a790d6754732c",
+  "git_dirty_at_freeze": false,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1925646,
+      "time_stamp": "2026-09-03T19:30:00.000Z",
+      "output_value": "535286C52235BECF589FED5B8B4357527F2E5A9D164CC895184E284E95EEFDD3DAD232BB4415775ED69879D597D5AF0C3A5792DF05818B8006AE8F3B01880245"
+    },
+    "drand": {
+      "round": 6434427,
+      "randomness": "375196872592857b219ae320a2786d81593a779f9605025558ec57b8bb3dc326"
+    }
+  },
+  "chain_hash": "d3c5e812e3686c7cfe414ad9533bbc4cd292c7838ca77d1630f36beb0faadd3d",
+  "chain_prev_hash": "4a230b96e43441aab07b07363c6243b931ca48b449b90080c91343c24c63afbf"
 }
