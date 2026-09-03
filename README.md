@@ -32,6 +32,9 @@ not guarantee the window the result needs. A third preregistration measured the 
 2048 bytes the model reaches 0.1741 against logistic regression at 0.1266 — a margin of +0.0475,
 0.0025 short of the 0.05 bar — and +0.0294 against a depth-16 tree, with transfer from 4096 at
 0.0455 against 0.038462 chance. The window boundary of this recipe is bracketed to (2048, 4096].
+Decomposed by content family, the 2048 miss is a pass on csv and log (+0.0554 and +0.0501
+against the strongest baseline) masked by the incompressible families; the verdict is the
+mixture's, and the decomposition is published beside it.
 
 What it also does not clear is **G5, a named buyer type**. No buyer has been contacted and none is
 claimed. A rising curve on a task nobody needs is a rising curve on a task nobody needs, and the

@@ -1,0 +1,139 @@
+{
+  "bar": 0.05,
+  "consistency": "per-family top-rung accuracies re-derived here equal the measurement script's banked within_per_family_top_rung to 4 decimals",
+  "derivation": "per-family accuracy per rung and per-family slope with a cluster bootstrap over that family's held-out source chunks (2000 resamples, seed 20260825), all from the banked per-example scores; per-family margins are the family's top-rung accuracy minus that family's best baseline as banked by the measurement script. No model re-run. Cluster unit = source chunk, per the 2026-08-31 correction.",
+  "families": {
+    "base64": {
+      "ci_excludes_zero": true,
+      "n_chunks": 617,
+      "n_eval": 16042,
+      "rung_accuracies": {
+        "1000": 0.0757,
+        "10000": 0.0823,
+        "100000": 0.0892,
+        "500000": 0.092
+      },
+      "slope": 0.006185,
+      "slope_ci95": [
+        0.004826,
+        0.007482
+      ]
+    },
+    "binary": {
+      "ci_excludes_zero": true,
+      "n_chunks": 624,
+      "n_eval": 16224,
+      "rung_accuracies": {
+        "1000": 0.0774,
+        "10000": 0.079,
+        "100000": 0.0849,
+        "500000": 0.092
+      },
+      "slope": 0.005332,
+      "slope_ci95": [
+        0.00388,
+        0.006718
+      ]
+    },
+    "code": {
+      "ci_excludes_zero": true,
+      "n_chunks": 620,
+      "n_eval": 16120,
+      "rung_accuracies": {
+        "1000": 0.0811,
+        "10000": 0.094,
+        "100000": 0.1127,
+        "500000": 0.1355
+      },
+      "slope": 0.019688,
+      "slope_ci95": [
+        0.017892,
+        0.021486
+      ]
+    },
+    "csv": {
+      "ci_excludes_zero": true,
+      "n_chunks": 590,
+      "n_eval": 15340,
+      "rung_accuracies": {
+        "1000": 0.0939,
+        "10000": 0.1353,
+        "100000": 0.1816,
+        "500000": 0.2218
+      },
+      "slope": 0.046991,
+      "slope_ci95": [
+        0.044591,
+        0.049451
+      ]
+    },
+    "gutenberg": {
+      "ci_excludes_zero": true,
+      "n_chunks": 638,
+      "n_eval": 16588,
+      "rung_accuracies": {
+        "1000": 0.0515,
+        "10000": 0.072,
+        "100000": 0.082,
+        "500000": 0.096
+      },
+      "slope": 0.015755,
+      "slope_ci95": [
+        0.01408,
+        0.017486
+      ]
+    },
+    "json": {
+      "ci_excludes_zero": true,
+      "n_chunks": 648,
+      "n_eval": 16848,
+      "rung_accuracies": {
+        "1000": 0.0877,
+        "10000": 0.108,
+        "100000": 0.1293,
+        "500000": 0.1654
+      },
+      "slope": 0.027473,
+      "slope_ci95": [
+        0.025442,
+        0.029355
+      ]
+    },
+    "log": {
+      "ci_excludes_zero": true,
+      "n_chunks": 634,
+      "n_eval": 16484,
+      "rung_accuracies": {
+        "1000": 0.0773,
+        "10000": 0.1103,
+        "100000": 0.1438,
+        "500000": 0.1742
+      },
+      "slope": 0.035467,
+      "slope_ci95": [
+        0.03348,
+        0.037652
+      ]
+    },
+    "mixed": {
+      "ci_excludes_zero": true,
+      "n_chunks": 629,
+      "n_eval": 16354,
+      "rung_accuracies": {
+        "1000": 0.0891,
+        "10000": 0.1088,
+        "100000": 0.1117,
+        "500000": 0.1106
+      },
+      "slope": 0.007683,
+      "slope_ci95": [
+        0.006205,
+        0.00918
+      ]
+    }
+  },
+  "schema": "raise-v1/per_family_curves/1",
+  "source_artifact": "artifacts/pivot/carve_generalisation.json",
+  "source_scores": "artifacts/pivot/carve_rung_scores.json",
+  "study": "1024-byte carve, preregistration 0007"
+}

@@ -33,7 +33,9 @@ data as the top rung; the margins over them are the headline clauses.
 
 `artifacts/pivot/per_family_curves.json`: ~+0.09/decade on structured content (csv, log, json) at
 ten times chance, near-flat on incompressible families sitting at the measured collision ceiling
-(`carve_channel_capacity.json`). The headline is a mixture and the decomposition is published.
+(`carve_channel_capacity.json`). The headline is a mixture and the decomposition is published —
+at 2048 too (`per_family_curves_2048.json`): csv and log clear the 0.05 bar on both readings
+(+0.0554 and +0.0501 against the depth-16 tree) while the mixture misses by 0.0025.
 
 ## "Does it survive realistic carve sizes?"
 

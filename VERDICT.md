@@ -327,7 +327,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **14 of 90 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 93 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -356,7 +356,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 | Class | Count | Meaning |
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
-| `arithmetic-verifiable` | 12 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
+| `arithmetic-verifiable` | 15 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
 | `primary-verifiable` | 64 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
@@ -647,6 +647,20 @@ same ordering as at 4096, compressed.
 statement with the boundary unmeasured across a factor of four. It is now bracketed to
 **(2048, 4096]**, each size under its own measured protocol (4096 at an 800000-fragment top rung
 in 0003; 1024 and 2048 at 500000). Nothing here says what happens above 4096 or below 1024.
+
+**6. Where the near-miss lives — a decomposition, not a clause.** `tools/pivot/per_family_curves.py`
+re-derives every family from the banked per-example scores and the per-family baselines the
+script banked (`artifacts/pivot/per_family_curves_2048.json`; the re-derived top-rung accuracies
+equal the artifact's to four decimals). On **csv** and **log** the 2048 model clears the 0.05 bar
+on **both** readings: csv **+0.1105** over logistic and **+0.0554** over the depth-16 tree; log
+**+0.0897** and **+0.0501**. **code** clears the frozen reading (**+0.0684**) and misses the
+stricter one (**+0.0469**); **json** misses both at **+0.0438**; gutenberg, base64, binary and mixed
+miss everything, mixed with a negative margin of **-0.0045**. The headline is a mixture, and the
+mixture's miss is a pass on two structured families masked by four incompressible ones. This
+changes nothing about the verdict — the preregistered unit is the mixture, and the mixture fails —
+and it is the number a buyer whose carves are csv or log would need to see. The same script at
+1024 (`per_family_curves_1024.json`, model side only; that run banked no per-family baselines)
+puts csv at **0.2218** with a slope of **+0.0470** per decade, the steepest thing in the 1024 run.
 
 **Cost, banked.** Corpus build **1564.0** seconds on 4 cores, no GPU; training **12.1**, **26.0**,
 **125.5** and **1036.0** seconds per rung. Three earlier attempts were killed by container

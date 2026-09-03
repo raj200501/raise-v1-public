@@ -127,6 +127,23 @@ chips = "".join([
             f'transfer {c2048["transfer_top1"]}; boundary {v2048["boundary_bytes"]}') if v2048["verdict"] != "VOID"
            else f'VOID: {"; ".join(v2048["validity_failed_clauses"])[:140]}')] if v2048 else []))
 
+fam2048_table = ""
+_pf2048 = A("pivot", "per_family_curves_2048.json")
+if os.path.exists(_pf2048):
+    pf = json.load(open(_pf2048, encoding="utf-8"))["families"]
+    top2048 = str(max(int(k) for k in pf["csv"]["rung_accuracies"]))
+    rows2048 = "".join(
+        f'<tr><td class="mono">{f}</td><td class="mono">{r["rung_accuracies"][top2048]}</td>'
+        f'<td class="mono">{"<strong>" if r["margin_frozen"]["clears_bar"] else ""}{r["margin_frozen"]["value"]:+.4f}{"</strong>" if r["margin_frozen"]["clears_bar"] else ""}</td>'
+        f'<td class="mono">{"<strong>" if r["margin_expanded"]["clears_bar"] else ""}{r["margin_expanded"]["value"]:+.4f}{"</strong>" if r["margin_expanded"]["clears_bar"] else ""}</td>'
+        f'<td class="mono">{r["slope"]:+.4f}</td></tr>'
+        for f, r in sorted(pf.items(), key=lambda kv: -kv[1]["margin_expanded"]["value"]))
+    fam2048_table = (f'<p><strong>Where the 2048 near-miss lives</strong> — a decomposition from the banked scores, '
+                     f'not a preregistered clause. Bold margins clear the 0.05 bar: two structured families pass on both '
+                     f'readings and four incompressible families fail on every reading; the verdict is the mixture\'s.</p>'
+                     f'<table><thead><tr><th>family</th><th>top rung</th><th>margin, frozen set</th><th>margin, all baselines</th><th>slope /decade</th></tr></thead>'
+                     f'<tbody>{rows2048}</tbody></table>')
+
 boundary_2048 = ""
 if c2048 and v2048 and v2048["verdict"] != "VOID":
     boundary_2048 = (f'<p><strong>The boundary is now bracketed to a factor of two.</strong> Preregistration 0011 '
@@ -289,7 +306,7 @@ protocol returns <span class="mono">CARVE_FAILS</span>: within-size top-1
 (margin below the 0.05 bar), and a 4096-trained model transfers at {carve["transfer_top1"]} —
 chance. The byte-identity ceiling barely moves across carve sizes, so this is a modelling failure
 and is reported as one. Two learned byte-sequence attempts (preregs 0009, 0010) did not rescue it.</p>
-{boundary_2048}
+{boundary_2048}{fam2048_table}
 </div>
 <div class="panel good">
 <p><strong>And the leak correction ran against us.</strong> When an adversarial audit found source
