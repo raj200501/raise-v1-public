@@ -54,3 +54,5 @@
 {"name": "sel1_deep_tree_T3", "fingerprint": "b2ca3647e112b693", "event": "started", "utc": "2026-09-03T13:04:59Z", "rss_gb": 4.77, "pid": 31590, "attempt": 1}
 {"name": "sel1_deep_tree_T3", "fingerprint": "b2ca3647e112b693", "event": "completed", "utc": "2026-09-03T13:06:18Z", "rss_gb": 4.77, "pid": 31590, "seconds": 76.3}
 {"name": "sel1_deep_tree_T4", "fingerprint": "a29999f95a6544c2", "event": "started", "utc": "2026-09-03T13:06:18Z", "rss_gb": 4.77, "pid": 31590, "attempt": 1}
+{"name": "sel1_deep_tree_T4", "fingerprint": "a29999f95a6544c2", "event": "completed", "utc": "2026-09-03T13:08:26Z", "rss_gb": 4.77, "pid": 31590, "seconds": 124.0}
+{"name": "sel1_deep_tree_T5", "fingerprint": "c90bcfc447d01cbc", "event": "started", "utc": "2026-09-03T13:08:26Z", "rss_gb": 4.77, "pid": 31590, "attempt": 1}
