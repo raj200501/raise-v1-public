@@ -4,3 +4,5 @@
 {"name": "sel1_model_M2", "fingerprint": "d9cfeb45cbfd3fce", "event": "started", "utc": "2026-09-03T11:18:07Z", "rss_gb": 4.45, "pid": 31590, "attempt": 1}
 {"name": "sel1_model_M2", "fingerprint": "d9cfeb45cbfd3fce", "event": "completed", "utc": "2026-09-03T11:22:52Z", "rss_gb": 4.63, "pid": 31590, "seconds": 269.1}
 {"name": "sel1_model_M3", "fingerprint": "e1be89379aed30ca", "event": "started", "utc": "2026-09-03T11:22:52Z", "rss_gb": 4.45, "pid": 31590, "attempt": 1}
+{"name": "sel1_model_M3", "fingerprint": "e1be89379aed30ca", "event": "completed", "utc": "2026-09-03T11:37:43Z", "rss_gb": 4.68, "pid": 31590, "seconds": 864.2}
+{"name": "sel1_model_M4", "fingerprint": "c08f0a89694516be", "event": "started", "utc": "2026-09-03T11:37:43Z", "rss_gb": 4.68, "pid": 31590, "attempt": 1}
