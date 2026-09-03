@@ -85,3 +85,12 @@
 {"name": "confirm_incumbent", "fingerprint": "4a42fe039b5a03b9", "event": "completed", "utc": "2026-09-03T17:47:10Z", "rss_gb": 8.2, "pid": 4663, "seconds": 1120.5}
 {"name": "confirm_logistic_l1", "fingerprint": "dc6c6112f5a08929", "event": "selection_bound", "utc": "2026-09-03T17:47:10Z", "rss_gb": 8.2, "pid": 4663, "selection_sha256": "555095287b346c9b5c7197cca9b997e05de00ade9024fd0785edc1fb2834ad91"}
 {"name": "confirm_logistic_l1", "fingerprint": "dc6c6112f5a08929", "event": "started", "utc": "2026-09-03T17:47:10Z", "rss_gb": 8.2, "pid": 4663, "attempt": 1}
+{"name": "confirm_logistic_l1", "fingerprint": "dc6c6112f5a08929", "event": "completed", "utc": "2026-09-03T17:55:36Z", "rss_gb": 8.3, "pid": 4663, "seconds": 503.7}
+{"name": "confirm_majority", "fingerprint": "f8269cc3e9bdaa18", "event": "selection_bound", "utc": "2026-09-03T17:55:36Z", "rss_gb": 8.3, "pid": 4663, "selection_sha256": "555095287b346c9b5c7197cca9b997e05de00ade9024fd0785edc1fb2834ad91"}
+{"name": "confirm_majority", "fingerprint": "f8269cc3e9bdaa18", "event": "started", "utc": "2026-09-03T17:55:36Z", "rss_gb": 8.3, "pid": 4663, "attempt": 1}
+{"name": "confirm_majority", "fingerprint": "f8269cc3e9bdaa18", "event": "completed", "utc": "2026-09-03T17:55:36Z", "rss_gb": 8.3, "pid": 4663, "seconds": 0.0}
+{"name": "confirm_stratified", "fingerprint": "c5be4ad84c38c092", "event": "selection_bound", "utc": "2026-09-03T17:55:37Z", "rss_gb": 8.3, "pid": 4663, "selection_sha256": "555095287b346c9b5c7197cca9b997e05de00ade9024fd0785edc1fb2834ad91"}
+{"name": "confirm_stratified", "fingerprint": "c5be4ad84c38c092", "event": "started", "utc": "2026-09-03T17:55:37Z", "rss_gb": 8.3, "pid": 4663, "attempt": 1}
+{"name": "confirm_stratified", "fingerprint": "c5be4ad84c38c092", "event": "completed", "utc": "2026-09-03T17:55:37Z", "rss_gb": 8.3, "pid": 4663, "seconds": 0.0}
+{"name": "confirm_best_single_feat", "fingerprint": "9eabe32d67f2d74a", "event": "selection_bound", "utc": "2026-09-03T17:55:37Z", "rss_gb": 8.3, "pid": 4663, "selection_sha256": "555095287b346c9b5c7197cca9b997e05de00ade9024fd0785edc1fb2834ad91"}
+{"name": "confirm_best_single_feat", "fingerprint": "9eabe32d67f2d74a", "event": "started", "utc": "2026-09-03T17:55:37Z", "rss_gb": 8.3, "pid": 4663, "attempt": 1}

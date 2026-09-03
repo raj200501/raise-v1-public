@@ -1,15 +1,15 @@
 {
-  "best_expanded_for_bar": null,
-  "best_expanded_head": null,
-  "best_expanded_non_gutenberg_for_bar": null,
-  "best_expanded_non_gutenberg_head": null,
-  "best_expanded_non_gutenberg_searched": null,
-  "best_expanded_searched": null,
-  "best_frozen_for_bar": null,
-  "best_frozen_head": null,
-  "best_frozen_non_gutenberg_for_bar": null,
-  "best_frozen_non_gutenberg_searched": null,
-  "best_frozen_searched": null,
+  "best_expanded_for_bar": 0.0385,
+  "best_expanded_head": "stratified",
+  "best_expanded_non_gutenberg_for_bar": 0.0385,
+  "best_expanded_non_gutenberg_head": "stratified",
+  "best_expanded_non_gutenberg_searched": 0.0385,
+  "best_expanded_searched": 0.0385,
+  "best_frozen_for_bar": 0.0385,
+  "best_frozen_head": "stratified",
+  "best_frozen_non_gutenberg_for_bar": 0.0385,
+  "best_frozen_non_gutenberg_searched": 0.0385,
+  "best_frozen_searched": 0.0385,
   "chance_accuracy": 0.038462,
   "class_names": [
     "zlib-1",
@@ -57,15 +57,21 @@
     "n_source_chunks": 25000
   },
   "cost": {
-    "banked_fit_seconds_total": 19016.4,
+    "banked_fit_seconds_total": 19520.1,
     "checkpoints": "artifacts/pivot/recipe_search_2048_ckpt",
-    "confirmatory_interruptions": {},
-    "confirmatory_seconds_by_role": {},
+    "confirmatory_interruptions": {
+      "majority": 0,
+      "stratified": 0
+    },
+    "confirmatory_seconds_by_role": {
+      "majority": 0.0,
+      "stratified": 0.0
+    },
     "incumbent_refit_seconds": 1120.5,
-    "logistic_l1_refit_seconds": null,
+    "logistic_l1_refit_seconds": 503.7,
     "null_seconds": null,
     "selection_seconds_total": 17895.9,
-    "wall_seconds_this_invocation": 1159.7
+    "wall_seconds_this_invocation": 1666.3
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -79,7 +85,98 @@
     "sklearn": "1.9.0",
     "threads": 3
   },
-  "final": {},
+  "final": {
+    "majority": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "threads": 3
+      },
+      "family": "dummy",
+      "fit_info": {},
+      "fit_rows_sha256": "c716babc84a83fbc0a05b3b65a04614b171e20fa2653a02024e80ff7526d6c9d",
+      "fit_rows_sorted_sha256": "45729322ca18dcd5041ff475ebf1bd30f48460be0ae0d143557fe26f0bc2ef2b",
+      "head": "majority",
+      "heartbeat_max_rss_gb": 8.3,
+      "id": "U1",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 500000,
+      "params": {
+        "strategy": "most_frequent"
+      },
+      "params_sha256": "bbc38a05542e68fea091f2d8fd2a373ae1da370b66342d0d41732f165b0bd587",
+      "per_family": {
+        "base64": 0.0385,
+        "binary": 0.0385,
+        "code": 0.0385,
+        "csv": 0.0385,
+        "gutenberg": 0.0385,
+        "json": 0.0385,
+        "log": 0.0385,
+        "mixed": 0.0385
+      },
+      "rss_gb": 8.3,
+      "ru_maxrss_gb": 9.65,
+      "scaled": false,
+      "seconds": 0.0,
+      "seed": 20260825,
+      "stage": "confirmatory",
+      "status": "fit",
+      "top1": 0.0385,
+      "top1_non_gutenberg": 0.0385,
+      "utc": "2026-09-03T17:55:36Z",
+      "val": null
+    },
+    "stratified": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "threads": 3
+      },
+      "family": "dummy",
+      "fit_info": {},
+      "fit_rows_sha256": "c716babc84a83fbc0a05b3b65a04614b171e20fa2653a02024e80ff7526d6c9d",
+      "fit_rows_sorted_sha256": "45729322ca18dcd5041ff475ebf1bd30f48460be0ae0d143557fe26f0bc2ef2b",
+      "head": "stratified",
+      "heartbeat_max_rss_gb": 8.3,
+      "id": "U2",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 500000,
+      "params": {
+        "strategy": "stratified"
+      },
+      "params_sha256": "32f8466a558356e038da2ef1937b54caaf05aa5b85e7b2867ad6dacb022751c6",
+      "per_family": {
+        "base64": 0.0388,
+        "binary": 0.039,
+        "code": 0.0367,
+        "csv": 0.0375,
+        "gutenberg": 0.0382,
+        "json": 0.0401,
+        "log": 0.0403,
+        "mixed": 0.0374
+      },
+      "rss_gb": 8.3,
+      "ru_maxrss_gb": 9.65,
+      "scaled": false,
+      "seconds": 0.0,
+      "seed": 20260825,
+      "stage": "confirmatory",
+      "status": "fit",
+      "top1": 0.0385,
+      "top1_non_gutenberg": 0.0385,
+      "utc": "2026-09-03T17:55:37Z",
+      "val": null
+    }
+  },
   "final_per_family": null,
   "final_status": null,
   "final_top1": null,
@@ -917,14 +1014,138 @@
       "rss_gb": 8.2,
       "seconds": 1120.5,
       "utc": "2026-09-03T17:47:10Z"
+    },
+    {
+      "event": "selection_bound",
+      "fingerprint": "dc6c6112f5a08929",
+      "name": "confirm_logistic_l1",
+      "pid": 4663,
+      "rss_gb": 8.2,
+      "selection_sha256": "555095287b346c9b5c7197cca9b997e05de00ade9024fd0785edc1fb2834ad91",
+      "utc": "2026-09-03T17:47:10Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "dc6c6112f5a08929",
+      "name": "confirm_logistic_l1",
+      "pid": 4663,
+      "rss_gb": 8.2,
+      "utc": "2026-09-03T17:47:10Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "dc6c6112f5a08929",
+      "name": "confirm_logistic_l1",
+      "pid": 4663,
+      "rss_gb": 8.3,
+      "seconds": 503.7,
+      "utc": "2026-09-03T17:55:36Z"
+    },
+    {
+      "event": "selection_bound",
+      "fingerprint": "f8269cc3e9bdaa18",
+      "name": "confirm_majority",
+      "pid": 4663,
+      "rss_gb": 8.3,
+      "selection_sha256": "555095287b346c9b5c7197cca9b997e05de00ade9024fd0785edc1fb2834ad91",
+      "utc": "2026-09-03T17:55:36Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "f8269cc3e9bdaa18",
+      "name": "confirm_majority",
+      "pid": 4663,
+      "rss_gb": 8.3,
+      "utc": "2026-09-03T17:55:36Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "f8269cc3e9bdaa18",
+      "name": "confirm_majority",
+      "pid": 4663,
+      "rss_gb": 8.3,
+      "seconds": 0.0,
+      "utc": "2026-09-03T17:55:36Z"
+    },
+    {
+      "event": "selection_bound",
+      "fingerprint": "c5be4ad84c38c092",
+      "name": "confirm_stratified",
+      "pid": 4663,
+      "rss_gb": 8.3,
+      "selection_sha256": "555095287b346c9b5c7197cca9b997e05de00ade9024fd0785edc1fb2834ad91",
+      "utc": "2026-09-03T17:55:37Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "c5be4ad84c38c092",
+      "name": "confirm_stratified",
+      "pid": 4663,
+      "rss_gb": 8.3,
+      "utc": "2026-09-03T17:55:37Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "c5be4ad84c38c092",
+      "name": "confirm_stratified",
+      "pid": 4663,
+      "rss_gb": 8.3,
+      "seconds": 0.0,
+      "utc": "2026-09-03T17:55:37Z"
     }
   ],
-  "logistic_l1_refit": null,
-  "logistic_l1_refit_top1": null,
+  "logistic_l1_refit": {
+    "block_refills": [],
+    "environment": {
+      "nice": 10,
+      "numpy": "2.4.6",
+      "python": "3.11.15",
+      "sklearn": "1.9.0",
+      "threads": 3
+    },
+    "family": "logistic",
+    "fit_info": {
+      "n_iter": 400
+    },
+    "fit_rows_sha256": "c716babc84a83fbc0a05b3b65a04614b171e20fa2653a02024e80ff7526d6c9d",
+    "fit_rows_sorted_sha256": "45729322ca18dcd5041ff475ebf1bd30f48460be0ae0d143557fe26f0bc2ef2b",
+    "head": "logistic_l1",
+    "heartbeat_max_rss_gb": 8.4,
+    "id": "L1",
+    "interruptions_before_this_fit": 0,
+    "last_heartbeat_rss_gb_before_this_fit": null,
+    "n_fit_rows": 500000,
+    "params": {
+      "max_iter": 400
+    },
+    "params_sha256": "e33ca5cf969577c600139aa1a6892b6f079158aa32fd50bae3c0e0dadb93bae0",
+    "per_family": {
+      "base64": 0.0681,
+      "binary": 0.0796,
+      "code": 0.1261,
+      "csv": 0.181,
+      "gutenberg": 0.093,
+      "json": 0.1921,
+      "log": 0.1585,
+      "mixed": 0.1143
+    },
+    "rss_gb": 8.3,
+    "ru_maxrss_gb": 9.65,
+    "scaled": false,
+    "seconds": 503.7,
+    "seed": 20260825,
+    "stage": "confirmatory",
+    "status": "fit",
+    "top1": 0.1266,
+    "top1_non_gutenberg": 0.1315,
+    "utc": "2026-09-03T17:47:10Z",
+    "val": null
+  },
+  "logistic_l1_refit_top1": 0.1266,
   "missing_roles": [
-    "logistic_l1",
-    "majority",
-    "stratified",
     "best_single_feat",
     "depth3_tree",
     "deep_tree",
