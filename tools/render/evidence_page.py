@@ -36,6 +36,10 @@ covmap  = J("verification", "coverage.json")
 _c2048p = A("pivot", "carve_generalisation_2048.json"); _v2048p = A("pivot", "carve_generalisation_2048_verdict.json")
 c2048 = json.load(open(_c2048p, encoding="utf-8")) if os.path.exists(_c2048p) else None
 v2048 = json.load(open(_v2048p, encoding="utf-8")) if os.path.exists(_v2048p) else None
+# 0012 (symmetric recipe search at 2048) is rendered only once its artifact and verdict exist.
+_r2048p = A("pivot", "recipe_search_2048.json"); _rv2048p = A("pivot", "recipe_search_2048_verdict.json")
+r2048 = json.load(open(_r2048p, encoding="utf-8")) if os.path.exists(_r2048p) else None
+rv2048 = json.load(open(_rv2048p, encoding="utf-8")) if os.path.exists(_rv2048p) else None
 
 git_head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO,
                           capture_output=True, text=True).stdout.strip()
@@ -137,7 +141,12 @@ chips = "".join([
 ] + ([chip(v2048["verdict"], {"CARVE_ROBUST": "pass", "CARVE_SIZE_SPECIFIC": "fail", "CARVE_FAILS": "fail", "VOID": "inc"}[v2048["verdict"]], "0011",
            (f'2048 B: within-size top-1 {c2048["within_top1"]} vs best baseline {c2048["within_best_baseline_expanded"]}; '
             f'transfer {c2048["transfer_top1"]}; boundary {v2048["boundary_bytes"]}') if v2048["verdict"] != "VOID"
-           else f'VOID: {"; ".join(v2048["validity_failed_clauses"])[:140]}')] if v2048 else []))
+           else f'VOID: {"; ".join(v2048["validity_failed_clauses"])[:140]}')] if v2048 else [])
+ + ([chip(rv2048["verdict"], {"RECIPE_CLEARS": "pass", "RECIPE_FAILS": "fail", "VOID": "inc"}[rv2048["verdict"]], "0012",
+           (f'symmetric recipe search at 2048 B: searched model {r2048["selected_model_id"]} {r2048["final_top1"]} vs floored '
+            f'bars frozen {r2048["best_frozen_for_bar"]} / expanded {r2048["best_expanded_for_bar"]}; '
+            f'boundary {rv2048["boundary_bytes"]}') if rv2048["verdict"] != "VOID" and r2048 and r2048.get("complete")
+           else f'VOID: {"; ".join(rv2048["validity_failed_clauses"])[:140]}')] if rv2048 else []))
 
 fam2048_table = ""
 _pf2048 = A("pivot", "per_family_curves_2048.json")
@@ -167,6 +176,22 @@ if c2048 and v2048 and v2048["verdict"] != "VOID":
                      f'matched-rung accuracy {c2048["within_matched_rung_top1"]} against {c2048["reference_matched_rung_top1"]} '
                      f'at 4096. The window boundary for this recipe lies in <span class="mono">{v2048["boundary_bytes"]}</span> '
                      f'bytes, each size under its own measured protocol.</p>')
+
+boundary_0012 = ""
+if r2048 and rv2048 and rv2048["verdict"] != "VOID" and r2048.get("complete"):
+    _fm = r2048["final_top1"]; _bf = r2048["best_frozen_for_bar"]; _be = r2048["best_expanded_for_bar"]
+    _fmn = r2048["final_top1_non_gutenberg"]; _ben = r2048["best_expanded_non_gutenberg_for_bar"]
+    boundary_0012 = (f'<p><strong>Under a symmetric recipe search the 2048 answer is '
+                     f'<span class="mono">{rv2048["verdict"]}</span>.</strong> Preregistration 0012 gave every head '
+                     f'with a hyperparameter — the model, the logistic, the depth-3 tree, the deep tree — eight '
+                     f'enumerated recipes with the 0011 recipe first, one selection rule on a chunk-rule holdout that '
+                     f'never touched the evaluation set, one confirmatory fit per head on 0011\'s pool and one scoring '
+                     f'per role on 0011\'s evaluation set, the model last, every baseline floored at its 0011 value. '
+                     f'The selected model ({r2048["selected_model_id"]}) scores {_fm} against a floored frozen bar of '
+                     f'{_bf} (margin {_fm - _bf:+.4f}) and a floored expanded bar of {_be} (margin {_fm - _be:+.4f}); '
+                     f'without gutenberg, {_fmn} against {_ben} (margin {_fmn - _ben:+.4f}). The incumbent refit '
+                     f'reproduced 0011\'s {r2048["incumbent_refit_top1"]} exactly. Boundary: '
+                     f'<span class="mono">{rv2048["boundary_bytes"]}</span>.</p>')
 
 # ---------------------------------------------------------------- seed panel
 if seeds:
@@ -319,7 +344,7 @@ protocol returns <span class="mono">CARVE_FAILS</span>: within-size top-1
 (margin below the 0.05 bar), and a 4096-trained model transfers at {carve["transfer_top1"]} —
 chance. The byte-identity ceiling barely moves across carve sizes, so this is a modelling failure
 and is reported as one. Two learned byte-sequence attempts (preregs 0009, 0010) did not rescue it.</p>
-{boundary_2048}{fam2048_table}
+{boundary_2048}{boundary_0012}{fam2048_table}
 </div>
 <div class="panel good">
 <p><strong>And the leak correction ran against us.</strong> When an adversarial audit found source
