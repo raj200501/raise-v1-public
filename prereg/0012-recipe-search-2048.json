@@ -18,70 +18,456 @@
     "what_this_does_not_cover": "The transfer arm (a fair transfer reading would need the 4096 recipe searched too; 0011's transfer verdict stands). Carve sizes other than 2048, so no boundary below 2048 is bracketed even on a pass. The rung ladder and the slope. Any change to the feature set or any learned byte representation (0009 and 0010 stand). Model families off the enumerated list: no MLP, ExtraTrees or RandomForest head - the pilot banks the MLP at 0.0913 against HGB 0.1290 at n=20000 (engineering_log.json), no artifact banks a fit time for either on any corpus, and sklearn 1.9.0's MLPClassifier.fit has no X_val so its early stopping copies the pool through train_test_split, the mechanism behind the 0003 OOMs - a banked reason, not a preference; an architecture search is a separate preregistration with its own memory plan and cost anchor. Libraries absent from the banked environment (lightgbm, xgboost, catboost, torch: verified absent 2026-09-03), random search, seed sweeps, ensembles, intra-fit checkpointing. Per-family verdicts: per-family accuracies are banked for every record and carry no clause. The gutenberg pool leak is bounded by the non-gutenberg clause, not fixed. A RECIPE_CLEARS does not revise 0003, 0006, 0007 or 0011, does not license quoting 4096 numbers at 2048 or 2048 numbers at 1024, and is quoted at 2048 only; a RECIPE_FAILS proves that none of these eight model recipes clears under this protocol, not that no recipe exists. Nothing here establishes a buyer, a customer, a user or a partner; establishes_a_buyer is emitted False unconditionally and no outcome could change it.",
     "roster": {
       "protocol": {
-        "seed": 20260825, "eval_frac": 0.2, "top_rung": 500000, "threads": 3, "nice": 10,
-        "carve": 2048, "chunk_offset": 75000, "chunk_size": 32768,
-        "holdout": {"rule": "chunk_id_mod", "modulus": 5, "residue": 0},
-        "stages": [{"rows": 100000, "keep": 2}, {"rows": "all", "keep": 1}],
-        "caps": {"selection_fit_seconds": 72000, "memory_kill_gb": 12.5},
-        "launch": {"min_disk_free_gb": 0.25, "min_mem_available_gb": 9.0},
-        "null_rows": 20000, "incumbent_id": "M1", "logistic_l1_id": "L1", "logistic_head_id": "logistic",
-        "confirm_order": ["incumbent", "logistic_l1", "majority", "stratified", "best_single_feat",
-                          "depth3_tree", "deep_tree", "logistic", "null", "model"],
-        "floors": {"majority": 0.0385, "stratified": 0.0385, "depth3_tree": 0.0887, "logistic": 0.1266,
-                   "best_single_feat": 0.0726, "deep_tree": 0.1447},
-        "floors_non_gutenberg": {"majority": 0.0385, "stratified": 0.0385, "depth3_tree": 0.0898,
-                                 "logistic": 0.1315, "best_single_feat": 0.0762, "deep_tree": 0.1511}
+        "seed": 20260825,
+        "eval_frac": 0.2,
+        "top_rung": 500000,
+        "threads": 3,
+        "nice": 10,
+        "carve": 2048,
+        "chunk_offset": 75000,
+        "chunk_size": 32768,
+        "holdout": {
+          "rule": "chunk_id_mod",
+          "modulus": 5,
+          "residue": 0
+        },
+        "stages": [
+          {
+            "rows": 100000,
+            "keep": 2
+          },
+          {
+            "rows": "all",
+            "keep": 1
+          }
+        ],
+        "caps": {
+          "selection_fit_seconds": 72000,
+          "memory_kill_gb": 12.5
+        },
+        "launch": {
+          "min_disk_free_gb": 0.25,
+          "min_mem_available_gb": 9.0
+        },
+        "null_rows": 20000,
+        "incumbent_id": "M1",
+        "logistic_l1_id": "L1",
+        "logistic_head_id": "logistic",
+        "confirm_order": [
+          "incumbent",
+          "logistic_l1",
+          "majority",
+          "stratified",
+          "best_single_feat",
+          "depth3_tree",
+          "deep_tree",
+          "logistic",
+          "null",
+          "model"
+        ],
+        "floors": {
+          "majority": 0.0385,
+          "stratified": 0.0385,
+          "depth3_tree": 0.0887,
+          "logistic": 0.1266,
+          "best_single_feat": 0.0726,
+          "deep_tree": 0.1447
+        },
+        "floors_non_gutenberg": {
+          "majority": 0.0385,
+          "stratified": 0.0385,
+          "depth3_tree": 0.0898,
+          "logistic": 0.1315,
+          "best_single_feat": 0.0762,
+          "deep_tree": 0.1511
+        }
       },
       "heads": [
-        {"id": "model", "side": "model", "candidates": [
-          {"id": "M1", "family": "hgb", "val": "frag", "params": {"learning_rate": 0.15, "max_leaf_nodes": 63, "max_iter": 200, "n_iter_no_change": 10}, "why": "0011's incumbent verbatim (run_study.py make_model 'hgb', run_carve.py's explicit last-10% validation split); every other parameter at the sklearn 1.9.0 default"},
-          {"id": "M2", "family": "hgb", "val": "frag", "params": {"learning_rate": 0.15, "max_leaf_nodes": 63, "max_iter": 400, "n_iter_no_change": 20}, "why": "horizon only: was the incumbent stopped early by patience 10 on a 26-class validation loss that moves by thousandths? (its early stopping fired after 22 iterations at 100000 rows on training rows, 2026-09-03 cost anchor)"},
-          {"id": "M3", "family": "hgb", "val": "frag", "params": {"learning_rate": 0.05, "max_leaf_nodes": 63, "max_iter": 300, "n_iter_no_change": 20}, "why": "lower rate, longer horizon: the standard boosting trade; the cap of 300 bounds the worst-case cost"},
-          {"id": "M4", "family": "hgb", "val": "frag", "params": {"learning_rate": 0.05, "max_leaf_nodes": 127, "l2_regularization": 1.0, "max_iter": 250, "n_iter_no_change": 20}, "why": "capacity plus regularisation plus a lower rate together: 500000 rows x 26 classes supports bigger trees than 63 leaves, and the deep-tree baseline gained 0.1259 -> 0.1447 from depth 8 to 16 at 2048"},
-          {"id": "M5", "family": "hgb", "val": "frag", "params": {"learning_rate": 0.1, "max_leaf_nodes": 255, "l2_regularization": 1.0, "min_samples_leaf": 50, "max_iter": 150, "n_iter_no_change": 15}, "why": "the wide-tree end with the leaf-size regulariser that matters for 26-way splits on noisy histogram columns; run_study.py records that unregularised capacity collapsed the 100k rung once"},
-          {"id": "M6", "family": "hgb", "val": "frag", "params": {"learning_rate": 0.1, "max_leaf_nodes": 63, "max_features": 0.5, "max_iter": 400, "n_iter_no_change": 20}, "why": "per-split column subsampling: feature_ablation.json banks that the 555 alignment columns carry little, i.e. about half the 1108-column vector is near-redundant, and subsampling is the cheap decorrelator (new in sklearn 1.4, unavailable to the 0003 pilot)"},
-          {"id": "M7", "family": "hgb", "val": "frag", "params": {"learning_rate": 0.15, "max_leaf_nodes": 31, "l2_regularization": 10.0, "max_iter": 400, "n_iter_no_change": 20}, "why": "the low-variance end: small trees with heavy L2; at chance 0.038 and top-1 0.17 the task is signal-starved and a lower-variance learner can beat a higher-capacity one at the same data"},
-          {"id": "M8", "family": "hgb", "val": "group", "params": {"learning_rate": 0.15, "max_leaf_nodes": 63, "max_iter": 200, "n_iter_no_change": 10}, "why": "the incumbent with a CHUNK-GROUPED early-stopping split instead of the inherited fragment-level one, which shares 18614 chunks with its fitting rows at 500000 rows (measured 2026-09-03): isolates whether the content-leaking validation split stops the incumbent at the wrong iteration"}
-        ]},
-        {"id": "logistic", "side": "frozen", "candidates": [
-          {"id": "L1", "family": "logistic", "params": {"max_iter": 400}, "why": "0011's logistic verbatim (LogisticRegression(max_iter=400), lbfgs, C 1.0, raw features): the frozen-set bar at 0.1266; its confirmatory reproduction within 0.005 is a validity clause"},
-          {"id": "L2", "family": "logistic", "params": {"max_iter": 1500}, "why": "the 0011 recipe allowed to run to 1500 lbfgs iterations on raw features: tests whether the 400-iteration cap alone held the frozen bar down (0011's run hit the cap)"},
-          {"id": "L3", "family": "logistic", "scaled": true, "params": {"max_iter": 1000, "C": 1.0}, "why": "standardised inputs with C 1.0: the single most standard fix for an lbfgs logistic on 1108 unscaled hand-engineered columns"},
-          {"id": "L4", "family": "logistic", "scaled": true, "params": {"max_iter": 1000, "C": 0.1}, "why": "standardised, stronger regularisation"},
-          {"id": "L5", "family": "logistic", "scaled": true, "params": {"max_iter": 1000, "C": 0.01}, "why": "standardised, the strongest regularisation on the list, so the C axis is bracketed below"},
-          {"id": "L6", "family": "logistic", "scaled": true, "params": {"max_iter": 1000, "C": 10.0}, "why": "standardised, weak regularisation, so the C axis is bracketed above"},
-          {"id": "L7", "family": "logistic", "scaled": true, "params": {"max_iter": 1500, "C": 1.0}, "why": "L3 with a longer iteration budget: convergence at 1500 against 1000 on the standardised problem"},
-          {"id": "L8", "family": "logistic", "scaled": true, "params": {"max_iter": 1500, "C": 0.1}, "why": "L4 with a longer iteration budget; max_iter is capped at 1500 across the head so the worst-case logistic fit is bounded"}
-        ]},
-        {"id": "depth3_tree", "side": "frozen", "candidates": [
-          {"id": "D1", "family": "tree", "params": {"max_depth": 3}, "why": "0011's depth3_tree verbatim (DecisionTreeClassifier(max_depth=3, random_state=0), gini, min_samples_leaf 1): 0.0887 banked"},
-          {"id": "D2", "family": "tree", "params": {"max_depth": 3, "min_samples_leaf": 5}, "why": "depth is the head's definition and is not searched; criterion x min_samples_leaf is the whole knob space at depth 3, searched so that every frozen head with a hyperparameter gets the same treatment"},
-          {"id": "D3", "family": "tree", "params": {"max_depth": 3, "min_samples_leaf": 20}, "why": "as D2"},
-          {"id": "D4", "family": "tree", "params": {"max_depth": 3, "min_samples_leaf": 100}, "why": "as D2"},
-          {"id": "D5", "family": "tree", "params": {"max_depth": 3, "criterion": "entropy"}, "why": "as D2, entropy criterion"},
-          {"id": "D6", "family": "tree", "params": {"max_depth": 3, "criterion": "entropy", "min_samples_leaf": 5}, "why": "as D2, entropy criterion"},
-          {"id": "D7", "family": "tree", "params": {"max_depth": 3, "criterion": "entropy", "min_samples_leaf": 20}, "why": "as D2, entropy criterion"},
-          {"id": "D8", "family": "tree", "params": {"max_depth": 3, "criterion": "entropy", "min_samples_leaf": 100}, "why": "as D2, entropy criterion"}
-        ]},
-        {"id": "deep_tree", "side": "expanded", "candidates": [
-          {"id": "T1", "family": "tree", "params": {"max_depth": 8}, "why": "0011's depth8_tree verbatim (0.1259 banked); the deep_tree head subsumes 0011's depth8_tree and depth16_tree heads and carries the floor max(0.1259, 0.1447) = 0.1447 (non-gutenberg 0.1511)"},
-          {"id": "T2", "family": "tree", "params": {"max_depth": 16}, "why": "0011's depth16_tree verbatim: the binding expanded-set baseline at 0.1447 (0.1511 non-gutenberg)"},
-          {"id": "T3", "family": "tree", "params": {"max_depth": 16, "min_samples_leaf": 20}, "why": "depth 16 with leaf-size regularisation: the first-order fix for an unpruned depth-16 tree on 500000 rows"},
-          {"id": "T4", "family": "tree", "params": {"max_depth": 24}, "why": "the next step on the axis that banked 0.0887 -> 0.1259 -> 0.1447 from depth 3 to 8 to 16"},
-          {"id": "T5", "family": "tree", "params": {"max_depth": 24, "min_samples_leaf": 20}, "why": "depth 24, regularised"},
-          {"id": "T6", "family": "tree", "params": {"max_depth": null}, "why": "unlimited depth, unpruned: the maximal single tree"},
-          {"id": "T7", "family": "tree", "params": {"max_depth": null, "min_samples_leaf": 5}, "why": "unlimited depth, light leaf regularisation"},
-          {"id": "T8", "family": "tree", "params": {"max_depth": null, "min_samples_leaf": 20}, "why": "unlimited depth with min_samples_leaf 20: plausibly the strongest single tree sklearn can build here, and the candidate most likely to RAISE the expanded bar"}
-        ]},
-        {"id": "majority", "side": "frozen", "candidates": [
-          {"id": "U1", "family": "dummy", "params": {"strategy": "most_frequent"}, "why": "no hyperparameter; confirmatory fit only, as in 0011 (0.0385 banked)"}
-        ]},
-        {"id": "stratified", "side": "frozen", "candidates": [
-          {"id": "U2", "family": "dummy", "params": {"strategy": "stratified"}, "why": "no hyperparameter; confirmatory fit only (0.0385 banked)"}
-        ]},
-        {"id": "best_single_feat", "side": "expanded", "candidates": [
-          {"id": "U3", "family": "tree", "params": {"max_depth": 1}, "why": "a depth-1 tree has no meaningful knob; confirmatory fit only (0.0726 banked; non-gutenberg 0.0762)"}
-        ]}
+        {
+          "id": "model",
+          "side": "model",
+          "candidates": [
+            {
+              "id": "M1",
+              "family": "hgb",
+              "val": "frag",
+              "params": {
+                "learning_rate": 0.15,
+                "max_leaf_nodes": 63,
+                "max_iter": 200,
+                "n_iter_no_change": 10
+              },
+              "why": "0011's incumbent verbatim (run_study.py make_model 'hgb', run_carve.py's explicit last-10% validation split); every other parameter at the sklearn 1.9.0 default"
+            },
+            {
+              "id": "M2",
+              "family": "hgb",
+              "val": "frag",
+              "params": {
+                "learning_rate": 0.15,
+                "max_leaf_nodes": 63,
+                "max_iter": 400,
+                "n_iter_no_change": 20
+              },
+              "why": "horizon only: was the incumbent stopped early by patience 10 on a 26-class validation loss that moves by thousandths? (its early stopping fired after 22 iterations at 100000 rows on training rows, 2026-09-03 cost anchor)"
+            },
+            {
+              "id": "M3",
+              "family": "hgb",
+              "val": "frag",
+              "params": {
+                "learning_rate": 0.05,
+                "max_leaf_nodes": 63,
+                "max_iter": 300,
+                "n_iter_no_change": 20
+              },
+              "why": "lower rate, longer horizon: the standard boosting trade; the cap of 300 bounds the worst-case cost"
+            },
+            {
+              "id": "M4",
+              "family": "hgb",
+              "val": "frag",
+              "params": {
+                "learning_rate": 0.05,
+                "max_leaf_nodes": 127,
+                "l2_regularization": 1.0,
+                "max_iter": 250,
+                "n_iter_no_change": 20
+              },
+              "why": "capacity plus regularisation plus a lower rate together: 500000 rows x 26 classes supports bigger trees than 63 leaves, and the deep-tree baseline gained 0.1259 -> 0.1447 from depth 8 to 16 at 2048"
+            },
+            {
+              "id": "M5",
+              "family": "hgb",
+              "val": "frag",
+              "params": {
+                "learning_rate": 0.1,
+                "max_leaf_nodes": 255,
+                "l2_regularization": 1.0,
+                "min_samples_leaf": 50,
+                "max_iter": 150,
+                "n_iter_no_change": 15
+              },
+              "why": "the wide-tree end with the leaf-size regulariser that matters for 26-way splits on noisy histogram columns; run_study.py records that unregularised capacity collapsed the 100k rung once"
+            },
+            {
+              "id": "M6",
+              "family": "hgb",
+              "val": "frag",
+              "params": {
+                "learning_rate": 0.1,
+                "max_leaf_nodes": 63,
+                "max_features": 0.5,
+                "max_iter": 400,
+                "n_iter_no_change": 20
+              },
+              "why": "per-split column subsampling: feature_ablation.json banks that the 555 alignment columns carry little, i.e. about half the 1108-column vector is near-redundant, and subsampling is the cheap decorrelator (new in sklearn 1.4, unavailable to the 0003 pilot)"
+            },
+            {
+              "id": "M7",
+              "family": "hgb",
+              "val": "frag",
+              "params": {
+                "learning_rate": 0.15,
+                "max_leaf_nodes": 31,
+                "l2_regularization": 10.0,
+                "max_iter": 400,
+                "n_iter_no_change": 20
+              },
+              "why": "the low-variance end: small trees with heavy L2; at chance 0.038 and top-1 0.17 the task is signal-starved and a lower-variance learner can beat a higher-capacity one at the same data"
+            },
+            {
+              "id": "M8",
+              "family": "hgb",
+              "val": "group",
+              "params": {
+                "learning_rate": 0.15,
+                "max_leaf_nodes": 63,
+                "max_iter": 200,
+                "n_iter_no_change": 10
+              },
+              "why": "the incumbent with a CHUNK-GROUPED early-stopping split instead of the inherited fragment-level one, which shares 18614 chunks with its fitting rows at 500000 rows (measured 2026-09-03): isolates whether the content-leaking validation split stops the incumbent at the wrong iteration"
+            }
+          ]
+        },
+        {
+          "id": "logistic",
+          "side": "frozen",
+          "candidates": [
+            {
+              "id": "L1",
+              "family": "logistic",
+              "params": {
+                "max_iter": 400
+              },
+              "why": "0011's logistic verbatim (LogisticRegression(max_iter=400), lbfgs, C 1.0, raw features): the frozen-set bar at 0.1266; its confirmatory reproduction within 0.005 is a validity clause"
+            },
+            {
+              "id": "L2",
+              "family": "logistic",
+              "params": {
+                "max_iter": 1500
+              },
+              "why": "the 0011 recipe allowed to run to 1500 lbfgs iterations on raw features: tests whether the 400-iteration cap alone held the frozen bar down (0011's run hit the cap)"
+            },
+            {
+              "id": "L3",
+              "family": "logistic",
+              "scaled": true,
+              "params": {
+                "max_iter": 1000,
+                "C": 1.0
+              },
+              "why": "standardised inputs with C 1.0: the single most standard fix for an lbfgs logistic on 1108 unscaled hand-engineered columns"
+            },
+            {
+              "id": "L4",
+              "family": "logistic",
+              "scaled": true,
+              "params": {
+                "max_iter": 1000,
+                "C": 0.1
+              },
+              "why": "standardised, stronger regularisation"
+            },
+            {
+              "id": "L5",
+              "family": "logistic",
+              "scaled": true,
+              "params": {
+                "max_iter": 1000,
+                "C": 0.01
+              },
+              "why": "standardised, the strongest regularisation on the list, so the C axis is bracketed below"
+            },
+            {
+              "id": "L6",
+              "family": "logistic",
+              "scaled": true,
+              "params": {
+                "max_iter": 1000,
+                "C": 10.0
+              },
+              "why": "standardised, weak regularisation, so the C axis is bracketed above"
+            },
+            {
+              "id": "L7",
+              "family": "logistic",
+              "scaled": true,
+              "params": {
+                "max_iter": 1500,
+                "C": 1.0
+              },
+              "why": "L3 with a longer iteration budget: convergence at 1500 against 1000 on the standardised problem"
+            },
+            {
+              "id": "L8",
+              "family": "logistic",
+              "scaled": true,
+              "params": {
+                "max_iter": 1500,
+                "C": 0.1
+              },
+              "why": "L4 with a longer iteration budget; max_iter is capped at 1500 across the head so the worst-case logistic fit is bounded"
+            }
+          ]
+        },
+        {
+          "id": "depth3_tree",
+          "side": "frozen",
+          "candidates": [
+            {
+              "id": "D1",
+              "family": "tree",
+              "params": {
+                "max_depth": 3
+              },
+              "why": "0011's depth3_tree verbatim (DecisionTreeClassifier(max_depth=3, random_state=0), gini, min_samples_leaf 1): 0.0887 banked"
+            },
+            {
+              "id": "D2",
+              "family": "tree",
+              "params": {
+                "max_depth": 3,
+                "min_samples_leaf": 5
+              },
+              "why": "depth is the head's definition and is not searched; criterion x min_samples_leaf is the whole knob space at depth 3, searched so that every frozen head with a hyperparameter gets the same treatment"
+            },
+            {
+              "id": "D3",
+              "family": "tree",
+              "params": {
+                "max_depth": 3,
+                "min_samples_leaf": 20
+              },
+              "why": "as D2"
+            },
+            {
+              "id": "D4",
+              "family": "tree",
+              "params": {
+                "max_depth": 3,
+                "min_samples_leaf": 100
+              },
+              "why": "as D2"
+            },
+            {
+              "id": "D5",
+              "family": "tree",
+              "params": {
+                "max_depth": 3,
+                "criterion": "entropy"
+              },
+              "why": "as D2, entropy criterion"
+            },
+            {
+              "id": "D6",
+              "family": "tree",
+              "params": {
+                "max_depth": 3,
+                "criterion": "entropy",
+                "min_samples_leaf": 5
+              },
+              "why": "as D2, entropy criterion"
+            },
+            {
+              "id": "D7",
+              "family": "tree",
+              "params": {
+                "max_depth": 3,
+                "criterion": "entropy",
+                "min_samples_leaf": 20
+              },
+              "why": "as D2, entropy criterion"
+            },
+            {
+              "id": "D8",
+              "family": "tree",
+              "params": {
+                "max_depth": 3,
+                "criterion": "entropy",
+                "min_samples_leaf": 100
+              },
+              "why": "as D2, entropy criterion"
+            }
+          ]
+        },
+        {
+          "id": "deep_tree",
+          "side": "expanded",
+          "candidates": [
+            {
+              "id": "T1",
+              "family": "tree",
+              "params": {
+                "max_depth": 8
+              },
+              "why": "0011's depth8_tree verbatim (0.1259 banked); the deep_tree head subsumes 0011's depth8_tree and depth16_tree heads and carries the floor max(0.1259, 0.1447) = 0.1447 (non-gutenberg 0.1511)"
+            },
+            {
+              "id": "T2",
+              "family": "tree",
+              "params": {
+                "max_depth": 16
+              },
+              "why": "0011's depth16_tree verbatim: the binding expanded-set baseline at 0.1447 (0.1511 non-gutenberg)"
+            },
+            {
+              "id": "T3",
+              "family": "tree",
+              "params": {
+                "max_depth": 16,
+                "min_samples_leaf": 20
+              },
+              "why": "depth 16 with leaf-size regularisation: the first-order fix for an unpruned depth-16 tree on 500000 rows"
+            },
+            {
+              "id": "T4",
+              "family": "tree",
+              "params": {
+                "max_depth": 24
+              },
+              "why": "the next step on the axis that banked 0.0887 -> 0.1259 -> 0.1447 from depth 3 to 8 to 16"
+            },
+            {
+              "id": "T5",
+              "family": "tree",
+              "params": {
+                "max_depth": 24,
+                "min_samples_leaf": 20
+              },
+              "why": "depth 24, regularised"
+            },
+            {
+              "id": "T6",
+              "family": "tree",
+              "params": {
+                "max_depth": null
+              },
+              "why": "unlimited depth, unpruned: the maximal single tree"
+            },
+            {
+              "id": "T7",
+              "family": "tree",
+              "params": {
+                "max_depth": null,
+                "min_samples_leaf": 5
+              },
+              "why": "unlimited depth, light leaf regularisation"
+            },
+            {
+              "id": "T8",
+              "family": "tree",
+              "params": {
+                "max_depth": null,
+                "min_samples_leaf": 20
+              },
+              "why": "unlimited depth with min_samples_leaf 20: plausibly the strongest single tree sklearn can build here, and the candidate most likely to RAISE the expanded bar"
+            }
+          ]
+        },
+        {
+          "id": "majority",
+          "side": "frozen",
+          "candidates": [
+            {
+              "id": "U1",
+              "family": "dummy",
+              "params": {
+                "strategy": "most_frequent"
+              },
+              "why": "no hyperparameter; confirmatory fit only, as in 0011 (0.0385 banked)"
+            }
+          ]
+        },
+        {
+          "id": "stratified",
+          "side": "frozen",
+          "candidates": [
+            {
+              "id": "U2",
+              "family": "dummy",
+              "params": {
+                "strategy": "stratified"
+              },
+              "why": "no hyperparameter; confirmatory fit only (0.0385 banked)"
+            }
+          ]
+        },
+        {
+          "id": "best_single_feat",
+          "side": "expanded",
+          "candidates": [
+            {
+              "id": "U3",
+              "family": "tree",
+              "params": {
+                "max_depth": 1
+              },
+              "why": "a depth-1 tree has no meaningful knob; confirmatory fit only (0.0726 banked; non-gutenberg 0.0762)"
+            }
+          ]
+        }
       ]
     }
   },
@@ -148,30 +534,150 @@
     }
   },
   "readings": [
-    {"name": "verdict", "unit": "enum{RECIPE_FAILS,RECIPE_CLEARS,VOID}", "source_artifact": "artifacts/pivot/recipe_search_2048_verdict.json", "json_path": "$.verdict"},
-    {"name": "boundary_bytes", "unit": "text: '(2048, 4096], frozen and searched' on RECIPE_FAILS; 'clears at 2048 under search; below 2048 unmeasured under search; (2048, 4096] stands for the frozen recipe (0011)' on RECIPE_CLEARS; 'not bracketed by this run' on VOID", "source_artifact": "artifacts/pivot/recipe_search_2048_verdict.json", "json_path": "$.boundary_bytes"},
-    {"name": "frozen_reading_clears", "unit": "boolean, INFORMATIONAL: not a verdict, not quotable as a pass", "source_artifact": "artifacts/pivot/recipe_search_2048_verdict.json", "json_path": "$.frozen_reading_clears"},
-    {"name": "gain_over_incumbent", "unit": "final_top1 - 0.1741, informational", "source_artifact": "artifacts/pivot/recipe_search_2048_verdict.json", "json_path": "$.gain_over_incumbent"},
-    {"name": "selected_model_id", "unit": "roster id of the model head's selected recipe", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.selected_model_id"},
-    {"name": "selected_ids", "unit": "map of head to selected roster id", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.selected_ids"},
-    {"name": "final_top1", "unit": "fraction correct, the selected model recipe at 500000 rows on the sealed evaluation set", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.final_top1"},
-    {"name": "final_top1_non_gutenberg", "unit": "fraction correct on the 113412 non-gutenberg evaluation rows", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.final_top1_non_gutenberg"},
-    {"name": "best_frozen_for_bar", "unit": "fraction: max over the frozen heads of max(searched confirmatory top-1, 0011 floor)", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.best_frozen_for_bar"},
-    {"name": "best_expanded_for_bar", "unit": "fraction: the same maximum over all six baseline heads", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.best_expanded_for_bar"},
-    {"name": "best_expanded_non_gutenberg_for_bar", "unit": "fraction, non-gutenberg rows, non-gutenberg floors", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.best_expanded_non_gutenberg_for_bar"},
-    {"name": "best_frozen_searched", "unit": "fraction: the searched frozen best before flooring, informational", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.best_frozen_searched"},
-    {"name": "best_expanded_searched", "unit": "fraction: the searched expanded best before flooring, informational", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.best_expanded_searched"},
-    {"name": "incumbent_refit_top1", "unit": "fraction; must be within 0.005 of 0.1741", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.incumbent_refit_top1"},
-    {"name": "logistic_l1_refit_top1", "unit": "fraction; must be within 0.005 of 0.1266", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.logistic_l1_refit_top1"},
-    {"name": "shuffled_label_accuracy", "unit": "fraction; must be <= 0.038462 + 0.02", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.shuffled_label_accuracy"},
-    {"name": "eval_idx_sha256", "unit": "sha256; must equal 4036c7a58bd46113725adda2b3bf3602ca1597888ad1b934b46d327ef07536a3", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.partition.eval_idx_sha256"},
-    {"name": "pool_idx_sha256", "unit": "sha256; must equal c716babc84a83fbc0a05b3b65a04614b171e20fa2653a02024e80ff7526d6c9d", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.partition.pool_idx_sha256"},
-    {"name": "holdout_idx_sha256", "unit": "sha256; must equal 820792faeaac582f7a4be9473cbafca58377666bda9330cbcce3c68e800b2e80", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.partition.holdout_idx_sha256"},
-    {"name": "eval_rows_gathered_in_selection", "unit": "count, measured by stage select; must be 0", "source_artifact": "artifacts/pivot/recipe_search_2048_selection.json", "json_path": "$.eval_rows_gathered_in_selection"},
-    {"name": "selection_sha256", "unit": "sha256 of the selection file, bound into every confirmatory ledger entry", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.selection_sha256"},
-    {"name": "complete", "unit": "boolean; every confirmatory role banked", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.complete"},
-    {"name": "cluster_ci95_informational", "unit": "map of role to a 95% cluster-bootstrap interval over the 5000 evaluation chunks, informational", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.cluster_ci95_informational"},
-    {"name": "cost", "unit": "seconds per fit and per stage, interruptions, environment; gates nothing", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.cost"}
+    {
+      "name": "verdict",
+      "unit": "enum{RECIPE_FAILS,RECIPE_CLEARS,VOID}",
+      "source_artifact": "artifacts/pivot/recipe_search_2048_verdict.json",
+      "json_path": "$.verdict"
+    },
+    {
+      "name": "boundary_bytes",
+      "unit": "text: '(2048, 4096], frozen and searched' on RECIPE_FAILS; 'clears at 2048 under search; below 2048 unmeasured under search; (2048, 4096] stands for the frozen recipe (0011)' on RECIPE_CLEARS; 'not bracketed by this run' on VOID",
+      "source_artifact": "artifacts/pivot/recipe_search_2048_verdict.json",
+      "json_path": "$.boundary_bytes"
+    },
+    {
+      "name": "frozen_reading_clears",
+      "unit": "boolean, INFORMATIONAL: not a verdict, not quotable as a pass",
+      "source_artifact": "artifacts/pivot/recipe_search_2048_verdict.json",
+      "json_path": "$.frozen_reading_clears"
+    },
+    {
+      "name": "gain_over_incumbent",
+      "unit": "final_top1 - 0.1741, informational",
+      "source_artifact": "artifacts/pivot/recipe_search_2048_verdict.json",
+      "json_path": "$.gain_over_incumbent"
+    },
+    {
+      "name": "selected_model_id",
+      "unit": "roster id of the model head's selected recipe",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.selected_model_id"
+    },
+    {
+      "name": "selected_ids",
+      "unit": "map of head to selected roster id",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.selected_ids"
+    },
+    {
+      "name": "final_top1",
+      "unit": "fraction correct, the selected model recipe at 500000 rows on the sealed evaluation set",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.final_top1"
+    },
+    {
+      "name": "final_top1_non_gutenberg",
+      "unit": "fraction correct on the 113412 non-gutenberg evaluation rows",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.final_top1_non_gutenberg"
+    },
+    {
+      "name": "best_frozen_for_bar",
+      "unit": "fraction: max over the frozen heads of max(searched confirmatory top-1, 0011 floor)",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.best_frozen_for_bar"
+    },
+    {
+      "name": "best_expanded_for_bar",
+      "unit": "fraction: the same maximum over all six baseline heads",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.best_expanded_for_bar"
+    },
+    {
+      "name": "best_expanded_non_gutenberg_for_bar",
+      "unit": "fraction, non-gutenberg rows, non-gutenberg floors",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.best_expanded_non_gutenberg_for_bar"
+    },
+    {
+      "name": "best_frozen_searched",
+      "unit": "fraction: the searched frozen best before flooring, informational",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.best_frozen_searched"
+    },
+    {
+      "name": "best_expanded_searched",
+      "unit": "fraction: the searched expanded best before flooring, informational",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.best_expanded_searched"
+    },
+    {
+      "name": "incumbent_refit_top1",
+      "unit": "fraction; must be within 0.005 of 0.1741",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.incumbent_refit_top1"
+    },
+    {
+      "name": "logistic_l1_refit_top1",
+      "unit": "fraction; must be within 0.005 of 0.1266",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.logistic_l1_refit_top1"
+    },
+    {
+      "name": "shuffled_label_accuracy",
+      "unit": "fraction; must be <= 0.038462 + 0.02",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.shuffled_label_accuracy"
+    },
+    {
+      "name": "eval_idx_sha256",
+      "unit": "sha256; must equal 4036c7a58bd46113725adda2b3bf3602ca1597888ad1b934b46d327ef07536a3",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.partition.eval_idx_sha256"
+    },
+    {
+      "name": "pool_idx_sha256",
+      "unit": "sha256; must equal c716babc84a83fbc0a05b3b65a04614b171e20fa2653a02024e80ff7526d6c9d",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.partition.pool_idx_sha256"
+    },
+    {
+      "name": "holdout_idx_sha256",
+      "unit": "sha256; must equal 820792faeaac582f7a4be9473cbafca58377666bda9330cbcce3c68e800b2e80",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.partition.holdout_idx_sha256"
+    },
+    {
+      "name": "eval_rows_gathered_in_selection",
+      "unit": "count, measured by stage select; must be 0",
+      "source_artifact": "artifacts/pivot/recipe_search_2048_selection.json",
+      "json_path": "$.eval_rows_gathered_in_selection"
+    },
+    {
+      "name": "selection_sha256",
+      "unit": "sha256 of the selection file, bound into every confirmatory ledger entry",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.selection_sha256"
+    },
+    {
+      "name": "complete",
+      "unit": "boolean; every confirmatory role banked",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.complete"
+    },
+    {
+      "name": "cluster_ci95_informational",
+      "unit": "map of role to a 95% cluster-bootstrap interval over the 5000 evaluation chunks, informational",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.cluster_ci95_informational"
+    },
+    {
+      "name": "cost",
+      "unit": "seconds per fit and per stage, interruptions, environment; gates nothing",
+      "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.cost"
+    }
   ],
   "arms": [
     "SYMMETRIC SEARCH: four searched heads (model, logistic, depth3_tree, deep_tree) with eight enumerated recipes each and the 0011 recipe first; stage 1 fits all eight on the sealed 100000-row block and scores them on the chunk-rule holdout; the top 2 refit on the whole 399831-row fit pool; the stage-2 winner (ties to the lower index) is the head's recipe. The three knob-free heads skip selection.",
@@ -200,6 +706,24 @@
     "what_neither_outcome_means": "Neither outcome names a buyer. Neither revises 0011. A RECIPE_FAILS says that none of these eight model recipes clears under this protocol, not that no recipe exists; a RECIPE_CLEARS says nothing below 2048."
   },
   "reader": "tools/readers/recipe2048_verdict.py",
-  "frozen": false,
-  "invocation": "export OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3; nice -n 10 python3 tools/pivot/run_recipe_search.py --stage select; then nice -n 10 python3 tools/pivot/run_recipe_search.py --stage confirm; then python3 tools/readers/recipe2048_verdict.py. Every path at its default: --prereg-file prereg/0012-recipe-search-2048.json, --cache data/pivot/carve_c2048.npz, --workdir artifacts/pivot/recipe_search_2048_ckpt, --selection-out artifacts/pivot/recipe_search_2048_selection.json, --out artifacts/pivot/recipe_search_2048.json, --scores-out artifacts/pivot/recipe_search_2048_scores.json. Relaunching the identical command after a container restart is the whole recovery procedure; checkpoints are committed and pushed as they land."
+  "frozen": true,
+  "invocation": "export OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3; nice -n 10 python3 tools/pivot/run_recipe_search.py --stage select; then nice -n 10 python3 tools/pivot/run_recipe_search.py --stage confirm; then python3 tools/readers/recipe2048_verdict.py. Every path at its default: --prereg-file prereg/0012-recipe-search-2048.json, --cache data/pivot/carve_c2048.npz, --workdir artifacts/pivot/recipe_search_2048_ckpt, --selection-out artifacts/pivot/recipe_search_2048_selection.json, --out artifacts/pivot/recipe_search_2048.json, --scores-out artifacts/pivot/recipe_search_2048_scores.json. Relaunching the identical command after a container restart is the whole recovery procedure; checkpoints are committed and pushed as they land.",
+  "reader_sha256": "c3dc012eab1d89849a23a991d7f4fc08f192cc2ceafcba9144f3f15d8de22b97",
+  "frozen_utc": "2026-09-03T11:11:36Z",
+  "git_commit": "4c18a332d48fe93449508ca13d717a0c73939737",
+  "git_dirty_at_freeze": false,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1925147,
+      "time_stamp": "2026-09-03T11:11:00.000Z",
+      "output_value": "51082EF3D1D9CD068F0627BF63E7DE3322967417F6E51DF6736014F551871F9A232C44100E73FD9064B5208F0CCAF43F40AE2FD9A7DAD3D445D09AAE902D6BF9"
+    },
+    "drand": {
+      "round": 6433429,
+      "randomness": "29401d0365a8bf05d0d8f9f0c7b7d6258ae1e102d64ec0a80c7d79097ed34853"
+    }
+  },
+  "chain_hash": "4a230b96e43441aab07b07363c6243b931ca48b449b90080c91343c24c63afbf",
+  "chain_prev_hash": "1757ec1e1878f23459d4a04c72404bfb3e0ef8ef20ec72f8738d901cbf0cb813"
 }

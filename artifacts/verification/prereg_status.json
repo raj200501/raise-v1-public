@@ -241,10 +241,32 @@
       "reader_sha256": "9a19b8bc0213c3cbca7996ebe7e177c10513aba10ddd8fd8c4c6f2ef84b60c2c",
       "seq": 11,
       "slug": "carve-2048-boundary"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "29401d0365a8bf05d0d8f9f0c7b7d6258ae1e102d64ec0a80c7d79097ed34853",
+          "round": 6433429
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "51082EF3D1D9CD068F0627BF63E7DE3322967417F6E51DF6736014F551871F9A232C44100E73FD9064B5208F0CCAF43F40AE2FD9A7DAD3D445D09AAE902D6BF9",
+          "pulse": 1925147,
+          "time_stamp": "2026-09-03T11:11:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-09-03T11:11:36Z",
+      "hash": "4a230b96e43441aab07b07363c6243b931ca48b449b90080c91343c24c63afbf",
+      "id": "0012",
+      "prev_hash": "1757ec1e1878f23459d4a04c72404bfb3e0ef8ef20ec72f8738d901cbf0cb813",
+      "reader": "tools/readers/recipe2048_verdict.py",
+      "reader_sha256": "c3dc012eab1d89849a23a991d7f4fc08f192cc2ceafcba9144f3f15d8de22b97",
+      "seq": 12,
+      "slug": "recipe-search-2048"
     }
   ],
-  "entries": 11,
-  "head": "1757ec1e1878f23459d4a04c72404bfb3e0ef8ef20ec72f8738d901cbf0cb813",
+  "entries": 12,
+  "head": "4a230b96e43441aab07b07363c6243b931ca48b449b90080c91343c24c63afbf",
   "problems": 0,
   "schema": "raise-v1/prereg_status/1",
   "verified": true
