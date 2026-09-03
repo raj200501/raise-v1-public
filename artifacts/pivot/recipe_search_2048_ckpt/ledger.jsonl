@@ -10,3 +10,5 @@
 {"name": "sel1_model_M5", "fingerprint": "1dad099885c5cce9", "event": "started", "utc": "2026-09-03T12:00:47Z", "rss_gb": 4.67, "pid": 31590, "attempt": 1}
 {"name": "sel1_model_M5", "fingerprint": "1dad099885c5cce9", "event": "completed", "utc": "2026-09-03T12:17:56Z", "rss_gb": 4.67, "pid": 31590, "seconds": 1011.4}
 {"name": "sel1_model_M6", "fingerprint": "9664bf39ef7de766", "event": "started", "utc": "2026-09-03T12:17:56Z", "rss_gb": 4.67, "pid": 31590, "attempt": 1}
+{"name": "sel1_model_M6", "fingerprint": "9664bf39ef7de766", "event": "completed", "utc": "2026-09-03T12:25:57Z", "rss_gb": 4.67, "pid": 31590, "seconds": 461.6}
+{"name": "sel1_model_M7", "fingerprint": "f8e8c29566a144cb", "event": "started", "utc": "2026-09-03T12:25:57Z", "rss_gb": 4.67, "pid": 31590, "attempt": 1}
