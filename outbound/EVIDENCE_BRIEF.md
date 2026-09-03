@@ -93,6 +93,24 @@ reading available, fixed before the run; the looser reading would have given **+
   1024; transfer from 4096 at **0.0455**, from a model that first reproduced its banked **0.1965**
   on corpus A. Slope **+0.0316** per decade, cluster interval **[0.0307, 0.0326]**. Every validity
   clause passed. The window boundary of this recipe is bracketed to (2048, 4096].
+
+Per family at 2048 (`artifacts/pivot/per_family_curves_2048.json`, re-derived from the banked
+per-example scores and per-family baselines; a decomposition, not a preregistered clause):
+
+| Family | Top-rung accuracy | Margin, frozen set | Margin, all baselines | Slope /decade |
+|---|---:|---:|---:|---:|
+| csv | 0.2915 | **+0.1105** | **+0.0554** | +0.0648 |
+| log | 0.2482 | **+0.0897** | **+0.0501** | +0.0573 |
+| code | 0.1945 | **+0.0684** | +0.0469 | +0.0388 |
+| json | 0.2359 | +0.0438 | +0.0438 | +0.0501 |
+| gutenberg | 0.1208 | +0.0278 | +0.0200 | +0.0219 |
+| base64 | 0.103 | +0.0262 | -0.0011 | +0.0098 |
+| binary | 0.0925 | +0.0129 | +0.0007 | +0.0056 |
+| mixed | 0.1098 | -0.0045 | -0.0045 | +0.0057 |
+
+Bold margins clear the 0.05 bar. The mixture misses by 0.0025 because two structured families
+pass on both readings and four incompressible families fail on every reading; the verdict is the
+mixture's, and the decomposition is what a buyer with csv or log carves would need to see.
 - **A byte-sequence CNN does not rescue it** (0009): 0.0849 against the hand-engineered 0.1165 and
   a byte-histogram logistic at 0.0943. A corrected-head variant (0010) was inconclusive under its
   frozen recipe, and its reader says so rather than counting it either way.

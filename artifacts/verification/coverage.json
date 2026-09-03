@@ -786,6 +786,36 @@
       "json_path": "$.corpora.data/pivot/carve_c2048.npz.X.dtype",
       "reverify": "python3 tools/pivot/corpus_manifest.py --check",
       "value": "float32"
+    },
+    {
+      "artifact": "artifacts/pivot/per_family_curves_2048.json",
+      "claim": "Decomposed by content family, the 2048 model clears the 0.05 bar on csv and log on both readings - +0.0554 and +0.0501 over the depth-16 tree - while the mixture misses by 0.0025; the per-family top-rung accuracies re-derived from the banked scores equal the measurement script's banked values to four decimals.",
+      "class": "arithmetic-verifiable",
+      "id": "carve2048-per-family-csv",
+      "json_path": "$.families.csv.margin_expanded.value",
+      "note": "Derived by tools/pivot/per_family_curves.py from the banked per-example scores and per-family baselines; no model re-run. A decomposition, not a preregistered clause.",
+      "reverify": "python3 tools/pivot/per_family_curves.py --scores artifacts/pivot/carve_rung_scores_2048.json --artifact artifacts/pivot/carve_generalisation_2048.json --out artifacts/pivot/per_family_curves_2048.json --label '2048-byte carve, preregistration 0011'",
+      "value": 0.0554
+    },
+    {
+      "artifact": "artifacts/pivot/per_family_curves_2048.json",
+      "claim": "The mixed family has a negative margin at 2048 (-0.0045 on both readings) and the incompressible families base64 and binary sit within 0.0011 of their best baseline; the four families that fail on every reading are what pull the mixture below its bar.",
+      "class": "arithmetic-verifiable",
+      "id": "carve2048-per-family-mixed",
+      "json_path": "$.families.mixed.margin_expanded.value",
+      "note": "Same derivation.",
+      "reverify": "python3 tools/pivot/per_family_curves.py --scores artifacts/pivot/carve_rung_scores_2048.json --artifact artifacts/pivot/carve_generalisation_2048.json --out artifacts/pivot/per_family_curves_2048.json --label '2048-byte carve, preregistration 0011'",
+      "value": -0.0045
+    },
+    {
+      "artifact": "artifacts/pivot/per_family_curves_1024.json",
+      "claim": "At 1024 bytes the steepest family is csv at 0.2218 top-rung accuracy and +0.0470 per decade (cluster bootstrap over its own held-out chunks); that run banked no per-family baselines, so no per-family margin is stated for it.",
+      "class": "arithmetic-verifiable",
+      "id": "carve1024-per-family-csv",
+      "json_path": "$.families.csv.slope",
+      "note": "Same derivation, model side only.",
+      "reverify": "python3 tools/pivot/per_family_curves.py --scores artifacts/pivot/carve_rung_scores.json --artifact artifacts/pivot/carve_generalisation.json --out artifacts/pivot/per_family_curves_1024.json --label '1024-byte carve, preregistration 0007'",
+      "value": 0.046991
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",
