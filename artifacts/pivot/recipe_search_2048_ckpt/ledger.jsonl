@@ -40,3 +40,7 @@
 {"name": "sel1_depth3_tree_D4", "fingerprint": "535865221db115e6", "event": "started", "utc": "2026-09-03T13:00:53Z", "rss_gb": 4.77, "pid": 31590, "attempt": 1}
 {"name": "sel1_depth3_tree_D4", "fingerprint": "535865221db115e6", "event": "completed", "utc": "2026-09-03T13:01:10Z", "rss_gb": 4.77, "pid": 31590, "seconds": 15.9}
 {"name": "sel1_depth3_tree_D5", "fingerprint": "34b088c19bb7bca0", "event": "started", "utc": "2026-09-03T13:01:10Z", "rss_gb": 4.77, "pid": 31590, "attempt": 1}
+{"name": "sel1_depth3_tree_D5", "fingerprint": "34b088c19bb7bca0", "event": "completed", "utc": "2026-09-03T13:01:31Z", "rss_gb": 4.77, "pid": 31590, "seconds": 18.8}
+{"name": "sel1_depth3_tree_D6", "fingerprint": "92914466463a0ce7", "event": "started", "utc": "2026-09-03T13:01:31Z", "rss_gb": 4.77, "pid": 31590, "attempt": 1}
+{"name": "sel1_depth3_tree_D6", "fingerprint": "92914466463a0ce7", "event": "completed", "utc": "2026-09-03T13:01:53Z", "rss_gb": 4.77, "pid": 31590, "seconds": 19.9}
+{"name": "sel1_depth3_tree_D7", "fingerprint": "d8f3db7c63364b89", "event": "started", "utc": "2026-09-03T13:01:53Z", "rss_gb": 4.77, "pid": 31590, "attempt": 1}
