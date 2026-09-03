@@ -97,3 +97,6 @@
 {"name": "confirm_best_single_feat", "fingerprint": "9eabe32d67f2d74a", "event": "completed", "utc": "2026-09-03T17:56:14Z", "rss_gb": 8.3, "pid": 4663, "seconds": 36.1}
 {"name": "confirm_depth3_tree", "fingerprint": "6f6a2c350f48f86f", "event": "selection_bound", "utc": "2026-09-03T17:56:14Z", "rss_gb": 8.3, "pid": 4663, "selection_sha256": "555095287b346c9b5c7197cca9b997e05de00ade9024fd0785edc1fb2834ad91"}
 {"name": "confirm_depth3_tree", "fingerprint": "6f6a2c350f48f86f", "event": "started", "utc": "2026-09-03T17:56:14Z", "rss_gb": 8.3, "pid": 4663, "attempt": 1}
+{"name": "confirm_depth3_tree", "fingerprint": "6f6a2c350f48f86f", "event": "completed", "utc": "2026-09-03T17:57:36Z", "rss_gb": 8.3, "pid": 4663, "seconds": 81.1}
+{"name": "confirm_deep_tree", "fingerprint": "12f399d59feae472", "event": "selection_bound", "utc": "2026-09-03T17:57:36Z", "rss_gb": 8.3, "pid": 4663, "selection_sha256": "555095287b346c9b5c7197cca9b997e05de00ade9024fd0785edc1fb2834ad91"}
+{"name": "confirm_deep_tree", "fingerprint": "12f399d59feae472", "event": "started", "utc": "2026-09-03T17:57:36Z", "rss_gb": 8.3, "pid": 4663, "attempt": 1}

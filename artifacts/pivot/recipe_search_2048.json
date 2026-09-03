@@ -1,15 +1,15 @@
 {
-  "best_expanded_for_bar": 0.0726,
-  "best_expanded_head": "best_single_feat",
-  "best_expanded_non_gutenberg_for_bar": 0.0762,
-  "best_expanded_non_gutenberg_head": "best_single_feat",
-  "best_expanded_non_gutenberg_searched": 0.0762,
-  "best_expanded_searched": 0.0726,
-  "best_frozen_for_bar": 0.0385,
-  "best_frozen_head": "stratified",
-  "best_frozen_non_gutenberg_for_bar": 0.0385,
-  "best_frozen_non_gutenberg_searched": 0.0385,
-  "best_frozen_searched": 0.0385,
+  "best_expanded_for_bar": 0.0985,
+  "best_expanded_head": "depth3_tree",
+  "best_expanded_non_gutenberg_for_bar": 0.1013,
+  "best_expanded_non_gutenberg_head": "depth3_tree",
+  "best_expanded_non_gutenberg_searched": 0.1013,
+  "best_expanded_searched": 0.0985,
+  "best_frozen_for_bar": 0.0985,
+  "best_frozen_head": "depth3_tree",
+  "best_frozen_non_gutenberg_for_bar": 0.1013,
+  "best_frozen_non_gutenberg_searched": 0.1013,
+  "best_frozen_searched": 0.0985,
   "chance_accuracy": 0.038462,
   "class_names": [
     "zlib-1",
@@ -57,15 +57,17 @@
     "n_source_chunks": 25000
   },
   "cost": {
-    "banked_fit_seconds_total": 19556.2,
+    "banked_fit_seconds_total": 19637.3,
     "checkpoints": "artifacts/pivot/recipe_search_2048_ckpt",
     "confirmatory_interruptions": {
       "best_single_feat": 0,
+      "depth3_tree": 0,
       "majority": 0,
       "stratified": 0
     },
     "confirmatory_seconds_by_role": {
       "best_single_feat": 36.1,
+      "depth3_tree": 81.1,
       "majority": 0.0,
       "stratified": 0.0
     },
@@ -73,7 +75,7 @@
     "logistic_l1_refit_seconds": 503.7,
     "null_seconds": null,
     "selection_seconds_total": 17895.9,
-    "wall_seconds_this_invocation": 1703.1
+    "wall_seconds_this_invocation": 1785.0
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -134,6 +136,55 @@
       "top1": 0.0726,
       "top1_non_gutenberg": 0.0762,
       "utc": "2026-09-03T17:55:37Z",
+      "val": null
+    },
+    "depth3_tree": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "threads": 3
+      },
+      "family": "tree",
+      "fit_info": {
+        "depth": 3,
+        "n_leaves": 8
+      },
+      "fit_rows_sha256": "c716babc84a83fbc0a05b3b65a04614b171e20fa2653a02024e80ff7526d6c9d",
+      "fit_rows_sorted_sha256": "45729322ca18dcd5041ff475ebf1bd30f48460be0ae0d143557fe26f0bc2ef2b",
+      "head": "depth3_tree",
+      "heartbeat_max_rss_gb": 10.46,
+      "id": "D5",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 500000,
+      "params": {
+        "criterion": "entropy",
+        "max_depth": 3
+      },
+      "params_sha256": "427e2c907eba08ecc653da356c4f5fef1e6d1fc0d372ab1db5c0c2d7d2e79e66",
+      "per_family": {
+        "base64": 0.0767,
+        "binary": 0.0769,
+        "code": 0.099,
+        "csv": 0.1435,
+        "gutenberg": 0.0787,
+        "json": 0.1041,
+        "log": 0.122,
+        "mixed": 0.0888
+      },
+      "rss_gb": 8.3,
+      "ru_maxrss_gb": 10.46,
+      "scaled": false,
+      "seconds": 81.1,
+      "seed": 20260825,
+      "stage": "confirmatory",
+      "status": "fit",
+      "top1": 0.0985,
+      "top1_non_gutenberg": 0.1013,
+      "utc": "2026-09-03T17:56:14Z",
       "val": null
     },
     "majority": {
@@ -1172,6 +1223,33 @@
       "rss_gb": 8.3,
       "seconds": 36.1,
       "utc": "2026-09-03T17:56:14Z"
+    },
+    {
+      "event": "selection_bound",
+      "fingerprint": "6f6a2c350f48f86f",
+      "name": "confirm_depth3_tree",
+      "pid": 4663,
+      "rss_gb": 8.3,
+      "selection_sha256": "555095287b346c9b5c7197cca9b997e05de00ade9024fd0785edc1fb2834ad91",
+      "utc": "2026-09-03T17:56:14Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "6f6a2c350f48f86f",
+      "name": "confirm_depth3_tree",
+      "pid": 4663,
+      "rss_gb": 8.3,
+      "utc": "2026-09-03T17:56:14Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "6f6a2c350f48f86f",
+      "name": "confirm_depth3_tree",
+      "pid": 4663,
+      "rss_gb": 8.3,
+      "seconds": 81.1,
+      "utc": "2026-09-03T17:57:36Z"
     }
   ],
   "logistic_l1_refit": {
@@ -1223,7 +1301,6 @@
   },
   "logistic_l1_refit_top1": 0.1266,
   "missing_roles": [
-    "depth3_tree",
     "deep_tree",
     "logistic",
     "null",
