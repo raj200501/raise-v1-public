@@ -24,3 +24,5 @@
 {"name": "sel1_logistic_L4", "fingerprint": "762682828477e3a8", "event": "started", "utc": "2026-09-03T12:49:06Z", "rss_gb": 4.77, "pid": 31590, "attempt": 1}
 {"name": "sel1_logistic_L4", "fingerprint": "762682828477e3a8", "event": "completed", "utc": "2026-09-03T12:50:17Z", "rss_gb": 4.77, "pid": 31590, "seconds": 61.9}
 {"name": "sel1_logistic_L5", "fingerprint": "c62376ea5262fc90", "event": "started", "utc": "2026-09-03T12:50:17Z", "rss_gb": 4.77, "pid": 31590, "attempt": 1}
+{"name": "sel1_logistic_L5", "fingerprint": "c62376ea5262fc90", "event": "completed", "utc": "2026-09-03T12:51:22Z", "rss_gb": 4.77, "pid": 31590, "seconds": 55.5}
+{"name": "sel1_logistic_L6", "fingerprint": "f5e3a752c4243a49", "event": "started", "utc": "2026-09-03T12:51:22Z", "rss_gb": 4.77, "pid": 31590, "attempt": 1}
