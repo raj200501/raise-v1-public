@@ -87,6 +87,14 @@ reading available, fixed before the run; the looser reading would have given **+
   4096-trained model transfers at **0.0403** — chance. The information is present at 1024 (the
   collision ceiling barely moves: 20.9125 → 20.79 across 4096 → 512), so this is a modelling
   failure and is reported as one.
+- **Symmetric recipe search at 2048: `RECIPE_FAILS`, margin +0.0234 on every reading.** Eight
+  enumerated recipes for the model and for each baseline with a hyperparameter, one selection
+  rule on a chunk-rule holdout that gathered **0** evaluation rows, one confirmatory fit per head,
+  every baseline floored at its 0011 value. The model rose from **0.1741** to **0.212**; the
+  standardised logistic rose from **0.1266** to **0.1886** and set every bar. Preregistration
+  0012's frozen reader emitted `VOID` on a record-order defect of its own (filed in the
+  corrections ledger); preregistration 0013 re-read the same banked artifact with the numbers
+  disclosed and the outcome committed in advance.
 - **2048-byte carve: `CARVE_FAILS` on every reading — by 0.0025 on the slackest, 0.0206 on the
   binding one.** Within-size margin **+0.0475** over the frozen
   baseline set against the 0.05 bar, **+0.0294** over all baselines, **+0.0308** with the leaked

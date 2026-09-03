@@ -32,6 +32,12 @@ not guarantee the window the result needs. A third preregistration measured the 
 2048 bytes the model reaches 0.1741 against logistic regression at 0.1266 — a margin of +0.0475,
 0.0025 short of the 0.05 bar — and +0.0294 against a depth-16 tree, with transfer from 4096 at
 0.0455 against 0.038462 chance. The window boundary of this recipe is bracketed to (2048, 4096].
+A fourth preregistration then searched the recipe symmetrically — eight enumerated recipes for
+the model and for each baseline with a hyperparameter, selected by one rule on a holdout that
+never touched the evaluation set, every baseline floored at its earlier value: the model rose to
+0.212 and the standardised logistic baseline to 0.1886, so the margin fell to +0.0234 and the
+verdict is `RECIPE_FAILS` (read under preregistration 0013 after 0012's own frozen reader
+voided the run on a defect of its own, filed in the corrections ledger).
 Decomposed by content family, csv and log clear the bar at 2048 on both readings (+0.0554 and
 +0.0501 against the strongest baseline) and the structured four clear it as a set (+0.0549), but
 the mixture fails even with the three incompressible families removed (+0.0478); the verdict is

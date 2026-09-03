@@ -96,7 +96,10 @@ again, on every reading: top-1 **0.1741** against logistic **0.1266** (**+0.0475
 bar, **0.0025** short), and **+0.0294** against a depth-16 tree at **0.1447** (**0.0206** short on
 the reading frozen as binding). At the matched **100000** rung:
 **0.1165** at 1024, **0.1461** at 2048, **0.1965** at 4096. Transfer from 4096 lands at **0.0455**
-after the transfer model reproduced its own **0.1965** on corpus A first. The window boundary of
+after the transfer model reproduced its own **0.1965** on corpus A first. A symmetric recipe
+search at 2048 (preregistration 0012, read under 0013) moved the model to **0.212** and the
+standardised logistic baseline to **0.1886**, and the margin fell to **+0.0234**: `RECIPE_FAILS`.
+The window boundary of
 this recipe lies in (2048, 4096]; every number above remains a 4096-byte-window number.
 
 Note what the 1024 curve does: it **rises**, at **+0.0204** per decade with a lower bound of
@@ -186,7 +189,7 @@ reported, and neither is quoted as the other.
 
 The verification-coverage map is machine-checked and prints its weakest class first, deliberately.
 
-**14 of 96 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
+**14 of 108 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
 including us. Eight are measurements made by subagents inside scratch directories that no longer
 exist, and **that includes measurements the conclusions rest on.** The ninth is worse than
 unverified: it is a figure we published and then failed to reproduce ourselves.

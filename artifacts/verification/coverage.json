@@ -844,6 +844,114 @@
       "json_path": "$.confirmed",
       "note": "Counted from the workflow output; the review rests on this session's agents.",
       "value": 29
+    },
+    {
+      "id": "recipe-search-0012-verdict-void",
+      "artifact": "artifacts/pivot/recipe_search_2048_verdict.json",
+      "json_path": "$.verdict",
+      "value": "VOID",
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe2048_verdict.py",
+      "claim": "Preregistration 0012's frozen reader emits VOID on the completed run, on two clauses of its own making (second-stage record order); the VOID is banked as emitted and filed in CORRECTIONS.md."
+    },
+    {
+      "id": "recipe-search-0013-verdict",
+      "artifact": "artifacts/pivot/recipe_search_2048_reread_verdict.json",
+      "json_path": "$.verdict",
+      "value": "RECIPE_FAILS",
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe2048_reread_verdict.py",
+      "claim": "Preregistration 0013, a re-read of 0012's banked artifact under a reader with the one order line corrected, emits RECIPE_FAILS: under a symmetric recipe search the 2048-byte carve does not clear the 0.05 bar on any of the three readings."
+    },
+    {
+      "id": "recipe-search-final-top1",
+      "artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.final_top1",
+      "value": 0.212,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe2048_reread_verdict.py",
+      "claim": "The searched model recipe (M7: 31 leaves, L2 10, learning rate 0.15) scores 0.212 on 0011's sealed evaluation set after one confirmatory fit on 0011's 500000-row pool."
+    },
+    {
+      "id": "recipe-search-final-top1-non-gutenberg",
+      "artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.final_top1_non_gutenberg",
+      "value": 0.2223,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe2048_reread_verdict.py",
+      "claim": "The searched model scores 0.2223 on the 113412 non-gutenberg evaluation rows."
+    },
+    {
+      "id": "recipe-search-frozen-bar",
+      "artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.best_frozen_for_bar",
+      "value": 0.1886,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe2048_reread_verdict.py",
+      "claim": "The searched logistic (L3: standardised inputs, C 1.0) scores 0.1886 on the sealed set and sets both the frozen and the expanded floored bars, above the 0011 logistic's 0.1266 and above every other head's floor."
+    },
+    {
+      "id": "recipe-search-expanded-ng-bar",
+      "artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.best_expanded_non_gutenberg_for_bar",
+      "value": 0.1975,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe2048_reread_verdict.py",
+      "claim": "The expanded bar without gutenberg is 0.1975, set by the searched logistic."
+    },
+    {
+      "id": "recipe-search-gain-over-incumbent",
+      "artifact": "artifacts/pivot/recipe_search_2048_reread_verdict.json",
+      "json_path": "$.gain_over_incumbent",
+      "value": 0.0379,
+      "class": "arithmetic-verifiable",
+      "reverify": "python3 tools/readers/recipe2048_reread_verdict.py",
+      "claim": "The searched model's gain over the incumbent on the sealed set is 0.0379 (0.212 against 0.1741); the searched logistic's gain over the 0011 logistic is 0.062 (0.1886 against 0.1266), so the frozen-reading shortfall widened from 0.0025 to 0.0266."
+    },
+    {
+      "id": "recipe-search-incumbent-reproduced",
+      "artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.incumbent_refit_top1",
+      "value": 0.1741,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe2048_reread_verdict.py",
+      "claim": "The incumbent refit on the pool reproduces 0011's banked 0.1741 exactly, so the pool and the evaluation set are 0011's."
+    },
+    {
+      "id": "recipe-search-l1-reproduced",
+      "artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.logistic_l1_refit_top1",
+      "value": 0.1266,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe2048_reread_verdict.py",
+      "claim": "The 0011 logistic refit reproduces its banked 0.1266 exactly."
+    },
+    {
+      "id": "recipe-search-null-control",
+      "artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.shuffled_label_accuracy",
+      "value": 0.0408,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe2048_reread_verdict.py",
+      "claim": "The null control with the selected recipe on shuffled labels lands at 0.0408, within chance 0.038462 plus 0.02."
+    },
+    {
+      "id": "recipe-search-eval-rows-gathered",
+      "artifact": "artifacts/pivot/recipe_search_2048_selection.json",
+      "json_path": "$.eval_rows_gathered_in_selection",
+      "value": 0,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe2048_reread_verdict.py",
+      "claim": "The selection stage gathered zero evaluation rows, measured by intersecting every gathered index array with the evaluation index."
+    },
+    {
+      "id": "recipe-search-fit-seconds",
+      "artifact": "artifacts/pivot/recipe_search_2048.json",
+      "json_path": "$.cost.banked_fit_seconds_total",
+      "value": 24743.6,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe2048_reread_verdict.py",
+      "claim": "The whole 0012 run cost 24743.6 s of banked fit time (17895.9 s selection, the rest confirmatory) at 3 threads and nice 10, plus one container restart."
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

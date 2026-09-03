@@ -27,8 +27,10 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 >
 > Then we measured where our own result breaks, and published that with the same confidence: at a
 > 1024-byte carve the same protocol fails its own bar, and at 2048 it fails on every reading —
-> by 0.0025 against the frozen baselines and by 0.0206 against the strongest one. Every
-> number I will ever quote you is a 4096-byte-window number.
+> by 0.0025 against the frozen baselines and by 0.0206 against the strongest one. Then we
+> searched the recipe at 2048, symmetrically — the baselines got the same search — and the
+> baseline moved more than the model did: the margin fell to +0.0234. Every number I will
+> ever quote you is a 4096-byte-window number.
 >
 > Then we ran 54 adversarial agents against the whole record. 13 findings survived refutation; all
 > 13 were fixed by measurement and the full audit is published, rejected findings included.
@@ -105,7 +107,12 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > outcome written down first: at 2048 bytes the model reaches 0.1741 against a logistic baseline
 > of 0.1266 — +0.0475 against the 0.05 bar, 0.0025 short — and +0.0294 against a depth-16
 > tree at 0.1447, 0.0206 short on the reading we froze as binding; transfer from 4096 lands
-> at 0.0455 against a 0.1266 baseline and fails its margin. The boundary of our result is
+> at 0.0455 against a 0.1266 baseline and fails its margin. We then asked whether the 0.0025
+> was a recipe artefact, under a preregistered search that gave every baseline the same eight
+> recipes, the same rule and a floor at its earlier value: the model rose to 0.212, the
+> standardised logistic to 0.1886, the margin fell to +0.0234, verdict `RECIPE_FAILS` — read
+> under a successor preregistration after the first reader voided the run on a defect of its
+> own, which we filed. The boundary of our result is
 > bracketed to (2048, 4096], and the near-miss on the slack reading is published beside the
 > clear miss on the strict one.
 
@@ -127,7 +134,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 
 > So here is the honest inventory. A validated instrument that reproduces on a cold clone. One
 > real curve with its boundaries measured by the same instrument. A corrections ledger that costs
-> us something to keep. A verification map that prints its weakest class first — 14 of 96 claims
+> us something to keep. A verification map that prints its weakest class first — 14 of 108 claims
 > we ourselves cannot currently re-derive, and it says so. And no buyer yet: G5, a named buyer
 > type, is the gate this work has not cleared, and no result in the repository could have cleared
 > it, because that work happens outside the repository. We are raising to do exactly that work,
@@ -171,7 +178,9 @@ allows and explicitly hedged where it does not.
 > No — at 1024 bytes the model ties a dumb rule, at 2048 it misses the bar on every reading (by
 > 0.0025 against the frozen baselines, by 0.0206 against the strongest), and transfer fails its
 > margin at both sizes — 0.0403 at 1024, which is chance, and 0.0455 at 2048 against a 0.1266
-> baseline; we preregistered those tests ourselves, they failed, and every number we quote is a
+> baseline; a symmetric recipe search at 2048 then widened the miss to +0.0234 because the
+> standardised logistic baseline gained more (0.1266 to 0.1886) than the model (0.1741 to 0.212);
+> we preregistered those tests ourselves, they failed, and every number we quote is a
 > 4096-byte-window number labelled as such.
 
 **"Who buys it?"**

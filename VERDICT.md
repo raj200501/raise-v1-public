@@ -111,7 +111,9 @@ carved-DEFLATE task at a matched training rung, shortening the window from 4096 
 - **Measured a second time, at 2048 bytes (0011).** Transfer lands at 0.0455 against 0.038462
   chance from a model that reproduced its own 4096 accuracy of 0.1965 first, and the within-size
   margin fails on every reading — by 0.0025 on the frozen set, by more on the stricter ones. L4
-  rests on two shorter sizes, not one.
+  rests on two shorter sizes, not one. A symmetric recipe search at 2048 (0012, read under 0013)
+  then moved the model to 0.212 and the logistic baseline to 0.1886, and the margin fell further
+  short, to +0.0234: the failure is not the recipe's.
 
 **What it retires.** Any candidate whose student receives a variable-size fragment and whose planned
 representation is hand-engineered statistics over it. The result will hold at one size and the
@@ -311,6 +313,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 | Phase 1 (falsify the data thesis) | Delivered on the pivot, not on a selected domain. The null control, the grouped split and the trivial-baseline floor were all measured before any learned number was believed. | primary-verifiable |
 | Phase 2 (the scaling curve) | **Delivered on the pivot.** `CURVE_ESTABLISHED` over 2.9031 decades, both margins clearing 0.05. It is a real curve on a real task — and on a domain that reached it through the archived trial rather than through Phase 0 selection, and that still has no buyer. | primary-verifiable |
 | **2048-byte carve (0011)** | **`CARVE_FAILS`** — top-1 0.1741 against logistic 0.1266 (+0.0475, 0.0025 short of the bar) and against a depth-16 tree at 0.1447 (+0.0294); transfer from 4096 at 0.0455. The window boundary is bracketed to (2048, 4096]. Expected outcome, stated in the preregistration before the corpus existed. | primary-verifiable |
+| **Symmetric recipe search at 2048 (0012, re-read under 0013)** | **`RECIPE_FAILS`** — the searched model (M7) reaches 0.212, +0.0379 over the incumbent; the searched logistic (L3, standardised) reaches 0.1886, +0.062 over the 0011 logistic, and sets every bar; margins +0.0234 (frozen), +0.0234 (expanded), +0.0248 (gutenberg excluded) against 0.05. 0012's own frozen reader emitted `VOID` on a defect of its own (filed in `CORRECTIONS.md`); 0013 re-read the same artifact with the numbers disclosed and the outcome committed in advance. | primary-verifiable |
 | Phase 3 (credibility artifact) | Partially delivered. The *instrument* ships and reproduces, and the manufacture-and-measure pipeline ships with it; the corpus itself is 5.8 GB and is not committed, so a stranger must re-manufacture rather than download. | n/a |
 | Round 3 screener's own arithmetic | Reported 11 adversarial reviews. Recounted from the banked artifacts: **8**. The screener's candidate total of 99 is correct. | arithmetic-verifiable |
 | Our own allocation-flag count | Recorded 76 against a subagent's 77 and filed it as *the subagent's* discrepancy. The subagent was right. Filed in `CORRECTIONS.md` at full size. | primary-verifiable |
@@ -327,7 +330,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **14 of 96 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 108 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -356,8 +359,8 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 | Class | Count | Meaning |
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
-| `arithmetic-verifiable` | 18 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 64 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `arithmetic-verifiable` | 19 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
+| `primary-verifiable` | 75 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -684,17 +687,75 @@ is a new preregistration (M1's question at a second size), not a footnote to thi
 stricter margin, +0.0294 against the deep tree, is not a gap a recipe search should be expected
 to close.
 
-**That preregistration exists, is frozen, and is running.** Preregistration 0012
-(`prereg/0012-recipe-search-2048.json`, chain seq 12, NIST Beacon pulse 1925147, drand round
-6433429, reader `tools/readers/recipe2048_verdict.py` hashed into the chain at a clean tree) is a
-*symmetric* recipe search: every head with a hyperparameter — the HGB model, the logistic, the
-depth-3 tree and the deep tree — gets an enumerated roster of eight recipes with the 0011 recipe
-first, selected by one rule on a chunk-rule holdout that shares no chunk with the sealed
-evaluation set, then fitted once on 0011's 500000-row pool and scored once on 0011's evaluation
-set, the model last, with every baseline head floored at its 0011 value so the search can raise
-the bar and never lower it. Its expected outcome, written before any fit, is `RECIPE_FAILS`. No
-0012 number appears in this document until its frozen reader emits one; the run's checkpoints
-are committed as they land under `artifacts/pivot/recipe_search_2048_ckpt/`.
+**That preregistration was run, and the answer is in the next section.** Preregistration 0012
+(chain seq 12) searched every head symmetrically; its frozen reader voided the run on a defect
+of its own, and preregistration 0013 (chain seq 13) re-read the same banked artifact with that
+one line corrected: `RECIPE_FAILS`. The searched model gained 0.0379 over the incumbent; the
+searched logistic gained more.
+
+### The recipe search — `RECIPE_FAILS` at 2048 under a symmetric search (preregistrations 0012 and 0013)
+
+The 0011 section above ends on the question the record named: is the 0.0025 shortfall a
+recipe artefact? Preregistration 0012 (chain seq 12, NIST Beacon pulse 1925147, drand round
+6433429) asked it the only fair way. Every head with a hyperparameter — the HGB model, the
+logistic, the depth-3 tree, the deep tree — got an enumerated roster of eight recipes with the
+0011 recipe first; every roster went through the same two-stage selection on a chunk-rule
+holdout (chunk id mod 5 equals 0, hashed into the reader before any fit) that shares no chunk
+with the sealed evaluation set; each head's winner was fitted once on 0011's 500000-row pool and
+scored once on 0011's evaluation set, the model last; and every baseline head was floored at its
+0011 value, so the search could raise the bar and never lower it. The expected outcome, written
+before any fit, was `RECIPE_FAILS`.
+
+| | |
+|---|---|
+| **Verdict** | `RECIPE_FAILS` — boundary **(2048, 4096]**, frozen and searched |
+| **Emitted by** | `tools/readers/recipe2048_reread_verdict.py` (preregistration 0013, chain seq 13, NIST pulse 1925646, drand round 6434427) on 0012's banked artifact; 0012's own frozen reader emitted `VOID`, see below |
+| **Artifact** | `artifacts/pivot/recipe_search_2048.json` with `recipe_search_2048_selection.json` and `recipe_search_2048_scores.json`; verdicts in `recipe_search_2048_verdict.json` (0012, `VOID`) and `recipe_search_2048_reread_verdict.json` (0013) |
+| **Cost** | 24743.6 s of banked fit time (17895.9 s selection, the rest confirmatory) at 3 threads, nice 10, on 4 cores, no GPU; wall clock 11:13 to 19:23 UTC on 2026-09-03 including one container restart; `artifacts/pivot/engineering_log_0012.json` |
+
+| Clause | Bar | Read | Result |
+|---|---|---|---|
+| Incumbent refit reproduces 0011 | within 0.005 of 0.1741 | **0.1741** | pass |
+| 0011 logistic refit reproduces 0011 | within 0.005 of 0.1266 | **0.1266** | pass |
+| Null control with the selected recipe | ≤ chance + 0.02 | **0.0408** | pass |
+| Evaluation rows gathered during selection | 0 | **0** | pass |
+| Margin, frozen set (floored) | ≥ 0.05 | 0.212 − 0.1886 = **+0.0234** | **fail** |
+| Margin, expanded set (floored) | ≥ 0.05 | 0.212 − 0.1886 = **+0.0234** | **fail** |
+| Margin, expanded set, gutenberg excluded | ≥ 0.05 | 0.2223 − 0.1975 = **+0.0248** | **fail** |
+
+**Finding 1 — the search moved both sides, and the baseline side moved more.** The selected
+model recipe, M7 (31 leaves, L2 10, learning rate 0.15, 149 boosting iterations against the
+incumbent's 38), scores **0.212** on the sealed set, a gain of **+0.0379** over the incumbent's
+0.1741. The selected logistic, L3 (standardised inputs, C 1.0), scores **0.1886**, a gain of
+**+0.062** over the 0011 logistic's 0.1266 — and it now sets every bar, above the searched deep
+tree (0.1465, floor 0.1447) and above every other head's floor. The frozen-reading shortfall that
+was 0.0025 under the incumbent is **0.0266** under the search. The 0011 logistic was an
+unstandardised lbfgs run that hit its iteration cap; standardising the 1108 columns was worth
+more to the dumb rule than a hyperparameter search was worth to the model.
+
+**Finding 2 — what the model search found, and what it did not.** On the selection holdout the
+incumbent scored 0.1462 at the 100000-row stage and every lower-learning-rate or heavier-regularised
+recipe beat it (M3 0.1737, M4 0.1784, M7 0.1808); the incumbent with a chunk-grouped early-stopping
+split (M8, 0.1465) did not, so the content-leaking validation split was not what held it back. The
+per-family picture is 0011's: csv **0.3432**, log **0.3246**, json **0.3131**, code **0.2499** for
+the searched model against gutenberg **0.1409**, mixed **0.1143**, base64 **0.1071** and binary
+**0.1054** — three eighths of the evaluation set carry nothing a recipe can move.
+
+**Finding 3 — the frozen reader voided an honest run, and the record says so.** 0012's reader
+expected the two second-stage records of each head in ranked order; the runner writes them in
+roster order. Same records, same ranking, same winner; every other clause passed. The `VOID` is
+banked as emitted, the defect and the gate that missed it are filed at full size in
+`CORRECTIONS.md` (2026-09-03), and preregistration 0013 re-read the same artifact under a reader
+with that one line changed — with every 0012 number quoted in the preregistration before its
+reader was hashed into the chain, and the outcome those numbers give, `RECIPE_FAILS`, committed
+to in advance. The re-read revises nothing: 0012 stands `VOID` on its own reader.
+
+**What it does not establish.** A buyer. Anything about recipes off the roster, architectures off
+the roster (no MLP, no forest — the reasons are in the preregistration), carve sizes other than
+2048, the transfer arm, or the feature set. It establishes that under this protocol, at 2048
+bytes, none of eight model recipes clears a bar that a symmetric search of the baselines raised
+to 0.1886 — and that the 0011 number the search was chasing was 0.0025 short of a bar that was
+itself soft.
 
 ### A learned representation over raw bytes does not rescue it either — `BYTE_MODEL_FAILS`
 

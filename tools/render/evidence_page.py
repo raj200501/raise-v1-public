@@ -40,6 +40,9 @@ v2048 = json.load(open(_v2048p, encoding="utf-8")) if os.path.exists(_v2048p) el
 _r2048p = A("pivot", "recipe_search_2048.json"); _rv2048p = A("pivot", "recipe_search_2048_verdict.json")
 r2048 = json.load(open(_r2048p, encoding="utf-8")) if os.path.exists(_r2048p) else None
 rv2048 = json.load(open(_rv2048p, encoding="utf-8")) if os.path.exists(_rv2048p) else None
+# 0013 re-reads 0012's artifact under a reader with one line corrected; its verdict is the reading.
+_rr2048p = A("pivot", "recipe_search_2048_reread_verdict.json")
+rr2048 = json.load(open(_rr2048p, encoding="utf-8")) if os.path.exists(_rr2048p) else None
 
 git_head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO,
                           capture_output=True, text=True).stdout.strip()
@@ -146,7 +149,13 @@ chips = "".join([
            (f'symmetric recipe search at 2048 B: searched model {r2048["selected_model_id"]} {r2048["final_top1"]} vs floored '
             f'bars frozen {r2048["best_frozen_for_bar"]} / expanded {r2048["best_expanded_for_bar"]}; '
             f'boundary {rv2048["boundary_bytes"]}') if rv2048["verdict"] != "VOID" and r2048 and r2048.get("complete")
-           else f'VOID: {"; ".join(rv2048["validity_failed_clauses"])[:140]}')] if rv2048 else []))
+           else f'VOID on a defect of the frozen reader (record order), filed in CORRECTIONS.md; the run itself completed '
+                f'cleanly and is re-read under 0013')] if rv2048 else [])
+ + ([chip(rr2048["verdict"], {"RECIPE_CLEARS": "pass", "RECIPE_FAILS": "fail", "VOID": "inc"}[rr2048["verdict"]], "0013",
+           (f're-read of 0012\'s banked artifact with the reader\'s one line corrected: searched model {r2048["selected_model_id"]} '
+            f'{r2048["final_top1"]} vs floored bars frozen {r2048["best_frozen_for_bar"]} / expanded {r2048["best_expanded_for_bar"]}; '
+            f'boundary {rr2048["boundary_bytes"]}') if rr2048["verdict"] != "VOID" and r2048 and r2048.get("complete")
+           else f'VOID: {"; ".join(rr2048["validity_failed_clauses"])[:140]}')] if rr2048 else []))
 
 fam2048_table = ""
 _pf2048 = A("pivot", "per_family_curves_2048.json")
@@ -178,11 +187,15 @@ if c2048 and v2048 and v2048["verdict"] != "VOID":
                      f'bytes, each size under its own measured protocol.</p>')
 
 boundary_0012 = ""
-if r2048 and rv2048 and rv2048["verdict"] != "VOID" and r2048.get("complete"):
+_reading = rr2048 if (rr2048 and rr2048["verdict"] != "VOID") else (rv2048 if (rv2048 and rv2048["verdict"] != "VOID") else None)
+if r2048 and _reading and r2048.get("complete"):
     _fm = r2048["final_top1"]; _bf = r2048["best_frozen_for_bar"]; _be = r2048["best_expanded_for_bar"]
     _fmn = r2048["final_top1_non_gutenberg"]; _ben = r2048["best_expanded_non_gutenberg_for_bar"]
+    _who = ("preregistration 0013, which re-reads 0012\'s banked artifact under a reader with one line corrected "
+            "after 0012\'s own frozen reader voided the run on a record-order expectation of its own making "
+            "(filed in the corrections ledger)") if _reading is rr2048 else "preregistration 0012"
     boundary_0012 = (f'<p><strong>Under a symmetric recipe search the 2048 answer is '
-                     f'<span class="mono">{rv2048["verdict"]}</span>.</strong> Preregistration 0012 gave every head '
+                     f'<span class="mono">{_reading["verdict"]}</span></strong> (read by {_who}). Preregistration 0012 gave every head '
                      f'with a hyperparameter — the model, the logistic, the depth-3 tree, the deep tree — eight '
                      f'enumerated recipes with the 0011 recipe first, one selection rule on a chunk-rule holdout that '
                      f'never touched the evaluation set, one confirmatory fit per head on 0011\'s pool and one scoring '
@@ -191,7 +204,7 @@ if r2048 and rv2048 and rv2048["verdict"] != "VOID" and r2048.get("complete"):
                      f'{_bf} (margin {_fm - _bf:+.4f}) and a floored expanded bar of {_be} (margin {_fm - _be:+.4f}); '
                      f'without gutenberg, {_fmn} against {_ben} (margin {_fmn - _ben:+.4f}). The incumbent refit '
                      f'reproduced 0011\'s {r2048["incumbent_refit_top1"]} exactly. Boundary: '
-                     f'<span class="mono">{rv2048["boundary_bytes"]}</span>.</p>')
+                     f'<span class="mono">{_reading["boundary_bytes"]}</span>.</p>')
 
 # ---------------------------------------------------------------- seed panel
 if seeds:
