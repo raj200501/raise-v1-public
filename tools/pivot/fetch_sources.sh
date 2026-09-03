@@ -17,8 +17,11 @@ UA="raise-v1-research/1.0"
 for id in 1342 2701 84 1661 98 2600 1952 11 5200 74; do
   out="$DIR/pg${id}.txt"
   [ -s "$out" ] && continue
-  curl -sS --max-time 60 -A "$UA" -o "$out" "https://www.gutenberg.org/files/${id}/${id}-0.txt" 2>/dev/null \
-    || curl -sS --max-time 60 -A "$UA" -o "$out" "https://www.gutenberg.org/cache/epub/${id}/pg${id}.txt"
+  # -f: an HTTP error is a failure, not a 404 page saved as the source (board review 2026-09-03);
+  # the partial file is removed so the fallback runs and a later run re-fetches.
+  curl -fsS --retry 3 --max-time 60 -A "$UA" -o "$out" "https://www.gutenberg.org/files/${id}/${id}-0.txt" 2>/dev/null \
+    || { rm -f "$out"; curl -fsS --retry 3 --max-time 60 -A "$UA" -o "$out" "https://www.gutenberg.org/cache/epub/${id}/pg${id}.txt"; } \
+    || { rm -f "$out"; echo "fetch failed for pg${id}" >&2; exit 1; }
 done
 echo "source bytes: $(du -sh "$DIR" | cut -f1) in $DIR"
 python3 "$(dirname "${BASH_SOURCE[0]}")/pin_sources.py"

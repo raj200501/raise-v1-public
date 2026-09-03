@@ -280,7 +280,8 @@ determination; it records what the documents say and what this repository does.
   to the Project Gutenberg License for all works posted with the permission of the copyright holder
   found at the beginning of this work."*
 - **No additional terms appear at the beginning of the work**, in the current copy or in the banked
-  copy (`grep -n "©\|(C)\|non-commercial\|Wyllie"` matches only the translator line in both).
+  copy (`grep -n "©\|(C)\|non-commercial\|Wyllie"` matches only the translator line in the current
+  copy and nothing at all in the banked copy, which carries no translator credit — §1).
 - So the terms that bind are §1.E.1–1.E.7: no fee for access or copies (§1.E.7), the licence
   kept attached (§1.E.4), the §1.E.1 sentence displayed on any copy (§1.E.1, §1.E.5). This
   repository distributes neither the file nor the corpus (both gitignored); the file it measured is
@@ -327,10 +328,16 @@ assertion.
   is hereby granted, free of charge, to use this software for evaluation and research purposes.
   This license does not allow this software to be used in a commercial context."* and *"All other
   usage is reserved."* Where it is used here: only `tools/repro/sat_solver_identity.py`, the
-  reproduction of a Phase-0 **kill** (the SAT-solver-identity candidate), which is evaluation and
-  research use. It is **not in the product path** — nothing in the DEFLATE pivot imports pysat.
-  It must not ship in anything commercial; if the company ever productises code touching pysat,
-  Lingeling is dropped first. `README.md` now says so.
+  reproduction of a Phase-0 **kill** (the SAT-solver-identity candidate), whose results are banked
+  in `artifacts/verification/repro_sat_solver_identity_run1.json` and `run2.json`. It is **not in
+  the product path** — nothing in the DEFLATE pivot imports pysat. **COULD NOT VERIFY** whether a
+  company's reproduction run is "evaluation and research" rather than "a commercial context" under
+  that COPYING: the restriction is on *use*, not only on shipping, and that is a legal question this
+  audit does not answer (an earlier version of this paragraph answered it in the repository's own
+  favour; the 2026-09-03 board review struck that). The conservative course, if the question is
+  ever pressed, is to re-run the reproduction with the five MIT-form solvers and retire the
+  Lingeling-bearing artifacts under a CORRECTIONS entry. `README.md` states the restriction as
+  written.
   **F13 — the venv contains it regardless of use:** python-sat's wheel bundles the compiled
   solvers, so `pysolvers.cpython-311-x86_64-linux-gnu.so` in the venv contains Lingeling whether
   or not it is called. Redistributing the venv or the wheel would redistribute it.
@@ -419,6 +426,10 @@ blocked by this container's egress policy.
 3. The licence of MapleLCMDistChronoBT from its declared source, which was unreachable (§5.3).
 4. Submitter-level IP claims on individual NCBI assembly records (§5.5).
 5. Whether an archived copy of the banked pg1342 edition exists (§5.6).
+6. Whether a company's use of pg5200 windows as training input is within §1.E.1–1.E.7 (no fee,
+   licence attached) — a legal question, not answered here (§5.1).
+7. Whether running Lingeling for the banked Phase-0 reproduction is "evaluation and research" or
+   "a commercial context" under its COPYING — a legal question, not answered here (§5.3, F11).
 
 Resolved since 2026-08-31: the pg5200 terms as stated in the file; the public-domain status PG
 asserts for the other nine editions; ISA-L and five of six SAT solver licences; the IGS and BKG

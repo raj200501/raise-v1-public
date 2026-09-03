@@ -312,5 +312,66 @@
   "schema": "raise-v1/per_family_curves/1",
   "source_artifact": "artifacts/pivot/carve_generalisation_2048.json",
   "source_scores": "artifacts/pivot/carve_rung_scores_2048.json",
-  "study": "2048-byte carve, preregistration 0011"
+  "study": "2048-byte carve, preregistration 0011",
+  "subsets": {
+    "structured_only_csv_log_json_code": {
+      "baselines": {
+        "best_single_feat": 0.0757,
+        "depth16_tree": 0.187,
+        "depth3_tree": 0.0903,
+        "depth8_tree": 0.1511,
+        "logistic": 0.1645,
+        "majority": 0.0385,
+        "stratified": 0.0387
+      },
+      "families": [
+        "code",
+        "csv",
+        "json",
+        "log"
+      ],
+      "margin_expanded": {
+        "baseline": "depth16_tree",
+        "clears_bar": true,
+        "value": 0.0549
+      },
+      "margin_frozen": {
+        "baseline": "logistic",
+        "clears_bar": true,
+        "value": 0.0774
+      },
+      "n_eval": 64792,
+      "top_rung_accuracy": 0.2419
+    },
+    "without_base64_binary_mixed": {
+      "baselines": {
+        "best_single_feat": 0.0701,
+        "depth16_tree": 0.1694,
+        "depth3_tree": 0.0884,
+        "depth8_tree": 0.1401,
+        "logistic": 0.1499,
+        "majority": 0.0385,
+        "stratified": 0.0386
+      },
+      "families": [
+        "gutenberg",
+        "code",
+        "csv",
+        "json",
+        "log"
+      ],
+      "margin_expanded": {
+        "baseline": "depth16_tree",
+        "clears_bar": false,
+        "value": 0.0478
+      },
+      "margin_frozen": {
+        "baseline": "logistic",
+        "clears_bar": true,
+        "value": 0.0673
+      },
+      "n_eval": 81380,
+      "top_rung_accuracy": 0.2172
+    }
+  }
 }

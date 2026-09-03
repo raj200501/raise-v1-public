@@ -27,7 +27,7 @@ cat <<'MSG'
 To re-derive the result from scratch rather than read the banked one:
 
     pip install -r requirements-pivot.txt     # zopfli, isal, libdeflate
-    tools/pivot/fetch_sources.sh              # public-domain source bytes
+    tools/pivot/fetch_sources.sh              # Project Gutenberg source bytes; terms in docs/compliance/LICENSE_AUDIT.md
     python3 tools/pivot/run_study.py --help   # the manufacture-and-measure pipeline
 
 Everything above exits non-zero on failure.

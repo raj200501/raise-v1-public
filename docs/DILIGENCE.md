@@ -35,7 +35,8 @@ data as the top rung; the margins over them are the headline clauses.
 ten times chance, near-flat on incompressible families sitting at the measured collision ceiling
 (`carve_channel_capacity.json`). The headline is a mixture and the decomposition is published —
 at 2048 too (`per_family_curves_2048.json`): csv and log clear the 0.05 bar on both readings
-(+0.0554 and +0.0501 against the depth-16 tree) while the mixture misses by 0.0025.
+(+0.0554 and +0.0501 against the depth-16 tree), the structured four clear it as a set (+0.0549),
+and the mixture misses on every reading — even without the three incompressible families (+0.0478).
 
 ## "Does it survive realistic carve sizes?"
 
@@ -64,7 +65,7 @@ PR was merged with a merge commit, preserving it.
 
 ## "What did you get wrong?"
 
-`CORRECTIONS.md`: twelve entries at full size, including a published figure our own reproduction
+`CORRECTIONS.md`: thirteen entries at full size, including a published figure our own reproduction
 contradicted, an instrument warning grepped out of view before a commit, a wrong reading of our own
 null control (an error *against* us, filed anyway), and the audit's thirteen findings. The pattern
 of what the gates missed is stated there: they check mechanical honesty, not reasoning between

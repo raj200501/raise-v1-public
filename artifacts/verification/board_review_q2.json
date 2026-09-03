@@ -1,0 +1,196 @@
+{
+  "schema": "raise-v1/board_review_q2/1",
+  "date": "2026-09-03",
+  "workflow_run": "wltinjbr5",
+  "agents": 77,
+  "design": "five department reviewers (compliance, statistics, reproducibility, research QA, public mirror), two board refuters per finding, a finding survives only if both decline to refute",
+  "raw_findings": 36,
+  "confirmed": 29,
+  "rejected": 7,
+  "confirmed_findings": [
+    {
+      "title": "Lingeling's licence forbids use in a commercial context; the audit and README narrow it to a shipping restriction and assert the use is 'evaluation and research' \u2014 a legal determination the section says it does not make, and not carried into the COULD NOT VERIFY list",
+      "file": "docs/compliance/LICENSE_AUDIT.md",
+      "line": 331,
+      "severity": "major"
+    },
+    {
+      "title": "The dataset card and the cold-clone instructions still say the Gutenberg sources are 'public-domain', the exact statement finding F1 found false for pg5200",
+      "file": "tools/pivot/DATASET_CARD.md",
+      "line": 49,
+      "severity": "major"
+    },
+    {
+      "title": "\u00a75.1 says the additional-terms grep 'matches only the translator line in both' copies; the banked copy has no translator line and the grep matches nothing there",
+      "file": "docs/compliance/LICENSE_AUDIT.md",
+      "line": 283,
+      "severity": "minor"
+    },
+    {
+      "title": "The public mirror states that all four filtered GNSS files have unverifiable redistribution terms; the audit resolved the terms for the two BKG/IGS broadcast files",
+      "file": "/home/user/raise-v1-public/docs/PUBLIC_MIRROR.md",
+      "line": 9,
+      "severity": "minor"
+    },
+    {
+      "title": "The updated consolidated COULD NOT VERIFY list drops a residual that \u00a75.1 labels COULD NOT VERIFY: whether training on compressed windows of pg5200 is within \u00a71.E.7 for a company",
+      "file": "docs/compliance/LICENSE_AUDIT.md",
+      "line": 415,
+      "severity": "minor"
+    },
+    {
+      "title": "Depth-16 tree accuracy at 1024 misquoted: 0.1103 is the depth-8 tree; depth-16 is 0.1197",
+      "file": "/home/user/raise-v1/VERDICT.md",
+      "line": 625,
+      "severity": "major"
+    },
+    {
+      "title": "Heading says each halving of the window 'costs about the same'; the paragraph's own banked steps are 0.0504 and 0.0296",
+      "file": "/home/user/raise-v1/VERDICT.md",
+      "line": 629,
+      "severity": "major"
+    },
+    {
+      "title": "'CARVE_FAILS by 0.0025' quotes the slackest of three failed within-size clauses; the verdict-binding clauses miss by 0.0206 and 0.0192",
+      "file": "/home/user/raise-v1/outbound/NARRATIVE.md",
+      "line": 29,
+      "severity": "major"
+    },
+    {
+      "title": "'The same ordering as at 4096' is false: base64 and mixed swap places between 4096 and 2048",
+      "file": "/home/user/raise-v1/VERDICT.md",
+      "line": 644,
+      "severity": "minor"
+    },
+    {
+      "title": "'Four incompressible families' counts gutenberg, which is Project Gutenberg English prose, not an incompressible generator",
+      "file": "/home/user/raise-v1/VERDICT.md",
+      "line": 659,
+      "severity": "minor"
+    },
+    {
+      "title": "'60 findings' across two review rounds has no artifact in the repository \u2014 COULD NOT VERIFY",
+      "file": "/home/user/raise-v1/VERDICT.md",
+      "line": 597,
+      "severity": "minor"
+    },
+    {
+      "title": "Prereg readings descriptor says corpus_b_chunk_offset 'must be >= 75000' while the sealed bar and the reader require exactly 75000",
+      "file": "/home/user/raise-v1/prereg/0011-carve-2048-boundary.json",
+      "line": 212,
+      "severity": "minor"
+    },
+    {
+      "title": "VERDICT attributes the 1024 depth-8 tree's accuracy (0.1103) to the depth-16 tree",
+      "file": "VERDICT.md",
+      "line": 625,
+      "severity": "major"
+    },
+    {
+      "title": "CI determinism probe runs with zero source bytes, so the gutenberg family is silently replaced and never tested",
+      "file": ".github/workflows/verify.yml",
+      "line": 23,
+      "severity": "major"
+    },
+    {
+      "title": "The frozen reader does not check the cache's build metadata; the unfrozen script does",
+      "file": "VERDICT.md",
+      "line": 668,
+      "severity": "minor"
+    },
+    {
+      "title": "Training-time cost is banked as 4 cores while the engineering log says the run used 3 threads under nice",
+      "file": "artifacts/pivot/carve_generalisation_2048.json",
+      "line": 42,
+      "severity": "minor"
+    },
+    {
+      "title": "Coverage-map reverify commands for 0011 overwrite the banked artifacts they are meant to verify",
+      "file": "artifacts/verification/coverage.json",
+      "line": 741,
+      "severity": "minor"
+    },
+    {
+      "title": "fetch_sources.sh fallback URL is dead on HTTP errors and a 404 page is cached as the source",
+      "file": "tools/pivot/fetch_sources.sh",
+      "line": 20,
+      "severity": "minor"
+    },
+    {
+      "title": "VERDICT quotes the depth-8 tree's 1024 accuracy as the depth-16 tree's",
+      "file": "VERDICT.md",
+      "line": 625,
+      "severity": "major"
+    },
+    {
+      "title": "'A pass on csv and log masked by the incompressible families' is not supported on the reading it quotes",
+      "file": "README.md",
+      "line": 35,
+      "severity": "major"
+    },
+    {
+      "title": "NARRATIVE reports 2048 only as 'fails by 0.0025' and never gives the stricter preregistered reading or the transfer margin",
+      "file": "outbound/NARRATIVE.md",
+      "line": 29,
+      "severity": "major"
+    },
+    {
+      "title": "NARRATIVE says transfer 'collapses to chance at both' sizes; at 2048 the artifact does not support 'chance'",
+      "file": "outbound/NARRATIVE.md",
+      "line": 168,
+      "severity": "minor"
+    },
+    {
+      "title": "MILESTONES M3 cost extrapolation is contradicted by the banked 2048 cost it does not cite",
+      "file": "docs/strategy/MILESTONES.md",
+      "line": 188,
+      "severity": "major"
+    },
+    {
+      "title": "'Two adversarial review rounds whose 60 findings' is not banked in any artifact and counts filed findings as accepted ones",
+      "file": "VERDICT.md",
+      "line": 597,
+      "severity": "minor"
+    },
+    {
+      "title": "'Each halving of the window costs about the same' is contradicted by the two banked steps it quotes",
+      "file": "VERDICT.md",
+      "line": 629,
+      "severity": "minor"
+    },
+    {
+      "title": "Per-family ordering at 2048 is not 'the same ordering as at 4096'",
+      "file": "VERDICT.md",
+      "line": 644,
+      "severity": "minor"
+    },
+    {
+      "title": "Evidence page's provenance stamp names a commit at which the artifacts it renders did not exist",
+      "file": "outbound/evidence_page.html",
+      "line": 78,
+      "severity": "minor"
+    },
+    {
+      "title": "Mirror note says each prereg/chain.jsonl entry carries a git_commit; no chain entry has that field",
+      "file": "/home/user/raise-v1-public/docs/PUBLIC_MIRROR.md",
+      "line": 20,
+      "severity": "minor"
+    },
+    {
+      "title": "Banner and mirror note say all four GNSS files' redistribution terms could not be verified; the audit resolved two of them",
+      "file": "/home/user/raise-v1-public/README.md",
+      "line": 1,
+      "severity": "minor"
+    }
+  ],
+  "rejected_titles": [
+    "\u00a75.4 attributes all four committed GNSS files and '5.5 MB' to commit b185129; that commit holds three files (4.4 MB), the fourth was committed earlier in 6ed8a6d",
+    "MANIFEST.json promises that committed source texts are 'marked', but no entry carries a mark and the committed IGS text (a pypdf extraction) has no recorded hash",
+    "Outbound documents quote the (2048, 4096] bracket without the top-rung caveat the verdict artifact attaches to it; the frozen-set miss is smaller than the slope-implied gain from matching 4096's 800000 rung",
+    "The scaling mutation gate never exercises fit(groups=...), the cluster branch every 0011 slope clause gates on",
+    "The logistic baseline that decides the 0.0025 near-miss did not converge, and no artifact or document says so",
+    "Per-family stricter margins are set beside the mixture's frozen-set miss as if they were the same reading",
+    "Mirror build has no post-filter verification; a future rebuild would silently publish a leaked item"
+  ],
+  "disposition": "every confirmed finding was fixed on 2026-09-03 and filed in CORRECTIONS.md; duplicates (the same defect reported by two departments) were fixed once"
+}

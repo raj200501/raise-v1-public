@@ -32,9 +32,10 @@ not guarantee the window the result needs. A third preregistration measured the 
 2048 bytes the model reaches 0.1741 against logistic regression at 0.1266 — a margin of +0.0475,
 0.0025 short of the 0.05 bar — and +0.0294 against a depth-16 tree, with transfer from 4096 at
 0.0455 against 0.038462 chance. The window boundary of this recipe is bracketed to (2048, 4096].
-Decomposed by content family, the 2048 miss is a pass on csv and log (+0.0554 and +0.0501
-against the strongest baseline) masked by the incompressible families; the verdict is the
-mixture's, and the decomposition is published beside it.
+Decomposed by content family, csv and log clear the bar at 2048 on both readings (+0.0554 and
++0.0501 against the strongest baseline) and the structured four clear it as a set (+0.0549), but
+the mixture fails even with the three incompressible families removed (+0.0478); the verdict is
+the mixture's, and the decomposition is published beside it.
 
 What it also does not clear is **G5, a named buyer type**. No buyer has been contacted and none is
 claimed. A rising curve on a task nobody needs is a rising curve on a task nobody needs, and the
@@ -113,5 +114,7 @@ Apache-2.0 (full text in `LICENSE`, copyright in `NOTICE`), for the code and for
 alike. Data and dependency licences are recorded per-corpus in `docs/compliance/LICENSE_AUDIT.md`
 — with the upstream licence texts and a hash manifest of every fetched source under
 `docs/compliance/sources/` — and are not assumed to be the same as the code licence. One
-component used only by an archived Phase-0 reproduction (Lingeling, via `python-sat`) is licensed
-for evaluation and research use only; it is not in the product path and must not ship in one.
+component used only by an archived Phase-0 reproduction (Lingeling, via `python-sat`) carries a
+licence that permits evaluation and research use and "does not allow this software to be used in
+a commercial context"; it is not in the product path, and whether the banked reproduction run
+falls inside that restriction is a legal question the audit records as COULD NOT VERIFY.

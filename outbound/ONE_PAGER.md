@@ -92,8 +92,9 @@ byte-identity ceiling barely moves, **20.9125** distinct streams of 26 at 4096 a
 **The boundary is bracketed.** Preregistration 0011 built a third corpus at **2048** bytes, disjoint
 by chunk id from both earlier corpora, and re-ran the protocol with gutenberg-excluded clauses in
 both arms and a reader that returns `VOID` for anything it cannot vouch for. Verdict `CARVE_FAILS`
-again — by **0.0025**: top-1 **0.1741** against logistic **0.1266** (**+0.0475** against the 0.05
-bar), and **+0.0294** against a depth-16 tree at **0.1447**. At the matched **100000** rung:
+again, on every reading: top-1 **0.1741** against logistic **0.1266** (**+0.0475** against the 0.05
+bar, **0.0025** short), and **+0.0294** against a depth-16 tree at **0.1447** (**0.0206** short on
+the reading frozen as binding). At the matched **100000** rung:
 **0.1165** at 1024, **0.1461** at 2048, **0.1965** at 4096. Transfer from 4096 lands at **0.0455**
 after the transfer model reproduced its own **0.1965** on corpus A first. The window boundary of
 this recipe lies in (2048, 4096]; every number above remains a 4096-byte-window number.
@@ -185,7 +186,7 @@ reported, and neither is quoted as the other.
 
 The verification-coverage map is machine-checked and prints its weakest class first, deliberately.
 
-**14 of 93 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
+**14 of 96 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
 including us. Eight are measurements made by subagents inside scratch directories that no longer
 exist, and **that includes measurements the conclusions rest on.** The ninth is worse than
 unverified: it is a figure we published and then failed to reproduce ourselves.

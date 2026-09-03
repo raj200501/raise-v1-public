@@ -327,7 +327,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **14 of 93 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 96 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -356,7 +356,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 | Class | Count | Meaning |
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
-| `arithmetic-verifiable` | 15 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
+| `arithmetic-verifiable` | 18 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
 | `primary-verifiable` | 64 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
@@ -594,8 +594,9 @@ archived trial killed five candidates on, arriving this time in our own work.
 ### The boundary, bracketed — `CARVE_FAILS` at 2048 too (preregistration 0011)
 
 Preregistration 0011, frozen at chain seq 11 (NIST Beacon pulse 1924204, drand round 6431543)
-before the third corpus existed, after two adversarial review rounds whose 60 findings are the
-reason its reader returns `VOID` for anything it cannot vouch for. The expected outcome was written
+before the third corpus existed, after two adversarial review rounds — 60 raw findings, banked with
+their dispositions in `artifacts/verification/prereg_0011_reviews.json` — which are the reason its
+reader returns `VOID` for anything it cannot vouch for. The expected outcome was written
 into the preregistration before the data: `CARVE_FAILS`. A third corpus at **2048** bytes — 25000
 source chunks at ids 75000..99999, disjoint by chunk id from both earlier corpora — under the 0007
 protocol plus gutenberg-excluded margin clauses in **both** arms.
@@ -622,11 +623,11 @@ protocol plus gutenberg-excluded margin clauses in **both** arms.
 **0.1741** at 500000 fragments against logistic regression at **0.1266**: a margin of **+0.0475**
 where the bar is 0.05. The three frozen-set margins now read **+0.0099** at 1024, **+0.0475** at
 2048 and **+0.1003** at 4096. The stricter reading is not close: the depth-16 tree reaches
-**0.1447** at 2048 (it was **0.1103** at 1024 and **0.1812** at 4096), for a margin of **+0.0294**.
+**0.1447** at 2048 (it was **0.1197** at 1024 and **0.1812** at 4096), for a margin of **+0.0294**.
 Excluding the gutenberg family — the rows the chunk-id disjointness guarantee does not cover —
 moves the stricter margin to **+0.0308**, so the near-miss is not carried by leaked rows either.
 
-**2. Holding data volume fixed, each halving of the window costs about the same.** At the matched
+**2. Holding data volume fixed, the upper halving costs more than the lower one.** At the matched
 100000 rung: **0.1165** at 1024, **0.1461** at 2048, **0.1965** at 4096. The step from 2048 to 4096
 is worth **0.0504**; the step from 1024 to 2048 is worth **0.0296**.
 
@@ -641,7 +642,7 @@ cluster-bootstrap interval of **[0.0307, 0.0326]** over the 5000 held-out chunks
 between 1024's **+0.0204** and 4096's **+0.0491**. Rungs: **0.0882**, **0.1140**, **0.1461**,
 **0.1741**. Per family at the top rung: csv **0.2915**, log **0.2482**, json **0.2359**, code
 **0.1945**, gutenberg **0.1208**, mixed **0.1098**, base64 **0.103**, binary **0.0925** — the
-same ordering as at 4096, compressed.
+same ordering as at 4096 for the top five, compressed; mixed and base64 swap places at the bottom.
 
 **5. The scope sentence is now a measurement.** "Valid only at a 4096-byte window" was a two-point
 statement with the boundary unmeasured across a factor of four. It is now bracketed to
@@ -655,18 +656,27 @@ equal the artifact's to four decimals). On **csv** and **log** the 2048 model cl
 on **both** readings: csv **+0.1105** over logistic and **+0.0554** over the depth-16 tree; log
 **+0.0897** and **+0.0501**. **code** clears the frozen reading (**+0.0684**) and misses the
 stricter one (**+0.0469**); **json** misses both at **+0.0438**; gutenberg, base64, binary and mixed
-miss everything, mixed with a negative margin of **-0.0045**. The headline is a mixture, and the
-mixture's miss is a pass on two structured families masked by four incompressible ones. This
-changes nothing about the verdict — the preregistered unit is the mixture, and the mixture fails —
-and it is the number a buyer whose carves are csv or log would need to see. The same script at
+miss everything, mixed with a negative margin of **-0.0045**. The headline is a mixture; the same
+script banks the mixture *without* the three incompressible families (base64, binary, mixed): top-1
+**0.2172**, margin **+0.0673** over logistic and **+0.0478** over the depth-16 tree — still below the
+bar on the binding reading. Only the structured four (csv, log, json, code) clear both readings as
+a set, **+0.0774** and **+0.0549** at top-1 **0.2419**. So the honest sentence is narrower than
+"a pass masked by noise": two families pass outright, the structured four pass together, and the
+mixture fails even with the incompressible families removed, because gutenberg prose and json sit
+between. This changes nothing about the verdict — the preregistered unit is the mixture, and the
+mixture fails — and the per-family rows are what a buyer whose carves are csv or log would need
+to see. The same script at
 1024 (`per_family_curves_1024.json`, model side only; that run banked no per-family baselines)
 puts csv at **0.2218** with a slope of **+0.0470** per decade, the steepest thing in the 1024 run.
 
-**Cost, banked.** Corpus build **1564.0** seconds on 4 cores, no GPU; training **12.1**, **26.0**,
-**125.5** and **1036.0** seconds per rung. Three earlier attempts were killed by container
+**Cost, banked.** Corpus build **1564.0** seconds at 4 processes on the 4-core container, no GPU;
+training **12.1**, **26.0**, **125.5** and **1036.0** seconds per rung, taken under `nice` with 3
+BLAS threads (the artifact's `cost.train_environment`), so not comparable to 0007's 4-thread
+ladder. Three earlier attempts were killed by container
 restarts — two during the corpus build, one during the baselines — and the fourth reused the
-corpus cache the third had written; the reader checks that cache's build metadata, not the
-command line, which is why a reused cache is safe to trust.
+corpus cache the third had written. The measurement script refuses a cache whose stored build
+metadata disagrees with its command line and stamps the artifact with where `carve_bytes` came
+from; the frozen reader requires that stamp. That is why a reused cache is safe to trust.
 
 **What it does not establish.** A buyer. Anything about a different recipe at 2048: a frozen-set
 margin 0.0025 short of the bar is exactly the gap a per-head recipe search might close, and that

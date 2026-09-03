@@ -45,6 +45,8 @@ All compute below is priced from these banked fields (4 CPU cores, `gpu: "none"`
 | `artifacts/pivot/carve_generalisation.json` | 1024-byte corpus, 650000 fragments | `build_seconds` 1066.6 |
 | `artifacts/pivot/carve_generalisation.json` | training, rungs 1000 / 10000 / 100000 / 500000 | `train_seconds_per_rung` 11.1 / 24.5 / 99.4 / 751.5 |
 | `artifacts/pivot/byte_model.json` | the whole 0009 CNN round (10 epochs, 182842 parameters) | `cost.build_seconds` 3665.7 |
+| `artifacts/pivot/carve_generalisation_2048.json` | 2048-byte corpus, 650000 fragments | `build_seconds` 1564.0 |
+| `artifacts/pivot/carve_generalisation_2048.json` | training, rungs 1000 / 10000 / 100000 / 500000 (niced, 3 threads — see the artifact's `cost.train_environment`) | `train_seconds_per_rung` 12.1 / 26.0 / 125.5 / 1036.0 |
 
 Corpus sizes are banked as array shapes and dtypes in `artifacts/pivot/corpus_manifest.json`
 (the corpora themselves are not committed; a cold clone re-manufactures them and checks the
@@ -185,13 +187,15 @@ quoting it as "carved DEFLATE encoder provenance" rather than "provenance among 
 configurations" becomes the kind of overquote this repository files corrections for. Kill
 here is cheap and informative in both directions.
 
-**Cost basis (measured units).** The two banked corpus builds bracket the per-size cost:
-1066.6 build seconds for 650000 fragments at 1024, 3415.5 for 1300000 at 4096, with train
-ladders of 11.1–751.5 and 14.5–1324.6 seconds respectively. **EXTRAPOLATION:** one
-additional carve size run to the full 0007 protocol costs on the order of one banked 1024
-ladder — about 1066.6 build seconds plus under 1000 train seconds at 4 cores — basis: same
-fragment counts, same pipeline, cost scaling between the two banked points with carve
-bytes and fragment count. For encoder families the labels remain free — marginal cost one
+**Cost basis (measured units).** Three banked corpus builds now price the per-size cost:
+1066.6 build seconds for 650000 fragments at 1024, 1564.0 for 650000 at 2048, 3415.5 for
+1300000 at 4096, with train ladders of 11.1–751.5, 12.1–1036.0 (the 2048 ladder ran niced at 3
+threads, so it is an upper bound on the 4-thread cost) and 14.5–1324.6 seconds respectively.
+An earlier version of this paragraph extrapolated a fresh carve size at "about 1066.6 build
+seconds plus under 1000 train seconds"; the measured 2048 run came in at 1564.0 and 1199.6, so
+the extrapolation was low by roughly half on both counts. **EXTRAPOLATION, revised:** one
+additional carve size run to the full 0007 protocol costs on the order of the measured 2048
+ladder — basis: same fragment count, same pipeline, the three banked points. For encoder families the labels remain free — marginal cost one
 compression call per fragment — and the build cost scales with the configuration count;
 **EXTRAPOLATION:** growing the class set from 26 scales build seconds roughly in
 proportion, basis: the build is one compression pass per configuration per chunk.

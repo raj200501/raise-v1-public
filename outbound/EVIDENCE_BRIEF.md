@@ -87,7 +87,8 @@ reading available, fixed before the run; the looser reading would have given **+
   4096-trained model transfers at **0.0403** — chance. The information is present at 1024 (the
   collision ceiling barely moves: 20.9125 → 20.79 across 4096 → 512), so this is a modelling
   failure and is reported as one.
-- **2048-byte carve: `CARVE_FAILS`, by 0.0025.** Within-size margin **+0.0475** over the frozen
+- **2048-byte carve: `CARVE_FAILS` on every reading — by 0.0025 on the slackest, 0.0206 on the
+  binding one.** Within-size margin **+0.0475** over the frozen
   baseline set against the 0.05 bar, **+0.0294** over all baselines, **+0.0308** with the leaked
   family excluded; matched-rung accuracy **0.1461** against **0.1965** at 4096 and **0.1165** at
   1024; transfer from 4096 at **0.0455**, from a model that first reproduced its banked **0.1965**
@@ -108,9 +109,11 @@ per-example scores and per-family baselines; a decomposition, not a preregistere
 | binary | 0.0925 | +0.0129 | +0.0007 | +0.0056 |
 | mixed | 0.1098 | -0.0045 | -0.0045 | +0.0057 |
 
-Bold margins clear the 0.05 bar. The mixture misses by 0.0025 because two structured families
-pass on both readings and four incompressible families fail on every reading; the verdict is the
-mixture's, and the decomposition is what a buyer with csv or log carves would need to see.
+Bold margins clear the 0.05 bar. Two structured families pass on both readings; three
+incompressible families and the gutenberg prose family fail on every reading. The same artifact
+banks the mixture without base64, binary and mixed — **+0.0673** frozen, **+0.0478** against the
+depth-16 tree, still below the bar — and the structured four alone, **+0.0774** and **+0.0549**.
+The verdict is the mixture's; the rows are what a buyer with csv or log carves would need to see.
 - **A byte-sequence CNN does not rescue it** (0009): 0.0849 against the hand-engineered 0.1165 and
   a byte-histogram logistic at 0.0943. A corrected-head variant (0010) was inconclusive under its
   frozen recipe, and its reader says so rather than counting it either way.
@@ -137,7 +140,7 @@ rerun would have said something different. It would not have.
 **11** preregistrations, hash-chained (entry *N* carries entry *N−1*'s hash) and anchored to NIST
 Beacon 2.0 and drand; readers frozen by sha256 before their data existed.
 **178** deliberate mutations across **14** gates, **178** detected, **0** survived — every gate provably capable of
-failing. **12** corrections filed against this work at full size, including a **54-agent
+failing. **13** corrections filed against this work at full size, including a **54-agent
 adversarial audit** whose 13 confirmed findings (three critical) were each fixed — the load-bearing ones by new measurement,
 with the audit record banked — rejected findings included — so the filter itself can be audited.
 
