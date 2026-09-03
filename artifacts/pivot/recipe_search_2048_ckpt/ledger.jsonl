@@ -6,3 +6,5 @@
 {"name": "sel1_model_M3", "fingerprint": "e1be89379aed30ca", "event": "started", "utc": "2026-09-03T11:22:52Z", "rss_gb": 4.45, "pid": 31590, "attempt": 1}
 {"name": "sel1_model_M3", "fingerprint": "e1be89379aed30ca", "event": "completed", "utc": "2026-09-03T11:37:43Z", "rss_gb": 4.68, "pid": 31590, "seconds": 864.2}
 {"name": "sel1_model_M4", "fingerprint": "c08f0a89694516be", "event": "started", "utc": "2026-09-03T11:37:43Z", "rss_gb": 4.68, "pid": 31590, "attempt": 1}
+{"name": "sel1_model_M4", "fingerprint": "c08f0a89694516be", "event": "completed", "utc": "2026-09-03T12:00:47Z", "rss_gb": 4.67, "pid": 31590, "seconds": 1347.1}
+{"name": "sel1_model_M5", "fingerprint": "1dad099885c5cce9", "event": "started", "utc": "2026-09-03T12:00:47Z", "rss_gb": 4.67, "pid": 31590, "attempt": 1}
