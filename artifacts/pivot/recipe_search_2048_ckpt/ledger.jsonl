@@ -67,3 +67,5 @@
 {"name": "sel2_model_M4", "fingerprint": "1bdc037d95c932d6", "event": "started", "utc": "2026-09-03T14:24:35Z", "rss_gb": 6.58, "pid": 1668, "attempt": 2}
 {"name": "sel2_model_M4", "fingerprint": "1bdc037d95c932d6", "event": "completed", "utc": "2026-09-03T16:06:21Z", "rss_gb": 7.34, "pid": 1668, "seconds": 6069.7}
 {"name": "sel2_model_M7", "fingerprint": "e564d37a429f0b9d", "event": "started", "utc": "2026-09-03T16:06:21Z", "rss_gb": 7.18, "pid": 1668, "attempt": 1}
+{"name": "sel2_model_M7", "fingerprint": "e564d37a429f0b9d", "event": "completed", "utc": "2026-09-03T16:54:36Z", "rss_gb": 7.19, "pid": 1668, "seconds": 2869.3}
+{"name": "sel2_logistic_L3", "fingerprint": "5e75cd442876afc5", "event": "started", "utc": "2026-09-03T16:54:36Z", "rss_gb": 7.19, "pid": 1668, "attempt": 1}
