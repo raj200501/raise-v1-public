@@ -109,3 +109,4 @@
 {"name": "confirm_null", "fingerprint": "5f664ae8f7e8f8b3", "event": "completed", "utc": "2026-09-03T18:14:53Z", "rss_gb": 8.3, "pid": 4663, "seconds": 35.6}
 {"name": "confirm_model", "fingerprint": "5579d9c191575706", "event": "selection_bound", "utc": "2026-09-03T18:14:54Z", "rss_gb": 8.3, "pid": 4663, "selection_sha256": "555095287b346c9b5c7197cca9b997e05de00ade9024fd0785edc1fb2834ad91"}
 {"name": "confirm_model", "fingerprint": "5579d9c191575706", "event": "started", "utc": "2026-09-03T18:14:54Z", "rss_gb": 8.3, "pid": 4663, "attempt": 1}
+{"name": "confirm_model", "fingerprint": "5579d9c191575706", "event": "completed", "utc": "2026-09-03T19:23:34Z", "rss_gb": 8.44, "pid": 4663, "seconds": 4084.7}
