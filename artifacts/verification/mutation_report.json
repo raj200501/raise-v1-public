@@ -49,8 +49,8 @@
       "total": 9
     },
     "recipe2048": {
-      "detected": 25,
-      "total": 25
+      "detected": 27,
+      "total": 27
     },
     "scaling": {
       "detected": 10,
@@ -1675,6 +1675,24 @@
     },
     {
       "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=[\"search: head deep_tree stage 2 records ['T5', 'T8'] are not ['T8', 'T5'] in roster order\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "0012s-frozen-reader-VOIDs-a-runner-shaped-artifact-(the-filed-defect)",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=[\"search: head model stage 2 records ['M4', 'M3'] are not ['M3', 'M4'] in roster order\", \"search: head deep_tree stage 2 records ['T8', 'T5'] are not ['T5', 'T",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "second-stage-records-in-ranked-order-are-VOID-under-the-re-read-reader",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
       "evidence": "verdict=RECIPE_FAILS frozen_clears=True validity=[] margin=['margin S (expanded set): 0.19 - 0.15 = 0.04 is below 0.05']",
       "exit_code": 1,
       "expected": "fail",
@@ -1890,8 +1908,8 @@
       "observed": "fail"
     }
   ],
-  "detected": 203,
+  "detected": 205,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 203
+  "total_mutations": 205
 }

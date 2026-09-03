@@ -208,7 +208,7 @@ manufacturing a discrepancy against a subagent that turned out to be right.
 git clone <repo> && cd raise-v1
 python3 tools/preflight.py                        # interpreter + dependency floors, cause and fix
 python3 tools/prereg.py verify                    # chain order, sealed fields, reader hashes
-python3 tests/mutation_test.py                    # 203 deliberate mutations, 203 detected, 0 survived
+python3 tests/mutation_test.py                    # 205 deliberate mutations, 205 detected, 0 survived
 python3 tools/coverage.py                         # coverage map, weakest class first
 python3 tools/claimcheck.py outbound VERDICT.md   # every number traces to a banked artifact
 python3 tools/freshness.py                        # every live number equals its CURRENT artifact value

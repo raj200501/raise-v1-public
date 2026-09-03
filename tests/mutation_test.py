@@ -1762,7 +1762,7 @@ def _(root):
 
 
 
-# ---------------------------------------------------------------- recipe2048 gate (preregistration 0012)
+# ---------------------------------------------------------------- recipe2048 gate (preregistrations 0012 and 0013)
 #
 # A symmetric recipe search: the reader re-derives every winner, re-hashes the roster, requires the
 # sealed partition hashes, floors the searched baselines at 0011's values, requires one scoring per
@@ -1817,8 +1817,9 @@ def _good_recipe2048():
         stages, survivors = [], [c["id"] for c in h["candidates"]]
         for si in range(2):
             n, rs, ss = part["stage_rows"][si], part["stage_idx_sha256"][si], part["stage_sorted_sha256"][si]
+            fit_order = [c["id"] for c in h["candidates"] if c["id"] in survivors]   # the runner fits survivors in ROSTER order
             recs = [rec(hid, cid, f"selection-{si + 1}", n, rs, ss, sel_scores[hid][cid],
-                        round(sel_scores[hid][cid] + 0.005, 4)) for cid in survivors]
+                        round(sel_scores[hid][cid] + 0.005, 4)) for cid in fit_order]
             ranked = sorted(survivors, key=lambda cid: -sel_scores[hid][cid])
             keep = proto["stages"][si]["keep"]
             stages.append({"stage": si + 1, "n_fit_rows": n, "fit_rows_sha256": rs, "records": recs,
@@ -1875,7 +1876,8 @@ def _good_recipe2048():
     return art, sel_bytes, scores
 
 
-def _recipe2048(root, mutate=None, sel_bytes_override=None, drop_artifact=False, not_run=None):
+def _recipe2048(root, mutate=None, sel_bytes_override=None, drop_artifact=False, not_run=None,
+                reader="recipe2048_reread_verdict.py", verdict_file="recipe_search_2048_reread_verdict.json"):
     art, sel_bytes, scores = _good_recipe2048()
     if mutate:
         r = mutate(art, scores)
@@ -1889,12 +1891,11 @@ def _recipe2048(root, mutate=None, sel_bytes_override=None, drop_artifact=False,
         json.dump(art, open(os.path.join(piv, "recipe_search_2048.json"), "w"))
     if not_run is not None:
         json.dump(not_run, open(os.path.join(piv, "recipe_search_2048_not_run.json"), "w"))
-    shutil.copy(os.path.join(REPO, "tools", "readers", "recipe2048_verdict.py"),
-                os.path.join(root, "tools", "readers", "recipe2048_verdict.py"))
-    rc, out = run([PY, "tools/readers/recipe2048_verdict.py"], root)
+    shutil.copy(os.path.join(REPO, "tools", "readers", reader), os.path.join(root, "tools", "readers", reader))
+    rc, out = run([PY, f"tools/readers/{reader}"], root)
     if rc != 0:
         return rc, out
-    v = json.load(open(os.path.join(piv, "recipe_search_2048_verdict.json")))
+    v = json.load(open(os.path.join(piv, verdict_file)))
     ok = v["verdict"] == "RECIPE_CLEARS"
     return (0 if ok else 1), (f"verdict={v['verdict']} frozen_clears={v['frozen_reading_clears']} "
                               f"validity={v['validity_failed_clauses'][:2]} margin={v['margin_failed_clauses']}")
@@ -1909,6 +1910,35 @@ def _m12(**kw):
 @case("recipe2048", "control-clears-result-passes", "pass")
 def _(root):
     return _recipe2048(root)
+
+
+@case("recipe2048", "0012s-frozen-reader-VOIDs-a-runner-shaped-artifact-(the-filed-defect)", "fail")
+def _(root):
+    # CORRECTIONS.md 2026-09-03: 0012's reader expected second-stage records in ranked order; the runner
+    # writes them in roster order. This case keeps that defect visible and is expected to fail.
+    rc, out = _recipe2048(root, reader="recipe2048_verdict.py", verdict_file="recipe_search_2048_verdict.json")
+    if rc != 0 and "in roster order" not in out and "verdict=VOID" not in out:
+        return 0, out + " !! the 0012 reader no longer VOIDs on record order; the filed defect changed shape"
+    return rc, out
+
+
+@case("recipe2048", "second-stage-records-in-ranked-order-are-VOID-under-the-re-read-reader", "fail")
+def _(root):
+    def f(art, scores):
+        for hid in ("model", "deep_tree"):
+            st = art["selection"]["selection"][hid]["stages"][1]
+            st["records"] = list(reversed(st["records"]))
+    art, sel_bytes, scores = _good_recipe2048()
+    sel = json.loads(sel_bytes)
+    for hid in ("model", "deep_tree"):
+        st = sel["selection"][hid]["stages"][1]; st["records"] = list(reversed(st["records"]))
+    nb = _canon12(sel).encode("utf-8")
+    def g(art, scores):
+        art["selection"] = sel; art["selection_sha256"] = hashlib.sha256(nb).hexdigest()
+        for e in art["ledger"]:
+            if e["event"] == "selection_bound":
+                e["selection_sha256"] = art["selection_sha256"]
+    return _recipe2048(root, g, sel_bytes_override=nb)
 
 
 @case("recipe2048", "a-frozen-only-pass-is-RECIPE_FAILS-with-the-field-informational", "fail")

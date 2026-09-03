@@ -29,32 +29,211 @@
     "note": "cost anchor, not a measurement: seconds of fitting on TRAINING rows of the pool only, no holdout, no evaluation row, no accuracy recorded; 3 BLAS threads, nice 10, 4-core container, no GPU; 2026-09-03",
     "contention": "the HGB leaf-count rows at 10000 rows and the incumbent iteration counts were taken while one design-review agent was running (contended); the rest were taken with the machine otherwise idle",
     "anchors": [
-      {"what": "HGB 63 leaves, 10 iterations, no early stopping, 10000 rows", "seconds": 27.6, "contended": false},
-      {"what": "HGB 63 leaves, 10 iterations, no early stopping, 100000 rows", "seconds": 93.7, "contended": false},
-      {"what": "HGB 31 leaves, 10 iterations, 10000 rows", "seconds": 15.0, "contended": true},
-      {"what": "HGB 127 leaves, 10 iterations, 10000 rows", "seconds": 50.7, "contended": true},
-      {"what": "HGB 255 leaves, 10 iterations, 10000 rows", "seconds": 88.6, "contended": true},
-      {"what": "HGB 63 leaves, max_features 0.5, 10 iterations, 10000 rows", "seconds": 25.6, "contended": true},
-      {"what": "HGB 63 leaves, l2 1.0, min_samples_leaf 50, 10 iterations, 10000 rows", "seconds": 22.9, "contended": true},
-      {"what": "decision tree depth 8, 100000 rows", "seconds": 43.7, "contended": false},
-      {"what": "decision tree depth 16, 100000 rows", "seconds": 80.8, "contended": false},
-      {"what": "decision tree unlimited depth, 100000 rows", "seconds": 154.3, "contended": false},
-      {"what": "decision tree unlimited depth, min_samples_leaf 20, 100000 rows", "seconds": 97.7, "contended": false},
-      {"what": "logistic lbfgs raw features, 10 iterations, 100000 rows", "seconds": 4.5, "contended": false},
-      {"what": "logistic lbfgs standardised features, 10 iterations, 100000 rows", "seconds": 4.4, "contended": false},
-      {"what": "MLP (384,192) one epoch, standardised, 20000 rows (not on the roster; recorded for a later architecture preregistration)", "seconds": 1.2, "contended": false}
+      {
+        "what": "HGB 63 leaves, 10 iterations, no early stopping, 10000 rows",
+        "seconds": 27.6,
+        "contended": false
+      },
+      {
+        "what": "HGB 63 leaves, 10 iterations, no early stopping, 100000 rows",
+        "seconds": 93.7,
+        "contended": false
+      },
+      {
+        "what": "HGB 31 leaves, 10 iterations, 10000 rows",
+        "seconds": 15.0,
+        "contended": true
+      },
+      {
+        "what": "HGB 127 leaves, 10 iterations, 10000 rows",
+        "seconds": 50.7,
+        "contended": true
+      },
+      {
+        "what": "HGB 255 leaves, 10 iterations, 10000 rows",
+        "seconds": 88.6,
+        "contended": true
+      },
+      {
+        "what": "HGB 63 leaves, max_features 0.5, 10 iterations, 10000 rows",
+        "seconds": 25.6,
+        "contended": true
+      },
+      {
+        "what": "HGB 63 leaves, l2 1.0, min_samples_leaf 50, 10 iterations, 10000 rows",
+        "seconds": 22.9,
+        "contended": true
+      },
+      {
+        "what": "decision tree depth 8, 100000 rows",
+        "seconds": 43.7,
+        "contended": false
+      },
+      {
+        "what": "decision tree depth 16, 100000 rows",
+        "seconds": 80.8,
+        "contended": false
+      },
+      {
+        "what": "decision tree unlimited depth, 100000 rows",
+        "seconds": 154.3,
+        "contended": false
+      },
+      {
+        "what": "decision tree unlimited depth, min_samples_leaf 20, 100000 rows",
+        "seconds": 97.7,
+        "contended": false
+      },
+      {
+        "what": "logistic lbfgs raw features, 10 iterations, 100000 rows",
+        "seconds": 4.5,
+        "contended": false
+      },
+      {
+        "what": "logistic lbfgs standardised features, 10 iterations, 100000 rows",
+        "seconds": 4.4,
+        "contended": false
+      },
+      {
+        "what": "MLP (384,192) one epoch, standardised, 20000 rows (not on the roster; recorded for a later architecture preregistration)",
+        "seconds": 1.2,
+        "contended": false
+      }
     ],
     "incumbent_early_stopping_on_training_rows": [
-      {"rows": 10000, "n_iter": 11, "seconds_contended": 30.0},
-      {"rows": 100000, "n_iter": 22, "seconds_contended": 177.7}
+      {
+        "rows": 10000,
+        "n_iter": 11,
+        "seconds_contended": 30.0
+      },
+      {
+        "rows": 100000,
+        "n_iter": 22,
+        "seconds_contended": 177.7
+      }
     ],
     "banked_anchors_reused": {
-      "incumbent_train_seconds_per_rung_0011": [12.1, 26.0, 125.5, 1036.0],
+      "incumbent_train_seconds_per_rung_0011": [
+        12.1,
+        26.0,
+        125.5,
+        1036.0
+      ],
       "depth16_tree_seconds_at_500000_0011": 395
     }
   },
   "smoke_runs": {
     "note": "smoke runs of the driver on the scratchpad with tiny rungs (2000-row stage 1, 20000-row pool) and stub rosters, every output stamped smoke=true; they exercised checkpoint resume, the ledger refusal of a second confirmatory scoring, the three-launches-without-progress rule, in-place scaling with probe-checked refills, and the two-stage separation; no smoke output is banked and the reader reads a smoke artifact as VOID",
     "eval_hashes_reproduced_in_every_smoke": true
+  },
+  "run_record": {
+    "note": "what the run actually did, from the banked artifact and ledger; the verdict is the reader's, not this log's",
+    "launches": "stage select: two launches on 2026-09-03 (the first stopped by the operator after 60 s to detach it from the tool session; the second killed by a container restart at about 14:19 UTC, 62 minutes into the second-stage M4 refit); a third launch resumed all 32 stage-one checkpoints and completed; stage confirm: one launch, no interruption",
+    "interruptions_banked": {
+      "model_head_selection": 2,
+      "every_other_head": 0,
+      "confirmatory_roles": 0
+    },
+    "selection": {
+      "selected_ids": {
+        "model": "M7",
+        "logistic": "L3",
+        "depth3_tree": "D5",
+        "deep_tree": "T3",
+        "majority": "U1",
+        "stratified": "U2",
+        "best_single_feat": "U3"
+      },
+      "eval_rows_gathered_in_selection": 0,
+      "selection_seconds_total": 17895.9,
+      "stage1_holdout_top1": {
+        "model": {
+          "M1": 0.1462,
+          "M2": 0.148,
+          "M3": 0.1737,
+          "M4": 0.1784,
+          "M5": 0.1672,
+          "M6": 0.1617,
+          "M7": 0.1808,
+          "M8": 0.1465
+        },
+        "logistic": {
+          "L1": 0.1334,
+          "L2": 0.1339,
+          "L3": 0.1716,
+          "L4": 0.171,
+          "L5": 0.1703,
+          "L6": 0.1709,
+          "L7": 0.1716,
+          "L8": 0.171
+        },
+        "depth3_tree": {
+          "D1": 0.0892,
+          "D2": 0.0892,
+          "D3": 0.0892,
+          "D4": 0.0891,
+          "D5": 0.1011,
+          "D6": 0.1011,
+          "D7": 0.1011,
+          "D8": 0.1011
+        },
+        "deep_tree": {
+          "T1": 0.1249,
+          "T2": 0.1344,
+          "T3": 0.1377,
+          "T4": 0.1207,
+          "T5": 0.1291,
+          "T6": 0.1113,
+          "T7": 0.117,
+          "T8": 0.1278
+        }
+      },
+      "stage2_holdout_top1": {
+        "model": {
+          "M4": 0.2048,
+          "M7": 0.2064
+        },
+        "logistic": {
+          "L3": 0.1877,
+          "L7": 0.1877
+        },
+        "depth3_tree": {
+          "D5": 0.0985,
+          "D6": 0.0985
+        },
+        "deep_tree": {
+          "T2": 0.1439,
+          "T3": 0.1461
+        }
+      }
+    },
+    "confirmatory_seconds": {
+      "incumbent_M1": 1120.5,
+      "logistic_L1": 503.7,
+      "majority": 0.0,
+      "stratified": 0.0,
+      "best_single_feat": 36.1,
+      "depth3_tree": 81.1,
+      "deep_tree": 366.8,
+      "logistic": 619.2,
+      "null": 35.6,
+      "model": 4084.7
+    },
+    "banked_fit_seconds_total": 24743.6,
+    "wall_clock": "stage select 11:13 to 17:27 UTC including the restart and the operator stop; stage confirm 17:27 to 19:23 UTC",
+    "against_the_extrapolation": "the preregistration's typical case was about 35000 s of fit time (23800 select + 11500 confirm); the run banked 24744 s (17896 + 6848), inside the typical case and well inside the worst case; the stage-A cap of 72000 s was never approached",
+    "environment_banked": {
+      "threads": 3,
+      "nice": 10,
+      "sklearn": "1.9.0",
+      "numpy": "2.4.6",
+      "python": "3.11.15",
+      "cpu_cores": 4,
+      "mem_available_gb_at_launch": 15.72,
+      "cgroup_memory_limit": "unlimited",
+      "disk_free_gb_at_launch": 7.42,
+      "peak_heartbeat_rss_gb_seen": 8.97
+    },
+    "reader_outcome": "VOID from the frozen 0012 reader, on two clauses of its own making: it expected second-stage records in ranked order, the runner writes them in roster order; every other clause passed (a scratch copy of the reader with that one line changed reads RECIPE_FAILS on all three margins: 0.0234, 0.0234, 0.0248). Filed in CORRECTIONS.md; re-read under preregistration 0013 with the numbers disclosed."
   }
 }

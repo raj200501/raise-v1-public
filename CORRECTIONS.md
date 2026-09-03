@@ -19,6 +19,57 @@ Format:
 
 ---
 
+## 2026-09-03 — Preregistration 0012's frozen reader voided an honest run because of a defect in the reader, and the mutation gate had been built to the reader's assumption
+
+**Claimed:** Implicitly, by freezing `tools/readers/recipe2048_verdict.py` into chain entry 12 with 25
+mutation cases behind it: that the reader would emit a verdict on any complete, valid run of the
+0012 protocol. `VERDICT.md` said, in the 0011 section, that 0012 "is frozen, and is running" and
+that "no 0012 number appears in this document until its frozen reader emits one".
+
+**Actual:** The run completed cleanly — 50 checkpoints, zero evaluation rows gathered during
+selection, both reproduction controls landing on 0011's banked values to four decimals (0.1741 and
+0.1266), the null control at 0.0408, the model's single scoring last — and the frozen reader
+emitted `VOID` on two clauses: *"head model stage 2 records ['M4', 'M7'] are not ['M7', 'M4'] in
+roster order"* and the same for the deep-tree head. The runner fits the two second-stage survivors
+in roster order (M4 before M7, T2 before T3), which is the order every other clause of the reader
+uses; the reader's implementation expected them in ranked order. Both orderings hold the same two
+records, the same ranking and the same winner, and the reader's own re-derivation of the winner
+agreed with the banked one for every head. The VOID is banked as emitted
+(`artifacts/pivot/recipe_search_2048_verdict.json`). A scratch copy of the reader with that one
+line changed reads `RECIPE_FAILS` on all three margins (0.212 − 0.1886, 0.212 − 0.1886,
+0.2223 − 0.1975: 0.0234, 0.0234 and 0.0248 against the 0.05 bar); that scratch reading is not a
+verdict and is quoted here only to size the defect.
+
+**Size:** One preregistration's verdict, from a reading of the run to no reading of the run. In
+the bar's units, nothing: the defect has no arithmetic content and the numbers it hid point the
+way the preregistration predicted (`RECIPE_FAILS`, with the searched logistic raising the frozen
+bar from 0.1266 to 0.1886, more than the searched model's gain from 0.1741 to 0.212).
+
+**Cause:** Two, and the second is the one that matters. (1) The reader's stage-loop reused the
+ranked list as the expected record order for later stages; the runner iterates the roster. (2)
+The mutation gate's synthetic "good" artifact was built inside the test from the reader's
+assumption — survivors listed in ranked order — instead of from the runner's behaviour, so the
+control case passed and 24 mutations were detected against an artifact shape the runner never
+produces. A gate that mirrors the thing it is checking cannot see that thing's disagreement with
+the world; this is the same failure the 2026-08-25 allocation-flag entry names, one level up: a
+check that shares an assumption with the code it checks.
+
+**Fix.** Four changes, all made. (1) 0012 stands `VOID` on the record; the frozen reader is not
+edited. (2) Preregistration 0013 re-reads the same banked artifact under a successor reader whose
+only behavioural change is that one line (its diff against 0012's reader is five hunks, listed in
+the preregistration), with every 0012 number quoted in the preregistration before its reader is
+hashed into the chain and the outcome those numbers give — `RECIPE_FAILS` — committed to in
+advance. (3) The mutation gate now builds its synthetic artifact with the runner's own rule for
+second-stage record order, exercises the successor reader, and carries two standing cases: the
+0012 reader voiding a runner-shaped artifact (kept failing, so the defect stays visible) and
+ranked-order records voiding under the successor. (4) Standing rule, added to
+`docs/OPERATING_RULES.md` §4: the control artifact of a reader's mutation gate is built from the
+runner's output shape — a smoke run's structure or the runner's own ordering code — never from
+the reader's expectations, and a reader is not frozen until its control case has been produced
+that way.
+
+---
+
 ## 2026-09-03 — The board review of the second quarter found nine distinct defects in the 2048 write-up and the quarter's documents
 
 Five department reviewers and two board refuters per finding (`artifacts/verification/board_review_q2.json`:

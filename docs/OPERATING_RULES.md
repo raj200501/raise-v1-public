@@ -42,6 +42,15 @@ gate and asserts the gate notices. A mutation that survives is reported as a hol
 instrument, not quietly dropped. The report is banked at
 `artifacts/verification/mutation_report.json`.
 
+The control artifact of a reader's mutation gate — the one the reader must read as a verdict —
+is built from the **runner's** output shape: a smoke run's structure, or the runner's own
+ordering and naming code imported into the test. It is never built from the reader's
+expectations, because a control that shares an assumption with the reader cannot see the
+reader disagree with the world. A reader is not frozen until its control case has been produced
+that way. (Added 2026-09-03 after preregistration 0012's frozen reader voided an honest run on
+a record-order expectation its own gate had been built to satisfy; `CORRECTIONS.md`, entry of
+that date.)
+
 ## 4a. Measure the dumbest thing that could work, first
 
 Before any learned result is believed, the trivial baselines are run and banked:

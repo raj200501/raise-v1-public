@@ -1,0 +1,55 @@
+{
+  "id": "0013",
+  "slug": "recipe-search-2048-reread",
+  "title": "Re-read of preregistration 0012's banked artifact under its own clauses with the reader's one defect corrected: the second-stage records are expected in roster order, as the runner fits them. No new measurement. Every 0012 number was known when this was written and is quoted here; under these clauses they read RECIPE_FAILS.",
+  "scope": {
+    "one_line": "Same corpus, same seed, same rung, same sealed evaluation set, same artifact (artifacts/pivot/recipe_search_2048.json as committed at 2a25cb1 and its selection and scores files), same clauses, same floors, same tolerances as 0012. Nothing is fitted and nothing is scored; the reader reads what 0012 banked.",
+    "why_this_exists": "0012's frozen reader emitted VOID with two clauses named: 'head model stage 2 records [M4, M7] are not [M7, M4] in roster order' and the same for the deep-tree head ([T2, T3] against [T3, T2]). The runner fits second-stage survivors in ROSTER order (M4 before M7, T2 before T3), which is the order every other clause of that reader uses; the reader's implementation expected them in RANKED order. Both orderings contain the same records, the same ranking and the same winner (the reader's re-derivation of the winner agreed with the banked one in every head). The defect is the reader's, not the run's, and it would have voided every honest run; 0012's mutation gate did not catch it because its synthetic artifact was built to the reader's assumption rather than the runner's behaviour. Filed at full size in CORRECTIONS.md. A frozen reader is not edited after it has seen a number, so 0012 stands VOID on the record and this preregistration re-reads the same artifact under a successor reader with exactly one line changed.",
+    "what_changes_from_0012": "One line in the reader: for stages after the first, the expected record order is the roster order of the surviving candidates instead of their ranked order. Plus the output path (recipe_search_2048_reread_verdict.json) and the preregistration stamp the verdict carries; the artifact it reads is still required to be stamped 0012-recipe-search-2048. Every constant, hash, floor, tolerance, clause and verdict rule is 0012's, byte for byte, and the diff between the two readers is five hunks that a reviewer can read in a minute.",
+    "numbers_known_when_this_was_written": "Every number below is banked in artifacts/pivot/recipe_search_2048.json (committed 2a25cb1) and was known before this preregistration was written, in violation of nothing but in the open. Selected recipes: model M7 (31 leaves, L2 10, learning rate 0.15), logistic L3 (standardised, C 1.0), depth3_tree D5 (entropy), deep_tree T3 (depth 16, min_samples_leaf 20). Confirmatory scores on the sealed evaluation set: model 0.212 (0.2223 without gutenberg); searched logistic 0.1886 (0.1975); searched deep tree 0.1465 (0.1529); searched depth-3 tree 0.0985 (0.1013); best_single_feat 0.0726 (0.0762); majority 0.0385; stratified 0.0385. Reproductions: the incumbent M1 refit 0.1741 (0011's banked 0.1741 exactly), the 0011 logistic L1 refit 0.1266 (exactly). Null control with M7 on 20000 rows with shuffled labels: 0.0408. Floored bars: frozen 0.1886, expanded 0.1886, expanded without gutenberg 0.1975 (the searched logistic exceeds every floor). Margins under 0012's clauses: 0.212 - 0.1886 = 0.0234; 0.212 - 0.1886 = 0.0234; 0.2223 - 0.1975 = 0.0248; all below 0.05. Informational cluster-bootstrap 95% intervals: model [0.2088, 0.2152], searched logistic [0.1857, 0.1916].",
+    "what_the_known_numbers_give_under_these_clauses": "RECIPE_FAILS on all three margin clauses. This preregistration commits to that outcome before its reader is hashed into the chain; the only way it could have produced anything else is by changing a clause, and no clause is changed.",
+    "corpus": "Unchanged from 0012: data/pivot/carve_c2048.npz, not touched by this preregistration.",
+    "seed": "Unchanged from 0012 (20260825); no random draw is made by this preregistration.",
+    "rungs": "Unchanged from 0012 (500000); no fit is made by this preregistration.",
+    "what_this_does_not_cover": "Everything 0012 did not cover, unchanged. In addition: it does not revise 0012's VOID, which stands as the verdict of 0012's frozen reader on 0012's artifact. It does not license quoting a 0012 number as a pass of anything. It is a reading of one banked artifact and nothing else.",
+    "roster": "Identical to 0012's scope.roster; the reader requires the artifact's roster to hash to the same ROSTER_SHA256 (0956bb74d9cb60b74865bf4f8d9762170a81cd31c29d6c3fae07c2d8d3112c8b)."
+  },
+  "bar": {
+    "identical_to_0012": {
+      "direction": "equality",
+      "passes_if": "Every validity, control and margin clause of prereg/0012-recipe-search-2048.json, applied unchanged by the successor reader, whose only behavioural change is that second-stage records are expected in roster order. The reader's diff against 0012's reader is the whole specification of the change.",
+      "threshold": 0
+    },
+    "margin_frozen": {"direction": "higher_is_better", "passes_if": "round(final_top1 - best_frozen_for_bar, 6) >= 0.05 - 1e-9; on the known numbers 0.0234, fails.", "threshold": 0.05},
+    "margin_expanded": {"direction": "higher_is_better", "passes_if": "round(final_top1 - best_expanded_for_bar, 6) >= 0.05 - 1e-9; on the known numbers 0.0234, fails.", "threshold": 0.05},
+    "margin_expanded_gutenberg_excluded": {"direction": "higher_is_better", "passes_if": "round(final_top1_non_gutenberg - best_expanded_non_gutenberg_for_bar, 6) >= 0.05 - 1e-9; on the known numbers 0.0248, fails.", "threshold": 0.05}
+  },
+  "readings": [
+    {"name": "verdict", "unit": "enum{RECIPE_FAILS,RECIPE_CLEARS,VOID}", "source_artifact": "artifacts/pivot/recipe_search_2048_reread_verdict.json", "json_path": "$.verdict"},
+    {"name": "reads_artifact_of", "unit": "the preregistration stamp of the artifact read; must be 0012-recipe-search-2048", "source_artifact": "artifacts/pivot/recipe_search_2048_reread_verdict.json", "json_path": "$.reads_artifact_of"},
+    {"name": "boundary_bytes", "unit": "text", "source_artifact": "artifacts/pivot/recipe_search_2048_reread_verdict.json", "json_path": "$.boundary_bytes"},
+    {"name": "margin_failed_clauses", "unit": "list of the failed margin clauses with their arithmetic", "source_artifact": "artifacts/pivot/recipe_search_2048_reread_verdict.json", "json_path": "$.margin_failed_clauses"},
+    {"name": "validity_failed_clauses", "unit": "list; must be empty for a non-VOID verdict", "source_artifact": "artifacts/pivot/recipe_search_2048_reread_verdict.json", "json_path": "$.validity_failed_clauses"},
+    {"name": "final_top1", "unit": "fraction, from 0012's artifact (0.212 known)", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.final_top1"},
+    {"name": "best_expanded_for_bar", "unit": "fraction, from 0012's artifact (0.1886 known)", "source_artifact": "artifacts/pivot/recipe_search_2048.json", "json_path": "$.best_expanded_for_bar"}
+  ],
+  "arms": [
+    "ONE ARM: the successor reader on 0012's banked artifact, selection file and scores file, unchanged.",
+    "RIVAL EXPLANATION, closed by construction: 'the successor was shaped by the numbers'. Yes, and it says so: the numbers are quoted above, the committed outcome is RECIPE_FAILS, and the only change is an order expectation that has no arithmetic content."
+  ],
+  "stop_rules": [
+    "If the successor reader emits anything other than RECIPE_FAILS on the banked artifact, that is published as emitted and a further correction is filed, because it would mean either that another reader defect exists or that the numbers quoted here were misread; in neither case is a clause changed.",
+    "0012's VOID is not revised, softened or annotated away; its verdict file stays banked as the frozen reader emitted it.",
+    "No number from 0012 or 0013 is quoted as a pass of the 0.05 bar; the searched model's gain over the incumbent (0.212 against 0.1741) and the searched logistic's gain over the 0011 logistic (0.1886 against 0.1266) are banked measurements, not verdicts.",
+    "This cannot revise 0003, 0006, 0007, 0011 or 0012; establishes_a_buyer and revises_0003_0006_0007_0011 are emitted False unconditionally; no customer, user, partner or buyer is claimed.",
+    "The artifact, selection file and scores file are the committed ones (2a25cb1); if any of the three is missing or altered, the reader's hash and completeness clauses read VOID."
+  ],
+  "thesis": {
+    "what_a_reader_defect_costs": "One preregistration entry, one correction, and the disclosure above. What it must not cost is a quiet edit to a frozen file.",
+    "what_the_re_read_establishes": "That under a symmetric search of this recipe space, at 2048 bytes, the bar does not clear: the model gained 0.0379 over the incumbent, the searched logistic gained 0.062 over the 0011 logistic, and the margin that was 0.0025 short on the frozen reading became 0.0266 short. The boundary statement (2048, 4096] stands for the frozen recipe and for the searched space.",
+    "what_neither_outcome_means": "Neither names a buyer. Neither revises 0011. RECIPE_FAILS says that none of these eight model recipes clears against a symmetric baseline search under this protocol, not that no recipe exists."
+  },
+  "reader": "tools/readers/recipe2048_reread_verdict.py",
+  "frozen": false,
+  "invocation": "python3 tools/readers/recipe2048_reread_verdict.py — no runner, no fit, no scoring; the reader reads artifacts/pivot/recipe_search_2048.json, artifacts/pivot/recipe_search_2048_selection.json and artifacts/pivot/recipe_search_2048_scores.json as committed and writes artifacts/pivot/recipe_search_2048_reread_verdict.json."
+}
