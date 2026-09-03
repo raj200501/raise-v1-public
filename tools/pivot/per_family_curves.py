@@ -93,6 +93,29 @@ def main() -> int:
         print("MISMATCH against the artifact's banked per-family top-rung accuracies:", mism,
               file=sys.stderr)
         return 1
+    # Subset mixtures: the question "is the miss carried by the incompressible families?" has a
+    # banked answer only if the mixture EXCLUDING them is computed, weighted by evaluation rows,
+    # with every baseline re-weighted the same way. Both readings, both subsets.
+    if banked_base:
+        subsets = {"without_base64_binary_mixed": [f for f in FAMILIES if f not in ("base64", "binary", "mixed")],
+                   "structured_only_csv_log_json_code": ["code", "csv", "json", "log"]}
+        out["subsets"] = {}
+        for name, fams in subsets.items():
+            m = np.isin(fam, fams)
+            acc = round(float(S[top][m].mean()), 4)
+            base_acc = {b: round(sum(banked_base[b][f] * int((fam == f).sum()) for f in fams)
+                                 / int(m.sum()), 4) for b in banked_base}
+            frozen = {b: v for b, v in base_acc.items() if b in FROZEN_SET}
+            bf = max(frozen, key=frozen.get); be = max(base_acc, key=base_acc.get)
+            out["subsets"][name] = {
+                "families": fams, "n_eval": int(m.sum()), "top_rung_accuracy": acc,
+                "baselines": base_acc,
+                "margin_frozen": {"value": round(acc - frozen[bf], 4), "baseline": bf,
+                                  "clears_bar": bool(round(acc - frozen[bf], 6) >= BAR - 1e-9)},
+                "margin_expanded": {"value": round(acc - base_acc[be], 4), "baseline": be,
+                                    "clears_bar": bool(round(acc - base_acc[be], 6) >= BAR - 1e-9)}}
+            print(f"  subset {name:<36} top {acc:.4f}  frozen {out['subsets'][name]['margin_frozen']['value']:+.4f} "
+                  f"({bf})  expanded {out['subsets'][name]['margin_expanded']['value']:+.4f} ({be})")
     out["consistency"] = ("per-family top-rung accuracies re-derived here equal the measurement "
                           "script's banked within_per_family_top_rung to 4 decimals")
     if banked_base:

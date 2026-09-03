@@ -166,6 +166,15 @@
       "select": [
         "slope_ci95_low"
       ]
+    },
+    {
+      "id": "verdict-2048-depth16-at-1024",
+      "file": "VERDICT.md",
+      "pattern": "\\*\\*0\\.1447\\*\\* at 2048 \\(it was \\*\\*([0-9.]+)\\*\\* at 1024",
+      "artifact": "artifacts/pivot/carve_generalisation.json",
+      "select": [
+        "within_trivial_baselines.depth16_tree"
+      ]
     }
   ]
 }

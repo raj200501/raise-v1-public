@@ -25,7 +25,7 @@
       "lines": 34,
       "last_line": "wrote artifacts/pivot/carve_generalisation_2048.json",
       "outcome": "wrote the artifact",
-      "note": "reused data/pivot/carve_c2048.npz written by attempt 3 (build_s 1564.0); run niced with 3 BLAS threads; the reader checks the cache's build metadata"
+      "note": "reused data/pivot/carve_c2048.npz written by attempt 3 (build_s 1564.0); run niced (nice 10) with OMP/OPENBLAS/MKL threads 3; the measurement script refuses a cache whose stored build metadata disagrees with its command line and stamps the artifact, and the frozen reader requires that stamp"
     }
   ]
 }

@@ -46,7 +46,8 @@
       26.0,
       125.5,
       1036.0
-    ]
+    ],
+    "train_environment": "training ran under nice 10 with OMP/OPENBLAS/MKL threads = 3 on the 4-core container after three attempts were killed by container restarts (engineering_log_0011.json); the corpus build ran at 4 processes. cpu_cores=4 describes the container, not the thread count of training; the train_seconds_per_rung are therefore not comparable to 0007's at 4 threads. Annotation added 2026-09-03; no measured value changed."
   },
   "decades_spanned": 2.699,
   "establishes_a_buyer": false,

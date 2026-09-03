@@ -70,6 +70,14 @@ def hashes(X, y, g):
 def main() -> int:
     t0 = time.perf_counter()
     real = load_real(SRC_DIR)
+    if len(real) == 0:
+        # With no source bytes corpus.py silently substitutes synthetic json for the gutenberg
+        # family (make_chunk), so a "pass" here would have tested seven families and quietly
+        # relabelled the eighth. Found by the 2026-09-03 board review; refuse rather than pretend.
+        print("DETERMINISM PROBE: REFUSED - data/pivot/src holds no source bytes, so the gutenberg "
+              "family would be silently replaced by synthetic json. Run tools/pivot/fetch_sources.sh "
+              "first (it pins the banked edition).", file=sys.stderr)
+        return 2
     canonical = list(range(CHUNK_OFFSET, CHUNK_OFFSET + N_CHUNKS))
     print(f"determinism probe: {N_CHUNKS} chunks x {CHUNK_SIZE} B, carve {CARVE_LEN} B, "
           f"offset {CHUNK_OFFSET}, {N_FEATURES} features, "

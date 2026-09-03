@@ -738,7 +738,7 @@
       "class": "primary-verifiable",
       "id": "carve2048-within",
       "json_path": "$.within_top1",
-      "reverify": "python3 tools/pivot/run_carve.py --carve 2048 --chunks 25000 --chunk-offset 75000 --cache data/pivot/carve_c2048.npz --out artifacts/pivot/carve_generalisation_2048.json --scores-out artifacts/pivot/carve_rung_scores_2048.json --preregistration 0011-carve-2048-boundary",
+      "reverify": "python3 tools/readers/carve2048_verdict.py   # reads the banked artifact; a full re-measurement is the preregistered invocation in prereg/0011-carve-2048-boundary.json with --out/--scores-out pointed at scratch paths, then diffed against the banked files",
       "value": 0.1741
     },
     {
@@ -794,17 +794,17 @@
       "id": "carve2048-per-family-csv",
       "json_path": "$.families.csv.margin_expanded.value",
       "note": "Derived by tools/pivot/per_family_curves.py from the banked per-example scores and per-family baselines; no model re-run. A decomposition, not a preregistered clause.",
-      "reverify": "python3 tools/pivot/per_family_curves.py --scores artifacts/pivot/carve_rung_scores_2048.json --artifact artifacts/pivot/carve_generalisation_2048.json --out artifacts/pivot/per_family_curves_2048.json --label '2048-byte carve, preregistration 0011'",
+      "reverify": "python3 tools/pivot/per_family_curves.py --scores artifacts/pivot/carve_rung_scores_2048.json --artifact artifacts/pivot/carve_generalisation_2048.json --out /tmp/per_family_curves_2048.json --label '2048-byte carve, preregistration 0011' && diff <(python3 -c \"import json;print(json.dumps(json.load(open('/tmp/per_family_curves_2048.json')),sort_keys=True))\") <(python3 -c \"import json;print(json.dumps(json.load(open('artifacts/pivot/per_family_curves_2048.json')),sort_keys=True))\")",
       "value": 0.0554
     },
     {
       "artifact": "artifacts/pivot/per_family_curves_2048.json",
-      "claim": "The mixed family has a negative margin at 2048 (-0.0045 on both readings) and the incompressible families base64 and binary sit within 0.0011 of their best baseline; the four families that fail on every reading are what pull the mixture below its bar.",
+      "claim": "The mixed family has a negative margin at 2048 (-0.0045 on both readings) and base64 and binary sit within 0.0011 of their best baseline; three incompressible families and the gutenberg prose family fail on every reading, and the mixture misses its binding reading even with the three incompressible families removed (+0.0478, subsets.without_base64_binary_mixed).",
       "class": "arithmetic-verifiable",
       "id": "carve2048-per-family-mixed",
       "json_path": "$.families.mixed.margin_expanded.value",
       "note": "Same derivation.",
-      "reverify": "python3 tools/pivot/per_family_curves.py --scores artifacts/pivot/carve_rung_scores_2048.json --artifact artifacts/pivot/carve_generalisation_2048.json --out artifacts/pivot/per_family_curves_2048.json --label '2048-byte carve, preregistration 0011'",
+      "reverify": "python3 tools/pivot/per_family_curves.py --scores artifacts/pivot/carve_rung_scores_2048.json --artifact artifacts/pivot/carve_generalisation_2048.json --out /tmp/per_family_curves_2048.json --label '2048-byte carve, preregistration 0011' && diff <(python3 -c \"import json;print(json.dumps(json.load(open('/tmp/per_family_curves_2048.json')),sort_keys=True))\") <(python3 -c \"import json;print(json.dumps(json.load(open('artifacts/pivot/per_family_curves_2048.json')),sort_keys=True))\")",
       "value": -0.0045
     },
     {
@@ -814,8 +814,36 @@
       "id": "carve1024-per-family-csv",
       "json_path": "$.families.csv.slope",
       "note": "Same derivation, model side only.",
-      "reverify": "python3 tools/pivot/per_family_curves.py --scores artifacts/pivot/carve_rung_scores.json --artifact artifacts/pivot/carve_generalisation.json --out artifacts/pivot/per_family_curves_1024.json --label '1024-byte carve, preregistration 0007'",
+      "reverify": "python3 tools/pivot/per_family_curves.py --scores artifacts/pivot/carve_rung_scores.json --artifact artifacts/pivot/carve_generalisation.json --out /tmp/per_family_curves_1024.json --label '1024-byte carve, preregistration 0007' && diff <(python3 -c \"import json;print(json.dumps(json.load(open('/tmp/per_family_curves_1024.json')),sort_keys=True))\") <(python3 -c \"import json;print(json.dumps(json.load(open('artifacts/pivot/per_family_curves_1024.json')),sort_keys=True))\")",
       "value": 0.046991
+    },
+    {
+      "artifact": "artifacts/pivot/per_family_curves_2048.json",
+      "claim": "The 2048 mixture without base64, binary and mixed reaches 0.2172 top-1 for a margin of +0.0673 over logistic and +0.0478 over the depth-16 tree - still below the 0.05 bar on the binding reading - while the structured four (csv, log, json, code) alone clear both readings, +0.0774 and +0.0549 at 0.2419.",
+      "class": "arithmetic-verifiable",
+      "id": "carve2048-subset-margins",
+      "json_path": "$.subsets.without_base64_binary_mixed.margin_expanded.value",
+      "note": "Evaluation-row-weighted re-mixture of the banked per-family accuracies and per-family baselines by tools/pivot/per_family_curves.py; no model re-run. A decomposition, not a preregistered clause.",
+      "reverify": "python3 tools/pivot/per_family_curves.py --scores artifacts/pivot/carve_rung_scores_2048.json --artifact artifacts/pivot/carve_generalisation_2048.json --out /tmp/per_family_curves_2048.json --label '2048-byte carve, preregistration 0011' && diff <(python3 -c \"import json;print(json.dumps(json.load(open('/tmp/per_family_curves_2048.json')),sort_keys=True))\") <(python3 -c \"import json;print(json.dumps(json.load(open('artifacts/pivot/per_family_curves_2048.json')),sort_keys=True))\")",
+      "value": 0.0478
+    },
+    {
+      "artifact": "artifacts/verification/prereg_0011_reviews.json",
+      "claim": "Preregistration 0011 was reviewed before freezing by two adversarial rounds that raised 60 raw findings (43 and 17), of which 5 survived double refutation in round one and the remainder were adjudicated by hand when the subagent quota expired; the reader's VOID verdict and sealed-parameter checks are the result.",
+      "class": "arithmetic-verifiable",
+      "id": "prereg-0011-review-findings",
+      "json_path": "$.total_raw_findings",
+      "note": "Counted from the two workflow outputs; the reviews themselves rest on this session's agents and are not independently re-runnable.",
+      "value": 60
+    },
+    {
+      "artifact": "artifacts/verification/board_review_q2.json",
+      "claim": "The second-quarter board review (five departments, two refuters per finding) raised 36 findings, confirmed 29 by double refutation and rejected 7; every confirmed finding was fixed on 2026-09-03 and the distinct defects are filed in CORRECTIONS.md.",
+      "class": "arithmetic-verifiable",
+      "id": "board-review-q2-findings",
+      "json_path": "$.confirmed",
+      "note": "Counted from the workflow output; the review rests on this session's agents.",
+      "value": 29
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

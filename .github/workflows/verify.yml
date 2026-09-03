@@ -20,7 +20,10 @@ jobs:
       - name: Every gate, in one command (tools/gates.sh - the same script run locally)
         run: bash tools/gates.sh
 
-      - name: Corpus determinism probe (small slice built twice + order-shuffled, hashes must match)
+      - name: Fetch the ten source texts and pin them to the banked edition (fails on drift)
+        run: bash tools/pivot/fetch_sources.sh
+
+      - name: Corpus determinism probe (small slice built twice + order-shuffled, hashes must match; refuses without source bytes)
         run: |
           python3 -m pip install --quiet -r requirements-pivot.txt
           python3 tools/ci/determinism_probe.py

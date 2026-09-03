@@ -46,7 +46,8 @@ zero open datasets at any scale**.
 ## Content
 
 Source bytes are mixed deliberately across content families so a model cannot succeed by memorising
-content: public-domain prose (Project Gutenberg) plus synthetic JSON, CSV, logs, source-code-like
+content: Project Gutenberg prose (nine editions PG lists as "Public domain in the USA"; pg5200 is a
+copyrighted eBook under the Project Gutenberg License — see Licence below) plus synthetic JSON, CSV, logs, source-code-like
 text, base64, packed binary, and mixed-entropy runs.
 
 Every fragment records the source chunk it came from, so evaluation **must** be split by source

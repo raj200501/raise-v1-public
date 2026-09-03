@@ -19,6 +19,76 @@ Format:
 
 ---
 
+## 2026-09-03 — The board review of the second quarter found nine distinct defects in the 2048 write-up and the quarter's documents
+
+Five department reviewers and two board refuters per finding (`artifacts/verification/board_review_q2.json`:
+36 raised, 29 confirmed by double refutation, 7 rejected; the 29 collapse to nine distinct defects
+because several departments found the same one). Each is filed here at full size and fixed in the
+same commit.
+
+**1. A baseline misattributed.** `VERDICT.md` said the depth-16 tree reached 0.1103 at 1024. That
+is the depth-8 tree; the depth-16 tree reached **0.1197** (`carve_generalisation.json`,
+`within_trivial_baselines`), and the same document's 0007 section had both right. Fixed and
+registered with `tools/freshness.py` (`verdict-2048-depth16-at-1024`).
+
+**2. "A pass on csv and log masked by four incompressible families."** Two things wrong. Gutenberg is
+prose, not an incompressible generator — three families are incompressible and gutenberg is the
+fourth that fails. And "masked" was not supported: removing base64, binary and mixed leaves a
+mixture that still misses the binding reading (**+0.0478** against the depth-16 tree; now banked as
+`subsets.without_base64_binary_mixed` in `per_family_curves_2048.json`). Only the structured four as
+a set clear both readings (**+0.0549**). README, VERDICT, the brief, the diligence map, the evidence
+page and the coverage claim now say exactly that.
+
+**3. "By 0.0025" as the headline.** The narrative, brief and one-pager quoted the slackest of three
+failed within-size clauses as if it were the miss. The reading frozen as binding misses by
+**0.0206** (`carve_margins_2048.json`, `distance_to_bar`), and transfer fails its margin at both
+sizes rather than "collapsing to chance at both" (0.0455 at 2048 is above the null control). All
+three documents now state every failed reading.
+
+**4. Two sentences contradicted by their own numbers.** "Each halving of the window costs about the
+same" sat beside 0.0504 and 0.0296; "the same ordering as at 4096" sat beside a list in which mixed
+and base64 had swapped. Both rewritten to what the numbers show.
+
+**5. An unbanked count.** "Two adversarial review rounds whose 60 findings…" traced to nothing but
+commit messages. The two rounds are now banked in `artifacts/verification/prereg_0011_reviews.json`
+(43 + 17 raw; 5 confirmed by double refutation; the rest adjudicated by hand when the subagent
+quota expired) and the sentence cites it.
+
+**6. The reader credited with a check the script performs.** VERDICT and the engineering log said
+the frozen reader checks the corpus cache's build metadata; it checks the stamp the script writes
+after the script has refused a mismatching cache. Reworded in both places.
+
+**7. The training cost quoted without its environment.** The 2048 ladder ran under `nice` with
+three BLAS threads after three container restarts, and the artifact banked `cpu_cores: 4` beside
+it. `cost.train_environment` now records the conditions, and VERDICT and the milestone map say the
+ladder is not comparable to 0007's; the milestone map's cost table gains the 2048 row, and its M3
+extrapolation — which the measured run showed low by roughly half on both build and training — is
+revised against three banked points.
+
+**8. Licence statements.** The dataset card's content section and `tools/pivot/verify.sh` still
+called the sources "public-domain", the sentence F1 found false for pg5200. The audit's Lingeling
+finding answered a legal question in the repository's own favour ("which is evaluation and
+research use") one paragraph after saying it makes no legal determination — the restriction in
+`COPYING` is on *use* in a commercial context, and whether a company's banked reproduction run is
+inside it is now COULD NOT VERIFY, in §5.3, in the consolidated list, and in README. A §5.1 grep
+claim was false for the banked copy, and one §5.1 residual had been dropped from the consolidated
+list; both fixed.
+
+**9. Instrument and mirror.** The CI determinism probe had been passing with zero source bytes, so
+the gutenberg family was silently synthetic in every CI run; it now refuses without sources and CI
+fetches the pinned edition first. `fetch_sources.sh` could cache a 404 page as a source; it now
+fails on HTTP errors. Coverage-map `reverify` commands for 0011 would have overwritten the banked
+artifacts they verify — the class filed on 2026-09-02 for 0007 — and now point at the frozen reader
+or at scratch paths with a diff. The public mirror's note said all four filtered GNSS files had
+unverifiable terms when the audit resolved two of them, and said `chain.jsonl` carries a
+`git_commit` it does not carry; the evidence page's provenance stamp named a commit at which the
+artifacts it rendered did not exist. All reworded or fixed, and the mirror regenerated. One sealed
+descriptor cannot be edited: `prereg/0011-carve-2048-boundary.json` `readings[corpus_b_chunk_offset].unit`
+says "must be >= 75000" while the sealed bar and the frozen reader require exactly 75000..99999;
+the bar governs, the reader enforces it, and this line is the record of the stale descriptor.
+
+---
+
 ## 2026-09-02 — The same superseded interval, three more places: the 0003 headline bound in README and in VERDICT's summary and clause tables
 
 **Claimed:** `README.md`: "a 95% interval of **[0.0485, 0.0497]**"; `VERDICT.md`, the results
