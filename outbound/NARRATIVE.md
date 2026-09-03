@@ -14,7 +14,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 >
 > Before we measured anything, we built the instrument. Bars frozen and hash-chained before the
 > data existed, verdict readers frozen by hash, and every gate proven able to fail —
-> 178 deliberate mutations, 178 detected, 0 survived.
+> 203 deliberate mutations, 203 detected, 0 survived.
 >
 > Then we ran the search the thesis demanded: 99 candidate domains over three rounds, 8 through
 > adversarial review with default posture reject, 0 selected. We published that negative under a
@@ -51,7 +51,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > hash-chained so nothing can be silently inserted between two that already exist, each anchored
 > to public randomness beacons — NIST and drand — with the verdict-emitting readers frozen by
 > sha256 before their data existed. Then we proved the instrument itself can fail:
-> 178 deliberate mutations across 14 gates, 178 detected, 0 survived. A gate that cannot fail is decoration, so
+> 203 deliberate mutations across 15 gates, 203 detected, 0 survived. A gate that cannot fail is decoration, so
 > we broke every one on purpose and checked that it noticed.
 
 **The search, and the negative we published.**

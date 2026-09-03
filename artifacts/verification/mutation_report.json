@@ -48,6 +48,10 @@
       "detected": 9,
       "total": 9
     },
+    "recipe2048": {
+      "detected": 25,
+      "total": 25
+    },
     "scaling": {
       "detected": 10,
       "total": 10
@@ -1659,10 +1663,235 @@
       "gate": "byteflat",
       "mutation": "absent-artifact-emits-no-verdict",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=RECIPE_CLEARS frozen_clears=True validity=[] margin=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "recipe2048",
+      "mutation": "control-clears-result-passes",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=RECIPE_FAILS frozen_clears=True validity=[] margin=['margin S (expanded set): 0.19 - 0.15 = 0.04 is below 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-frozen-only-pass-is-RECIPE_FAILS-with-the-field-informational",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=RECIPE_FAILS frozen_clears=True validity=[] margin=['margin S-ng (expanded set, gutenberg excluded): 0.2 - 0.155 = 0.045 is below 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "the-gutenberg-excluded-expanded-margin-fails-on-its-own",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=RECIPE_FAILS frozen_clears=True validity=[] margin=['margin S (expanded set): 0.1999 - 0.15 = 0.0499 is below 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-margin-of-exactly-0.0500-passes-and-0.0499-fails",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=['scope: the banked roster does not hash to the sealed ROSTER_SHA256', 'search: head model M3 stage 1 params hash is off-roster'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "one-parameter-changed-in-one-candidate-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=['leakage: the embedded selection file differs from the file on disk', \"search: head model selected 'M3' in the selection file and 'M1' in the artifact; the ru",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-selected-id-that-is-not-the-rule's-winner-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=[\"sealed set: partition.eval_idx_sha256='<hash>', preregistered '<hash>'\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-different-evaluation-set-hash-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=[\"search: baseline head logistic candidate L3 stage 1 is 'infeasible_memory'; a symmetric search with a missing baseline arm is not symmetric\", \"search: head l",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-baseline-candidate-that-dropped-out-is-VOID-not-a-lower-bar",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=[\"reproduction: the incumbent refit scores 0.18 against 0011's banked 0.1741; the pool or the evaluation set is not 0011's\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "an-incumbent-refit-outside-0.005-of-0011-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=['reproduction: the 0011 logistic refit scores 0.132 against the banked 0.1266'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-0011-logistic-refit-outside-0.005-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=[\"bars: best_expanded_for_bar=0.1214 is not the reader's recomputation 0.1447\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-banked-bar-below-the-floor-recomputation-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=['field: final_top1 / final_top1_non_gutenberg missing or not finite'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-non-finite-final-score-is-VOID-not-a-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=['scope: smoke=True; a smoke run is not the preregistered run'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-smoke-run-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=[\"order: the model's confirmatory fit was not the last completion (['confirm_logistic'])\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-model-fit-that-was-not-the-last-completion-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=['leakage: selection_sha256 does not equal the sha256 of the selection file on disk'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-selection-file-that-differs-from-the-embedded-copy-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=['leakage: stage select gathered evaluation rows'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "an-evaluation-row-gathered-during-selection-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "READER 0012: NOT RUN \u2014 'three consecutive select launches produced no new checkpoint' (stage None, filed None, None checkpoints). A NOT RUN is not a verdict.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-NOT-RUN-marker-emits-no-verdict-and-names-the-rule",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=[\"complete: complete=False; missing roles ['model']\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "an-incomplete-confirmatory-artifact-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=['confirmatory: confirm_model per-example vector missing or not 130000 long'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-per-example-vector-of-the-wrong-length-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=['confirmatory: confirm_model has 2 ledger completions, must be exactly 1'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-role-scored-twice-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=['environment: confirm_logistic threads=4, banked 3'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-record-fitted-at-another-thread-count-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=[\"scope: preregistration='0011-carve-2048-boundary', this reader is frozen for 0012-recipe-search-2048\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "an-artifact-stamped-with-another-preregistration-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=['null control: shuffled labels reached 0.06, above chance 0.038462 + 0.02 with the selected recipe \u2014 the pipeline leaks'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-leaking-null-control-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=[\"confirmatory: confirm_deep_tree record id 'T1' is not the selected 'T8'\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-baseline-head-substituted-with-a-non-selected-recipe-is-VOID",
+      "observed": "fail"
     }
   ],
-  "detected": 178,
+  "detected": 203,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 178
+  "total_mutations": 203
 }

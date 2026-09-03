@@ -10,6 +10,7 @@ never mutated. Writes artifacts/verification/mutation_report.json.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import shutil
@@ -1758,6 +1759,355 @@ def _(root):
     shutil.copy(os.path.join(REPO, "tools", "readers", "byte_model_flat_verdict.py"),
                 os.path.join(root, "tools", "readers", "byte_model_flat_verdict.py"))
     return run([PY, "tools/readers/byte_model_flat_verdict.py"], root)
+
+
+
+# ---------------------------------------------------------------- recipe2048 gate (preregistration 0012)
+#
+# A symmetric recipe search: the reader re-derives every winner, re-hashes the roster, requires the
+# sealed partition hashes, floors the searched baselines at 0011's values, requires one scoring per
+# role with the model last, and reads VOID on any baseline that dropped out. Each of those must be
+# shown to fail on its own.
+
+_R12 = json.load(open(os.path.join(REPO, "prereg", "0012-recipe-search-2048.json")))["scope"]["roster"]
+_ENV12 = {"threads": 3, "nice": 10, "sklearn": "1.9.0", "numpy": "2.4.6", "python": "3.11.15"}
+
+
+def _canon12(o):
+    return json.dumps(o, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False)
+
+
+def _sha12(o):
+    return hashlib.sha256(_canon12(o).encode("utf-8")).hexdigest()
+
+
+def _good_recipe2048():
+    """A complete, valid artifact set whose numbers give RECIPE_CLEARS: model 0.21 against a floored
+    frozen bar 0.13 and an expanded bar 0.15 (0.155 non-gutenberg)."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "r12", os.path.join(REPO, "tools", "readers", "recipe2048_verdict.py"))
+    r12 = importlib.util.module_from_spec(spec); spec.loader.exec_module(r12)
+    part = dict(r12.PARTITION)
+    proto = _R12["protocol"]; heads = _R12["heads"]
+    by_id = {c["id"]: c for h in heads for c in h["candidates"]}
+    fam8 = ["gutenberg", "base64", "binary", "code", "csv", "json", "log", "mixed"]
+
+    def rec(head, cid, stage, n_rows, rows_sha, sorted_sha, top1, ng):
+        c = by_id[cid]
+        return {"id": cid, "head": head, "family": c["family"], "params": c.get("params", {}),
+                "scaled": bool(c.get("scaled", False)), "val": c.get("val"), "seed": 20260825,
+                "params_sha256": _sha12(c), "stage": stage, "n_fit_rows": n_rows, "fit_rows_sha256": rows_sha,
+                "fit_rows_sorted_sha256": sorted_sha, "environment": dict(_ENV12), "status": "fit",
+                "seconds": 1.0, "top1": top1, "top1_non_gutenberg": ng,
+                "per_family": {f: round(top1, 4) for f in fam8}, "block_refills": [], "fit_info": {}}
+
+    # selection: stage-1 scores rise with roster index except M1/L1 (index 0) so the winner is a
+    # searched recipe; keep 2 then 1
+    sel_scores = {"model": {"M1": 0.14, "M2": 0.15, "M3": 0.16, "M4": 0.155, "M5": 0.12, "M6": 0.13, "M7": 0.11, "M8": 0.145},
+                  "logistic": {"L1": 0.10, "L2": 0.11, "L3": 0.13, "L4": 0.125, "L5": 0.09, "L6": 0.12, "L7": 0.129, "L8": 0.124},
+                  "depth3_tree": {"D1": 0.088, "D2": 0.088, "D3": 0.087, "D4": 0.086, "D5": 0.089, "D6": 0.0885, "D7": 0.088, "D8": 0.085},
+                  "deep_tree": {"T1": 0.125, "T2": 0.144, "T3": 0.146, "T4": 0.143, "T5": 0.147, "T6": 0.14, "T7": 0.145, "T8": 0.149}}
+    selection, selected = {}, {}
+    for h in heads:
+        hid = h["id"]
+        if len(h["candidates"]) == 1:
+            selection[hid] = {"side": h["side"], "stages": [], "selected_id": h["candidates"][0]["id"]}
+            selected[hid] = h["candidates"][0]["id"]; continue
+        stages, survivors = [], [c["id"] for c in h["candidates"]]
+        for si in range(2):
+            n, rs, ss = part["stage_rows"][si], part["stage_idx_sha256"][si], part["stage_sorted_sha256"][si]
+            recs = [rec(hid, cid, f"selection-{si + 1}", n, rs, ss, sel_scores[hid][cid],
+                        round(sel_scores[hid][cid] + 0.005, 4)) for cid in survivors]
+            ranked = sorted(survivors, key=lambda cid: -sel_scores[hid][cid])
+            keep = proto["stages"][si]["keep"]
+            stages.append({"stage": si + 1, "n_fit_rows": n, "fit_rows_sha256": rs, "records": recs,
+                           "eligible_ranked_ids": ranked, "advanced_ids": ranked[:keep]})
+            survivors = ranked[:keep]
+        selection[hid] = {"side": h["side"], "stages": stages, "selected_id": survivors[0]}
+        selected[hid] = survivors[0]
+    sel_part = {k: v for k, v in part.items() if k != "eval_y_sha256"}
+    corpus = dict(r12.CORPUS)
+    sel_doc = {"schema_version": 1, "preregistration": "0012-recipe-search-2048", "smoke": False,
+               "roster_sha256": _sha12(_R12), "roster": _R12, "corpus": corpus, "partition": sel_part,
+               "n_classes": 26, "class_names": [], "chance_accuracy": 0.038462, "stage": "select",
+               "gathers": [{"name": "holdout", "n_rows": 100169, "n_eval_rows": 0}],
+               "eval_rows_gathered_in_selection": 0, "environment": dict(_ENV12), "selection": selection,
+               "selected_ids": selected, "ledger": [], "cost": {"selection_seconds_total": 1.0},
+               "selection_started_utc": "2026-09-04T00:00:00Z", "selection_finished_utc": "2026-09-04T01:00:00Z"}
+    sel_bytes = _canon12(sel_doc).encode("utf-8")
+    pool_sha, pool_sorted = part["pool_idx_sha256"], part["pool_sorted_sha256"]
+    conf = {"majority": (0.0385, 0.0385), "stratified": (0.0385, 0.0385), "best_single_feat": (0.0726, 0.0762),
+            "depth3_tree": (0.09, 0.091), "deep_tree": (0.15, 0.155), "logistic": (0.13, 0.135),
+            "model": (0.21, 0.22)}
+    final = {hid: rec(hid, selected[hid], "confirmatory", 500000, pool_sha, pool_sorted, *conf[hid]) for hid in conf}
+    inc = rec("incumbent", "M1", "confirmatory", 500000, pool_sha, pool_sorted, 0.1741, 0.1819)
+    l1 = rec("logistic_l1", "L1", "confirmatory", 500000, pool_sha, pool_sorted, 0.1266, 0.1315)
+    null = rec("null", selected["model"], "null", 20000, "x", r12.NULL_SORTED_SHA256, 0.039, 0.039)
+    order = ["confirm_incumbent", "confirm_logistic_l1", "confirm_majority", "confirm_stratified",
+             "confirm_best_single_feat", "confirm_depth3_tree", "confirm_deep_tree", "confirm_logistic",
+             "confirm_null", "confirm_model"]
+    sel_sha = hashlib.sha256(sel_bytes).hexdigest()
+    ledger = []
+    for i, nm in enumerate(order):
+        ledger += [{"name": nm, "fingerprint": nm, "event": "selection_bound", "selection_sha256": sel_sha},
+                   {"name": nm, "fingerprint": nm, "event": "started", "utc": f"2026-09-04T02:{i:02d}:00Z"},
+                   {"name": nm, "fingerprint": nm, "event": "completed", "utc": f"2026-09-04T02:{i:02d}:30Z"}]
+    floors, floors_ng = proto["floors"], proto["floors_non_gutenberg"]
+    frozen = ["majority", "stratified", "depth3_tree", "logistic"]; expanded = frozen + ["best_single_feat", "deep_tree"]
+    bf = max(max(conf[h][0], floors[h]) for h in frozen); be = max(max(conf[h][0], floors[h]) for h in expanded)
+    ben = max(max(conf[h][1], floors_ng[h]) for h in expanded)
+    art = {"schema_version": 1, "preregistration": "0012-recipe-search-2048", "smoke": False, "stage": "confirm",
+           "roster_sha256": _sha12(_R12), "roster": _R12, "corpus": corpus, "partition": part, "n_classes": 26,
+           "class_names": [], "chance_accuracy": 0.038462, "selection_sha256": sel_sha, "selection": sel_doc,
+           "selected_ids": selected, "selected_model_id": selected["model"], "environment": dict(_ENV12),
+           "complete": True, "missing_roles": [], "final": final,
+           "final_top1": conf["model"][0], "final_top1_non_gutenberg": conf["model"][1],
+           "final_per_family": final["model"]["per_family"], "final_status": "fit",
+           "best_frozen_for_bar": bf, "best_frozen_searched": 0.13, "best_frozen_head": "logistic",
+           "best_expanded_for_bar": be, "best_expanded_searched": 0.15, "best_expanded_head": "deep_tree",
+           "best_expanded_non_gutenberg_for_bar": ben, "best_expanded_non_gutenberg_searched": 0.155,
+           "incumbent_refit": inc, "incumbent_refit_top1": 0.1741, "logistic_l1_refit": l1,
+           "logistic_l1_refit_top1": 0.1266, "null_control": null, "shuffled_label_accuracy": 0.039,
+           "null_rows": 20000, "cluster_ci95_informational": {}, "ledger": ledger, "cost": {},
+           "confirmatory_started_utc": "2026-09-04T02:00:00Z"}
+    scores = {"per_example": {k: [1] * 130000 for k in list(conf) + ["incumbent", "logistic_l1"]}}
+    return art, sel_bytes, scores
+
+
+def _recipe2048(root, mutate=None, sel_bytes_override=None, drop_artifact=False, not_run=None):
+    art, sel_bytes, scores = _good_recipe2048()
+    if mutate:
+        r = mutate(art, scores)
+        if r is not None:
+            art = r
+    piv = os.path.join(root, "artifacts", "pivot"); os.makedirs(piv, exist_ok=True)
+    with open(os.path.join(piv, "recipe_search_2048_selection.json"), "wb") as fh:
+        fh.write(sel_bytes_override if sel_bytes_override is not None else sel_bytes)
+    json.dump(scores, open(os.path.join(piv, "recipe_search_2048_scores.json"), "w"))
+    if not drop_artifact:
+        json.dump(art, open(os.path.join(piv, "recipe_search_2048.json"), "w"))
+    if not_run is not None:
+        json.dump(not_run, open(os.path.join(piv, "recipe_search_2048_not_run.json"), "w"))
+    shutil.copy(os.path.join(REPO, "tools", "readers", "recipe2048_verdict.py"),
+                os.path.join(root, "tools", "readers", "recipe2048_verdict.py"))
+    rc, out = run([PY, "tools/readers/recipe2048_verdict.py"], root)
+    if rc != 0:
+        return rc, out
+    v = json.load(open(os.path.join(piv, "recipe_search_2048_verdict.json")))
+    ok = v["verdict"] == "RECIPE_CLEARS"
+    return (0 if ok else 1), (f"verdict={v['verdict']} frozen_clears={v['frozen_reading_clears']} "
+                              f"validity={v['validity_failed_clauses'][:2]} margin={v['margin_failed_clauses']}")
+
+
+def _m12(**kw):
+    def f(art, scores):
+        art.update(kw)
+    return f
+
+
+@case("recipe2048", "control-clears-result-passes", "pass")
+def _(root):
+    return _recipe2048(root)
+
+
+@case("recipe2048", "a-frozen-only-pass-is-RECIPE_FAILS-with-the-field-informational", "fail")
+def _(root):
+    rc, out = _recipe2048(root, _m12(final_top1=0.19))          # F: +0.06 passes, S: +0.04 fails
+    if rc != 0 and ("verdict=RECIPE_FAILS" not in out or "frozen_clears=True" not in out):
+        return 0, out + " !! a frozen-only pass did not read RECIPE_FAILS with frozen_reading_clears True"
+    return rc, out
+
+
+@case("recipe2048", "the-gutenberg-excluded-expanded-margin-fails-on-its-own", "fail")
+def _(root):
+    return _recipe2048(root, _m12(final_top1_non_gutenberg=0.20))   # 0.20 - 0.155 = 0.045
+
+
+@case("recipe2048", "a-margin-of-exactly-0.0500-passes-and-0.0499-fails", "fail")
+def _(root):
+    rc0, out0 = _recipe2048(root, _m12(final_top1=0.20))          # S: 0.20 - 0.15 = 0.0500
+    if rc0 != 0:
+        return 0, out0 + " !! a margin printed as 0.0500 did not pass"
+    return _recipe2048(root, _m12(final_top1=0.1999))
+
+
+@case("recipe2048", "one-parameter-changed-in-one-candidate-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["roster"] = json.loads(json.dumps(art["roster"]))
+        art["roster"]["heads"][0]["candidates"][2]["params"]["max_iter"] = 301
+    rc, out = _recipe2048(root, f)
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! an edited roster was read as a result"
+    return rc, out
+
+
+@case("recipe2048", "a-selected-id-that-is-not-the-rule's-winner-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["selected_ids"]["model"] = "M1"; art["selected_model_id"] = "M1"
+    rc, out = _recipe2048(root, f)
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! a hand-picked winner was read as a result"
+    return rc, out
+
+
+@case("recipe2048", "a-different-evaluation-set-hash-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["partition"]["eval_idx_sha256"] = "0" * 64
+    return _recipe2048(root, f)
+
+
+@case("recipe2048", "a-baseline-candidate-that-dropped-out-is-VOID-not-a-lower-bar", "fail")
+def _(root):
+    def f(art, scores):
+        r = art["selection"]["selection"]["logistic"]["stages"][0]["records"][2]
+        r["status"] = "infeasible_memory"; r["top1"] = None; r["evidence"] = "MemoryError"
+        # the embedded selection must still hash-match the file: rewrite both
+        return None
+    art, sel_bytes, scores = _good_recipe2048()
+    sel = json.loads(sel_bytes)
+    r = sel["selection"]["logistic"]["stages"][0]["records"][2]
+    r["status"] = "infeasible_memory"; r["top1"] = None; r["evidence"] = "MemoryError"
+    sel["selection"]["logistic"]["stages"][0]["eligible_ranked_ids"] = [
+        i for i in sel["selection"]["logistic"]["stages"][0]["eligible_ranked_ids"] if i != r["id"]]
+    new_bytes = _canon12(sel).encode("utf-8")
+    def g(art, scores):
+        art["selection"] = sel; art["selection_sha256"] = hashlib.sha256(new_bytes).hexdigest()
+        for e in art["ledger"]:
+            if e["event"] == "selection_bound":
+                e["selection_sha256"] = art["selection_sha256"]
+        # the rule's winner is unchanged (L3 was the dropped one -> the new winner would be L7);
+        # keep the banked winner so the only new defect is the drop-out
+    rc, out = _recipe2048(root, g, sel_bytes_override=new_bytes)
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! a missing baseline arm was read as a result"
+    return rc, out
+
+
+@case("recipe2048", "an-incumbent-refit-outside-0.005-of-0011-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["incumbent_refit"]["top1"] = 0.18; art["incumbent_refit_top1"] = 0.18
+    return _recipe2048(root, f)
+
+
+@case("recipe2048", "a-0011-logistic-refit-outside-0.005-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["logistic_l1_refit"]["top1"] = 0.132; art["logistic_l1_refit_top1"] = 0.132
+    return _recipe2048(root, f)
+
+
+@case("recipe2048", "a-banked-bar-below-the-floor-recomputation-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["final"]["deep_tree"]["top1"] = 0.1214       # below the 0.1447 floor
+        art["best_expanded_for_bar"] = 0.1214             # banked without the floor
+        art["final_top1"] = 0.19                          # would pass S against 0.1214
+    rc, out = _recipe2048(root, f)
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! an unfloored bar was read as a result"
+    return rc, out
+
+
+@case("recipe2048", "a-non-finite-final-score-is-VOID-not-a-pass", "fail")
+def _(root):
+    return _recipe2048(root, _m12(final_top1_non_gutenberg=float("nan")))
+
+
+@case("recipe2048", "a-smoke-run-is-VOID", "fail")
+def _(root):
+    return _recipe2048(root, _m12(smoke=True))
+
+
+@case("recipe2048", "a-model-fit-that-was-not-the-last-completion-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        L = art["ledger"]; i = next(k for k, e in enumerate(L) if e["name"] == "confirm_model" and e["event"] == "completed")
+        L.append(L.pop(i - 6))                              # move an earlier completion after the model's
+    return _recipe2048(root, f)
+
+
+@case("recipe2048", "a-selection-file-that-differs-from-the-embedded-copy-is-VOID", "fail")
+def _(root):
+    art, sel_bytes, scores = _good_recipe2048()
+    return _recipe2048(root, sel_bytes_override=sel_bytes + b"\n")
+
+
+@case("recipe2048", "an-evaluation-row-gathered-during-selection-is-VOID", "fail")
+def _(root):
+    art, sel_bytes, scores = _good_recipe2048()
+    sel = json.loads(sel_bytes); sel["eval_rows_gathered_in_selection"] = 1
+    nb = _canon12(sel).encode("utf-8")
+    def g(art, scores):
+        art["selection"] = sel; art["selection_sha256"] = hashlib.sha256(nb).hexdigest()
+        for e in art["ledger"]:
+            if e["event"] == "selection_bound":
+                e["selection_sha256"] = art["selection_sha256"]
+    return _recipe2048(root, g, sel_bytes_override=nb)
+
+
+@case("recipe2048", "absent-artifact-emits-no-verdict", "fail")
+def _(root):
+    return _recipe2048(root, drop_artifact=True)
+
+
+@case("recipe2048", "a-NOT-RUN-marker-emits-no-verdict-and-names-the-rule", "fail")
+def _(root):
+    rc, out = _recipe2048(root, drop_artifact=True,
+                          not_run={"reason": "three consecutive select launches produced no new checkpoint"})
+    if rc == 2 and "NOT RUN" not in out:
+        return 0, out + " !! the NOT RUN marker was not surfaced"
+    return rc, out
+
+
+@case("recipe2048", "an-incomplete-confirmatory-artifact-is-VOID", "fail")
+def _(root):
+    return _recipe2048(root, _m12(complete=False, missing_roles=["model"]))
+
+
+@case("recipe2048", "a-per-example-vector-of-the-wrong-length-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        scores["per_example"]["model"] = [1] * 129999
+    return _recipe2048(root, f)
+
+
+@case("recipe2048", "a-role-scored-twice-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["ledger"].append({"name": "confirm_model", "fingerprint": "confirm_model", "event": "completed"})
+    return _recipe2048(root, f)
+
+
+@case("recipe2048", "a-record-fitted-at-another-thread-count-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["final"]["logistic"]["environment"]["threads"] = 4
+    return _recipe2048(root, f)
+
+
+@case("recipe2048", "an-artifact-stamped-with-another-preregistration-is-VOID", "fail")
+def _(root):
+    return _recipe2048(root, _m12(preregistration="0011-carve-2048-boundary"))
+
+
+@case("recipe2048", "a-leaking-null-control-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["null_control"]["top1"] = 0.06; art["shuffled_label_accuracy"] = 0.06
+    return _recipe2048(root, f)
+
+
+@case("recipe2048", "a-baseline-head-substituted-with-a-non-selected-recipe-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["final"]["deep_tree"]["id"] = "T1"   # the head selected T8
+    return _recipe2048(root, f)
+
 
 
 def _stable_evidence(out: str) -> str:

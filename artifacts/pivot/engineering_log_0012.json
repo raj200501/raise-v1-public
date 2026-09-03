@@ -1,0 +1,60 @@
+{
+  "schema": "raise-v1/engineering_log/1",
+  "preregistration": "0012-recipe-search-2048",
+  "status": "cost anchors and design record, written BEFORE the preregistration was frozen and before any 0012 fit; nothing here is a measurement of the task",
+  "design_review": {
+    "how": "three independent designs (preregistration-integrity, ML-practitioner and operations lenses), one adversarial critique per design covering both a hostile diligence reviewer and the operating rules, and one synthesis, run as a multi-agent workflow on 2026-09-03; the synthesis was then reconciled with the cost anchors below",
+    "adopted_from_the_review": [
+      "a chunk-rule holdout (chunk_id % 5 == 0) instead of a random draw, with every partition hash sealed before any fit",
+      "two selection stages (100000 rows, then the whole 399831-row fit pool) with ties to the lower roster index only",
+      "symmetric rosters of eight for every head with a hyperparameter, the 0011 recipe first in each; three knob-free heads",
+      "per-head floors at 0011's banked values so the searched baselines can raise the bar and never lower it",
+      "a separate selection invocation that banks a measured count of evaluation rows gathered, hashed into every confirmatory ledger entry",
+      "the model's confirmatory fit LAST, so no model evaluation number exists before every baseline number is banked",
+      "baseline attrition reads VOID, not a lowered bar; no time-based eligibility; interruptions are counted, never a status",
+      "reproduction of both fixed 0011 recipes (M1 and L1) within 0.005 as validity controls; threads and nice as validity conditions",
+      "a three-valued verdict enum with the frozen-only reading banked as an informational field, never a verdict value",
+      "NOT RUN reachable only before any evaluation-touching checkpoint, by mechanical rules, and visible to the reader"
+    ],
+    "departures_from_the_synthesis_and_why": [
+      "stage-2 keep is 2, not 3: with the per-iteration anchors below, three stage-2 refits of the slowest model candidates would put the worst case near a day of fit time; two keeps the worst case bounded and is applied to every head alike",
+      "the HGB iteration caps are lower than the synthesis proposed (M2 400, M3 300, M4 250, M5 150, M6 400, M7 400 against 600 to 800): the incumbent's early stopping fires after 11 to 22 iterations on training rows, and a 63-leaf iteration costs about 8 s at 100000 rows and an assumed 30 to 40 s at 400000 to 500000 rows, so an 800-iteration cap could cost nine hours for one fit",
+      "logistic iteration caps are 1500, not 2000, for the same reason",
+      "the stage-A cap is 72000 s (about 1.2 times the worst case) rather than 43200 s, so a slow but legitimate run is not filed NOT RUN by its own backstop",
+      "the reader keeps the file name tools/readers/recipe2048_verdict.py, matching carve2048_verdict.py, and reads the roster from the artifact against a sealed hash rather than opening the preregistration file"
+    ],
+    "review_record": "the workflow's journal (three designs, three critiques, one synthesis) is not banked as an artifact; the adopted points and departures above are the record"
+  },
+  "cost_anchors": {
+    "note": "cost anchor, not a measurement: seconds of fitting on TRAINING rows of the pool only, no holdout, no evaluation row, no accuracy recorded; 3 BLAS threads, nice 10, 4-core container, no GPU; 2026-09-03",
+    "contention": "the HGB leaf-count rows at 10000 rows and the incumbent iteration counts were taken while one design-review agent was running (contended); the rest were taken with the machine otherwise idle",
+    "anchors": [
+      {"what": "HGB 63 leaves, 10 iterations, no early stopping, 10000 rows", "seconds": 27.6, "contended": false},
+      {"what": "HGB 63 leaves, 10 iterations, no early stopping, 100000 rows", "seconds": 93.7, "contended": false},
+      {"what": "HGB 31 leaves, 10 iterations, 10000 rows", "seconds": 15.0, "contended": true},
+      {"what": "HGB 127 leaves, 10 iterations, 10000 rows", "seconds": 50.7, "contended": true},
+      {"what": "HGB 255 leaves, 10 iterations, 10000 rows", "seconds": 88.6, "contended": true},
+      {"what": "HGB 63 leaves, max_features 0.5, 10 iterations, 10000 rows", "seconds": 25.6, "contended": true},
+      {"what": "HGB 63 leaves, l2 1.0, min_samples_leaf 50, 10 iterations, 10000 rows", "seconds": 22.9, "contended": true},
+      {"what": "decision tree depth 8, 100000 rows", "seconds": 43.7, "contended": false},
+      {"what": "decision tree depth 16, 100000 rows", "seconds": 80.8, "contended": false},
+      {"what": "decision tree unlimited depth, 100000 rows", "seconds": 154.3, "contended": false},
+      {"what": "decision tree unlimited depth, min_samples_leaf 20, 100000 rows", "seconds": 97.7, "contended": false},
+      {"what": "logistic lbfgs raw features, 10 iterations, 100000 rows", "seconds": 4.5, "contended": false},
+      {"what": "logistic lbfgs standardised features, 10 iterations, 100000 rows", "seconds": 4.4, "contended": false},
+      {"what": "MLP (384,192) one epoch, standardised, 20000 rows (not on the roster; recorded for a later architecture preregistration)", "seconds": 1.2, "contended": false}
+    ],
+    "incumbent_early_stopping_on_training_rows": [
+      {"rows": 10000, "n_iter": 11, "seconds_contended": 30.0},
+      {"rows": 100000, "n_iter": 22, "seconds_contended": 177.7}
+    ],
+    "banked_anchors_reused": {
+      "incumbent_train_seconds_per_rung_0011": [12.1, 26.0, 125.5, 1036.0],
+      "depth16_tree_seconds_at_500000_0011": 395
+    }
+  },
+  "smoke_runs": {
+    "note": "smoke runs of the driver on the scratchpad with tiny rungs (2000-row stage 1, 20000-row pool) and stub rosters, every output stamped smoke=true; they exercised checkpoint resume, the ledger refusal of a second confirmatory scoring, the three-launches-without-progress rule, in-place scaling with probe-checked refills, and the two-stage separation; no smoke output is banked and the reader reads a smoke artifact as VOID",
+    "eval_hashes_reproduced_in_every_smoke": true
+  }
+}
