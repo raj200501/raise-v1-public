@@ -19,3 +19,7 @@ data/pivot/
 # Raw GNSS products for the EphemErr study. Re-fetchable by tools/gnss/fetch.sh from BKG and
 # ESA's navigation office; ~4.4 MB per day and no reason to carry them in git.
 data/gnss/
+
+# 0012 runner heartbeat files change every 30 s and are not provenance
+artifacts/pivot/recipe_search_2048_ckpt/*.hb
+artifacts/pivot/recipe_search_2048_ckpt/*.tmp
