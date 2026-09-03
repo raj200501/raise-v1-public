@@ -15,6 +15,7 @@ import os
 import shutil
 import subprocess
 import sys
+import re
 import tempfile
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -1759,6 +1760,19 @@ def _(root):
     return run([PY, "tools/readers/byte_model_flat_verdict.py"], root)
 
 
+def _stable_evidence(out: str) -> str:
+    """Last line of a case's output, with the sandbox path and the hashes of throwaway chains
+    built inside the sandbox replaced by placeholders. The report is a banked artifact whose
+    digest the evidence page carries; without this the file changed on every run while every
+    count stayed the same (board review 2026-09-03). Counts, not evidence strings, are the gate."""
+    if not out.strip():
+        return ""
+    line = out.strip().splitlines()[-1]
+    line = re.sub(r"/tmp/[^/\s]+", "<sandbox>", line)
+    line = re.sub(r"\b[0-9a-f]{16,64}\b", "<hash>", line)
+    return line[:200]
+
+
 def main() -> int:
     results = []
     for c in CASES:
@@ -1773,7 +1787,7 @@ def main() -> int:
             results.append({
                 "gate": c["gate"], "mutation": c["name"], "expected": c["expect"],
                 "observed": observed, "exit_code": rc, "detected": ok,
-                "evidence": out.strip().splitlines()[-1][:200] if out.strip() else "",
+                "evidence": _stable_evidence(out),
             })
 
     survived = [r for r in results if not r["detected"]]
