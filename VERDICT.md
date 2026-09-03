@@ -684,6 +684,18 @@ is a new preregistration (M1's question at a second size), not a footnote to thi
 stricter margin, +0.0294 against the deep tree, is not a gap a recipe search should be expected
 to close.
 
+**That preregistration exists, is frozen, and is running.** Preregistration 0012
+(`prereg/0012-recipe-search-2048.json`, chain seq 12, NIST Beacon pulse 1925147, drand round
+6433429, reader `tools/readers/recipe2048_verdict.py` hashed into the chain at a clean tree) is a
+*symmetric* recipe search: every head with a hyperparameter — the HGB model, the logistic, the
+depth-3 tree and the deep tree — gets an enumerated roster of eight recipes with the 0011 recipe
+first, selected by one rule on a chunk-rule holdout that shares no chunk with the sealed
+evaluation set, then fitted once on 0011's 500000-row pool and scored once on 0011's evaluation
+set, the model last, with every baseline head floored at its 0011 value so the search can raise
+the bar and never lower it. Its expected outcome, written before any fit, is `RECIPE_FAILS`. No
+0012 number appears in this document until its frozen reader emits one; the run's checkpoints
+are committed as they land under `artifacts/pivot/recipe_search_2048_ckpt/`.
+
 ### A learned representation over raw bytes does not rescue it either — `BYTE_MODEL_FAILS`
 
 L4 was written with a scope limit in its own paragraph: it does not establish that a **learned**

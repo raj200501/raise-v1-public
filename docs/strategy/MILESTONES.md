@@ -165,7 +165,10 @@ and *"carve sizes other than the one frozen here."* Today there are three measur
 sizes — 4096 (works, margin +0.1003 frozen and +0.0583 stricter), 2048 (fails by 0.0025 on the
 frozen set, +0.0475, and by more on the stricter one, +0.0294; prereg 0011) and 1024 (fails,
 margin +0.0099) — the boundary is bracketed to (2048, 4096], and nothing is measured beyond
-4096 or below 1024. The information-side prerequisite is already
+4096 or below 1024. Whether the 2048 failure survives a *symmetric* recipe search — every
+head with a hyperparameter searched with the same rule and floored at its 0011 value — is
+preregistration 0012, frozen 2026-09-03 and running as this is written; no number from it is
+quoted anywhere until its frozen reader emits one. The information-side prerequisite is already
 banked down to 512 bytes: the byte-identity ceiling is 20.79 distinct streams of 26 at 512
 against 20.9125 at 4096, so any per-size failure is a modelling result, not an information
 result, exactly as 0007 was forced to say.
