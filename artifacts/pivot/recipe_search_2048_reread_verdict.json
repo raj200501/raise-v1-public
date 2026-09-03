@@ -1,0 +1,126 @@
+{
+  "bars_applied": {
+    "expanded": 0.1886,
+    "expanded_non_gutenberg": 0.1975,
+    "frozen": 0.1886,
+    "margin": 0.05,
+    "per_head": {
+      "best_single_feat": 0.0726,
+      "deep_tree": 0.1465,
+      "depth3_tree": 0.0985,
+      "logistic": 0.1886,
+      "majority": 0.0385,
+      "stratified": 0.0385
+    },
+    "per_head_non_gutenberg": {
+      "best_single_feat": 0.0762,
+      "deep_tree": 0.1529,
+      "depth3_tree": 0.1013,
+      "logistic": 0.1975,
+      "majority": 0.0385,
+      "stratified": 0.0385
+    }
+  },
+  "boundary_bytes": "(2048, 4096], frozen and searched",
+  "establishes_a_buyer": false,
+  "frozen_reading_clears": false,
+  "gain_over_incumbent": 0.0379,
+  "incumbent_reproduction_drift": 0.0,
+  "informational_only": "frozen_reading_clears, gain_over_incumbent, the reproduction drifts and the artifact's cluster intervals are informational: not a verdict, not quotable as a pass. The verdict is the `verdict` field and nothing else.",
+  "logistic_l1_reproduction_drift": 0.0,
+  "margin_failed_clauses": [
+    "margin F (frozen set): 0.212 - 0.1886 = 0.0234 is below 0.05",
+    "margin S (expanded set): 0.212 - 0.1886 = 0.0234 is below 0.05",
+    "margin S-ng (expanded set, gutenberg excluded): 0.2223 - 0.1975 = 0.0248 is below 0.05"
+  ],
+  "meaning": "A margin clause fails. Under a budgeted, symmetric search of the preregistered recipe space, the 2048-byte carve does not clear the 0.05 bar; the window boundary statement (2048, 4096] stands for the frozen recipe and for this searched space.",
+  "preregistration": "0013-recipe-search-2048-reread",
+  "read": {
+    "best_expanded_for_bar": 0.1886,
+    "best_expanded_head": "logistic",
+    "best_expanded_non_gutenberg_for_bar": 0.1975,
+    "best_expanded_non_gutenberg_searched": 0.1975,
+    "best_expanded_searched": 0.1886,
+    "best_frozen_for_bar": 0.1886,
+    "best_frozen_head": "logistic",
+    "best_frozen_searched": 0.1886,
+    "chance_accuracy": 0.038462,
+    "cluster_ci95_informational": {
+      "best_single_feat": [
+        0.0723,
+        0.073
+      ],
+      "deep_tree": [
+        0.1444,
+        0.1486
+      ],
+      "depth3_tree": [
+        0.0975,
+        0.0994
+      ],
+      "incumbent": [
+        0.1715,
+        0.1767
+      ],
+      "logistic": [
+        0.1857,
+        0.1916
+      ],
+      "logistic_l1": [
+        0.1248,
+        0.1284
+      ],
+      "majority": [
+        0.0385,
+        0.0385
+      ],
+      "model": [
+        0.2088,
+        0.2152
+      ],
+      "stratified": [
+        0.0376,
+        0.0396
+      ]
+    },
+    "complete": true,
+    "final_per_family": {
+      "base64": 0.1071,
+      "binary": 0.1054,
+      "code": 0.2499,
+      "csv": 0.3432,
+      "gutenberg": 0.1409,
+      "json": 0.3131,
+      "log": 0.3246,
+      "mixed": 0.1143
+    },
+    "final_top1": 0.212,
+    "final_top1_non_gutenberg": 0.2223,
+    "incumbent_refit_top1": 0.1741,
+    "logistic_l1_refit_top1": 0.1266,
+    "missing_roles": [],
+    "n_classes": 26,
+    "null_rows": 20000,
+    "preregistration": "0012-recipe-search-2048",
+    "selected_ids": {
+      "best_single_feat": "U3",
+      "deep_tree": "T3",
+      "depth3_tree": "D5",
+      "logistic": "L3",
+      "majority": "U1",
+      "model": "M7",
+      "stratified": "U2"
+    },
+    "selected_model_id": "M7",
+    "selection_sha256": "555095287b346c9b5c7197cca9b997e05de00ade9024fd0785edc1fb2834ad91",
+    "shuffled_label_accuracy": 0.0408,
+    "smoke": false,
+    "stage": "confirm"
+  },
+  "reads_artifact_of": "0012-recipe-search-2048",
+  "revises_0003_0006_0007_0011": false,
+  "schema": "raise-v1/recipe_search_2048_reread_verdict/1",
+  "source_artifact": "artifacts/pivot/recipe_search_2048.json",
+  "validity_failed_clauses": [],
+  "verdict": "RECIPE_FAILS"
+}
