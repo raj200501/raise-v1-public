@@ -70,11 +70,11 @@ PROTOCOL = {
     ],
     "caps": {
         "selection_fit_seconds": 120000,
-        "memory_kill_gb": 14.5
+        "memory_kill_gb": 13.0
     },
     "launch": {
         "min_disk_free_gb": 0.25,
-        "min_mem_available_gb": 11.0
+        "min_mem_available_gb": 12.0
     },
     "null_rows": 20000,
     "incumbent_id": "M1",
@@ -119,10 +119,10 @@ EXPANDED_HEADS = FROZEN_HEADS + ("best_single_feat", "deep_tree")
 # prereg["scope"]["roster"] - the protocol block above and every head's candidate list - taken at
 # freeze time. The roster lives under the sealed `scope` field, so the chain's sealed_sha256
 # protects it as well.
-ROSTER_SHA256 = "818fb2d877579d10ec67306be8974fdf49d1113b8854662bf46009aee0b2697c"
+ROSTER_SHA256 = "ff8c6698f3635b42bd9806b4722eb42eaed2423a83f86a7d6aff5fb34054dd1f"
 # Every hash and count below was computed on 2026-09-04 from data/pivot/full_c4096.npz (corpus A, the
 # cache 0003 was scored on) with tools/pivot/run_carve.py grouped_split(seed 20260825, eval_frac
-# 0.2, cap 500000) and the holdout rule above, before any 0012 fit. Digest convention: sha256 of
+# 0.2, cap 800000) and the holdout rule above, before any 0014 fit. Digest convention: sha256 of
 # np.ascontiguousarray(a).tobytes(); index arrays int64 in grouped_split / np.nonzero order; y as
 # stored (int16); chunk-id sets and sorted sets np.sort(...).astype(np.int64).
 PARTITION = {

@@ -14,7 +14,7 @@
     "why_the_search_is_symmetric": "As 0012, unchanged: same roster size (8) for every head with a hyperparameter, the same two stages on the same rows, the same holdout, the same metric, ties to the lower roster index, one confirmatory fit per head on the same 800000 rows, one scoring per role. The same asymmetries are accepted and stated (compute favours the model; the floored maximum over four or six baseline heads runs against it; HGB fits on 90%% of its block by its inherited protocol; the baseline side selects four winners from four lists).",
     "selection_never_sees_the_evaluation_set": "As 0012: --stage select gathers only the holdout and the stage blocks and banks the measured count of evaluation rows gathered (must be 0); --stage confirm binds the selection file's hash into every confirmatory ledger entry and fits the model last. Disclosed: this is the second preregistration scored on 0003's sealed set (0003 scored it 4 rungs + 7 baselines + null = 12 times; 0006 scored it for top-k; 0014 adds 8 to 10), and the rosters were written with 0003's, 0011's and 0012's numbers known.",
     "inherited_conventions": "As 0012, unchanged. In addition the incumbent's early-stopping validation split at 800000 rows is the last 80000 rows of the pool, the same fragment-level rule 0003 used.",
-    "cost": "EXTRAPOLATION, basis 0012's banked seconds scaled by rows. 0012 banked 17895.9 s of selection fit time (stage 1 on 100000 rows, stage 2 on 399831 rows) and 6847.7 s of confirmatory fit time on 500000 rows. Stage 1 is the same 100000 rows here (about 7200 s in 0012 across all heads). Stage 2 runs on 639227 rows, 1.6 times 0012's block: about 1.6 x 10700 s = 17000 s. Confirmatory fits run on 800000 rows, 1.6 times 0012's pool: about 1.6 x 6850 s = 11000 s; 0003 banked 1324.6 s for the incumbent at 800000 rows on 4 cores, against 0012's 1120.5 s at 500000 on 3 threads, consistent with that scaling. Typical total about 35000 s (10 h) of fit time; worst case (every HGB and logistic candidate to its cap) about 1.6 times 0012's worst case, about 100000 s; the stage-A cap is 120000 s. Memory (arithmetic, labelled): stage select holds the 639227 x 1108 float64 stage-2 block, 5.67 GB, plus the 160773-row float32 holdout, 0.71 GB; a tree adds a 2.83 GB float32 transient, HGB a 0.7 GB binned copy: peak about 9.3 GB. Stage confirm holds the 800000-row pool, 7.09 GB, plus the 260000-row evaluation block, 1.15 GB; a tree adds a 3.55 GB transient, HGB 0.89 GB binned, an in-place logistic about 0.1 GB: peak about 11.9 GB at the deep-tree confirmatory fit. The container reported 16.86 GB total and 15.72 GB available at 0012's launch with no visible cgroup limit; 0003's own peak was 11.69 GB at this rung (engineering_log.json). The launch precondition requires 11.0 GB available and the kill threshold for stamping infeasible_memory is 14.5 GB. Disk: checkpoints are kilobytes; confirmatory records carry 260000-int8 vectors, about 780 KB each; the scores file about 8 MB.",
+    "cost": "EXTRAPOLATION, basis 0012's banked seconds scaled by rows. 0012 banked 17895.9 s of selection fit time (stage 1 on 100000 rows, stage 2 on 399831 rows) and 6847.7 s of confirmatory fit time on 500000 rows. Stage 1 is the same 100000 rows here (about 7200 s in 0012 across all heads). Stage 2 runs on 639227 rows, 1.6 times 0012's block: about 1.6 x 10700 s = 17000 s. Confirmatory fits run on 800000 rows, 1.6 times 0012's pool: about 1.6 x 6850 s = 11000 s; 0003 banked 1324.6 s for the incumbent at 800000 rows on 4 cores, against 0012's 1120.5 s at 500000 on 3 threads, consistent with that scaling. Typical total about 35000 s (10 h) of fit time; worst case (every HGB and logistic candidate to its cap) about 1.6 times 0012's worst case, about 100000 s; the stage-A cap is 120000 s. Memory (arithmetic, labelled; every figure is ANONYMOUS resident memory, RssAnon, which is what the container's ceiling counts - the 5.77 GB file-backed mapping of the cache is excluded and banked separately as rss_total_gb): stage select holds the 639227 x 1108 float64 stage-2 block, 5.67 GB, plus the 160773-row float32 holdout, 0.71 GB; a tree adds a 2.83 GB float32 transient, HGB a 0.7 GB binned copy: peak about 9.3 GB. Stage confirm holds the 800000-row pool, 7.09 GB, plus the 260000-row evaluation block, 1.15 GB; a tree adds a 3.55 GB transient, HGB 0.89 GB binned; the standardised logistic scales the pool in place with a chunkwise two-pass mean and standard deviation (the runner no longer calls numpy's std, whose full-size temporary 0012 banked as +4.3 GB of ru_maxrss at 500000 rows and would have been +7.09 GB here, on top of 8.24 GB, against a 16.46 GB container with no swap): peak about 11.8 GB at the deep-tree confirmatory fit. The container reported 16.46 GB total and 14.9 GB available on 2026-09-04 with no swap; this box has killed processes at about 13.9 GB (engineering_log.json, five kills), so the launch precondition requires 12.0 GB available and infeasible_memory is stamped from a heartbeat at or above 13.0 GB anonymous - a threshold that is reachable, unlike 14.5 GB against a 13.9 GB ceiling. Disk: checkpoints are kilobytes; confirmatory records carry 260000-int8 vectors, about 780 KB each; the scores file about 8 MB.",
     "expected_outcome_stated_in_advance": "Genuinely uncertain, and stated so. From 0012's banked lifts: the standardised logistic gained 0.062 at 2048 and the searched model 0.0379. If both lifts carried to 4096 the searched logistic would reach about 0.20 and the searched model about 0.28, leaving the frozen and expanded readings near +0.08 - RECIPE_CLEARS. If the model's lift is smaller at 4096 (the incumbent was tuned on 4096 pilot data, so its recipe is less wrong there than at 2048) and the logistic's is not, the expanded margin could fall toward 0.04 - RECIPE_FAILS. The honest prior is RECIPE_CLEARS with a real chance of RECIPE_FAILS; either outcome is published at the same size, and a RECIPE_FAILS would be filed as a correction to the record's headline framing at full size.",
     "what_a_fail_would_mean_for_the_record": "That the CURVE_ESTABLISHED margins of 0003 were measured against baselines a symmetric search could beat, and that the headline's +0.0583 stricter margin does not survive a fair baseline. 0003's verdict would stand on its own frozen reader (it is not revised), but VERDICT.md, README.md and every outbound document would carry the searched margin beside it and a correction would be filed. That is the whole reason to run this now rather than after a raise.",
     "what_this_does_not_cover": "Everything 0012 did not cover, at 4096. It does not redo the ladder or the slope; it measures one rung. It does not search the 1024 or 2048 sizes again. Nothing here establishes a buyer, a customer, a user or a partner.",
@@ -45,11 +45,11 @@
         ],
         "caps": {
           "selection_fit_seconds": 120000,
-          "memory_kill_gb": 14.5
+          "memory_kill_gb": 13.0
         },
         "launch": {
           "min_disk_free_gb": 0.25,
-          "min_mem_available_gb": 11.0
+          "min_mem_available_gb": 12.0
         },
         "null_rows": 20000,
         "incumbent_id": "M1",
@@ -288,7 +288,7 @@
               "params": {
                 "max_depth": 3
               },
-              "why": "0003's depth3_tree verbatim (DecisionTreeClassifier(max_depth=3, random_state=0), gini, min_samples_leaf 1): 0.0887 banked"
+              "why": "0003's depth3_tree verbatim (DecisionTreeClassifier(max_depth=3, random_state=0), gini, min_samples_leaf 1): 0.0969 banked"
             },
             {
               "id": "D2",
@@ -456,7 +456,7 @@
               "params": {
                 "strategy": "stratified"
               },
-              "why": "no hyperparameter; confirmatory fit only (0.0385 banked)"
+              "why": "no hyperparameter; confirmatory fit only (0.0387 banked)"
             }
           ]
         },
@@ -505,7 +505,7 @@
     },
     "reproduces_0003_fixed_recipes": {
       "direction": "lower_is_better",
-      "passes_if": "abs(incumbent_refit_top1 - 0.2395) <= 0.005 and abs(logistic_l1_refit_top1 - 0.1392) <= 0.005: the fixed 0003 recipes refit on the 500000-row pool exactly as 0003 fitted them and scored once on the sealed set must reproduce 0003's banked values (0003's own transfer model reproduced corpus A's matched-rung accuracy under the same convention). Failure is VOID: the run is not measuring 0003's pipeline, so any changed margin would be drift in disguise. The drifts are banked as readings.",
+      "passes_if": "abs(incumbent_refit_top1 - 0.2395) <= 0.005 and abs(logistic_l1_refit_top1 - 0.1392) <= 0.005: the fixed 0003 recipes refit on the 800000-row pool exactly as 0003 fitted them and scored once on the sealed set must reproduce 0003's banked values (0003's own transfer model reproduced corpus A's matched-rung accuracy under the same convention). Failure is VOID: the run is not measuring 0003's pipeline, so any changed margin would be drift in disguise. The drifts are banked as readings.",
       "threshold": 0.005
     },
     "null_control": {
@@ -520,7 +520,7 @@
     },
     "margin_frozen": {
       "direction": "higher_is_better",
-      "passes_if": "round(final_top1 - best_frozen_for_bar, 6) >= 0.05 - 1e-9, where final_top1 is the selected model recipe's single evaluation top-1 at 800000 rows (banked to 4 decimals). This is the 0.0025 gap the run exists to test; the searched logistic can widen it.",
+      "passes_if": "round(final_top1 - best_frozen_for_bar, 6) >= 0.05 - 1e-9, where final_top1 is the selected model recipe's single evaluation top-1 at 800000 rows (banked to 4 decimals). Under 0003's fixed recipes this margin was +0.1003 (0.2395 against logistic 0.1392); the run exists to learn whether a searched logistic narrows it below the bar.",
       "threshold": 0.05
     },
     "margin_expanded": {
@@ -548,7 +548,7 @@
     },
     {
       "name": "boundary_bytes",
-      "unit": "text: '(2048, 4096], frozen and searched' on RECIPE_FAILS; 'clears at 4096 under search; below 2048 unmeasured under search; (2048, 4096] stands for the frozen recipe (0003)' on RECIPE_CLEARS; 'not bracketed by this run' on VOID",
+      "unit": "text: 'the headline size fails under search; (2048, 4096] stands for the frozen recipe (0003, 0011)' on RECIPE_FAILS; 'clears at 4096 under search; (2048, 4096] stands for the frozen recipe (0003, 0011)' on RECIPE_CLEARS; 'not bracketed by this run' on VOID",
       "source_artifact": "artifacts/pivot/recipe_search_4096_verdict.json",
       "json_path": "$.boundary_bytes"
     },
@@ -584,7 +584,7 @@
     },
     {
       "name": "final_top1_non_gutenberg",
-      "unit": "fraction correct on the 113412 non-gutenberg evaluation rows",
+      "unit": "fraction correct on the 227006 non-gutenberg evaluation rows",
       "source_artifact": "artifacts/pivot/recipe_search_4096.json",
       "json_path": "$.final_top1_non_gutenberg"
     },
@@ -638,19 +638,19 @@
     },
     {
       "name": "eval_idx_sha256",
-      "unit": "sha256; must equal 4036c7a58bd46113725adda2b3bf3602ca1597888ad1b934b46d327ef07536a3",
+      "unit": "sha256; must equal 7da1099e0cf9d4c3903dad62f52c91f67b751113fc4bfc0a62c53f05dccf1efa",
       "source_artifact": "artifacts/pivot/recipe_search_4096.json",
       "json_path": "$.partition.eval_idx_sha256"
     },
     {
       "name": "pool_idx_sha256",
-      "unit": "sha256; must equal c716babc84a83fbc0a05b3b65a04614b171e20fa2653a02024e80ff7526d6c9d",
+      "unit": "sha256; must equal 17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
       "source_artifact": "artifacts/pivot/recipe_search_4096.json",
       "json_path": "$.partition.pool_idx_sha256"
     },
     {
       "name": "holdout_idx_sha256",
-      "unit": "sha256; must equal 820792faeaac582f7a4be9473cbafca58377666bda9330cbcce3c68e800b2e80",
+      "unit": "sha256; must equal dd6cb8f7a7a7bdf6b5bcb0cebf0e533addc8e33f10e78c946c18723e449c7b02",
       "source_artifact": "artifacts/pivot/recipe_search_4096.json",
       "json_path": "$.partition.holdout_idx_sha256"
     },
@@ -674,7 +674,7 @@
     },
     {
       "name": "cluster_ci95_informational",
-      "unit": "map of role to a 95% cluster-bootstrap interval over the 5000 evaluation chunks, informational",
+      "unit": "map of role to a 95% cluster-bootstrap interval over the 10000 evaluation chunks, informational",
       "source_artifact": "artifacts/pivot/recipe_search_4096.json",
       "json_path": "$.cluster_ci95_informational"
     },
@@ -699,9 +699,9 @@
     "NOT RUN is reachable only before the first evaluation-touching checkpoint and only by mechanical rules (a failed launch precondition; three consecutive launches of a stage that produced no new checkpoint; stage-A fit seconds above caps.selection_fit_seconds); it is filed as artifacts/pivot/recipe_search_4096_not_run.json, the reader prints it and exits 2, and nothing is re-scoped to fewer candidates, a smaller rung or a lower bar.",
     "Once stage confirm has written any checkpoint the artifact exists at the sealed path with complete false and reads VOID naming the missing roles until every role is banked; abandonment after that point is a published VOID, never a silent NOT RUN; every confirmatory fit runs to completion with no time cap; the model winner is fitted last.",
     "No candidate is added, removed or re-parameterised after freeze: the roster hashes to a literal in the frozen reader and sits under the sealed scope; a record whose params hash is off-roster is VOID.",
-    "The sealed evaluation set is scored exactly once per confirmatory role; no runner-up substitution on either side; no re-selection in stage confirm; no time-based or seconds-based eligibility anywhere; ties break by roster index only; interruptions are counted, never turned into a status; infeasible_memory is stamped only on a caught MemoryError or a kill whose last heartbeat RSS was at or above 12.5 GB, with the evidence banked.",
+    "The sealed evaluation set is scored exactly once per confirmatory role; no runner-up substitution on either side; no re-selection in stage confirm; no time-based or seconds-based eligibility anywhere; ties break by roster index only; interruptions are counted, never turned into a status; infeasible_memory is stamped only on a caught MemoryError or a kill whose last heartbeat RSS was at or above 13.0 GB, with the evidence banked. RSS here means anonymous resident memory (RssAnon), which excludes the file-backed pages of the memory-mapped cache; the runner banks the total beside it.",
     "The 0.05 bar is not lowered, 0003's three readings are all required, and absence, NaN or inf read as VOID.",
-    "This cannot revise 0003, 0006, 0007 or 0003; 0003's CARVE_FAILS and (2048, 4096] stand for the frozen recipe whatever this returns; revises_0003_0006_0007_0003 and establishes_a_buyer are emitted False unconditionally; no customer, user, partner or buyer is claimed.",
+    "This cannot revise 0003, 0006, 0007 or 0011; 0011's CARVE_FAILS and (2048, 4096] stand for the frozen recipe whatever this returns; revises_0003_0006_0007_0011 and establishes_a_buyer are emitted False unconditionally; no customer, user, partner or buyer is claimed.",
     "Cost is banked beside the result (fit seconds, ru_maxrss and heartbeat RSS per record, launches, interruptions, refills, the environment) and gates nothing in the reader; every cost figure in this preregistration is labelled EXTRAPOLATION with its basis.",
     "The corpus, the evaluation set, the pool and the partition are one draw and are not redrawn; smoke runs write only to the scratchpad, are stamped smoke true, and read VOID.",
     "If the run cannot complete under the container's memory (an infeasible_memory on the baseline side, or a third on the model side, or the incumbent), the result is VOID, filed as such, and nothing in the recipe is changed to make it fit.",
@@ -716,7 +716,7 @@
   "frozen": false,
   "invocation": "export OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3; nice -n 10 python3 tools/pivot/run_recipe_search.py --stage select --prereg-file prereg/0014-recipe-search-4096.json --cache data/pivot/full_c4096.npz --workdir artifacts/pivot/recipe_search_4096_ckpt --selection-out artifacts/pivot/recipe_search_4096_selection.json --out artifacts/pivot/recipe_search_4096.json --scores-out artifacts/pivot/recipe_search_4096_scores.json; then the same with --stage confirm; then python3 tools/readers/recipe4096_verdict.py. Relaunching the identical command after a container restart is the whole recovery procedure; checkpoints are committed and pushed as they land.",
   "smoke": {
-    "top_rung": 20000,
+    "top_rung": 12000,
     "stages": [
       {
         "rows": 2000,

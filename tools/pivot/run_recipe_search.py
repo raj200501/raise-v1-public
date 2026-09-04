@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Preregistration 0012: a budgeted, SYMMETRIC recipe search at the 2048-byte carve.
+"""A budgeted, SYMMETRIC recipe search at one carve size (preregistration 0012 at 2048; 0014 at 4096).
 
 Question. 0011 measured the incumbent recipe at 2048 and returned CARVE_FAILS with the frozen-set
 margin 0.0025 short of the bar (0.1741 against logistic 0.1266) and the expanded margin +0.0294
@@ -9,15 +9,16 @@ one architecture is not architecture-neutral, and freezing it privileges the inc
 search here is symmetric: every HEAD - the model and each baseline family with a hyperparameter -
 is an enumerated roster of the same size in the preregistration's SEALED scope, selected by the
 same rule on the same chunk-rule holdout, and each head's selected recipe is fitted ONCE on the
-same 500000 training rows 0011 used and scored ONCE on 0011's sealed evaluation set.
+same training pool the reproduced run used (0011's 500000 rows at 2048; 0003's 800000 at 4096) and
+scored ONCE on that run's sealed evaluation set.
 
 Two invocations, so that selection can be shown never to have held an evaluation row:
 
   --stage select   gathers the holdout and the stage blocks only (every gather is intersected
                    with the evaluation index and the count banked), runs every roster through the
-                   stages, and writes artifacts/pivot/recipe_search_2048_selection.json.
+                   stages, and writes the --selection-out file.
   --stage confirm  refuses without that file; gathers the evaluation block and the pool once;
-                   fits the roles in the PREREGISTERED ORDER - the incumbent and the 0011 logistic
+                   fits the roles in the PREREGISTERED ORDER - the incumbent and the fixed-recipe logistic
                    reproductions, the knob-free heads, the searched baseline heads, the null
                    control, and the model's selected recipe LAST - and re-assembles the artifact
                    after every role, so an abandoned stage reads VOID rather than vanishing.
@@ -29,15 +30,17 @@ append-only attempt ledger, the environment - and the frozen reader compares tho
 constants sealed in it.
 
 Partition (all derived from the cache's y and g arrays; the script recomputes and banks hashes):
-  eval        grouped_split(seed, eval_frac, cap) held-out chunks: 130000 rows, 5000 chunks - 0011's
-  pool        the 500000 training rows grouped_split returns, in its order - 0011's top rung rows
+  eval        grouped_split(seed, eval_frac, cap) held-out chunks - the reproduced run's sealed set
+              (130000 rows / 5000 chunks at 2048; 260000 rows / 10000 chunks at 4096)
+  pool        the `cap` training rows grouped_split returns, in its order - the top rung's rows
+              (500000 at 2048; 800000 at 4096)
   holdout     pool rows whose chunk id satisfies the preregistered rule (a rule, not a draw)
   fit pool    the other pool rows, in pool order
   stage k     the first stage.rows of the fit pool ("all" = the whole fit pool)
 
 Selection per head: stage 1 fits every candidate on the stage-1 block and scores it on the holdout;
 the top `keep` advance (ties at 4 decimals go to the LOWER roster index, so a tie can only favour
-the recipe listed first, and every roster lists the 0011 recipe first); the last stage's winner is
+the recipe listed first, and every roster lists the reproduced run's recipe first); the last stage's winner is
 the head's recipe. Fit seconds are banked for cost and never decide eligibility. A candidate whose
 fit raises MemoryError, or that was killed while its last heartbeat showed the process at or above
 the preregistered memory threshold, is banked infeasible_memory and is ineligible; it is never
@@ -74,7 +77,31 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from corpus import CONFIG_NAMES, FAMILIES, N_CONFIGS  # noqa: E402
 from npzmap import fill_f32, fill_f64, npz_memmap  # noqa: E402
 from run_carve import grouped_split  # noqa: E402
-from run_study import _rss_gb, predict_chunked  # noqa: E402
+from run_study import _rss_gb as _rss_total_gb, predict_chunked  # noqa: E402
+
+
+def _rss_gb():
+    """Anonymous resident memory (RssAnon) in GB - what the container's memory ceiling counts.
+    VmRSS also counts the file-backed pages of the memory-mapped cache (5.77 GB for corpus A),
+    which the kernel drops under pressure; a VmRSS threshold would be crossed by an idle process
+    sitting on the pool plus the mapping. Both figures are banked; this one is the threshold's."""
+    try:
+        anon = rss_file = rss = None
+        with open("/proc/self/status") as fh:
+            for ln in fh:
+                if ln.startswith("RssAnon:"):
+                    anon = int(ln.split()[1])
+                elif ln.startswith("RssFile:"):
+                    rss_file = int(ln.split()[1])
+                elif ln.startswith("VmRSS:"):
+                    rss = int(ln.split()[1])
+        if anon is not None:
+            return anon / 1e6
+        if rss is not None and rss_file is not None:
+            return (rss - rss_file) / 1e6
+    except OSError:
+        pass
+    return float("nan")
 
 PROBE_STRIDE = 7813
 
@@ -160,9 +187,18 @@ class InPlaceScaled:
     def __init__(self, est):
         self.est = est
 
-    def fit_inplace(self, Xtr, fit_fn):
+    def fit_inplace(self, Xtr, fit_fn, rows_per_pass=20000):
+        # Column mean and (population) standard deviation accumulated over row blocks. numpy's
+        # std(axis=0) materialises a full-size (Xtr - mean) temporary: at 800000 x 1108 float64 that
+        # is a second 7.09 GB copy beside the block (0012 banked it as +4.3 GB of ru_maxrss on the
+        # scaled logistic at 500000 rows). Two passes, transients of rows_per_pass rows only.
+        n = int(Xtr.shape[0])
         self.mean_ = Xtr.mean(axis=0)
-        sd = Xtr.std(axis=0); sd[sd == 0] = 1.0; self.scale_ = sd
+        ss = np.zeros(Xtr.shape[1], np.float64)
+        for i in range(0, n, rows_per_pass):
+            d = Xtr[i:i + rows_per_pass] - self.mean_
+            ss += np.einsum("ij,ij->j", d, d)
+        sd = np.sqrt(ss / n); sd[sd == 0] = 1.0; self.scale_ = sd
         Xtr -= self.mean_; Xtr /= self.scale_
         fit_fn(self.est)
         return self
@@ -329,7 +365,8 @@ class Store:
             try:
                 r = round(_rss_gb(), 2); box["max"] = max(box.get("max", 0.0), r)
                 with open(hb + ".tmp", "w") as fh:
-                    json.dump({"utc": _utc(), "rss_gb": r}, fh)
+                    json.dump({"utc": _utc(), "rss_gb": r, "rss_total_gb": round(_rss_total_gb(), 2),
+                               "rss_gb_is": "anonymous (RssAnon)"}, fh)
                 os.replace(hb + ".tmp", hb)
             except Exception:  # noqa: BLE001
                 pass
@@ -403,7 +440,7 @@ def run_fit(store, name, fp, head, cand, seed, block, y_all, g_all, Xs, ys, fam_
             "last_heartbeat_rss_gb_before_this_fit": (last_hb or {}).get("rss_gb"), "utc": _utc()}
     if prior > 0 and last_hb and (last_hb.get("rss_gb") or 0) >= caps["memory_kill_gb"]:
         rec = dict(base, status="infeasible_memory", seconds=None, top1=None, top1_non_gutenberg=None,
-                   per_family=None, evidence=f"killed with RSS {last_hb['rss_gb']} GB at the last heartbeat, "
+                   per_family=None, evidence=f"killed with anonymous RSS {last_hb['rss_gb']} GB at the last heartbeat, "
                                              f"at or above the preregistered {caps['memory_kill_gb']} GB")
         store.log(name, fp, "infeasible_stamped", evidence=rec["evidence"]); store.save(name, fp, rec)
         print(f"      {name:<30} {rec['status']} ({rec['evidence']})", flush=True)
@@ -429,6 +466,7 @@ def run_fit(store, name, fp, head, cand, seed, block, y_all, g_all, Xs, ys, fam_
     if needs_refill:
         block.refill()
     rec = dict(base, status="fit", seconds=secs, rss_gb=round(_rss_gb(), 2),
+               rss_total_gb=round(_rss_total_gb(), 2), rss_gb_is="anonymous (RssAnon)",
                heartbeat_max_rss_gb=box.get("max"),
                ru_maxrss_gb=round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6, 2),
                fit_info=fit_info(est), block_refills=list(block.refills), **sc)
@@ -468,6 +506,7 @@ def main() -> int:
                     help="override the protocol with the prereg file's 'smoke' block; every output is "
                          "stamped smoke=true and the reader VOIDs it")
     args = ap.parse_args()
+    out_stem = os.path.splitext(os.path.basename(args.out))[0]  # recipe_search_2048 / recipe_search_4096
     t_all = time.perf_counter()
     not_run_path = args.out[:-5] + "_not_run.json"
 
@@ -535,7 +574,7 @@ def main() -> int:
               "cache_y_sha256": cache_y_sha, "cache_g_sha256": cache_g_sha, "n_rows": int(len(y)), "n_features": int(ncols)}
     print(f"[1] corpus C: {corpus}", flush=True)
 
-    # [2] the sealed split - 0011's by construction (same function, seed, fraction, cap)
+    # [2] the sealed split - the reproduced run's by construction (same function, seed, fraction, cap)
     ev, tr, rng = grouped_split(y, g, seed, eval_frac, top_rung)
     fam = lambda idx: np.array([FAMILIES[int(v) % len(FAMILIES)] for v in g[idx]])  # noqa: E731
     ev_chunks = np.unique(g[ev])
@@ -656,7 +695,7 @@ def main() -> int:
         except NotRun as e:
             print(f"NOT RUN: {e}", file=sys.stderr)
             with open(not_run_path, "w") as fh:
-                json.dump({"schema": "raise-v1/recipe_search_2048_not_run/1", "preregistration": stamp,
+                json.dump({"schema": f"raise-v1/{out_stem}_not_run/1", "preregistration": stamp,
                            "stage": "select", "reason": str(e), "utc": _utc(), "smoke": bool(args.smoke),
                            "n_checkpoints": len([f for f in os.listdir(args.workdir) if f.endswith(".json")])},
                           fh, indent=2)
@@ -730,8 +769,9 @@ def main() -> int:
                    null_control=null_rec, shuffled_label_accuracy=(null_rec or {}).get("top1"),
                    null_rows=int(min(len(tr), int(P["null_rows"]))),
                    cluster_ci95_informational=ci or {},
-                   cluster_ci95_note="95% cluster-bootstrap intervals over the 5000 evaluation chunks (2000 "
-                                     "resamples) on each confirmatory accuracy; informational, never a clause",
+                   cluster_ci95_note=f"95% cluster-bootstrap intervals over the {partition['n_eval_chunks']} "
+                                     "evaluation chunks (2000 resamples) on each confirmatory accuracy; "
+                                     "informational, never a clause",
                    ledger=store.ledger(),
                    cost={"wall_seconds_this_invocation": round(time.perf_counter() - t_all, 1),
                          "selection_seconds_total": sel_doc["cost"]["selection_seconds_total"],
@@ -748,7 +788,7 @@ def main() -> int:
             json.dump(out, fh, indent=2, sort_keys=True); fh.write("\n")
         os.replace(args.out + ".tmp", args.out)
         with open(args.scores_out + ".tmp", "w") as fh:
-            json.dump({"schema": "raise-v1/recipe_search_2048_scores/1", "preregistration": stamp,
+            json.dump({"schema": f"raise-v1/{out_stem}_scores/1", "preregistration": stamp,
                        "smoke": bool(args.smoke), "eval_idx_sha256": partition["eval_idx_sha256"],
                        "eval_chunk_ids": g[ev].tolist(),
                        "per_example": {k: v.tolist() for k, v in per_ex.items()}}, fh)
@@ -763,7 +803,8 @@ def main() -> int:
         ye = np.asarray(y[ev]); fam_e = fam(ev)
         partition["eval_y_sha256"] = _sha(ye)
         pool = Block(X, tr, ncols, "pool")
-        print(f"[confirm] pool {len(tr)} rows and eval {len(ev)} rows materialised, RSS {_rss_gb():.2f} GB",
+        print(f"[confirm] pool {len(tr)} rows and eval {len(ev)} rows materialised, anonymous RSS "
+              f"{_rss_gb():.2f} GB (total {_rss_total_gb():.2f} GB)",
               flush=True)
         final, per_ex = {}, {}
         roles_done = []
@@ -834,7 +875,7 @@ def main() -> int:
     except NotRun as e:
         print(f"NOT RUN: {e}", file=sys.stderr)
         with open(not_run_path, "w") as fh:
-            json.dump({"schema": "raise-v1/recipe_search_2048_not_run/1", "preregistration": stamp,
+            json.dump({"schema": f"raise-v1/{out_stem}_not_run/1", "preregistration": stamp,
                        "stage": "confirm", "reason": str(e), "utc": _utc(), "smoke": bool(args.smoke),
                        "n_checkpoints": len([f for f in os.listdir(args.workdir) if f.endswith(".json")])},
                       fh, indent=2)
