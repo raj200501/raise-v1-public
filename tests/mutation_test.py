@@ -1781,15 +1781,28 @@ def _sha12(o):
     return hashlib.sha256(_canon12(o).encode("utf-8")).hexdigest()
 
 
-def _good_recipe2048():
-    """A complete, valid artifact set whose numbers give RECIPE_CLEARS: model 0.21 against a floored
-    frozen bar 0.13 and an expanded bar 0.15 (0.155 non-gutenberg)."""
+_CFG2048 = {"reader": "recipe2048_verdict.py", "prereg": "0012-recipe-search-2048.json",
+            "conf": {"majority": (0.0385, 0.0385), "stratified": (0.0385, 0.0385), "best_single_feat": (0.0726, 0.0762),
+                     "depth3_tree": (0.09, 0.091), "deep_tree": (0.15, 0.155), "logistic": (0.13, 0.135),
+                     "model": (0.21, 0.22)},
+            "incumbent": (0.1741, 0.1819), "l1": (0.1266, 0.1315), "stamp": "0012-recipe-search-2048"}
+_CFG4096 = {"reader": "recipe4096_verdict.py", "prereg": "0014-recipe-search-4096.json",
+            "conf": {"majority": (0.0385, 0.0385), "stratified": (0.0387, 0.0388), "best_single_feat": (0.0751, 0.0769),
+                     "depth3_tree": (0.10, 0.101), "deep_tree": (0.19, 0.195), "logistic": (0.15, 0.155),
+                     "model": (0.26, 0.27)},
+            "incumbent": (0.2395, 0.2475), "l1": (0.1392, 0.1438), "stamp": "0014-recipe-search-4096"}
+
+
+def _good_recipe2048(cfg=None):
+    """A complete, valid artifact set whose numbers give RECIPE_CLEARS (2048: model 0.21 against a
+    floored frozen bar 0.13 and an expanded bar 0.15; 4096: 0.26 against 0.15 and 0.19)."""
+    cfg = cfg or _CFG2048
     import importlib.util
-    spec = importlib.util.spec_from_file_location(
-        "r12", os.path.join(REPO, "tools", "readers", "recipe2048_verdict.py"))
+    spec = importlib.util.spec_from_file_location("r12", os.path.join(REPO, "tools", "readers", cfg["reader"]))
     r12 = importlib.util.module_from_spec(spec); spec.loader.exec_module(r12)
     part = dict(r12.PARTITION)
-    proto = _R12["protocol"]; heads = _R12["heads"]
+    _R = json.load(open(os.path.join(REPO, "prereg", cfg["prereg"])))["scope"]["roster"]
+    proto = _R["protocol"]; heads = _R["heads"]
     by_id = {c["id"]: c for h in heads for c in h["candidates"]}
     fam8 = ["gutenberg", "base64", "binary", "code", "csv", "json", "log", "mixed"]
 
@@ -1829,21 +1842,19 @@ def _good_recipe2048():
         selected[hid] = survivors[0]
     sel_part = {k: v for k, v in part.items() if k != "eval_y_sha256"}
     corpus = dict(r12.CORPUS)
-    sel_doc = {"schema_version": 1, "preregistration": "0012-recipe-search-2048", "smoke": False,
-               "roster_sha256": _sha12(_R12), "roster": _R12, "corpus": corpus, "partition": sel_part,
+    sel_doc = {"schema_version": 1, "preregistration": cfg["stamp"], "smoke": False,
+               "roster_sha256": _sha12(_R), "roster": _R, "corpus": corpus, "partition": sel_part,
                "n_classes": 26, "class_names": [], "chance_accuracy": 0.038462, "stage": "select",
-               "gathers": [{"name": "holdout", "n_rows": 100169, "n_eval_rows": 0}],
+               "gathers": [{"name": "holdout", "n_rows": part["n_holdout_rows"], "n_eval_rows": 0}],
                "eval_rows_gathered_in_selection": 0, "environment": dict(_ENV12), "selection": selection,
                "selected_ids": selected, "ledger": [], "cost": {"selection_seconds_total": 1.0},
                "selection_started_utc": "2026-09-04T00:00:00Z", "selection_finished_utc": "2026-09-04T01:00:00Z"}
     sel_bytes = _canon12(sel_doc).encode("utf-8")
     pool_sha, pool_sorted = part["pool_idx_sha256"], part["pool_sorted_sha256"]
-    conf = {"majority": (0.0385, 0.0385), "stratified": (0.0385, 0.0385), "best_single_feat": (0.0726, 0.0762),
-            "depth3_tree": (0.09, 0.091), "deep_tree": (0.15, 0.155), "logistic": (0.13, 0.135),
-            "model": (0.21, 0.22)}
-    final = {hid: rec(hid, selected[hid], "confirmatory", 500000, pool_sha, pool_sorted, *conf[hid]) for hid in conf}
-    inc = rec("incumbent", "M1", "confirmatory", 500000, pool_sha, pool_sorted, 0.1741, 0.1819)
-    l1 = rec("logistic_l1", "L1", "confirmatory", 500000, pool_sha, pool_sorted, 0.1266, 0.1315)
+    conf = cfg["conf"]
+    final = {hid: rec(hid, selected[hid], "confirmatory", part["n_pool_rows"], pool_sha, pool_sorted, *conf[hid]) for hid in conf}
+    inc = rec("incumbent", "M1", "confirmatory", part["n_pool_rows"], pool_sha, pool_sorted, *cfg["incumbent"])
+    l1 = rec("logistic_l1", "L1", "confirmatory", part["n_pool_rows"], pool_sha, pool_sorted, *cfg["l1"])
     null = rec("null", selected["model"], "null", 20000, "x", r12.NULL_SORTED_SHA256, 0.039, 0.039)
     order = ["confirm_incumbent", "confirm_logistic_l1", "confirm_majority", "confirm_stratified",
              "confirm_best_single_feat", "confirm_depth3_tree", "confirm_deep_tree", "confirm_logistic",
@@ -1858,39 +1869,40 @@ def _good_recipe2048():
     frozen = ["majority", "stratified", "depth3_tree", "logistic"]; expanded = frozen + ["best_single_feat", "deep_tree"]
     bf = max(max(conf[h][0], floors[h]) for h in frozen); be = max(max(conf[h][0], floors[h]) for h in expanded)
     ben = max(max(conf[h][1], floors_ng[h]) for h in expanded)
-    art = {"schema_version": 1, "preregistration": "0012-recipe-search-2048", "smoke": False, "stage": "confirm",
-           "roster_sha256": _sha12(_R12), "roster": _R12, "corpus": corpus, "partition": part, "n_classes": 26,
+    art = {"schema_version": 1, "preregistration": cfg["stamp"], "smoke": False, "stage": "confirm",
+           "roster_sha256": _sha12(_R), "roster": _R, "corpus": corpus, "partition": part, "n_classes": 26,
            "class_names": [], "chance_accuracy": 0.038462, "selection_sha256": sel_sha, "selection": sel_doc,
            "selected_ids": selected, "selected_model_id": selected["model"], "environment": dict(_ENV12),
            "complete": True, "missing_roles": [], "final": final,
            "final_top1": conf["model"][0], "final_top1_non_gutenberg": conf["model"][1],
            "final_per_family": final["model"]["per_family"], "final_status": "fit",
-           "best_frozen_for_bar": bf, "best_frozen_searched": 0.13, "best_frozen_head": "logistic",
-           "best_expanded_for_bar": be, "best_expanded_searched": 0.15, "best_expanded_head": "deep_tree",
-           "best_expanded_non_gutenberg_for_bar": ben, "best_expanded_non_gutenberg_searched": 0.155,
-           "incumbent_refit": inc, "incumbent_refit_top1": 0.1741, "logistic_l1_refit": l1,
-           "logistic_l1_refit_top1": 0.1266, "null_control": null, "shuffled_label_accuracy": 0.039,
+           "best_frozen_for_bar": bf, "best_frozen_searched": conf["logistic"][0], "best_frozen_head": "logistic",
+           "best_expanded_for_bar": be, "best_expanded_searched": conf["deep_tree"][0], "best_expanded_head": "deep_tree",
+           "best_expanded_non_gutenberg_for_bar": ben, "best_expanded_non_gutenberg_searched": conf["deep_tree"][1],
+           "incumbent_refit": inc, "incumbent_refit_top1": cfg["incumbent"][0], "logistic_l1_refit": l1,
+           "logistic_l1_refit_top1": cfg["l1"][0], "null_control": null, "shuffled_label_accuracy": 0.039,
            "null_rows": 20000, "cluster_ci95_informational": {}, "ledger": ledger, "cost": {},
            "confirmatory_started_utc": "2026-09-04T02:00:00Z"}
-    scores = {"per_example": {k: [1] * 130000 for k in list(conf) + ["incumbent", "logistic_l1"]}}
+    scores = {"per_example": {k: [1] * part["n_eval_rows"] for k in list(conf) + ["incumbent", "logistic_l1"]}}
     return art, sel_bytes, scores
 
 
 def _recipe2048(root, mutate=None, sel_bytes_override=None, drop_artifact=False, not_run=None,
-                reader="recipe2048_reread_verdict.py", verdict_file="recipe_search_2048_reread_verdict.json"):
-    art, sel_bytes, scores = _good_recipe2048()
+                reader="recipe2048_reread_verdict.py", verdict_file="recipe_search_2048_reread_verdict.json",
+                cfg=None, tag="2048"):
+    art, sel_bytes, scores = _good_recipe2048(cfg)
     if mutate:
         r = mutate(art, scores)
         if r is not None:
             art = r
     piv = os.path.join(root, "artifacts", "pivot"); os.makedirs(piv, exist_ok=True)
-    with open(os.path.join(piv, "recipe_search_2048_selection.json"), "wb") as fh:
+    with open(os.path.join(piv, f"recipe_search_{tag}_selection.json"), "wb") as fh:
         fh.write(sel_bytes_override if sel_bytes_override is not None else sel_bytes)
-    json.dump(scores, open(os.path.join(piv, "recipe_search_2048_scores.json"), "w"))
+    json.dump(scores, open(os.path.join(piv, f"recipe_search_{tag}_scores.json"), "w"))
     if not drop_artifact:
-        json.dump(art, open(os.path.join(piv, "recipe_search_2048.json"), "w"))
+        json.dump(art, open(os.path.join(piv, f"recipe_search_{tag}.json"), "w"))
     if not_run is not None:
-        json.dump(not_run, open(os.path.join(piv, "recipe_search_2048_not_run.json"), "w"))
+        json.dump(not_run, open(os.path.join(piv, f"recipe_search_{tag}_not_run.json"), "w"))
     shutil.copy(os.path.join(REPO, "tools", "readers", reader), os.path.join(root, "tools", "readers", reader))
     rc, out = run([PY, f"tools/readers/{reader}"], root)
     if rc != 0:
@@ -2138,6 +2150,95 @@ def _(root):
         art["final"]["deep_tree"]["id"] = "T1"   # the head selected T8
     return _recipe2048(root, f)
 
+
+
+
+# ---------------------------------------------------------------- recipe4096 gate (preregistration 0014)
+#
+# The same reader logic at the headline size, with 0003's floors and reproduction values; the control
+# artifact is built the runner's way (second-stage survivors in roster order).
+
+def _r4096(root, mutate=None, **kw):
+    return _recipe2048(root, mutate, reader="recipe4096_verdict.py", verdict_file="recipe_search_4096_verdict.json",
+                       cfg=_CFG4096, tag="4096", **kw)
+
+
+@case("recipe4096", "control-clears-result-passes", "pass")
+def _(root):
+    return _r4096(root)
+
+
+@case("recipe4096", "a-frozen-only-pass-is-RECIPE_FAILS", "fail")
+def _(root):
+    rc, out = _r4096(root, _m12(final_top1=0.23))            # F: 0.23-0.15 passes; S: 0.23-0.19 = 0.04 fails
+    if rc != 0 and ("verdict=RECIPE_FAILS" not in out or "frozen_clears=True" not in out):
+        return 0, out + " !! a frozen-only pass did not read RECIPE_FAILS with frozen_reading_clears True"
+    return rc, out
+
+
+@case("recipe4096", "a-margin-of-exactly-0.0500-passes-and-0.0499-fails", "fail")
+def _(root):
+    rc0, out0 = _r4096(root, _m12(final_top1=0.24))          # S: 0.24 - 0.19 = 0.0500
+    if rc0 != 0:
+        return 0, out0 + " !! a margin printed as 0.0500 did not pass"
+    return _r4096(root, _m12(final_top1=0.2399))
+
+
+@case("recipe4096", "a-different-evaluation-set-hash-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["partition"]["eval_idx_sha256"] = "0" * 64
+    return _r4096(root, f)
+
+
+@case("recipe4096", "an-incumbent-refit-outside-0.005-of-0003-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["incumbent_refit"]["top1"] = 0.25; art["incumbent_refit_top1"] = 0.25
+    return _r4096(root, f)
+
+
+@case("recipe4096", "a-banked-bar-below-the-0003-floor-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["final"]["deep_tree"]["top1"] = 0.17; art["best_expanded_for_bar"] = 0.17; art["final_top1"] = 0.22
+    rc, out = _r4096(root, f)
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! an unfloored bar was read as a result"
+    return rc, out
+
+
+@case("recipe4096", "one-parameter-changed-in-one-candidate-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["roster"] = json.loads(json.dumps(art["roster"]))
+        art["roster"]["heads"][0]["candidates"][2]["params"]["max_iter"] = 301
+    return _r4096(root, f)
+
+
+@case("recipe4096", "a-per-example-vector-of-the-wrong-length-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        scores["per_example"]["model"] = [1] * 259999
+    return _r4096(root, f)
+
+
+@case("recipe4096", "a-model-fit-that-was-not-the-last-completion-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        L = art["ledger"]; i = next(k for k, e in enumerate(L) if e["name"] == "confirm_model" and e["event"] == "completed")
+        L.append(L.pop(i - 6))
+    return _r4096(root, f)
+
+
+@case("recipe4096", "a-smoke-run-is-VOID", "fail")
+def _(root):
+    return _r4096(root, _m12(smoke=True))
+
+
+@case("recipe4096", "absent-artifact-emits-no-verdict", "fail")
+def _(root):
+    return _r4096(root, drop_artifact=True)
 
 
 def _stable_evidence(out: str) -> str:

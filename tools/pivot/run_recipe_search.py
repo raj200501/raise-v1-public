@@ -501,20 +501,38 @@ def main() -> int:
         return 3
 
     # [1] corpus C from its cache, refusing a cache whose build metadata disagrees with the protocol
-    with np.load(args.cache) as z:
-        y = np.asarray(z["y"]); g = np.asarray(z["g"])
-        if "carve" not in z.files:
-            print("REFUSING: cache carries no build metadata", file=sys.stderr); return 3
-        cache_carve, cache_off, cache_cs = int(z["carve"]), int(z["chunk_offset"]), int(z["chunk_size"])
-    if (cache_carve, cache_off, cache_cs) != (P["carve"], P["chunk_offset"], P["chunk_size"]):
-        print(f"REFUSING: cache built at carve {cache_carve}, offset {cache_off}, chunk size {cache_cs}; "
-              f"the preregistration says {P['carve']}, {P['chunk_offset']}, {P['chunk_size']}", file=sys.stderr)
-        return 3
+    # y and g are read without touching X (np.load would read the whole X array); X is memmapped.
+    import io as _io, zipfile as _zf
+    with _zf.ZipFile(args.cache) as zf:
+        names = zf.namelist()
+        y = np.load(_io.BytesIO(zf.read("y.npy"))); g = np.load(_io.BytesIO(zf.read("g.npy")))
+        has_meta = "carve.npy" in names
+        if has_meta:
+            cache_carve = int(np.load(_io.BytesIO(zf.read("carve.npy"))))
+            cache_off = int(np.load(_io.BytesIO(zf.read("chunk_offset.npy"))))
+            cache_cs = int(np.load(_io.BytesIO(zf.read("chunk_size.npy"))))
+    cache_y_sha, cache_g_sha = _sha(y), _sha(g)
+    if has_meta:
+        if (cache_carve, cache_off, cache_cs) != (P["carve"], P["chunk_offset"], P["chunk_size"]):
+            print(f"REFUSING: cache built at carve {cache_carve}, offset {cache_off}, chunk size {cache_cs}; "
+                  f"the preregistration says {P['carve']}, {P['chunk_offset']}, {P['chunk_size']}", file=sys.stderr)
+            return 3
+        carve_source = "cache metadata written at build time"
+    else:
+        # A cache built before build metadata was written (corpus A, 0003) is identified by the
+        # sha256 of its y and g arrays, which the preregistration seals; anything else is refused.
+        ident = P.get("cache_identity") or {}
+        if ident.get("y_sha256") != cache_y_sha or ident.get("g_sha256") != cache_g_sha:
+            print("REFUSING: cache carries no build metadata and its y/g hashes are not the preregistration's "
+                  "sealed cache_identity", file=sys.stderr)
+            return 3
+        cache_carve, cache_off, cache_cs = int(P["carve"]), int(P["chunk_offset"]), int(P["chunk_size"])
+        carve_source = "sealed cache identity (sha256 of y and g); the cache carries no build metadata"
     X = npz_memmap(args.cache, "X"); ncols = X.shape[1]
-    corpus = {"carve_bytes": cache_carve, "carve_bytes_source": "cache metadata written at build time",
+    corpus = {"carve_bytes": cache_carve, "carve_bytes_source": carve_source,
               "chunk_size": cache_cs, "chunk_offset": cache_off, "chunk_id_min": int(g.min()),
               "chunk_id_max": int(g.max()), "n_source_chunks": int(np.unique(g).size),
-              "cache_y_sha256": _sha(y), "cache_g_sha256": _sha(g), "n_rows": int(len(y)), "n_features": int(ncols)}
+              "cache_y_sha256": cache_y_sha, "cache_g_sha256": cache_g_sha, "n_rows": int(len(y)), "n_features": int(ncols)}
     print(f"[1] corpus C: {corpus}", flush=True)
 
     # [2] the sealed split - 0011's by construction (same function, seed, fraction, cap)

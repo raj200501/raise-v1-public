@@ -52,6 +52,10 @@
       "detected": 27,
       "total": 27
     },
+    "recipe4096": {
+      "detected": 11,
+      "total": 11
+    },
     "scaling": {
       "detected": 10,
       "total": 10
@@ -1906,10 +1910,109 @@
       "gate": "recipe2048",
       "mutation": "a-baseline-head-substituted-with-a-non-selected-recipe-is-VOID",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=RECIPE_CLEARS frozen_clears=True validity=[] margin=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "recipe4096",
+      "mutation": "control-clears-result-passes",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=RECIPE_FAILS frozen_clears=True validity=[] margin=['margin S (expanded set): 0.23 - 0.19 = 0.04 is below 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe4096",
+      "mutation": "a-frozen-only-pass-is-RECIPE_FAILS",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=RECIPE_FAILS frozen_clears=True validity=[] margin=['margin S (expanded set): 0.2399 - 0.19 = 0.0499 is below 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe4096",
+      "mutation": "a-margin-of-exactly-0.0500-passes-and-0.0499-fails",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=[\"sealed set: partition.eval_idx_sha256='<hash>', preregistered '<hash>'\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe4096",
+      "mutation": "a-different-evaluation-set-hash-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=[\"reproduction: the incumbent refit scores 0.25 against 0003's banked 0.2395; the pool or the evaluation set is not 0003's\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe4096",
+      "mutation": "an-incumbent-refit-outside-0.005-of-0003-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=[\"bars: best_expanded_for_bar=0.17 is not the reader's recomputation 0.1812\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe4096",
+      "mutation": "a-banked-bar-below-the-0003-floor-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=['scope: the banked roster does not hash to the sealed ROSTER_SHA256', 'search: head model M3 stage 1 params hash is off-roster'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe4096",
+      "mutation": "one-parameter-changed-in-one-candidate-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=['confirmatory: confirm_model per-example vector missing or not 260000 long'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe4096",
+      "mutation": "a-per-example-vector-of-the-wrong-length-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=[\"order: the model's confirmatory fit was not the last completion (['confirm_logistic'])\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe4096",
+      "mutation": "a-model-fit-that-was-not-the-last-completion-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID frozen_clears=None validity=['scope: smoke=True; a smoke run is not the preregistered run'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe4096",
+      "mutation": "a-smoke-run-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "recipe4096",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
     }
   ],
-  "detected": 205,
+  "detected": 216,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 205
+  "total_mutations": 216
 }
