@@ -296,7 +296,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 |---|---|---|
 | Every gate can be shown to fail | 221 mutations, 221 detected, 0 survived | primary-verifiable |
 | A number that is real but STALE is caught, not just a fabricated one | `tools/freshness.py`, 9 mutations | primary-verifiable |
-| Preregistration chain verifies, reader unchanged since freeze | 13 entries, head `d3c5e812…` | primary-verifiable |
+| Preregistration chain verifies, reader unchanged since freeze | 14 entries, head `b0816161…` | primary-verifiable |
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |
 | ACS PUMS record count reproduced | 392,318 records | primary-verifiable |
 | Instrument reproduces on a cold clone | preflight names cause and fix | primary-verifiable |
@@ -756,6 +756,19 @@ the roster (no MLP, no forest — the reasons are in the preregistration), carve
 bytes, none of eight model recipes clears a bar that a symmetric search of the baselines raised
 to 0.1886 — and that the 0011 number the search was chasing was 0.0025 short of a bar that was
 itself soft.
+
+**The same question at the headline size, in flight.** Preregistration 0014 (chain seq 14,
+NIST Beacon pulse 1927238, drand round 6437632) applies the 0012 protocol, roster for roster, to
+corpus A at 4096 bytes: 0003's sealed evaluation set, 0003's 800000-row pool, every baseline
+head floored at its 0003 value, the model fitted last. It asks whether the headline
+`CURVE_ESTABLISHED` margin (+0.1003 over the frozen set, +0.0583 over all baselines) survives
+the search that moved the 2048 margin from +0.0475 to +0.0234. The expected outcome is written
+in the preregistration as genuinely uncertain. Two refuter passes before the freeze found and
+fixed a standardiser that would have allocated a second 7.09 GB copy of the pool during the
+confirmatory logistic fit, a memory rule that counted the cache's file-backed pages, and 2048-era
+constants inside sealed fields; the record of that review is `artifacts/pivot/engineering_log_0014.json`.
+It is frozen, and it is running. No 0014 number appears in this document until its frozen reader
+emits one; a `RECIPE_FAILS` is filed as a correction against the headline framing at full size.
 
 ### A learned representation over raw bytes does not rescue it either — `BYTE_MODEL_FAILS`
 

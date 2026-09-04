@@ -37,7 +37,11 @@ the model and for each baseline with a hyperparameter, selected by one rule on a
 never touched the evaluation set, every baseline floored at its earlier value: the model rose to
 0.212 and the standardised logistic baseline to 0.1886, so the margin fell to +0.0234 and the
 verdict is `RECIPE_FAILS` (read under preregistration 0013 after 0012's own frozen reader
-voided the run on a defect of its own, filed in the corrections ledger).
+voided the run on a defect of its own, filed in the corrections ledger). Preregistration 0014
+applies the same search to the headline 4096-byte result — 0003's sealed evaluation set, 0003's
+800000-row pool, every baseline floored at its 0003 value — with the outcome stated in advance as
+genuinely uncertain; it is frozen (chain entry 14) and running, and no 0014 number appears here
+until its frozen reader emits one.
 Decomposed by content family, csv and log clear the bar at 2048 on both readings (+0.0554 and
 +0.0501 against the strongest baseline) and the structured four clear it as a set (+0.0549), but
 the mixture fails even with the three incompressible families removed (+0.0478); the verdict is

@@ -713,7 +713,7 @@
     "what_neither_outcome_means": "Neither names a buyer. Neither revises 0003's verdict on its own reader. Neither says anything below 4096."
   },
   "reader": "tools/readers/recipe4096_verdict.py",
-  "frozen": false,
+  "frozen": true,
   "invocation": "export OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3; nice -n 10 python3 tools/pivot/run_recipe_search.py --stage select --prereg-file prereg/0014-recipe-search-4096.json --cache data/pivot/full_c4096.npz --workdir artifacts/pivot/recipe_search_4096_ckpt --selection-out artifacts/pivot/recipe_search_4096_selection.json --out artifacts/pivot/recipe_search_4096.json --scores-out artifacts/pivot/recipe_search_4096_scores.json; then the same with --stage confirm; then python3 tools/readers/recipe4096_verdict.py. Relaunching the identical command after a container restart is the whole recovery procedure; checkpoints are committed and pushed as they land.",
   "smoke": {
     "top_rung": 12000,
@@ -733,5 +733,23 @@
       "min_mem_available_gb": 0.0
     },
     "invocation": "The invocation above with --smoke added and --workdir, --selection-out, --out and --scores-out pointed under the session scratchpad; the runner refuses --smoke with any output path under artifacts/, and refuses a real run with any output path outside it. The smoke block replaces top_rung, stages, null_rows and launch; everything else is the sealed protocol."
-  }
+  },
+  "reader_sha256": "5ff6146d7dd302760e8c5e6add6dd4d960dcfa156f9ca2676de33c0465028f3f",
+  "frozen_utc": "2026-09-04T22:13:01Z",
+  "git_commit": "58b044e2a19cb22ceeb77ba844792a2d4a01c81c",
+  "git_dirty_at_freeze": false,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1927238,
+      "time_stamp": "2026-09-04T22:12:00.000Z",
+      "output_value": "3912C641B01A77D857EFE3EF5A16A6BAF94C1CDDB83148C77097EC2463B1B050DEB4FBA1770F2B59394A82BA12B117BF11C7B32AFF9F3717CC88C7930A19FE50"
+    },
+    "drand": {
+      "round": 6437632,
+      "randomness": "10edfb72d8607f90a4cbf76f86f077a482444aeec7509b17657ba73b7a0779a6"
+    }
+  },
+  "chain_hash": "b0816161b0ee894efe0014714df4e9ad7cf0601e7986ca97365ef81399db348c",
+  "chain_prev_hash": "d3c5e812e3686c7cfe414ad9533bbc4cd292c7838ca77d1630f36beb0faadd3d"
 }
