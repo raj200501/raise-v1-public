@@ -88,10 +88,21 @@
       },
       {
         "utc": "2026-09-04T21:53Z",
-        "outcome": "PENDING"
+        "outcome": "completed: stage select exit 0 at 22:03:54Z (35 candidates, 0 evaluation rows gathered), stage confirm exit 0 at 22:11:37Z (7 searched roles + incumbent + fixed logistic + null = 10 scorings of the sealed set); the reader, run in a sandbox against the smoke output, parsed every field and emitted VOID on the smoke clauses (smoke true; 12000-row pool, stage blocks and null block off the sealed hashes; reproductions 0.15 and 0.1101 against 0.2395 and 0.1392), with the sealed evaluation-set hashes matching (eval_idx 7da1099e..., eval_y 92b95cf0..., 260000 rows)",
+        "note": "the confirm stage ran the runner as committed at 3cc8dbd plus the smoke-path guard (a5c0874); the single-buffer standardiser (a2b6715) landed after it started, so its banked probe fraction is 0.2005, the two-transient value"
       }
     ],
-    "sealed_set_scorings_by_smoke_confirm_stages": "PENDING"
+    "sealed_set_scorings_by_smoke_confirm_stages": 10,
+    "eval_hashes_reproduced_in_every_smoke": true,
+    "memory_accounting_observed": {
+      "model_confirm_record": {
+        "rss_gb_anonymous": 1.75,
+        "rss_total_gb": 4.12,
+        "ru_maxrss_gb": 5.4,
+        "heartbeat_max_rss_gb": 2.18
+      },
+      "reading": "anonymous RSS is the banked threshold quantity; the total counts resident pages of the 5.77 GB memory-mapped cache, and ru_maxrss counts the process high-water mark including those pages"
+    }
   },
   "run_record": {
     "note": "filled after the run from the banked artifact and ledger; PENDING"
