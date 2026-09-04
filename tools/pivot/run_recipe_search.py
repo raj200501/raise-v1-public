@@ -154,9 +154,40 @@ def environment():
     return env
 
 
+_PROBE = {}
+
+
+def standardiser_probe(rows=20000, ncols=1108):
+    """Fit InPlaceScaled on a synthetic block under tracemalloc and bank the peak extra allocation
+    as a fraction of the block. The guard against a pool-sized temporary creeping back into the
+    standardiser (numpy's std(axis=0) allocates one; at 800000 x 1108 float64 that is 7.09 GB).
+    Computed once per process and banked with every record's environment."""
+    key = (rows, ncols)
+    if key not in _PROBE:
+        import tracemalloc
+        A = np.random.default_rng(0).normal(size=(rows, ncols))
+        tracemalloc.start()
+        base = tracemalloc.get_traced_memory()[0]
+        tracemalloc.reset_peak()
+        # rows_per_pass is set to a tenth of the probe block so the probe can tell a chunked
+        # standardiser (fraction near 0.1) from one that materialises the whole block (near 1.0);
+        # production uses the default 20000-row pass, whose transient is banked as an absolute.
+        InPlaceScaled(None).fit_inplace(A, lambda est: None, rows_per_pass=max(1, rows // 10))
+        peak = tracemalloc.get_traced_memory()[1]
+        tracemalloc.stop()
+        _PROBE[key] = {"rows": rows, "ncols": ncols, "block_gb": round(A.nbytes / 1e9, 3),
+                       "probe_rows_per_pass": max(1, rows // 10),
+                       "peak_extra_fraction_of_block": round(max(0.0, peak - base) / A.nbytes, 4),
+                       "production_rows_per_pass": 20000,
+                       "production_transient_gb": round(20000 * ncols * 8 / 1e9, 3)}
+        del A
+    return dict(_PROBE[key])
+
+
 def record_env():
     return {"threads": _threads(), "nice": os.nice(0), "sklearn": __import__("sklearn").__version__,
-            "numpy": np.__version__, "python": platform.python_version()}
+            "numpy": np.__version__, "python": platform.python_version(),
+            "standardiser_probe": standardiser_probe()}
 
 
 # ------------------------------------------------------------------------------- recipe factories
@@ -507,6 +538,22 @@ def main() -> int:
                          "stamped smoke=true and the reader VOIDs it")
     args = ap.parse_args()
     out_stem = os.path.splitext(os.path.basename(args.out))[0]  # recipe_search_2048 / recipe_search_4096
+    # Smoke runs write only to the scratchpad; real runs write only under artifacts/. Enforced, not
+    # promised: a smoke launched with the defaults would otherwise overwrite a chain-referenced
+    # banked artifact, and a smoke at the sealed paths would plant a smoke-stamped selection file
+    # that the real --stage select then refuses.
+    art = os.path.join(REPO, "artifacts") + os.sep
+    outputs = {"--workdir": args.workdir, "--selection-out": args.selection_out, "--out": args.out,
+               "--scores-out": args.scores_out}
+    under = {k: os.path.abspath(v).startswith(art) for k, v in outputs.items()}
+    if args.smoke and any(under.values()):
+        print("REFUSING: --smoke with an output path under artifacts/: "
+              f"{[k for k, v in under.items() if v]}", file=sys.stderr)
+        return 3
+    if not args.smoke and not all(under.values()):
+        print("REFUSING: a real run must write every output under artifacts/: "
+              f"{[k for k, v in under.items() if not v]}", file=sys.stderr)
+        return 3
     t_all = time.perf_counter()
     not_run_path = args.out[:-5] + "_not_run.json"
 
