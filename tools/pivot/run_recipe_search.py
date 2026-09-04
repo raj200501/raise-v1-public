@@ -170,8 +170,8 @@ def standardiser_probe(rows=20000, ncols=1108):
         base = tracemalloc.get_traced_memory()[0]
         tracemalloc.reset_peak()
         # rows_per_pass is set to a tenth of the probe block so the probe can tell a chunked
-        # standardiser (fraction near 0.1) from one that materialises the whole block (near 1.0);
-        # production uses the default 20000-row pass, whose transient is banked as an absolute.
+        # standardiser (one pass-sized transient: fraction about 0.1) from one that materialises the
+        # whole block (about 1.0); production uses the default 20000-row pass, banked as an absolute.
         InPlaceScaled(None).fit_inplace(A, lambda est: None, rows_per_pass=max(1, rows // 10))
         peak = tracemalloc.get_traced_memory()[1]
         tracemalloc.stop()
@@ -226,9 +226,13 @@ class InPlaceScaled:
         n = int(Xtr.shape[0])
         self.mean_ = Xtr.mean(axis=0)
         ss = np.zeros(Xtr.shape[1], np.float64)
+        buf = np.empty((min(rows_per_pass, n), Xtr.shape[1]), np.float64)  # the one transient
         for i in range(0, n, rows_per_pass):
-            d = Xtr[i:i + rows_per_pass] - self.mean_
-            ss += np.einsum("ij,ij->j", d, d)
+            d = buf[:min(rows_per_pass, n - i)]
+            np.subtract(Xtr[i:i + rows_per_pass], self.mean_, out=d)
+            np.multiply(d, d, out=d)
+            ss += d.sum(axis=0)
+        del buf, d
         sd = np.sqrt(ss / n); sd[sd == 0] = 1.0; self.scale_ = sd
         Xtr -= self.mean_; Xtr /= self.scale_
         fit_fn(self.est)
@@ -451,6 +455,11 @@ def run_fit(store, name, fp, head, cand, seed, block, y_all, g_all, Xs, ys, fam_
     hit = store.load(name, fp)
     if hit is not None:
         r = hit["record"]
+        if not store.completed_before(name, fp):
+            # Store.save writes the checkpoint and only then appends the 'completed' event; a restart
+            # inside that window leaves a banked record with no completion event, which the reader
+            # counts as zero completions. Reconstruct the event from the checkpoint, marked as such.
+            store.log(name, fp, "completed", seconds=r.get("seconds"), reconstructed_on_resume=True)
         print(f"      {name:<30} resumed: {r['status']} top1={r.get('top1')}", flush=True)
         pe = np.asarray(hit["per_example"], np.int8) if hit.get("per_example") is not None else None
         return r, pe

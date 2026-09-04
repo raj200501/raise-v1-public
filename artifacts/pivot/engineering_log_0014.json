@@ -45,10 +45,21 @@
         "finding": "the cost block's worst case scaled all of 0012's worst case by 1.6 although stage 1 runs on the same rows; the cap is enforced before each fit so it can be exceeded by one fit; iteration counts at 4096 are unanchored; the HGB bin-mapper draws a 1.77 GB transient",
         "fix": "stated as limits of the arithmetic in scope.cost, with the deep-tree headroom under the ceiling made explicit",
         "severity_as_filed": "minor"
+      },
+      {
+        "finding": "Store.save writes a checkpoint and only then appends the 'completed' ledger event; a restart inside that window would leave a banked record with no completion event, which the reader counts as zero completions (never observed: 0012 banked 52 started / 50 completed / 2 counted interruptions)",
+        "fix": "on resume, a checkpoint with no completion event gets one reconstructed from the checkpoint's banked seconds, marked reconstructed_on_resume",
+        "severity_as_filed": "non-blocking (synthesis)"
+      },
+      {
+        "finding": "the standardiser probe's einsum materialised the squared block, doubling the per-pass transient it banked",
+        "fix": "squares in place, one transient per pass; the banked production transient (0.177 GB per 20000-row pass) is now the measured one",
+        "severity_as_filed": "non-blocking (synthesis)"
       }
     ],
     "verified_correct_by_the_review": "split identity (every PARTITION constant reproduced from the cache; 0003's banked per-example vector restricted by the reconstructed gutenberg mask gives the banked 0.2511 non-gutenberg and the eight per-family accuracies to four decimals); floors equal baseline_family_rescore.json; M1 and L1 are 0003's recipes; the 0.005 tolerance is met with margin by deterministic refits in 0011 and 0012; the cache-identity guard matches the manifest",
-    "review_record": "the workflow's journal (three refuter reports and one synthesis) is not banked as an artifact; the adopted findings above are the record, and the diffs are in the commits between the unfrozen draft and the freeze"
+    "review_record": "the workflow's journal (three refuter reports and one synthesis) is not banked as an artifact; the adopted findings above are the record, and the diffs are in the commits between the unfrozen draft and the freeze",
+    "synthesis_verdict": "freeze; no blocking item; the non-blocking items were applied before the freeze except where noted"
   },
   "cost_anchors": {
     "note": "EXTRAPOLATION from banked seconds; no new anchor measurement was taken for 0014",
@@ -84,5 +95,8 @@
   },
   "run_record": {
     "note": "filled after the run from the banked artifact and ledger; PENDING"
+  },
+  "operator_procedure": {
+    "repeated_launches_of_one_fit": "once any confirm checkpoint exists the three-launch NOT RUN rule is off by design; a fit that is killed within 30 s of its last heartbeat is never stamped infeasible_memory. Repeated launches of the same fit with no new checkpoint are therefore the operator's signal to stop and file the VOID that stop rules 3 and 10 prescribe, by hand, with the launches ledger as the evidence. With the corrected memory arithmetic no honest fit approaches the ceiling, so this is a stated procedure, not an expected path."
   }
 }
