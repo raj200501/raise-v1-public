@@ -31,3 +31,13 @@
 {"name": "sel1_logistic_L8", "fingerprint": "f166f483c8991410", "event": "started", "utc": "2026-09-04T23:35:19Z", "rss_gb": 2.04, "pid": 8912, "attempt": 1}
 {"name": "sel1_logistic_L8", "fingerprint": "f166f483c8991410", "event": "completed", "utc": "2026-09-04T23:36:22Z", "rss_gb": 2.04, "pid": 8912, "seconds": 57.1}
 {"name": "sel1_depth3_tree_D1", "fingerprint": "47e91c13ec561dac", "event": "started", "utc": "2026-09-04T23:36:22Z", "rss_gb": 2.04, "pid": 8912, "attempt": 1}
+{"name": "sel1_depth3_tree_D1", "fingerprint": "47e91c13ec561dac", "event": "completed", "utc": "2026-09-04T23:36:36Z", "rss_gb": 2.04, "pid": 8912, "seconds": 13.4}
+{"name": "sel1_depth3_tree_D2", "fingerprint": "cb41ce754f144121", "event": "started", "utc": "2026-09-04T23:36:36Z", "rss_gb": 2.04, "pid": 8912, "attempt": 1}
+{"name": "sel1_depth3_tree_D2", "fingerprint": "cb41ce754f144121", "event": "completed", "utc": "2026-09-04T23:36:51Z", "rss_gb": 2.04, "pid": 8912, "seconds": 13.2}
+{"name": "sel1_depth3_tree_D3", "fingerprint": "6d99ad255916b1ba", "event": "started", "utc": "2026-09-04T23:36:51Z", "rss_gb": 2.04, "pid": 8912, "attempt": 1}
+{"name": "sel1_depth3_tree_D3", "fingerprint": "6d99ad255916b1ba", "event": "completed", "utc": "2026-09-04T23:37:05Z", "rss_gb": 2.04, "pid": 8912, "seconds": 13.1}
+{"name": "sel1_depth3_tree_D4", "fingerprint": "04bd7cb6afcda34f", "event": "started", "utc": "2026-09-04T23:37:05Z", "rss_gb": 2.04, "pid": 8912, "attempt": 1}
+{"name": "sel1_depth3_tree_D4", "fingerprint": "04bd7cb6afcda34f", "event": "completed", "utc": "2026-09-04T23:37:19Z", "rss_gb": 2.04, "pid": 8912, "seconds": 12.9}
+{"name": "sel1_depth3_tree_D5", "fingerprint": "eed083ef3523141d", "event": "started", "utc": "2026-09-04T23:37:19Z", "rss_gb": 2.04, "pid": 8912, "attempt": 1}
+{"name": "sel1_depth3_tree_D5", "fingerprint": "eed083ef3523141d", "event": "completed", "utc": "2026-09-04T23:37:35Z", "rss_gb": 2.04, "pid": 8912, "seconds": 14.5}
+{"name": "sel1_depth3_tree_D6", "fingerprint": "6a2069d55c92ad00", "event": "started", "utc": "2026-09-04T23:37:35Z", "rss_gb": 2.04, "pid": 8912, "attempt": 1}
