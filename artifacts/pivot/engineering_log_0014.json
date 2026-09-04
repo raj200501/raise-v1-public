@@ -1,0 +1,88 @@
+{
+  "schema": "raise-v1/engineering_log/1",
+  "preregistration": "0014-recipe-search-4096",
+  "status": "design record and review record, written BEFORE the preregistration was frozen and before any 0014 fit; the run_record block is filled from the banked artifact after the run and is not a verdict",
+  "design": {
+    "question": "Does the headline CURVE_ESTABLISHED margin at 4096 (0003: +0.1003 over the frozen baseline set, +0.0583 over all baselines) survive the budgeted, symmetric recipe search that moved the 2048 margin from +0.0475 (0011) to +0.0234 (0012, read under 0013)?",
+    "what_is_reused_from_0012": "the runner, the roster (candidate for candidate; two 'why' strings corrected, see review), the chunk-rule holdout, the two stages, the tie rule, the two-invocation protocol, the floors mechanism, the reader structure (0013's, with the second-stage order line as fixed there)",
+    "what_is_new": "corpus A (data/pivot/full_c4096.npz, 0003's cache, no build metadata: accepted only because the sealed y and g hashes match the manifest); 0003's 800000-row pool and 260000-row evaluation set; floors at 0003's banked baselines; a partition sealed from the cache's y and g before any fit (split identity checked: 227006 = 260000 - 32994 non-gutenberg rows, every hash a literal in the reader)",
+    "expected_outcome_stated_in_advance": "genuinely uncertain; RECIPE_CLEARS prior with a real chance of RECIPE_FAILS; a fail is filed as a correction against the headline framing at full size"
+  },
+  "pre_freeze_review": {
+    "how": "three independent refuters, each instructed to break the unfrozen package against the code, the cache and the container, followed by one synthesis; run on 2026-09-04 before the freeze",
+    "findings_adopted": [
+      {
+        "finding": "InPlaceScaled called numpy std(axis=0), which materialises a full-size float64 temporary: a second 7.09 GB copy of the 800000-row pool during the confirmatory standardised-logistic fit, against a 16.46 GB container with no swap and an observed kill ceiling near 13.9 GB anonymous. 0012 had banked the same temporary as +4.3 GB of ru_maxrss at 500000 rows without anyone reading it as such.",
+        "fix": "two-pass chunkwise mean and standard deviation over 20000-row passes (matches numpy to 1e-14 relative); a tracemalloc probe of the standardiser runs once per process and is banked in every record's environment",
+        "severity_as_filed": "fatal (two refuters independently)"
+      },
+      {
+        "finding": "the heartbeat and the infeasible_memory stamp read VmRSS, which counts the file-backed pages of the 5.77 GB memory-mapped cache; a 14.5 GB threshold would be crossed by an idle confirm-stage process and could never witness a real kill at the 13.9 GB anonymous ceiling",
+        "fix": "heartbeat and stamp read anonymous RSS (RssAnon; VmRSS banked beside it); protocol.caps.memory_kill_gb 13.0 anonymous; launch.min_mem_available_gb 12.0; the cost paragraph restated in anonymous-memory terms with the heartbeat's 30 s blind spot stated",
+        "severity_as_filed": "fatal / major (three refuters)"
+      },
+      {
+        "finding": "sealed fields carried 2048-era constants copied from 0012: the three 'must equal' split hashes, 113412 non-gutenberg rows, 5000 evaluation chunks, a 500000-row pool, a 12.5 GB threshold, 0012's boundary strings, the 0.0025 sentence, and '0003's CARVE_FAILS'",
+        "fix": "every constant replaced with the 4096 value the reader requires; a pre-freeze consistency script (scratchpad, not banked) asserts every sha256 and count quoted in the sealed text is a constant the reader carries, the protocol matches key by key, the roster hash matches, and no 2048-era token remains",
+        "severity_as_filed": "fatal / major (three refuters)"
+      },
+      {
+        "finding": "two roster 'why' strings quoted 0011's banked baselines as 0003's (D1 '0.0887 banked', U2 '0.0385 banked')",
+        "fix": "0.0969 and 0.0387; roster sha256 recomputed and the reader's ROSTER_SHA256 updated in the same commit",
+        "severity_as_filed": "major"
+      },
+      {
+        "finding": "the runner's CLI defaults are 0012's banked paths and --smoke disabled the selection-exists refusal, so a smoke launched with the defaults would have overwritten a chain-referenced artifact; the smoke block had no invocation; smoke confirm stages score the sealed set and the disclosure did not count them",
+        "fix": "the runner refuses --smoke with any output under artifacts/ and a real run with any output outside it; smoke invocation added; the sealed-set disclosure counts smoke confirms and points here for their number",
+        "severity_as_filed": "major"
+      },
+      {
+        "finding": "runner schema strings and the cluster-CI note named 2048 (5000 chunks); the reader's provenance comment said cap 500000 and 0012",
+        "fix": "derived from the run (output basename, partition n_eval_chunks); comment corrected",
+        "severity_as_filed": "minor"
+      },
+      {
+        "finding": "the cost block's worst case scaled all of 0012's worst case by 1.6 although stage 1 runs on the same rows; the cap is enforced before each fit so it can be exceeded by one fit; iteration counts at 4096 are unanchored; the HGB bin-mapper draws a 1.77 GB transient",
+        "fix": "stated as limits of the arithmetic in scope.cost, with the deep-tree headroom under the ceiling made explicit",
+        "severity_as_filed": "minor"
+      }
+    ],
+    "verified_correct_by_the_review": "split identity (every PARTITION constant reproduced from the cache; 0003's banked per-example vector restricted by the reconstructed gutenberg mask gives the banked 0.2511 non-gutenberg and the eight per-family accuracies to four decimals); floors equal baseline_family_rescore.json; M1 and L1 are 0003's recipes; the 0.005 tolerance is met with margin by deterministic refits in 0011 and 0012; the cache-identity guard matches the manifest",
+    "review_record": "the workflow's journal (three refuter reports and one synthesis) is not banked as an artifact; the adopted findings above are the record, and the diffs are in the commits between the unfrozen draft and the freeze"
+  },
+  "cost_anchors": {
+    "note": "EXTRAPOLATION from banked seconds; no new anchor measurement was taken for 0014",
+    "from_0012_banked": {
+      "selection_seconds_total": 17895.9,
+      "stage1_rows": 100000,
+      "stage2_rows": 399831,
+      "confirmatory_seconds_total": 6847.7,
+      "confirmatory_rows": 500000,
+      "model_M7_confirm_seconds": 4084.7,
+      "incumbent_M1_confirm_seconds": 1120.5
+    },
+    "from_0003_banked": {
+      "incumbent_seconds_at_800000_rows_4_cores": 1324.6
+    },
+    "typical_total_fit_seconds": 35000,
+    "worst_case_fit_seconds": 100000,
+    "selection_cap_seconds": 120000
+  },
+  "smoke_runs": {
+    "note": "smoke runs of the runner on the scratchpad against corpus A with the sealed roster and tiny stages (smoke block of the preregistration: 2000-row stage 1, 12000-row pool, 2000 null rows); stamped smoke true; read VOID by the reader; never an input to any decision",
+    "launched": [
+      {
+        "utc": "2026-09-04T21:31Z",
+        "outcome": "stopped by the operator during stage-2 selection (before any confirm stage) to relaunch detached and, later, to apply the review's runner fixes; scored nothing on the sealed set"
+      },
+      {
+        "utc": "2026-09-04T21:53Z",
+        "outcome": "PENDING"
+      }
+    ],
+    "sealed_set_scorings_by_smoke_confirm_stages": "PENDING"
+  },
+  "run_record": {
+    "note": "filled after the run from the banked artifact and ledger; PENDING"
+  }
+}
