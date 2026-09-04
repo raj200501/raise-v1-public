@@ -23,3 +23,5 @@ data/gnss/
 # 0012 runner heartbeat files change every 30 s and are not provenance
 artifacts/pivot/recipe_search_2048_ckpt/*.hb
 artifacts/pivot/recipe_search_2048_ckpt/*.tmp
+artifacts/pivot/recipe_search_4096_ckpt/*.hb
+artifacts/pivot/recipe_search_4096_ckpt/*.tmp

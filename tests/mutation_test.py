@@ -35,7 +35,7 @@ def sandbox(tmp: str) -> str:
     os.makedirs(os.path.join(root, "docs"), exist_ok=True)
     os.makedirs(os.path.join(root, "prereg"), exist_ok=True)
     for f in ("chainlib.py", "prereg.py", "claimcheck.py", "scaling.py", "trivial_baselines.py",
-              "coverage.py", "freshness.py"):
+              "coverage.py", "freshness.py", "record_counts.py"):
         shutil.copy(os.path.join(REPO, "tools", f), os.path.join(root, "tools", f))
     with open(os.path.join(root, "docs", "claimcheck_allowlist.tsv"), "w") as fh:
         fh.write("# value\treason\n")
@@ -663,6 +663,65 @@ def _(root):
     shutil.copy(os.path.join(REPO, "tools", "readers", "ephemerr_a2_verdict.py"),
                 os.path.join(root, "tools", "readers", "ephemerr_a2_verdict.py"))
     return run([PY, "tools/readers/ephemerr_a2_verdict.py"], root)
+
+
+# ---------------------------------------------------------------- record_counts gate
+#
+# The counts prose quotes about the record itself (how many corrections, how many chain entries)
+# drifted in three outbound documents while every gate passed (CORRECTIONS.md, 2026-09-04).
+# tools/record_counts.py banks the ledger's length; freshness ties each sentence to it. The gate is
+# the pair, and the pair must fail when the ledger and the sentence disagree.
+
+def _ledger(n_entries, template=False):
+    head = "# Corrections ledger\n\nFormat:\n\n```\n## YYYY-MM-DD - <one-line description>\n```\n\n"
+    if template:
+        head += "## YYYY-MM-DD - a template heading left in the body\n\n"
+    body = "".join(f"## 2026-08-{25 + i:02d} — correction {i}\n\n**Claimed:** x\n\n---\n\n" for i in range(n_entries))
+    return head + body
+
+
+def _counts(root, n_entries, prose_n, template=False):
+    with open(os.path.join(root, "CORRECTIONS.md"), "w") as fh:
+        fh.write(_ledger(n_entries, template))
+    rc, out = run([PY, "tools/record_counts.py"], root)
+    if rc != 0:
+        return rc, out
+    doc = os.path.join(root, "docs", "report.md")
+    with open(doc, "w") as fh:
+        fh.write(f"ledger: {prose_n} entries at full size\n")
+    reg = os.path.join(root, "docs", "live_claims.json")
+    json.dump({"claims": [{"id": "ledger", "file": "docs/report.md",
+                           "pattern": r"ledger: (\d+) entries at full size",
+                           "artifact": "artifacts/verification/record_counts.json",
+                           "select": ["corrections_entries"]}]}, open(reg, "w"))
+    return run([PY, "tools/freshness.py", "docs/live_claims.json"], root)
+
+
+@case("record_counts", "control-ledger-and-prose-agree", "pass")
+def _(root):
+    return _counts(root, 2, 2)
+
+
+@case("record_counts", "prose-count-stale-after-an-entry-was-filed", "fail")
+def _(root):
+    return _counts(root, 3, 2)
+
+
+@case("record_counts", "prose-count-ahead-of-the-ledger", "fail")
+def _(root):
+    return _counts(root, 2, 3)
+
+
+@case("record_counts", "template-heading-is-not-an-entry", "fail")
+def _(root):
+    # Two dated entries plus the format template's own heading: the tool must count 2, so prose
+    # saying 3 has to fail.
+    return _counts(root, 2, 3, template=True)
+
+
+@case("record_counts", "empty-ledger-is-a-failure-not-zero", "fail")
+def _(root):
+    return _counts(root, 0, 0)
 
 
 # ---------------------------------------------------------------- freshness gate

@@ -175,6 +175,60 @@
       "select": [
         "within_trivial_baselines.depth16_tree"
       ]
+    },
+    {
+      "id": "narrative-prereg-count",
+      "file": "outbound/NARRATIVE.md",
+      "pattern": "(\\d+) preregistrations,\\n> hash-chained",
+      "artifact": "artifacts/verification/prereg_status.json",
+      "select": [
+        "chain|len"
+      ]
+    },
+    {
+      "id": "narrative-corrections-ledger",
+      "file": "outbound/NARRATIVE.md",
+      "pattern": "corrections ledger now carries (\\d+) entries",
+      "artifact": "artifacts/verification/record_counts.json",
+      "select": [
+        "corrections_entries"
+      ]
+    },
+    {
+      "id": "narrative-corrections-answer",
+      "file": "outbound/NARRATIVE.md",
+      "pattern": "> (\\d+) corrections at full size",
+      "artifact": "artifacts/verification/record_counts.json",
+      "select": [
+        "corrections_entries"
+      ]
+    },
+    {
+      "id": "brief-prereg-count",
+      "file": "outbound/EVIDENCE_BRIEF.md",
+      "pattern": "\\*\\*(\\d+)\\*\\* preregistrations, hash-chained",
+      "artifact": "artifacts/verification/prereg_status.json",
+      "select": [
+        "chain|len"
+      ]
+    },
+    {
+      "id": "brief-corrections-count",
+      "file": "outbound/EVIDENCE_BRIEF.md",
+      "pattern": "\\*\\*(\\d+)\\*\\* corrections filed against this work",
+      "artifact": "artifacts/verification/record_counts.json",
+      "select": [
+        "corrections_entries"
+      ]
+    },
+    {
+      "id": "diligence-corrections-count",
+      "file": "docs/DILIGENCE.md",
+      "pattern": "`CORRECTIONS.md`: (\\d+) entries at full size",
+      "artifact": "artifacts/verification/record_counts.json",
+      "select": [
+        "corrections_entries"
+      ]
     }
   ]
 }

@@ -56,6 +56,10 @@
       "detected": 11,
       "total": 11
     },
+    "record_counts": {
+      "detected": 5,
+      "total": 5
+    },
     "scaling": {
       "detected": 10,
       "total": 10
@@ -604,6 +608,51 @@
       "expected": "fail",
       "gate": "ephemerr-a2",
       "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: PASS",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "record_counts",
+      "mutation": "control-ledger-and-prose-agree",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (ledger)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "record_counts",
+      "mutation": "prose-count-stale-after-an-entry-was-filed",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (ledger)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "record_counts",
+      "mutation": "prose-count-ahead-of-the-ledger",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "FRESHNESS: FAIL (ledger)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "record_counts",
+      "mutation": "template-heading-is-not-an-entry",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "record_counts: no dated entries found in CORRECTIONS.md",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "record_counts",
+      "mutation": "empty-ledger-is-a-failure-not-zero",
       "observed": "fail"
     },
     {
@@ -2011,8 +2060,8 @@
       "observed": "fail"
     }
   ],
-  "detected": 216,
+  "detected": 221,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 216
+  "total_mutations": 221
 }

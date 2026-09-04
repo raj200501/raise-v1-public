@@ -1,0 +1,8 @@
+{
+  "corrections_entries": 15,
+  "corrections_first_date": "2026-08-25",
+  "corrections_latest_date": "2026-09-04",
+  "rule": "one entry per heading of the form '## YYYY-MM-DD '; the template heading does not match",
+  "schema": "raise-v1/record_counts/1",
+  "source": "CORRECTIONS.md"
+}

@@ -14,7 +14,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 >
 > Before we measured anything, we built the instrument. Bars frozen and hash-chained before the
 > data existed, verdict readers frozen by hash, and every gate proven able to fail —
-> 216 deliberate mutations, 216 detected, 0 survived.
+> 221 deliberate mutations, 221 detected, 0 survived.
 >
 > Then we ran the search the thesis demanded: 99 candidate domains over three rounds, 8 through
 > adversarial review with default posture reject, 0 selected. We published that negative under a
@@ -53,7 +53,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > hash-chained so nothing can be silently inserted between two that already exist, each anchored
 > to public randomness beacons — NIST and drand — with the verdict-emitting readers frozen by
 > sha256 before their data existed. Then we proved the instrument itself can fail:
-> 216 deliberate mutations across 16 gates, 216 detected, 0 survived. A gate that cannot fail is decoration, so
+> 221 deliberate mutations across 17 gates, 221 detected, 0 survived. A gate that cannot fail is decoration, so
 > we broke every one on purpose and checked that it noticed.
 
 **The search, and the negative we published.**
@@ -123,7 +123,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > survived, three of them critical: a bootstrap that contradicted our own split, a split guarantee
 > that was false for one of eight content families, and subagent evidence mislabelled first-hand.
 > All 13 were fixed by measurement, and the audit record is banked with its rejected findings
-> included, so the filter itself can be audited. The corrections ledger now carries 13 entries at
+> included, so the filter itself can be audited. The corrections ledger now carries 15 entries at
 > full size — including one where the error ran *against* our interest and was filed anyway. And
 > the uncomfortable meta-finding is published with it: every gate passed while all of those
 > defects were live, because gates check that numbers trace, not that the reasoning between them
@@ -194,7 +194,7 @@ allows and explicitly hedged where it does not.
 > the record itself rather than discovered by you.
 
 **"What did you get wrong?"**
-> 12 corrections at full size, including a published figure our own reproduction contradicted, an
+> 15 corrections at full size, including a published figure our own reproduction contradicted, an
 > instrument warning I personally grepped out of view, and 13 audit findings — the pattern being
 > that our gates check mechanical honesty, not reasoning, which the ledger states out loud.
 

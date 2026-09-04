@@ -12,6 +12,7 @@ PY="${PYTHON:-python3}"
 "$PY" tests/mutation_test.py        | tail -2
 "$PY" tools/coverage.py             | tail -2
 "$PY" tools/claimcheck.py outbound VERDICT.md | tail -1
+"$PY" tools/record_counts.py       | tail -1
 "$PY" tools/freshness.py            | tail -1
 
 # Frozen readers. Exit 0 means a verdict was emitted; exit 2 means the study's artifact is absent,

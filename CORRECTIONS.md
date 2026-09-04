@@ -19,6 +19,33 @@ Format:
 
 ---
 
+## 2026-09-04 — Three different counts of this ledger, and two of the preregistration chain, in the outbound documents
+
+**Claimed:** `outbound/EVIDENCE_BRIEF.md`: "**11** preregistrations, hash-chained" and "**13**
+corrections filed against this work"; `outbound/NARRATIVE.md`: "13 preregistrations", "The
+corrections ledger now carries 13 entries" and, later in the same document, "12 corrections at
+full size"; `docs/DILIGENCE.md`: "`CORRECTIONS.md`: thirteen entries at full size".
+
+**Actual:** The chain held 13 entries (`artifacts/verification/prereg_status.json`, `chain|len`)
+and this ledger held 14 dated entries before this one (`artifacts/verification/record_counts.json`,
+`corrections_entries`, now 15 with this entry).
+
+**Size:** The preregistration count was understated by 2 in one document. The corrections count
+was understated by 1 in three places and by 2 in a fourth. No measured result moved; the numbers
+describing the instrument were stale, which is the class of error the ledger's first entry of
+2026-08-25 (a mutation count that did not match the repository) was supposed to have ended.
+
+**Cause:** Each sentence was typed with the count current at the time and never registered as a
+live claim. `tools/freshness.py` checked the chain length and head in `VERDICT.md` only; no
+artifact banked the ledger's own length, so there was nothing to register a claim against.
+
+**Fix:** `tools/record_counts.py` banks the ledger's entry count into an artifact and runs in
+`tools/gates.sh`; six live claims in `docs/live_claims.json` now tie every one of the sentences
+above to `prereg_status.json` or `record_counts.json`, so the next drift fails the gate instead of
+waiting for someone to notice.
+
+---
+
 ## 2026-09-03 — Preregistration 0012's frozen reader voided an honest run because of a defect in the reader, and the mutation gate had been built to the reader's assumption
 
 **Claimed:** Implicitly, by freezing `tools/readers/recipe2048_verdict.py` into chain entry 12 with 25
