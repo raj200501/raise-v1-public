@@ -1,15 +1,15 @@
 {
-  "best_expanded_for_bar": 0.0387,
-  "best_expanded_head": "stratified",
-  "best_expanded_non_gutenberg_for_bar": 0.0388,
-  "best_expanded_non_gutenberg_head": "stratified",
-  "best_expanded_non_gutenberg_searched": 0.0388,
-  "best_expanded_searched": 0.0387,
-  "best_frozen_for_bar": 0.0387,
-  "best_frozen_head": "stratified",
-  "best_frozen_non_gutenberg_for_bar": 0.0388,
-  "best_frozen_non_gutenberg_searched": 0.0388,
-  "best_frozen_searched": 0.0387,
+  "best_expanded_for_bar": 0.0982,
+  "best_expanded_head": "depth3_tree",
+  "best_expanded_non_gutenberg_for_bar": 0.0986,
+  "best_expanded_non_gutenberg_head": "depth3_tree",
+  "best_expanded_non_gutenberg_searched": 0.097,
+  "best_expanded_searched": 0.0982,
+  "best_frozen_for_bar": 0.0982,
+  "best_frozen_head": "depth3_tree",
+  "best_frozen_non_gutenberg_for_bar": 0.0986,
+  "best_frozen_non_gutenberg_searched": 0.097,
+  "best_frozen_searched": 0.0982,
   "chance_accuracy": 0.038462,
   "class_names": [
     "zlib-1",
@@ -57,13 +57,17 @@
     "n_source_chunks": 50000
   },
   "cost": {
-    "banked_fit_seconds_total": 29459.0,
+    "banked_fit_seconds_total": 29627.5,
     "checkpoints": "artifacts/pivot/recipe_search_4096_ckpt",
     "confirmatory_interruptions": {
+      "best_single_feat": 0,
+      "depth3_tree": 0,
       "majority": 0,
       "stratified": 0
     },
     "confirmatory_seconds_by_role": {
+      "best_single_feat": 45.7,
+      "depth3_tree": 122.8,
       "majority": 0.0,
       "stratified": 0.0
     },
@@ -71,7 +75,7 @@
     "logistic_l1_refit_seconds": 679.6,
     "null_seconds": null,
     "selection_seconds_total": 27351.0,
-    "wall_seconds_this_invocation": 2154.3
+    "wall_seconds_this_invocation": 2325.8
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -86,6 +90,125 @@
     "threads": 3
   },
   "final": {
+    "best_single_feat": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "tree",
+      "fit_info": {
+        "depth": 1,
+        "n_leaves": 2
+      },
+      "fit_rows_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+      "fit_rows_sorted_sha256": "923cd266c3bf2a45683b2c479d36b046b311cc8f2e53426c962b6dd5ae836094",
+      "head": "best_single_feat",
+      "heartbeat_max_rss_gb": 12.19,
+      "id": "U3",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 800000,
+      "params": {
+        "max_depth": 1
+      },
+      "params_sha256": "64e34b44cb60421c99f66de6f1482adfac2556a1210a1b7ba7ab6d899143c697",
+      "per_family": {
+        "base64": 0.0769,
+        "binary": 0.0769,
+        "code": 0.0769,
+        "csv": 0.0769,
+        "gutenberg": 0.0625,
+        "json": 0.0769,
+        "log": 0.0769,
+        "mixed": 0.0769
+      },
+      "rss_gb": 8.72,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 10.33,
+      "ru_maxrss_gb": 13.9,
+      "scaled": false,
+      "seconds": 45.7,
+      "seed": 20260825,
+      "stage": "confirmatory",
+      "status": "fit",
+      "top1": 0.0751,
+      "top1_non_gutenberg": 0.0769,
+      "utc": "2026-09-05T06:32:26Z",
+      "val": null
+    },
+    "depth3_tree": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "tree",
+      "fit_info": {
+        "depth": 3,
+        "n_leaves": 8
+      },
+      "fit_rows_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+      "fit_rows_sorted_sha256": "923cd266c3bf2a45683b2c479d36b046b311cc8f2e53426c962b6dd5ae836094",
+      "head": "depth3_tree",
+      "heartbeat_max_rss_gb": 12.19,
+      "id": "D5",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 800000,
+      "params": {
+        "criterion": "entropy",
+        "max_depth": 3
+      },
+      "params_sha256": "427e2c907eba08ecc653da356c4f5fef1e6d1fc0d372ab1db5c0c2d7d2e79e66",
+      "per_family": {
+        "base64": 0.0769,
+        "binary": 0.0769,
+        "code": 0.0934,
+        "csv": 0.1473,
+        "gutenberg": 0.1066,
+        "json": 0.1106,
+        "log": 0.096,
+        "mixed": 0.0789
+      },
+      "rss_gb": 8.72,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 10.33,
+      "ru_maxrss_gb": 13.9,
+      "scaled": false,
+      "seconds": 122.8,
+      "seed": 20260825,
+      "stage": "confirmatory",
+      "status": "fit",
+      "top1": 0.0982,
+      "top1_non_gutenberg": 0.097,
+      "utc": "2026-09-05T06:33:13Z",
+      "val": null
+    },
     "majority": {
       "block_refills": [],
       "environment": {
@@ -1110,6 +1233,60 @@
       "rss_gb": 8.72,
       "seconds": 0.0,
       "utc": "2026-09-05T06:32:25Z"
+    },
+    {
+      "event": "selection_bound",
+      "fingerprint": "4b42782961224efa",
+      "name": "confirm_best_single_feat",
+      "pid": 19293,
+      "rss_gb": 8.72,
+      "selection_sha256": "037ad2c3811985690a224aafe90a3a71e51617a535cb0d40e4540947725fcba2",
+      "utc": "2026-09-05T06:32:26Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "4b42782961224efa",
+      "name": "confirm_best_single_feat",
+      "pid": 19293,
+      "rss_gb": 8.72,
+      "utc": "2026-09-05T06:32:26Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "4b42782961224efa",
+      "name": "confirm_best_single_feat",
+      "pid": 19293,
+      "rss_gb": 8.72,
+      "seconds": 45.7,
+      "utc": "2026-09-05T06:33:13Z"
+    },
+    {
+      "event": "selection_bound",
+      "fingerprint": "f4f5a0fb63052f0c",
+      "name": "confirm_depth3_tree",
+      "pid": 19293,
+      "rss_gb": 8.72,
+      "selection_sha256": "037ad2c3811985690a224aafe90a3a71e51617a535cb0d40e4540947725fcba2",
+      "utc": "2026-09-05T06:33:13Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "f4f5a0fb63052f0c",
+      "name": "confirm_depth3_tree",
+      "pid": 19293,
+      "rss_gb": 8.72,
+      "utc": "2026-09-05T06:33:13Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "f4f5a0fb63052f0c",
+      "name": "confirm_depth3_tree",
+      "pid": 19293,
+      "rss_gb": 8.72,
+      "seconds": 122.8,
+      "utc": "2026-09-05T06:35:17Z"
     }
   ],
   "logistic_l1_refit": {
@@ -1172,8 +1349,6 @@
   },
   "logistic_l1_refit_top1": 0.1352,
   "missing_roles": [
-    "best_single_feat",
-    "depth3_tree",
     "deep_tree",
     "logistic",
     "null",
