@@ -69,3 +69,7 @@
 {"name": "sel2_logistic_L3", "fingerprint": "e6b477ee4e355915", "event": "started", "utc": "2026-09-05T04:57:38Z", "rss_gb": 7.34, "pid": 8912, "attempt": 1}
 {"name": "sel2_logistic_L3", "fingerprint": "e6b477ee4e355915", "event": "completed", "utc": "2026-09-05T05:16:14Z", "rss_gb": 7.34, "pid": 8912, "seconds": 1104.8}
 {"name": "sel2_logistic_L6", "fingerprint": "f2c42e078cad0596", "event": "started", "utc": "2026-09-05T05:16:14Z", "rss_gb": 7.34, "pid": 8912, "attempt": 1}
+{"name": "sel2_logistic_L6", "fingerprint": "f2c42e078cad0596", "event": "completed", "utc": "2026-09-05T05:37:35Z", "rss_gb": 7.34, "pid": 8912, "seconds": 1274.7}
+{"name": "sel2_depth3_tree_D5", "fingerprint": "0718562a348d7c55", "event": "started", "utc": "2026-09-05T05:37:35Z", "rss_gb": 7.34, "pid": 8912, "attempt": 1}
+{"name": "sel2_depth3_tree_D5", "fingerprint": "0718562a348d7c55", "event": "completed", "utc": "2026-09-05T05:39:15Z", "rss_gb": 7.34, "pid": 8912, "seconds": 99.5}
+{"name": "sel2_depth3_tree_D6", "fingerprint": "158b31a171f8d94e", "event": "started", "utc": "2026-09-05T05:39:15Z", "rss_gb": 7.34, "pid": 8912, "attempt": 1}
