@@ -101,3 +101,6 @@
 {"name": "confirm_deep_tree", "fingerprint": "ef2e72944a26248b", "event": "completed", "utc": "2026-09-05T06:44:44Z", "rss_gb": 8.72, "pid": 19293, "seconds": 565.1}
 {"name": "confirm_logistic", "fingerprint": "4b88674c17d3561d", "event": "selection_bound", "utc": "2026-09-05T06:44:44Z", "rss_gb": 8.72, "pid": 19293, "selection_sha256": "037ad2c3811985690a224aafe90a3a71e51617a535cb0d40e4540947725fcba2"}
 {"name": "confirm_logistic", "fingerprint": "4b88674c17d3561d", "event": "started", "utc": "2026-09-05T06:44:44Z", "rss_gb": 8.72, "pid": 19293, "attempt": 1}
+{"name": "confirm_logistic", "fingerprint": "4b88674c17d3561d", "event": "completed", "utc": "2026-09-05T07:04:24Z", "rss_gb": 8.72, "pid": 19293, "seconds": 1164.3}
+{"name": "confirm_null", "fingerprint": "075c245962638813", "event": "selection_bound", "utc": "2026-09-05T07:04:25Z", "rss_gb": 8.72, "pid": 19293, "selection_sha256": "037ad2c3811985690a224aafe90a3a71e51617a535cb0d40e4540947725fcba2"}
+{"name": "confirm_null", "fingerprint": "075c245962638813", "event": "started", "utc": "2026-09-05T07:04:25Z", "rss_gb": 8.72, "pid": 19293, "attempt": 1}
