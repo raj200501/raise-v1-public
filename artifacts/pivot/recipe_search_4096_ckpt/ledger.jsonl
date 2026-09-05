@@ -83,3 +83,12 @@
 {"name": "confirm_incumbent", "fingerprint": "bf0043ffdc2da9e8", "event": "completed", "utc": "2026-09-05T06:21:01Z", "rss_gb": 8.62, "pid": 19293, "seconds": 1428.4}
 {"name": "confirm_logistic_l1", "fingerprint": "42381e07cdd9d461", "event": "selection_bound", "utc": "2026-09-05T06:21:01Z", "rss_gb": 8.63, "pid": 19293, "selection_sha256": "037ad2c3811985690a224aafe90a3a71e51617a535cb0d40e4540947725fcba2"}
 {"name": "confirm_logistic_l1", "fingerprint": "42381e07cdd9d461", "event": "started", "utc": "2026-09-05T06:21:01Z", "rss_gb": 8.63, "pid": 19293, "attempt": 1}
+{"name": "confirm_logistic_l1", "fingerprint": "42381e07cdd9d461", "event": "completed", "utc": "2026-09-05T06:32:23Z", "rss_gb": 8.72, "pid": 19293, "seconds": 679.6}
+{"name": "confirm_majority", "fingerprint": "2515df68036e938f", "event": "selection_bound", "utc": "2026-09-05T06:32:23Z", "rss_gb": 8.72, "pid": 19293, "selection_sha256": "037ad2c3811985690a224aafe90a3a71e51617a535cb0d40e4540947725fcba2"}
+{"name": "confirm_majority", "fingerprint": "2515df68036e938f", "event": "started", "utc": "2026-09-05T06:32:23Z", "rss_gb": 8.72, "pid": 19293, "attempt": 1}
+{"name": "confirm_majority", "fingerprint": "2515df68036e938f", "event": "completed", "utc": "2026-09-05T06:32:24Z", "rss_gb": 8.72, "pid": 19293, "seconds": 0.0}
+{"name": "confirm_stratified", "fingerprint": "9b8b4a19eebd5fc4", "event": "selection_bound", "utc": "2026-09-05T06:32:24Z", "rss_gb": 8.72, "pid": 19293, "selection_sha256": "037ad2c3811985690a224aafe90a3a71e51617a535cb0d40e4540947725fcba2"}
+{"name": "confirm_stratified", "fingerprint": "9b8b4a19eebd5fc4", "event": "started", "utc": "2026-09-05T06:32:24Z", "rss_gb": 8.72, "pid": 19293, "attempt": 1}
+{"name": "confirm_stratified", "fingerprint": "9b8b4a19eebd5fc4", "event": "completed", "utc": "2026-09-05T06:32:25Z", "rss_gb": 8.72, "pid": 19293, "seconds": 0.0}
+{"name": "confirm_best_single_feat", "fingerprint": "4b42782961224efa", "event": "selection_bound", "utc": "2026-09-05T06:32:26Z", "rss_gb": 8.72, "pid": 19293, "selection_sha256": "037ad2c3811985690a224aafe90a3a71e51617a535cb0d40e4540947725fcba2"}
+{"name": "confirm_best_single_feat", "fingerprint": "4b42782961224efa", "event": "started", "utc": "2026-09-05T06:32:26Z", "rss_gb": 8.72, "pid": 19293, "attempt": 1}
