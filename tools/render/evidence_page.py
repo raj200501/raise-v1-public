@@ -43,6 +43,11 @@ rv2048 = json.load(open(_rv2048p, encoding="utf-8")) if os.path.exists(_rv2048p)
 # 0013 re-reads 0012's artifact under a reader with one line corrected; its verdict is the reading.
 _rr2048p = A("pivot", "recipe_search_2048_reread_verdict.json")
 rr2048 = json.load(open(_rr2048p, encoding="utf-8")) if os.path.exists(_rr2048p) else None
+# 0014 (the same symmetric recipe search at 4096, the headline size) is rendered only once its
+# artifact and verdict exist; nothing about it is written here before its frozen reader has read it.
+_r4096p = A("pivot", "recipe_search_4096.json"); _rv4096p = A("pivot", "recipe_search_4096_verdict.json")
+r4096 = json.load(open(_r4096p, encoding="utf-8")) if os.path.exists(_r4096p) else None
+rv4096 = json.load(open(_rv4096p, encoding="utf-8")) if os.path.exists(_rv4096p) else None
 
 git_head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO,
                           capture_output=True, text=True).stdout.strip()
@@ -155,7 +160,12 @@ chips = "".join([
            (f're-read of 0012\'s banked artifact with the reader\'s one line corrected: searched model {r2048["selected_model_id"]} '
             f'{r2048["final_top1"]} vs floored bars frozen {r2048["best_frozen_for_bar"]} / expanded {r2048["best_expanded_for_bar"]}; '
             f'boundary {rr2048["boundary_bytes"]}') if rr2048["verdict"] != "VOID" and r2048 and r2048.get("complete")
-           else f'VOID: {"; ".join(rr2048["validity_failed_clauses"])[:140]}')] if rr2048 else []))
+           else f'VOID: {"; ".join(rr2048["validity_failed_clauses"])[:140]}')] if rr2048 else [])
+ + ([chip(rv4096["verdict"], {"RECIPE_CLEARS": "pass", "RECIPE_FAILS": "fail", "VOID": "inc"}[rv4096["verdict"]], "0014",
+           (f'the same symmetric recipe search at 4096 B, the headline size: searched model {r4096["selected_model_id"]} '
+            f'{r4096["final_top1"]} vs floored bars frozen {r4096["best_frozen_for_bar"]} / expanded {r4096["best_expanded_for_bar"]}; '
+            f'boundary {rv4096["boundary_bytes"]}') if rv4096["verdict"] != "VOID" and r4096 and r4096.get("complete")
+           else f'VOID: {"; ".join(rv4096["validity_failed_clauses"])[:140]}')] if rv4096 else []))
 
 fam2048_table = ""
 _pf2048 = A("pivot", "per_family_curves_2048.json")
@@ -205,6 +215,22 @@ if r2048 and _reading and r2048.get("complete"):
                      f'without gutenberg, {_fmn} against {_ben} (margin {_fmn - _ben:+.4f}). The incumbent refit '
                      f'reproduced 0011\'s {r2048["incumbent_refit_top1"]} exactly. Boundary: '
                      f'<span class="mono">{_reading["boundary_bytes"]}</span>.</p>')
+
+boundary_0014 = ""
+if r4096 and rv4096 and rv4096["verdict"] != "VOID" and r4096.get("complete"):
+    _fm = r4096["final_top1"]; _bf = r4096["best_frozen_for_bar"]; _be = r4096["best_expanded_for_bar"]
+    _fmn = r4096["final_top1_non_gutenberg"]; _ben = r4096["best_expanded_non_gutenberg_for_bar"]
+    _cls = "good" if rv4096["verdict"] == "RECIPE_CLEARS" else "bad"
+    boundary_0014 = (f'<p><strong>Under the same symmetric recipe search, the headline 4096-byte answer is '
+                     f'<span class="mono">{rv4096["verdict"]}</span></strong> (preregistration 0014, chain entry 14, read by its '
+                     f'own frozen reader). The 0012 protocol, roster for roster, on 0003\'s corpus: 0003\'s sealed evaluation '
+                     f'set, 0003\'s 800000-row pool, every baseline floored at its 0003 value, the model fitted last. '
+                     f'The selected model ({r4096["selected_model_id"]}) scores {_fm} against a floored frozen bar of '
+                     f'{_bf} (margin {_fm - _bf:+.4f}) and a floored expanded bar of {_be} (margin {_fm - _be:+.4f}); '
+                     f'without gutenberg, {_fmn} against {_ben} (margin {_fmn - _ben:+.4f}). The incumbent refit '
+                     f'scored {r4096["incumbent_refit_top1"]} against 0003\'s banked 0.2395 and the fixed-recipe logistic '
+                     f'{r4096["logistic_l1_refit_top1"]} against 0.1392; the searched logistic ({r4096["selected_ids"]["logistic"]}) '
+                     f'scores {r4096["final"]["logistic"]["top1"]}. Boundary: <span class="mono">{rv4096["boundary_bytes"]}</span>.</p>')
 
 # ---------------------------------------------------------------- seed panel
 if seeds:
@@ -357,7 +383,7 @@ protocol returns <span class="mono">CARVE_FAILS</span>: within-size top-1
 (margin below the 0.05 bar), and a 4096-trained model transfers at {carve["transfer_top1"]} —
 chance. The byte-identity ceiling barely moves across carve sizes, so this is a modelling failure
 and is reported as one. Two learned byte-sequence attempts (preregs 0009, 0010) did not rescue it.</p>
-{boundary_2048}{boundary_0012}{fam2048_table}
+{boundary_2048}{boundary_0012}{boundary_0014}{fam2048_table}
 </div>
 <div class="panel good">
 <p><strong>And the leak correction ran against us.</strong> When an adversarial audit found source
