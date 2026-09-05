@@ -112,7 +112,11 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > recipes, the same rule and a floor at its earlier value: the model rose to 0.212, the
 > standardised logistic to 0.1886, the margin fell to +0.0234, verdict `RECIPE_FAILS` — read
 > under a successor preregistration after the first reader voided the run on a defect of its
-> own, which we filed. The boundary of our result is
+> own, which we filed. Then we ran the same search against our own headline at 4096 (0014),
+> expecting nothing in particular and saying so in advance: the model rose to 0.2884, the
+> standardised logistic to 0.2317, and the margin held at +0.0567 on every reading, verdict
+> `RECIPE_CLEARS` — the headline survives a fair baseline, at a smaller margin than we had
+> been quoting, and that is the margin we quote now. The boundary of our result is
 > bracketed to (2048, 4096], and the near-miss on the slack reading is published beside the
 > clear miss on the strict one.
 
@@ -134,7 +138,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 
 > So here is the honest inventory. A validated instrument that reproduces on a cold clone. One
 > real curve with its boundaries measured by the same instrument. A corrections ledger that costs
-> us something to keep. A verification map that prints its weakest class first — 14 of 108 claims
+> us something to keep. A verification map that prints its weakest class first — 14 of 120 claims
 > we ourselves cannot currently re-derive, and it says so. And no buyer yet: G5, a named buyer
 > type, is the gate this work has not cleared, and no result in the repository could have cleared
 > it, because that work happens outside the repository. We are raising to do exactly that work,
@@ -179,7 +183,8 @@ allows and explicitly hedged where it does not.
 > 0.0025 against the frozen baselines, by 0.0206 against the strongest), and transfer fails its
 > margin at both sizes — 0.0403 at 1024, which is chance, and 0.0455 at 2048 against a 0.1266
 > baseline; a symmetric recipe search at 2048 then widened the miss to +0.0234 because the
-> standardised logistic baseline gained more (0.1266 to 0.1886) than the model (0.1741 to 0.212);
+> standardised logistic baseline gained more (0.1266 to 0.1886) than the model (0.1741 to 0.212),
+> while at 4096 the same search left the headline margin at +0.0567, above the bar;
 > we preregistered those tests ourselves, they failed, and every number we quote is a
 > 4096-byte-window number labelled as such.
 

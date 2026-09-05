@@ -105,7 +105,179 @@
     }
   },
   "run_record": {
-    "note": "filled after the run from the banked artifact and ledger; PENDING"
+    "note": "what the run actually did, from the banked artifact and ledger; the verdict is the reader's, not this log's",
+    "launches": "stage select: one launch at 2026-09-04T22:14:40Z, exit 0 at 2026-09-05T05:56:17Z (40 checkpoints, no interruption); stage confirm: one launch at 2026-09-05T05:56:33Z, exit 0 at 2026-09-05T11:31:47Z (10 roles, no interruption). A harness-side container restart notice at 10:16Z killed the session's log monitor only; the detached runner (pid 19293) was unaffected and its heartbeat continued",
+    "interruptions_banked": {
+      "selection_by_head": {
+        "best_single_feat": 0,
+        "deep_tree": 0,
+        "depth3_tree": 0,
+        "logistic": 0,
+        "majority": 0,
+        "model": 0,
+        "stratified": 0
+      },
+      "confirmatory_roles": {
+        "best_single_feat": 0,
+        "deep_tree": 0,
+        "depth3_tree": 0,
+        "logistic": 0,
+        "majority": 0,
+        "model": 0,
+        "stratified": 0
+      }
+    },
+    "selection": {
+      "selected_ids": {
+        "best_single_feat": "U3",
+        "deep_tree": "T3",
+        "depth3_tree": "D5",
+        "logistic": "L3",
+        "majority": "U1",
+        "model": "M4",
+        "stratified": "U2"
+      },
+      "eval_rows_gathered_in_selection": 0,
+      "selection_seconds_total": 27351.0,
+      "stage1_holdout_top1": {
+        "model": {
+          "M1": 0.189,
+          "M2": 0.1925,
+          "M3": 0.2369,
+          "M4": 0.2393,
+          "M5": 0.2232,
+          "M6": 0.2198,
+          "M7": 0.239,
+          "M8": 0.2065
+        },
+        "logistic": {
+          "L1": 0.1433,
+          "L2": 0.1439,
+          "L3": 0.2114,
+          "L4": 0.2098,
+          "L5": 0.2085,
+          "L6": 0.2119,
+          "L7": 0.2114,
+          "L8": 0.2098
+        },
+        "depth3_tree": {
+          "D1": 0.0965,
+          "D2": 0.0965,
+          "D3": 0.0965,
+          "D4": 0.0965,
+          "D5": 0.1002,
+          "D6": 0.1002,
+          "D7": 0.1002,
+          "D8": 0.1002
+        },
+        "deep_tree": {
+          "T1": 0.1484,
+          "T2": 0.1564,
+          "T3": 0.1621,
+          "T4": 0.1427,
+          "T5": 0.1563,
+          "T6": 0.1362,
+          "T7": 0.1413,
+          "T8": 0.1554
+        }
+      },
+      "stage2_holdout_top1": {
+        "model": {
+          "M4": 0.2878,
+          "M7": 0.2851
+        },
+        "logistic": {
+          "L3": 0.2338,
+          "L6": 0.2332
+        },
+        "depth3_tree": {
+          "D5": 0.0984,
+          "D6": 0.0984
+        },
+        "deep_tree": {
+          "T2": 0.1791,
+          "T3": 0.1818
+        }
+      }
+    },
+    "confirmatory_top1": {
+      "best_single_feat": 0.0751,
+      "deep_tree": 0.1834,
+      "depth3_tree": 0.0982,
+      "logistic": 0.2317,
+      "majority": 0.0385,
+      "model": 0.2884,
+      "stratified": 0.0387
+    },
+    "confirmatory_top1_non_gutenberg": {
+      "best_single_feat": 0.0769,
+      "deep_tree": 0.1916,
+      "depth3_tree": 0.097,
+      "logistic": 0.2427,
+      "majority": 0.0385,
+      "model": 0.3003,
+      "stratified": 0.0388
+    },
+    "reproductions": {
+      "incumbent_M1": 0.2395,
+      "logistic_L1": 0.1352,
+      "null": 0.0383
+    },
+    "confirmatory_seconds": {
+      "best_single_feat": 45.7,
+      "deep_tree": 565.1,
+      "depth3_tree": 122.8,
+      "logistic": 1164.3,
+      "majority": 0.0,
+      "model": 15874.2,
+      "stratified": 0.0,
+      "incumbent_M1": 1428.4,
+      "logistic_L1": 679.6,
+      "null": 71.6
+    },
+    "banked_fit_seconds_total": 47302.7,
+    "wall_clock": "stage select 22:14 UTC 2026-09-04 to 05:56 UTC 2026-09-05; stage confirm 05:56 to 11:31 UTC; 13 h 17 min end to end with no interruption",
+    "against_the_extrapolation": "the preregistration's typical case was about 35000 s of fit time and its worst case about 100000 s; the run banked 47302.7 s (27351.0 s selection). Two HGB candidates ran to their 250-iteration cap at the second stage (M4 12349.6 s, M7 6112.3 s) and the model's confirmatory fit took 15874.2 s at 800000 rows, which is where the excess over the typical case came from; the selection cap of 120000 s was not approached",
+    "memory_observed": {
+      "unit": "anonymous RSS (RssAnon), GB",
+      "stage_select_peak_heartbeat": 10.11,
+      "confirm_peak_heartbeat": 12.19,
+      "deep_tree_confirm_heartbeat_max": 12.19,
+      "scaled_logistic_confirm_heartbeat_max": 9.37,
+      "model_confirm_heartbeat_max": 10.34,
+      "projection_in_scope_cost": "deep tree 12.2 to 12.6 GB; threshold 13.0; ceiling about 13.9",
+      "standardiser_probe_peak_extra_fraction_of_block": 0.1005
+    },
+    "environment_banked": {
+      "cgroup_memory_limit": "unlimited",
+      "cpu_cores": 4,
+      "disk_free_gb": 7.36,
+      "gpu": "none",
+      "mem_available_gb": 15.66,
+      "nice": 10,
+      "numpy": "2.4.6",
+      "python": "3.11.15",
+      "sklearn": "1.9.0",
+      "threads": 3
+    },
+    "reader_outcome": "RECIPE_CLEARS from the frozen 0014 reader on the first read; margins +0.0567 frozen, +0.0567 expanded, +0.0576 gutenberg-excluded against the 0.05 bar; boundary 'clears at 4096 under search; (2048, 4096] stands for the frozen recipe (0003, 0011)'",
+    "derived_margins": {
+      "derivation": "round(a - b, 4) from artifacts/pivot/recipe_search_4096.json; arithmetic, not a reader output (the reader compares round(a - b, 6) >= 0.05 - 1e-9 and banks only pass/fail)",
+      "margin_frozen": 0.0567,
+      "margin_expanded": 0.0567,
+      "margin_expanded_gutenberg_excluded": 0.0576,
+      "bar_the_model_had_to_clear": 0.2817,
+      "bar_the_model_had_to_clear_non_gutenberg": 0.2927,
+      "required_gain_over_incumbent": 0.0422,
+      "model_gain_over_incumbent": 0.0489,
+      "logistic_gain_over_0003_refit": 0.0965,
+      "logistic_gain_over_0003_banked_0.1392": 0.0925,
+      "headline_margin_under_fixed_recipes_0003": {
+        "frozen": 0.1003,
+        "expanded": 0.0583
+      },
+      "narrowest_clearance_over_the_bar": 0.0067
+    }
   },
   "operator_procedure": {
     "repeated_launches_of_one_fit": "once any confirm checkpoint exists the three-launch NOT RUN rule is off by design; a fit that is killed within 30 s of its last heartbeat is never stamped infeasible_memory. Repeated launches of the same fit with no new checkpoint are therefore the operator's signal to stop and file the VOID that stop rules 3 and 10 prescribe, by hand, with the launches ledger as the evidence. With the corrected memory arithmetic no honest fit approaches the ceiling, so this is a stated procedure, not an expected path."

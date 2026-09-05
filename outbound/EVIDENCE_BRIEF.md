@@ -10,7 +10,9 @@ One task — recover which of **26** DEFLATE `(implementation, level)` configura
 window carved from the **middle** of a compressed stream, with no header, no stream start, no
 plaintext — measured under bars frozen and hash-chained **before the data existed**, delivering:
 
-- a scaling curve that clears every preregistered clause (`CURVE_ESTABLISHED`, prereg 0003);
+- a scaling curve that clears every preregistered clause (`CURVE_ESTABLISHED`, prereg 0003), and
+  a headline margin that survives a symmetric recipe search of every baseline (`RECIPE_CLEARS`,
+  0014: +0.0567 on every reading against a searched logistic at 0.2317);
 - an operationally usable output — shortlist plus abstention — under its own preregistration
   (`OUTPUT_USABLE`, 0006);
 - and its own boundaries, measured with equal force (`CARVE_FAILS` at 1024 bytes, 0007, and
@@ -43,6 +45,8 @@ Margins over trivial baselines trained on the same 800000 fragments as the top r
 | All baselines, deep trees included | depth-16 tree 0.1812 | **+0.0583** | 0.05 |
 | Frozen set, leaked family excluded | logistic 0.1438 | **+0.1073** | — |
 | All baselines, leaked family excluded | depth-16 tree 0.1891 | **+0.0620** | — |
+| Every baseline searched too (0014; searched model 0.2884) | standardised logistic 0.2317 | **+0.0567** | 0.05 |
+| Every baseline searched, leaked family excluded (0014; model 0.3003) | standardised logistic 0.2427 | **+0.0576** | 0.05 |
 
 The last two rows exist because the audit found gutenberg-family source bytes straddle the
 train/eval boundary (windows into one shared pool). Excluding that family **widens** both margins —
@@ -95,6 +99,13 @@ reading available, fixed before the run; the looser reading would have given **+
   0012's frozen reader emitted `VOID` on a record-order defect of its own (filed in the
   corrections ledger); preregistration 0013 re-read the same banked artifact with the numbers
   disclosed and the outcome committed in advance.
+- **Symmetric recipe search at 4096: `RECIPE_CLEARS`, margin +0.0567 frozen and expanded, +0.0576
+  without gutenberg.** The same protocol on 0003's 800000-row pool and sealed evaluation set, every
+  baseline floored at its 0003 value, the outcome stated in advance as uncertain: the searched
+  model (M4) reaches **0.2884**, the searched logistic **0.2317** (the 0003 recipe refits at
+  0.1352), the incumbent refit reproduces 0003's **0.2395** exactly. The headline margin under
+  fixed recipes (+0.1003) is stated beside its searched size, and the searched size is the one to
+  quote.
 - **2048-byte carve: `CARVE_FAILS` on every reading — by 0.0025 on the slackest, 0.0206 on the
   binding one.** Within-size margin **+0.0475** over the frozen
   baseline set against the 0.05 bar, **+0.0294** over all baselines, **+0.0308** with the leaked

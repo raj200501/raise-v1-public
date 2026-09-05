@@ -113,7 +113,8 @@ carved-DEFLATE task at a matched training rung, shortening the window from 4096 
   margin fails on every reading — by 0.0025 on the frozen set, by more on the stricter ones. L4
   rests on two shorter sizes, not one. A symmetric recipe search at 2048 (0012, read under 0013)
   then moved the model to 0.212 and the logistic baseline to 0.1886, and the margin fell further
-  short, to +0.0234: the failure is not the recipe's.
+  short, to +0.0234: the failure is not the recipe's. At 4096 the same search (0014) leaves the
+  margin at +0.0567, so the headline is not a recipe artefact either.
 
 **What it retires.** Any candidate whose student receives a variable-size fragment and whose planned
 representation is hand-engineered statistics over it. The result will hold at one size and the
@@ -303,7 +304,8 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 | SAT free decoder re-derived | 0.9857 with zero training rows, against 0.1667 chance | primary-verifiable |
 | Assembly-provenance split leak re-derived | temporal split 0.4765 **loses** to a 0.4805 constant | primary-verifiable |
 | Assembly-provenance confound re-derived | a fake BioProject partition is predictable at 0.7772 | primary-verifiable |
-| **Carved-DEFLATE scaling curve** | **`CURVE_ESTABLISHED`** — +0.0491/decade, cluster-corrected 95% CI [0.048216, 0.050014], over 2.9031 decades; margin +0.1003 frozen and +0.0583 stricter, both above 0.05 | primary-verifiable |
+| **Carved-DEFLATE scaling curve** | **`CURVE_ESTABLISHED`** — +0.0491/decade, cluster-corrected 95% CI [0.048216, 0.050014], over 2.9031 decades; margin +0.1003 frozen and +0.0583 stricter under fixed recipes, both above 0.05 | primary-verifiable |
+| **Symmetric recipe search at 4096 (0014)** | **`RECIPE_CLEARS`** — the searched model (M4) reaches 0.2884 against a searched-and-floored bar of 0.2317 set by the standardised logistic: +0.0567 frozen, +0.0567 expanded, +0.0576 with the leaked family excluded, all above 0.05; the headline survives a fair baseline at a smaller margin than fixed recipes gave | primary-verifiable |
 
 ### Failed, or did not reach a conclusion
 
@@ -330,7 +332,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **14 of 108 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 120 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -359,8 +361,8 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 | Class | Count | Meaning |
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
-| `arithmetic-verifiable` | 19 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 75 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `arithmetic-verifiable` | 20 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
+| `primary-verifiable` | 86 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -757,18 +759,57 @@ bytes, none of eight model recipes clears a bar that a symmetric search of the b
 to 0.1886 — and that the 0011 number the search was chasing was 0.0025 short of a bar that was
 itself soft.
 
-**The same question at the headline size, in flight.** Preregistration 0014 (chain seq 14,
-NIST Beacon pulse 1927238, drand round 6437632) applies the 0012 protocol, roster for roster, to
-corpus A at 4096 bytes: 0003's sealed evaluation set, 0003's 800000-row pool, every baseline
-head floored at its 0003 value, the model fitted last. It asks whether the headline
-`CURVE_ESTABLISHED` margin (+0.1003 over the frozen set, +0.0583 over all baselines) survives
-the search that moved the 2048 margin from +0.0475 to +0.0234. The expected outcome is written
-in the preregistration as genuinely uncertain. Two refuter passes before the freeze found and
-fixed a standardiser that would have allocated a second 7.09 GB copy of the pool during the
-confirmatory logistic fit, a memory rule that counted the cache's file-backed pages, and 2048-era
-constants inside sealed fields; the record of that review is `artifacts/pivot/engineering_log_0014.json`.
-It is frozen, and it is running. No 0014 number appears in this document until its frozen reader
-emits one; a `RECIPE_FAILS` is filed as a correction against the headline framing at full size.
+### The recipe search at the headline size — `RECIPE_CLEARS` at 4096 under a symmetric search (preregistration 0014)
+
+The 0012/0013 section above ends on the question it raised: if a fair search of the baselines
+moved the 2048 margin from +0.0475 to +0.0234, does the headline 4096 margin — +0.1003 over the
+frozen set, +0.0583 over all baselines — survive the same treatment? Preregistration 0014 (chain
+seq 14, NIST Beacon pulse 1927238, drand round 6437632) applied the 0012 protocol, roster for
+roster, to corpus A: 0003's sealed evaluation set (260000 rows from 10000 held-out chunks), 0003's
+800000-row pool, the same chunk-rule holdout (chunk id mod 5 equals 0, 160773 rows, hashed into
+the reader before any fit), the same two stages (100000 rows keep 2, then all 639227 fit-pool rows
+keep 1), every baseline head floored at its 0003 value, the model fitted last. The expected outcome,
+written before any fit, was "genuinely uncertain". Three refuters and a synthesis reviewed the
+package before the freeze; what they found and what changed is in
+`artifacts/pivot/engineering_log_0014.json`.
+
+| | |
+|---|---|
+| **Verdict** | `RECIPE_CLEARS` — boundary **clears at 4096 under search; (2048, 4096] stands for the frozen recipe (0003, 0011)** |
+| **Emitted by** | `tools/readers/recipe4096_verdict.py`, frozen as chain entry 14 |
+| **Artifact** | `artifacts/pivot/recipe_search_4096.json` with `recipe_search_4096_selection.json` and `recipe_search_4096_scores.json`; verdict in `recipe_search_4096_verdict.json` |
+| **Cost** | 47302.7 s of banked fit time (27351.0 s selection, the rest confirmatory) at 3 threads, nice 10, on 4 cores, no GPU; wall clock 22:14 UTC on 2026-09-04 to 11:31 UTC on 2026-09-05 with no interruption; `artifacts/pivot/engineering_log_0014.json` |
+
+| Clause | Bar | Read | Result |
+|---|---|---|---|
+| Incumbent refit reproduces 0003 | within 0.005 of 0.2395 | **0.2395** | pass |
+| 0003 logistic refit reproduces 0003 | within 0.005 of 0.1392 | **0.1352** | pass |
+| Null control with the selected recipe | ≤ chance + 0.02 | **0.0383** | pass |
+| Evaluation rows gathered during selection | 0 | **0** | pass |
+| Margin, frozen set (floored) | ≥ 0.05 | 0.2884 − 0.2317 = **+0.0567** | pass |
+| Margin, expanded set (floored) | ≥ 0.05 | 0.2884 − 0.2317 = **+0.0567** | pass |
+| Margin, expanded set, gutenberg excluded | ≥ 0.05 | 0.3003 − 0.2427 = **+0.0576** | pass |
+
+**Finding 1 — the baseline side moved as far at 4096 as it did at 2048.** The 0003 logistic was
+an unstandardised lbfgs run capped at 400 iterations; refit here it scores **0.1352** (0003 banked
+0.1392, a drift of 0.0040 inside the 0.005 tolerance). The searched logistic, L3 — standardised
+inputs, C 1.0, 728 iterations to convergence — scores **0.2317** on the sealed set, a gain of
+**+0.0965** over the refit and **+0.0925** over the banked value, and it sets every bar: the frozen
+bar, the expanded bar (the searched deep tree T3 reaches 0.1834 against its 0.1812 floor), and the
+non-gutenberg bar at **0.2427**. The bar the model had to clear was therefore **0.2817** on the
+full set and **0.2927** without gutenberg — 0.0422 above the incumbent's own 0.2395.
+
+**Finding 2 — what the model search found.** At the 100000-row stage every lower-learning-rate or
+heavier-regularised recipe beat the incumbent (M1 0.1890 on the holdout; M3 0.2369, M4 0.2393,
+M7 0.2390), and the incumbent with a chunk-grouped early-stopping split (M8, 0.2065) did not close
+the gap, so the content-leaking validation split is not what holds the incumbent back. At the
+639227-row stage M4 (127 leaves, learning rate 0.05, L2 1.0, stopped by its 250-iteration cap)
+scored 0.2878 against M7's 0.2851 and was selected. Fitted once on the 800000-row pool and scored once on the sealed set, it reaches **0.2884** — a gain of **+0.0489** over the incumbent's 0.2395 — and **0.3003** without gutenberg. Per family: csv 0.4505, log 0.4656, json 0.4541, code 0.3759, gutenberg 0.2065, base64 0.1296, binary 0.111, mixed 0.116 — the structured families carry the gain, as at 2048. The informational cluster intervals, banked and never read, put the searched model at [0.285, 0.2917] against the searched logistic at [0.229, 0.2344] and the incumbent at [0.2366, 0.2421].
+
+**Finding 3 — the margin survives, and it is smaller than the record said.** Under 0003's fixed recipes the frozen-set margin was +0.1003 and the all-baselines margin +0.0583. Under the search both sides moved and the baseline side moved more — +0.0925 for the logistic over its banked value against +0.0489 for the model — so the margin this record can now quote is **+0.0567** on the frozen reading, **+0.0567** on the expanded reading and **+0.0576** with the leaked family excluded: above the 0.05 bar on every reading, by 0.0067 at the narrowest. The frozen recipes' +0.1003 is no longer the number to lead with; it is a fixed-recipe number and is labelled as one wherever it still appears. The 2048 result is untouched: there the same search left +0.0234, and the boundary (2048, 4096] stands under both the frozen and the searched protocol.
+
+**What it does not establish.** A buyer. Anything about recipes off the roster, architectures off
+the roster, carve sizes other than 4096, or the feature set. It establishes that under this protocol, at 4096 bytes, one of eight model recipes clears a bar that a symmetric search of the baselines raised from 0.1392 to 0.2317 — and that the headline was not a recipe artefact, while the 2048 failure was not one either.
 
 ### A learned representation over raw bytes does not rescue it either — `BYTE_MODEL_FAILS`
 

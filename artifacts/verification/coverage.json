@@ -952,6 +952,114 @@
       "class": "primary-verifiable",
       "reverify": "python3 tools/readers/recipe2048_reread_verdict.py",
       "claim": "The whole 0012 run cost 24743.6 s of banked fit time (17895.9 s selection, the rest confirmatory) at 3 threads and nice 10, plus one container restart."
+    },
+    {
+      "id": "recipe4096-verdict",
+      "artifact": "artifacts/pivot/recipe_search_4096_verdict.json",
+      "json_path": "$.verdict",
+      "value": "RECIPE_CLEARS",
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe4096_verdict.py",
+      "claim": "Preregistration 0014's frozen reader emits RECIPE_CLEARS: under the same symmetric recipe search that failed the 2048-byte carve, the headline 4096-byte carve clears the 0.05 bar on all three readings."
+    },
+    {
+      "id": "recipe4096-final-top1",
+      "artifact": "artifacts/pivot/recipe_search_4096.json",
+      "json_path": "$.final_top1",
+      "value": 0.2884,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe4096_verdict.py",
+      "claim": "The searched model recipe (M4) scores 0.2884 on 0003's sealed evaluation set after one confirmatory fit on 0003's 800000-row pool."
+    },
+    {
+      "id": "recipe4096-final-top1-non-gutenberg",
+      "artifact": "artifacts/pivot/recipe_search_4096.json",
+      "json_path": "$.final_top1_non_gutenberg",
+      "value": 0.3003,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe4096_verdict.py",
+      "claim": "The searched model scores 0.3003 on the 227006 non-gutenberg evaluation rows."
+    },
+    {
+      "id": "recipe4096-frozen-bar",
+      "artifact": "artifacts/pivot/recipe_search_4096.json",
+      "json_path": "$.best_frozen_for_bar",
+      "value": 0.2317,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe4096_verdict.py",
+      "claim": "The floored frozen bar at 4096 is 0.2317, set by the searched logistic head (L3) at 0.2317 on the sealed set."
+    },
+    {
+      "id": "recipe4096-expanded-bar",
+      "artifact": "artifacts/pivot/recipe_search_4096.json",
+      "json_path": "$.best_expanded_for_bar",
+      "value": 0.2317,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe4096_verdict.py",
+      "claim": "The floored expanded bar at 4096 is 0.2317, set by the logistic head."
+    },
+    {
+      "id": "recipe4096-expanded-ng-bar",
+      "artifact": "artifacts/pivot/recipe_search_4096.json",
+      "json_path": "$.best_expanded_non_gutenberg_for_bar",
+      "value": 0.2427,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe4096_verdict.py",
+      "claim": "The expanded bar without gutenberg at 4096 is 0.2427."
+    },
+    {
+      "id": "recipe4096-gain-over-incumbent",
+      "artifact": "artifacts/pivot/recipe_search_4096_verdict.json",
+      "json_path": "$.gain_over_incumbent",
+      "value": 0.0489,
+      "class": "arithmetic-verifiable",
+      "reverify": "python3 tools/readers/recipe4096_verdict.py",
+      "claim": "The searched model's gain over the incumbent on the sealed set is 0.0489 (0.2884 against 0.2395); the searched logistic's gain over the 0003 logistic refit is 0.0965 (0.2317 against 0.1352)."
+    },
+    {
+      "id": "recipe4096-incumbent-reproduced",
+      "artifact": "artifacts/pivot/recipe_search_4096.json",
+      "json_path": "$.incumbent_refit_top1",
+      "value": 0.2395,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe4096_verdict.py",
+      "claim": "The incumbent refit on 0003's pool scores 0.2395 against 0003's banked 0.2395 (drift +0.0000), so the pool and the evaluation set are 0003's."
+    },
+    {
+      "id": "recipe4096-l1-reproduced",
+      "artifact": "artifacts/pivot/recipe_search_4096.json",
+      "json_path": "$.logistic_l1_refit_top1",
+      "value": 0.1352,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe4096_verdict.py",
+      "claim": "The 0003 logistic refit scores 0.1352 against its banked 0.1392 (drift -0.0040, within the 0.005 tolerance)."
+    },
+    {
+      "id": "recipe4096-null-control",
+      "artifact": "artifacts/pivot/recipe_search_4096.json",
+      "json_path": "$.shuffled_label_accuracy",
+      "value": 0.0383,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe4096_verdict.py",
+      "claim": "The null control with the selected recipe on shuffled labels lands at 0.0383, within chance 0.038462 plus 0.02."
+    },
+    {
+      "id": "recipe4096-eval-rows-gathered",
+      "artifact": "artifacts/pivot/recipe_search_4096_selection.json",
+      "json_path": "$.eval_rows_gathered_in_selection",
+      "value": 0,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe4096_verdict.py",
+      "claim": "The 0014 selection stage gathered zero evaluation rows, measured by intersecting every gathered index array with the evaluation index."
+    },
+    {
+      "id": "recipe4096-fit-seconds",
+      "artifact": "artifacts/pivot/recipe_search_4096.json",
+      "json_path": "$.cost.banked_fit_seconds_total",
+      "value": 47302.7,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/recipe4096_verdict.py",
+      "claim": "The whole 0014 run cost 47302.7 s of banked fit time (27351.0 s selection, the rest confirmatory) at 3 threads and nice 10 on 4 cores, no GPU."
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

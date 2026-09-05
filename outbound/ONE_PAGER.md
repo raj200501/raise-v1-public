@@ -7,7 +7,7 @@ reports existed, and designed so that each of its gates can be shown to fail on 
 
 **It is** a scaling curve that clears every clause frozen before its corpus existed —
 `CURVE_ESTABLISHED`, **+0.0491** accuracy points per decade over **2.9031** decades, margin
-**+0.1003** frozen and **+0.0583** under the stricter reading, both above the preregistered 0.05 —
+**+0.1003** frozen and **+0.0583** under the stricter reading with fixed recipes, **+0.0567** when every baseline is searched too (0014), all above the preregistered 0.05 —
 **at a 4096-byte window, and only there.**
 
 **It is not** a fundable thesis, and a later preregistration says why in the sharpest available
@@ -99,6 +99,10 @@ the reading frozen as binding). At the matched **100000** rung:
 after the transfer model reproduced its own **0.1965** on corpus A first. A symmetric recipe
 search at 2048 (preregistration 0012, read under 0013) moved the model to **0.212** and the
 standardised logistic baseline to **0.1886**, and the margin fell to **+0.0234**: `RECIPE_FAILS`.
+The same search at 4096 (preregistration 0014) leaves the headline standing: the searched model
+reaches **0.2884** against a searched logistic at **0.2317**, margins **+0.0567** on both readings
+and **+0.0576** without gutenberg, `RECIPE_CLEARS` — a smaller margin than the fixed-recipe
+**+0.1003**, and the one this page now leads with.
 The window boundary of
 this recipe lies in (2048, 4096]; every number above remains a 4096-byte-window number.
 
@@ -189,7 +193,7 @@ reported, and neither is quoted as the other.
 
 The verification-coverage map is machine-checked and prints its weakest class first, deliberately.
 
-**14 of 108 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
+**14 of 120 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
 including us. Eight are measurements made by subagents inside scratch directories that no longer
 exist, and **that includes measurements the conclusions rest on.** The ninth is worse than
 unverified: it is a figure we published and then failed to reproduce ourselves.

@@ -48,7 +48,10 @@ bar on the frozen set, +0.0294 against all baselines, transfer from 4096 at 0.04
 boundary of the working window is bracketed to (2048, 4096]. A symmetric recipe search at 2048
 (prereg 0012, read under 0013 after 0012's own frozen reader voided the run on a defect of its own,
 filed in `CORRECTIONS.md`) moved the model to 0.212 and the standardised logistic baseline to
-0.1886, so the margin fell to +0.0234: `RECIPE_FAILS`. Every number in this repository is a
+0.1886, so the margin fell to +0.0234: `RECIPE_FAILS`. The same search at 4096 (prereg 0014, its
+expected outcome stated in advance as uncertain) clears: 0.2884 against a searched logistic at
+0.2317, +0.0567 on every reading, `RECIPE_CLEARS`, so the headline margin is quoted at its searched
+size rather than the +0.1003 fixed recipes gave. Every number in this repository is a
 4096-byte-window number and the documents say so.
 
 ## "Who buys it?"
