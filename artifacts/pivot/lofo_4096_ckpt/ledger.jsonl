@@ -7,3 +7,5 @@
 {"name": "fold_gutenberg_majority", "fingerprint": "a8b63c62ae5f2dd5", "event": "started", "utc": "2026-09-08T20:11:56Z", "rss_gb": 7.94, "pid": 6914, "attempt": 1}
 {"name": "fold_gutenberg_majority", "fingerprint": "a8b63c62ae5f2dd5", "event": "completed", "utc": "2026-09-08T20:12:00Z", "rss_gb": 7.94, "pid": 6914, "seconds": 0.0}
 {"name": "fold_gutenberg_logistic", "fingerprint": "89a329002548257b", "event": "started", "utc": "2026-09-08T20:12:00Z", "rss_gb": 7.94, "pid": 6914, "attempt": 1}
+{"name": "fold_gutenberg_logistic", "fingerprint": "89a329002548257b", "event": "completed", "utc": "2026-09-08T20:25:41Z", "rss_gb": 7.94, "pid": 6914, "seconds": 817.6}
+{"name": "fold_gutenberg_model", "fingerprint": "fc84a301ef2749e6", "event": "started", "utc": "2026-09-08T20:25:41Z", "rss_gb": 7.94, "pid": 6914, "attempt": 1}

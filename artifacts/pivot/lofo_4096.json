@@ -45,21 +45,23 @@
     "n_source_chunks": 50000
   },
   "cost": {
-    "banked_fit_seconds_total": 2620.3,
+    "banked_fit_seconds_total": 3437.9,
     "checkpoints": "artifacts/pivot/lofo_4096_ckpt",
     "interruptions_by_name": {
+      "fold_gutenberg_logistic": 0,
       "fold_gutenberg_majority": 0,
       "null": 0,
       "repro_logistic": 0,
       "repro_model": 0
     },
     "seconds_by_name": {
+      "fold_gutenberg_logistic": 817.6,
       "fold_gutenberg_majority": 0.0,
       "null": 24.0,
       "repro_logistic": 929.7,
       "repro_model": 1666.6
     },
-    "wall_seconds_this_invocation": 2820.5
+    "wall_seconds_this_invocation": 3641.9
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -95,7 +97,64 @@
       "model": null
     },
     "gutenberg": {
-      "logistic": null,
+      "logistic": {
+        "block_refills": [],
+        "environment": {
+          "nice": 10,
+          "numpy": "2.4.6",
+          "python": "3.11.15",
+          "sklearn": "1.9.0",
+          "standardiser_probe": {
+            "block_gb": 0.177,
+            "ncols": 1108,
+            "peak_extra_fraction_of_block": 0.1005,
+            "probe_rows_per_pass": 2000,
+            "production_rows_per_pass": 20000,
+            "production_transient_gb": 0.177,
+            "rows": 20000
+          },
+          "threads": 3
+        },
+        "family": "logistic",
+        "fit_info": {
+          "n_iter": 400
+        },
+        "fit_rows_sha256": "036d65b93a92e3ebb950e4fe37c0a0354c18c8e258961ba21db37b6196f561e3",
+        "fit_rows_sorted_sha256": "e9c059873523e8543196c8bbb32fcaf0f628124a94c8b9766c75fdf5a2ab9648",
+        "head": "logistic",
+        "heartbeat_max_rss_gb": 7.94,
+        "id": "L1",
+        "interruptions_before_this_fit": 0,
+        "last_heartbeat_rss_gb_before_this_fit": null,
+        "n_fit_rows": 700288,
+        "params": {
+          "max_iter": 400
+        },
+        "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+        "per_family": {
+          "base64": 0.0675,
+          "binary": 0.0764,
+          "code": 0.1579,
+          "csv": 0.2014,
+          "gutenberg": 0.0635,
+          "json": 0.2208,
+          "log": 0.1797,
+          "mixed": 0.1134
+        },
+        "rss_gb": 7.94,
+        "rss_gb_is": "anonymous (RssAnon)",
+        "rss_total_gb": 12.56,
+        "ru_maxrss_gb": 13.93,
+        "scaled": false,
+        "seconds": 817.6,
+        "seed": 20260825,
+        "stage": "lofo:gutenberg",
+        "status": "fit",
+        "top1": 0.1348,
+        "top1_non_gutenberg": 0.1452,
+        "utc": "2026-09-08T20:12:00Z",
+        "val": null
+      },
       "majority": {
         "block_refills": [],
         "environment": {
@@ -260,6 +319,24 @@
       "rss_gb": 7.94,
       "seconds": 0.0,
       "utc": "2026-09-08T20:12:00Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "89a329002548257b",
+      "name": "fold_gutenberg_logistic",
+      "pid": 6914,
+      "rss_gb": 7.94,
+      "utc": "2026-09-08T20:12:00Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "89a329002548257b",
+      "name": "fold_gutenberg_logistic",
+      "pid": 6914,
+      "rss_gb": 7.94,
+      "seconds": 817.6,
+      "utc": "2026-09-08T20:25:41Z"
     }
   ],
   "lofo": {},
@@ -267,7 +344,6 @@
   "lofo_mixture_top1": null,
   "logistic_l1_refit_top1": 0.1352,
   "missing_roles": [
-    "fold_gutenberg_logistic",
     "fold_gutenberg_model",
     "fold_base64_majority",
     "fold_base64_logistic",
