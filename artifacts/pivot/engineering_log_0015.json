@@ -72,13 +72,22 @@
       {
         "utc": "2026-09-08T18:19Z",
         "outcome": "completed: run exit 0 at 18:34:11Z after 901.3 s wall (347.4 s of fits); all 27 fits banked (24 fold fits, 2 reproductions, 1 null) and scored on the sealed set; the reader, run in a sandbox against a copy of the output, parsed every field and emitted VOID on smoke clauses only (smoke true; 3000-row folds and their hashes; 12000-row reproduction pool; 2000-row null block; reproductions 0.15 and 0.1101 against 0.2395 and 0.1392); the reader's mixture recomputation, replicated on the smoke vectors, equals the runner's banked mixtures, per-family readings and stitched vectors for all three roles"
+      },
+      {
+        "utc": "2026-09-08T19:09Z",
+        "outcome": "completed on the reviewed runner: run exit 0 at 19:19:39Z after 627.0 s wall; the same 27 fits, the same LOFO mixtures as the first smoke (model 0.0818, logistic 0.0801, majority 0.0385: the runner is deterministic across the review's runner changes); the reader in a sandbox emitted VOID on 64 smoke clauses only (smoke flag, fold and pool sizes and hashes, the 2000-row null block, the two reproductions on the 12000-row pool)"
       }
     ],
-    "sealed_set_scorings_by_smoke_runs": 27,
+    "sealed_set_scorings_by_smoke_runs": 54,
     "eval_hashes_reproduced_in_every_smoke": true,
     "artifact_sizes_observed": {
       "scores_json_mb": 24.4,
       "note": "29 per-example vectors of 260000 int8 as JSON; the real run writes the same 29 vectors"
+    },
+    "resume_test": {
+      "utc": "2026-09-08T19:20Z",
+      "how": "the identical smoke command relaunched on the completed checkpoint directory",
+      "outcome": "all 27 fits resumed from their checkpoints, one block gathered (the evaluation block; no pool, null or fold block, as the lazy gathers intend), the artifact rewritten in 44.8 s with the same mixtures, launch number 2, exactly 27 completion events in the ledger and none reconstructed"
     }
   },
   "run_record": {
