@@ -2313,6 +2313,240 @@ def _stable_evidence(out: str) -> str:
     return line[:200]
 
 
+
+# ---------------------------------------------------------------- lofo4096 gate (0015)
+#
+# The 0015 reader reads a leave-one-family-out artifact: eight folds x three roles, two reproduction
+# controls, a null control, and a mixture it re-derives from the per-example vectors. The control
+# artifact below is built in the runner's output shape from the reader's sealed constants, with the
+# mixture, the per-family readings and the fold records all computed from the same vectors, exactly
+# as the runner does; every case then breaks one thing and must be read as VOID or TRANSFER_FAILS.
+
+def _lofo_reader():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("r15", os.path.join(REPO, "tools", "readers", "lofo4096_verdict.py"))
+    r15 = importlib.util.module_from_spec(spec); spec.loader.exec_module(r15)
+    return r15
+
+
+def _good_lofo(per_family=None, total_correct=None):
+    """A complete, valid LOFO artifact set. per_family: the model's held-out accuracy per family (the
+    logistic gets 0.6x, the majority 0.0385); total_correct overrides the model's correct count and is
+    spread over the families so the mixture prints exactly total_correct / 260000."""
+    r15 = _lofo_reader()
+    fam = list(r15.FAMILIES); folds = r15.FOLDS; part = dict(r15.PARTITION); rec = r15.RECIPES
+    n_eval = part["n_eval_rows"]
+    # evaluation chunk ids: family k's rows carry chunk id k (family = chunk % 8), in family blocks
+    counts = {f: folds[f]["n_eval_rows"] for f in fam}
+    chunk_ids = []
+    for k, f in enumerate(fam):
+        chunk_ids += [k] * counts[f]
+    assert len(chunk_ids) == n_eval
+    starts = {}; pos = 0
+    for f in fam:
+        starts[f] = pos; pos += counts[f]
+    pf = per_family or {"gutenberg": 0.05, "base64": 0.04, "binary": 0.04, "code": 0.2, "csv": 0.25,
+                        "json": 0.22, "log": 0.24, "mixed": 0.05}
+    role_pf = {"model": pf, "logistic": {f: round(pf[f] * 0.6, 4) for f in fam}, "majority": {f: 0.0385 for f in fam}}
+    correct_counts = {r: {f: int(round(role_pf[r][f] * counts[f])) for f in fam} for r in role_pf}
+    if total_correct is not None:
+        # spread the model's correct count: as even a share per family as integers allow
+        base, extra = divmod(int(total_correct), len(fam))
+        for i, f in enumerate(fam):
+            correct_counts["model"][f] = base + (1 if i < extra else 0)
+
+    def vec(role, f):
+        v = [1] * n_eval                        # rows of other families: trained-on, arbitrary here
+        c = correct_counts[role][f]
+        for i in range(starts[f], starts[f] + counts[f]):
+            v[i] = 1 if i - starts[f] < c else 0
+        return v
+
+    def record(name, role, n_rows, rows_sha, sorted_sha, top1, perfam, stage):
+        c = rec[role]
+        return {"id": c["id"], "head": role, "family": c["family"], "params": c.get("params", {}),
+                "scaled": False, "val": c.get("val"), "seed": 20260825, "params_sha256": _sha12(c),
+                "stage": stage, "n_fit_rows": n_rows, "fit_rows_sha256": rows_sha, "fit_rows_sorted_sha256": sorted_sha,
+                "environment": dict(_ENV12), "interruptions_before_this_fit": 0, "status": "fit", "seconds": 1.0,
+                "top1": top1, "top1_non_gutenberg": top1, "per_family": perfam, "block_refills": [], "fit_info": {}}
+
+    per_example, fold_recs, lofo = {}, {f: {} for f in fam}, {}
+    for role in ("majority", "logistic", "model"):
+        mix = [0] * n_eval
+        for f in fam:
+            v = vec(role, f); per_example[f"fold_{f}_{role}"] = v
+            for i in range(starts[f], starts[f] + counts[f]):
+                mix[i] = v[i]
+            perfam = {h: round(sum(v[starts[h]:starts[h] + counts[h]]) / counts[h], 4) for h in fam}
+            fold_recs[f][role] = record(f"fold_{f}_{role}", role, folds[f]["n_train_rows"], folds[f]["train_idx_sha256"],
+                                        folds[f]["train_sorted_sha256"], round(sum(v) / n_eval, 4), perfam, f"lofo:{f}")
+        m = lambda idx: round(sum(mix[i] for i in idx) / len(idx), 4)  # noqa: E731
+        allidx = range(n_eval)
+        lofo[role] = {"mixture_top1": m(allidx),
+                      "mixture_top1_non_gutenberg": m([i for i in allidx if chunk_ids[i] != 0]),
+                      "structured_four_top1": m([i for i in allidx if fam[chunk_ids[i]] in r15.STRUCTURED]),
+                      "per_family": {f: m(range(starts[f], starts[f] + counts[f])) for f in fam},
+                      "mixture_vector_key": f"lofo_mixture_{role}"}
+        per_example[f"lofo_mixture_{role}"] = mix
+    pool_sha, n_pool = part["pool_idx_sha256"], part["n_pool_rows"]
+    inc = record("repro_model", "model", n_pool, pool_sha, "x", 0.2395, {f: 0.2395 for f in fam}, "reproduction")
+    l1 = record("repro_logistic", "logistic", n_pool, pool_sha, "x", 0.1392, {f: 0.1392 for f in fam}, "reproduction")
+    null = record("null", "model", part["null_rows"], "x", part["null_sorted_sha256"], 0.039, {f: 0.039 for f in fam}, "null")
+    per_example["repro_model"] = [1] * n_eval; per_example["repro_logistic"] = [0] * n_eval
+    names = ["repro_model", "repro_logistic", "null"] + [f"fold_{f}_{r}" for f in fam for r in ("majority", "logistic", "model")]
+    ledger = []
+    for i, nm in enumerate(names):
+        ledger += [{"name": nm, "fingerprint": nm, "event": "started", "utc": f"2026-09-08T20:{i:02d}:00Z"},
+                   {"name": nm, "fingerprint": nm, "event": "completed", "utc": f"2026-09-08T20:{i:02d}:30Z"}]
+    pfolds = {f: dict(folds[f], n_eval_chunks=1, n_train_chunks=1, train_rows_of_heldout_family=0,
+                      train_chunks_shared_with_eval=0, train_rows_in_eval=0) for f in fam}
+    partition = dict(part, folds=pfolds)
+    mm, lm = lofo["model"]["mixture_top1"], lofo["logistic"]["mixture_top1"]
+    art = {"schema_version": 1, "schema": "raise-v1/lofo_4096/1", "preregistration": "0015-lofo-4096", "smoke": False,
+           "stage": "run", "protocol": r15.PROTOCOL, "protocol_sha256": r15.PROTOCOL_SHA256, "recipes": rec,
+           "recipes_sha256": r15.RECIPES_SHA256, "corpus": dict(r15.CORPUS), "partition": partition, "n_classes": 26,
+           "class_names": [], "chance_accuracy": 0.038462, "environment": dict(_ENV12), "launch_environment": {},
+           "launch_number": 1, "complete": True, "missing_roles": [],
+           "reproduction": {"model": inc, "logistic": l1}, "incumbent_refit_top1": 0.2395, "logistic_l1_refit_top1": 0.1392,
+           "null_control": null, "shuffled_label_accuracy": 0.039, "null_rows": part["null_rows"],
+           "folds": fold_recs, "lofo": lofo, "lofo_mixture_top1": mm,
+           "lofo_margin_model_over_logistic": round(mm - lm, 6), "cluster_ci95_informational": {}, "ledger": ledger,
+           "cost": {}, "run_started_utc": "2026-09-08T20:00:00Z", "run_finished_utc": "2026-09-08T21:00:00Z"}
+    scores = {"schema": "raise-v1/lofo_4096_scores/1", "preregistration": "0015-lofo-4096", "smoke": False,
+              "eval_idx_sha256": part["eval_idx_sha256"], "eval_chunk_ids": chunk_ids, "families": fam,
+              "per_example": per_example}
+    return art, scores
+
+
+def _lofo(root, mutate=None, drop_artifact=False, **kw):
+    art, scores = _good_lofo(**kw)
+    if mutate:
+        r = mutate(art, scores)
+        if r is not None:
+            art = r
+    piv = os.path.join(root, "artifacts", "pivot"); os.makedirs(piv, exist_ok=True)
+    json.dump(scores, open(os.path.join(piv, "lofo_4096_scores.json"), "w"))
+    if not drop_artifact:
+        json.dump(art, open(os.path.join(piv, "lofo_4096.json"), "w"))
+    shutil.copy(os.path.join(REPO, "tools", "readers", "lofo4096_verdict.py"),
+                os.path.join(root, "tools", "readers", "lofo4096_verdict.py"))
+    rc, out = run([PY, "tools/readers/lofo4096_verdict.py"], root)
+    if rc != 0:
+        return rc, out
+    v = json.load(open(os.path.join(piv, "lofo_4096_verdict.json")))
+    ok = v["verdict"] == "TRANSFERS"
+    return (0 if ok else 1), (f"verdict={v['verdict']} mixture={v['lofo_mixture_top1']} "
+                              f"validity={v['validity_failed_clauses'][:2]} transfer={v['transfer_failed_clauses']}")
+
+
+@case("lofo4096", "control-transfers-passes", "pass")
+def _(root):
+    return _lofo(root)
+
+
+@case("lofo4096", "a-mixture-below-chance-plus-0.05-is-TRANSFER_FAILS", "fail")
+def _(root):
+    rc, out = _lofo(root, per_family={"gutenberg": 0.05, "base64": 0.04, "binary": 0.04, "code": 0.12, "csv": 0.12,
+                                      "json": 0.12, "log": 0.12, "mixed": 0.05})
+    if rc != 0 and "verdict=TRANSFER_FAILS" not in out:
+        return 0, out + " !! a mixture below the bar did not read TRANSFER_FAILS"
+    return rc, out
+
+
+@case("lofo4096", "a-mixture-of-exactly-0.0885-passes-and-0.0884-fails", "fail")
+def _(root):
+    rc0, out0 = _lofo(root, total_correct=23010)            # 23010 / 260000 = 0.0885 = chance + 0.050038
+    if rc0 != 0:
+        return 0, out0 + " !! a mixture printed as 0.0885 did not pass"
+    return _lofo(root, total_correct=22984)                  # 0.0884: 0.049938 below the bar
+
+
+@case("lofo4096", "a-different-evaluation-set-hash-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["partition"]["eval_idx_sha256"] = "0" * 64
+    return _lofo(root, f)
+
+
+@case("lofo4096", "one-held-out-family-row-in-a-fold's-training-rows-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["partition"]["folds"]["csv"]["train_rows_of_heldout_family"] = 1
+    return _lofo(root, f)
+
+
+@case("lofo4096", "a-fold-fitted-on-rows-other-than-the-sealed-ones-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["folds"]["log"]["model"]["fit_rows_sha256"] = "1" * 64
+    return _lofo(root, f)
+
+
+@case("lofo4096", "an-incumbent-refit-outside-0.005-of-0003-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["reproduction"]["model"]["top1"] = 0.25; art["incumbent_refit_top1"] = 0.25
+    return _lofo(root, f)
+
+
+@case("lofo4096", "a-null-control-above-chance-plus-0.02-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["null_control"]["top1"] = 0.06; art["shuffled_label_accuracy"] = 0.06
+    return _lofo(root, f)
+
+
+@case("lofo4096", "one-parameter-changed-in-one-recipe-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["recipes"] = json.loads(json.dumps(art["recipes"]))
+        art["recipes"]["model"]["params"]["max_iter"] = 201
+        art["recipes_sha256"] = _sha12(art["recipes"])
+    return _lofo(root, f)
+
+
+@case("lofo4096", "a-missing-fold-record-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["folds"]["json"]["logistic"] = None
+    return _lofo(root, f)
+
+
+@case("lofo4096", "a-per-example-vector-of-the-wrong-length-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        scores["per_example"]["fold_code_model"] = scores["per_example"]["fold_code_model"][:-1]
+    return _lofo(root, f)
+
+
+@case("lofo4096", "a-banked-mixture-that-is-not-the-recomputed-one-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["lofo"]["model"]["mixture_top1"] = round(art["lofo"]["model"]["mixture_top1"] + 0.01, 4)
+        art["lofo_mixture_top1"] = art["lofo"]["model"]["mixture_top1"]
+    return _lofo(root, f)
+
+
+@case("lofo4096", "a-fold-scored-twice-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        L = art["ledger"]; e = next(x for x in L if x["name"] == "fold_csv_model" and x["event"] == "completed")
+        L.append(dict(e))
+    return _lofo(root, f)
+
+
+@case("lofo4096", "a-smoke-run-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["smoke"] = True; scores["smoke"] = True
+    return _lofo(root, f)
+
+
+@case("lofo4096", "absent-artifact-emits-no-verdict", "fail")
+def _(root):
+    return _lofo(root, drop_artifact=True)
+
+
 def main() -> int:
     results = []
     for c in CASES:

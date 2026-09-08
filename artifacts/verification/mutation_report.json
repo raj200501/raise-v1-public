@@ -40,6 +40,10 @@
       "detected": 9,
       "total": 9
     },
+    "lofo4096": {
+      "detected": 15,
+      "total": 15
+    },
     "pivot-curve": {
       "detected": 11,
       "total": 11
@@ -2058,10 +2062,145 @@
       "gate": "recipe4096",
       "mutation": "absent-artifact-emits-no-verdict",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=TRANSFERS mixture=0.1359 validity=[] transfer=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "lofo4096",
+      "mutation": "control-transfers-passes",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=TRANSFER_FAILS mixture=0.0823 validity=[] transfer=['transfer: LOFO mixture 0.0823 - chance 0.038462 = 0.043838 is below 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "a-mixture-below-chance-plus-0.05-is-TRANSFER_FAILS",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=TRANSFER_FAILS mixture=0.0884 validity=[] transfer=['transfer: LOFO mixture 0.0884 - chance 0.038462 = 0.049938 is below 0.05']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "a-mixture-of-exactly-0.0885-passes-and-0.0884-fails",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=[\"sealed set: partition.eval_idx_sha256='<hash>', preregistered '<hash>'\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "a-different-evaluation-set-hash-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=['leakage: fold csv.train_rows_of_heldout_family=1, must be 0'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "one-held-out-family-row-in-a-fold's-training-rows-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=['fit: fold_log_model was not fitted on the sealed rows with the preregistered seed'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "a-fold-fitted-on-rows-other-than-the-sealed-ones-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=[\"reproduction: the incumbent refit scores 0.25 against 0003's banked 0.2395; the pool or the evaluation set is not 0003's\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "an-incumbent-refit-outside-0.005-of-0003-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=['null control: shuffled labels reached 0.06, above chance 0.038462 + 0.02 \u2014 the pipeline leaks'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "a-null-control-above-chance-plus-0.02-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=[\"scope: the banked recipes are not 0003's sealed recipes\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "one-parameter-changed-in-one-recipe-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=[\"fit: fold_json_logistic status None; must be 'fit'\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "a-missing-fold-record-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=['fit: fold_code_model per-example vector missing or not 260000 long'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "a-per-example-vector-of-the-wrong-length-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1459 validity=[\"mixture: lofo.model.mixture_top1=0.1459 is not the reader's recomputation 0.1359\", 'mixture: lofo_margin_model_over_logistic is not model minus logistic'] transf",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "a-banked-mixture-that-is-not-the-recomputed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=['fit: fold_csv_model has 2 ledger completions, must be exactly 1'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "a-fold-scored-twice-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=['scope: smoke=True; a smoke run is not the preregistered run', \"scores: the scores file is not this run's, or is a smoke run's\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "a-smoke-run-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
     }
   ],
-  "detected": 221,
+  "detected": 236,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 221
+  "total_mutations": 236
 }

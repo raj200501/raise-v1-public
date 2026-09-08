@@ -1,0 +1,418 @@
+{
+  "id": "0015",
+  "slug": "lofo-4096",
+  "title": "Does the encoder-provenance signal survive content the model has never seen? Leave-one-family-out transfer at 4096 with 0003's fixed recipes: for each of the eight content families, fit on the other seven families' pool rows, score once on the held-out family's sealed evaluation rows, and read the stitched mixture against chance.",
+  "scope": {
+    "one_line": "One corpus (corpus A, data/pivot/full_c4096.npz, the 0003 corpus, not rebuilt), one seed (20260825), 0003's sealed evaluation set (260000 rows from 10000 held-out chunks) and 0003's 800000-row pool. Eight folds, one per content family: 0003's incumbent recipe (M1), 0003's logistic (L1) and the majority rule (U1) are each fitted on every pool row whose family is not the held-out one (about 700000 rows, in pool order) and scored once on the sealed set; the fold's reading is the accuracy on the held-out family's rows. The eight readings are stitched into the LOFO mixture: one accuracy over all 260000 evaluation rows, every row predicted by a model that never saw a row of its family. Verdict TRANSFERS if the model's LOFO mixture clears chance (0.038462) by 0.05; TRANSFER_FAILS otherwise; VOID on any validity or control failure.",
+    "why_this_is_the_biggest_open_risk": "Every number in this record - the curve (0003), the searched margins (0014), the boundaries (0007, 0011, 0012/0013) - trains and scores on the same eight content families. The grouped split and the null control rule out memorising source chunks; nothing rules out the model having learned eight family-specific encoder signatures rather than an encoder signature. A buyer's carves are not drawn from these eight families. If the signal does not transfer across families the headline is a statement about eight manufactured content types; if it does, it is a statement about DEFLATE.",
+    "corpus": "data/pivot/full_c4096.npz exactly as 0003 left it: 1300000 rows from 50000 source chunks 0..49999, 1108 features, carve 4096 by sealed cache identity (the cache carries no build metadata): y sha256 2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093, g sha256 eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9. A row's family is FAMILIES[chunk_id % 8] with FAMILIES = [\"gutenberg\", \"base64\", \"binary\", \"code\", \"csv\", \"json\", \"log\", \"mixed\"], the corpus builder's rule.",
+    "seed": "20260825 throughout, as in 0003 and 0014; the split is grouped_split(y, g, 20260825, 0.2, 800000), 0003's, reproduced hash for hash before any fit.",
+    "design": "For each family f in the sealed order: training rows = the pool rows whose family is not f, in pool order, every one of them (fold_rows 'all'); no row of f and no chunk shared with the evaluation set, both measured and banked as counts that must be 0. Three fits per fold in the order majority, logistic, model, each scored once on the whole sealed evaluation set; the per-family accuracies are banked for every fold, and the fold's READING is its held-out family's accuracy. The LOFO mixture for a role is the accuracy over all 260000 evaluation rows where row i's correctness is taken from the fold that held out i's family; it is banked to 4 decimals and re-derived by the reader from the per-example vectors and the banked chunk ids. Two reproduction controls precede the folds: M1 and L1 refit on the full 800000-row pool must reproduce 0003's 0.2395 and 0.1392 within 0.005 (0014 measured 0.2395 and 0.1352 under this convention). A null control follows: M1 fitted on the first 20000 rows of the first fold's training rows with labels shuffled by the split's generator must score at or below chance + 0.02 on the sealed set.",
+    "partition_sealed_before_any_fit": "Computed on 2026-09-08 from the cache's y and g arrays before any 0015 fit; every hash is a literal in the frozen reader and in scope.sealed_partition below. Digest convention as 0012/0014: sha256 of np.ascontiguousarray(a).tobytes(); index arrays int64 in grouped_split / np.nonzero order; sorted sets np.sort(...).astype(np.int64). EVAL: 260000 rows from 10000 chunks, 227006 of them non-gutenberg, eval_idx_sha256 7da1099e0cf9d4c3903dad62f52c91f67b751113fc4bfc0a62c53f05dccf1efa, eval_y_sha256 92b95cf02a21945cea2a7bd756a1e1096b07ec351b478c39e795a8a2267400d1. POOL: 800000 rows from 40000 chunks, pool_idx_sha256 17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5, pool_y_sha256 d519612b4e46991f6ea1850fc92271e0de581e3cc378dd05fec59ff678dc72ea. FOLDS: gutenberg: 700288 training rows from 35019 chunks (train_idx_sha256 036d65b93a92e3ebb950e4fe37c0a0354c18c8e258961ba21db37b6196f561e3, train_sorted_sha256 e9c059873523e8543196c8bbb32fcaf0f628124a94c8b9766c75fdf5a2ab9648), 32994 evaluation rows from 1269 chunks (eval_idx_sha256 a6a1bef8036511315d2ac17e4a0f7078c6be848ca1c2c4b42d4ee6a084a56202), 0 held-out-family rows in training, 0 chunks shared with the evaluation set, 0 training rows in the evaluation set; base64: 700560 training rows from 35014 chunks (train_idx_sha256 989a2bb2df796f435a81dce996f0a9f5764044696c2eafaa85dcb58043854c32, train_sorted_sha256 32a0e6e6e99c0ff3140c0004c4b78faf3ea7958584191a835e47406d04b6d404), 32864 evaluation rows from 1264 chunks (eval_idx_sha256 bdebc4239afd64ccdfc6c27415326d95f29d1bcd8b46a4cf87b2c7fb63ad04eb), 0 held-out-family rows in training, 0 chunks shared with the evaluation set, 0 training rows in the evaluation set; binary: 699897 training rows from 34999 chunks (train_idx_sha256 986eb2ee3bf4193c97d3a0d730ab01d158292c864252633864122a218a51c653, train_sorted_sha256 9a5c958d8122ecda681a4292ed85d25fb8c6690c6f78a7f0d24a64e2a5ebf6a4), 32474 evaluation rows from 1249 chunks (eval_idx_sha256 f91f609e7fb8739a17c0bb3a6fce9afdf1599b8282e14e366823461fb1dbd8c4), 0 held-out-family rows in training, 0 chunks shared with the evaluation set, 0 training rows in the evaluation set; code: 699654 training rows from 34975 chunks (train_idx_sha256 14a38f73e27f9a4906b91e6803cae5cbe89fe0da1fa1e18b241038ff2653c222, train_sorted_sha256 39f72aa942c473a4ac8867c11d056a0527b5e6f0f4602c2e643157a2eff73775), 31850 evaluation rows from 1225 chunks (eval_idx_sha256 578248b2f2350e7aa5d3f7b2a832ecdb14fbd97d93e4690b7b4ea1e73a504bec), 0 held-out-family rows in training, 0 chunks shared with the evaluation set, 0 training rows in the evaluation set; csv: 699440 training rows from 34966 chunks (train_idx_sha256 8ae358528d974d213f64ee1d8d7800af18babba31b96dec37d6feb561afdf612, train_sorted_sha256 8f6fee17a72ee29f6bb8c2215e7b4bad24b367c2444e6eaa84e5ea7002017233), 31616 evaluation rows from 1216 chunks (eval_idx_sha256 b4ccfb51f5b8b54b2ef856b54af6e79cc7ca6ed62bc0d8cc8a7bfcac09dc5555), 0 held-out-family rows in training, 0 chunks shared with the evaluation set, 0 training rows in the evaluation set; json: 700071 training rows from 35010 chunks (train_idx_sha256 6f4c8110a832e4c3a1b184bbb212ae7d417e74784de11628369d7aa8e8726e25, train_sorted_sha256 f9d7de73a4ffd623c962bdd8a82f8e8ab4959ab49b0989e3ca3907d22dfedb5d), 32760 evaluation rows from 1260 chunks (eval_idx_sha256 8eacb2d465c04006d1dbfd1452653d2cb4eab3a9ca633b1301b0b0064a17aaa4), 0 held-out-family rows in training, 0 chunks shared with the evaluation set, 0 training rows in the evaluation set; log: 700473 training rows from 35029 chunks (train_idx_sha256 03ac48cec4a2761b22d023db503e17403e69251891387bd1836ae57e09635695, train_sorted_sha256 72a9d924f37f03ee6727e434ff839f04d101d697f413503d01c0106e39ae3fcb), 33254 evaluation rows from 1279 chunks (eval_idx_sha256 1dab3cc04aa0ae442fc9cab1dd0f0cafd5b1b2e0cf3de25341ab39d8752e1d8b), 0 held-out-family rows in training, 0 chunks shared with the evaluation set, 0 training rows in the evaluation set; mixed: 699617 training rows from 34988 chunks (train_idx_sha256 21870ebf6835b9e404baf3e729bf8cf5236da421479014ed7ae295df82ec1425, train_sorted_sha256 7705b06a505570c34bb5ade21e6be99c704fc8b012d854891bb8df5a81b7c5f7), 32188 evaluation rows from 1238 chunks (eval_idx_sha256 3749067dd47d4a788ada22122dcf43c159d462ba5ade7904398735bdf94a80f1), 0 held-out-family rows in training, 0 chunks shared with the evaluation set, 0 training rows in the evaluation set. NULL BLOCK: the first 20000 rows of the gutenberg fold's training rows, sorted sha256 0653cc12293ae078dd68b900c8778d93e701261ca93414be9eb7bb8e7ee686db.",
+    "recipes_are_0003s": "M1, L1 and U1 verbatim from 0014's sealed roster (params hashes in the reader): the incumbent HGB (learning rate 0.15, 63 leaves, 200 iterations with patience 10 on the last 10% of rows), LogisticRegression(max_iter=400) on raw features, DummyClassifier(most_frequent). Nothing is searched or selected; 0014 established that a symmetric search moves both sides, and a searched-recipe transfer is a separate preregistration.",
+    "what_lofo_measures_and_does_not": "It measures whether a model trained on seven content types identifies the encoder of an eighth. It does not measure transfer to content outside the corpus builder's eight families, to other carve sizes, or to other encoder sets; a pass says 'the signal is not family-specific among these eight', not 'the signal is universal'. The incompressible families (base64, binary, mixed) sit near the byte-identity collision ceiling in-distribution (0003: 0.1221, 0.1049, 0.1143) and are expected near chance under transfer too; the mixture bar counts them.",
+    "reference_0003_top_rung_per_family": {
+      "note": "in-distribution reference, banked by 0003 at the 800000-row rung on the same evaluation rows (artifacts/pivot/audit_rederivations.json per_family_top_rung_accuracy); the reader banks retention = LOFO / reference per family as an informational reading, never a clause",
+      "values": {
+        "base64": 0.1221,
+        "binary": 0.1049,
+        "code": 0.2944,
+        "csv": 0.3888,
+        "gutenberg": 0.1596,
+        "json": 0.3581,
+        "log": 0.3756,
+        "mixed": 0.1143
+      },
+      "n_eval_per_family": {
+        "base64": 32864,
+        "binary": 32474,
+        "code": 31850,
+        "csv": 31616,
+        "gutenberg": 32994,
+        "json": 32760,
+        "log": 33254,
+        "mixed": 32188
+      }
+    },
+    "cost": "EXTRAPOLATION from 0014's banked confirmatory fits on this pool: M1 1428.4 s at 800000 rows, L1 679.6 s, majority 0.0 s. Each fold trains on about 700000 rows: about 1250 s for M1 and 600 s for L1, eight folds about 15000 s; the two reproductions about 2100 s; the null about 70 s; gathers of eight 700000-row blocks about 1 to 2 minutes each. Typical total about 18000 s (5 h) of fit time. Memory (anonymous RSS, as 0014): a fold block 700000 x 1108 float64 is 6.2 GB, the evaluation block 1.15 GB, HGB adds a 0.78 GB binned copy and a 1.77 GB bin-mapper transient: peak about 10 GB; the reproduction pool is 7.09 GB with the same additions, about 10.9 GB; the raw logistic scales nothing and copies nothing. Threshold 13.0 GB anonymous, launch precondition 12.0 GB MemAvailable, same limits as 0014. Every fit scores the sealed set, so NOT RUN is reachable only by a failed launch precondition or three launches without a new checkpoint before the first one exists.",
+    "sealed_set_disclosure": "This is the third preregistration scored on 0003's sealed evaluation set: 0003 scored it 12 times, 0006 for top-k, 0014 10 times plus 10 in a smoke confirm; 0015 adds 27 scorings (24 fold fits, 2 reproductions, 1 null), all of them fixed recipes with no selection, and its smoke runs add their own, counted in artifacts/pivot/engineering_log_0015.json.",
+    "expected_outcome_stated_in_advance": "Genuinely uncertain, and stated so. Prior: the structured families (csv, log, json, code) share byte-level statistics and should transfer partially; the three incompressible families sit near chance in-distribution and will under transfer; gutenberg is prose with no structured cousin. The mixture bar is 0.0885. A mixture near 0.09 is the modal expectation, so either verdict is live. A TRANSFER_FAILS does not revise 0003 or 0014; it bounds what they mean: an encoder signature learned per family, not across families.",
+    "what_a_fail_would_mean_for_the_record": "A TRANSFER_FAILS is filed as a boundary of the headline in VERDICT.md, README.md and every outbound document at full size: the curve and the searched margin stand as measured, and they are statements about eight content families, not about DEFLATE streams in general. No correction is owed, because no document claims transfer; the claim that would then be withdrawn is the implicit one.",
+    "what_this_does_not_cover": "Other carve sizes, searched recipes, content outside the eight families, the transfer arm of 0007/0011, calibration, or a buyer. Nothing here establishes a buyer, a customer, a user or a partner.",
+    "protocol": {
+      "seed": 20260825,
+      "eval_frac": 0.2,
+      "top_rung": 800000,
+      "threads": 3,
+      "nice": 10,
+      "carve": 4096,
+      "chunk_offset": 0,
+      "chunk_size": 32768,
+      "cache_identity": {
+        "y_sha256": "2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093",
+        "g_sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9"
+      },
+      "families": [
+        "gutenberg",
+        "base64",
+        "binary",
+        "code",
+        "csv",
+        "json",
+        "log",
+        "mixed"
+      ],
+      "fold_rows": "all",
+      "roles": [
+        "majority",
+        "logistic",
+        "model"
+      ],
+      "order": [
+        "reproduction_model",
+        "reproduction_logistic",
+        "null",
+        "folds"
+      ],
+      "null_rows": 20000,
+      "structured_families": [
+        "code",
+        "csv",
+        "json",
+        "log"
+      ],
+      "caps": {
+        "memory_kill_gb": 13.0
+      },
+      "launch": {
+        "min_disk_free_gb": 0.25,
+        "min_mem_available_gb": 12.0
+      },
+      "bar": {
+        "lofo_mixture_minus_chance": 0.05
+      },
+      "reproduction_tolerance": 0.005,
+      "null_tolerance": 0.02
+    },
+    "recipes": {
+      "model": {
+        "id": "M1",
+        "family": "hgb",
+        "val": "frag",
+        "params": {
+          "learning_rate": 0.15,
+          "max_leaf_nodes": 63,
+          "max_iter": 200,
+          "n_iter_no_change": 10
+        },
+        "why": "0003's incumbent verbatim (run_study.py make_model 'hgb', run_carve.py's explicit last-10% validation split); every other parameter at the sklearn 1.9.0 default"
+      },
+      "logistic": {
+        "id": "L1",
+        "family": "logistic",
+        "params": {
+          "max_iter": 400
+        },
+        "why": "0003's logistic verbatim (LogisticRegression(max_iter=400), lbfgs, C 1.0, raw features): the frozen-set bar at 0.1392; its confirmatory reproduction within 0.005 is a validity clause"
+      },
+      "majority": {
+        "id": "U1",
+        "family": "dummy",
+        "params": {
+          "strategy": "most_frequent"
+        },
+        "why": "no hyperparameter; confirmatory fit only, as in 0003 (0.0385 banked)"
+      }
+    },
+    "sealed_partition": {
+      "eval": {
+        "n_rows": 260000,
+        "n_chunks": 10000,
+        "n_non_gutenberg": 227006,
+        "eval_idx_sha256": "7da1099e0cf9d4c3903dad62f52c91f67b751113fc4bfc0a62c53f05dccf1efa",
+        "eval_y_sha256": "92b95cf02a21945cea2a7bd756a1e1096b07ec351b478c39e795a8a2267400d1"
+      },
+      "pool": {
+        "n_rows": 800000,
+        "n_chunks": 40000,
+        "pool_idx_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+        "pool_y_sha256": "d519612b4e46991f6ea1850fc92271e0de581e3cc378dd05fec59ff678dc72ea"
+      },
+      "null": {
+        "n_rows": 20000,
+        "null_sorted_sha256": "0653cc12293ae078dd68b900c8778d93e701261ca93414be9eb7bb8e7ee686db"
+      },
+      "folds": {
+        "gutenberg": {
+          "n_eval_rows": 32994,
+          "eval_idx_sha256": "a6a1bef8036511315d2ac17e4a0f7078c6be848ca1c2c4b42d4ee6a084a56202",
+          "eval_chunks": 1269,
+          "n_train_rows": 700288,
+          "train_idx_sha256": "036d65b93a92e3ebb950e4fe37c0a0354c18c8e258961ba21db37b6196f561e3",
+          "train_sorted_sha256": "e9c059873523e8543196c8bbb32fcaf0f628124a94c8b9766c75fdf5a2ab9648",
+          "train_chunks": 35019,
+          "train_rows_of_heldout_family": 0,
+          "train_chunks_shared_with_eval": 0
+        },
+        "base64": {
+          "n_eval_rows": 32864,
+          "eval_idx_sha256": "bdebc4239afd64ccdfc6c27415326d95f29d1bcd8b46a4cf87b2c7fb63ad04eb",
+          "eval_chunks": 1264,
+          "n_train_rows": 700560,
+          "train_idx_sha256": "989a2bb2df796f435a81dce996f0a9f5764044696c2eafaa85dcb58043854c32",
+          "train_sorted_sha256": "32a0e6e6e99c0ff3140c0004c4b78faf3ea7958584191a835e47406d04b6d404",
+          "train_chunks": 35014,
+          "train_rows_of_heldout_family": 0,
+          "train_chunks_shared_with_eval": 0
+        },
+        "binary": {
+          "n_eval_rows": 32474,
+          "eval_idx_sha256": "f91f609e7fb8739a17c0bb3a6fce9afdf1599b8282e14e366823461fb1dbd8c4",
+          "eval_chunks": 1249,
+          "n_train_rows": 699897,
+          "train_idx_sha256": "986eb2ee3bf4193c97d3a0d730ab01d158292c864252633864122a218a51c653",
+          "train_sorted_sha256": "9a5c958d8122ecda681a4292ed85d25fb8c6690c6f78a7f0d24a64e2a5ebf6a4",
+          "train_chunks": 34999,
+          "train_rows_of_heldout_family": 0,
+          "train_chunks_shared_with_eval": 0
+        },
+        "code": {
+          "n_eval_rows": 31850,
+          "eval_idx_sha256": "578248b2f2350e7aa5d3f7b2a832ecdb14fbd97d93e4690b7b4ea1e73a504bec",
+          "eval_chunks": 1225,
+          "n_train_rows": 699654,
+          "train_idx_sha256": "14a38f73e27f9a4906b91e6803cae5cbe89fe0da1fa1e18b241038ff2653c222",
+          "train_sorted_sha256": "39f72aa942c473a4ac8867c11d056a0527b5e6f0f4602c2e643157a2eff73775",
+          "train_chunks": 34975,
+          "train_rows_of_heldout_family": 0,
+          "train_chunks_shared_with_eval": 0
+        },
+        "csv": {
+          "n_eval_rows": 31616,
+          "eval_idx_sha256": "b4ccfb51f5b8b54b2ef856b54af6e79cc7ca6ed62bc0d8cc8a7bfcac09dc5555",
+          "eval_chunks": 1216,
+          "n_train_rows": 699440,
+          "train_idx_sha256": "8ae358528d974d213f64ee1d8d7800af18babba31b96dec37d6feb561afdf612",
+          "train_sorted_sha256": "8f6fee17a72ee29f6bb8c2215e7b4bad24b367c2444e6eaa84e5ea7002017233",
+          "train_chunks": 34966,
+          "train_rows_of_heldout_family": 0,
+          "train_chunks_shared_with_eval": 0
+        },
+        "json": {
+          "n_eval_rows": 32760,
+          "eval_idx_sha256": "8eacb2d465c04006d1dbfd1452653d2cb4eab3a9ca633b1301b0b0064a17aaa4",
+          "eval_chunks": 1260,
+          "n_train_rows": 700071,
+          "train_idx_sha256": "6f4c8110a832e4c3a1b184bbb212ae7d417e74784de11628369d7aa8e8726e25",
+          "train_sorted_sha256": "f9d7de73a4ffd623c962bdd8a82f8e8ab4959ab49b0989e3ca3907d22dfedb5d",
+          "train_chunks": 35010,
+          "train_rows_of_heldout_family": 0,
+          "train_chunks_shared_with_eval": 0
+        },
+        "log": {
+          "n_eval_rows": 33254,
+          "eval_idx_sha256": "1dab3cc04aa0ae442fc9cab1dd0f0cafd5b1b2e0cf3de25341ab39d8752e1d8b",
+          "eval_chunks": 1279,
+          "n_train_rows": 700473,
+          "train_idx_sha256": "03ac48cec4a2761b22d023db503e17403e69251891387bd1836ae57e09635695",
+          "train_sorted_sha256": "72a9d924f37f03ee6727e434ff839f04d101d697f413503d01c0106e39ae3fcb",
+          "train_chunks": 35029,
+          "train_rows_of_heldout_family": 0,
+          "train_chunks_shared_with_eval": 0
+        },
+        "mixed": {
+          "n_eval_rows": 32188,
+          "eval_idx_sha256": "3749067dd47d4a788ada22122dcf43c159d462ba5ade7904398735bdf94a80f1",
+          "eval_chunks": 1238,
+          "n_train_rows": 699617,
+          "train_idx_sha256": "21870ebf6835b9e404baf3e729bf8cf5236da421479014ed7ae295df82ec1425",
+          "train_sorted_sha256": "7705b06a505570c34bb5ade21e6be99c704fc8b012d854891bb8df5a81b7c5f7",
+          "train_chunks": 34988,
+          "train_rows_of_heldout_family": 0,
+          "train_chunks_shared_with_eval": 0
+        }
+      }
+    }
+  },
+  "bar": {
+    "scope_parameters_sealed": {
+      "direction": "equality",
+      "passes_if": "preregistration == '0015-lofo-4096'; smoke is False; stage == 'run'; the corpus block equals the sealed constants (carve 4096 by sealed cache identity, chunk size 32768, offset 0, chunk ids 0..49999, 50000 chunks, 1300000 rows, 1108 features, the y and g hashes); the banked protocol equals the sealed protocol key by key and hashes to the reader's PROTOCOL_SHA256; the banked recipes hash to the reader's RECIPES_SHA256; n_classes 26 and chance 0.038462.",
+      "threshold": 0
+    },
+    "sealed_sets": {
+      "direction": "equality",
+      "passes_if": "The banked partition equals the sealed constants field by field: eval (260000 rows, 10000 chunks, idx and y hashes), pool (800000 rows, idx, y and sorted hashes), every fold's training and evaluation hashes and counts, and the null block's sorted hash.",
+      "threshold": 0
+    },
+    "no_leakage": {
+      "direction": "equality",
+      "passes_if": "For every fold the banked counts train_rows_of_heldout_family, train_chunks_shared_with_eval and train_rows_in_eval are 0, and the fold's training index hash equals the sealed one (which was computed with the held-out family excluded); every fit record's fit_rows_sha256 and fit_rows_sorted_sha256 equal the fold's sealed hashes with n_fit_rows equal to the sealed count and the preregistered seed.",
+      "threshold": 0
+    },
+    "complete_one_scoring_per_fit": {
+      "direction": "equality",
+      "passes_if": "complete is True; all 24 fold records, the 2 reproduction records and the null record have status 'fit' with finite top-1, non-gutenberg top-1 and eight finite per-family accuracies; every name has exactly one 'completed' event in the ledger; every fold record and reproduction record has a per-example vector of length 260000 in the scores file; each record's params hash equals the sealed hash of its recipe; the banked environment (threads 3, nice 10, sklearn 1.9.0, numpy 2.4.6) matches in every record.",
+      "threshold": 0
+    },
+    "reproduces_0003_fixed_recipes": {
+      "direction": "lower_is_better",
+      "passes_if": "abs(incumbent_refit_top1 - 0.2395) <= 0.005 and abs(logistic_l1_refit_top1 - 0.1392) <= 0.005 for the two refits on the full 800000-row pool. Failure is VOID: the run is not measuring 0003's pipeline.",
+      "threshold": 0.005
+    },
+    "null_control": {
+      "direction": "lower_is_better",
+      "passes_if": "shuffled_label_accuracy <= chance_accuracy + 0.02, the control being M1 fitted on the sealed 20000-row null block with shuffled labels and scored on the sealed set.",
+      "threshold": 0.02
+    },
+    "mixture_arithmetic": {
+      "direction": "equality",
+      "passes_if": "The reader recomputes each role's LOFO mixture from the eight fold per-example vectors and the banked evaluation chunk ids (family = FAMILIES[chunk % 8]) and requires the banked mixture_top1, mixture_top1_non_gutenberg, structured_four_top1 and per_family values to equal the recomputation at 4 decimals; the banked lofo_mixture_top1 must equal the model role's mixture.",
+      "threshold": 0
+    },
+    "transfer": {
+      "direction": "higher_is_better",
+      "passes_if": "round(lofo_mixture_top1 - 0.038462, 6) >= 0.05 - 1e-9, i.e. the model's LOFO mixture accuracy is at least 0.088462 (banked to 4 decimals, so 0.0885 passes and 0.0884 fails). Verdict TRANSFERS if it passes, TRANSFER_FAILS if not. The same-protocol logistic and majority mixtures, the margin of the model over the logistic, the per-family readings, the structured-four reading and retention against 0003's in-distribution per-family accuracies are banked as readings and gate nothing.",
+      "threshold": 0.05
+    }
+  },
+  "readings": [
+    {
+      "name": "verdict",
+      "unit": "enum{TRANSFERS,TRANSFER_FAILS,VOID}",
+      "source_artifact": "artifacts/pivot/lofo_4096_verdict.json",
+      "json_path": "$.verdict"
+    },
+    {
+      "name": "lofo_mixture_top1",
+      "unit": "fraction correct over all 260000 evaluation rows, each predicted by the fold that held out its family; the model role",
+      "source_artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo_mixture_top1"
+    },
+    {
+      "name": "lofo_mixture_top1_logistic",
+      "unit": "the same mixture for the raw logistic, informational",
+      "source_artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo.logistic.mixture_top1"
+    },
+    {
+      "name": "lofo_mixture_top1_majority",
+      "unit": "the same mixture for the majority rule, informational",
+      "source_artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo.majority.mixture_top1"
+    },
+    {
+      "name": "lofo_margin_model_over_logistic",
+      "unit": "model mixture minus logistic mixture, informational",
+      "source_artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo_margin_model_over_logistic"
+    },
+    {
+      "name": "lofo_per_family_model",
+      "unit": "map of family to the model's accuracy on that family's evaluation rows from the fold that held it out",
+      "source_artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo.model.per_family"
+    },
+    {
+      "name": "lofo_structured_four_model",
+      "unit": "the model's LOFO accuracy over the code, csv, json and log evaluation rows, informational",
+      "source_artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo.model.structured_four_top1"
+    },
+    {
+      "name": "retention_per_family",
+      "unit": "LOFO accuracy divided by 0003's in-distribution top-rung accuracy for that family, informational",
+      "source_artifact": "artifacts/pivot/lofo_4096_verdict.json",
+      "json_path": "$.retention_per_family"
+    },
+    {
+      "name": "incumbent_refit_top1",
+      "unit": "fraction; must be within 0.005 of 0.2395",
+      "source_artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.incumbent_refit_top1"
+    },
+    {
+      "name": "logistic_l1_refit_top1",
+      "unit": "fraction; must be within 0.005 of 0.1392",
+      "source_artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.logistic_l1_refit_top1"
+    },
+    {
+      "name": "shuffled_label_accuracy",
+      "unit": "fraction; must be <= 0.038462 + 0.02",
+      "source_artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.shuffled_label_accuracy"
+    },
+    {
+      "name": "eval_idx_sha256",
+      "unit": "sha256; must equal 7da1099e0cf9d4c3903dad62f52c91f67b751113fc4bfc0a62c53f05dccf1efa",
+      "source_artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.partition.eval_idx_sha256"
+    },
+    {
+      "name": "pool_idx_sha256",
+      "unit": "sha256; must equal 17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+      "source_artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.partition.pool_idx_sha256"
+    },
+    {
+      "name": "fold_train_idx_sha256",
+      "unit": "map of family to sha256; each must equal the sealed fold hash in the reader",
+      "source_artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.partition.folds.*.train_idx_sha256"
+    },
+    {
+      "name": "complete",
+      "unit": "boolean; every fit banked",
+      "source_artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.complete"
+    },
+    {
+      "name": "cluster_ci95_informational",
+      "unit": "map of fold-role and mixture to a 95% cluster-bootstrap interval over the relevant evaluation chunks, informational",
+      "source_artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.cluster_ci95_informational"
+    },
+    {
+      "name": "cost",
+      "unit": "seconds per fit, interruptions, environment; gates nothing",
+      "source_artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.cost"
+    }
+  ],
+  "arms": [
+    "REPRODUCTION: M1 then L1 refit on the full 800000-row pool, scored once each on the sealed set; the incumbent must give 0.2395 and the logistic 0.1392 within 0.005.",
+    "NULL: M1 on the sealed 20000-row null block with shuffled labels, scored once; at or below chance + 0.02.",
+    "EIGHT FOLDS, in the sealed family order gutenberg, base64, binary, code, csv, json, log, mixed: majority, then logistic, then model, each fitted on every pool row of the other seven families and scored once on the sealed set. The reading is the held-out family's accuracy; the eight readings stitch into the LOFO mixture that the verdict is read from."
+  ],
+  "stop_rules": [
+    "TRANSFER_FAILS is published at the same size as TRANSFERS would have been, as a boundary of the headline in every document that states the headline.",
+    "A validity or control failure is VOID: the clause is named, nothing is counted in either direction; a VOID run may be resumed from its checkpoints under the identical invocation and is never re-parameterised; a changed recipe, fold rule, rung or tolerance is a new preregistration with this one's VOID or NOT RUN on the record.",
+    "NOT RUN is reachable only before the first checkpoint and only by mechanical rules (a failed launch precondition; three consecutive launches that produced no checkpoint); it is filed as artifacts/pivot/lofo_4096_not_run.json, the reader prints it and exits 2, and nothing is re-scoped to fewer folds or fewer roles.",
+    "Once any checkpoint exists the artifact exists at the sealed path with complete false and reads VOID naming the missing fits until every fit is banked; abandonment after that point is a published VOID, never a silent NOT RUN; every fit runs to completion with no time cap.",
+    "No recipe, fold or role is added, removed or re-parameterised after freeze: the recipes hash to a literal in the frozen reader and sit under the sealed scope; a record whose params hash is off-recipe is VOID; a fold whose training rows contain a held-out-family row or a chunk of the evaluation set is VOID.",
+    "The sealed evaluation set is scored exactly once per fit; no fold is re-fitted; interruptions are counted, never turned into a status; infeasible_memory is stamped only on a caught MemoryError or a kill whose last heartbeat anonymous RSS (RssAnon) was at or above 13.0 GB, and any infeasible_memory in this run is VOID (there is no model-side budget here: every fit is a reading).",
+    "The 0.05 bar is not lowered, the mixture is not re-weighted, no family is dropped from it, and absence, NaN or inf read as VOID.",
+    "This cannot revise 0003, 0006, 0007, 0011 or 0014; revises_0003_0014 and establishes_a_buyer are emitted False unconditionally; no customer, user, partner or buyer is claimed.",
+    "Cost is banked beside the result (fit seconds, ru_maxrss and heartbeat anonymous RSS per record, launches, interruptions, refills, the environment) and gates nothing in the reader; every cost figure in this preregistration is labelled EXTRAPOLATION with its basis.",
+    "The corpus, the evaluation set, the pool and the folds are one draw and are not redrawn; smoke runs write only to the scratchpad, are stamped smoke true, and read VOID."
+  ],
+  "thesis": {
+    "what_would_make_it_fail_honestly": "The model having learned eight family-specific signatures: a mixture near chance on every fold, including the structured ones, with the in-distribution per-family accuracies (0.29 to 0.39 on csv, log, json, code) collapsing to under 0.09 when the family is withheld.",
+    "what_a_pass_would_mean": "That the encoder signature is shared across content types the model was not trained on: a statement about DEFLATE rather than about eight manufactured families, bounded by the eight families the corpus builder has.",
+    "what_neither_outcome_means": "Neither names a buyer. Neither revises 0003 or 0014. Neither says anything about carve sizes other than 4096, about searched recipes, or about content outside the corpus builder's families."
+  },
+  "reader": "tools/readers/lofo4096_verdict.py",
+  "frozen": false,
+  "invocation": "export OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3; nice -n 10 python3 tools/pivot/run_lofo.py --stage run --prereg-file prereg/0015-lofo-4096.json --cache data/pivot/full_c4096.npz --workdir artifacts/pivot/lofo_4096_ckpt --out artifacts/pivot/lofo_4096.json --scores-out artifacts/pivot/lofo_4096_scores.json; then python3 tools/readers/lofo4096_verdict.py. Relaunching the identical command after a container restart is the whole recovery procedure; checkpoints are committed and pushed as they land.",
+  "smoke": {
+    "top_rung": 12000,
+    "fold_rows": 3000,
+    "null_rows": 2000,
+    "launch": {
+      "min_disk_free_gb": 0.0,
+      "min_mem_available_gb": 0.0
+    },
+    "invocation": "The invocation above with --smoke added and --workdir, --out and --scores-out pointed under the session scratchpad; the runner refuses --smoke with any output path under artifacts/ and a real run with any output path outside it. The smoke block replaces top_rung, fold_rows, null_rows and launch; everything else is the sealed protocol."
+  }
+}
