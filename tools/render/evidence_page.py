@@ -48,6 +48,10 @@ rr2048 = json.load(open(_rr2048p, encoding="utf-8")) if os.path.exists(_rr2048p)
 _r4096p = A("pivot", "recipe_search_4096.json"); _rv4096p = A("pivot", "recipe_search_4096_verdict.json")
 r4096 = json.load(open(_r4096p, encoding="utf-8")) if os.path.exists(_r4096p) else None
 rv4096 = json.load(open(_rv4096p, encoding="utf-8")) if os.path.exists(_rv4096p) else None
+# 0015 (leave-one-family-out transfer at 4096) is rendered only once its artifact and frozen verdict exist.
+_lofop = A("pivot", "lofo_4096.json"); _lofovp = A("pivot", "lofo_4096_verdict.json")
+lofo = json.load(open(_lofop, encoding="utf-8")) if os.path.exists(_lofop) else None
+lofov = json.load(open(_lofovp, encoding="utf-8")) if os.path.exists(_lofovp) else None
 
 git_head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO,
                           capture_output=True, text=True).stdout.strip()
@@ -165,7 +169,12 @@ chips = "".join([
            (f'the same symmetric recipe search at 4096 B, the headline size: searched model {r4096["selected_model_id"]} '
             f'{r4096["final_top1"]} vs floored bars frozen {r4096["best_frozen_for_bar"]} / expanded {r4096["best_expanded_for_bar"]}; '
             f'boundary {rv4096["boundary_bytes"]}') if rv4096["verdict"] != "VOID" and r4096 and r4096.get("complete")
-           else f'VOID: {"; ".join(rv4096["validity_failed_clauses"])[:140]}')] if rv4096 else []))
+           else f'VOID: {"; ".join(rv4096["validity_failed_clauses"])[:140]}')] if rv4096 else [])
+ + ([chip(lofov["verdict"], {"TRANSFERS": "pass", "TRANSFER_FAILS": "fail", "VOID": "inc"}[lofov["verdict"]], "0015",
+           (f'leave-one-family-out at 4096 B: the model\'s mixture over rows whose family it never saw {lofo["lofo_mixture_top1"]} '
+            f'vs chance {lofo["chance_accuracy"]} (bar {lofov["bar_applied"]["mixture_must_reach"]}); same-protocol logistic '
+            f'{lofov["lofo_mixture_top1_logistic"]}') if lofov["verdict"] != "VOID" and lofo and lofo.get("complete")
+           else f'VOID: {"; ".join(lofov["validity_failed_clauses"])[:140]}')] if lofov else []))
 
 fam2048_table = ""
 _pf2048 = A("pivot", "per_family_curves_2048.json")
@@ -231,6 +240,23 @@ if r4096 and rv4096 and rv4096["verdict"] != "VOID" and r4096.get("complete"):
                      f'scored {r4096["incumbent_refit_top1"]} against 0003\'s banked 0.2395 and the fixed-recipe logistic '
                      f'{r4096["logistic_l1_refit_top1"]} against 0.1392; the searched logistic ({r4096["selected_ids"]["logistic"]}) '
                      f'scores {r4096["final"]["logistic"]["top1"]}. Boundary: <span class="mono">{rv4096["boundary_bytes"]}</span>.</p>')
+
+boundary_0015 = ""
+if lofo and lofov and lofov["verdict"] != "VOID" and lofo.get("complete"):
+    _pf = lofo["lofo"]["model"]["per_family"]; _ref = lofov["reference_0003_top_rung_per_family"]
+    _rows = "".join(f'<tr><td class="mono">{f}</td><td class="mono">{_pf[f]}</td><td class="mono">{_ref[f]}</td>'
+                    f'<td class="mono">{lofo["lofo"]["logistic"]["per_family"][f]}</td></tr>'
+                    for f in sorted(_pf, key=lambda k: -_pf[k]))
+    _word = "survives" if lofov["verdict"] == "TRANSFERS" else "does not survive"
+    boundary_0015 = (f'<p><strong>The signal {_word} content the model never saw: <span class="mono">{lofov["verdict"]}</span></strong> '
+                     f'(preregistration 0015, chain entry 15, read by its own frozen reader). Each of the eight content families '
+                     f'was held out in turn; 0003\'s fixed recipes were fitted on every pool row of the other seven and scored once '
+                     f'on the held-out family\'s sealed rows; the eight readings stitched into one mixture give '
+                     f'{lofo["lofo_mixture_top1"]} against chance {lofo["chance_accuracy"]} (bar {lofov["bar_applied"]["mixture_must_reach"]}); '
+                     f'the same-protocol logistic gives {lofov["lofo_mixture_top1_logistic"]} and the majority rule '
+                     f'{lofov["lofo_mixture_top1_majority"]}. The incumbent refit reproduced 0003\'s {lofo["incumbent_refit_top1"]}.</p>'
+                     f'<table><thead><tr><th>held-out family</th><th>LOFO accuracy</th><th>in-distribution (0003, top rung)</th>'
+                     f'<th>LOFO logistic</th></tr></thead><tbody>{_rows}</tbody></table>')
 
 # ---------------------------------------------------------------- seed panel
 if seeds:
@@ -383,7 +409,7 @@ protocol returns <span class="mono">CARVE_FAILS</span>: within-size top-1
 (margin below the 0.05 bar), and a 4096-trained model transfers at {carve["transfer_top1"]} —
 chance. The byte-identity ceiling barely moves across carve sizes, so this is a modelling failure
 and is reported as one. Two learned byte-sequence attempts (preregs 0009, 0010) did not rescue it.</p>
-{boundary_2048}{boundary_0012}{boundary_0014}{fam2048_table}
+{boundary_2048}{boundary_0012}{boundary_0014}{boundary_0015}{fam2048_table}
 </div>
 <div class="panel good">
 <p><strong>And the leak correction ran against us.</strong> When an adversarial audit found source
