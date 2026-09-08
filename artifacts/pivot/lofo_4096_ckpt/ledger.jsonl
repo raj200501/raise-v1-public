@@ -33,3 +33,7 @@
 {"name": "fold_csv_logistic", "fingerprint": "c5df91362c58d995", "event": "started", "utc": "2026-09-08T22:56:14Z", "rss_gb": 8.24, "pid": 6914, "attempt": 1}
 {"name": "fold_csv_logistic", "fingerprint": "c5df91362c58d995", "event": "completed", "utc": "2026-09-08T23:09:57Z", "rss_gb": 8.24, "pid": 6914, "seconds": 818.7}
 {"name": "fold_csv_model", "fingerprint": "4ed6e432c19c0998", "event": "started", "utc": "2026-09-08T23:09:58Z", "rss_gb": 8.24, "pid": 6914, "attempt": 1}
+{"name": "fold_csv_model", "fingerprint": "4ed6e432c19c0998", "event": "completed", "utc": "2026-09-08T23:35:35Z", "rss_gb": 8.23, "pid": 6914, "seconds": 1514.5}
+{"name": "fold_json_majority", "fingerprint": "09195ad5bbb74530", "event": "started", "utc": "2026-09-08T23:35:46Z", "rss_gb": 8.24, "pid": 6914, "attempt": 1}
+{"name": "fold_json_majority", "fingerprint": "09195ad5bbb74530", "event": "completed", "utc": "2026-09-08T23:35:49Z", "rss_gb": 8.24, "pid": 6914, "seconds": 0.0}
+{"name": "fold_json_logistic", "fingerprint": "57885eb8b79e0863", "event": "started", "utc": "2026-09-08T23:35:50Z", "rss_gb": 8.24, "pid": 6914, "attempt": 1}

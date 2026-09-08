@@ -45,7 +45,7 @@
     "n_source_chunks": 50000
   },
   "cost": {
-    "banked_fit_seconds_total": 13112.0,
+    "banked_fit_seconds_total": 14626.5,
     "checkpoints": "artifacts/pivot/lofo_4096_ckpt",
     "interruptions_by_name": {
       "fold_base64_logistic": 0,
@@ -59,9 +59,11 @@
       "fold_code_model": 0,
       "fold_csv_logistic": 0,
       "fold_csv_majority": 0,
+      "fold_csv_model": 0,
       "fold_gutenberg_logistic": 0,
       "fold_gutenberg_majority": 0,
       "fold_gutenberg_model": 0,
+      "fold_json_majority": 0,
       "null": 0,
       "repro_logistic": 0,
       "repro_model": 0
@@ -78,14 +80,16 @@
       "fold_code_model": 1351.4,
       "fold_csv_logistic": 818.7,
       "fold_csv_majority": 0.0,
+      "fold_csv_model": 1514.5,
       "fold_gutenberg_logistic": 817.6,
       "fold_gutenberg_majority": 0.0,
       "fold_gutenberg_model": 1634.9,
+      "fold_json_majority": 0.0,
       "null": 24.0,
       "repro_logistic": 929.7,
       "repro_model": 1666.6
     },
-    "wall_seconds_this_invocation": 13497.7
+    "wall_seconds_this_invocation": 15049.4
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -746,7 +750,67 @@
         "utc": "2026-09-08T22:56:10Z",
         "val": null
       },
-      "model": null
+      "model": {
+        "block_refills": [],
+        "environment": {
+          "nice": 10,
+          "numpy": "2.4.6",
+          "python": "3.11.15",
+          "sklearn": "1.9.0",
+          "standardiser_probe": {
+            "block_gb": 0.177,
+            "ncols": 1108,
+            "peak_extra_fraction_of_block": 0.1005,
+            "probe_rows_per_pass": 2000,
+            "production_rows_per_pass": 20000,
+            "production_transient_gb": 0.177,
+            "rows": 20000
+          },
+          "threads": 3
+        },
+        "family": "hgb",
+        "fit_info": {
+          "n_iter": 36
+        },
+        "fit_rows_sha256": "8ae358528d974d213f64ee1d8d7800af18babba31b96dec37d6feb561afdf612",
+        "fit_rows_sorted_sha256": "8f6fee17a72ee29f6bb8c2215e7b4bad24b367c2444e6eaa84e5ea7002017233",
+        "head": "model",
+        "heartbeat_max_rss_gb": 9.0,
+        "id": "M1",
+        "interruptions_before_this_fit": 0,
+        "last_heartbeat_rss_gb_before_this_fit": null,
+        "n_fit_rows": 699440,
+        "params": {
+          "learning_rate": 0.15,
+          "max_iter": 200,
+          "max_leaf_nodes": 63,
+          "n_iter_no_change": 10
+        },
+        "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+        "per_family": {
+          "base64": 0.1239,
+          "binary": 0.1059,
+          "code": 0.3006,
+          "csv": 0.0968,
+          "gutenberg": 0.1726,
+          "json": 0.3687,
+          "log": 0.3938,
+          "mixed": 0.1119
+        },
+        "rss_gb": 8.23,
+        "rss_gb_is": "anonymous (RssAnon)",
+        "rss_total_gb": 12.13,
+        "ru_maxrss_gb": 13.93,
+        "scaled": false,
+        "seconds": 1514.5,
+        "seed": 20260825,
+        "stage": "lofo:csv",
+        "status": "fit",
+        "top1": 0.2101,
+        "top1_non_gutenberg": 0.2155,
+        "utc": "2026-09-08T23:09:58Z",
+        "val": "frag"
+      }
     },
     "gutenberg": {
       "logistic": {
@@ -927,7 +991,62 @@
     },
     "json": {
       "logistic": null,
-      "majority": null,
+      "majority": {
+        "block_refills": [],
+        "environment": {
+          "nice": 10,
+          "numpy": "2.4.6",
+          "python": "3.11.15",
+          "sklearn": "1.9.0",
+          "standardiser_probe": {
+            "block_gb": 0.177,
+            "ncols": 1108,
+            "peak_extra_fraction_of_block": 0.1005,
+            "probe_rows_per_pass": 2000,
+            "production_rows_per_pass": 20000,
+            "production_transient_gb": 0.177,
+            "rows": 20000
+          },
+          "threads": 3
+        },
+        "family": "dummy",
+        "fit_info": {},
+        "fit_rows_sha256": "6f4c8110a832e4c3a1b184bbb212ae7d417e74784de11628369d7aa8e8726e25",
+        "fit_rows_sorted_sha256": "f9d7de73a4ffd623c962bdd8a82f8e8ab4959ab49b0989e3ca3907d22dfedb5d",
+        "head": "majority",
+        "heartbeat_max_rss_gb": 8.24,
+        "id": "U1",
+        "interruptions_before_this_fit": 0,
+        "last_heartbeat_rss_gb_before_this_fit": null,
+        "n_fit_rows": 700071,
+        "params": {
+          "strategy": "most_frequent"
+        },
+        "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+        "per_family": {
+          "base64": 0.0385,
+          "binary": 0.0385,
+          "code": 0.0385,
+          "csv": 0.0385,
+          "gutenberg": 0.0385,
+          "json": 0.0385,
+          "log": 0.0385,
+          "mixed": 0.0385
+        },
+        "rss_gb": 8.24,
+        "rss_gb_is": "anonymous (RssAnon)",
+        "rss_total_gb": 12.54,
+        "ru_maxrss_gb": 13.93,
+        "scaled": false,
+        "seconds": 0.0,
+        "seed": 20260825,
+        "stage": "lofo:json",
+        "status": "fit",
+        "top1": 0.0385,
+        "top1_non_gutenberg": 0.0385,
+        "utc": "2026-09-08T23:35:46Z",
+        "val": null
+      },
       "model": null
     },
     "log": {
@@ -1265,6 +1384,42 @@
       "rss_gb": 8.24,
       "seconds": 818.7,
       "utc": "2026-09-08T23:09:57Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "4ed6e432c19c0998",
+      "name": "fold_csv_model",
+      "pid": 6914,
+      "rss_gb": 8.24,
+      "utc": "2026-09-08T23:09:58Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "4ed6e432c19c0998",
+      "name": "fold_csv_model",
+      "pid": 6914,
+      "rss_gb": 8.23,
+      "seconds": 1514.5,
+      "utc": "2026-09-08T23:35:35Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "09195ad5bbb74530",
+      "name": "fold_json_majority",
+      "pid": 6914,
+      "rss_gb": 8.24,
+      "utc": "2026-09-08T23:35:46Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "09195ad5bbb74530",
+      "name": "fold_json_majority",
+      "pid": 6914,
+      "rss_gb": 8.24,
+      "seconds": 0.0,
+      "utc": "2026-09-08T23:35:49Z"
     }
   ],
   "lofo": {},
@@ -1272,8 +1427,6 @@
   "lofo_mixture_top1": null,
   "logistic_l1_refit_top1": 0.1352,
   "missing_roles": [
-    "fold_csv_model",
-    "fold_json_majority",
     "fold_json_logistic",
     "fold_json_model",
     "fold_log_majority",
