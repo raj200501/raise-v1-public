@@ -15,3 +15,7 @@
 {"name": "fold_base64_logistic", "fingerprint": "7c430a00fc110368", "event": "started", "utc": "2026-09-08T20:53:38Z", "rss_gb": 7.95, "pid": 6914, "attempt": 1}
 {"name": "fold_base64_logistic", "fingerprint": "7c430a00fc110368", "event": "completed", "utc": "2026-09-08T21:07:48Z", "rss_gb": 7.95, "pid": 6914, "seconds": 845.9}
 {"name": "fold_base64_model", "fingerprint": "80785583cf15bda7", "event": "started", "utc": "2026-09-08T21:07:49Z", "rss_gb": 7.95, "pid": 6914, "attempt": 1}
+{"name": "fold_base64_model", "fingerprint": "80785583cf15bda7", "event": "completed", "utc": "2026-09-08T21:35:07Z", "rss_gb": 8.18, "pid": 6914, "seconds": 1620.2}
+{"name": "fold_binary_majority", "fingerprint": "4d65e6b7696a8faa", "event": "started", "utc": "2026-09-08T21:35:21Z", "rss_gb": 7.96, "pid": 6914, "attempt": 1}
+{"name": "fold_binary_majority", "fingerprint": "4d65e6b7696a8faa", "event": "completed", "utc": "2026-09-08T21:35:25Z", "rss_gb": 7.96, "pid": 6914, "seconds": 0.0}
+{"name": "fold_binary_logistic", "fingerprint": "67791e266df60779", "event": "started", "utc": "2026-09-08T21:35:25Z", "rss_gb": 7.96, "pid": 6914, "attempt": 1}
