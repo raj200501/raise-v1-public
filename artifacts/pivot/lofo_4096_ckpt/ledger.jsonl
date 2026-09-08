@@ -10,3 +10,6 @@
 {"name": "fold_gutenberg_logistic", "fingerprint": "89a329002548257b", "event": "completed", "utc": "2026-09-08T20:25:41Z", "rss_gb": 7.94, "pid": 6914, "seconds": 817.6}
 {"name": "fold_gutenberg_model", "fingerprint": "fc84a301ef2749e6", "event": "started", "utc": "2026-09-08T20:25:41Z", "rss_gb": 7.94, "pid": 6914, "attempt": 1}
 {"name": "fold_gutenberg_model", "fingerprint": "fc84a301ef2749e6", "event": "completed", "utc": "2026-09-08T20:53:20Z", "rss_gb": 8.25, "pid": 6914, "seconds": 1634.9}
+{"name": "fold_base64_majority", "fingerprint": "b64643e33e9e81b6", "event": "started", "utc": "2026-09-08T20:53:34Z", "rss_gb": 7.95, "pid": 6914, "attempt": 1}
+{"name": "fold_base64_majority", "fingerprint": "b64643e33e9e81b6", "event": "completed", "utc": "2026-09-08T20:53:38Z", "rss_gb": 7.95, "pid": 6914, "seconds": 0.1}
+{"name": "fold_base64_logistic", "fingerprint": "7c430a00fc110368", "event": "started", "utc": "2026-09-08T20:53:38Z", "rss_gb": 7.95, "pid": 6914, "attempt": 1}
