@@ -21,8 +21,50 @@
   },
   "pre_freeze_review": {
     "how": "three independent refuters (reader against runner; folds, recipes and bar; memory, cost and operations) followed by one synthesis, run on 2026-09-08 before the freeze",
-    "findings_adopted": "PENDING",
-    "synthesis_verdict": "PENDING"
+    "findings_adopted": [
+      {
+        "finding": "the logistic reproduction clause was anchored on 0003's banked 0.1392 with a 0.005 tolerance, but this exact machinery (the same float64 pool block, fit_one, LogisticRegression(max_iter=400) with lbfgs at its iteration cap, sklearn 1.9.0 / numpy 2.4.6 / 3 threads) produced 0.1352 in 0014: an honest run sat 0.001 from a VOID on a control clause with nothing to do with transfer, the failure class 0012's reader exhibited (CORRECTIONS.md 2026-09-03); raised independently by all three refuters",
+        "fix": "the anchor is 0014's same-convention 0.1352 (artifacts/pivot/recipe_search_4096.json logistic_l1_refit.top1) with the 0.005 tolerance unchanged; 0003's 0.1392 is banked beside the reading as a drift reference; the incumbent's 0.2395 anchor is unchanged (0014 reproduced it exactly); the tolerance is compared at 4-decimal precision so 0.005 passes at the boundary in both directions; prereg bar, readings and design text state the choice; the protocol block and its hash are unchanged",
+        "severity_as_filed": "blocking (synthesis)"
+      },
+      {
+        "finding": "the reader could exit with a traceback instead of VOID on a scores file with a non-integer chunk id or vector entry (never produced by the runner)",
+        "fix": "the reader validates chunk ids and every fold vector as integers (vectors in {0,1}) before the recomputation and voids on failure; a mutation case proves VOID-not-crash",
+        "severity_as_filed": "non-blocking"
+      },
+      {
+        "finding": "the sealed prereg text over-claimed what the reader checked: the pool's sorted hash was not sealed, the null record's seed/environment/probe were not checked, and scope.sealed_partition used key names the artifact does not bank and omitted train_rows_in_eval",
+        "fix": "pool_sorted_sha256 sealed in the reader and the prereg (recomputed from grouped_split; equals 0014's sealed constant for the same pool); the null record goes through the same record checks as every fit; sealed_partition keys match the artifact and carry train_rows_in_eval 0",
+        "severity_as_filed": "non-blocking"
+      },
+      {
+        "finding": "the lofo4096 mutation gate left many reader clauses without a mutation (complete=False, per-record params hash, a fold's held-out reading disagreeing with its vector, the headline mixture not the model role's, an absent scores file, the banked environment, the null block hash, the reproduction tolerance boundary)",
+        "fix": "ten cases added (25 in the gate; 246 across 18 gates, all detected), including 0.1402 passes / 0.1403 fails at the anchor and 0003's 0.1392 passing as a value 0.004 from it",
+        "severity_as_filed": "non-blocking"
+      },
+      {
+        "finding": "on every resume the runner re-gathered the two 7.09 GB pool blocks and the null block for fits already checkpointed (cost only); scope.cost counted eight gathers where the runner performs eleven",
+        "fix": "every block is gathered lazily, only when its fit is not checkpointed; cost text says eleven gathers",
+        "severity_as_filed": "non-blocking"
+      },
+      {
+        "finding": "stop rule 3 said a failed launch precondition files a NOT RUN marker; the runner refuses to launch (exit 3) and files nothing; a checkpoint deleted after its completion event makes the runner file NOT RUN while the reader, seeing the artifact, reads VOID",
+        "fix": "stop rule 3 restated to what the runner and reader do, with an operator rule never to run git stash, git clean or deletions against the checkpoint directory during the run",
+        "severity_as_filed": "non-blocking"
+      },
+      {
+        "finding": "scope.cost gave no worst case while no fit has a time cap; it also summed the HGB bin-mapper subsample and the binned copy, which do not coexist in sklearn 1.9.0",
+        "fix": "worst case stated: about 70000 s if no fold's early stopping fires (43 s per iteration at 800000 rows from 0014's 1428.4 s / 33 iterations, against the 200-iteration cap); the HGB peak restated",
+        "severity_as_filed": "non-blocking"
+      },
+      {
+        "finding": "no guard against a second concurrent launch on the same checkpoint directory; two survivors fitting the same name would leave two completion events and a VOID with no honest repair",
+        "fix": "not changed in code: the 12.0 GB MemAvailable launch precondition refuses a second launch whenever the first holds a pool or fold block, and the poll script relaunches only when no runner process is alive; recorded here as the operator's exposure",
+        "severity_as_filed": "non-blocking, accepted"
+      }
+    ],
+    "synthesis_verdict": "fix_then_freeze: one blocking finding, fixed before the freeze; every non-blocking finding adopted except where noted",
+    "mixture_agreement_how_established": "the smoke run cannot exercise the reader's mixture clauses (its fold and reproduction records void first, and the recomputation is skipped once a fit clause has voided). Agreement was established two ways: an independent re-stitch of the smoke's per-example vectors by chunk-id family equals the runner's banked mixtures, per-family readings and stitched vectors bit for bit for all three roles; and a refuter's sandbox copy of the smoke with only the smoke-sized fields patched to the sealed values read zero validity failures and TRANSFER_FAILS at 0.0818, with Python round(int/int, 4) shown equal to round(float(np.int8.mean()), 4) for every (count, n) pair over the eleven denominators involved."
   },
   "smoke_runs": {
     "note": "smoke runs of the runner on the scratchpad against corpus A with the sealed recipes and tiny folds (3000 training rows per fold, 12000-row reproduction pool, 2000 null rows); stamped smoke true; read VOID by the reader; never an input to any decision",
@@ -41,5 +83,10 @@
   },
   "run_record": {
     "note": "filled after the run from the banked artifact and ledger; PENDING"
+  },
+  "operator_procedure": {
+    "repeated_launches_of_one_fit": "a fit killed within 30 s of its last heartbeat is never stamped infeasible_memory; repeated launches of the same fit with no new checkpoint are the operator's signal to stop and file the VOID by hand, with the launches ledger as evidence",
+    "checkpoint_directory": "never run git stash, git clean or any deletion against artifacts/pivot/lofo_4096_ckpt during the run: a checkpoint lost after its completion event is a terminal VOID for that fit",
+    "concurrent_launch": "never launch a second runner while one is alive; the poll script checks pgrep before relaunching and the 12.0 GB launch precondition refuses a launch while a block is held"
   }
 }

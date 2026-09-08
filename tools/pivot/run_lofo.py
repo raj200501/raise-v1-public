@@ -14,7 +14,7 @@ Reuses tools/pivot/run_recipe_search.py's machinery (blocks, fits, checkpoints, 
 accounting, launch rules) unchanged; nothing here searches or selects a recipe.
 
 Stages: one invocation (--stage run). Order: the two reproduction controls on the full pool (the
-incumbent must reproduce 0003's 0.2395, the logistic 0.1392), the null control, then the eight folds
+incumbent must reproduce 0003's 0.2395, the logistic 0014's same-convention 0.1352), the null control, then the eight folds
 in the sealed family order, majority / logistic / model within each fold. Checkpoints resume; a
 container restart is recovered by relaunching the identical command.
 """
@@ -239,11 +239,15 @@ def main() -> int:
         print(f"[run] eval {len(ev)} rows materialised, anonymous RSS {_rss_gb():.2f} GB "
               f"(total {_rss_total_gb():.2f} GB)", flush=True)
 
-        def fit(name, role, cand, block, stage, rows_sha, y_all=None, keep=True):
+        def fit(name, role, cand, make_block, stage, rows_sha, y_all=None, keep=True):
+            """make_block is called only when the fit is not already checkpointed: a resume never gathers a
+            block it will not use (a pool gather is 7.09 GB and about two minutes from a cold cache)."""
             fp = fingerprint(prereg=stamp, seed=seed, role=role, cand=cand, stage=stage,
                              rows=rows_sha, eval=partition["eval_idx_sha256"])
+            block = None if store.load(name, fp) is not None else make_block()
             r, pe = run_fit(store, name, fp, role, cand, seed, block, y_all if y_all is not None else y, g,
                             Xe, ye, fam_e, stage, caps, keep_per_example=keep, confirmatory=True)
+            del block
             records[name] = r
             if pe is not None:
                 per_ex[name] = pe
@@ -252,32 +256,34 @@ def main() -> int:
 
         for step in P["order"]:
             if step == "reproduction_model":
-                pool = Block(X, tr, ncols, "pool")
-                fit("repro_model", "model", recipes["model"], pool, "reproduction", partition["pool_idx_sha256"])
-                del pool
+                fit("repro_model", "model", recipes["model"], lambda: Block(X, tr, ncols, "pool"), "reproduction",
+                    partition["pool_idx_sha256"])
             elif step == "reproduction_logistic":
-                pool = Block(X, tr, ncols, "pool")
-                fit("repro_logistic", "logistic", recipes["logistic"], pool, "reproduction", partition["pool_idx_sha256"])
-                del pool
+                fit("repro_logistic", "logistic", recipes["logistic"], lambda: Block(X, tr, ncols, "pool"), "reproduction",
+                    partition["pool_idx_sha256"])
             elif step == "null":
+                # the label shuffle is drawn from the split's generator whether or not the fit is checkpointed, so
+                # the generator's state downstream does not depend on resume history (nothing downstream uses it)
                 y_sh = np.asarray(y[null_rows]).copy(); rng.shuffle(y_sh)
                 y_view = y.copy(); y_view[null_rows] = y_sh
-                nb = Block(X, null_rows, ncols, "null")
-                fit("null", "null", recipes["model"], nb, "null", partition["null_sorted_sha256"], y_all=y_view, keep=False)
-                del nb, y_view
+                fit("null", "null", recipes["model"], lambda: Block(X, null_rows, ncols, "null"), "null",
+                    partition["null_sorted_sha256"], y_all=y_view, keep=False)
+                del y_view
             elif step == "folds":
                 for f in families:
-                    block = None
-                    for r in roles:
-                        name = f"fold_{f}_{r}"
-                        if store.load(name, fingerprint(prereg=stamp, seed=seed, role=r, cand=recipes[r], stage=f"lofo:{f}",
-                                                        rows=partition["folds"][f]["train_idx_sha256"],
-                                                        eval=partition["eval_idx_sha256"])) is None and block is None:
-                            block = Block(X, folds[f], ncols, f"fold_{f}")
+                    holder = {}
+
+                    def make_fold_block(f=f, holder=holder):
+                        if "b" not in holder:
+                            holder["b"] = Block(X, folds[f], ncols, f"fold_{f}")
                             print(f"[run] fold {f}: {len(folds[f])} training rows materialised, anonymous RSS "
                                   f"{_rss_gb():.2f} GB", flush=True)
-                        fit(name, r, recipes[r], block, f"lofo:{f}", partition["folds"][f]["train_idx_sha256"])
-                    del block
+                        return holder["b"]
+
+                    for r in roles:
+                        fit(f"fold_{f}_{r}", r, recipes[r], make_fold_block, f"lofo:{f}",
+                            partition["folds"][f]["train_idx_sha256"])
+                    holder.clear()
             else:
                 raise NotRun(f"unknown order step {step!r}")
         ci = {}

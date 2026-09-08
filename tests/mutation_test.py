@@ -2389,9 +2389,12 @@ def _good_lofo(per_family=None, total_correct=None):
                       "mixture_vector_key": f"lofo_mixture_{role}"}
         per_example[f"lofo_mixture_{role}"] = mix
     pool_sha, n_pool = part["pool_idx_sha256"], part["n_pool_rows"]
-    inc = record("repro_model", "model", n_pool, pool_sha, "x", 0.2395, {f: 0.2395 for f in fam}, "reproduction")
-    l1 = record("repro_logistic", "logistic", n_pool, pool_sha, "x", 0.1392, {f: 0.1392 for f in fam}, "reproduction")
+    pool_sorted = part["pool_sorted_sha256"]
+    inc = record("repro_model", "model", n_pool, pool_sha, pool_sorted, 0.2395, {f: 0.2395 for f in fam}, "reproduction")
+    l1 = record("repro_logistic", "logistic", n_pool, pool_sha, pool_sorted, r15.LOGISTIC_L1_TOP1,
+                {f: r15.LOGISTIC_L1_TOP1 for f in fam}, "reproduction")
     null = record("null", "model", part["null_rows"], "x", part["null_sorted_sha256"], 0.039, {f: 0.039 for f in fam}, "null")
+    null["head"] = "null"
     per_example["repro_model"] = [1] * n_eval; per_example["repro_logistic"] = [0] * n_eval
     names = ["repro_model", "repro_logistic", "null"] + [f"fold_{f}_{r}" for f in fam for r in ("majority", "logistic", "model")]
     ledger = []
@@ -2407,7 +2410,8 @@ def _good_lofo(per_family=None, total_correct=None):
            "recipes_sha256": r15.RECIPES_SHA256, "corpus": dict(r15.CORPUS), "partition": partition, "n_classes": 26,
            "class_names": [], "chance_accuracy": 0.038462, "environment": dict(_ENV12), "launch_environment": {},
            "launch_number": 1, "complete": True, "missing_roles": [],
-           "reproduction": {"model": inc, "logistic": l1}, "incumbent_refit_top1": 0.2395, "logistic_l1_refit_top1": 0.1392,
+           "reproduction": {"model": inc, "logistic": l1}, "incumbent_refit_top1": 0.2395,
+           "logistic_l1_refit_top1": r15.LOGISTIC_L1_TOP1,
            "null_control": null, "shuffled_label_accuracy": 0.039, "null_rows": part["null_rows"],
            "folds": fold_recs, "lofo": lofo, "lofo_mixture_top1": mm,
            "lofo_margin_model_over_logistic": round(mm - lm, 6), "cluster_ci95_informational": {}, "ledger": ledger,
@@ -2418,14 +2422,15 @@ def _good_lofo(per_family=None, total_correct=None):
     return art, scores
 
 
-def _lofo(root, mutate=None, drop_artifact=False, **kw):
+def _lofo(root, mutate=None, drop_artifact=False, drop_scores=False, **kw):
     art, scores = _good_lofo(**kw)
     if mutate:
         r = mutate(art, scores)
         if r is not None:
             art = r
     piv = os.path.join(root, "artifacts", "pivot"); os.makedirs(piv, exist_ok=True)
-    json.dump(scores, open(os.path.join(piv, "lofo_4096_scores.json"), "w"))
+    if not drop_scores:
+        json.dump(scores, open(os.path.join(piv, "lofo_4096_scores.json"), "w"))
     if not drop_artifact:
         json.dump(art, open(os.path.join(piv, "lofo_4096.json"), "w"))
     shutil.copy(os.path.join(REPO, "tools", "readers", "lofo4096_verdict.py"),
@@ -2545,6 +2550,87 @@ def _(root):
 @case("lofo4096", "absent-artifact-emits-no-verdict", "fail")
 def _(root):
     return _lofo(root, drop_artifact=True)
+
+
+@case("lofo4096", "complete-false-with-a-missing-fit-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["complete"] = False; art["missing_roles"] = ["fold_mixed_model"]
+    return _lofo(root, f)
+
+
+@case("lofo4096", "one-record-whose-params-hash-is-off-recipe-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["folds"]["binary"]["model"]["params_sha256"] = "f" * 64      # recipes block intact
+    return _lofo(root, f)
+
+
+@case("lofo4096", "a-fold's-held-out-reading-that-disagrees-with-its-vector-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["folds"]["csv"]["model"]["per_family"]["csv"] = round(art["folds"]["csv"]["model"]["per_family"]["csv"] + 0.01, 4)
+    return _lofo(root, f)
+
+
+@case("lofo4096", "a-headline-mixture-that-is-not-the-model-role's-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["lofo_mixture_top1"] = art["lofo"]["logistic"]["mixture_top1"]
+    return _lofo(root, f)
+
+
+@case("lofo4096", "an-absent-scores-file-is-VOID", "fail")
+def _(root):
+    return _lofo(root, drop_scores=True)
+
+
+@case("lofo4096", "a-different-sklearn-in-the-banked-environment-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["environment"] = dict(art["environment"], sklearn="1.8.0")
+    return _lofo(root, f)
+
+
+@case("lofo4096", "a-null-block-that-is-not-the-sealed-one-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["null_control"]["fit_rows_sorted_sha256"] = "9" * 64
+    return _lofo(root, f)
+
+
+@case("lofo4096", "an-L1-refit-at-exactly-the-tolerance-passes-and-just-outside-is-VOID", "fail")
+def _(root):
+    def hi(art, scores):
+        art["reproduction"]["logistic"]["top1"] = 0.1402; art["logistic_l1_refit_top1"] = 0.1402   # anchor 0.1352 + 0.0050
+    rc0, out0 = _lofo(root, hi)
+    if rc0 != 0:
+        return 0, out0 + " !! a refit exactly 0.005 from the anchor did not pass"
+    def out(art, scores):
+        art["reproduction"]["logistic"]["top1"] = 0.1403; art["logistic_l1_refit_top1"] = 0.1403
+    return _lofo(root, out)
+
+
+@case("lofo4096", "an-L1-refit-at-0003's-0.1392-passes-and-at-0.1292-is-VOID", "fail")
+def _(root):
+    def ok(art, scores):
+        art["reproduction"]["logistic"]["top1"] = 0.1392; art["logistic_l1_refit_top1"] = 0.1392
+    rc0, out0 = _lofo(root, ok)
+    if rc0 != 0:
+        return 0, out0 + " !! 0003's banked value, 0.004 from the anchor, did not pass"
+    def bad(art, scores):
+        art["reproduction"]["logistic"]["top1"] = 0.1292; art["logistic_l1_refit_top1"] = 0.1292
+    return _lofo(root, bad)
+
+
+@case("lofo4096", "a-non-integer-chunk-id-is-VOID-not-a-crash", "fail")
+def _(root):
+    def f(art, scores):
+        scores["eval_chunk_ids"][5] = None
+    rc, out = _lofo(root, f)
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! the reader crashed instead of emitting VOID"
+    return rc, out
 
 
 def main() -> int:

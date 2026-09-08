@@ -2,12 +2,12 @@
   "claims": [
     {
       "artifact": "artifacts/verification/mutation_report.json",
-      "claim": "Every gate in this repository is shown capable of failing: 236 deliberate mutations across 18 gates, 236 detected, 0 survived.",
+      "claim": "Every gate in this repository is shown capable of failing: 246 deliberate mutations across 18 gates, 246 detected, 0 survived.",
       "class": "primary-verifiable",
       "id": "mutations-detected",
       "json_path": "$.detected",
       "reverify": "python3 tests/mutation_test.py",
-      "value": 236
+      "value": 246
     },
     {
       "artifact": "artifacts/verification/mutation_report.json",

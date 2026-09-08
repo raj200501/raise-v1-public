@@ -41,8 +41,8 @@
       "total": 9
     },
     "lofo4096": {
-      "detected": 15,
-      "total": 15
+      "detected": 25,
+      "total": 25
     },
     "pivot-curve": {
       "detected": 11,
@@ -2197,10 +2197,100 @@
       "gate": "lofo4096",
       "mutation": "absent-artifact-emits-no-verdict",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=[\"complete: complete=False; missing ['fold_mixed_model']\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "complete-false-with-a-missing-fit-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=[\"fit: fold_binary_model is not 0003's model recipe (id 'M1', params hash off-recipe)\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "one-record-whose-params-hash-is-off-recipe-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=['mixture: fold csv model banked 0.26 on its held-out family, recomputed 0.25'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "a-fold's-held-out-reading-that-disagrees-with-its-vector-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.0815 validity=[\"mixture: lofo_mixture_top1 missing, not finite, or not the model role's mixture\", 'mixture: lofo_margin_model_over_logistic is not model minus logistic'] transfe",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "a-headline-mixture-that-is-not-the-model-role's-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=['scores: the scores file is absent', 'scores: eval_chunk_ids missing or not 260000 long'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "an-absent-scores-file-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=[\"environment: sklearn='1.8.0', banked '1.9.0'\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "a-different-sklearn-in-the-banked-environment-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=['fit: null was not fitted on the sealed rows with the preregistered seed'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "a-null-block-that-is-not-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=['reproduction: the 0003 logistic refit scores 0.1403 against the same-convention anchor 0.1352 (0003 banked 0.1392)'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "an-L1-refit-at-exactly-the-tolerance-passes-and-just-outside-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=['reproduction: the 0003 logistic refit scores 0.1292 against the same-convention anchor 0.1352 (0003 banked 0.1392)'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "an-L1-refit-at-0003's-0.1392-passes-and-at-0.1292-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1359 validity=['scores: eval_chunk_ids contains a non-integer entry'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "a-non-integer-chunk-id-is-VOID-not-a-crash",
+      "observed": "fail"
     }
   ],
-  "detected": 236,
+  "detected": 246,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 236
+  "total_mutations": 246
 }
