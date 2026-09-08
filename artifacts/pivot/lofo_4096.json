@@ -45,11 +45,12 @@
     "n_source_chunks": 50000
   },
   "cost": {
-    "banked_fit_seconds_total": 3437.9,
+    "banked_fit_seconds_total": 5072.8,
     "checkpoints": "artifacts/pivot/lofo_4096_ckpt",
     "interruptions_by_name": {
       "fold_gutenberg_logistic": 0,
       "fold_gutenberg_majority": 0,
+      "fold_gutenberg_model": 0,
       "null": 0,
       "repro_logistic": 0,
       "repro_model": 0
@@ -57,11 +58,12 @@
     "seconds_by_name": {
       "fold_gutenberg_logistic": 817.6,
       "fold_gutenberg_majority": 0.0,
+      "fold_gutenberg_model": 1634.9,
       "null": 24.0,
       "repro_logistic": 929.7,
       "repro_model": 1666.6
     },
-    "wall_seconds_this_invocation": 3641.9
+    "wall_seconds_this_invocation": 5301.0
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -211,7 +213,67 @@
         "utc": "2026-09-08T20:11:56Z",
         "val": null
       },
-      "model": null
+      "model": {
+        "block_refills": [],
+        "environment": {
+          "nice": 10,
+          "numpy": "2.4.6",
+          "python": "3.11.15",
+          "sklearn": "1.9.0",
+          "standardiser_probe": {
+            "block_gb": 0.177,
+            "ncols": 1108,
+            "peak_extra_fraction_of_block": 0.1005,
+            "probe_rows_per_pass": 2000,
+            "production_rows_per_pass": 20000,
+            "production_transient_gb": 0.177,
+            "rows": 20000
+          },
+          "threads": 3
+        },
+        "family": "hgb",
+        "fit_info": {
+          "n_iter": 36
+        },
+        "fit_rows_sha256": "036d65b93a92e3ebb950e4fe37c0a0354c18c8e258961ba21db37b6196f561e3",
+        "fit_rows_sorted_sha256": "e9c059873523e8543196c8bbb32fcaf0f628124a94c8b9766c75fdf5a2ab9648",
+        "head": "model",
+        "heartbeat_max_rss_gb": 9.0,
+        "id": "M1",
+        "interruptions_before_this_fit": 0,
+        "last_heartbeat_rss_gb_before_this_fit": null,
+        "n_fit_rows": 700288,
+        "params": {
+          "learning_rate": 0.15,
+          "max_iter": 200,
+          "max_leaf_nodes": 63,
+          "n_iter_no_change": 10
+        },
+        "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+        "per_family": {
+          "base64": 0.1256,
+          "binary": 0.1043,
+          "code": 0.3093,
+          "csv": 0.3981,
+          "gutenberg": 0.0552,
+          "json": 0.3739,
+          "log": 0.4003,
+          "mixed": 0.1121
+        },
+        "rss_gb": 8.25,
+        "rss_gb_is": "anonymous (RssAnon)",
+        "rss_total_gb": 12.29,
+        "ru_maxrss_gb": 13.93,
+        "scaled": false,
+        "seconds": 1634.9,
+        "seed": 20260825,
+        "stage": "lofo:gutenberg",
+        "status": "fit",
+        "top1": 0.2344,
+        "top1_non_gutenberg": 0.2604,
+        "utc": "2026-09-08T20:25:41Z",
+        "val": "frag"
+      }
     },
     "json": {
       "logistic": null,
@@ -337,6 +399,24 @@
       "rss_gb": 7.94,
       "seconds": 817.6,
       "utc": "2026-09-08T20:25:41Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "fc84a301ef2749e6",
+      "name": "fold_gutenberg_model",
+      "pid": 6914,
+      "rss_gb": 7.94,
+      "utc": "2026-09-08T20:25:41Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "fc84a301ef2749e6",
+      "name": "fold_gutenberg_model",
+      "pid": 6914,
+      "rss_gb": 8.25,
+      "seconds": 1634.9,
+      "utc": "2026-09-08T20:53:20Z"
     }
   ],
   "lofo": {},
@@ -344,7 +424,6 @@
   "lofo_mixture_top1": null,
   "logistic_l1_refit_top1": 0.1352,
   "missing_roles": [
-    "fold_gutenberg_model",
     "fold_base64_majority",
     "fold_base64_logistic",
     "fold_base64_model",
