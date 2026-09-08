@@ -297,7 +297,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 |---|---|---|
 | Every gate can be shown to fail | 246 mutations, 246 detected, 0 survived | primary-verifiable |
 | A number that is real but STALE is caught, not just a fabricated one | `tools/freshness.py`, 9 mutations | primary-verifiable |
-| Preregistration chain verifies, reader unchanged since freeze | 14 entries, head `b0816161…` | primary-verifiable |
+| Preregistration chain verifies, reader unchanged since freeze | 15 entries, head `d81fb4ce…` | primary-verifiable |
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |
 | ACS PUMS record count reproduced | 392,318 records | primary-verifiable |
 | Instrument reproduces on a cold clone | preflight names cause and fix | primary-verifiable |
@@ -810,6 +810,17 @@ scored 0.2878 against M7's 0.2851 and was selected. Fitted once on the 800000-ro
 
 **What it does not establish.** A buyer. Anything about recipes off the roster, architectures off
 the roster, carve sizes other than 4096, or the feature set. It establishes that under this protocol, at 4096 bytes, one of eight model recipes clears a bar that a symmetric search of the baselines raised from 0.1392 to 0.2317 — and that the headline was not a recipe artefact, while the 2048 failure was not one either.
+
+**Transfer to unseen content, in flight.** Every verdict above trains and scores on the same eight
+content families. Preregistration 0015 (chain seq 15, NIST Beacon pulse 1932826, drand round 6448808)
+asks whether the encoder signal survives content the model has never seen: for each family, 0003's
+fixed recipes are fitted on every pool row of the other seven families and scored once on the held-out
+family's sealed evaluation rows; the eight readings are stitched into one leave-one-family-out mixture,
+read against chance plus 0.05 (`TRANSFERS` or `TRANSFER_FAILS`). The expected outcome is written in the
+preregistration as genuinely uncertain, with the mixture bar at 0.0885. Three refuter passes before the
+freeze are recorded in `artifacts/pivot/engineering_log_0015.json`. It is frozen, and it is running. No
+0015 number appears in this document until its frozen reader emits one; a `TRANSFER_FAILS` is filed as a
+boundary of the headline at full size in every document that states the headline.
 
 ### A learned representation over raw bytes does not rescue it either — `BYTE_MODEL_FAILS`
 

@@ -307,10 +307,32 @@
       "reader_sha256": "5ff6146d7dd302760e8c5e6add6dd4d960dcfa156f9ca2676de33c0465028f3f",
       "seq": 14,
       "slug": "recipe-search-4096"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "30e8ac0f368313f682fd48918dadbd5dbf5dbdb06ef91f0e7212541211bb8823",
+          "round": 6448808
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "C36367C61BF9CE8CF0F2F7AFA11920417F48A75CA57CFB1C8892B7ADF1B71B508E0CAF5FD847CFBF117F6A5CBAF1A5D7F8F3D9E1B7311BEFAD7556C1D85D4880",
+          "pulse": 1932826,
+          "time_stamp": "2026-09-08T19:20:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-09-08T19:21:24Z",
+      "hash": "d81fb4ce143891ba9d4fff3dec85d7dc753b705e32f8825349fa1ce9947ba170",
+      "id": "0015",
+      "prev_hash": "b0816161b0ee894efe0014714df4e9ad7cf0601e7986ca97365ef81399db348c",
+      "reader": "tools/readers/lofo4096_verdict.py",
+      "reader_sha256": "d951d35887e9b80e5f34907dc8c02deb3ab590a4e5a91242ca095e99fac44bef",
+      "seq": 15,
+      "slug": "lofo-4096"
     }
   ],
-  "entries": 14,
-  "head": "b0816161b0ee894efe0014714df4e9ad7cf0601e7986ca97365ef81399db348c",
+  "entries": 15,
+  "head": "d81fb4ce143891ba9d4fff3dec85d7dc753b705e32f8825349fa1ce9947ba170",
   "problems": 0,
   "schema": "raise-v1/prereg_status/1",
   "verified": true

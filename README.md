@@ -43,7 +43,11 @@ then applied the same search to the headline 4096-byte result — 0003's sealed 
 genuinely uncertain — and it clears: the searched model reaches 0.2884 against a searched
 logistic at 0.2317, margins +0.0567 on both readings and +0.0576 with the leaked family excluded,
 verdict `RECIPE_CLEARS`. The headline margin is therefore quoted at its searched size, +0.0567,
-beside the +0.1003 that fixed recipes gave.
+beside the +0.1003 that fixed recipes gave. Preregistration 0015 asks whether that signal survives
+content the model has never seen — each of the eight content families held out in turn, 0003's fixed
+recipes fitted on the other seven and scored once on the held-out family's sealed rows, the eight
+readings stitched into one leave-one-family-out mixture read against chance plus 0.05; it is frozen
+(chain entry 15) and running, and no 0015 number appears here until its frozen reader emits one.
 Decomposed by content family, csv and log clear the bar at 2048 on both readings (+0.0554 and
 +0.0501 against the strongest baseline) and the structured four clear it as a set (+0.0549), but
 the mixture fails even with the three incompressible families removed (+0.0478); the verdict is
