@@ -1,0 +1,471 @@
+{
+  "chance_accuracy": 0.038462,
+  "class_names": [
+    "zlib-1",
+    "zlib-2",
+    "zlib-3",
+    "zlib-4",
+    "zlib-5",
+    "zlib-6",
+    "zlib-7",
+    "zlib-8",
+    "zlib-9",
+    "libdeflate-1",
+    "libdeflate-2",
+    "libdeflate-3",
+    "libdeflate-4",
+    "libdeflate-5",
+    "libdeflate-6",
+    "libdeflate-7",
+    "libdeflate-8",
+    "libdeflate-9",
+    "libdeflate-10",
+    "libdeflate-11",
+    "libdeflate-12",
+    "isal-0",
+    "isal-1",
+    "isal-2",
+    "isal-3",
+    "zopfli"
+  ],
+  "cluster_ci95_informational": {},
+  "cluster_ci95_note": "95% cluster-bootstrap intervals over the held-out family's evaluation chunks (2000 resamples) for each fold and role, and over all 10000 chunks for each mixture; informational, never a clause",
+  "complete": false,
+  "corpus": {
+    "cache_g_sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9",
+    "cache_y_sha256": "2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093",
+    "carve_bytes": 4096,
+    "carve_bytes_source": "sealed cache identity (sha256 of y and g); the cache carries no build metadata",
+    "chunk_id_max": 49999,
+    "chunk_id_min": 0,
+    "chunk_offset": 0,
+    "chunk_size": 32768,
+    "n_features": 1108,
+    "n_rows": 1300000,
+    "n_source_chunks": 50000
+  },
+  "cost": {
+    "banked_fit_seconds_total": 1666.6,
+    "checkpoints": "artifacts/pivot/lofo_4096_ckpt",
+    "interruptions_by_name": {
+      "repro_model": 0
+    },
+    "seconds_by_name": {
+      "repro_model": 1666.6
+    },
+    "wall_seconds_this_invocation": 1773.8
+  },
+  "environment": {
+    "cgroup_memory_limit": "unlimited",
+    "cpu_cores": 4,
+    "disk_free_gb": 6.65,
+    "gpu": "none",
+    "mem_available_gb": 15.7,
+    "nice": 10,
+    "numpy": "2.4.6",
+    "python": "3.11.15",
+    "sklearn": "1.9.0",
+    "threads": 3
+  },
+  "folds": {
+    "base64": {
+      "logistic": null,
+      "majority": null,
+      "model": null
+    },
+    "binary": {
+      "logistic": null,
+      "majority": null,
+      "model": null
+    },
+    "code": {
+      "logistic": null,
+      "majority": null,
+      "model": null
+    },
+    "csv": {
+      "logistic": null,
+      "majority": null,
+      "model": null
+    },
+    "gutenberg": {
+      "logistic": null,
+      "majority": null,
+      "model": null
+    },
+    "json": {
+      "logistic": null,
+      "majority": null,
+      "model": null
+    },
+    "log": {
+      "logistic": null,
+      "majority": null,
+      "model": null
+    },
+    "mixed": {
+      "logistic": null,
+      "majority": null,
+      "model": null
+    }
+  },
+  "incumbent_refit_top1": 0.2395,
+  "launch_environment": {
+    "env": {
+      "cgroup_memory_limit": "unlimited",
+      "cpu_cores": 4,
+      "disk_free_gb": 6.65,
+      "gpu": "none",
+      "mem_available_gb": 15.7,
+      "nice": 10,
+      "numpy": "2.4.6",
+      "python": "3.11.15",
+      "sklearn": "1.9.0",
+      "threads": 3
+    },
+    "ok": true,
+    "problems": []
+  },
+  "launch_number": 1,
+  "ledger": [
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "856796c0987afdf6",
+      "name": "repro_model",
+      "pid": 6914,
+      "rss_gb": 8.34,
+      "utc": "2026-09-08T19:26:23Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "856796c0987afdf6",
+      "name": "repro_model",
+      "pid": 6914,
+      "rss_gb": 8.75,
+      "seconds": 1666.6,
+      "utc": "2026-09-08T19:54:33Z"
+    }
+  ],
+  "lofo": {},
+  "lofo_margin_model_over_logistic": null,
+  "lofo_mixture_top1": null,
+  "logistic_l1_refit_top1": null,
+  "missing_roles": [
+    "repro_logistic",
+    "null",
+    "fold_gutenberg_majority",
+    "fold_gutenberg_logistic",
+    "fold_gutenberg_model",
+    "fold_base64_majority",
+    "fold_base64_logistic",
+    "fold_base64_model",
+    "fold_binary_majority",
+    "fold_binary_logistic",
+    "fold_binary_model",
+    "fold_code_majority",
+    "fold_code_logistic",
+    "fold_code_model",
+    "fold_csv_majority",
+    "fold_csv_logistic",
+    "fold_csv_model",
+    "fold_json_majority",
+    "fold_json_logistic",
+    "fold_json_model",
+    "fold_log_majority",
+    "fold_log_logistic",
+    "fold_log_model",
+    "fold_mixed_majority",
+    "fold_mixed_logistic",
+    "fold_mixed_model"
+  ],
+  "n_classes": 26,
+  "null_control": null,
+  "null_rows": 20000,
+  "partition": {
+    "eval_frac": 0.2,
+    "eval_idx_sha256": "7da1099e0cf9d4c3903dad62f52c91f67b751113fc4bfc0a62c53f05dccf1efa",
+    "eval_y_sha256": "92b95cf02a21945cea2a7bd756a1e1096b07ec351b478c39e795a8a2267400d1",
+    "families": [
+      "gutenberg",
+      "base64",
+      "binary",
+      "code",
+      "csv",
+      "json",
+      "log",
+      "mixed"
+    ],
+    "fold_rows": "all",
+    "folds": {
+      "base64": {
+        "eval_idx_sha256": "bdebc4239afd64ccdfc6c27415326d95f29d1bcd8b46a4cf87b2c7fb63ad04eb",
+        "n_eval_chunks": 1264,
+        "n_eval_rows": 32864,
+        "n_train_chunks": 35014,
+        "n_train_rows": 700560,
+        "train_chunks_shared_with_eval": 0,
+        "train_idx_sha256": "989a2bb2df796f435a81dce996f0a9f5764044696c2eafaa85dcb58043854c32",
+        "train_rows_in_eval": 0,
+        "train_rows_of_heldout_family": 0,
+        "train_sorted_sha256": "32a0e6e6e99c0ff3140c0004c4b78faf3ea7958584191a835e47406d04b6d404"
+      },
+      "binary": {
+        "eval_idx_sha256": "f91f609e7fb8739a17c0bb3a6fce9afdf1599b8282e14e366823461fb1dbd8c4",
+        "n_eval_chunks": 1249,
+        "n_eval_rows": 32474,
+        "n_train_chunks": 34999,
+        "n_train_rows": 699897,
+        "train_chunks_shared_with_eval": 0,
+        "train_idx_sha256": "986eb2ee3bf4193c97d3a0d730ab01d158292c864252633864122a218a51c653",
+        "train_rows_in_eval": 0,
+        "train_rows_of_heldout_family": 0,
+        "train_sorted_sha256": "9a5c958d8122ecda681a4292ed85d25fb8c6690c6f78a7f0d24a64e2a5ebf6a4"
+      },
+      "code": {
+        "eval_idx_sha256": "578248b2f2350e7aa5d3f7b2a832ecdb14fbd97d93e4690b7b4ea1e73a504bec",
+        "n_eval_chunks": 1225,
+        "n_eval_rows": 31850,
+        "n_train_chunks": 34975,
+        "n_train_rows": 699654,
+        "train_chunks_shared_with_eval": 0,
+        "train_idx_sha256": "14a38f73e27f9a4906b91e6803cae5cbe89fe0da1fa1e18b241038ff2653c222",
+        "train_rows_in_eval": 0,
+        "train_rows_of_heldout_family": 0,
+        "train_sorted_sha256": "39f72aa942c473a4ac8867c11d056a0527b5e6f0f4602c2e643157a2eff73775"
+      },
+      "csv": {
+        "eval_idx_sha256": "b4ccfb51f5b8b54b2ef856b54af6e79cc7ca6ed62bc0d8cc8a7bfcac09dc5555",
+        "n_eval_chunks": 1216,
+        "n_eval_rows": 31616,
+        "n_train_chunks": 34966,
+        "n_train_rows": 699440,
+        "train_chunks_shared_with_eval": 0,
+        "train_idx_sha256": "8ae358528d974d213f64ee1d8d7800af18babba31b96dec37d6feb561afdf612",
+        "train_rows_in_eval": 0,
+        "train_rows_of_heldout_family": 0,
+        "train_sorted_sha256": "8f6fee17a72ee29f6bb8c2215e7b4bad24b367c2444e6eaa84e5ea7002017233"
+      },
+      "gutenberg": {
+        "eval_idx_sha256": "a6a1bef8036511315d2ac17e4a0f7078c6be848ca1c2c4b42d4ee6a084a56202",
+        "n_eval_chunks": 1269,
+        "n_eval_rows": 32994,
+        "n_train_chunks": 35019,
+        "n_train_rows": 700288,
+        "train_chunks_shared_with_eval": 0,
+        "train_idx_sha256": "036d65b93a92e3ebb950e4fe37c0a0354c18c8e258961ba21db37b6196f561e3",
+        "train_rows_in_eval": 0,
+        "train_rows_of_heldout_family": 0,
+        "train_sorted_sha256": "e9c059873523e8543196c8bbb32fcaf0f628124a94c8b9766c75fdf5a2ab9648"
+      },
+      "json": {
+        "eval_idx_sha256": "8eacb2d465c04006d1dbfd1452653d2cb4eab3a9ca633b1301b0b0064a17aaa4",
+        "n_eval_chunks": 1260,
+        "n_eval_rows": 32760,
+        "n_train_chunks": 35010,
+        "n_train_rows": 700071,
+        "train_chunks_shared_with_eval": 0,
+        "train_idx_sha256": "6f4c8110a832e4c3a1b184bbb212ae7d417e74784de11628369d7aa8e8726e25",
+        "train_rows_in_eval": 0,
+        "train_rows_of_heldout_family": 0,
+        "train_sorted_sha256": "f9d7de73a4ffd623c962bdd8a82f8e8ab4959ab49b0989e3ca3907d22dfedb5d"
+      },
+      "log": {
+        "eval_idx_sha256": "1dab3cc04aa0ae442fc9cab1dd0f0cafd5b1b2e0cf3de25341ab39d8752e1d8b",
+        "n_eval_chunks": 1279,
+        "n_eval_rows": 33254,
+        "n_train_chunks": 35029,
+        "n_train_rows": 700473,
+        "train_chunks_shared_with_eval": 0,
+        "train_idx_sha256": "03ac48cec4a2761b22d023db503e17403e69251891387bd1836ae57e09635695",
+        "train_rows_in_eval": 0,
+        "train_rows_of_heldout_family": 0,
+        "train_sorted_sha256": "72a9d924f37f03ee6727e434ff839f04d101d697f413503d01c0106e39ae3fcb"
+      },
+      "mixed": {
+        "eval_idx_sha256": "3749067dd47d4a788ada22122dcf43c159d462ba5ade7904398735bdf94a80f1",
+        "n_eval_chunks": 1238,
+        "n_eval_rows": 32188,
+        "n_train_chunks": 34988,
+        "n_train_rows": 699617,
+        "train_chunks_shared_with_eval": 0,
+        "train_idx_sha256": "21870ebf6835b9e404baf3e729bf8cf5236da421479014ed7ae295df82ec1425",
+        "train_rows_in_eval": 0,
+        "train_rows_of_heldout_family": 0,
+        "train_sorted_sha256": "7705b06a505570c34bb5ade21e6be99c704fc8b012d854891bb8df5a81b7c5f7"
+      }
+    },
+    "n_eval_chunks": 10000,
+    "n_eval_non_gutenberg": 227006,
+    "n_eval_rows": 260000,
+    "n_pool_chunks": 40000,
+    "n_pool_rows": 800000,
+    "null_rows": 20000,
+    "null_sorted_sha256": "0653cc12293ae078dd68b900c8778d93e701261ca93414be9eb7bb8e7ee686db",
+    "pool_idx_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+    "pool_sorted_sha256": "923cd266c3bf2a45683b2c479d36b046b311cc8f2e53426c962b6dd5ae836094",
+    "pool_y_sha256": "d519612b4e46991f6ea1850fc92271e0de581e3cc378dd05fec59ff678dc72ea",
+    "seed": 20260825,
+    "split_is_grouped_by_source": true,
+    "top_rung": 800000
+  },
+  "preregistration": "0015-lofo-4096",
+  "protocol": {
+    "bar": {
+      "lofo_mixture_minus_chance": 0.05
+    },
+    "cache_identity": {
+      "g_sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9",
+      "y_sha256": "2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093"
+    },
+    "caps": {
+      "memory_kill_gb": 13.0
+    },
+    "carve": 4096,
+    "chunk_offset": 0,
+    "chunk_size": 32768,
+    "eval_frac": 0.2,
+    "families": [
+      "gutenberg",
+      "base64",
+      "binary",
+      "code",
+      "csv",
+      "json",
+      "log",
+      "mixed"
+    ],
+    "fold_rows": "all",
+    "launch": {
+      "min_disk_free_gb": 0.25,
+      "min_mem_available_gb": 12.0
+    },
+    "nice": 10,
+    "null_rows": 20000,
+    "null_tolerance": 0.02,
+    "order": [
+      "reproduction_model",
+      "reproduction_logistic",
+      "null",
+      "folds"
+    ],
+    "reproduction_tolerance": 0.005,
+    "roles": [
+      "majority",
+      "logistic",
+      "model"
+    ],
+    "seed": 20260825,
+    "structured_families": [
+      "code",
+      "csv",
+      "json",
+      "log"
+    ],
+    "threads": 3,
+    "top_rung": 800000
+  },
+  "protocol_sha256": "e245f35e1793042f9d3e441a88237de8b6db53c7810bd8a7b14c7580a0a14613",
+  "recipes": {
+    "logistic": {
+      "family": "logistic",
+      "id": "L1",
+      "params": {
+        "max_iter": 400
+      },
+      "why": "0003's logistic verbatim (LogisticRegression(max_iter=400), lbfgs, C 1.0, raw features): the frozen-set bar at 0.1392; its confirmatory reproduction within 0.005 is a validity clause"
+    },
+    "majority": {
+      "family": "dummy",
+      "id": "U1",
+      "params": {
+        "strategy": "most_frequent"
+      },
+      "why": "no hyperparameter; confirmatory fit only, as in 0003 (0.0385 banked)"
+    },
+    "model": {
+      "family": "hgb",
+      "id": "M1",
+      "params": {
+        "learning_rate": 0.15,
+        "max_iter": 200,
+        "max_leaf_nodes": 63,
+        "n_iter_no_change": 10
+      },
+      "val": "frag",
+      "why": "0003's incumbent verbatim (run_study.py make_model 'hgb', run_carve.py's explicit last-10% validation split); every other parameter at the sklearn 1.9.0 default"
+    }
+  },
+  "recipes_sha256": "8d58ec2efa92330916444d07fd73b43d7b5edbb9ffb0dddd32304d3f448bc4d3",
+  "reproduction": {
+    "logistic": null,
+    "model": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "hgb",
+      "fit_info": {
+        "n_iter": 33
+      },
+      "fit_rows_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+      "fit_rows_sorted_sha256": "923cd266c3bf2a45683b2c479d36b046b311cc8f2e53426c962b6dd5ae836094",
+      "head": "model",
+      "heartbeat_max_rss_gb": 9.91,
+      "id": "M1",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 800000,
+      "params": {
+        "learning_rate": 0.15,
+        "max_iter": 200,
+        "max_leaf_nodes": 63,
+        "n_iter_no_change": 10
+      },
+      "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+      "per_family": {
+        "base64": 0.1221,
+        "binary": 0.1049,
+        "code": 0.2944,
+        "csv": 0.3888,
+        "gutenberg": 0.1596,
+        "json": 0.3581,
+        "log": 0.3756,
+        "mixed": 0.1143
+      },
+      "rss_gb": 8.75,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 12.54,
+      "ru_maxrss_gb": 13.93,
+      "scaled": false,
+      "seconds": 1666.6,
+      "seed": 20260825,
+      "stage": "reproduction",
+      "status": "fit",
+      "top1": 0.2395,
+      "top1_non_gutenberg": 0.2511,
+      "utc": "2026-09-08T19:26:23Z",
+      "val": "frag"
+    }
+  },
+  "run_finished_utc": null,
+  "run_started_utc": "2026-09-08T19:25:06Z",
+  "schema": "raise-v1/lofo_4096/1",
+  "schema_version": 1,
+  "shuffled_label_accuracy": null,
+  "smoke": false,
+  "stage": "run"
+}

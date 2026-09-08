@@ -1,1 +1,2 @@
 {"name": "repro_model", "fingerprint": "856796c0987afdf6", "event": "started", "utc": "2026-09-08T19:26:23Z", "rss_gb": 8.34, "pid": 6914, "attempt": 1}
+{"name": "repro_model", "fingerprint": "856796c0987afdf6", "event": "completed", "utc": "2026-09-08T19:54:33Z", "rss_gb": 8.75, "pid": 6914, "seconds": 1666.6}
