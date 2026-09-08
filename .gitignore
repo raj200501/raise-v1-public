@@ -25,3 +25,5 @@ artifacts/pivot/recipe_search_2048_ckpt/*.hb
 artifacts/pivot/recipe_search_2048_ckpt/*.tmp
 artifacts/pivot/recipe_search_4096_ckpt/*.hb
 artifacts/pivot/recipe_search_4096_ckpt/*.tmp
+artifacts/pivot/lofo_4096_ckpt/*.hb
+artifacts/pivot/lofo_4096_ckpt/*.tmp

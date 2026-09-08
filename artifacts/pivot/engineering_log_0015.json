@@ -1,0 +1,40 @@
+{
+  "schema": "raise-v1/engineering_log/1",
+  "preregistration": "0015-lofo-4096",
+  "status": "design record and review record, written BEFORE the preregistration was frozen and before any 0015 fit; the run_record block is filled from the banked artifact after the run and is not a verdict",
+  "design": {
+    "question": "Does the encoder-provenance signal survive content the model has never seen? Every verdict so far trains and scores on the same eight content families.",
+    "protocol_in_one_line": "leave-one-family-out: for each family, 0003's fixed recipes (M1, L1, U1) fitted on every pool row of the other seven families, scored once on the sealed set; the eight held-out readings stitched into one mixture accuracy; bar chance + 0.05 on the model's mixture",
+    "why_fixed_recipes_not_searched": "0014 established that a symmetric search moves both sides; a searched-recipe transfer is a separate preregistration. The question here is about the headline recipe's signal, and M1 at about 700000 rows costs about 20 minutes per fold against several hours for the searched M4.",
+    "why_the_mixture_and_not_per_family_bars": "the record's convention (0011, 0012/0013, 0014): the verdict is the mixture's and the decomposition is published beside it; per-family bars on 32000-row subsets would multiply the clauses and the chances of an incidental fail or pass",
+    "why_chance_plus_0.05_and_not_a_margin_over_the_logistic": "the question is whether the signal transfers, not whether the model beats a dumb rule under transfer; a logistic that transferred as well as the model would be a finding, not a failure. The same-protocol logistic and majority mixtures are banked as readings, with the margin.",
+    "expected_outcome_stated_in_advance": "genuinely uncertain; the mixture bar is 0.0885 and a mixture near 0.09 is the modal expectation"
+  },
+  "cost_anchors": {
+    "note": "EXTRAPOLATION from 0014's banked confirmatory fits on this pool (artifacts/pivot/recipe_search_4096.json cost); no new anchor measured",
+    "from_0014_banked": {
+      "incumbent_M1_seconds_at_800000": 1428.4,
+      "logistic_L1_seconds_at_800000": 679.6,
+      "majority_seconds": 0.0
+    },
+    "typical_total_fit_seconds": 18000
+  },
+  "pre_freeze_review": {
+    "how": "three independent refuters (reader against runner; folds, recipes and bar; memory, cost and operations) followed by one synthesis, run on 2026-09-08 before the freeze",
+    "findings_adopted": "PENDING",
+    "synthesis_verdict": "PENDING"
+  },
+  "smoke_runs": {
+    "note": "smoke runs of the runner on the scratchpad against corpus A with the sealed recipes and tiny folds (3000 training rows per fold, 12000-row reproduction pool, 2000 null rows); stamped smoke true; read VOID by the reader; never an input to any decision",
+    "launched": [
+      {
+        "utc": "2026-09-08T18:19Z",
+        "outcome": "PENDING"
+      }
+    ],
+    "sealed_set_scorings_by_smoke_runs": "PENDING"
+  },
+  "run_record": {
+    "note": "filled after the run from the banked artifact and ledger; PENDING"
+  }
+}
