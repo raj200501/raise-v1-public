@@ -6,7 +6,8 @@
 #
 # The files/ path is fetched first because it is the path the banked corpora were built from;
 # the cache/epub path serves a different, later edition of at least pg5200. gutenberg.org also
-# re-edits files/ copies in place (pg1342 changed between 2026-08-25 and 2026-09-02), so every
+# re-edits files/ copies in place (pg1342 changed between 2026-08-25 and 2026-09-02; pg2701 by
+# 2026-09-08), so every
 # download is checked against the banked sha256 by tools/pivot/pin_sources.py, which fails
 # loudly rather than letting a changed edition rebuild a corpus that no longer matches
 # artifacts/pivot/corpus_manifest.json.

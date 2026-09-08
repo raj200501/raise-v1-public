@@ -22,6 +22,32 @@
           ]
         }
       }
+    },
+    "pg2701.txt": {
+      "known_upstream_editions": {
+        "547de799c1643ef231cc1efe45ffccefcb876ff3fe8f2206e7488529ad08f999": {
+          "observed_at": "https://www.gutenberg.org/files/2701/2701-0.txt",
+          "observed_utc_date": "2026-09-08",
+          "line_edits": [
+            {
+              "line": 2426,
+              "from": "occupation? Whence comest thou? Thy country? What people?' But mark now,",
+              "to": "occupation? Whence comest thou? Thy country? What people? But mark now,"
+            },
+            {
+              "line": 20334,
+              "from": "“Oh good master, master, master!”",
+              "to": "“Oh good master, master, master!"
+            },
+            {
+              "line": 20662,
+              "from": "of my soul!—when the poorest landsman has had fresh fruit to his daily",
+              "to": "of my soil!—when the poorest landsman has had fresh fruit to his daily"
+            }
+          ],
+          "note": "three transcription fixes upstream (two closing quotation marks restored, 'soil' corrected to 'soul'); the banked corpus was built from the earlier edition, so the edits below reverse them to recover the banked bytes"
+        }
+      }
     }
   }
 }
