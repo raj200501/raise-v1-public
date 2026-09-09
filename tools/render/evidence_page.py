@@ -189,10 +189,12 @@ chips = "".join([
             f'doubling of families (bar {fdcv["bar_applied"]["slope_per_doubling_must_reach"]}); logistic slope '
             f'{fdcv["fdc_slope_per_doubling_logistic"]}') if fdcv["verdict"] != "VOID" and fdc and fdc.get("complete")
            else f'VOID: {"; ".join(fdcv["validity_failed_clauses"])[:140]}')] if fdcv else [])
- + ([chip(l3v["verdict"], {"TRANSFER_REVERSAL": "fail", "NO_TRANSFER_REVERSAL": "pass", "VOID": "inc"}[l3v["verdict"]], "0017",
-           (f'0014\'s standardised logistic on 0015\'s eight folds: mixture on unseen families {l3v["lofo_mixture_top1_l3"]} against '
-            f'0015\'s incumbent {l3v["bar_applied"]["reference_0015_incumbent_mixture"]} (margin {l3v["lofo_margin_l3_over_0015_model"]}; '
-            f'bar {l3v["bar_applied"]["margin"]})') if l3v["verdict"] != "VOID" and l3a and l3a.get("complete")
+ + ([chip(l3v["verdict"], {"L3_LEADS_INCUMBENT_UNDER_TRANSFER": "pass", "L3_LEAD_BELOW_BAR": "fail", "VOID": "inc"}[l3v["verdict"]], "0017",
+           (f'0014\'s searched, standardised logistic on 0015\'s eight sealed folds: stitched mixture on unseen families '
+            f'{l3v["lofo_mixture_top1_l3"]} against 0015\'s incumbent {l3v["bar_applied"]["reference_0015_incumbent_mixture"]}: '
+            f'{l3v["lofo_correct_l3"]} correct rows against the incumbent\'s {l3v["bar_applied"]["reference_0015_incumbent_correct"]}, '
+            f'a lead of {l3v["lofo_margin_l3_over_0015_model_exact"]} (bar {l3v["bar_applied"]["margin"]}, '
+            f'{l3v["bar_applied"]["margin_correct_rows"]} rows)') if l3v["verdict"] != "VOID" and l3a and l3a.get("complete")
            else f'VOID: {"; ".join(l3v["validity_failed_clauses"])[:140]}')] if l3v else []))
 
 fam2048_table = ""
@@ -302,19 +304,33 @@ if fdc and fdcv and fdcv["verdict"] != "VOID" and fdc.get("complete"):
 
 boundary_0017 = ""
 if l3a and l3v and l3v["verdict"] != "VOID" and l3a.get("complete"):
-    _pf = l3v["per_family_l3"]; _ref = l3v["reference_0015"]
+    _pf = l3v["per_family_l3"]; _ref = l3v["reference_0015"]; _pm = l3v["per_family_margin_over_0015_model"] or {}
     _rows = "".join(f'<tr><td class="mono">{f}</td><td class="mono">{_pf[f]}</td><td class="mono">{_ref["model_per_family"][f]}</td>'
-                    f'<td class="mono">{_ref["logistic_per_family"][f]}</td></tr>' for f in sorted(_pf, key=lambda k: -_pf[k]))
-    _word = "is reversed" if l3v["verdict"] == "TRANSFER_REVERSAL" else "is not reversed"
-    boundary_0017 = (f'<p><strong>Under transfer the in-distribution ordering {_word} by the record\'s own margin: '
-                     f'<span class="mono">{l3v["verdict"]}</span></strong> (preregistration 0017, chain entry 17, read by its own '
-                     f'frozen reader). 0014\'s searched, standardised logistic, fitted on 0015\'s eight sealed folds, identifies the '
-                     f'encoder on the unseen family at {l3v["lofo_mixture_top1_l3"]} (stitched mixture) against 0015\'s incumbent '
-                     f'{_ref["model_mixture_top1"]} and raw logistic {_ref["logistic_mixture_top1"]}: a margin of '
-                     f'{l3v["lofo_margin_l3_over_0015_model"]} over the incumbent against a bar of {l3v["bar_applied"]["margin"]}. '
-                     f'The refit on the full pool reproduced 0014\'s {l3a["logistic_l3_refit_top1"]}.</p>'
+                    f'<td class="mono">{_ref["logistic_per_family"][f]}</td><td class="mono">{_pm.get(f, "—")}</td></tr>'
+                    for f in sorted(_pf, key=lambda k: -_pf[k]))
+    _ba = l3v["bar_applied"]
+    _word = "leads" if l3v["verdict"] == "L3_LEADS_INCUMBENT_UNDER_TRANSFER" else "does not lead"
+    _flag05 = "reaches" if _ba.get("reaches_record_margin_bar_0.05") else "does not reach"
+    _flagt = "clears" if _ba.get("reaches_0015_transfer_bar") else "does not clear"
+    _nb = l3v.get("n_iter_by_fold") or {}
+    _iters = ", ".join(f"{k} {v}" for k, v in (_nb.items() if isinstance(_nb, dict) else enumerate(_nb)))
+    _cap = ("no fold reached the 1000-iteration cap" if l3v.get("any_fold_at_iteration_cap") is False
+            else "at least one fold reached the 1000-iteration cap")
+    boundary_0017 = (f'<p><strong>Under transfer, the searched standardised logistic {_word} the fixed incumbent by the '
+                     f'preregistered margin: <span class="mono">{l3v["verdict"]}</span></strong> (preregistration 0017, chain entry '
+                     f'17, read by its own frozen reader, which recounts the correct rows from the banked scores). 0014\'s searched, '
+                     f'standardised logistic, fitted once per fold on 0015\'s eight sealed folds, identifies the encoder on the '
+                     f'unseen family on {l3v["lofo_correct_l3"]} of {_ref["n_eval_rows"]} rows (stitched mixture '
+                     f'{l3v["lofo_mixture_top1_l3"]}) against 0015\'s incumbent on {_ba["reference_0015_incumbent_correct"]} rows '
+                     f'({_ref["model_mixture_top1"]}) and 0015\'s raw logistic at {_ref["logistic_mixture_top1"]}: a lead of '
+                     f'{l3v["lofo_margin_l3_over_0015_model_exact"]} over the incumbent against a bar of {_ba["margin"]} '
+                     f'({_ba["margin_correct_rows"]} rows). The lead {_flag05} the record\'s 0.05 margin bar, and the mixture '
+                     f'{_flagt} 0015\'s own transfer bar of chance + 0.05 (informational flags, banked beside the verdict). '
+                     f'Iterations per fold {_iters}: {_cap}. The refit on the full pool reproduced 0014\'s '
+                     f'{l3a["logistic_l3_refit_top1"]}. In distribution the incumbent leads this logistic (0.2395 against 0.2317); '
+                     f'nothing here revises 0003, 0014 or 0015, and nothing here establishes a buyer.</p>'
                      f'<table><thead><tr><th>held-out family</th><th>standardised logistic</th><th>0015 incumbent</th>'
-                     f'<th>0015 raw logistic</th></tr></thead><tbody>{_rows}</tbody></table>')
+                     f'<th>0015 raw logistic</th><th>lead over incumbent</th></tr></thead><tbody>{_rows}</tbody></table>')
 
 # ---------------------------------------------------------------- seed panel
 if seeds:
