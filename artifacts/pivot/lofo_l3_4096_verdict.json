@@ -1,0 +1,142 @@
+{
+  "any_fold_at_iteration_cap": false,
+  "bar_applied": {
+    "margin": 0.02,
+    "margin_correct_rows": 5200,
+    "mixture_must_reach": 0.105935,
+    "reaches_0015_transfer_bar": true,
+    "reaches_record_margin_bar_0.05": false,
+    "reference_0015_incumbent_correct": 22343,
+    "reference_0015_incumbent_mixture": 0.0859
+  },
+  "establishes_a_buyer": false,
+  "folds_below_iteration_cap": 8,
+  "informational_only": "the margin over 0015's logistic, the per-family readings, the structured-four reading, the reproduction drift and the artifact's cluster intervals are informational: not a verdict, not quotable as a pass. The verdict is the `verdict` field.",
+  "l3_reproduction_drift": 0.0,
+  "lead_failed_clauses": [
+    "lead: L3's stitched correct count 24736 minus 0015's incumbent count 22343 = 2393 rows (0.009204) is below 5200 rows (0.02)"
+  ],
+  "lofo": {
+    "logistic_l3": {
+      "mixture_top1": 0.0951,
+      "mixture_top1_non_gutenberg": 0.1014,
+      "mixture_vector_key": "lofo_mixture_logistic_l3",
+      "per_family": {
+        "base64": 0.0655,
+        "binary": 0.0769,
+        "code": 0.1181,
+        "csv": 0.1105,
+        "gutenberg": 0.0518,
+        "json": 0.1347,
+        "log": 0.1272,
+        "mixed": 0.077
+      },
+      "structured_four_top1": 0.1228
+    }
+  },
+  "lofo_correct_l3": 24736,
+  "lofo_margin_l3_over_0015_logistic": 0.0023,
+  "lofo_margin_l3_over_0015_model": 0.0092,
+  "lofo_margin_l3_over_0015_model_exact": 0.009204,
+  "lofo_mixture_minus_chance_l3": 0.056638,
+  "lofo_mixture_top1_l3": 0.0951,
+  "lofo_mixture_top1_l3_banked_by_runner": 0.0951,
+  "meaning": "Under leave-one-family-out transfer at 4096 on 0015's folds, 0014's searched, standardised logistic does not lead 0003's fixed incumbent by 0.02: the standardised linear rule's lead over the incumbent on unseen families, if any (the exact margin 0.009204 may be negative), is below the preregistered bar; iteration counts are banked (8 of 8 folds below the 1000 cap). L3 is a searched recipe and the incumbent is not; 0014's searched model is not measured here. A statement about the corpus builder's eight families (seven parametric generators and one real-prose family) at 4096 bytes and this pair of recipes; nothing here establishes a buyer.",
+  "n_iter_by_fold": {
+    "base64": 826,
+    "binary": 796,
+    "code": 851,
+    "csv": 774,
+    "gutenberg": 954,
+    "json": 915,
+    "log": 869,
+    "mixed": 848
+  },
+  "per_family_l3": {
+    "base64": 0.0655,
+    "binary": 0.0769,
+    "code": 0.1181,
+    "csv": 0.1105,
+    "gutenberg": 0.0518,
+    "json": 0.1347,
+    "log": 0.1272,
+    "mixed": 0.077
+  },
+  "per_family_margin_over_0015_model": {
+    "base64": 0.0002,
+    "binary": 0.0151,
+    "code": 0.0046,
+    "csv": 0.0137,
+    "gutenberg": -0.0034,
+    "json": 0.0213,
+    "log": 0.0189,
+    "mixed": 0.0032
+  },
+  "preregistration": "0017-lofo-l3-4096",
+  "read": {
+    "any_fold_at_iteration_cap": false,
+    "chance_accuracy": 0.038462,
+    "complete": true,
+    "lofo_correct_l3": 24736,
+    "lofo_margin_l3_over_0015_logistic": 0.0023,
+    "lofo_margin_l3_over_0015_model": 0.0092,
+    "lofo_margin_l3_over_0015_model_exact": 0.009204,
+    "lofo_mixture_top1": 0.0951,
+    "logistic_l3_refit_top1": 0.2317,
+    "missing_roles": [],
+    "n_classes": 26,
+    "n_iter_by_fold": {
+      "base64": 826,
+      "binary": 796,
+      "code": 851,
+      "csv": 774,
+      "gutenberg": 954,
+      "json": 915,
+      "log": 869,
+      "mixed": 848
+    },
+    "null_rows": 20000,
+    "preregistration": "0017-lofo-l3-4096",
+    "shuffled_label_accuracy": 0.0383,
+    "smoke": false,
+    "stage": "run"
+  },
+  "reference_0015": {
+    "counts_source": "sum of the stitched vectors lofo_mixture_model and lofo_mixture_logistic in artifacts/pivot/lofo_4096_scores.json (22343 / 260000 = 0.085935, banked 0.0859; 24131 / 260000 = 0.092812, banked 0.0928)",
+    "logistic_correct": 24131,
+    "logistic_mixture_top1": 0.0928,
+    "logistic_per_family": {
+      "base64": 0.0596,
+      "binary": 0.0773,
+      "code": 0.1023,
+      "csv": 0.103,
+      "gutenberg": 0.0635,
+      "json": 0.1504,
+      "log": 0.1104,
+      "mixed": 0.0762
+    },
+    "logistic_structured_four_top1": 0.1167,
+    "majority_mixture_top1": 0.0385,
+    "model_correct": 22343,
+    "model_mixture_top1": 0.0859,
+    "model_per_family": {
+      "base64": 0.0653,
+      "binary": 0.0618,
+      "code": 0.1135,
+      "csv": 0.0968,
+      "gutenberg": 0.0552,
+      "json": 0.1134,
+      "log": 0.1083,
+      "mixed": 0.0738
+    },
+    "model_structured_four_top1": 0.1081,
+    "n_eval_rows": 260000,
+    "source": "artifacts/pivot/lofo_4096.json"
+  },
+  "revises_0003_0014_0015": false,
+  "schema": "raise-v1/lofo_l3_4096_verdict/1",
+  "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+  "structured_four_top1_l3": 0.1228,
+  "validity_failed_clauses": [],
+  "verdict": "L3_LEAD_BELOW_BAR"
+}

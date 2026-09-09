@@ -1,5 +1,5 @@
 {
-  "any_fold_at_iteration_cap": null,
+  "any_fold_at_iteration_cap": false,
   "chance_accuracy": 0.038462,
   "class_names": [
     "zlib-1",
@@ -29,9 +29,50 @@
     "isal-3",
     "zopfli"
   ],
-  "cluster_ci95_informational": {},
+  "cluster_ci95_informational": {
+    "fold_base64_logistic_l3": [
+      0.0638,
+      0.0671
+    ],
+    "fold_binary_logistic_l3": [
+      0.0752,
+      0.0786
+    ],
+    "fold_code_logistic_l3": [
+      0.1153,
+      0.1211
+    ],
+    "fold_csv_logistic_l3": [
+      0.108,
+      0.1132
+    ],
+    "fold_gutenberg_logistic_l3": [
+      0.0495,
+      0.0541
+    ],
+    "fold_json_logistic_l3": [
+      0.1319,
+      0.1377
+    ],
+    "fold_log_logistic_l3": [
+      0.1243,
+      0.13
+    ],
+    "fold_mixed_logistic_l3": [
+      0.0752,
+      0.0787
+    ],
+    "lofo_mixture_logistic_l3": [
+      0.0941,
+      0.0962
+    ],
+    "repro_l3": [
+      0.229,
+      0.2344
+    ]
+  },
   "cluster_ci95_note": "95% cluster-bootstrap intervals over the held-out family's evaluation chunks (2000 resamples) for each fold and role, and over all 10000 chunks for each mixture; informational, never a clause",
-  "complete": false,
+  "complete": true,
   "corpus": {
     "cache_g_sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9",
     "cache_y_sha256": "2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093",
@@ -46,7 +87,7 @@
     "n_source_chunks": 50000
   },
   "cost": {
-    "banked_fit_seconds_total": 14040.2,
+    "banked_fit_seconds_total": 15574.9,
     "checkpoints": "artifacts/pivot/lofo_l3_4096_ckpt",
     "interruptions_by_name": {
       "fold_base64_logistic_l3": 0,
@@ -56,6 +97,7 @@
       "fold_gutenberg_logistic_l3": 0,
       "fold_json_logistic_l3": 0,
       "fold_log_logistic_l3": 0,
+      "fold_mixed_logistic_l3": 0,
       "null": 0,
       "repro_l3": 0
     },
@@ -67,10 +109,11 @@
       "fold_gutenberg_logistic_l3": 1918.0,
       "fold_json_logistic_l3": 1807.2,
       "fold_log_logistic_l3": 1675.6,
+      "fold_mixed_logistic_l3": 1534.7,
       "null": 89.2,
       "repro_l3": 1817.5
     },
-    "wall_seconds_this_invocation": 14290.9
+    "wall_seconds_this_invocation": 15842.9
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -555,7 +598,71 @@
       }
     },
     "mixed": {
-      "logistic_l3": null
+      "logistic_l3": {
+        "block_refills": [
+          {
+            "order": "canonical",
+            "probe_ok": true,
+            "utc": "2026-09-09T22:28:45Z"
+          }
+        ],
+        "environment": {
+          "nice": 10,
+          "numpy": "2.4.6",
+          "python": "3.11.15",
+          "sklearn": "1.9.0",
+          "standardiser_probe": {
+            "block_gb": 0.177,
+            "ncols": 1108,
+            "peak_extra_fraction_of_block": 0.1005,
+            "probe_rows_per_pass": 2000,
+            "production_rows_per_pass": 20000,
+            "production_transient_gb": 0.177,
+            "rows": 20000
+          },
+          "threads": 3
+        },
+        "family": "logistic",
+        "fit_info": {
+          "n_iter": 848
+        },
+        "fit_rows_sha256": "21870ebf6835b9e404baf3e729bf8cf5236da421479014ed7ae295df82ec1425",
+        "fit_rows_sorted_sha256": "7705b06a505570c34bb5ade21e6be99c704fc8b012d854891bb8df5a81b7c5f7",
+        "head": "logistic_l3",
+        "heartbeat_max_rss_gb": 7.86,
+        "id": "L3",
+        "interruptions_before_this_fit": 0,
+        "last_heartbeat_rss_gb_before_this_fit": null,
+        "n_fit_rows": 699617,
+        "params": {
+          "C": 1.0,
+          "max_iter": 1000
+        },
+        "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+        "per_family": {
+          "base64": 0.089,
+          "binary": 0.0855,
+          "code": 0.3201,
+          "csv": 0.3358,
+          "gutenberg": 0.1572,
+          "json": 0.397,
+          "log": 0.3785,
+          "mixed": 0.077
+        },
+        "rss_gb": 7.57,
+        "rss_gb_is": "anonymous (RssAnon)",
+        "rss_total_gb": 12.29,
+        "ru_maxrss_gb": 13.74,
+        "scaled": true,
+        "seconds": 1534.7,
+        "seed": 20260825,
+        "stage": "lofo:mixed",
+        "status": "fit",
+        "top1": 0.2299,
+        "top1_non_gutenberg": 0.2404,
+        "utc": "2026-09-09T22:02:59Z",
+        "val": null
+      }
     }
   },
   "launch_environment": {
@@ -737,28 +844,61 @@
       "rss_gb": 7.58,
       "seconds": 1675.6,
       "utc": "2026-09-09T22:02:55Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "2745d033496c33ce",
+      "name": "fold_mixed_logistic_l3",
+      "pid": 11052,
+      "rss_gb": 7.57,
+      "utc": "2026-09-09T22:02:59Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "2745d033496c33ce",
+      "name": "fold_mixed_logistic_l3",
+      "pid": 11052,
+      "rss_gb": 7.57,
+      "seconds": 1534.7,
+      "utc": "2026-09-09T22:28:45Z"
     }
   ],
-  "lofo": {},
-  "lofo_correct_l3": null,
-  "lofo_margin_l3_over_0015_logistic": null,
-  "lofo_margin_l3_over_0015_model": null,
-  "lofo_margin_l3_over_0015_model_exact": null,
-  "lofo_mixture_top1": null,
+  "lofo": {
+    "logistic_l3": {
+      "mixture_top1": 0.0951,
+      "mixture_top1_non_gutenberg": 0.1014,
+      "mixture_vector_key": "lofo_mixture_logistic_l3",
+      "per_family": {
+        "base64": 0.0655,
+        "binary": 0.0769,
+        "code": 0.1181,
+        "csv": 0.1105,
+        "gutenberg": 0.0518,
+        "json": 0.1347,
+        "log": 0.1272,
+        "mixed": 0.077
+      },
+      "structured_four_top1": 0.1228
+    }
+  },
+  "lofo_correct_l3": 24736,
+  "lofo_margin_l3_over_0015_logistic": 0.0023,
+  "lofo_margin_l3_over_0015_model": 0.0092,
+  "lofo_margin_l3_over_0015_model_exact": 0.009204,
+  "lofo_mixture_top1": 0.0951,
   "lofo_per_family_margin_over_0015_model": {
-    "base64": null,
-    "binary": null,
-    "code": null,
-    "csv": null,
-    "gutenberg": null,
-    "json": null,
-    "log": null,
-    "mixed": null
+    "base64": 0.0002,
+    "binary": 0.0151,
+    "code": 0.0046,
+    "csv": 0.0137,
+    "gutenberg": -0.0034,
+    "json": 0.0213,
+    "log": 0.0189,
+    "mixed": 0.0032
   },
   "logistic_l3_refit_top1": 0.2317,
-  "missing_roles": [
-    "fold_mixed_logistic_l3"
-  ],
+  "missing_roles": [],
   "n_classes": 26,
   "n_iter_by_fold": {
     "base64": 826,
@@ -768,7 +908,7 @@
     "gutenberg": 954,
     "json": 915,
     "log": 869,
-    "mixed": null
+    "mixed": 848
   },
   "null_control": {
     "block_refills": [
@@ -1166,7 +1306,7 @@
       "val": null
     }
   },
-  "run_finished_utc": null,
+  "run_finished_utc": "2026-09-09T22:28:47Z",
   "run_started_utc": "2026-09-09T18:04:50Z",
   "schema": "raise-v1/lofo_l3_4096/1",
   "schema_version": 1,
