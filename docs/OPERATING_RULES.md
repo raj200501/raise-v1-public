@@ -120,5 +120,6 @@ python3 tests/mutation_test.py        # proof that the gates can fail
 python3 tools/claimcheck.py outbound  # outbound-copy gate
 ```
 
-All three are run in CI on every push (`.github/workflows/verify.yml`) and all three exit
-non-zero on failure.
+All three are run by `bash tools/gates.sh` before every push to main, and by the GitHub Actions workflow
+(`.github/workflows/verify.yml`) when it is started by hand from the Actions tab; automatic runs on push were
+switched off on 2026-09-09 after they spent the account's included minutes. All three exit non-zero on failure.
