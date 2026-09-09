@@ -1,1 +1,5 @@
 {"name": "repro_l3", "fingerprint": "ad3f601b4fbeccaf", "event": "started", "utc": "2026-09-09T18:05:30Z", "rss_gb": 8.34, "pid": 11052, "attempt": 1}
+{"name": "repro_l3", "fingerprint": "ad3f601b4fbeccaf", "event": "completed", "utc": "2026-09-09T18:36:02Z", "rss_gb": 8.44, "pid": 11052, "seconds": 1817.5}
+{"name": "null", "fingerprint": "f5043ccc5cb44e57", "event": "started", "utc": "2026-09-09T18:36:03Z", "rss_gb": 1.69, "pid": 11052, "attempt": 1}
+{"name": "null", "fingerprint": "f5043ccc5cb44e57", "event": "completed", "utc": "2026-09-09T18:37:44Z", "rss_gb": 1.69, "pid": 11052, "seconds": 89.2}
+{"name": "fold_gutenberg_logistic_l3", "fingerprint": "cd888c933a5fcb12", "event": "started", "utc": "2026-09-09T18:38:06Z", "rss_gb": 7.58, "pid": 11052, "attempt": 1}

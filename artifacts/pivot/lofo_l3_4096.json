@@ -1,0 +1,595 @@
+{
+  "any_fold_at_iteration_cap": null,
+  "chance_accuracy": 0.038462,
+  "class_names": [
+    "zlib-1",
+    "zlib-2",
+    "zlib-3",
+    "zlib-4",
+    "zlib-5",
+    "zlib-6",
+    "zlib-7",
+    "zlib-8",
+    "zlib-9",
+    "libdeflate-1",
+    "libdeflate-2",
+    "libdeflate-3",
+    "libdeflate-4",
+    "libdeflate-5",
+    "libdeflate-6",
+    "libdeflate-7",
+    "libdeflate-8",
+    "libdeflate-9",
+    "libdeflate-10",
+    "libdeflate-11",
+    "libdeflate-12",
+    "isal-0",
+    "isal-1",
+    "isal-2",
+    "isal-3",
+    "zopfli"
+  ],
+  "cluster_ci95_informational": {},
+  "cluster_ci95_note": "95% cluster-bootstrap intervals over the held-out family's evaluation chunks (2000 resamples) for each fold and role, and over all 10000 chunks for each mixture; informational, never a clause",
+  "complete": false,
+  "corpus": {
+    "cache_g_sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9",
+    "cache_y_sha256": "2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093",
+    "carve_bytes": 4096,
+    "carve_bytes_source": "sealed cache identity (sha256 of y and g); the cache carries no build metadata",
+    "chunk_id_max": 49999,
+    "chunk_id_min": 0,
+    "chunk_offset": 0,
+    "chunk_size": 32768,
+    "n_features": 1108,
+    "n_rows": 1300000,
+    "n_source_chunks": 50000
+  },
+  "cost": {
+    "banked_fit_seconds_total": 1906.7,
+    "checkpoints": "artifacts/pivot/lofo_l3_4096_ckpt",
+    "interruptions_by_name": {
+      "null": 0,
+      "repro_l3": 0
+    },
+    "seconds_by_name": {
+      "null": 89.2,
+      "repro_l3": 1817.5
+    },
+    "wall_seconds_this_invocation": 1980.6
+  },
+  "environment": {
+    "cgroup_memory_limit": "unlimited",
+    "cpu_cores": 4,
+    "disk_free_gb": 5.19,
+    "gpu": "none",
+    "mem_available_gb": 15.67,
+    "nice": 10,
+    "numpy": "2.4.6",
+    "python": "3.11.15",
+    "sklearn": "1.9.0",
+    "threads": 3
+  },
+  "folds": {
+    "base64": {
+      "logistic_l3": null
+    },
+    "binary": {
+      "logistic_l3": null
+    },
+    "code": {
+      "logistic_l3": null
+    },
+    "csv": {
+      "logistic_l3": null
+    },
+    "gutenberg": {
+      "logistic_l3": null
+    },
+    "json": {
+      "logistic_l3": null
+    },
+    "log": {
+      "logistic_l3": null
+    },
+    "mixed": {
+      "logistic_l3": null
+    }
+  },
+  "launch_environment": {
+    "env": {
+      "cgroup_memory_limit": "unlimited",
+      "cpu_cores": 4,
+      "disk_free_gb": 5.19,
+      "gpu": "none",
+      "mem_available_gb": 15.67,
+      "nice": 10,
+      "numpy": "2.4.6",
+      "python": "3.11.15",
+      "sklearn": "1.9.0",
+      "threads": 3
+    },
+    "ok": true,
+    "problems": []
+  },
+  "launch_number": 1,
+  "ledger": [
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "ad3f601b4fbeccaf",
+      "name": "repro_l3",
+      "pid": 11052,
+      "rss_gb": 8.34,
+      "utc": "2026-09-09T18:05:30Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "ad3f601b4fbeccaf",
+      "name": "repro_l3",
+      "pid": 11052,
+      "rss_gb": 8.44,
+      "seconds": 1817.5,
+      "utc": "2026-09-09T18:36:02Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "f5043ccc5cb44e57",
+      "name": "null",
+      "pid": 11052,
+      "rss_gb": 1.69,
+      "utc": "2026-09-09T18:36:03Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "f5043ccc5cb44e57",
+      "name": "null",
+      "pid": 11052,
+      "rss_gb": 1.69,
+      "seconds": 89.2,
+      "utc": "2026-09-09T18:37:44Z"
+    }
+  ],
+  "lofo": {},
+  "lofo_correct_l3": null,
+  "lofo_margin_l3_over_0015_logistic": null,
+  "lofo_margin_l3_over_0015_model": null,
+  "lofo_margin_l3_over_0015_model_exact": null,
+  "lofo_mixture_top1": null,
+  "lofo_per_family_margin_over_0015_model": {
+    "base64": null,
+    "binary": null,
+    "code": null,
+    "csv": null,
+    "gutenberg": null,
+    "json": null,
+    "log": null,
+    "mixed": null
+  },
+  "logistic_l3_refit_top1": 0.2317,
+  "missing_roles": [
+    "fold_gutenberg_logistic_l3",
+    "fold_base64_logistic_l3",
+    "fold_binary_logistic_l3",
+    "fold_code_logistic_l3",
+    "fold_csv_logistic_l3",
+    "fold_json_logistic_l3",
+    "fold_log_logistic_l3",
+    "fold_mixed_logistic_l3"
+  ],
+  "n_classes": 26,
+  "n_iter_by_fold": {
+    "base64": null,
+    "binary": null,
+    "code": null,
+    "csv": null,
+    "gutenberg": null,
+    "json": null,
+    "log": null,
+    "mixed": null
+  },
+  "null_control": {
+    "block_refills": [
+      {
+        "order": "canonical",
+        "probe_ok": true,
+        "utc": "2026-09-09T18:37:44Z"
+      }
+    ],
+    "environment": {
+      "nice": 10,
+      "numpy": "2.4.6",
+      "python": "3.11.15",
+      "sklearn": "1.9.0",
+      "standardiser_probe": {
+        "block_gb": 0.177,
+        "ncols": 1108,
+        "peak_extra_fraction_of_block": 0.1005,
+        "probe_rows_per_pass": 2000,
+        "production_rows_per_pass": 20000,
+        "production_transient_gb": 0.177,
+        "rows": 20000
+      },
+      "threads": 3
+    },
+    "family": "logistic",
+    "fit_info": {
+      "n_iter": 708
+    },
+    "fit_rows_sha256": "89bb1d7e2ea1068f9f12283c827fa28d1929fa961cfb6eacceb9c391dd3b9504",
+    "fit_rows_sorted_sha256": "0653cc12293ae078dd68b900c8778d93e701261ca93414be9eb7bb8e7ee686db",
+    "head": "null",
+    "heartbeat_max_rss_gb": 1.88,
+    "id": "L3",
+    "interruptions_before_this_fit": 0,
+    "last_heartbeat_rss_gb_before_this_fit": null,
+    "n_fit_rows": 20000,
+    "params": {
+      "C": 1.0,
+      "max_iter": 1000
+    },
+    "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+    "per_family": {
+      "base64": 0.0373,
+      "binary": 0.038,
+      "code": 0.0345,
+      "csv": 0.0409,
+      "gutenberg": 0.0411,
+      "json": 0.0374,
+      "log": 0.0389,
+      "mixed": 0.0386
+    },
+    "rss_gb": 1.69,
+    "rss_gb_is": "anonymous (RssAnon)",
+    "rss_total_gb": 6.55,
+    "ru_maxrss_gb": 13.74,
+    "scaled": true,
+    "seconds": 89.2,
+    "seed": 20260825,
+    "stage": "null",
+    "status": "fit",
+    "top1": 0.0383,
+    "top1_non_gutenberg": 0.0379,
+    "utc": "2026-09-09T18:36:03Z",
+    "val": null
+  },
+  "null_rows": 20000,
+  "partition": {
+    "eval_frac": 0.2,
+    "eval_idx_sha256": "7da1099e0cf9d4c3903dad62f52c91f67b751113fc4bfc0a62c53f05dccf1efa",
+    "eval_y_sha256": "92b95cf02a21945cea2a7bd756a1e1096b07ec351b478c39e795a8a2267400d1",
+    "families": [
+      "gutenberg",
+      "base64",
+      "binary",
+      "code",
+      "csv",
+      "json",
+      "log",
+      "mixed"
+    ],
+    "fold_rows": "all",
+    "folds": {
+      "base64": {
+        "eval_idx_sha256": "bdebc4239afd64ccdfc6c27415326d95f29d1bcd8b46a4cf87b2c7fb63ad04eb",
+        "n_eval_chunks": 1264,
+        "n_eval_rows": 32864,
+        "n_train_chunks": 35014,
+        "n_train_rows": 700560,
+        "train_chunks_shared_with_eval": 0,
+        "train_idx_sha256": "989a2bb2df796f435a81dce996f0a9f5764044696c2eafaa85dcb58043854c32",
+        "train_rows_in_eval": 0,
+        "train_rows_of_heldout_family": 0,
+        "train_sorted_sha256": "32a0e6e6e99c0ff3140c0004c4b78faf3ea7958584191a835e47406d04b6d404"
+      },
+      "binary": {
+        "eval_idx_sha256": "f91f609e7fb8739a17c0bb3a6fce9afdf1599b8282e14e366823461fb1dbd8c4",
+        "n_eval_chunks": 1249,
+        "n_eval_rows": 32474,
+        "n_train_chunks": 34999,
+        "n_train_rows": 699897,
+        "train_chunks_shared_with_eval": 0,
+        "train_idx_sha256": "986eb2ee3bf4193c97d3a0d730ab01d158292c864252633864122a218a51c653",
+        "train_rows_in_eval": 0,
+        "train_rows_of_heldout_family": 0,
+        "train_sorted_sha256": "9a5c958d8122ecda681a4292ed85d25fb8c6690c6f78a7f0d24a64e2a5ebf6a4"
+      },
+      "code": {
+        "eval_idx_sha256": "578248b2f2350e7aa5d3f7b2a832ecdb14fbd97d93e4690b7b4ea1e73a504bec",
+        "n_eval_chunks": 1225,
+        "n_eval_rows": 31850,
+        "n_train_chunks": 34975,
+        "n_train_rows": 699654,
+        "train_chunks_shared_with_eval": 0,
+        "train_idx_sha256": "14a38f73e27f9a4906b91e6803cae5cbe89fe0da1fa1e18b241038ff2653c222",
+        "train_rows_in_eval": 0,
+        "train_rows_of_heldout_family": 0,
+        "train_sorted_sha256": "39f72aa942c473a4ac8867c11d056a0527b5e6f0f4602c2e643157a2eff73775"
+      },
+      "csv": {
+        "eval_idx_sha256": "b4ccfb51f5b8b54b2ef856b54af6e79cc7ca6ed62bc0d8cc8a7bfcac09dc5555",
+        "n_eval_chunks": 1216,
+        "n_eval_rows": 31616,
+        "n_train_chunks": 34966,
+        "n_train_rows": 699440,
+        "train_chunks_shared_with_eval": 0,
+        "train_idx_sha256": "8ae358528d974d213f64ee1d8d7800af18babba31b96dec37d6feb561afdf612",
+        "train_rows_in_eval": 0,
+        "train_rows_of_heldout_family": 0,
+        "train_sorted_sha256": "8f6fee17a72ee29f6bb8c2215e7b4bad24b367c2444e6eaa84e5ea7002017233"
+      },
+      "gutenberg": {
+        "eval_idx_sha256": "a6a1bef8036511315d2ac17e4a0f7078c6be848ca1c2c4b42d4ee6a084a56202",
+        "n_eval_chunks": 1269,
+        "n_eval_rows": 32994,
+        "n_train_chunks": 35019,
+        "n_train_rows": 700288,
+        "train_chunks_shared_with_eval": 0,
+        "train_idx_sha256": "036d65b93a92e3ebb950e4fe37c0a0354c18c8e258961ba21db37b6196f561e3",
+        "train_rows_in_eval": 0,
+        "train_rows_of_heldout_family": 0,
+        "train_sorted_sha256": "e9c059873523e8543196c8bbb32fcaf0f628124a94c8b9766c75fdf5a2ab9648"
+      },
+      "json": {
+        "eval_idx_sha256": "8eacb2d465c04006d1dbfd1452653d2cb4eab3a9ca633b1301b0b0064a17aaa4",
+        "n_eval_chunks": 1260,
+        "n_eval_rows": 32760,
+        "n_train_chunks": 35010,
+        "n_train_rows": 700071,
+        "train_chunks_shared_with_eval": 0,
+        "train_idx_sha256": "6f4c8110a832e4c3a1b184bbb212ae7d417e74784de11628369d7aa8e8726e25",
+        "train_rows_in_eval": 0,
+        "train_rows_of_heldout_family": 0,
+        "train_sorted_sha256": "f9d7de73a4ffd623c962bdd8a82f8e8ab4959ab49b0989e3ca3907d22dfedb5d"
+      },
+      "log": {
+        "eval_idx_sha256": "1dab3cc04aa0ae442fc9cab1dd0f0cafd5b1b2e0cf3de25341ab39d8752e1d8b",
+        "n_eval_chunks": 1279,
+        "n_eval_rows": 33254,
+        "n_train_chunks": 35029,
+        "n_train_rows": 700473,
+        "train_chunks_shared_with_eval": 0,
+        "train_idx_sha256": "03ac48cec4a2761b22d023db503e17403e69251891387bd1836ae57e09635695",
+        "train_rows_in_eval": 0,
+        "train_rows_of_heldout_family": 0,
+        "train_sorted_sha256": "72a9d924f37f03ee6727e434ff839f04d101d697f413503d01c0106e39ae3fcb"
+      },
+      "mixed": {
+        "eval_idx_sha256": "3749067dd47d4a788ada22122dcf43c159d462ba5ade7904398735bdf94a80f1",
+        "n_eval_chunks": 1238,
+        "n_eval_rows": 32188,
+        "n_train_chunks": 34988,
+        "n_train_rows": 699617,
+        "train_chunks_shared_with_eval": 0,
+        "train_idx_sha256": "21870ebf6835b9e404baf3e729bf8cf5236da421479014ed7ae295df82ec1425",
+        "train_rows_in_eval": 0,
+        "train_rows_of_heldout_family": 0,
+        "train_sorted_sha256": "7705b06a505570c34bb5ade21e6be99c704fc8b012d854891bb8df5a81b7c5f7"
+      }
+    },
+    "n_eval_chunks": 10000,
+    "n_eval_non_gutenberg": 227006,
+    "n_eval_rows": 260000,
+    "n_pool_chunks": 40000,
+    "n_pool_rows": 800000,
+    "null_rows": 20000,
+    "null_sorted_sha256": "0653cc12293ae078dd68b900c8778d93e701261ca93414be9eb7bb8e7ee686db",
+    "pool_idx_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+    "pool_sorted_sha256": "923cd266c3bf2a45683b2c479d36b046b311cc8f2e53426c962b6dd5ae836094",
+    "pool_y_sha256": "d519612b4e46991f6ea1850fc92271e0de581e3cc378dd05fec59ff678dc72ea",
+    "seed": 20260825,
+    "split_is_grouped_by_source": true,
+    "top_rung": 800000
+  },
+  "preregistration": "0017-lofo-l3-4096",
+  "protocol": {
+    "bar": {
+      "l3_correct_minus_0015_incumbent_correct_over_n_eval": 0.02
+    },
+    "cache_identity": {
+      "g_sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9",
+      "y_sha256": "2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093"
+    },
+    "caps": {
+      "memory_kill_gb": 13.0
+    },
+    "carve": 4096,
+    "chunk_offset": 0,
+    "chunk_size": 32768,
+    "environment": {
+      "numpy": "2.4.6",
+      "python": "3.11.15",
+      "sklearn": "1.9.0"
+    },
+    "eval_frac": 0.2,
+    "families": [
+      "gutenberg",
+      "base64",
+      "binary",
+      "code",
+      "csv",
+      "json",
+      "log",
+      "mixed"
+    ],
+    "fold_rows": "all",
+    "launch": {
+      "min_disk_free_gb": 0.25,
+      "min_mem_available_gb": 14.5
+    },
+    "nice": 10,
+    "null_rows": 20000,
+    "null_tolerance": 0.02,
+    "order": [
+      "reproduction_l3",
+      "null",
+      "folds"
+    ],
+    "reference_0015": {
+      "counts_source": "sum of the stitched vectors lofo_mixture_model and lofo_mixture_logistic in artifacts/pivot/lofo_4096_scores.json (22343 / 260000 = 0.085935, banked 0.0859; 24131 / 260000 = 0.092812, banked 0.0928)",
+      "logistic_correct": 24131,
+      "logistic_mixture_top1": 0.0928,
+      "logistic_per_family": {
+        "base64": 0.0596,
+        "binary": 0.0773,
+        "code": 0.1023,
+        "csv": 0.103,
+        "gutenberg": 0.0635,
+        "json": 0.1504,
+        "log": 0.1104,
+        "mixed": 0.0762
+      },
+      "logistic_structured_four_top1": 0.1167,
+      "majority_mixture_top1": 0.0385,
+      "model_correct": 22343,
+      "model_mixture_top1": 0.0859,
+      "model_per_family": {
+        "base64": 0.0653,
+        "binary": 0.0618,
+        "code": 0.1135,
+        "csv": 0.0968,
+        "gutenberg": 0.0552,
+        "json": 0.1134,
+        "log": 0.1083,
+        "mixed": 0.0738
+      },
+      "model_structured_four_top1": 0.1081,
+      "n_eval_rows": 260000,
+      "source": "artifacts/pivot/lofo_4096.json"
+    },
+    "reproduction_tolerance": 0.005,
+    "roles": [
+      "logistic_l3"
+    ],
+    "seed": 20260825,
+    "structured_families": [
+      "code",
+      "csv",
+      "json",
+      "log"
+    ],
+    "threads": 3,
+    "top_rung": 800000
+  },
+  "protocol_sha256": "6a0f5fc20f706bf922f0cd826aca614353e8ed253f99d6d28e13092ed79a1d8b",
+  "recipes": {
+    "logistic_l3": {
+      "family": "logistic",
+      "id": "L3",
+      "params": {
+        "C": 1.0,
+        "max_iter": 1000
+      },
+      "scaled": true,
+      "why": "standardised inputs with C 1.0: the single most standard fix for an lbfgs logistic on 1108 unscaled hand-engineered columns"
+    }
+  },
+  "recipes_sha256": "67d78d3fece51a0877f53a4a9611a82fd5b9f8907a83da060907652ddc9a1b8b",
+  "reference_0015": {
+    "counts_source": "sum of the stitched vectors lofo_mixture_model and lofo_mixture_logistic in artifacts/pivot/lofo_4096_scores.json (22343 / 260000 = 0.085935, banked 0.0859; 24131 / 260000 = 0.092812, banked 0.0928)",
+    "logistic_correct": 24131,
+    "logistic_mixture_top1": 0.0928,
+    "logistic_per_family": {
+      "base64": 0.0596,
+      "binary": 0.0773,
+      "code": 0.1023,
+      "csv": 0.103,
+      "gutenberg": 0.0635,
+      "json": 0.1504,
+      "log": 0.1104,
+      "mixed": 0.0762
+    },
+    "logistic_structured_four_top1": 0.1167,
+    "majority_mixture_top1": 0.0385,
+    "model_correct": 22343,
+    "model_mixture_top1": 0.0859,
+    "model_per_family": {
+      "base64": 0.0653,
+      "binary": 0.0618,
+      "code": 0.1135,
+      "csv": 0.0968,
+      "gutenberg": 0.0552,
+      "json": 0.1134,
+      "log": 0.1083,
+      "mixed": 0.0738
+    },
+    "model_structured_four_top1": 0.1081,
+    "n_eval_rows": 260000,
+    "source": "artifacts/pivot/lofo_4096.json"
+  },
+  "reproduction": {
+    "logistic_l3": {
+      "block_refills": [
+        {
+          "order": "canonical",
+          "probe_ok": true,
+          "utc": "2026-09-09T18:36:02Z"
+        }
+      ],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "logistic",
+      "fit_info": {
+        "n_iter": 728
+      },
+      "fit_rows_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+      "fit_rows_sorted_sha256": "923cd266c3bf2a45683b2c479d36b046b311cc8f2e53426c962b6dd5ae836094",
+      "head": "logistic_l3",
+      "heartbeat_max_rss_gb": 8.77,
+      "id": "L3",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 800000,
+      "params": {
+        "C": 1.0,
+        "max_iter": 1000
+      },
+      "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+      "per_family": {
+        "base64": 0.0909,
+        "binary": 0.0852,
+        "code": 0.3127,
+        "csv": 0.3303,
+        "gutenberg": 0.1558,
+        "json": 0.3906,
+        "log": 0.3744,
+        "mixed": 0.115
+      },
+      "rss_gb": 8.44,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 13.14,
+      "ru_maxrss_gb": 13.74,
+      "scaled": true,
+      "seconds": 1817.5,
+      "seed": 20260825,
+      "stage": "reproduction",
+      "status": "fit",
+      "top1": 0.2317,
+      "top1_non_gutenberg": 0.2427,
+      "utc": "2026-09-09T18:05:30Z",
+      "val": null
+    }
+  },
+  "run_finished_utc": null,
+  "run_started_utc": "2026-09-09T18:04:50Z",
+  "schema": "raise-v1/lofo_l3_4096/1",
+  "schema_version": 1,
+  "shuffled_label_accuracy": 0.0383,
+  "smoke": false,
+  "stage": "run"
+}
