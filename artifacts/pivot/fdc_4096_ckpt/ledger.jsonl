@@ -203,3 +203,17 @@
 {"name": "fold_code_k1_model", "fingerprint": "5dcb9ae67da73a30", "event": "started", "utc": "2026-09-09T12:39:52Z", "rss_gb": 2.77, "pid": 892, "attempt": 1}
 {"name": "fold_code_k1_model", "fingerprint": "5dcb9ae67da73a30", "event": "completed", "utc": "2026-09-09T12:43:56Z", "rss_gb": 2.75, "pid": 892, "seconds": 229.1}
 {"name": "fold_code_k1_logistic_l3", "fingerprint": "f607ce1b2878285c", "event": "started", "utc": "2026-09-09T12:43:57Z", "rss_gb": 2.75, "pid": 892, "attempt": 1}
+{"name": "fold_code_k1_logistic_l3", "fingerprint": "f607ce1b2878285c", "event": "completed", "utc": "2026-09-09T12:48:41Z", "rss_gb": 2.75, "pid": 892, "seconds": 273.4}
+{"name": "fold_code_k2_majority", "fingerprint": "86e457841236be63", "event": "started", "utc": "2026-09-09T12:48:42Z", "rss_gb": 2.75, "pid": 892, "attempt": 1}
+{"name": "fold_code_k2_majority", "fingerprint": "86e457841236be63", "event": "completed", "utc": "2026-09-09T12:48:43Z", "rss_gb": 2.75, "pid": 892, "seconds": 0.0}
+{"name": "fold_code_k2_logistic", "fingerprint": "236495d3e979a84e", "event": "started", "utc": "2026-09-09T12:48:43Z", "rss_gb": 2.75, "pid": 892, "attempt": 1}
+{"name": "fold_code_k2_logistic", "fingerprint": "236495d3e979a84e", "event": "completed", "utc": "2026-09-09T12:50:58Z", "rss_gb": 2.75, "pid": 892, "seconds": 131.4}
+{"name": "fold_code_k2_model", "fingerprint": "f8b2244312883504", "event": "started", "utc": "2026-09-09T12:50:58Z", "rss_gb": 2.75, "pid": 892, "attempt": 1}
+{"name": "fold_code_k2_model", "fingerprint": "f8b2244312883504", "event": "completed", "utc": "2026-09-09T13:04:56Z", "rss_gb": 2.92, "pid": 892, "seconds": 788.4}
+{"name": "fold_code_k2_logistic_l3", "fingerprint": "f5b8ac013a7fb161", "event": "started", "utc": "2026-09-09T13:04:56Z", "rss_gb": 2.75, "pid": 892, "attempt": 1}
+{"name": "fold_code_k2_logistic_l3", "fingerprint": "f5b8ac013a7fb161", "event": "completed", "utc": "2026-09-09T13:09:08Z", "rss_gb": 2.75, "pid": 892, "seconds": 240.0}
+{"name": "fold_code_k4_majority", "fingerprint": "1e57922bfd7103df", "event": "started", "utc": "2026-09-09T13:09:09Z", "rss_gb": 2.75, "pid": 892, "attempt": 1}
+{"name": "fold_code_k4_majority", "fingerprint": "1e57922bfd7103df", "event": "completed", "utc": "2026-09-09T13:09:09Z", "rss_gb": 2.75, "pid": 892, "seconds": 0.0}
+{"name": "fold_code_k4_logistic", "fingerprint": "0b81527eca73f13e", "event": "started", "utc": "2026-09-09T13:09:10Z", "rss_gb": 2.75, "pid": 892, "attempt": 1}
+{"name": "fold_code_k4_logistic", "fingerprint": "0b81527eca73f13e", "event": "completed", "utc": "2026-09-09T13:11:28Z", "rss_gb": 2.75, "pid": 892, "seconds": 134.7}
+{"name": "fold_code_k4_model", "fingerprint": "94f002a2b8de8f7e", "event": "started", "utc": "2026-09-09T13:11:28Z", "rss_gb": 2.75, "pid": 892, "attempt": 1}
