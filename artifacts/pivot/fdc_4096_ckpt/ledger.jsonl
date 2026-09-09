@@ -513,3 +513,6 @@
 {"name": "pred_mixed_k1_logistic", "fingerprint": "37af9dd0d7928023", "event": "started", "utc": "2026-09-09T17:54:09Z", "rss_gb": 2.75, "pid": 892, "attempt": 1}
 {"name": "pred_mixed_k1_logistic", "fingerprint": "37af9dd0d7928023", "event": "completed", "utc": "2026-09-09T17:56:13Z", "rss_gb": 2.75, "pid": 892, "seconds": 121.4}
 {"name": "pred_mixed_k1_model", "fingerprint": "6b9441887b79752c", "event": "started", "utc": "2026-09-09T17:56:14Z", "rss_gb": 2.75, "pid": 892, "attempt": 1}
+{"name": "pred_mixed_k1_model", "fingerprint": "6b9441887b79752c", "event": "completed", "utc": "2026-09-09T17:59:39Z", "rss_gb": 2.75, "pid": 892, "seconds": 191.3}
+{"name": "pred_mixed_k1_logistic_l3", "fingerprint": "af78d3629019c3c2", "event": "started", "utc": "2026-09-09T17:59:40Z", "rss_gb": 2.75, "pid": 892, "attempt": 1}
+{"name": "pred_mixed_k1_logistic_l3", "fingerprint": "af78d3629019c3c2", "event": "completed", "utc": "2026-09-09T18:02:26Z", "rss_gb": 2.75, "pid": 892, "seconds": 155.9}

@@ -28,9 +28,1166 @@
     "isal-3",
     "zopfli"
   ],
-  "cluster_ci95_informational": {},
+  "cluster_ci95_informational": {
+    "depth_base64_c1225_logistic": [
+      0.0658,
+      0.069
+    ],
+    "depth_base64_c1225_logistic_l3": [
+      0.0634,
+      0.0662
+    ],
+    "depth_base64_c1225_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_base64_c1225_model": [
+      0.063,
+      0.0662
+    ],
+    "depth_base64_c2450_logistic": [
+      0.0254,
+      0.0286
+    ],
+    "depth_base64_c2450_logistic_l3": [
+      0.0631,
+      0.066
+    ],
+    "depth_base64_c2450_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_base64_c2450_model": [
+      0.0628,
+      0.0658
+    ],
+    "depth_base64_c700_logistic": [
+      0.0693,
+      0.0723
+    ],
+    "depth_base64_c700_logistic_l3": [
+      0.0231,
+      0.026
+    ],
+    "depth_base64_c700_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_base64_c700_model": [
+      0.0641,
+      0.0672
+    ],
+    "depth_binary_c1225_logistic": [
+      0.0762,
+      0.0786
+    ],
+    "depth_binary_c1225_logistic_l3": [
+      0.0371,
+      0.0402
+    ],
+    "depth_binary_c1225_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_binary_c1225_model": [
+      0.0508,
+      0.0542
+    ],
+    "depth_binary_c2450_logistic": [
+      0.076,
+      0.0784
+    ],
+    "depth_binary_c2450_logistic_l3": [
+      0.0384,
+      0.0417
+    ],
+    "depth_binary_c2450_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_binary_c2450_model": [
+      0.0766,
+      0.0796
+    ],
+    "depth_binary_c700_logistic": [
+      0.0753,
+      0.0777
+    ],
+    "depth_binary_c700_logistic_l3": [
+      0.0378,
+      0.0412
+    ],
+    "depth_binary_c700_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_binary_c700_model": [
+      0.0763,
+      0.0797
+    ],
+    "depth_code_c1225_logistic": [
+      0.0587,
+      0.0634
+    ],
+    "depth_code_c1225_logistic_l3": [
+      0.0474,
+      0.0518
+    ],
+    "depth_code_c1225_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_code_c1225_model": [
+      0.0519,
+      0.0564
+    ],
+    "depth_code_c2450_logistic": [
+      0.0658,
+      0.0701
+    ],
+    "depth_code_c2450_logistic_l3": [
+      0.0447,
+      0.0489
+    ],
+    "depth_code_c2450_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_code_c2450_model": [
+      0.0482,
+      0.0524
+    ],
+    "depth_code_c700_logistic": [
+      0.0533,
+      0.0578
+    ],
+    "depth_code_c700_logistic_l3": [
+      0.0494,
+      0.054
+    ],
+    "depth_code_c700_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_code_c700_model": [
+      0.0519,
+      0.0562
+    ],
+    "depth_csv_c1225_logistic": [
+      0.1259,
+      0.1307
+    ],
+    "depth_csv_c1225_logistic_l3": [
+      0.1249,
+      0.1306
+    ],
+    "depth_csv_c1225_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_csv_c1225_model": [
+      0.1371,
+      0.1431
+    ],
+    "depth_csv_c2450_logistic": [
+      0.1337,
+      0.1395
+    ],
+    "depth_csv_c2450_logistic_l3": [
+      0.1296,
+      0.1353
+    ],
+    "depth_csv_c2450_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_csv_c2450_model": [
+      0.1395,
+      0.1458
+    ],
+    "depth_csv_c700_logistic": [
+      0.114,
+      0.1181
+    ],
+    "depth_csv_c700_logistic_l3": [
+      0.0995,
+      0.1053
+    ],
+    "depth_csv_c700_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_csv_c700_model": [
+      0.138,
+      0.1439
+    ],
+    "depth_gutenberg_c1225_logistic": [
+      0.0276,
+      0.031
+    ],
+    "depth_gutenberg_c1225_logistic_l3": [
+      0.0281,
+      0.0316
+    ],
+    "depth_gutenberg_c1225_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_gutenberg_c1225_model": [
+      0.0313,
+      0.035
+    ],
+    "depth_gutenberg_c2450_logistic": [
+      0.0244,
+      0.0278
+    ],
+    "depth_gutenberg_c2450_logistic_l3": [
+      0.0285,
+      0.032
+    ],
+    "depth_gutenberg_c2450_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_gutenberg_c2450_model": [
+      0.0284,
+      0.032
+    ],
+    "depth_gutenberg_c700_logistic": [
+      0.0255,
+      0.0287
+    ],
+    "depth_gutenberg_c700_logistic_l3": [
+      0.0289,
+      0.0326
+    ],
+    "depth_gutenberg_c700_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_gutenberg_c700_model": [
+      0.0301,
+      0.0339
+    ],
+    "depth_json_c1225_logistic": [
+      0.1107,
+      0.1147
+    ],
+    "depth_json_c1225_logistic_l3": [
+      0.1164,
+      0.1219
+    ],
+    "depth_json_c1225_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_json_c1225_model": [
+      0.1071,
+      0.1121
+    ],
+    "depth_json_c2450_logistic": [
+      0.112,
+      0.116
+    ],
+    "depth_json_c2450_logistic_l3": [
+      0.1233,
+      0.1288
+    ],
+    "depth_json_c2450_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_json_c2450_model": [
+      0.1091,
+      0.1141
+    ],
+    "depth_json_c700_logistic": [
+      0.1091,
+      0.113
+    ],
+    "depth_json_c700_logistic_l3": [
+      0.1135,
+      0.119
+    ],
+    "depth_json_c700_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_json_c700_model": [
+      0.1072,
+      0.1121
+    ],
+    "depth_log_c1225_logistic": [
+      0.0328,
+      0.0365
+    ],
+    "depth_log_c1225_logistic_l3": [
+      0.0352,
+      0.0391
+    ],
+    "depth_log_c1225_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_log_c1225_model": [
+      0.0346,
+      0.0385
+    ],
+    "depth_log_c2450_logistic": [
+      0.0366,
+      0.0403
+    ],
+    "depth_log_c2450_logistic_l3": [
+      0.0338,
+      0.0377
+    ],
+    "depth_log_c2450_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_log_c2450_model": [
+      0.0334,
+      0.0374
+    ],
+    "depth_log_c700_logistic": [
+      0.0391,
+      0.043
+    ],
+    "depth_log_c700_logistic_l3": [
+      0.0349,
+      0.0387
+    ],
+    "depth_log_c700_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_log_c700_model": [
+      0.0309,
+      0.0347
+    ],
+    "depth_mixed_c1225_logistic": [
+      0.0745,
+      0.0775
+    ],
+    "depth_mixed_c1225_logistic_l3": [
+      0.0786,
+      0.0827
+    ],
+    "depth_mixed_c1225_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_mixed_c1225_model": [
+      0.0361,
+      0.0402
+    ],
+    "depth_mixed_c2450_logistic": [
+      0.0794,
+      0.0828
+    ],
+    "depth_mixed_c2450_logistic_l3": [
+      0.0885,
+      0.0928
+    ],
+    "depth_mixed_c2450_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_mixed_c2450_model": [
+      0.0388,
+      0.0428
+    ],
+    "depth_mixed_c700_logistic": [
+      0.0823,
+      0.0859
+    ],
+    "depth_mixed_c700_logistic_l3": [
+      0.0989,
+      0.1035
+    ],
+    "depth_mixed_c700_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_mixed_c700_model": [
+      0.0367,
+      0.0408
+    ],
+    "depth_mixture_c1225_logistic": [
+      0.0721,
+      0.0739
+    ],
+    "depth_mixture_c1225_logistic_l3": [
+      0.0671,
+      0.0691
+    ],
+    "depth_mixture_c1225_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_mixture_c1225_model": [
+      0.0647,
+      0.0668
+    ],
+    "depth_mixture_c2450_logistic": [
+      0.0696,
+      0.0716
+    ],
+    "depth_mixture_c2450_logistic_l3": [
+      0.0695,
+      0.0715
+    ],
+    "depth_mixture_c2450_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_mixture_c2450_model": [
+      0.0678,
+      0.0699
+    ],
+    "depth_mixture_c700_logistic": [
+      0.0717,
+      0.0734
+    ],
+    "depth_mixture_c700_logistic_l3": [
+      0.0615,
+      0.0636
+    ],
+    "depth_mixture_c700_majority": [
+      0.0385,
+      0.0385
+    ],
+    "depth_mixture_c700_model": [
+      0.0676,
+      0.0696
+    ],
+    "fdc_mixture_k1_logistic": [
+      0.0693,
+      0.0712
+    ],
+    "fdc_mixture_k1_logistic_l3": [
+      0.0699,
+      0.0719
+    ],
+    "fdc_mixture_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fdc_mixture_k1_model": [
+      0.0656,
+      0.0676
+    ],
+    "fdc_mixture_k2_logistic": [
+      0.0853,
+      0.0871
+    ],
+    "fdc_mixture_k2_logistic_l3": [
+      0.0763,
+      0.0783
+    ],
+    "fdc_mixture_k2_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fdc_mixture_k2_model": [
+      0.0644,
+      0.0662
+    ],
+    "fdc_mixture_k4_logistic": [
+      0.081,
+      0.0826
+    ],
+    "fdc_mixture_k4_logistic_l3": [
+      0.083,
+      0.0848
+    ],
+    "fdc_mixture_k4_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fdc_mixture_k4_model": [
+      0.0727,
+      0.0745
+    ],
+    "fdc_mixture_k7_logistic": [
+      0.0938,
+      0.0957
+    ],
+    "fdc_mixture_k7_logistic_l3": [
+      0.0931,
+      0.0951
+    ],
+    "fdc_mixture_k7_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fdc_mixture_k7_model": [
+      0.0819,
+      0.0839
+    ],
+    "fold_base64_k1_logistic": [
+      0.028,
+      0.031
+    ],
+    "fold_base64_k1_logistic_l3": [
+      0.0633,
+      0.0662
+    ],
+    "fold_base64_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_base64_k1_model": [
+      0.0499,
+      0.0536
+    ],
+    "fold_base64_k2_logistic": [
+      0.0626,
+      0.0655
+    ],
+    "fold_base64_k2_logistic_l3": [
+      0.0626,
+      0.0657
+    ],
+    "fold_base64_k2_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_base64_k2_model": [
+      0.0394,
+      0.0433
+    ],
+    "fold_base64_k4_logistic": [
+      0.059,
+      0.0613
+    ],
+    "fold_base64_k4_logistic_l3": [
+      0.0606,
+      0.0636
+    ],
+    "fold_base64_k4_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_base64_k4_model": [
+      0.0556,
+      0.0591
+    ],
+    "fold_base64_k7_logistic": [
+      0.062,
+      0.0645
+    ],
+    "fold_base64_k7_logistic_l3": [
+      0.0643,
+      0.0676
+    ],
+    "fold_base64_k7_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_base64_k7_model": [
+      0.0678,
+      0.0712
+    ],
+    "fold_binary_k1_logistic": [
+      0.0749,
+      0.0775
+    ],
+    "fold_binary_k1_logistic_l3": [
+      0.0372,
+      0.0404
+    ],
+    "fold_binary_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_binary_k1_model": [
+      0.0767,
+      0.0798
+    ],
+    "fold_binary_k2_logistic": [
+      0.0757,
+      0.0783
+    ],
+    "fold_binary_k2_logistic_l3": [
+      0.0358,
+      0.0387
+    ],
+    "fold_binary_k2_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_binary_k2_model": [
+      0.0392,
+      0.0422
+    ],
+    "fold_binary_k4_logistic": [
+      0.0764,
+      0.078
+    ],
+    "fold_binary_k4_logistic_l3": [
+      0.0621,
+      0.0649
+    ],
+    "fold_binary_k4_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_binary_k4_model": [
+      0.0381,
+      0.041
+    ],
+    "fold_binary_k7_logistic": [
+      0.0768,
+      0.0794
+    ],
+    "fold_binary_k7_logistic_l3": [
+      0.0746,
+      0.0781
+    ],
+    "fold_binary_k7_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_binary_k7_model": [
+      0.0678,
+      0.072
+    ],
+    "fold_code_k1_logistic": [
+      0.0666,
+      0.071
+    ],
+    "fold_code_k1_logistic_l3": [
+      0.0485,
+      0.0528
+    ],
+    "fold_code_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_code_k1_model": [
+      0.0505,
+      0.0547
+    ],
+    "fold_code_k2_logistic": [
+      0.1192,
+      0.1243
+    ],
+    "fold_code_k2_logistic_l3": [
+      0.0998,
+      0.106
+    ],
+    "fold_code_k2_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_code_k2_model": [
+      0.1019,
+      0.1072
+    ],
+    "fold_code_k4_logistic": [
+      0.1137,
+      0.1196
+    ],
+    "fold_code_k4_logistic_l3": [
+      0.0994,
+      0.106
+    ],
+    "fold_code_k4_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_code_k4_model": [
+      0.115,
+      0.1208
+    ],
+    "fold_code_k7_logistic": [
+      0.1029,
+      0.1084
+    ],
+    "fold_code_k7_logistic_l3": [
+      0.1086,
+      0.1142
+    ],
+    "fold_code_k7_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_code_k7_model": [
+      0.0998,
+      0.1049
+    ],
+    "fold_csv_k1_logistic": [
+      0.1323,
+      0.1379
+    ],
+    "fold_csv_k1_logistic_l3": [
+      0.1353,
+      0.1409
+    ],
+    "fold_csv_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_csv_k1_model": [
+      0.1369,
+      0.1429
+    ],
+    "fold_csv_k2_logistic": [
+      0.1315,
+      0.1364
+    ],
+    "fold_csv_k2_logistic_l3": [
+      0.1219,
+      0.1273
+    ],
+    "fold_csv_k2_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_csv_k2_model": [
+      0.1031,
+      0.108
+    ],
+    "fold_csv_k4_logistic": [
+      0.09,
+      0.0947
+    ],
+    "fold_csv_k4_logistic_l3": [
+      0.1247,
+      0.1301
+    ],
+    "fold_csv_k4_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_csv_k4_model": [
+      0.0952,
+      0.1008
+    ],
+    "fold_csv_k7_logistic": [
+      0.1052,
+      0.11
+    ],
+    "fold_csv_k7_logistic_l3": [
+      0.1179,
+      0.1235
+    ],
+    "fold_csv_k7_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_csv_k7_model": [
+      0.0971,
+      0.1028
+    ],
+    "fold_gutenberg_k1_logistic": [
+      0.0285,
+      0.0319
+    ],
+    "fold_gutenberg_k1_logistic_l3": [
+      0.027,
+      0.0307
+    ],
+    "fold_gutenberg_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_gutenberg_k1_model": [
+      0.0286,
+      0.0322
+    ],
+    "fold_gutenberg_k2_logistic": [
+      0.0266,
+      0.03
+    ],
+    "fold_gutenberg_k2_logistic_l3": [
+      0.0305,
+      0.0342
+    ],
+    "fold_gutenberg_k2_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_gutenberg_k2_model": [
+      0.0295,
+      0.033
+    ],
+    "fold_gutenberg_k4_logistic": [
+      0.0466,
+      0.0508
+    ],
+    "fold_gutenberg_k4_logistic_l3": [
+      0.045,
+      0.0494
+    ],
+    "fold_gutenberg_k4_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_gutenberg_k4_model": [
+      0.0486,
+      0.0532
+    ],
+    "fold_gutenberg_k7_logistic": [
+      0.0656,
+      0.0703
+    ],
+    "fold_gutenberg_k7_logistic_l3": [
+      0.049,
+      0.0539
+    ],
+    "fold_gutenberg_k7_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_gutenberg_k7_model": [
+      0.0485,
+      0.053
+    ],
+    "fold_json_k1_logistic": [
+      0.1071,
+      0.1113
+    ],
+    "fold_json_k1_logistic_l3": [
+      0.1251,
+      0.1306
+    ],
+    "fold_json_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_json_k1_model": [
+      0.1021,
+      0.1072
+    ],
+    "fold_json_k2_logistic": [
+      0.1097,
+      0.1145
+    ],
+    "fold_json_k2_logistic_l3": [
+      0.0963,
+      0.101
+    ],
+    "fold_json_k2_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_json_k2_model": [
+      0.0908,
+      0.0955
+    ],
+    "fold_json_k4_logistic": [
+      0.0941,
+      0.0987
+    ],
+    "fold_json_k4_logistic_l3": [
+      0.0984,
+      0.1028
+    ],
+    "fold_json_k4_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_json_k4_model": [
+      0.0843,
+      0.0888
+    ],
+    "fold_json_k7_logistic": [
+      0.145,
+      0.1512
+    ],
+    "fold_json_k7_logistic_l3": [
+      0.1229,
+      0.1288
+    ],
+    "fold_json_k7_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_json_k7_model": [
+      0.1057,
+      0.1111
+    ],
+    "fold_log_k1_logistic": [
+      0.036,
+      0.0395
+    ],
+    "fold_log_k1_logistic_l3": [
+      0.0311,
+      0.0349
+    ],
+    "fold_log_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_log_k1_model": [
+      0.0362,
+      0.0402
+    ],
+    "fold_log_k2_logistic": [
+      0.0745,
+      0.0772
+    ],
+    "fold_log_k2_logistic_l3": [
+      0.0743,
+      0.0789
+    ],
+    "fold_log_k2_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_log_k2_model": [
+      0.0662,
+      0.0703
+    ],
+    "fold_log_k4_logistic": [
+      0.085,
+      0.0889
+    ],
+    "fold_log_k4_logistic_l3": [
+      0.0911,
+      0.0955
+    ],
+    "fold_log_k4_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_log_k4_model": [
+      0.0746,
+      0.0789
+    ],
+    "fold_log_k7_logistic": [
+      0.1088,
+      0.1132
+    ],
+    "fold_log_k7_logistic_l3": [
+      0.1241,
+      0.1297
+    ],
+    "fold_log_k7_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_log_k7_model": [
+      0.1009,
+      0.1059
+    ],
+    "fold_mixed_k1_logistic": [
+      0.0764,
+      0.0799
+    ],
+    "fold_mixed_k1_logistic_l3": [
+      0.0864,
+      0.0904
+    ],
+    "fold_mixed_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_mixed_k1_model": [
+      0.0384,
+      0.0423
+    ],
+    "fold_mixed_k2_logistic": [
+      0.0776,
+      0.0813
+    ],
+    "fold_mixed_k2_logistic_l3": [
+      0.0823,
+      0.0868
+    ],
+    "fold_mixed_k2_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_mixed_k2_model": [
+      0.0379,
+      0.0419
+    ],
+    "fold_mixed_k4_logistic": [
+      0.076,
+      0.0793
+    ],
+    "fold_mixed_k4_logistic_l3": [
+      0.074,
+      0.0778
+    ],
+    "fold_mixed_k4_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_mixed_k4_model": [
+      0.0615,
+      0.0663
+    ],
+    "fold_mixed_k7_logistic": [
+      0.0755,
+      0.0778
+    ],
+    "fold_mixed_k7_logistic_l3": [
+      0.0733,
+      0.077
+    ],
+    "fold_mixed_k7_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_mixed_k7_model": [
+      0.0577,
+      0.0619
+    ],
+    "pred_base64_k1_logistic": [
+      0.0716,
+      0.0748
+    ],
+    "pred_base64_k1_logistic_l3": [
+      0.0709,
+      0.0742
+    ],
+    "pred_base64_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "pred_base64_k1_model": [
+      0.0323,
+      0.0354
+    ],
+    "pred_binary_k1_logistic": [
+      0.0752,
+      0.0776
+    ],
+    "pred_binary_k1_logistic_l3": [
+      0.0346,
+      0.0375
+    ],
+    "pred_binary_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "pred_binary_k1_model": [
+      0.0749,
+      0.0776
+    ],
+    "pred_code_k1_logistic": [
+      0.0494,
+      0.0529
+    ],
+    "pred_code_k1_logistic_l3": [
+      0.0533,
+      0.0574
+    ],
+    "pred_code_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "pred_code_k1_model": [
+      0.0439,
+      0.0481
+    ],
+    "pred_csv_k1_logistic": [
+      0.1104,
+      0.1153
+    ],
+    "pred_csv_k1_logistic_l3": [
+      0.0507,
+      0.0553
+    ],
+    "pred_csv_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "pred_csv_k1_model": [
+      0.096,
+      0.1008
+    ],
+    "pred_gutenberg_k1_logistic": [
+      0.0378,
+      0.0418
+    ],
+    "pred_gutenberg_k1_logistic_l3": [
+      0.0315,
+      0.0351
+    ],
+    "pred_gutenberg_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "pred_gutenberg_k1_model": [
+      0.0347,
+      0.0386
+    ],
+    "pred_json_k1_logistic": [
+      0.0828,
+      0.0876
+    ],
+    "pred_json_k1_logistic_l3": [
+      0.0822,
+      0.0871
+    ],
+    "pred_json_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "pred_json_k1_model": [
+      0.07,
+      0.0747
+    ],
+    "pred_log_k1_logistic": [
+      0.1049,
+      0.109
+    ],
+    "pred_log_k1_logistic_l3": [
+      0.122,
+      0.1273
+    ],
+    "pred_log_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "pred_log_k1_model": [
+      0.1124,
+      0.1178
+    ],
+    "pred_mixed_k1_logistic": [
+      0.0755,
+      0.077
+    ],
+    "pred_mixed_k1_logistic_l3": [
+      0.0554,
+      0.0596
+    ],
+    "pred_mixed_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "pred_mixed_k1_model": [
+      0.075,
+      0.0785
+    ],
+    "pred_mixture_k1_logistic": [
+      0.0769,
+      0.0785
+    ],
+    "pred_mixture_k1_logistic_l3": [
+      0.064,
+      0.0657
+    ],
+    "pred_mixture_k1_majority": [
+      0.0385,
+      0.0385
+    ],
+    "pred_mixture_k1_model": [
+      0.0685,
+      0.0703
+    ],
+    "repro_100k": [
+      0.1945,
+      0.1985
+    ]
+  },
   "cluster_ci95_note": "95% cluster-bootstrap intervals over the held-out family's evaluation chunks (2000 resamples) for each fit and role, and over all 10000 chunks for each mixture; informational, never a clause",
-  "complete": false,
+  "complete": true,
   "corpus": {
     "cache_g_sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9",
     "cache_y_sha256": "2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093",
@@ -45,7 +1202,7 @@
     "n_source_chunks": 50000
   },
   "cost": {
-    "banked_fit_seconds_total": 29318.4,
+    "banked_fit_seconds_total": 29665.6,
     "checkpoints": "artifacts/pivot/fdc_4096_ckpt",
     "interruptions_by_name": {
       "depth_base64_c1225_logistic": 0,
@@ -302,7 +1459,9 @@
       "pred_log_k1_majority": 0,
       "pred_log_k1_model": 0,
       "pred_mixed_k1_logistic": 0,
+      "pred_mixed_k1_logistic_l3": 0,
       "pred_mixed_k1_majority": 0,
+      "pred_mixed_k1_model": 0,
       "repro_100k": 0
     },
     "seconds_by_name": {
@@ -560,10 +1719,12 @@
       "pred_log_k1_majority": 0.0,
       "pred_log_k1_model": 786.4,
       "pred_mixed_k1_logistic": 121.4,
+      "pred_mixed_k1_logistic_l3": 155.9,
       "pred_mixed_k1_majority": 0.0,
+      "pred_mixed_k1_model": 191.3,
       "repro_100k": 356.1
     },
-    "wall_seconds_this_invocation": 22450.7
+    "wall_seconds_this_invocation": 22838.6
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -978,7 +2139,7 @@
           "structured_four_top1": 0.1213
         }
       },
-      "composition_spread_k1": null,
+      "composition_spread_k1": 0.006,
       "depth": {
         "by_chunks": {
           "1225": {
@@ -1229,7 +2390,21 @@
           0.0751
         ]
       },
-      "pred_k1": null,
+      "pred_k1": {
+        "mixture_top1": 0.0649,
+        "mixture_top1_non_gutenberg": 0.0694,
+        "per_family": {
+          "base64": 0.0725,
+          "binary": 0.0361,
+          "code": 0.0554,
+          "csv": 0.0531,
+          "gutenberg": 0.0333,
+          "json": 0.0846,
+          "log": 0.1246,
+          "mixed": 0.0575
+        },
+        "structured_four_top1": 0.08
+      },
       "slope_per_doubling": 0.008019,
       "structured_four_by_k": [
         0.087,
@@ -1638,7 +2813,7 @@
           "structured_four_top1": 0.1036
         }
       },
-      "composition_spread_k1": null,
+      "composition_spread_k1": -0.0028,
       "depth": {
         "by_chunks": {
           "1225": {
@@ -1889,7 +3064,21 @@
           0.0598
         ]
       },
-      "pred_k1": null,
+      "pred_k1": {
+        "mixture_top1": 0.0694,
+        "mixture_top1_non_gutenberg": 0.0741,
+        "per_family": {
+          "base64": 0.0339,
+          "binary": 0.0762,
+          "code": 0.046,
+          "csv": 0.0984,
+          "gutenberg": 0.0366,
+          "json": 0.0723,
+          "log": 0.1151,
+          "mixed": 0.0767
+        },
+        "structured_four_top1": 0.0832
+      },
       "slope_per_doubling": 0.00596,
       "structured_four_by_k": [
         0.0833,
@@ -17261,7 +18450,71 @@
           "utc": "2026-09-09T17:54:09Z",
           "val": null
         },
-        "logistic_l3": null,
+        "logistic_l3": {
+          "block_refills": [
+            {
+              "order": "canonical",
+              "probe_ok": true,
+              "utc": "2026-09-09T18:02:26Z"
+            }
+          ],
+          "environment": {
+            "nice": 10,
+            "numpy": "2.4.6",
+            "python": "3.11.15",
+            "sklearn": "1.9.0",
+            "standardiser_probe": {
+              "block_gb": 0.177,
+              "ncols": 1108,
+              "peak_extra_fraction_of_block": 0.1005,
+              "probe_rows_per_pass": 2000,
+              "production_rows_per_pass": 20000,
+              "production_transient_gb": 0.177,
+              "rows": 20000
+            },
+            "threads": 3
+          },
+          "family": "logistic",
+          "fit_info": {
+            "n_iter": 504
+          },
+          "fit_rows_sha256": "92d5f3d9cdce4b16a9954e25c719a07eb2d3d11f3b69141b659a34364525b91d",
+          "fit_rows_sorted_sha256": "5ffae736f58b10a6ecbbb6dc8ea0b2cdaf49ecf1bf3912d59420f33de5b90e5e",
+          "head": "logistic_l3",
+          "heartbeat_max_rss_gb": 2.75,
+          "id": "L3",
+          "interruptions_before_this_fit": 0,
+          "last_heartbeat_rss_gb_before_this_fit": null,
+          "n_fit_rows": 98196,
+          "params": {
+            "C": 1.0,
+            "max_iter": 1000
+          },
+          "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+          "per_family": {
+            "base64": 0.0704,
+            "binary": 0.0535,
+            "code": 0.1173,
+            "csv": 0.1061,
+            "gutenberg": 0.0397,
+            "json": 0.1278,
+            "log": 0.6475,
+            "mixed": 0.0575
+          },
+          "rss_gb": 2.75,
+          "rss_gb_is": "anonymous (RssAnon)",
+          "rss_total_gb": 8.4,
+          "ru_maxrss_gb": 9.73,
+          "scaled": true,
+          "seconds": 155.9,
+          "seed": 20260825,
+          "stage": "pred:mixed:k1",
+          "status": "fit",
+          "top1": 0.1539,
+          "top1_non_gutenberg": 0.1705,
+          "utc": "2026-09-09T17:59:40Z",
+          "val": null
+        },
         "majority": {
           "block_refills": [],
           "environment": {
@@ -17318,7 +18571,67 @@
           "utc": "2026-09-09T17:54:07Z",
           "val": null
         },
-        "model": null
+        "model": {
+          "block_refills": [],
+          "environment": {
+            "nice": 10,
+            "numpy": "2.4.6",
+            "python": "3.11.15",
+            "sklearn": "1.9.0",
+            "standardiser_probe": {
+              "block_gb": 0.177,
+              "ncols": 1108,
+              "peak_extra_fraction_of_block": 0.1005,
+              "probe_rows_per_pass": 2000,
+              "production_rows_per_pass": 20000,
+              "production_transient_gb": 0.177,
+              "rows": 20000
+            },
+            "threads": 3
+          },
+          "family": "hgb",
+          "fit_info": {
+            "n_iter": 30
+          },
+          "fit_rows_sha256": "92d5f3d9cdce4b16a9954e25c719a07eb2d3d11f3b69141b659a34364525b91d",
+          "fit_rows_sorted_sha256": "5ffae736f58b10a6ecbbb6dc8ea0b2cdaf49ecf1bf3912d59420f33de5b90e5e",
+          "head": "model",
+          "heartbeat_max_rss_gb": 2.92,
+          "id": "M1",
+          "interruptions_before_this_fit": 0,
+          "last_heartbeat_rss_gb_before_this_fit": null,
+          "n_fit_rows": 98196,
+          "params": {
+            "learning_rate": 0.15,
+            "max_iter": 200,
+            "max_leaf_nodes": 63,
+            "n_iter_no_change": 10
+          },
+          "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+          "per_family": {
+            "base64": 0.0744,
+            "binary": 0.0752,
+            "code": 0.1208,
+            "csv": 0.0994,
+            "gutenberg": 0.0579,
+            "json": 0.1046,
+            "log": 0.5052,
+            "mixed": 0.0767
+          },
+          "rss_gb": 2.75,
+          "rss_gb_is": "anonymous (RssAnon)",
+          "rss_total_gb": 8.4,
+          "ru_maxrss_gb": 9.73,
+          "scaled": false,
+          "seconds": 191.3,
+          "seed": 20260825,
+          "stage": "pred:mixed:k1",
+          "status": "fit",
+          "top1": 0.1403,
+          "top1_non_gutenberg": 0.1523,
+          "utc": "2026-09-09T17:56:14Z",
+          "val": "frag"
+        }
       }
     }
   },
@@ -21966,12 +23279,45 @@
       "rss_gb": 2.75,
       "seconds": 121.4,
       "utc": "2026-09-09T17:56:13Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "6b9441887b79752c",
+      "name": "pred_mixed_k1_model",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "utc": "2026-09-09T17:56:14Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "6b9441887b79752c",
+      "name": "pred_mixed_k1_model",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "seconds": 191.3,
+      "utc": "2026-09-09T17:59:39Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "af78d3629019c3c2",
+      "name": "pred_mixed_k1_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "utc": "2026-09-09T17:59:40Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "af78d3629019c3c2",
+      "name": "pred_mixed_k1_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "seconds": 155.9,
+      "utc": "2026-09-09T18:02:26Z"
     }
   ],
-  "missing_roles": [
-    "pred_mixed_k1_model",
-    "pred_mixed_k1_logistic_l3"
-  ],
+  "missing_roles": [],
   "n_classes": 26,
   "null_control": {
     "block_refills": [],
@@ -24605,7 +25951,7 @@
       "val": "frag"
     }
   },
-  "run_finished_utc": null,
+  "run_finished_utc": "2026-09-09T18:02:42Z",
   "run_started_utc": "2026-09-09T11:42:25Z",
   "schema": "raise-v1/fdc_4096/1",
   "schema_version": 1,
