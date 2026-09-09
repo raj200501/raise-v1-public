@@ -49,3 +49,5 @@
 {"name": "fold_mixed_majority", "fingerprint": "63f0ec0c07baca3a", "event": "started", "utc": "2026-09-09T00:49:48Z", "rss_gb": 8.21, "pid": 6914, "attempt": 1}
 {"name": "fold_mixed_majority", "fingerprint": "63f0ec0c07baca3a", "event": "completed", "utc": "2026-09-09T00:49:51Z", "rss_gb": 8.21, "pid": 6914, "seconds": 0.0}
 {"name": "fold_mixed_logistic", "fingerprint": "2ce6db08673c9015", "event": "started", "utc": "2026-09-09T00:49:53Z", "rss_gb": 8.21, "pid": 6914, "attempt": 1}
+{"name": "fold_mixed_logistic", "fingerprint": "2ce6db08673c9015", "event": "completed", "utc": "2026-09-09T01:03:26Z", "rss_gb": 8.21, "pid": 6914, "seconds": 809.6}
+{"name": "fold_mixed_model", "fingerprint": "82fb4eefd5b1164b", "event": "started", "utc": "2026-09-09T01:03:29Z", "rss_gb": 8.21, "pid": 6914, "attempt": 1}

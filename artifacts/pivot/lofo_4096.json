@@ -45,7 +45,7 @@
     "n_source_chunks": 50000
   },
   "cost": {
-    "banked_fit_seconds_total": 18991.4,
+    "banked_fit_seconds_total": 19801.0,
     "checkpoints": "artifacts/pivot/lofo_4096_ckpt",
     "interruptions_by_name": {
       "fold_base64_logistic": 0,
@@ -69,6 +69,7 @@
       "fold_log_logistic": 0,
       "fold_log_majority": 0,
       "fold_log_model": 0,
+      "fold_mixed_logistic": 0,
       "fold_mixed_majority": 0,
       "null": 0,
       "repro_logistic": 0,
@@ -96,12 +97,13 @@
       "fold_log_logistic": 803.6,
       "fold_log_majority": 0.0,
       "fold_log_model": 1472.6,
+      "fold_mixed_logistic": 809.6,
       "fold_mixed_majority": 0.0,
       "null": 24.0,
       "repro_logistic": 929.7,
       "repro_model": 1666.6
     },
-    "wall_seconds_this_invocation": 19491.5
+    "wall_seconds_this_invocation": 20307.4
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -1356,7 +1358,64 @@
       }
     },
     "mixed": {
-      "logistic": null,
+      "logistic": {
+        "block_refills": [],
+        "environment": {
+          "nice": 10,
+          "numpy": "2.4.6",
+          "python": "3.11.15",
+          "sklearn": "1.9.0",
+          "standardiser_probe": {
+            "block_gb": 0.177,
+            "ncols": 1108,
+            "peak_extra_fraction_of_block": 0.1005,
+            "probe_rows_per_pass": 2000,
+            "production_rows_per_pass": 20000,
+            "production_transient_gb": 0.177,
+            "rows": 20000
+          },
+          "threads": 3
+        },
+        "family": "logistic",
+        "fit_info": {
+          "n_iter": 400
+        },
+        "fit_rows_sha256": "21870ebf6835b9e404baf3e729bf8cf5236da421479014ed7ae295df82ec1425",
+        "fit_rows_sorted_sha256": "7705b06a505570c34bb5ade21e6be99c704fc8b012d854891bb8df5a81b7c5f7",
+        "head": "logistic",
+        "heartbeat_max_rss_gb": 8.28,
+        "id": "L1",
+        "interruptions_before_this_fit": 0,
+        "last_heartbeat_rss_gb_before_this_fit": null,
+        "n_fit_rows": 699617,
+        "params": {
+          "max_iter": 400
+        },
+        "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+        "per_family": {
+          "base64": 0.0644,
+          "binary": 0.0778,
+          "code": 0.1322,
+          "csv": 0.1628,
+          "gutenberg": 0.1132,
+          "json": 0.2016,
+          "log": 0.1583,
+          "mixed": 0.0762
+        },
+        "rss_gb": 8.21,
+        "rss_gb_is": "anonymous (RssAnon)",
+        "rss_total_gb": 12.51,
+        "ru_maxrss_gb": 13.93,
+        "scaled": false,
+        "seconds": 809.6,
+        "seed": 20260825,
+        "stage": "lofo:mixed",
+        "status": "fit",
+        "top1": 0.1233,
+        "top1_non_gutenberg": 0.1248,
+        "utc": "2026-09-09T00:49:53Z",
+        "val": null
+      },
       "majority": {
         "block_refills": [],
         "environment": {
@@ -1884,9 +1943,43 @@
       "rss_gb": 8.21,
       "seconds": 0.0,
       "utc": "2026-09-09T00:49:51Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "2ce6db08673c9015",
+      "name": "fold_mixed_logistic",
+      "pid": 6914,
+      "rss_gb": 8.21,
+      "utc": "2026-09-09T00:49:53Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "2ce6db08673c9015",
+      "name": "fold_mixed_logistic",
+      "pid": 6914,
+      "rss_gb": 8.21,
+      "seconds": 809.6,
+      "utc": "2026-09-09T01:03:26Z"
     }
   ],
   "lofo": {
+    "logistic": {
+      "mixture_top1": 0.0928,
+      "mixture_top1_non_gutenberg": 0.0971,
+      "mixture_vector_key": "lofo_mixture_logistic",
+      "per_family": {
+        "base64": 0.0596,
+        "binary": 0.0773,
+        "code": 0.1023,
+        "csv": 0.103,
+        "gutenberg": 0.0635,
+        "json": 0.1504,
+        "log": 0.1104,
+        "mixed": 0.0762
+      },
+      "structured_four_top1": 0.1167
+    },
     "majority": {
       "mixture_top1": 0.0385,
       "mixture_top1_non_gutenberg": 0.0385,
@@ -1908,7 +2001,6 @@
   "lofo_mixture_top1": null,
   "logistic_l1_refit_top1": 0.1352,
   "missing_roles": [
-    "fold_mixed_logistic",
     "fold_mixed_model"
   ],
   "n_classes": 26,
