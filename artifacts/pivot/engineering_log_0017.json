@@ -1,7 +1,7 @@
 {
   "schema": "raise-v1/engineering_log/1",
   "preregistration": "0017-lofo-l3-4096",
-  "status": "frozen (see prereg/chain.jsonl seq 17); extended as the run proceeds",
+  "status": "frozen (chain seq 17), running since 2026-09-09T18:04:26Z",
   "design": {
     "question": "Under leave-one-family-out transfer at 4096 on 0015's eight sealed folds, does 0014's searched, standardised logistic L3 lead 0003's fixed incumbent by a preregistered margin of 0.02 (5200 of 260000 rows)? Eight L3 fits, one scoring each, the stitched count of correct rows read against 0015's banked incumbent count 22343 plus 5200 (L3_LEADS_INCUMBENT_UNDER_TRANSFER / L3_LEAD_BELOW_BAR); two flags banked beside it (the record's 0.05 margin; 0015's own transfer bar).",
     "why_now": "0016's pre-freeze review adopted the finding that 'the primary reading was on the recipe 0015 showed transfers worst (M1), beside a raw logistic that hit its 400-iteration cap in every fold; a converged, standardised linear rule is the more informative comparator under transfer' (severity major) and, separately, argued that L3 on 0015's full folds is the most decision-relevant next measurement; eight fits of the standardised linear rule the record already has answer it without a new partition.",
@@ -135,7 +135,29 @@
       }
     ]
   },
-  "run_record": null,
+  "run_record": {
+    "launches": [
+      {
+        "launch": "refused",
+        "utc": "2026-09-09T18:03:43Z",
+        "why": "the other-runner refusal matched the operator's own harness shell, whose command text mentioned tools/pivot/run_ and python (a grep); no runner was alive. The check was narrowed to interpreter processes whose own arguments name a tools/pivot/run_ script (a launch-precondition implementation fix; no sealed parameter changed; the reader is untouched)"
+      },
+      {
+        "launch": 1,
+        "utc": "2026-09-09T18:04:26Z",
+        "n_checkpoints_at_launch": 0,
+        "why": "first launch after 0016 exited at 18:02:43Z; MemAvailable 15 GB, no other runner"
+      }
+    ],
+    "reproduction": {
+      "logistic_l3_refit_top1": 0.2317,
+      "against_0014": 0.2317,
+      "n_iter": 728,
+      "seconds": 1817.5,
+      "note": "exactly 0014's same-convention value and iteration count; slower than 0014's 1164.3 s because the operator's gate suite and mirror build shared the machine"
+    },
+    "operating_note": "as for 0016, the runner is suspended whenever this session is idle; the session is kept active for the run"
+  },
   "operator_procedure": "launch detached after 0016's run has exited and its checkpoints are committed; poll every 30 minutes: commit and push new checkpoints, relaunch the identical command if the runner is dead and the run is not finished; the reader runs once on the completed artifact; publication states the verdict at the same size either way.",
   "freeze_note": "The first freeze attempt (10:21:56 UTC) copied the draft to a wrongly named file (prereg/0017-fdc-4096.json, a scripting slip that reused 0016's file name) and appended a chain entry pointing at it; nothing had been committed or pushed, so the entry and the file were discarded and the freeze redone with the correct path. The chain's append-only discipline concerns the published record: no published entry was altered. The discarded entry's anchors (NIST pulse and drand round at 10:21 UTC) are simply earlier not-before evidence than the entry that stands."
 }

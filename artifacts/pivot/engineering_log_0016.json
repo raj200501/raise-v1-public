@@ -606,7 +606,8 @@
         128.2,
         313.0
       ]
-    }
+    },
+    "ci_note": "the bank commit (d0486d1, 18:03 UTC) turned CI on main red for one commit: the mutation suite's count guard found the coverage claim stale (313 against 315 cases after the lofol3 gate's two boundary cases were added) before the publication commit updated the counts; the publication commit (c52db55) is green. No number in the record was affected."
   },
   "operator_procedure": "launch detached (setsid nohup) with the sealed invocation; poll every 30 minutes: commit and push new checkpoints, relaunch the identical command if the runner is dead and the run is not finished; the reader runs once on the completed artifact; publication states the verdict at the same size either way."
 }
