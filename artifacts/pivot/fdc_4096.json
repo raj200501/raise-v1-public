@@ -45,7 +45,7 @@
     "n_source_chunks": 50000
   },
   "cost": {
-    "banked_fit_seconds_total": 8949.0,
+    "banked_fit_seconds_total": 10413.2,
     "checkpoints": "artifacts/pivot/fdc_4096_ckpt",
     "interruptions_by_name": {
       "depth_base64_c1225_logistic": 0,
@@ -60,6 +60,7 @@
       "depth_base64_c700_logistic_l3": 0,
       "depth_base64_c700_majority": 0,
       "depth_base64_c700_model": 0,
+      "depth_binary_c2450_majority": 0,
       "depth_gutenberg_c1225_logistic": 0,
       "depth_gutenberg_c1225_logistic_l3": 0,
       "depth_gutenberg_c1225_majority": 0,
@@ -97,7 +98,13 @@
       "fold_binary_k2_majority": 0,
       "fold_binary_k2_model": 0,
       "fold_binary_k4_logistic": 0,
+      "fold_binary_k4_logistic_l3": 0,
       "fold_binary_k4_majority": 0,
+      "fold_binary_k4_model": 2,
+      "fold_binary_k7_logistic": 0,
+      "fold_binary_k7_logistic_l3": 0,
+      "fold_binary_k7_majority": 0,
+      "fold_binary_k7_model": 0,
       "fold_gutenberg_k1_logistic": 0,
       "fold_gutenberg_k1_logistic_l3": 0,
       "fold_gutenberg_k1_majority": 0,
@@ -138,6 +145,7 @@
       "depth_base64_c700_logistic_l3": 15.9,
       "depth_base64_c700_majority": 0.0,
       "depth_base64_c700_model": 47.9,
+      "depth_binary_c2450_majority": 0.0,
       "depth_gutenberg_c1225_logistic": 62.3,
       "depth_gutenberg_c1225_logistic_l3": 43.1,
       "depth_gutenberg_c1225_majority": 0.0,
@@ -175,7 +183,13 @@
       "fold_binary_k2_majority": 0.0,
       "fold_binary_k2_model": 267.8,
       "fold_binary_k4_logistic": 163.1,
+      "fold_binary_k4_logistic_l3": 180.5,
       "fold_binary_k4_majority": 0.0,
+      "fold_binary_k4_model": 751.7,
+      "fold_binary_k7_logistic": 126.5,
+      "fold_binary_k7_logistic_l3": 146.6,
+      "fold_binary_k7_majority": 0.0,
+      "fold_binary_k7_model": 258.9,
       "fold_gutenberg_k1_logistic": 313.0,
       "fold_gutenberg_k1_logistic_l3": 122.7,
       "fold_gutenberg_k1_majority": 0.0,
@@ -203,7 +217,7 @@
       "pred_gutenberg_k1_model": 73.3,
       "repro_100k": 356.1
     },
-    "wall_seconds_this_invocation": 309.6
+    "wall_seconds_this_invocation": 1894.0
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -346,7 +360,7 @@
         "7": [
           400,
           400,
-          null,
+          400,
           null,
           null,
           null,
@@ -537,7 +551,7 @@
         "4": [
           678,
           667,
-          null,
+          588,
           null,
           null,
           null,
@@ -547,7 +561,7 @@
         "7": [
           545,
           547,
-          null,
+          478,
           null,
           null,
           null,
@@ -939,7 +953,7 @@
         "4": [
           29,
           42,
-          null,
+          118,
           null,
           null,
           null,
@@ -949,7 +963,7 @@
         "7": [
           29,
           38,
-          null,
+          39,
           null,
           null,
           null,
@@ -3520,7 +3534,71 @@
             "utc": "2026-09-09T10:17:52Z",
             "val": null
           },
-          "logistic_l3": null,
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T12:04:07Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 588
+            },
+            "fit_rows_sha256": "1e2715d72d7a0cbcfed172f5c69bd39793a13d5e433778d57958951ea6c213b3",
+            "fit_rows_sorted_sha256": "0ff77c1187663ed20483d8c22a6cfaf8a04f11e49414e4337b1898da81e61cd7",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 2.74,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99153,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.0635,
+              "binary": 0.0635,
+              "code": 0.3491,
+              "csv": 0.3322,
+              "gutenberg": 0.0563,
+              "json": 0.4263,
+              "log": 0.4043,
+              "mixed": 0.0445
+            },
+            "rss_gb": 2.74,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 6.01,
+            "ru_maxrss_gb": 7.31,
+            "scaled": true,
+            "seconds": 180.5,
+            "seed": 20260825,
+            "stage": "fdc:binary:k4",
+            "status": "fit",
+            "top1": 0.2172,
+            "top1_non_gutenberg": 0.2406,
+            "utc": "2026-09-09T12:00:55Z",
+            "val": null
+          },
           "majority": {
             "block_refills": [],
             "environment": {
@@ -3577,13 +3655,309 @@
             "utc": "2026-09-09T10:17:50Z",
             "val": null
           },
-          "model": null
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 118
+            },
+            "fit_rows_sha256": "1e2715d72d7a0cbcfed172f5c69bd39793a13d5e433778d57958951ea6c213b3",
+            "fit_rows_sorted_sha256": "0ff77c1187663ed20483d8c22a6cfaf8a04f11e49414e4337b1898da81e61cd7",
+            "head": "model",
+            "heartbeat_max_rss_gb": 3.12,
+            "id": "M1",
+            "interruptions_before_this_fit": 2,
+            "last_heartbeat_rss_gb_before_this_fit": 2.74,
+            "n_fit_rows": 99153,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.0296,
+              "binary": 0.0395,
+              "code": 0.3281,
+              "csv": 0.4026,
+              "gutenberg": 0.0578,
+              "json": 0.4012,
+              "log": 0.4152,
+              "mixed": 0.0409
+            },
+            "rss_gb": 2.68,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 5.96,
+            "ru_maxrss_gb": 6.39,
+            "scaled": false,
+            "seconds": 751.7,
+            "seed": 20260825,
+            "stage": "fdc:binary:k4",
+            "status": "fit",
+            "top1": 0.2139,
+            "top1_non_gutenberg": 0.2366,
+            "utc": "2026-09-09T11:47:22Z",
+            "val": "frag"
+          }
         },
         "7": {
-          "logistic": null,
-          "logistic_l3": null,
-          "majority": null,
-          "model": null
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 400
+            },
+            "fit_rows_sha256": "6221ced168fb6cbf7a5a52375a05d1e71b229d593c4ad9ae33b745ffba8432a7",
+            "fit_rows_sorted_sha256": "5005f1ed676441ec1d1a223cb172ebedc403a01c79e67d0e131726bcd1fa5068",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 2.74,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99179,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.0689,
+              "binary": 0.0782,
+              "code": 0.143,
+              "csv": 0.1974,
+              "gutenberg": 0.1101,
+              "json": 0.2081,
+              "log": 0.1673,
+              "mixed": 0.1133
+            },
+            "rss_gb": 2.74,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 6.23,
+            "ru_maxrss_gb": 7.31,
+            "scaled": false,
+            "seconds": 126.5,
+            "seed": 20260825,
+            "stage": "fdc:binary:k7",
+            "status": "fit",
+            "top1": 0.1356,
+            "top1_non_gutenberg": 0.1393,
+            "utc": "2026-09-09T12:04:09Z",
+            "val": null
+          },
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T12:13:36Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 478
+            },
+            "fit_rows_sha256": "6221ced168fb6cbf7a5a52375a05d1e71b229d593c4ad9ae33b745ffba8432a7",
+            "fit_rows_sorted_sha256": "5005f1ed676441ec1d1a223cb172ebedc403a01c79e67d0e131726bcd1fa5068",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 3.4,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99179,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.0886,
+              "binary": 0.0763,
+              "code": 0.2874,
+              "csv": 0.3115,
+              "gutenberg": 0.1476,
+              "json": 0.3582,
+              "log": 0.3477,
+              "mixed": 0.1144
+            },
+            "rss_gb": 2.77,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 6.27,
+            "ru_maxrss_gb": 7.56,
+            "scaled": true,
+            "seconds": 146.6,
+            "seed": 20260825,
+            "stage": "fdc:binary:k7",
+            "status": "fit",
+            "top1": 0.2163,
+            "top1_non_gutenberg": 0.2263,
+            "utc": "2026-09-09T12:10:58Z",
+            "val": null
+          },
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "6221ced168fb6cbf7a5a52375a05d1e71b229d593c4ad9ae33b745ffba8432a7",
+            "fit_rows_sorted_sha256": "5005f1ed676441ec1d1a223cb172ebedc403a01c79e67d0e131726bcd1fa5068",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 2.74,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99179,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 2.74,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 6.23,
+            "ru_maxrss_gb": 7.31,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "fdc:binary:k7",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T12:04:08Z",
+            "val": null
+          },
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 39
+            },
+            "fit_rows_sha256": "6221ced168fb6cbf7a5a52375a05d1e71b229d593c4ad9ae33b745ffba8432a7",
+            "fit_rows_sorted_sha256": "5005f1ed676441ec1d1a223cb172ebedc403a01c79e67d0e131726bcd1fa5068",
+            "head": "model",
+            "heartbeat_max_rss_gb": 3.21,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99179,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.1176,
+              "binary": 0.0699,
+              "code": 0.2293,
+              "csv": 0.3291,
+              "gutenberg": 0.1371,
+              "json": 0.2788,
+              "log": 0.298,
+              "mixed": 0.1145
+            },
+            "rss_gb": 2.78,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 6.27,
+            "ru_maxrss_gb": 7.31,
+            "scaled": false,
+            "seconds": 258.9,
+            "seed": 20260825,
+            "stage": "fdc:binary:k7",
+            "status": "fit",
+            "top1": 0.1965,
+            "top1_non_gutenberg": 0.2052,
+            "utc": "2026-09-09T12:06:19Z",
+            "val": "frag"
+          }
         }
       },
       "depth": {
@@ -3596,7 +3970,62 @@
         "2450": {
           "logistic": null,
           "logistic_l3": null,
-          "majority": null,
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "99c54c680d77a9f3987a6a8b10c97075841a160638336ed3e439035dbd330419",
+            "fit_rows_sorted_sha256": "9701f4bb4f02a13c808439f301fc32f61e77492886e81394856a1f522e63abe8",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 2.34,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 49404,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 2.34,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 5.96,
+            "ru_maxrss_gb": 7.56,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "depth:binary:c2450",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T12:13:37Z",
+            "val": null
+          },
           "model": null
         },
         "700": {
@@ -5843,7 +6272,7 @@
     "ok": true,
     "problems": []
   },
-  "launch_number": 2,
+  "launch_number": 3,
   "ledger": [
     {
       "attempt": 1,
@@ -7221,16 +7650,144 @@
       "pid": 30422,
       "rss_gb": 2.91,
       "utc": "2026-09-09T10:20:39Z"
+    },
+    {
+      "attempt": 2,
+      "event": "started",
+      "fingerprint": "26c68039b34afff3",
+      "name": "fold_binary_k4_model",
+      "pid": 1706,
+      "rss_gb": 2.26,
+      "utc": "2026-09-09T10:46:28Z"
+    },
+    {
+      "attempt": 3,
+      "event": "started",
+      "fingerprint": "26c68039b34afff3",
+      "name": "fold_binary_k4_model",
+      "pid": 892,
+      "rss_gb": 2.26,
+      "utc": "2026-09-09T11:47:22Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "26c68039b34afff3",
+      "name": "fold_binary_k4_model",
+      "pid": 892,
+      "rss_gb": 2.68,
+      "seconds": 751.7,
+      "utc": "2026-09-09T12:00:55Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "b2bb5bbad2409909",
+      "name": "fold_binary_k4_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.64,
+      "utc": "2026-09-09T12:00:55Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "b2bb5bbad2409909",
+      "name": "fold_binary_k4_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.74,
+      "seconds": 180.5,
+      "utc": "2026-09-09T12:04:07Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "dea32ded3c658d09",
+      "name": "fold_binary_k7_majority",
+      "pid": 892,
+      "rss_gb": 2.74,
+      "utc": "2026-09-09T12:04:08Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "dea32ded3c658d09",
+      "name": "fold_binary_k7_majority",
+      "pid": 892,
+      "rss_gb": 2.74,
+      "seconds": 0.0,
+      "utc": "2026-09-09T12:04:09Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "4c618663557c2818",
+      "name": "fold_binary_k7_logistic",
+      "pid": 892,
+      "rss_gb": 2.74,
+      "utc": "2026-09-09T12:04:09Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "4c618663557c2818",
+      "name": "fold_binary_k7_logistic",
+      "pid": 892,
+      "rss_gb": 2.74,
+      "seconds": 126.5,
+      "utc": "2026-09-09T12:06:19Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "ff5dc73da25a5a7d",
+      "name": "fold_binary_k7_model",
+      "pid": 892,
+      "rss_gb": 2.74,
+      "utc": "2026-09-09T12:06:19Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "ff5dc73da25a5a7d",
+      "name": "fold_binary_k7_model",
+      "pid": 892,
+      "rss_gb": 2.78,
+      "seconds": 258.9,
+      "utc": "2026-09-09T12:10:58Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "006b1b371819e1ae",
+      "name": "fold_binary_k7_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.77,
+      "utc": "2026-09-09T12:10:58Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "006b1b371819e1ae",
+      "name": "fold_binary_k7_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.77,
+      "seconds": 146.6,
+      "utc": "2026-09-09T12:13:36Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "58a536e310ef1a41",
+      "name": "depth_binary_c2450_majority",
+      "pid": 892,
+      "rss_gb": 2.34,
+      "utc": "2026-09-09T12:13:37Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "58a536e310ef1a41",
+      "name": "depth_binary_c2450_majority",
+      "pid": 892,
+      "rss_gb": 2.34,
+      "seconds": 0.0,
+      "utc": "2026-09-09T12:13:37Z"
     }
   ],
   "missing_roles": [
-    "fold_binary_k4_model",
-    "fold_binary_k4_logistic_l3",
-    "fold_binary_k7_majority",
-    "fold_binary_k7_logistic",
-    "fold_binary_k7_model",
-    "fold_binary_k7_logistic_l3",
-    "depth_binary_c2450_majority",
     "depth_binary_c2450_logistic",
     "depth_binary_c2450_model",
     "depth_binary_c2450_logistic_l3",
@@ -10041,7 +10598,7 @@
     }
   },
   "run_finished_utc": null,
-  "run_started_utc": "2026-09-09T10:41:29Z",
+  "run_started_utc": "2026-09-09T11:42:25Z",
   "schema": "raise-v1/fdc_4096/1",
   "schema_version": 1,
   "shuffled_label_accuracy": 0.0389,
