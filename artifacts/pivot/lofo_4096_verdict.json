@@ -1,0 +1,114 @@
+{
+  "bar_applied": {
+    "chance": 0.038462,
+    "margin_over_chance": 0.05,
+    "mixture_must_reach": 0.088462
+  },
+  "establishes_a_buyer": false,
+  "incumbent_reproduction_drift": 0.0,
+  "informational_only": "the logistic and majority mixtures, the margin, the per-family readings, the structured-four reading, retention, the reproduction drifts and the artifact's cluster intervals are informational: not a verdict, not quotable as a pass. The verdict is the `verdict` field.",
+  "lofo": {
+    "logistic": {
+      "mixture_top1": 0.0928,
+      "mixture_top1_non_gutenberg": 0.0971,
+      "mixture_vector_key": "lofo_mixture_logistic",
+      "per_family": {
+        "base64": 0.0596,
+        "binary": 0.0773,
+        "code": 0.1023,
+        "csv": 0.103,
+        "gutenberg": 0.0635,
+        "json": 0.1504,
+        "log": 0.1104,
+        "mixed": 0.0762
+      },
+      "structured_four_top1": 0.1167
+    },
+    "majority": {
+      "mixture_top1": 0.0385,
+      "mixture_top1_non_gutenberg": 0.0385,
+      "mixture_vector_key": "lofo_mixture_majority",
+      "per_family": {
+        "base64": 0.0385,
+        "binary": 0.0385,
+        "code": 0.0385,
+        "csv": 0.0385,
+        "gutenberg": 0.0385,
+        "json": 0.0385,
+        "log": 0.0385,
+        "mixed": 0.0385
+      },
+      "structured_four_top1": 0.0385
+    },
+    "model": {
+      "mixture_top1": 0.0859,
+      "mixture_top1_non_gutenberg": 0.0904,
+      "mixture_vector_key": "lofo_mixture_model",
+      "per_family": {
+        "base64": 0.0653,
+        "binary": 0.0618,
+        "code": 0.1135,
+        "csv": 0.0968,
+        "gutenberg": 0.0552,
+        "json": 0.1134,
+        "log": 0.1083,
+        "mixed": 0.0738
+      },
+      "structured_four_top1": 0.1081
+    }
+  },
+  "lofo_margin_model_over_logistic": -0.0069,
+  "lofo_mixture_minus_chance": 0.047438,
+  "lofo_mixture_top1": 0.0859,
+  "lofo_mixture_top1_logistic": 0.0928,
+  "lofo_mixture_top1_majority": 0.0385,
+  "logistic_l1_0003_banked": 0.1392,
+  "logistic_l1_anchor_same_convention_0014": 0.1352,
+  "logistic_l1_drift_from_0003_banked": -0.004,
+  "logistic_l1_reproduction_drift": 0.0,
+  "meaning": "The model's leave-one-family-out mixture does not clear chance by 0.05: on content its training set never contained, 0003's recipe does not identify the encoder at the preregistered level. The curve and the searched margin stand as measured and are statements about these eight content families.",
+  "preregistration": "0015-lofo-4096",
+  "read": {
+    "chance_accuracy": 0.038462,
+    "complete": true,
+    "incumbent_refit_top1": 0.2395,
+    "lofo_margin_model_over_logistic": -0.0069,
+    "lofo_mixture_top1": 0.0859,
+    "logistic_l1_refit_top1": 0.1352,
+    "missing_roles": [],
+    "n_classes": 26,
+    "null_rows": 20000,
+    "preregistration": "0015-lofo-4096",
+    "shuffled_label_accuracy": 0.0384,
+    "smoke": false,
+    "stage": "run"
+  },
+  "reference_0003_top_rung_per_family": {
+    "base64": 0.1221,
+    "binary": 0.1049,
+    "code": 0.2944,
+    "csv": 0.3888,
+    "gutenberg": 0.1596,
+    "json": 0.3581,
+    "log": 0.3756,
+    "mixed": 0.1143
+  },
+  "retention_per_family": {
+    "base64": 0.5348,
+    "binary": 0.5891,
+    "code": 0.3855,
+    "csv": 0.249,
+    "gutenberg": 0.3459,
+    "json": 0.3167,
+    "log": 0.2883,
+    "mixed": 0.6457
+  },
+  "revises_0003_0014": false,
+  "schema": "raise-v1/lofo_4096_verdict/1",
+  "source_artifact": "artifacts/pivot/lofo_4096.json",
+  "transfer_failed_clauses": [
+    "transfer: LOFO mixture 0.0859 - chance 0.038462 = 0.047438 is below 0.05"
+  ],
+  "validity_failed_clauses": [],
+  "verdict": "TRANSFER_FAILS"
+}
