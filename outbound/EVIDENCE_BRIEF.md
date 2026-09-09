@@ -170,7 +170,7 @@ rerun would have said something different. It would not have.
 
 ## The instrument these numbers passed through
 
-**15** preregistrations, hash-chained (entry *N* carries entry *N−1*'s hash) and anchored to NIST
+**16** preregistrations, hash-chained (entry *N* carries entry *N−1*'s hash) and anchored to NIST
 Beacon 2.0 and drand; readers frozen by sha256 before their data existed.
 **286** deliberate mutations across **19** gates, **286** detected, **0** survived — every gate provably capable of
 failing. **15** corrections filed against this work at full size, including a **54-agent

@@ -49,6 +49,10 @@ recipes fitted on the other seven and scored once on the held-out family's seale
 readings stitched into one leave-one-family-out mixture read against chance plus 0.05 — and the
 answer is no at the preregistered level: the stitched mixture is 0.0859 against chance 0.0385,
 0.0026 short of the bar, and a raw logistic transfers better (0.0928); verdict `TRANSFER_FAILS`.
+Preregistration 0016 (chain entry 16, frozen 2026-09-09) asks whether that failure is a matter of how many content
+families the model has seen: at a fixed plaintext budget of 4900 source chunks, 0003's recipes and 0014's standardised
+logistic are fitted on 1, 2, 4 or 7 of the other families and scored on the held-out one; the bar is 0.005 accuracy per
+doubling of families on the incumbent's stitched mixture. It is frozen and running; either outcome is published here.
 The curve and the searched margin stand as measured, and they are statements about these eight
 content families, not about DEFLATE streams in general.
 Decomposed by content family, csv and log clear the bar at 2048 on both readings (+0.0554 and

@@ -297,7 +297,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 |---|---|---|
 | Every gate can be shown to fail | 286 mutations, 286 detected, 0 survived | primary-verifiable |
 | A number that is real but STALE is caught, not just a fabricated one | `tools/freshness.py`, 9 mutations | primary-verifiable |
-| Preregistration chain verifies, reader unchanged since freeze | 15 entries, head `d81fb4ce…` | primary-verifiable |
+| Preregistration chain verifies, reader unchanged since freeze | 16 entries, head `bda56a78…` | primary-verifiable |
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |
 | ACS PUMS record count reproduced | 392,318 records | primary-verifiable |
 | Instrument reproduces on a cold clone | preflight names cause and fix | primary-verifiable |
@@ -885,6 +885,15 @@ carve sizes other than 4096, about content outside the corpus builder's eight fa
 whether a recipe trained on more families would transfer better — a separate preregistration each.
 It establishes that 0003's recipe, trained on seven of these families, does not identify the
 encoder on the eighth at chance plus 0.05, and that a raw logistic does slightly better at it.
+
+**In flight — preregistration 0016 (chain seq 16, frozen 2026-09-09T07:38:33Z, NIST Beacon pulse 1933564, drand round
+6450283, git e0360996).** The family-diversity curve at 4096: at a fixed plaintext budget of 4900 source chunks (every
+pool row of each), 0003's three fixed recipes and 0014's standardised logistic are fitted for each held-out family on the
+1, 2, 4 or 7 families that follow it in the sealed order and scored once on the held-out family's sealed rows; the eight
+readings at each count stitch into one mixture, and the bar is 0.005 accuracy per doubling of families on the incumbent's
+mixture (`DIVERSITY_HELPS` / `DIVERSITY_FLAT`), read by `tools/readers/fdc4096_verdict.py`. A single-family depth arm and a
+preceding-family arm are banked beside the curve. Nothing below this line changes until its frozen reader has read the
+completed run; the outcome, either way, is stated here at full size.
 
 ### A learned representation over raw bytes does not rescue it either — `BYTE_MODEL_FAILS`
 
