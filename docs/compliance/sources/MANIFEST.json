@@ -176,6 +176,42 @@
       "sha256": "4dfba428ca6043d679f749a8dd00cccad2cb87ce635e0c694aa48be22fde3992",
       "bytes": 24619,
       "note": "PG catalog page; copyright-status line: 'Public domain in the USA.'"
+    },
+    {
+      "url": "https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz",
+      "sha256": "e7de3240a8bc2b1e1ba5c81bf943f06861ff494b69fda990ce2722a504c6153d",
+      "bytes": 26521757,
+      "fetched_utc_date": "2026-09-09",
+      "note": "CPython 3.11.9 source tarball; Lib/**/*.py and Doc/**/*.rst are the py_src and rst_doc extension families (preregistration 0018); its LICENSE file committed verbatim as sources/Python-3.11.9_LICENSE.txt",
+      "committed_file": "Python-3.11.9_LICENSE.txt",
+      "committed_sha256": "3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf"
+    },
+    {
+      "url": "https://www.python.org/ftp/python/3.11.9/python-3.11.9-embed-amd64.zip",
+      "sha256": "009d6bf7e3b2ddca3d784fa09f90fe54336d5b60f0e0f305c37f400bf83cfd3b",
+      "bytes": 11249023,
+      "fetched_utc_date": "2026-09-09",
+      "note": "CPython 3.11.9 Windows embeddable package; its .dll/.exe/.pyd files are the pe_bin extension family; LICENSE.txt (PSF licence plus the bundled OpenSSL, SQLite and other notices) committed verbatim as sources/python-3.11.9-embed_LICENSE.txt",
+      "committed_file": "python-3.11.9-embed_LICENSE.txt",
+      "committed_sha256": "e502c6b880ff58d614901495a9009c136539cd0b1e2a2abb8fc00b934c203419"
+    },
+    {
+      "url": "https://sqlite.org/2024/sqlite-amalgamation-3450300.zip",
+      "sha256": "ea170e73e447703e8359308ca2e4366a3ae0c4304a8665896f068c736781c651",
+      "bytes": 2733959,
+      "fetched_utc_date": "2026-09-09",
+      "note": "SQLite 3.45.3 amalgamation; the c_src extension family; the file header's public-domain statement committed as sources/sqlite-3.45.3_amalgamation_header_as_served_2026-09-09.txt",
+      "committed_file": "sqlite-3.45.3_amalgamation_header_as_served_2026-09-09.txt",
+      "committed_sha256": "92b7f0f32181391c4e16d578893a5186176b42b6d0d42bbd5617d219f681ec46"
+    },
+    {
+      "url": "https://www.rfc-editor.org/rfc/rfc9110.txt",
+      "sha256": "21c1cdce6ab0e5509b04d84a28000836c7a087cf786efe6f04877ebfff47232a",
+      "bytes": 502941,
+      "fetched_utc_date": "2026-09-09",
+      "note": "one of the 79 RFC texts of the rfc_txt extension family (every one pinned in tools/pivot/ext_source_pins.json); its Copyright Notice, which points at BCP 78 and the IETF Trust Legal Provisions, committed as sources/rfc9110_copyright_notice_as_served_2026-09-09.txt",
+      "committed_file": "rfc9110_copyright_notice_as_served_2026-09-09.txt",
+      "committed_sha256": "7c8bf9a5fafed0d809f8b406c8bf5f417fb5d1419fd6d1ebc2789dd66ff7c4d1"
     }
   ],
   "unreachable": [
@@ -193,6 +229,12 @@
       "url": "http://web.archive.org/cdx/search/cdx?url=gutenberg.org/files/1342/1342-0.txt",
       "result": "blocked by the container's egress policy",
       "note": "could not check whether an archived copy of the banked pg1342 edition exists"
+    }
+  ],
+  "addenda": [
+    {
+      "utc_date": "2026-09-09",
+      "what": "extension corpus sources for preregistration 0018 (four entries above); fetched through the same egress proxy with the same user agent"
     }
   ]
 }

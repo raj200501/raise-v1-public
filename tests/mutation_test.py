@@ -3491,9 +3491,405 @@ def _(root):
 
 
 
+# ---------------------------------------------------------------- oob4096 gate (0018)
+
+def _oob_reader():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("r18", os.path.join(REPO, "tools", "readers", "oob4096_verdict.py"))
+    m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+    return m
+
+
+def _oob_readings(r18, v, fam_x):
+    n_eval, n_ext = r18.PARTITION["n_eval_rows"], r18.N_EXT
+    rep, ex = v[:n_eval], v[n_eval:]
+    by = {f: [] for f in r18.EXT_FAMILIES}
+    for i in range(n_ext):
+        by[fam_x[i]].append(ex[i])
+    m4 = lambda xs: round(sum(xs) / len(xs), 4) if xs else None  # noqa: E731
+    return {"reproduction_top1": m4(rep), "reproduction_correct": sum(rep), "ext_top1": m4(ex), "ext_correct": sum(ex),
+            "n_ext_rows": n_ext, "ext_per_family": {f: m4(by[f]) for f in r18.EXT_FAMILIES},
+            "ext_per_family_correct": {f: sum(by[f]) for f in r18.EXT_FAMILIES},
+            "ext_structured_text_top1": m4([x for f in r18.STRUCTURED_TEXT for x in by[f]]),
+            "ext_high_entropy_top1": m4([x for f in r18.HIGH_ENTROPY for x in by[f]]),
+            "ext_real_top1": m4([x for f in r18.REAL_FAMILIES for x in by[f]]),
+            "ext_synthetic_top1": m4([x for f in r18.SYNTH_FAMILIES for x in by[f]])}
+
+
+def _good_oob(ext_acc=None, model_correct=None, repro=None):
+    """A complete, valid 0018 artifact set. ext_acc: extension accuracy per role (spread evenly over families);
+    model_correct overrides M4's correct extension count exactly; repro overrides a role's reproduction accuracy."""
+    r18 = _oob_reader()
+    part = dict(r18.PARTITION); n_eval = part["n_eval_rows"]; n_ext = r18.N_EXT; rec = r18.RECIPES; roles = list(r18.ROLES)
+    fams = list(r18.EXT_FAMILIES); rpf = r18.EXT["rows_per_family"]
+    fam_idx = []
+    for k, f in enumerate(fams):
+        fam_idx += [k] * rpf[f]
+    assert len(fam_idx) == n_ext
+    fam_x = [fams[i] for i in fam_idx]
+    acc = dict({"incumbent": 0.09, "logistic_l3": 0.10, "model": 0.12, "null": 0.038}, **(ext_acc or {}))
+    reps = dict(r18.REFERENCE_TOP1, null=0.038); reps.update(repro or {})
+
+    def vec(name):
+        v = [0] * (n_eval + n_ext)
+        k = int(round(reps[name] * n_eval))
+        for i in range(k):
+            v[i] = 1
+        if name == "model" and model_correct is not None:
+            base, extra = divmod(int(model_correct), len(fams))
+            per = {f: base + (1 if j < extra else 0) for j, f in enumerate(fams)}
+        else:
+            per = {f: int(round(acc[name] * rpf[f])) for f in fams}
+        pos = n_eval
+        for f in fams:
+            for i in range(pos, pos + per[f]):
+                v[i] = 1
+            pos += rpf[f]
+        return v
+
+    def record(name, role, head, n_rows, rows_sha, sorted_sha, stage, top1):
+        c = rec[role]
+        return {"id": c["id"], "head": head, "family": c["family"], "params": c.get("params", {}), "scaled": bool(c.get("scaled", False)),
+                "val": c.get("val"), "seed": 20260825, "params_sha256": _sha12(c), "stage": stage, "n_fit_rows": n_rows,
+                "fit_rows_sha256": rows_sha, "fit_rows_sorted_sha256": sorted_sha, "environment": dict(_ENV12),
+                "interruptions_before_this_fit": 0, "status": "fit", "seconds": 1.0, "top1": top1, "top1_non_gutenberg": top1,
+                "per_family": {f: top1 for f in r18.FAMILIES}, "block_refills": [{"probe_ok": True}], "fit_info": {"n_iter": 100}}
+
+    per_example, reads, fits = {}, {}, {}
+    for name in roles + ["null"]:
+        v = vec(name); per_example[name] = v; reads[name] = _oob_readings(r18, v, fam_x)
+    for r in roles:
+        fits[r] = record(r, r, r, part["n_pool_rows"], part["pool_idx_sha256"], part["pool_sorted_sha256"], "pool",
+                         round(sum(per_example[r]) / (n_eval + n_ext), 4))
+    fits["null"] = record("null", "model", "null", part["null_rows"], "x", part["null_sorted_sha256"], "null", 0.04)
+    ledger = []
+    for i, nm in enumerate(["null"] + roles):
+        ledger += [{"name": nm, "fingerprint": nm, "event": "started", "utc": f"2026-09-10T00:{i:02d}:00Z"},
+                   {"name": nm, "fingerprint": nm, "event": "completed", "utc": f"2026-09-10T00:{i:02d}:30Z"}]
+    mc, lc, ic = (reads[r]["ext_correct"] for r in ("model", "logistic_l3", "incumbent"))
+    art = {"schema_version": 1, "schema": "raise-v1/oob_4096/1", "preregistration": "0018-oob-4096", "smoke": False, "stage": "run",
+           "protocol": r18.PROTOCOL, "protocol_sha256": r18.PROTOCOL_SHA256, "recipes": rec, "recipes_sha256": r18.RECIPES_SHA256,
+           "corpus": dict(r18.CORPUS), "ext_corpus": dict(r18.EXT), "partition": part, "n_classes": 26, "class_names": [],
+           "chance_accuracy": 0.038462, "environment": dict(_ENV12), "launch_environment": {}, "launch_number": 1,
+           "complete": True, "missing_roles": [], "fits": fits, "readings": reads,
+           "reproduction_top1": {r: reads[r]["reproduction_top1"] for r in roles},
+           "reproduction_drift": {r: round(reads[r]["reproduction_top1"] - r18.REFERENCE_TOP1[r], 6) for r in roles},
+           "reference_top1": dict(r18.REFERENCE_TOP1),
+           "ext_top1": {r: reads[r]["ext_top1"] for r in roles}, "ext_correct": {r: reads[r]["ext_correct"] for r in roles},
+           "ext_top1_model": reads["model"]["ext_top1"], "ext_correct_model": mc,
+           "ext_margin_model_over_logistic_l3_exact": round((mc - lc) / n_ext, 6),
+           "ext_margin_model_over_incumbent_exact": round((mc - ic) / n_ext, 6),
+           "ext_per_family": {r: reads[r]["ext_per_family"] for r in roles},
+           "null_control": fits["null"], "shuffled_label_accuracy_ext": reads["null"]["ext_top1"],
+           "shuffled_label_accuracy_eval": reads["null"]["reproduction_top1"], "null_rows": part["null_rows"],
+           "n_ext_rows": n_ext, "n_eval_rows": n_eval, "fit_info_by_role": {r: {"n_iter": 100} for r in roles},
+           "cluster_ci95_informational": {}, "ledger": ledger, "cost": {},
+           "run_started_utc": "2026-09-10T00:00:00Z", "run_finished_utc": "2026-09-10T06:00:00Z"}
+    scores = {"schema": "raise-v1/oob_4096_scores/1", "preregistration": "0018-oob-4096", "smoke": False,
+              "n_eval_rows": n_eval, "n_ext_rows": n_ext, "eval_idx_sha256": part["eval_idx_sha256"],
+              "eval_chunk_ids": [], "ext_chunk_ids": list(range(n_ext)), "ext_fam": fam_idx, "ext_families": fams,
+              "ext_arrays_sha256": {k: v["sha256"] for k, v in r18.EXT["arrays"].items()}, "per_example": per_example}
+    return art, scores
+
+
+def _oob(root, mutate=None, drop_artifact=False, drop_scores=False, **kw):
+    art, scores = _good_oob(**kw)
+    if mutate:
+        r = mutate(art, scores)
+        if r is not None:
+            art = r
+    piv = os.path.join(root, "artifacts", "pivot"); os.makedirs(piv, exist_ok=True)
+    if not drop_scores:
+        json.dump(scores, open(os.path.join(piv, "oob_4096_scores.json"), "w"))
+    if not drop_artifact:
+        json.dump(art, open(os.path.join(piv, "oob_4096.json"), "w"))
+    shutil.copy(os.path.join(REPO, "tools", "readers", "oob4096_verdict.py"), os.path.join(root, "tools", "readers", "oob4096_verdict.py"))
+    rc, out = run([PY, "tools/readers/oob4096_verdict.py"], root)
+    if rc != 0:
+        return rc, out
+    v = json.load(open(os.path.join(piv, "oob_4096_verdict.json")))
+    ok = v["verdict"] == "OOB_TRANSFERS"
+    return (0 if ok else 1), (f"verdict={v['verdict']} ext={v['ext_top1_model']} correct={v['ext_correct_model']} "
+                              f"validity={v['validity_failed_clauses'][:2]} transfer={v['transfer_failed_clauses']}")
+
+
+@case("oob4096", "control-model-clears-the-bar", "pass")
+def _(root):
+    return _oob(root)
+
+
+@case("oob4096", "model-below-the-bar-is-OOB_TRANSFER_FAILS", "fail")
+def _(root):
+    rc, out = _oob(root, ext_acc={"model": 0.07})
+    if rc != 0 and "verdict=OOB_TRANSFER_FAILS" not in out:
+        return 0, out + " !! a reading below the bar did not read OOB_TRANSFER_FAILS"
+    return rc, out
+
+
+@case("oob4096", "exactly-min-correct-rows-passes-and-one-row-fewer-fails", "fail")
+def _(root):
+    r18 = _oob_reader()
+    rc0, out0 = _oob(root, model_correct=r18.MIN_CORRECT)
+    if rc0 != 0:
+        return 0, out0 + f" !! {r18.MIN_CORRECT} correct rows is exactly the bar and should pass"
+    rc1, out1 = _oob(root, model_correct=r18.MIN_CORRECT - 1)
+    if rc1 != 0 and "verdict=OOB_TRANSFER_FAILS" not in out1:
+        return 0, out1 + " !! one row fewer did not read OOB_TRANSFER_FAILS"
+    return rc1, out0 + " | " + out1
+
+
+@case("oob4096", "a-banked-correct-count-off-by-one-row-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["ext_correct_model"] += 1
+    return _oob(root, f)
+
+
+@case("oob4096", "a-banked-per-family-reading-off-by-0.0001-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["ext_per_family"]["model"]["xml"] = round(art["ext_per_family"]["model"]["xml"] + 0.0001, 4)
+    return _oob(root, f)
+
+
+@case("oob4096", "a-reproduction-drift-of-exactly-0.005-passes-and-0.0051-is-VOID", "fail")
+def _(root):
+    rc0, out0 = _oob(root, repro={"model": 0.2934})
+    if rc0 != 0:
+        return 0, out0 + " !! a drift of exactly 0.005 should pass"
+    rc1, out1 = _oob(root, repro={"model": 0.2935})
+    if rc1 != 0 and "verdict=VOID" not in out1:
+        return 0, out1 + " !! a drift of 0.0051 did not VOID"
+    return rc1, out0 + " | " + out1
+
+
+@case("oob4096", "the-incumbent-reproduction-off-by-0.006-is-VOID", "fail")
+def _(root):
+    return _oob(root, repro={"incumbent": 0.2455})
+
+
+@case("oob4096", "null-control-above-chance-plus-0.02-on-the-extension-rows-is-VOID", "fail")
+def _(root):
+    return _oob(root, ext_acc={"null": 0.06})
+
+
+@case("oob4096", "a-smoke-artifact-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["smoke"] = True; scores["smoke"] = True
+    return _oob(root, f)
+
+
+@case("oob4096", "extension-array-hash-changed-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["ext_corpus"]["arrays"] = dict(art["ext_corpus"]["arrays"]); a = dict(art["ext_corpus"]["arrays"]["X"]); a["sha256"] = "0" * 64
+        art["ext_corpus"]["arrays"]["X"] = a
+    return _oob(root, f)
+
+
+@case("oob4096", "extension-rows-per-family-changed-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["ext_corpus"]["rows_per_family"] = dict(art["ext_corpus"]["rows_per_family"]); art["ext_corpus"]["rows_per_family"]["xml"] += 1
+    return _oob(root, f)
+
+
+@case("oob4096", "scores-file-naming-a-different-extension-corpus-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        scores["ext_arrays_sha256"] = dict(scores["ext_arrays_sha256"]); scores["ext_arrays_sha256"]["y"] = "1" * 64
+    return _oob(root, f)
+
+
+@case("oob4096", "one-extension-row-moved-to-another-family-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        scores["ext_fam"] = list(scores["ext_fam"]); scores["ext_fam"][0] = 7
+    return _oob(root, f)
+
+
+@case("oob4096", "an-extension-family-index-out-of-range-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        scores["ext_fam"] = list(scores["ext_fam"]); scores["ext_fam"][5] = 8
+    return _oob(root, f)
+
+
+@case("oob4096", "a-per-example-vector-one-entry-short-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        scores["per_example"]["model"] = scores["per_example"]["model"][:-1]
+    return _oob(root, f)
+
+
+@case("oob4096", "a-per-example-entry-of-2-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        scores["per_example"]["model"] = list(scores["per_example"]["model"]); scores["per_example"]["model"][-1] = 2
+    return _oob(root, f)
+
+
+@case("oob4096", "the-model-fit-under-another-recipe-hash-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fits"]["model"]["params_sha256"] = "f" * 64
+    return _oob(root, f)
+
+
+@case("oob4096", "the-model-fitted-on-rows-that-are-not-the-sealed-pool-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fits"]["model"]["fit_rows_sha256"] = "e" * 64
+    return _oob(root, f)
+
+
+@case("oob4096", "the-logistic-fitted-on-one-row-fewer-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fits"]["logistic_l3"]["n_fit_rows"] -= 1
+    return _oob(root, f)
+
+
+@case("oob4096", "the-logistic-not-standardised-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fits"]["logistic_l3"]["scaled"] = False
+    return _oob(root, f)
+
+
+@case("oob4096", "the-model-fitted-with-group-validation-instead-of-frag-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fits"]["model"]["val"] = "group"
+    return _oob(root, f)
+
+
+@case("oob4096", "two-ledger-completions-for-the-model-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["ledger"] = art["ledger"] + [{"name": "model", "fingerprint": "model", "event": "completed", "utc": "2026-09-10T07:00:00Z"}]
+    return _oob(root, f)
+
+
+@case("oob4096", "a-missing-ledger-completion-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["ledger"] = [e for e in art["ledger"] if not (e["name"] == "incumbent" and e["event"] == "completed")]
+    return _oob(root, f)
+
+
+@case("oob4096", "an-incomplete-artifact-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["complete"] = False; art["missing_roles"] = ["model"]
+    return _oob(root, f)
+
+
+@case("oob4096", "a-protocol-with-a-lower-bar-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["protocol"] = dict(art["protocol"]); art["protocol"]["bar"] = {"model_ext_correct_over_n_ext_minus_chance": 0.04}
+    return _oob(root, f)
+
+
+@case("oob4096", "a-recipe-with-more-iterations-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["recipes"] = json.loads(json.dumps(art["recipes"])); art["recipes"]["model"]["params"]["max_iter"] = 300
+    return _oob(root, f)
+
+
+@case("oob4096", "a-changed-in-distribution-reference-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["reference_top1"] = dict(art["reference_top1"]); art["reference_top1"]["model"] = 0.2800
+    return _oob(root, f)
+
+
+@case("oob4096", "a-different-sklearn-version-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["environment"] = dict(art["environment"]); art["environment"]["sklearn"] = "1.8.0"
+    return _oob(root, f)
+
+
+@case("oob4096", "artifact-absent-is-no-verdict", "fail")
+def _(root):
+    return _oob(root, drop_artifact=True)
+
+
+@case("oob4096", "scores-file-absent-is-VOID", "fail")
+def _(root):
+    return _oob(root, drop_scores=True)
+
+
+@case("oob4096", "another-preregistration-id-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["preregistration"] = "0017-lofo-l3-4096"
+    return _oob(root, f)
+
+
+@case("oob4096", "the-null-record-not-a-null-stage-fit-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fits"]["null"]["head"] = "model"; art["null_control"] = art["fits"]["null"]
+    return _oob(root, f)
+
+
+@case("oob4096", "a-fit-with-another-seed-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fits"]["incumbent"]["seed"] = 20260826
+    return _oob(root, f)
+
+
+@case("oob4096", "a-banked-exact-margin-off-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["ext_margin_model_over_logistic_l3_exact"] = round(art["ext_margin_model_over_logistic_l3_exact"] + 0.000001, 6)
+    return _oob(root, f)
+
+
+@case("oob4096", "extension-chunk-ids-not-disjoint-from-the-builder-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["ext_corpus"]["chunk_ids_disjoint_from_builder"] = False
+    return _oob(root, f)
+
+
+@case("oob4096", "a-banked-subset-reading-off-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["readings"]["model"]["ext_real_top1"] = round(art["readings"]["model"]["ext_real_top1"] + 0.0001, 4)
+    return _oob(root, f)
+
+
+@case("oob4096", "the-banked-null-extension-reading-not-the-recomputed-one-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["shuffled_label_accuracy_ext"] = 0.03
+    return _oob(root, f)
+
+
+@case("oob4096", "a-pool-fit-with-a-failed-block-probe-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fits"]["model"]["block_refills"] = [{"probe_ok": False}]
+    return _oob(root, f)
+
+
+
 def main() -> int:
+    # `python3 tests/mutation_test.py <gate> [<gate> ...]` runs only those gates' cases and writes NO report (a partial
+    # report would make the banked count stale); the full suite, as CI runs it, takes no arguments.
+    only = set(sys.argv[1:])
+    cases = [c for c in CASES if not only or c["gate"] in only]
+    if only and not cases:
+        print(f"no cases for gates {sorted(only)}", file=sys.stderr); return 2
     results = []
-    for c in CASES:
+    for c in cases:
         with tempfile.TemporaryDirectory() as tmp:
             root = sandbox(tmp)
             try:
@@ -3525,6 +3921,13 @@ def main() -> int:
     }
     outdir = os.path.join(REPO, "artifacts", "verification")
     os.makedirs(outdir, exist_ok=True)
+    if only:
+        width = max(len(r["mutation"]) for r in results)
+        for r in results:
+            print(f"{'OK  ' if r['detected'] else 'HOLE'}  {r['gate']:<11} {r['mutation']:<{width}}  expected={r['expected']:<4} "
+                  f"observed={r['observed']:<4} rc={r['exit_code']}  {r['evidence'][:160]}")
+        print(f"\nPARTIAL RUN ({sorted(only)}): {report['detected']}/{report['total_mutations']} detected; no report written")
+        return 0 if not survived else 1
     with open(os.path.join(outdir, "mutation_report.json"), "w") as fh:
         json.dump(report, fh, indent=2, sort_keys=True)
         fh.write("\n")
