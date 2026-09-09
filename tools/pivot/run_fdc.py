@@ -67,7 +67,7 @@ def ols_slope(xs, ys):
 
 def bits(v: np.ndarray) -> str:
     """A per-example 0/1 vector as a string of '0'/'1' characters (260000 rows -> 260 KB, not 800 KB of JSON ints)."""
-    return "".join("1" if int(x) else "0" for x in v.tolist())
+    return (np.asarray(v, np.uint8).clip(0, 1) + 48).tobytes().decode("ascii")
 
 
 def main() -> int:
@@ -102,13 +102,25 @@ def main() -> int:
     stamp = f"{prereg['id']}-{prereg['slug']}"
     seed = int(P["seed"]); eval_frac = float(P["eval_frac"]); top_rung = int(P["top_rung"]); caps = P["caps"]
     families = list(P["families"])
-    assert families == FAMILIES, "the sealed family order must be the corpus family order"
     roles = list(P["roles"])
-    assert set(roles) == set(recipes) == {"majority", "logistic", "model"}
     ks = [int(k) for k in P["family_counts"]]
     C = int(P["budget_chunks"])
-    assert ks[0] == 1 and all(C % k == 0 for k in ks), "the chunk budget must divide exactly by every family count, and k starts at 1"
-    assert P["subset_rule"] == "following_cyclic_nested_by_chunk"
+    problems = []
+    if families != FAMILIES:
+        problems.append("the sealed family order is not the corpus family order")
+    if set(roles) != set(recipes) or set(roles) != {"majority", "logistic", "model", "logistic_l3"} or roles[-1] != "logistic_l3":
+        problems.append("roles must be majority, logistic, model and logistic_l3, each with a recipe, the standardised logistic last")
+    if ks[0] != 1 or any(C % k for k in ks):
+        problems.append("the chunk budget must divide exactly by every family count, and the family counts must start at 1")
+    if P["subset_rule"] != "following_cyclic_nested_by_chunk":
+        problems.append(f"unknown subset rule {P['subset_rule']!r}")
+    if args.smoke:
+        extra = set(prereg.get("smoke", {})) - {"top_rung", "budget_chunks", "repro_rows", "null_rows", "launch", "invocation"}
+        if extra:
+            problems.append(f"the smoke block may only override sizes and launch minima, not {sorted(extra)}")
+    if problems:
+        print("REFUSING: " + "; ".join(problems), file=sys.stderr)
+        return 3
     depth_sizes = [C // k for k in ks[1:]]           # the depth arm: one family at C/k chunks, k > 1
     repro_rows = int(P["repro_rows"])
     env = environment()
@@ -279,7 +291,7 @@ def main() -> int:
     ge = np.asarray(g[ev]); ye = np.asarray(y[ev])
     per_ex: dict[str, np.ndarray] = {}
     records: dict[str, dict] = {}
-    log2k = [math.log2(k) for k in ks]
+    log2k = [round(math.log2(k), 6) for k in ks]   # the reader's LOG2K literal, bit for bit
 
     def stitch(vec_names):
         """Stitch eight per-example vectors: row i is read from the vector named for i's family."""
@@ -322,7 +334,7 @@ def main() -> int:
         dys = [mx["depth"].get(str(n), {}).get(  "mixture_top1") for n in dsizes]
         pred_m = (mx["pred"] or {}).get("mixture_top1")
         r6 = lambda a, b: round(a - b, 6) if a is not None and b is not None else None  # noqa: E731
-        out = {"by_k": mx["fdc"], "family_counts": ks, "log2_family_counts": [round(x, 6) for x in log2k],
+        out = {"by_k": mx["fdc"], "family_counts": ks, "log2_family_counts": list(log2k),
                "mixture_top1_by_k": ys,
                "slope_per_doubling": round(slope, 6) if slope is not None else None,
                "end_difference": r6(ys[-1], ys[0]),
@@ -336,6 +348,8 @@ def main() -> int:
                          "row_effect_per_doubling_of_chunks": (round((dys[0] - dys[-1]) / math.log2(dsizes[0] / dsizes[-1]), 6)
                                                                if dys[0] is not None and dys[-1] is not None else None)},
                "pred_k1": mx["pred"],
+               "n_iter_by_k": {str(k): [((records.get(f"fold_{f}_k{k}_{role}") or {}).get("fit_info") or {}).get("n_iter")
+                                        for f in families] for k in ks},
                "family_effect_at_matched_depth": {str(k): r6(mx["fdc"].get(str(k), {}).get("mixture_top1"),
                                                              mx["depth"].get(str(C // k), {}).get("mixture_top1")) for k in ks[1:]},
                "composition_spread_k1": r6(ys[0], pred_m)}

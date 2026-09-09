@@ -2665,7 +2665,8 @@ def _good_fdc(model_acc=None, total_correct_by_k=None):
             base = 0.08 if f in r16.STRUCTURED else 0.045
             gain = 0.02 if f in r16.STRUCTURED else 0.005
             return round(base + gain * math.log2(k) + 0.004 * math.log2(chunks / 700), 4)
-    role_acc = {"model": model_acc, "logistic": lambda f, k, c: round(model_acc(f, k, c) * 0.8, 4), "majority": lambda f, k, c: 0.0385}
+    role_acc = {"model": model_acc, "logistic": lambda f, k, c: round(model_acc(f, k, c) * 0.8, 4), "majority": lambda f, k, c: 0.0385,
+                "logistic_l3": lambda f, k, c: round(model_acc(f, k, c) * 0.9, 4)}
     # fold specs: (name_fmt, section, key, k, chunks, stage_fmt)
     specs = []
     for k in ks:
@@ -2694,7 +2695,7 @@ def _good_fdc(model_acc=None, total_correct_by_k=None):
     def record(name, role, n_rows, rows_sha, sorted_sha, top1, perfam, stage):
         c = rec[role]
         return {"id": c["id"], "head": role, "family": c["family"], "params": c.get("params", {}),
-                "scaled": False, "val": c.get("val"), "seed": 20260825, "params_sha256": _sha12(c),
+                "scaled": bool(c.get("scaled", False)), "val": c.get("val"), "seed": 20260825, "params_sha256": _sha12(c),
                 "stage": stage, "n_fit_rows": n_rows, "fit_rows_sha256": rows_sha, "fit_rows_sorted_sha256": sorted_sha,
                 "environment": dict(_ENV12), "interruptions_before_this_fit": 0, "status": "fit", "seconds": 1.0,
                 "top1": top1, "top1_non_gutenberg": top1, "per_family": perfam, "block_refills": [], "fit_info": {}}
@@ -2729,7 +2730,7 @@ def _good_fdc(model_acc=None, total_correct_by_k=None):
         return {"mixture_top1": m(range(n_eval)), "mixture_top1_non_gutenberg": m(non_g),
                 "structured_four_top1": m(struct), "per_family": {f: m(range(starts[f], starts[f] + counts[f])) for f in fam}}
 
-    for role in ("majority", "logistic", "model"):
+    for role in ("majority", "logistic", "model", "logistic_l3"):
         by_k = {}; ys = []
         for k in ks:
             by_k[str(k)] = stitched(role, f"fold_{{f}}_k{k}_{{r}}", "by_k", str(k), f"fdc:{{f}}:k{k}", f"fdc_mixture_k{k}_{role}")
@@ -2749,7 +2750,7 @@ def _good_fdc(model_acc=None, total_correct_by_k=None):
                                "per_family_by_chunks": {f: [dby[str(n)]["per_family"][f] for n in dsizes] for f in fam},
                                "row_effect_within_family": r6(dys[0], dys[-1]),
                                "row_effect_per_doubling_of_chunks": round((dys[0] - dys[-1]) / math.log2(dsizes[0] / dsizes[-1]), 6)},
-                     "pred_k1": pred,
+                     "pred_k1": pred, "n_iter_by_k": {str(k): [None] * len(fam) for k in ks},
                      "family_effect_at_matched_depth": {str(k): r6(ys[i], dys[i]) for i, k in enumerate(ks) if i > 0},
                      "composition_spread_k1": r6(ys[0], pred["mixture_top1"])}
     inc = record("repro_100k", "model", part["repro_rows"], part["repro_idx_sha256"], part["repro_sorted_sha256"],
@@ -2760,7 +2761,7 @@ def _good_fdc(model_acc=None, total_correct_by_k=None):
     names = ["repro_100k", "null"]
     for f in fam:
         for name_fmt, _, _, _, _, _ in specs:
-            names += [name_fmt.format(f=f, r=r) for r in ("majority", "logistic", "model")]
+            names += [name_fmt.format(f=f, r=r) for r in ("majority", "logistic", "model", "logistic_l3")]
     ledger = []
     for i, nm in enumerate(names):
         ledger += [{"name": nm, "fingerprint": nm, "event": "started", "utc": f"2026-09-09T{3 + i // 60:02d}:{i % 60:02d}:00Z"},
@@ -2774,7 +2775,7 @@ def _good_fdc(model_acc=None, total_correct_by_k=None):
 
     pfolds = {}
     for f in fam:
-        pf = {"n_eval_rows": folds[f]["n_eval_rows"], "eval_idx_sha256": folds[f]["eval_idx_sha256"], "n_eval_chunks": 1,
+        pf = {"n_eval_rows": folds[f]["n_eval_rows"], "eval_idx_sha256": folds[f]["eval_idx_sha256"], "n_eval_chunks": folds[f]["n_eval_chunks"],
               "by_k": {}, "depth": {}, "pred_k1": None}
         for k in ks:
             sb = folds[f]["by_k"][str(k)]; pf["by_k"][str(k)] = pblock(f, sb, sb["families"], C // k)

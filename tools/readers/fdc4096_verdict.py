@@ -70,7 +70,7 @@ PROTOCOL = {'seed': 20260825,
  'family_counts': [1, 2, 4, 7],
  'subset_rule': 'following_cyclic_nested_by_chunk',
  'repro_rows': 100000,
- 'roles': ['majority', 'logistic', 'model'],
+ 'roles': ['majority', 'logistic', 'model', 'logistic_l3'],
  'order': ['reproduction_100k', 'null', 'folds'],
  'null_rows': 20000,
  'structured_families': ['code', 'csv', 'json', 'log'],
@@ -81,9 +81,10 @@ PROTOCOL = {'seed': 20260825,
  'null_tolerance': 0.02,
  'budget_chunks': 4900,
  'environment': {'sklearn': '1.9.0', 'numpy': '2.4.6', 'python': '3.11.15'}}
-PROTOCOL_SHA256 = "0106cde7242d88fe0c9822b19cb13544e6661ef313b06ef8d1675d41f56bc737"
-# 0003's three fixed recipes, byte for byte 0015's sealed recipes; their canonical-JSON hashes are what
-# every record's params_sha256 must equal.
+PROTOCOL_SHA256 = "7c762783d7ce1e2d50bc03e09dd10be9b7b320bfdf899eaf2a1f07780b130594"
+# 0003's three fixed recipes, byte for byte 0015's sealed recipes, and 0014's searched logistic L3 (standardised
+# inputs, C 1.0, max_iter 1000), byte for byte 0014's sealed roster entry; their canonical-JSON hashes are what every
+# record's params_sha256 must equal.
 RECIPES = {'model': {'id': 'M1',
            'family': 'hgb',
            'val': 'frag',
@@ -99,11 +100,18 @@ RECIPES = {'model': {'id': 'M1',
  'majority': {'id': 'U1',
               'family': 'dummy',
               'params': {'strategy': 'most_frequent'},
-              'why': 'no hyperparameter; confirmatory fit only, as in 0003 (0.0385 banked)'}}
-RECIPES_SHA256 = "8d58ec2efa92330916444d07fd73b43d7b5edbb9ffb0dddd32304d3f448bc4d3"
+              'why': 'no hyperparameter; confirmatory fit only, as in 0003 (0.0385 banked)'},
+ 'logistic_l3': {'family': 'logistic',
+                 'id': 'L3',
+                 'params': {'C': 1.0, 'max_iter': 1000},
+                 'scaled': True,
+                 'why': 'standardised inputs with C 1.0: the single most standard fix for an lbfgs logistic '
+                        'on 1108 unscaled hand-engineered columns'}}
+RECIPES_SHA256 = "c2f7d0d43927cc118ffbcab792570901d9d81a95ce4dc1f35bd0e8a0e1a9898e"
 RECIPE_SHA256 = {'model': '618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f',
  'logistic': '70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52',
- 'majority': '0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a'}
+ 'majority': '0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a',
+ 'logistic_l3': '6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe'}
 PARTITION = {'n_eval_rows': 260000,
  'n_eval_chunks': 10000,
  'n_eval_non_gutenberg': 227006,
@@ -153,6 +161,7 @@ DEPTH_CHUNKS = [4900, 2450, 1225, 700]
 # reader requires, four zero leakage counts and per-family row and chunk maps that agree with the rule.
 FOLDS = {'gutenberg': {'n_eval_rows': 32994,
                'eval_idx_sha256': 'a6a1bef8036511315d2ac17e4a0f7078c6be848ca1c2c4b42d4ee6a084a56202',
+               'n_eval_chunks': 1269,
                'by_k': {'1': {'families': ['base64'],
                               'chunks_per_family': 4900,
                               'n_train_rows': 97797,
@@ -203,6 +212,7 @@ FOLDS = {'gutenberg': {'n_eval_rows': 32994,
                            'n_train_chunks': 4900}},
  'base64': {'n_eval_rows': 32864,
             'eval_idx_sha256': 'bdebc4239afd64ccdfc6c27415326d95f29d1bcd8b46a4cf87b2c7fb63ad04eb',
+            'n_eval_chunks': 1264,
             'by_k': {'1': {'families': ['binary'],
                            'chunks_per_family': 4900,
                            'n_train_rows': 98161,
@@ -253,6 +263,7 @@ FOLDS = {'gutenberg': {'n_eval_rows': 32994,
                         'n_train_chunks': 4900}},
  'binary': {'n_eval_rows': 32474,
             'eval_idx_sha256': 'f91f609e7fb8739a17c0bb3a6fce9afdf1599b8282e14e366823461fb1dbd8c4',
+            'n_eval_chunks': 1249,
             'by_k': {'1': {'families': ['code'],
                            'chunks_per_family': 4900,
                            'n_train_rows': 97972,
@@ -303,6 +314,7 @@ FOLDS = {'gutenberg': {'n_eval_rows': 32994,
                         'n_train_chunks': 4900}},
  'code': {'n_eval_rows': 31850,
           'eval_idx_sha256': '578248b2f2350e7aa5d3f7b2a832ecdb14fbd97d93e4690b7b4ea1e73a504bec',
+          'n_eval_chunks': 1225,
           'by_k': {'1': {'families': ['csv'],
                          'chunks_per_family': 4900,
                          'n_train_rows': 98014,
@@ -353,6 +365,7 @@ FOLDS = {'gutenberg': {'n_eval_rows': 32994,
                       'n_train_chunks': 4900}},
  'csv': {'n_eval_rows': 31616,
          'eval_idx_sha256': 'b4ccfb51f5b8b54b2ef856b54af6e79cc7ca6ed62bc0d8cc8a7bfcac09dc5555',
+         'n_eval_chunks': 1216,
          'by_k': {'1': {'families': ['json'],
                         'chunks_per_family': 4900,
                         'n_train_rows': 98230,
@@ -403,6 +416,7 @@ FOLDS = {'gutenberg': {'n_eval_rows': 32994,
                      'n_train_chunks': 4900}},
  'json': {'n_eval_rows': 32760,
           'eval_idx_sha256': '8eacb2d465c04006d1dbfd1452653d2cb4eab3a9ca633b1301b0b0064a17aaa4',
+          'n_eval_chunks': 1260,
           'by_k': {'1': {'families': ['log'],
                          'chunks_per_family': 4900,
                          'n_train_rows': 98196,
@@ -453,6 +467,7 @@ FOLDS = {'gutenberg': {'n_eval_rows': 32994,
                       'n_train_chunks': 4900}},
  'log': {'n_eval_rows': 33254,
          'eval_idx_sha256': '1dab3cc04aa0ae442fc9cab1dd0f0cafd5b1b2e0cf3de25341ab39d8752e1d8b',
+         'n_eval_chunks': 1279,
          'by_k': {'1': {'families': ['mixed'],
                         'chunks_per_family': 4900,
                         'n_train_rows': 98225,
@@ -503,6 +518,7 @@ FOLDS = {'gutenberg': {'n_eval_rows': 32994,
                      'n_train_chunks': 4900}},
  'mixed': {'n_eval_rows': 32188,
            'eval_idx_sha256': '3749067dd47d4a788ada22122dcf43c159d462ba5ade7904398735bdf94a80f1',
+           'n_eval_chunks': 1238,
            'by_k': {'1': {'families': ['gutenberg'],
                           'chunks_per_family': 4900,
                           'n_train_rows': 98209,
@@ -554,8 +570,10 @@ FOLDS = {'gutenberg': {'n_eval_rows': 32994,
 # The reproduction anchor: 0003's 100000-row rung (artifacts/pivot/deflate_curve.json rungs[2].accuracy),
 # the incumbent M1 on the FIRST 100000 pool rows with its last 10% as the early-stopping validation
 # split — the same rows and the same convention as 0003's ladder; 0011 banked the same 0.1965 on the
-# identical rows (transfer_model_top1_on_reference_eval). 0014 reproduced the 800000-row rung exactly
-# under this machinery, and the pre-freeze check reproduced this one exactly (engineering log 0016).
+# identical rows (transfer_model_top1_on_reference_eval). The clause checks pool order, machinery,
+# environment and evaluation set against a banked rung; it does not place the folds on the ladder.
+# 0014 reproduced the 800000-row rung exactly under this machinery, and the pre-freeze check
+# reproduced this one exactly (engineering log 0016).
 RUNG_100K_TOP1, REPRODUCTION_TOLERANCE = 0.1965, 0.005
 BAR_SLOPE_PER_DOUBLING = 0.005
 NULL_TOLERANCE, CHANCE = 0.02, 0.038462
@@ -568,7 +586,7 @@ REFERENCE_0015 = {"model_mixture_top1": 0.0859, "logistic_mixture_top1": 0.0928,
                   "rows_per_fold_about": 700000, "chunks_per_family_about": 5000}
 ENV = {"threads": 3, "nice": 10, "sklearn": "1.9.0", "numpy": "2.4.6"}
 SEED = 20260825
-ROLES = ["majority", "logistic", "model"]
+ROLES = ["majority", "logistic", "model", "logistic_l3"]
 SLOPE_AGREEMENT = 1e-6   # the runner's banked slope must agree with this reader's to this; the reader's is the verdict's
 
 
@@ -674,7 +692,7 @@ def main() -> int:
 
     for f in FAMILIES:
         pf = pfolds.get(f) or {}
-        for k in ("n_eval_rows", "eval_idx_sha256"):
+        for k in ("n_eval_rows", "eval_idx_sha256", "n_eval_chunks"):
             expect_eq(void, pf.get(k), FOLDS[f][k], f"sealed set: fold {f}.{k}")
         for label, sealed, chosen, per, where in fold_specs(f):
             pk = banked_block(pf, where)
@@ -908,18 +926,20 @@ def main() -> int:
                                     "nothing about family diversity in either direction.")
     elif fails:
         verdict, meaning = "DIVERSITY_FLAT", (
-            f"At a fixed plaintext budget of {BUDGET_CHUNKS} source chunks, spreading the training data over more content "
-            f"families does not raise 0003's M1 recipe's accuracy on a family it never saw by {BAR_SLOPE_PER_DOUBLING} per "
-            "doubling of families. More content types of the kind this corpus has are not, at this budget and rate, what "
-            "would fix 0015's transfer failure for this recipe. A statement about the corpus builder's eight families at "
-            "4096 bytes; nothing here establishes a buyer.")
+            f"At a fixed plaintext budget of {BUDGET_CHUNKS} source chunks, spreading the training data over one to seven of "
+            f"the corpus builder's families under the sealed successor rule does not raise 0003's M1 recipe's accuracy on a "
+            f"family it never saw by {BAR_SLOPE_PER_DOUBLING} per doubling of families. A statement about this recipe, this "
+            "budget, these eight families (seven parametric generators and one real-prose family) and family counts up to "
+            "seven at 4096 bytes; the depth and predecessor arms beside it say how much of the flatness is displaced "
+            "per-family depth and how much the pairing; nothing here establishes a buyer.")
     else:
         verdict, meaning = "DIVERSITY_HELPS", (
-            f"At a fixed plaintext budget of {BUDGET_CHUNKS} source chunks, spreading the training data over more content "
-            f"families raises 0003's M1 recipe's accuracy on a family it never saw by at least {BAR_SLOPE_PER_DOUBLING} per "
-            "doubling of families: content diversity, not only volume, moves transfer for this recipe. A statement about "
-            "the corpus builder's eight families at 4096 bytes; nothing here establishes a buyer, and nothing here revises "
-            "0015's TRANSFER_FAILS.")
+            f"At a fixed plaintext budget of {BUDGET_CHUNKS} source chunks, spreading the training data over one to seven of "
+            f"the corpus builder's families under the sealed successor rule raises 0003's M1 recipe's accuracy on a family it "
+            f"never saw by at least {BAR_SLOPE_PER_DOUBLING} per doubling of families. A statement about this recipe, this "
+            "budget, these eight families (seven parametric generators and one real-prose family) and family counts up to "
+            "seven at 4096 bytes, with no extrapolation past seven; nothing here establishes a buyer, and nothing here "
+            "revises 0015's TRANSFER_FAILS.")
 
     mk7 = None
     if verdict != "VOID":
@@ -951,6 +971,12 @@ def main() -> int:
         "composition_spread_k1_model": num(model_curve.get("composition_spread_k1")),
         "pred_k1_mixture_top1_model": num((model_curve.get("pred_k1") or {}).get("mixture_top1")),
         "depth_mixture_top1_by_chunks_logistic": (logi_curve.get("depth") or {}).get("mixture_top1_by_chunks"),
+        "fdc_slope_per_doubling_logistic_l3": num((fdc.get("logistic_l3") or {}).get("slope_per_doubling")),
+        "fdc_mixture_top1_by_k_logistic_l3": (fdc.get("logistic_l3") or {}).get("mixture_top1_by_k"),
+        "depth_mixture_top1_by_chunks_logistic_l3": ((fdc.get("logistic_l3") or {}).get("depth") or {}).get("mixture_top1_by_chunks"),
+        "family_effect_at_matched_depth_logistic_l3": (fdc.get("logistic_l3") or {}).get("family_effect_at_matched_depth"),
+        "composition_spread_k1_logistic_l3": num((fdc.get("logistic_l3") or {}).get("composition_spread_k1")),
+        "n_iter_by_k_model": model_curve.get("n_iter_by_k"),
         "family_effect_at_matched_depth_logistic": logi_curve.get("family_effect_at_matched_depth"),
         "composition_spread_k1_logistic": num(logi_curve.get("composition_spread_k1")),
         "reference_0015": REFERENCE_0015,
@@ -962,7 +988,7 @@ def main() -> int:
                                             if num(nc.get("top1")) is not None else None),
         "null_drift_from_0003_banked": (round(num(nc.get("top1")) - NULL_0003_BANKED, 6)
                                         if num(nc.get("top1")) is not None else None),
-        "informational_only": "the logistic and majority curves, the end differences, the depth and predecessor arms and every "
+        "informational_only": "the logistic, standardised-logistic and majority curves, the end differences, the depth and predecessor arms and every "
                               "reading derived from them, the per-family and structured-four readings, the comparison against "
                               "0015's full-row mixture, the reproduction and null drifts and the artifact's cluster intervals are "
                               "informational: not a verdict, not quotable as a pass. The verdict is the `verdict` field.",
