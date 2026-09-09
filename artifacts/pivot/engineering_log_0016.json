@@ -607,7 +607,8 @@
         313.0
       ]
     },
-    "ci_note": "the bank commit (d0486d1, 18:03 UTC) turned CI on main red for one commit: the mutation suite's count guard found the coverage claim stale (313 against 315 cases after the lofol3 gate's two boundary cases were added) before the publication commit updated the counts; the publication commit (c52db55) is green. No number in the record was affected."
+    "ci_note": "CI on both branches was red from the 0017 freeze commit (1daa97f, 10:24 UTC 2026-09-09) through the 0016 bank commit (d0486d1, 18:03 UTC): the mutation suite's count guard found the coverage claim stale (313 against 315 cases after the lofol3 gate's two boundary cases were added at the 0017 freeze) and every half-hourly checkpoint push re-ran and re-failed it: 38 red runs (19 commits, each pushed to two branches) until the publication commit (c52db55, 18:32 UTC) updated the counts. An earlier version of this note said the streak was one commit long; it was not. No number in the record was affected; the fix to the trigger (CI on pushes to main only, checkpoint pushes ignored) landed at 5852acd.",
+    "ci_note_superseded_text": "the bank commit (d0486d1, 18:03 UTC) turned CI on main red for one commit: the mutation suite's count guard found the coverage claim stale (313 against 315 cases after the lofol3 gate's two boundary cases were added) before the publication commit updated the counts; the publication commit (c52db55) is green. No number in the record was affected."
   },
   "operator_procedure": "launch detached (setsid nohup) with the sealed invocation; poll every 30 minutes: commit and push new checkpoints, relaunch the identical command if the runner is dead and the run is not finished; the reader runs once on the completed artifact; publication states the verdict at the same size either way."
 }
