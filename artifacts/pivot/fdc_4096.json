@@ -45,7 +45,7 @@
     "n_source_chunks": 50000
   },
   "cost": {
-    "banked_fit_seconds_total": 16902.7,
+    "banked_fit_seconds_total": 18569.2,
     "checkpoints": "artifacts/pivot/fdc_4096_ckpt",
     "interruptions_by_name": {
       "depth_base64_c1225_logistic": 0,
@@ -149,7 +149,15 @@
       "fold_csv_k1_majority": 0,
       "fold_csv_k1_model": 0,
       "fold_csv_k2_logistic": 0,
+      "fold_csv_k2_logistic_l3": 0,
       "fold_csv_k2_majority": 0,
+      "fold_csv_k2_model": 0,
+      "fold_csv_k4_logistic": 0,
+      "fold_csv_k4_logistic_l3": 0,
+      "fold_csv_k4_majority": 0,
+      "fold_csv_k4_model": 0,
+      "fold_csv_k7_logistic": 0,
+      "fold_csv_k7_majority": 0,
       "fold_gutenberg_k1_logistic": 0,
       "fold_gutenberg_k1_logistic_l3": 0,
       "fold_gutenberg_k1_majority": 0,
@@ -287,7 +295,15 @@
       "fold_csv_k1_majority": 0.0,
       "fold_csv_k1_model": 832.6,
       "fold_csv_k2_logistic": 128.5,
+      "fold_csv_k2_logistic_l3": 93.2,
       "fold_csv_k2_majority": 0.0,
+      "fold_csv_k2_model": 988.4,
+      "fold_csv_k4_logistic": 123.7,
+      "fold_csv_k4_logistic_l3": 153.6,
+      "fold_csv_k4_majority": 0.0,
+      "fold_csv_k4_model": 177.2,
+      "fold_csv_k7_logistic": 130.4,
+      "fold_csv_k7_majority": 0.0,
       "fold_gutenberg_k1_logistic": 313.0,
       "fold_gutenberg_k1_logistic_l3": 122.7,
       "fold_gutenberg_k1_majority": 0.0,
@@ -323,7 +339,7 @@
       "pred_gutenberg_k1_model": 73.3,
       "repro_100k": 356.1
     },
-    "wall_seconds_this_invocation": 8927.6
+    "wall_seconds_this_invocation": 10709.8
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -458,7 +474,7 @@
           400,
           400,
           400,
-          null,
+          400,
           null,
           null,
           null
@@ -468,7 +484,7 @@
           400,
           400,
           400,
-          null,
+          400,
           null,
           null,
           null
@@ -649,7 +665,7 @@
           472,
           735,
           721,
-          null,
+          302,
           null,
           null,
           null
@@ -659,7 +675,7 @@
           667,
           588,
           569,
-          null,
+          484,
           null,
           null,
           null
@@ -1051,7 +1067,7 @@
           30,
           35,
           101,
-          null,
+          137,
           null,
           null,
           null
@@ -1061,7 +1077,7 @@
           42,
           118,
           66,
-          null,
+          31,
           null,
           null,
           null
@@ -7282,7 +7298,71 @@
             "utc": "2026-09-09T14:08:39Z",
             "val": null
           },
-          "logistic_l3": null,
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T14:30:09Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 302
+            },
+            "fit_rows_sha256": "b7fe0d843d91a0d570b99ed366b05fbed5d98037bfa37e3fab2db2f068adeb59",
+            "fit_rows_sorted_sha256": "c429e88ec6bc3b2c3fcb573993ed45633dd7405b00be0bfc8449a5c31eea4ffc",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 2.75,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98949,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.0656,
+              "binary": 0.077,
+              "code": 0.1385,
+              "csv": 0.1245,
+              "gutenberg": 0.0503,
+              "json": 0.5357,
+              "log": 0.5244,
+              "mixed": 0.0755
+            },
+            "rss_gb": 2.75,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.75,
+            "ru_maxrss_gb": 9.04,
+            "scaled": true,
+            "seconds": 93.2,
+            "seed": 20260825,
+            "stage": "fdc:csv:k2",
+            "status": "fit",
+            "top1": 0.2003,
+            "top1_non_gutenberg": 0.2221,
+            "utc": "2026-09-09T14:28:25Z",
+            "val": null
+          },
           "majority": {
             "block_refills": [],
             "environment": {
@@ -7339,18 +7419,426 @@
             "utc": "2026-09-09T14:08:38Z",
             "val": null
           },
-          "model": null
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 137
+            },
+            "fit_rows_sha256": "b7fe0d843d91a0d570b99ed366b05fbed5d98037bfa37e3fab2db2f068adeb59",
+            "fit_rows_sorted_sha256": "c429e88ec6bc3b2c3fcb573993ed45633dd7405b00be0bfc8449a5c31eea4ffc",
+            "head": "model",
+            "heartbeat_max_rss_gb": 3.19,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98949,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.0683,
+              "binary": 0.0745,
+              "code": 0.1321,
+              "csv": 0.1055,
+              "gutenberg": 0.063,
+              "json": 0.5014,
+              "log": 0.5129,
+              "mixed": 0.0766
+            },
+            "rss_gb": 2.75,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.75,
+            "ru_maxrss_gb": 8.96,
+            "scaled": false,
+            "seconds": 988.4,
+            "seed": 20260825,
+            "stage": "fdc:csv:k2",
+            "status": "fit",
+            "top1": 0.1932,
+            "top1_non_gutenberg": 0.2121,
+            "utc": "2026-09-09T14:10:51Z",
+            "val": "frag"
+          }
         },
         "4": {
-          "logistic": null,
-          "logistic_l3": null,
-          "majority": null,
-          "model": null
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 400
+            },
+            "fit_rows_sha256": "93af21c1784eb641b73bedb633d7dda057225b818eccfae0242f327803cb626b",
+            "fit_rows_sorted_sha256": "ed36c7f11dd85093c83069e622b68eab9226ac017d3e72772cf5f803041c8745",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 2.76,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99200,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.0679,
+              "binary": 0.0762,
+              "code": 0.1073,
+              "csv": 0.0923,
+              "gutenberg": 0.1421,
+              "json": 0.2114,
+              "log": 0.2115,
+              "mixed": 0.1147
+            },
+            "rss_gb": 2.76,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.78,
+            "ru_maxrss_gb": 9.04,
+            "scaled": false,
+            "seconds": 123.7,
+            "seed": 20260825,
+            "stage": "fdc:csv:k4",
+            "status": "fit",
+            "top1": 0.1284,
+            "top1_non_gutenberg": 0.1264,
+            "utc": "2026-09-09T14:30:11Z",
+            "val": null
+          },
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T14:38:18Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 484
+            },
+            "fit_rows_sha256": "93af21c1784eb641b73bedb633d7dda057225b818eccfae0242f327803cb626b",
+            "fit_rows_sorted_sha256": "ed36c7f11dd85093c83069e622b68eab9226ac017d3e72772cf5f803041c8745",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 2.77,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99200,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.0676,
+              "binary": 0.0757,
+              "code": 0.1131,
+              "csv": 0.1276,
+              "gutenberg": 0.1939,
+              "json": 0.4381,
+              "log": 0.4367,
+              "mixed": 0.1163
+            },
+            "rss_gb": 2.77,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.8,
+            "ru_maxrss_gb": 9.1,
+            "scaled": true,
+            "seconds": 153.6,
+            "seed": 20260825,
+            "stage": "fdc:csv:k4",
+            "status": "fit",
+            "top1": 0.1974,
+            "top1_non_gutenberg": 0.1979,
+            "utc": "2026-09-09T14:35:32Z",
+            "val": null
+          },
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "93af21c1784eb641b73bedb633d7dda057225b818eccfae0242f327803cb626b",
+            "fit_rows_sorted_sha256": "ed36c7f11dd85093c83069e622b68eab9226ac017d3e72772cf5f803041c8745",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 2.76,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99200,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 2.76,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.78,
+            "ru_maxrss_gb": 9.04,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "fdc:csv:k4",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T14:30:10Z",
+            "val": null
+          },
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 31
+            },
+            "fit_rows_sha256": "93af21c1784eb641b73bedb633d7dda057225b818eccfae0242f327803cb626b",
+            "fit_rows_sorted_sha256": "ed36c7f11dd85093c83069e622b68eab9226ac017d3e72772cf5f803041c8745",
+            "head": "model",
+            "heartbeat_max_rss_gb": 3.2,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99200,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.0328,
+              "binary": 0.0767,
+              "code": 0.1022,
+              "csv": 0.0979,
+              "gutenberg": 0.166,
+              "json": 0.33,
+              "log": 0.3481,
+              "mixed": 0.1131
+            },
+            "rss_gb": 2.77,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.8,
+            "ru_maxrss_gb": 9.04,
+            "scaled": false,
+            "seconds": 177.2,
+            "seed": 20260825,
+            "stage": "fdc:csv:k4",
+            "status": "fit",
+            "top1": 0.1593,
+            "top1_non_gutenberg": 0.1583,
+            "utc": "2026-09-09T14:32:19Z",
+            "val": "frag"
+          }
         },
         "7": {
-          "logistic": null,
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 400
+            },
+            "fit_rows_sha256": "046cb26f8b1dd64a77390cbc52cd90d8f260abd4e2e81b73db8fbc0622e1a98f",
+            "fit_rows_sorted_sha256": "85a1db7ce815f7a6b9f4ebf7a5a8e7ed7a8427a7b844dadc5855a89e08655b2b",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 2.77,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99223,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.0725,
+              "binary": 0.073,
+              "code": 0.1362,
+              "csv": 0.1075,
+              "gutenberg": 0.1253,
+              "json": 0.1954,
+              "log": 0.1836,
+              "mixed": 0.1151
+            },
+            "rss_gb": 2.77,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.8,
+            "ru_maxrss_gb": 9.1,
+            "scaled": false,
+            "seconds": 130.4,
+            "seed": 20260825,
+            "stage": "fdc:csv:k7",
+            "status": "fit",
+            "top1": 0.1263,
+            "top1_non_gutenberg": 0.1264,
+            "utc": "2026-09-09T14:38:20Z",
+            "val": null
+          },
           "logistic_l3": null,
-          "majority": null,
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "046cb26f8b1dd64a77390cbc52cd90d8f260abd4e2e81b73db8fbc0622e1a98f",
+            "fit_rows_sorted_sha256": "85a1db7ce815f7a6b9f4ebf7a5a8e7ed7a8427a7b844dadc5855a89e08655b2b",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 2.77,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99223,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 2.77,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.8,
+            "ru_maxrss_gb": 9.1,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "fdc:csv:k7",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T14:38:19Z",
+            "val": null
+          },
           "model": null
         }
       },
@@ -11970,17 +12458,153 @@
       "rss_gb": 2.75,
       "seconds": 128.5,
       "utc": "2026-09-09T14:10:51Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "5645d15b73779a5e",
+      "name": "fold_csv_k2_model",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "utc": "2026-09-09T14:10:51Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "5645d15b73779a5e",
+      "name": "fold_csv_k2_model",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "seconds": 988.4,
+      "utc": "2026-09-09T14:28:25Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "34678443b8b7c203",
+      "name": "fold_csv_k2_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "utc": "2026-09-09T14:28:25Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "34678443b8b7c203",
+      "name": "fold_csv_k2_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "seconds": 93.2,
+      "utc": "2026-09-09T14:30:09Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "1a42ca1b34966999",
+      "name": "fold_csv_k4_majority",
+      "pid": 892,
+      "rss_gb": 2.76,
+      "utc": "2026-09-09T14:30:10Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "1a42ca1b34966999",
+      "name": "fold_csv_k4_majority",
+      "pid": 892,
+      "rss_gb": 2.76,
+      "seconds": 0.0,
+      "utc": "2026-09-09T14:30:11Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "631a41d21b27ff44",
+      "name": "fold_csv_k4_logistic",
+      "pid": 892,
+      "rss_gb": 2.76,
+      "utc": "2026-09-09T14:30:11Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "631a41d21b27ff44",
+      "name": "fold_csv_k4_logistic",
+      "pid": 892,
+      "rss_gb": 2.76,
+      "seconds": 123.7,
+      "utc": "2026-09-09T14:32:19Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "f8654b7b6d855e0d",
+      "name": "fold_csv_k4_model",
+      "pid": 892,
+      "rss_gb": 2.76,
+      "utc": "2026-09-09T14:32:19Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "f8654b7b6d855e0d",
+      "name": "fold_csv_k4_model",
+      "pid": 892,
+      "rss_gb": 2.77,
+      "seconds": 177.2,
+      "utc": "2026-09-09T14:35:32Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "dff4f43b70932174",
+      "name": "fold_csv_k4_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.77,
+      "utc": "2026-09-09T14:35:32Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "dff4f43b70932174",
+      "name": "fold_csv_k4_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.77,
+      "seconds": 153.6,
+      "utc": "2026-09-09T14:38:18Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "cc67c5cce78f31ac",
+      "name": "fold_csv_k7_majority",
+      "pid": 892,
+      "rss_gb": 2.77,
+      "utc": "2026-09-09T14:38:19Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "cc67c5cce78f31ac",
+      "name": "fold_csv_k7_majority",
+      "pid": 892,
+      "rss_gb": 2.77,
+      "seconds": 0.0,
+      "utc": "2026-09-09T14:38:19Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "1e0288019581d520",
+      "name": "fold_csv_k7_logistic",
+      "pid": 892,
+      "rss_gb": 2.77,
+      "utc": "2026-09-09T14:38:20Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "1e0288019581d520",
+      "name": "fold_csv_k7_logistic",
+      "pid": 892,
+      "rss_gb": 2.77,
+      "seconds": 130.4,
+      "utc": "2026-09-09T14:40:33Z"
     }
   ],
   "missing_roles": [
-    "fold_csv_k2_model",
-    "fold_csv_k2_logistic_l3",
-    "fold_csv_k4_majority",
-    "fold_csv_k4_logistic",
-    "fold_csv_k4_model",
-    "fold_csv_k4_logistic_l3",
-    "fold_csv_k7_majority",
-    "fold_csv_k7_logistic",
     "fold_csv_k7_model",
     "fold_csv_k7_logistic_l3",
     "depth_csv_c2450_majority",
