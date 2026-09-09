@@ -45,7 +45,7 @@
     "n_source_chunks": 50000
   },
   "cost": {
-    "banked_fit_seconds_total": 25947.3,
+    "banked_fit_seconds_total": 27615.1,
     "checkpoints": "artifacts/pivot/fdc_4096_ckpt",
     "interruptions_by_name": {
       "depth_base64_c1225_logistic": 0,
@@ -244,6 +244,13 @@
       "fold_log_k7_logistic_l3": 0,
       "fold_log_k7_majority": 0,
       "fold_log_k7_model": 0,
+      "fold_mixed_k1_logistic": 0,
+      "fold_mixed_k1_logistic_l3": 0,
+      "fold_mixed_k1_majority": 0,
+      "fold_mixed_k1_model": 0,
+      "fold_mixed_k2_logistic": 0,
+      "fold_mixed_k2_majority": 0,
+      "fold_mixed_k2_model": 0,
       "null": 0,
       "pred_base64_k1_logistic": 0,
       "pred_base64_k1_logistic_l3": 0,
@@ -270,7 +277,9 @@
       "pred_json_k1_majority": 0,
       "pred_json_k1_model": 0,
       "pred_log_k1_logistic": 0,
+      "pred_log_k1_logistic_l3": 0,
       "pred_log_k1_majority": 0,
+      "pred_log_k1_model": 0,
       "repro_100k": 0
     },
     "seconds_by_name": {
@@ -470,6 +479,13 @@
       "fold_log_k7_logistic_l3": 128.8,
       "fold_log_k7_majority": 0.0,
       "fold_log_k7_model": 150.8,
+      "fold_mixed_k1_logistic": 123.2,
+      "fold_mixed_k1_logistic_l3": 114.7,
+      "fold_mixed_k1_majority": 0.0,
+      "fold_mixed_k1_model": 239.2,
+      "fold_mixed_k2_logistic": 122.8,
+      "fold_mixed_k2_majority": 0.0,
+      "fold_mixed_k2_model": 162.9,
       "null": 23.6,
       "pred_base64_k1_logistic": 141.5,
       "pred_base64_k1_logistic_l3": 129.6,
@@ -496,10 +512,12 @@
       "pred_json_k1_majority": 0.0,
       "pred_json_k1_model": 185.5,
       "pred_log_k1_logistic": 129.9,
+      "pred_log_k1_logistic_l3": 118.6,
       "pred_log_k1_majority": 0.0,
+      "pred_log_k1_model": 786.4,
       "repro_100k": 356.1
     },
-    "wall_seconds_this_invocation": 18791.8
+    "wall_seconds_this_invocation": 20578.0
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -515,10 +533,57 @@
   },
   "fdc": {
     "logistic": {
-      "by_k": {},
+      "by_k": {
+        "1": {
+          "mixture_top1": 0.0702,
+          "mixture_top1_non_gutenberg": 0.076,
+          "per_family": {
+            "base64": 0.0295,
+            "binary": 0.0762,
+            "code": 0.0688,
+            "csv": 0.1351,
+            "gutenberg": 0.0302,
+            "json": 0.1092,
+            "log": 0.0378,
+            "mixed": 0.0781
+          },
+          "structured_four_top1": 0.0872
+        },
+        "2": {
+          "mixture_top1": 0.0862,
+          "mixture_top1_non_gutenberg": 0.0946,
+          "per_family": {
+            "base64": 0.064,
+            "binary": 0.0771,
+            "code": 0.1218,
+            "csv": 0.1339,
+            "gutenberg": 0.0283,
+            "json": 0.1121,
+            "log": 0.0758,
+            "mixed": 0.0795
+          },
+          "structured_four_top1": 0.1105
+        }
+      },
       "composition_spread_k1": null,
       "depth": {
-        "by_chunks": {},
+        "by_chunks": {
+          "4900": {
+            "mixture_top1": 0.0702,
+            "mixture_top1_non_gutenberg": 0.076,
+            "per_family": {
+              "base64": 0.0295,
+              "binary": 0.0762,
+              "code": 0.0688,
+              "csv": 0.1351,
+              "gutenberg": 0.0302,
+              "json": 0.1092,
+              "log": 0.0378,
+              "mixed": 0.0781
+            },
+            "structured_four_top1": 0.0872
+          }
+        },
         "chunks": [
           4900,
           2450,
@@ -526,56 +591,56 @@
           700
         ],
         "mixture_top1_by_chunks": [
-          null,
+          0.0702,
           null,
           null,
           null
         ],
         "per_family_by_chunks": {
           "base64": [
-            null,
+            0.0295,
             null,
             null,
             null
           ],
           "binary": [
-            null,
+            0.0762,
             null,
             null,
             null
           ],
           "code": [
-            null,
+            0.0688,
             null,
             null,
             null
           ],
           "csv": [
-            null,
+            0.1351,
             null,
             null,
             null
           ],
           "gutenberg": [
-            null,
+            0.0302,
             null,
             null,
             null
           ],
           "json": [
-            null,
+            0.1092,
             null,
             null,
             null
           ],
           "log": [
-            null,
+            0.0378,
             null,
             null,
             null
           ],
           "mixed": [
-            null,
+            0.0781,
             null,
             null,
             null
@@ -603,8 +668,8 @@
         2.807355
       ],
       "mixture_top1_by_k": [
-        null,
-        null,
+        0.0702,
+        0.0862,
         null,
         null
       ],
@@ -617,7 +682,7 @@
           400,
           400,
           205,
-          null
+          400
         ],
         "2": [
           400,
@@ -627,7 +692,7 @@
           400,
           400,
           400,
-          null
+          400
         ],
         "4": [
           400,
@@ -651,57 +716,57 @@
         ]
       },
       "non_gutenberg_by_k": [
-        null,
-        null,
+        0.076,
+        0.0946,
         null,
         null
       ],
       "per_family_by_k": {
         "base64": [
-          null,
-          null,
+          0.0295,
+          0.064,
           null,
           null
         ],
         "binary": [
-          null,
-          null,
+          0.0762,
+          0.0771,
           null,
           null
         ],
         "code": [
-          null,
-          null,
+          0.0688,
+          0.1218,
           null,
           null
         ],
         "csv": [
-          null,
-          null,
+          0.1351,
+          0.1339,
           null,
           null
         ],
         "gutenberg": [
-          null,
-          null,
+          0.0302,
+          0.0283,
           null,
           null
         ],
         "json": [
-          null,
-          null,
+          0.1092,
+          0.1121,
           null,
           null
         ],
         "log": [
-          null,
-          null,
+          0.0378,
+          0.0758,
           null,
           null
         ],
         "mixed": [
-          null,
-          null,
+          0.0781,
+          0.0795,
           null,
           null
         ]
@@ -709,17 +774,49 @@
       "pred_k1": null,
       "slope_per_doubling": null,
       "structured_four_by_k": [
-        null,
-        null,
+        0.0872,
+        0.1105,
         null,
         null
       ]
     },
     "logistic_l3": {
-      "by_k": {},
+      "by_k": {
+        "1": {
+          "mixture_top1": 0.0709,
+          "mixture_top1_non_gutenberg": 0.0771,
+          "per_family": {
+            "base64": 0.0648,
+            "binary": 0.0388,
+            "code": 0.0506,
+            "csv": 0.1381,
+            "gutenberg": 0.0288,
+            "json": 0.1278,
+            "log": 0.0329,
+            "mixed": 0.0883
+          },
+          "structured_four_top1": 0.087
+        }
+      },
       "composition_spread_k1": null,
       "depth": {
-        "by_chunks": {},
+        "by_chunks": {
+          "4900": {
+            "mixture_top1": 0.0709,
+            "mixture_top1_non_gutenberg": 0.0771,
+            "per_family": {
+              "base64": 0.0648,
+              "binary": 0.0388,
+              "code": 0.0506,
+              "csv": 0.1381,
+              "gutenberg": 0.0288,
+              "json": 0.1278,
+              "log": 0.0329,
+              "mixed": 0.0883
+            },
+            "structured_four_top1": 0.087
+          }
+        },
         "chunks": [
           4900,
           2450,
@@ -727,56 +824,56 @@
           700
         ],
         "mixture_top1_by_chunks": [
-          null,
+          0.0709,
           null,
           null,
           null
         ],
         "per_family_by_chunks": {
           "base64": [
-            null,
+            0.0648,
             null,
             null,
             null
           ],
           "binary": [
-            null,
+            0.0388,
             null,
             null,
             null
           ],
           "code": [
-            null,
+            0.0506,
             null,
             null,
             null
           ],
           "csv": [
-            null,
+            0.1381,
             null,
             null,
             null
           ],
           "gutenberg": [
-            null,
+            0.0288,
             null,
             null,
             null
           ],
           "json": [
-            null,
+            0.1278,
             null,
             null,
             null
           ],
           "log": [
-            null,
+            0.0329,
             null,
             null,
             null
           ],
           "mixed": [
-            null,
+            0.0883,
             null,
             null,
             null
@@ -804,7 +901,7 @@
         2.807355
       ],
       "mixture_top1_by_k": [
-        null,
+        0.0709,
         null,
         null,
         null
@@ -818,7 +915,7 @@
           375,
           504,
           195,
-          null
+          380
         ],
         "2": [
           388,
@@ -852,56 +949,56 @@
         ]
       },
       "non_gutenberg_by_k": [
-        null,
+        0.0771,
         null,
         null,
         null
       ],
       "per_family_by_k": {
         "base64": [
-          null,
+          0.0648,
           null,
           null,
           null
         ],
         "binary": [
-          null,
+          0.0388,
           null,
           null,
           null
         ],
         "code": [
-          null,
+          0.0506,
           null,
           null,
           null
         ],
         "csv": [
-          null,
+          0.1381,
           null,
           null,
           null
         ],
         "gutenberg": [
-          null,
+          0.0288,
           null,
           null,
           null
         ],
         "json": [
-          null,
+          0.1278,
           null,
           null,
           null
         ],
         "log": [
-          null,
+          0.0329,
           null,
           null,
           null
         ],
         "mixed": [
-          null,
+          0.0883,
           null,
           null,
           null
@@ -910,17 +1007,64 @@
       "pred_k1": null,
       "slope_per_doubling": null,
       "structured_four_by_k": [
-        null,
+        0.087,
         null,
         null,
         null
       ]
     },
     "majority": {
-      "by_k": {},
+      "by_k": {
+        "1": {
+          "mixture_top1": 0.0385,
+          "mixture_top1_non_gutenberg": 0.0385,
+          "per_family": {
+            "base64": 0.0385,
+            "binary": 0.0385,
+            "code": 0.0385,
+            "csv": 0.0385,
+            "gutenberg": 0.0385,
+            "json": 0.0385,
+            "log": 0.0385,
+            "mixed": 0.0385
+          },
+          "structured_four_top1": 0.0385
+        },
+        "2": {
+          "mixture_top1": 0.0385,
+          "mixture_top1_non_gutenberg": 0.0385,
+          "per_family": {
+            "base64": 0.0385,
+            "binary": 0.0385,
+            "code": 0.0385,
+            "csv": 0.0385,
+            "gutenberg": 0.0385,
+            "json": 0.0385,
+            "log": 0.0385,
+            "mixed": 0.0385
+          },
+          "structured_four_top1": 0.0385
+        }
+      },
       "composition_spread_k1": null,
       "depth": {
-        "by_chunks": {},
+        "by_chunks": {
+          "4900": {
+            "mixture_top1": 0.0385,
+            "mixture_top1_non_gutenberg": 0.0385,
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "structured_four_top1": 0.0385
+          }
+        },
         "chunks": [
           4900,
           2450,
@@ -928,56 +1072,56 @@
           700
         ],
         "mixture_top1_by_chunks": [
-          null,
+          0.0385,
           null,
           null,
           null
         ],
         "per_family_by_chunks": {
           "base64": [
-            null,
+            0.0385,
             null,
             null,
             null
           ],
           "binary": [
-            null,
+            0.0385,
             null,
             null,
             null
           ],
           "code": [
-            null,
+            0.0385,
             null,
             null,
             null
           ],
           "csv": [
-            null,
+            0.0385,
             null,
             null,
             null
           ],
           "gutenberg": [
-            null,
+            0.0385,
             null,
             null,
             null
           ],
           "json": [
-            null,
+            0.0385,
             null,
             null,
             null
           ],
           "log": [
-            null,
+            0.0385,
             null,
             null,
             null
           ],
           "mixed": [
-            null,
+            0.0385,
             null,
             null,
             null
@@ -1005,8 +1149,8 @@
         2.807355
       ],
       "mixture_top1_by_k": [
-        null,
-        null,
+        0.0385,
+        0.0385,
         null,
         null
       ],
@@ -1053,57 +1197,57 @@
         ]
       },
       "non_gutenberg_by_k": [
-        null,
-        null,
+        0.0385,
+        0.0385,
         null,
         null
       ],
       "per_family_by_k": {
         "base64": [
-          null,
-          null,
+          0.0385,
+          0.0385,
           null,
           null
         ],
         "binary": [
-          null,
-          null,
+          0.0385,
+          0.0385,
           null,
           null
         ],
         "code": [
-          null,
-          null,
+          0.0385,
+          0.0385,
           null,
           null
         ],
         "csv": [
-          null,
-          null,
+          0.0385,
+          0.0385,
           null,
           null
         ],
         "gutenberg": [
-          null,
-          null,
+          0.0385,
+          0.0385,
           null,
           null
         ],
         "json": [
-          null,
-          null,
+          0.0385,
+          0.0385,
           null,
           null
         ],
         "log": [
-          null,
-          null,
+          0.0385,
+          0.0385,
           null,
           null
         ],
         "mixed": [
-          null,
-          null,
+          0.0385,
+          0.0385,
           null,
           null
         ]
@@ -1111,17 +1255,64 @@
       "pred_k1": null,
       "slope_per_doubling": null,
       "structured_four_by_k": [
-        null,
-        null,
+        0.0385,
+        0.0385,
         null,
         null
       ]
     },
     "model": {
-      "by_k": {},
+      "by_k": {
+        "1": {
+          "mixture_top1": 0.0666,
+          "mixture_top1_non_gutenberg": 0.0719,
+          "per_family": {
+            "base64": 0.0517,
+            "binary": 0.0782,
+            "code": 0.0524,
+            "csv": 0.1398,
+            "gutenberg": 0.0304,
+            "json": 0.1046,
+            "log": 0.0382,
+            "mixed": 0.0403
+          },
+          "structured_four_top1": 0.0833
+        },
+        "2": {
+          "mixture_top1": 0.0653,
+          "mixture_top1_non_gutenberg": 0.0703,
+          "per_family": {
+            "base64": 0.0413,
+            "binary": 0.0407,
+            "code": 0.1045,
+            "csv": 0.1055,
+            "gutenberg": 0.0312,
+            "json": 0.0932,
+            "log": 0.0682,
+            "mixed": 0.04
+          },
+          "structured_four_top1": 0.0925
+        }
+      },
       "composition_spread_k1": null,
       "depth": {
-        "by_chunks": {},
+        "by_chunks": {
+          "4900": {
+            "mixture_top1": 0.0666,
+            "mixture_top1_non_gutenberg": 0.0719,
+            "per_family": {
+              "base64": 0.0517,
+              "binary": 0.0782,
+              "code": 0.0524,
+              "csv": 0.1398,
+              "gutenberg": 0.0304,
+              "json": 0.1046,
+              "log": 0.0382,
+              "mixed": 0.0403
+            },
+            "structured_four_top1": 0.0833
+          }
+        },
         "chunks": [
           4900,
           2450,
@@ -1129,56 +1320,56 @@
           700
         ],
         "mixture_top1_by_chunks": [
-          null,
+          0.0666,
           null,
           null,
           null
         ],
         "per_family_by_chunks": {
           "base64": [
-            null,
+            0.0517,
             null,
             null,
             null
           ],
           "binary": [
-            null,
+            0.0782,
             null,
             null,
             null
           ],
           "code": [
-            null,
+            0.0524,
             null,
             null,
             null
           ],
           "csv": [
-            null,
+            0.1398,
             null,
             null,
             null
           ],
           "gutenberg": [
-            null,
+            0.0304,
             null,
             null,
             null
           ],
           "json": [
-            null,
+            0.1046,
             null,
             null,
             null
           ],
           "log": [
-            null,
+            0.0382,
             null,
             null,
             null
           ],
           "mixed": [
-            null,
+            0.0403,
             null,
             null,
             null
@@ -1206,8 +1397,8 @@
         2.807355
       ],
       "mixture_top1_by_k": [
-        null,
-        null,
+        0.0666,
+        0.0653,
         null,
         null
       ],
@@ -1220,7 +1411,7 @@
           120,
           30,
           15,
-          null
+          40
         ],
         "2": [
           21,
@@ -1230,7 +1421,7 @@
           137,
           44,
           26,
-          null
+          29
         ],
         "4": [
           29,
@@ -1254,57 +1445,57 @@
         ]
       },
       "non_gutenberg_by_k": [
-        null,
-        null,
+        0.0719,
+        0.0703,
         null,
         null
       ],
       "per_family_by_k": {
         "base64": [
-          null,
-          null,
+          0.0517,
+          0.0413,
           null,
           null
         ],
         "binary": [
-          null,
-          null,
+          0.0782,
+          0.0407,
           null,
           null
         ],
         "code": [
-          null,
-          null,
+          0.0524,
+          0.1045,
           null,
           null
         ],
         "csv": [
-          null,
-          null,
+          0.1398,
+          0.1055,
           null,
           null
         ],
         "gutenberg": [
-          null,
-          null,
+          0.0304,
+          0.0312,
           null,
           null
         ],
         "json": [
-          null,
-          null,
+          0.1046,
+          0.0932,
           null,
           null
         ],
         "log": [
-          null,
-          null,
+          0.0382,
+          0.0682,
           null,
           null
         ],
         "mixed": [
-          null,
-          null,
+          0.0403,
+          0.04,
           null,
           null
         ]
@@ -1312,8 +1503,8 @@
       "pred_k1": null,
       "slope_per_doubling": null,
       "structured_four_by_k": [
-        null,
-        null,
+        0.0833,
+        0.0925,
         null,
         null
       ]
@@ -1321,8 +1512,8 @@
   },
   "fdc_end_difference": null,
   "fdc_mixture_top1_by_k": [
-    null,
-    null,
+    0.0666,
+    0.0653,
     null,
     null
   ],
@@ -14739,7 +14930,71 @@
           "utc": "2026-09-09T16:53:02Z",
           "val": null
         },
-        "logistic_l3": null,
+        "logistic_l3": {
+          "block_refills": [
+            {
+              "order": "canonical",
+              "probe_ok": true,
+              "utc": "2026-09-09T17:11:24Z"
+            }
+          ],
+          "environment": {
+            "nice": 10,
+            "numpy": "2.4.6",
+            "python": "3.11.15",
+            "sklearn": "1.9.0",
+            "standardiser_probe": {
+              "block_gb": 0.177,
+              "ncols": 1108,
+              "peak_extra_fraction_of_block": 0.1005,
+              "probe_rows_per_pass": 2000,
+              "production_rows_per_pass": 20000,
+              "production_transient_gb": 0.177,
+              "rows": 20000
+            },
+            "threads": 3
+          },
+          "family": "logistic",
+          "fit_info": {
+            "n_iter": 375
+          },
+          "fit_rows_sha256": "f86222b9a341f631276af6dfdcaaba7f9c93d6226d79f6dfca0bfa257110b3ec",
+          "fit_rows_sorted_sha256": "198287b668a26f4d32fcd735450b8c87b9c0d16cd0d972cef9c5be84617a43dd",
+          "head": "logistic_l3",
+          "heartbeat_max_rss_gb": 3.1,
+          "id": "L3",
+          "interruptions_before_this_fit": 0,
+          "last_heartbeat_rss_gb_before_this_fit": null,
+          "n_fit_rows": 98230,
+          "params": {
+            "C": 1.0,
+            "max_iter": 1000
+          },
+          "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+          "per_family": {
+            "base64": 0.0626,
+            "binary": 0.0776,
+            "code": 0.1189,
+            "csv": 0.1381,
+            "gutenberg": 0.0613,
+            "json": 0.6592,
+            "log": 0.1246,
+            "mixed": 0.0758
+          },
+          "rss_gb": 2.75,
+          "rss_gb_is": "anonymous (RssAnon)",
+          "rss_total_gb": 8.31,
+          "ru_maxrss_gb": 9.63,
+          "scaled": true,
+          "seconds": 118.6,
+          "seed": 20260825,
+          "stage": "pred:log:k1",
+          "status": "fit",
+          "top1": 0.1651,
+          "top1_non_gutenberg": 0.1802,
+          "utc": "2026-09-09T17:09:15Z",
+          "val": null
+        },
         "majority": {
           "block_refills": [],
           "environment": {
@@ -14796,22 +15051,490 @@
           "utc": "2026-09-09T16:52:59Z",
           "val": null
         },
-        "model": null
+        "model": {
+          "block_refills": [],
+          "environment": {
+            "nice": 10,
+            "numpy": "2.4.6",
+            "python": "3.11.15",
+            "sklearn": "1.9.0",
+            "standardiser_probe": {
+              "block_gb": 0.177,
+              "ncols": 1108,
+              "peak_extra_fraction_of_block": 0.1005,
+              "probe_rows_per_pass": 2000,
+              "production_rows_per_pass": 20000,
+              "production_transient_gb": 0.177,
+              "rows": 20000
+            },
+            "threads": 3
+          },
+          "family": "hgb",
+          "fit_info": {
+            "n_iter": 120
+          },
+          "fit_rows_sha256": "f86222b9a341f631276af6dfdcaaba7f9c93d6226d79f6dfca0bfa257110b3ec",
+          "fit_rows_sorted_sha256": "198287b668a26f4d32fcd735450b8c87b9c0d16cd0d972cef9c5be84617a43dd",
+          "head": "model",
+          "heartbeat_max_rss_gb": 3.18,
+          "id": "M1",
+          "interruptions_before_this_fit": 0,
+          "last_heartbeat_rss_gb_before_this_fit": null,
+          "n_fit_rows": 98230,
+          "params": {
+            "learning_rate": 0.15,
+            "max_iter": 200,
+            "max_leaf_nodes": 63,
+            "n_iter_no_change": 10
+          },
+          "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+          "per_family": {
+            "base64": 0.0586,
+            "binary": 0.0776,
+            "code": 0.1106,
+            "csv": 0.1398,
+            "gutenberg": 0.089,
+            "json": 0.5869,
+            "log": 0.1151,
+            "mixed": 0.0773
+          },
+          "rss_gb": 2.75,
+          "rss_gb_is": "anonymous (RssAnon)",
+          "rss_total_gb": 8.31,
+          "ru_maxrss_gb": 9.63,
+          "scaled": false,
+          "seconds": 786.4,
+          "seed": 20260825,
+          "stage": "pred:log:k1",
+          "status": "fit",
+          "top1": 0.1572,
+          "top1_non_gutenberg": 0.1671,
+          "utc": "2026-09-09T16:55:15Z",
+          "val": "frag"
+        }
       }
     },
     "mixed": {
       "by_k": {
         "1": {
-          "logistic": null,
-          "logistic_l3": null,
-          "majority": null,
-          "model": null
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 400
+            },
+            "fit_rows_sha256": "8bf3783cf12d4511b1fd5845d2f57900cef929861c26c0b7e9aee03db9b32055",
+            "fit_rows_sorted_sha256": "2dca00111af073547d6cc9ee84365ff095345a793fc74b9fefa178b10a5014d3",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 2.75,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98209,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.0732,
+              "binary": 0.0786,
+              "code": 0.0822,
+              "csv": 0.0956,
+              "gutenberg": 0.234,
+              "json": 0.1237,
+              "log": 0.0799,
+              "mixed": 0.0781
+            },
+            "rss_gb": 2.75,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.4,
+            "ru_maxrss_gb": 9.63,
+            "scaled": false,
+            "seconds": 123.2,
+            "seed": 20260825,
+            "stage": "fdc:mixed:k1",
+            "status": "fit",
+            "top1": 0.1059,
+            "top1_non_gutenberg": 0.0873,
+            "utc": "2026-09-09T17:11:26Z",
+            "val": null
+          },
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T17:19:57Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 380
+            },
+            "fit_rows_sha256": "8bf3783cf12d4511b1fd5845d2f57900cef929861c26c0b7e9aee03db9b32055",
+            "fit_rows_sorted_sha256": "2dca00111af073547d6cc9ee84365ff095345a793fc74b9fefa178b10a5014d3",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 3.31,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98209,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.0725,
+              "binary": 0.0785,
+              "code": 0.0971,
+              "csv": 0.1014,
+              "gutenberg": 0.3554,
+              "json": 0.0945,
+              "log": 0.0919,
+              "mixed": 0.0883
+            },
+            "rss_gb": 2.77,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.43,
+            "ru_maxrss_gb": 9.73,
+            "scaled": true,
+            "seconds": 114.7,
+            "seed": 20260825,
+            "stage": "fdc:mixed:k1",
+            "status": "fit",
+            "top1": 0.1229,
+            "top1_non_gutenberg": 0.0891,
+            "utc": "2026-09-09T17:17:52Z",
+            "val": null
+          },
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "8bf3783cf12d4511b1fd5845d2f57900cef929861c26c0b7e9aee03db9b32055",
+            "fit_rows_sorted_sha256": "2dca00111af073547d6cc9ee84365ff095345a793fc74b9fefa178b10a5014d3",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 2.75,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98209,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 2.75,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.4,
+            "ru_maxrss_gb": 9.63,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "fdc:mixed:k1",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T17:11:25Z",
+            "val": null
+          },
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 40
+            },
+            "fit_rows_sha256": "8bf3783cf12d4511b1fd5845d2f57900cef929861c26c0b7e9aee03db9b32055",
+            "fit_rows_sorted_sha256": "2dca00111af073547d6cc9ee84365ff095345a793fc74b9fefa178b10a5014d3",
+            "head": "model",
+            "heartbeat_max_rss_gb": 2.99,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98209,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.0339,
+              "binary": 0.0383,
+              "code": 0.0679,
+              "csv": 0.0535,
+              "gutenberg": 0.2587,
+              "json": 0.0659,
+              "log": 0.053,
+              "mixed": 0.0403
+            },
+            "rss_gb": 2.77,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.43,
+            "ru_maxrss_gb": 9.63,
+            "scaled": false,
+            "seconds": 239.2,
+            "seed": 20260825,
+            "stage": "fdc:mixed:k1",
+            "status": "fit",
+            "top1": 0.0768,
+            "top1_non_gutenberg": 0.0504,
+            "utc": "2026-09-09T17:13:33Z",
+            "val": "frag"
+          }
         },
         "2": {
-          "logistic": null,
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 400
+            },
+            "fit_rows_sha256": "d6014d267641f1611fcab38d939f721d441c4202778ffcc3f6861b577e245c54",
+            "fit_rows_sorted_sha256": "8eb74f99f4172f3345a2c6937227bf3cebe9ebfe39aa2ca7f434fa881092505c",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 2.78,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98516,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.1276,
+              "binary": 0.0751,
+              "code": 0.0607,
+              "csv": 0.0711,
+              "gutenberg": 0.1739,
+              "json": 0.0888,
+              "log": 0.0952,
+              "mixed": 0.0795
+            },
+            "rss_gb": 2.78,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.43,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 122.8,
+            "seed": 20260825,
+            "stage": "fdc:mixed:k2",
+            "status": "fit",
+            "top1": 0.0969,
+            "top1_non_gutenberg": 0.0857,
+            "utc": "2026-09-09T17:19:59Z",
+            "val": null
+          },
           "logistic_l3": null,
-          "majority": null,
-          "model": null
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "d6014d267641f1611fcab38d939f721d441c4202778ffcc3f6861b577e245c54",
+            "fit_rows_sorted_sha256": "8eb74f99f4172f3345a2c6937227bf3cebe9ebfe39aa2ca7f434fa881092505c",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 2.78,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98516,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 2.78,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.43,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "fdc:mixed:k2",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T17:19:57Z",
+            "val": null
+          },
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 29
+            },
+            "fit_rows_sha256": "d6014d267641f1611fcab38d939f721d441c4202778ffcc3f6861b577e245c54",
+            "fit_rows_sorted_sha256": "8eb74f99f4172f3345a2c6937227bf3cebe9ebfe39aa2ca7f434fa881092505c",
+            "head": "model",
+            "heartbeat_max_rss_gb": 2.88,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98516,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.1371,
+              "binary": 0.0712,
+              "code": 0.0832,
+              "csv": 0.0674,
+              "gutenberg": 0.2394,
+              "json": 0.0854,
+              "log": 0.0804,
+              "mixed": 0.04
+            },
+            "rss_gb": 2.75,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.4,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 162.9,
+            "seed": 20260825,
+            "stage": "fdc:mixed:k2",
+            "status": "fit",
+            "top1": 0.101,
+            "top1_non_gutenberg": 0.0809,
+            "utc": "2026-09-09T17:22:05Z",
+            "val": "frag"
+          }
         },
         "4": {
           "logistic": null,
@@ -18922,18 +19645,171 @@
       "rss_gb": 2.75,
       "seconds": 129.9,
       "utc": "2026-09-09T16:55:15Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "07bd0e54aa619ebd",
+      "name": "pred_log_k1_model",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "utc": "2026-09-09T16:55:15Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "07bd0e54aa619ebd",
+      "name": "pred_log_k1_model",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "seconds": 786.4,
+      "utc": "2026-09-09T17:09:15Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "bb3a93e443c9b9e6",
+      "name": "pred_log_k1_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "utc": "2026-09-09T17:09:15Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "bb3a93e443c9b9e6",
+      "name": "pred_log_k1_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "seconds": 118.6,
+      "utc": "2026-09-09T17:11:24Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "8b48b22e833737d6",
+      "name": "fold_mixed_k1_majority",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "utc": "2026-09-09T17:11:25Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "8b48b22e833737d6",
+      "name": "fold_mixed_k1_majority",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "seconds": 0.0,
+      "utc": "2026-09-09T17:11:26Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "ed9d3a6a03ee3edb",
+      "name": "fold_mixed_k1_logistic",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "utc": "2026-09-09T17:11:26Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "ed9d3a6a03ee3edb",
+      "name": "fold_mixed_k1_logistic",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "seconds": 123.2,
+      "utc": "2026-09-09T17:13:33Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "05e4ff512e8ff1b2",
+      "name": "fold_mixed_k1_model",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "utc": "2026-09-09T17:13:33Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "05e4ff512e8ff1b2",
+      "name": "fold_mixed_k1_model",
+      "pid": 892,
+      "rss_gb": 2.77,
+      "seconds": 239.2,
+      "utc": "2026-09-09T17:17:51Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "890707e083928907",
+      "name": "fold_mixed_k1_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.77,
+      "utc": "2026-09-09T17:17:52Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "890707e083928907",
+      "name": "fold_mixed_k1_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.77,
+      "seconds": 114.7,
+      "utc": "2026-09-09T17:19:57Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "e798998f5cd40506",
+      "name": "fold_mixed_k2_majority",
+      "pid": 892,
+      "rss_gb": 2.78,
+      "utc": "2026-09-09T17:19:57Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "e798998f5cd40506",
+      "name": "fold_mixed_k2_majority",
+      "pid": 892,
+      "rss_gb": 2.78,
+      "seconds": 0.0,
+      "utc": "2026-09-09T17:19:58Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "b4e98a575abfc51b",
+      "name": "fold_mixed_k2_logistic",
+      "pid": 892,
+      "rss_gb": 2.78,
+      "utc": "2026-09-09T17:19:59Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "b4e98a575abfc51b",
+      "name": "fold_mixed_k2_logistic",
+      "pid": 892,
+      "rss_gb": 2.78,
+      "seconds": 122.8,
+      "utc": "2026-09-09T17:22:05Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "cff2d3ca6ecf5929",
+      "name": "fold_mixed_k2_model",
+      "pid": 892,
+      "rss_gb": 2.78,
+      "utc": "2026-09-09T17:22:05Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "cff2d3ca6ecf5929",
+      "name": "fold_mixed_k2_model",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "seconds": 162.9,
+      "utc": "2026-09-09T17:25:01Z"
     }
   ],
   "missing_roles": [
-    "pred_log_k1_model",
-    "pred_log_k1_logistic_l3",
-    "fold_mixed_k1_majority",
-    "fold_mixed_k1_logistic",
-    "fold_mixed_k1_model",
-    "fold_mixed_k1_logistic_l3",
-    "fold_mixed_k2_majority",
-    "fold_mixed_k2_logistic",
-    "fold_mixed_k2_model",
     "fold_mixed_k2_logistic_l3",
     "fold_mixed_k4_majority",
     "fold_mixed_k4_logistic",
