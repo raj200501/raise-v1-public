@@ -46,12 +46,13 @@
     "n_source_chunks": 50000
   },
   "cost": {
-    "banked_fit_seconds_total": 8967.1,
+    "banked_fit_seconds_total": 10557.4,
     "checkpoints": "artifacts/pivot/lofo_l3_4096_ckpt",
     "interruptions_by_name": {
       "fold_base64_logistic_l3": 0,
       "fold_binary_logistic_l3": 0,
       "fold_code_logistic_l3": 0,
+      "fold_csv_logistic_l3": 0,
       "fold_gutenberg_logistic_l3": 0,
       "null": 0,
       "repro_l3": 0
@@ -60,11 +61,12 @@
       "fold_base64_logistic_l3": 1707.3,
       "fold_binary_logistic_l3": 1634.8,
       "fold_code_logistic_l3": 1800.3,
+      "fold_csv_logistic_l3": 1590.3,
       "fold_gutenberg_logistic_l3": 1918.0,
       "null": 89.2,
       "repro_l3": 1817.5
     },
-    "wall_seconds_this_invocation": 9143.2
+    "wall_seconds_this_invocation": 10752.7
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -281,7 +283,71 @@
       }
     },
     "csv": {
-      "logistic_l3": null
+      "logistic_l3": {
+        "block_refills": [
+          {
+            "order": "canonical",
+            "probe_ok": true,
+            "utc": "2026-09-09T21:03:56Z"
+          }
+        ],
+        "environment": {
+          "nice": 10,
+          "numpy": "2.4.6",
+          "python": "3.11.15",
+          "sklearn": "1.9.0",
+          "standardiser_probe": {
+            "block_gb": 0.177,
+            "ncols": 1108,
+            "peak_extra_fraction_of_block": 0.1005,
+            "probe_rows_per_pass": 2000,
+            "production_rows_per_pass": 20000,
+            "production_transient_gb": 0.177,
+            "rows": 20000
+          },
+          "threads": 3
+        },
+        "family": "logistic",
+        "fit_info": {
+          "n_iter": 774
+        },
+        "fit_rows_sha256": "8ae358528d974d213f64ee1d8d7800af18babba31b96dec37d6feb561afdf612",
+        "fit_rows_sorted_sha256": "8f6fee17a72ee29f6bb8c2215e7b4bad24b367c2444e6eaa84e5ea7002017233",
+        "head": "logistic_l3",
+        "heartbeat_max_rss_gb": 7.86,
+        "id": "L3",
+        "interruptions_before_this_fit": 0,
+        "last_heartbeat_rss_gb_before_this_fit": null,
+        "n_fit_rows": 699440,
+        "params": {
+          "C": 1.0,
+          "max_iter": 1000
+        },
+        "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+        "per_family": {
+          "base64": 0.0933,
+          "binary": 0.0853,
+          "code": 0.3366,
+          "csv": 0.1105,
+          "gutenberg": 0.1635,
+          "json": 0.4179,
+          "log": 0.407,
+          "mixed": 0.1167
+        },
+        "rss_gb": 7.57,
+        "rss_gb_is": "anonymous (RssAnon)",
+        "rss_total_gb": 12.52,
+        "ru_maxrss_gb": 13.74,
+        "scaled": true,
+        "seconds": 1590.3,
+        "seed": 20260825,
+        "stage": "lofo:csv",
+        "status": "fit",
+        "top1": 0.217,
+        "top1_non_gutenberg": 0.2248,
+        "utc": "2026-09-09T20:37:11Z",
+        "val": null
+      }
     },
     "gutenberg": {
       "logistic_l3": {
@@ -485,6 +551,24 @@
       "rss_gb": 7.57,
       "seconds": 1800.3,
       "utc": "2026-09-09T20:37:07Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "67df19cf45ada14e",
+      "name": "fold_csv_logistic_l3",
+      "pid": 11052,
+      "rss_gb": 7.57,
+      "utc": "2026-09-09T20:37:11Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "67df19cf45ada14e",
+      "name": "fold_csv_logistic_l3",
+      "pid": 11052,
+      "rss_gb": 7.57,
+      "seconds": 1590.3,
+      "utc": "2026-09-09T21:03:56Z"
     }
   ],
   "lofo": {},
@@ -505,7 +589,6 @@
   },
   "logistic_l3_refit_top1": 0.2317,
   "missing_roles": [
-    "fold_csv_logistic_l3",
     "fold_json_logistic_l3",
     "fold_log_logistic_l3",
     "fold_mixed_logistic_l3"
@@ -515,7 +598,7 @@
     "base64": 826,
     "binary": 796,
     "code": 851,
-    "csv": null,
+    "csv": 774,
     "gutenberg": 954,
     "json": null,
     "log": null,
