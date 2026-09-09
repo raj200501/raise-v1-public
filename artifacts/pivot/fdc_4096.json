@@ -45,9 +45,21 @@
     "n_source_chunks": 50000
   },
   "cost": {
-    "banked_fit_seconds_total": 3852.9,
+    "banked_fit_seconds_total": 8949.0,
     "checkpoints": "artifacts/pivot/fdc_4096_ckpt",
     "interruptions_by_name": {
+      "depth_base64_c1225_logistic": 0,
+      "depth_base64_c1225_logistic_l3": 0,
+      "depth_base64_c1225_majority": 0,
+      "depth_base64_c1225_model": 0,
+      "depth_base64_c2450_logistic": 0,
+      "depth_base64_c2450_logistic_l3": 0,
+      "depth_base64_c2450_majority": 0,
+      "depth_base64_c2450_model": 0,
+      "depth_base64_c700_logistic": 0,
+      "depth_base64_c700_logistic_l3": 0,
+      "depth_base64_c700_majority": 0,
+      "depth_base64_c700_model": 0,
       "depth_gutenberg_c1225_logistic": 0,
       "depth_gutenberg_c1225_logistic_l3": 0,
       "depth_gutenberg_c1225_majority": 0,
@@ -65,7 +77,27 @@
       "fold_base64_k1_majority": 0,
       "fold_base64_k1_model": 0,
       "fold_base64_k2_logistic": 0,
+      "fold_base64_k2_logistic_l3": 0,
       "fold_base64_k2_majority": 0,
+      "fold_base64_k2_model": 0,
+      "fold_base64_k4_logistic": 0,
+      "fold_base64_k4_logistic_l3": 0,
+      "fold_base64_k4_majority": 0,
+      "fold_base64_k4_model": 0,
+      "fold_base64_k7_logistic": 0,
+      "fold_base64_k7_logistic_l3": 0,
+      "fold_base64_k7_majority": 0,
+      "fold_base64_k7_model": 0,
+      "fold_binary_k1_logistic": 0,
+      "fold_binary_k1_logistic_l3": 0,
+      "fold_binary_k1_majority": 0,
+      "fold_binary_k1_model": 0,
+      "fold_binary_k2_logistic": 0,
+      "fold_binary_k2_logistic_l3": 0,
+      "fold_binary_k2_majority": 0,
+      "fold_binary_k2_model": 0,
+      "fold_binary_k4_logistic": 0,
+      "fold_binary_k4_majority": 0,
       "fold_gutenberg_k1_logistic": 0,
       "fold_gutenberg_k1_logistic_l3": 0,
       "fold_gutenberg_k1_majority": 0,
@@ -83,6 +115,10 @@
       "fold_gutenberg_k7_majority": 0,
       "fold_gutenberg_k7_model": 0,
       "null": 0,
+      "pred_base64_k1_logistic": 0,
+      "pred_base64_k1_logistic_l3": 0,
+      "pred_base64_k1_majority": 0,
+      "pred_base64_k1_model": 0,
       "pred_gutenberg_k1_logistic": 0,
       "pred_gutenberg_k1_logistic_l3": 0,
       "pred_gutenberg_k1_majority": 0,
@@ -90,6 +126,18 @@
       "repro_100k": 0
     },
     "seconds_by_name": {
+      "depth_base64_c1225_logistic": 62.8,
+      "depth_base64_c1225_logistic_l3": 35.2,
+      "depth_base64_c1225_majority": 0.0,
+      "depth_base64_c1225_model": 46.3,
+      "depth_base64_c2450_logistic": 86.2,
+      "depth_base64_c2450_logistic_l3": 39.9,
+      "depth_base64_c2450_majority": 0.0,
+      "depth_base64_c2450_model": 54.4,
+      "depth_base64_c700_logistic": 61.9,
+      "depth_base64_c700_logistic_l3": 15.9,
+      "depth_base64_c700_majority": 0.0,
+      "depth_base64_c700_model": 47.9,
       "depth_gutenberg_c1225_logistic": 62.3,
       "depth_gutenberg_c1225_logistic_l3": 43.1,
       "depth_gutenberg_c1225_majority": 0.0,
@@ -107,7 +155,27 @@
       "fold_base64_k1_majority": 0.0,
       "fold_base64_k1_model": 114.0,
       "fold_base64_k2_logistic": 149.9,
+      "fold_base64_k2_logistic_l3": 168.5,
       "fold_base64_k2_majority": 0.0,
+      "fold_base64_k2_model": 223.7,
+      "fold_base64_k4_logistic": 154.8,
+      "fold_base64_k4_logistic_l3": 234.2,
+      "fold_base64_k4_majority": 0.0,
+      "fold_base64_k4_model": 334.8,
+      "fold_base64_k7_logistic": 139.1,
+      "fold_base64_k7_logistic_l3": 190.2,
+      "fold_base64_k7_majority": 0.0,
+      "fold_base64_k7_model": 267.3,
+      "fold_binary_k1_logistic": 153.5,
+      "fold_binary_k1_logistic_l3": 163.1,
+      "fold_binary_k1_majority": 0.0,
+      "fold_binary_k1_model": 1132.7,
+      "fold_binary_k2_logistic": 138.3,
+      "fold_binary_k2_logistic_l3": 329.0,
+      "fold_binary_k2_majority": 0.0,
+      "fold_binary_k2_model": 267.8,
+      "fold_binary_k4_logistic": 163.1,
+      "fold_binary_k4_majority": 0.0,
       "fold_gutenberg_k1_logistic": 313.0,
       "fold_gutenberg_k1_logistic_l3": 122.7,
       "fold_gutenberg_k1_majority": 0.0,
@@ -125,13 +193,17 @@
       "fold_gutenberg_k7_majority": 0.0,
       "fold_gutenberg_k7_model": 206.5,
       "null": 23.6,
+      "pred_base64_k1_logistic": 141.5,
+      "pred_base64_k1_logistic_l3": 129.6,
+      "pred_base64_k1_majority": 0.0,
+      "pred_base64_k1_model": 314.4,
       "pred_gutenberg_k1_logistic": 77.8,
       "pred_gutenberg_k1_logistic_l3": 71.2,
       "pred_gutenberg_k1_majority": 0.0,
       "pred_gutenberg_k1_model": 73.3,
       "repro_100k": 356.1
     },
-    "wall_seconds_this_invocation": 4215.9
+    "wall_seconds_this_invocation": 9705.1
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -244,7 +316,7 @@
         "1": [
           400,
           400,
-          null,
+          400,
           null,
           null,
           null,
@@ -254,7 +326,7 @@
         "2": [
           400,
           400,
-          null,
+          400,
           null,
           null,
           null,
@@ -263,8 +335,8 @@
         ],
         "4": [
           400,
-          null,
-          null,
+          400,
+          400,
           null,
           null,
           null,
@@ -273,7 +345,7 @@
         ],
         "7": [
           400,
-          null,
+          400,
           null,
           null,
           null,
@@ -445,7 +517,7 @@
         "1": [
           306,
           206,
-          null,
+          480,
           null,
           null,
           null,
@@ -454,8 +526,8 @@
         ],
         "2": [
           388,
-          null,
-          null,
+          472,
+          735,
           null,
           null,
           null,
@@ -464,7 +536,7 @@
         ],
         "4": [
           678,
-          null,
+          667,
           null,
           null,
           null,
@@ -474,7 +546,7 @@
         ],
         "7": [
           545,
-          null,
+          547,
           null,
           null,
           null,
@@ -847,7 +919,7 @@
         "1": [
           21,
           15,
-          null,
+          121,
           null,
           null,
           null,
@@ -856,8 +928,8 @@
         ],
         "2": [
           21,
-          null,
-          null,
+          30,
+          35,
           null,
           null,
           null,
@@ -866,7 +938,7 @@
         ],
         "4": [
           29,
-          null,
+          42,
           null,
           null,
           null,
@@ -876,7 +948,7 @@
         ],
         "7": [
           29,
-          null,
+          38,
           null,
           null,
           null,
@@ -1264,7 +1336,71 @@
             "utc": "2026-09-09T08:46:36Z",
             "val": null
           },
-          "logistic_l3": null,
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T08:56:17Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 472
+            },
+            "fit_rows_sha256": "993a95e3743346f8da2bf42d4c7de8808e7520460bf7c3fa4793707bb765a276",
+            "fit_rows_sorted_sha256": "ec9e645a44d6e3ff9047c5a6ba7ec750f557f8f43f83e9fbeb606f3f822d0ca1",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 3.63,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98888,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.0642,
+              "binary": 0.1037,
+              "code": 0.5258,
+              "csv": 0.0804,
+              "gutenberg": 0.0412,
+              "json": 0.1171,
+              "log": 0.1002,
+              "mixed": 0.0784
+            },
+            "rss_gb": 2.4,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.82,
+            "ru_maxrss_gb": 9.12,
+            "scaled": true,
+            "seconds": 168.5,
+            "seed": 20260825,
+            "stage": "fdc:base64:k2",
+            "status": "fit",
+            "top1": 0.1378,
+            "top1_non_gutenberg": 0.1518,
+            "utc": "2026-09-09T08:53:16Z",
+            "val": null
+          },
           "majority": {
             "block_refills": [],
             "environment": {
@@ -1321,66 +1457,2126 @@
             "utc": "2026-09-09T08:46:35Z",
             "val": null
           },
-          "model": null
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 30
+            },
+            "fit_rows_sha256": "993a95e3743346f8da2bf42d4c7de8808e7520460bf7c3fa4793707bb765a276",
+            "fit_rows_sorted_sha256": "ec9e645a44d6e3ff9047c5a6ba7ec750f557f8f43f83e9fbeb606f3f822d0ca1",
+            "head": "model",
+            "heartbeat_max_rss_gb": 3.18,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98888,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.0413,
+              "binary": 0.1045,
+              "code": 0.3953,
+              "csv": 0.096,
+              "gutenberg": 0.0607,
+              "json": 0.1248,
+              "log": 0.1233,
+              "mixed": 0.075
+            },
+            "rss_gb": 2.75,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.17,
+            "ru_maxrss_gb": 9.1,
+            "scaled": false,
+            "seconds": 223.7,
+            "seed": 20260825,
+            "stage": "fdc:base64:k2",
+            "status": "fit",
+            "top1": 0.1268,
+            "top1_non_gutenberg": 0.1365,
+            "utc": "2026-09-09T08:49:10Z",
+            "val": "frag"
+          }
         },
         "4": {
-          "logistic": null,
-          "logistic_l3": null,
-          "majority": null,
-          "model": null
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 400
+            },
+            "fit_rows_sha256": "03262eee7d218f940151755a19c391f64ad5894163626001634d7a925f3e814a",
+            "fit_rows_sorted_sha256": "a3246dcab2e4dffc9c4687f7c5817c7f9fce3cfd671e7ecbb8351f2eb0c3163f",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 2.45,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99125,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.0601,
+              "binary": 0.0771,
+              "code": 0.186,
+              "csv": 0.2432,
+              "gutenberg": 0.0708,
+              "json": 0.2429,
+              "log": 0.1232,
+              "mixed": 0.0762
+            },
+            "rss_gb": 2.4,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.83,
+            "ru_maxrss_gb": 9.12,
+            "scaled": false,
+            "seconds": 154.8,
+            "seed": 20260825,
+            "stage": "fdc:base64:k4",
+            "status": "fit",
+            "top1": 0.1344,
+            "top1_non_gutenberg": 0.1436,
+            "utc": "2026-09-09T08:56:19Z",
+            "val": null
+          },
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T09:09:09Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 667
+            },
+            "fit_rows_sha256": "03262eee7d218f940151755a19c391f64ad5894163626001634d7a925f3e814a",
+            "fit_rows_sorted_sha256": "a3246dcab2e4dffc9c4687f7c5817c7f9fce3cfd671e7ecbb8351f2eb0c3163f",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 3.46,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99125,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.0621,
+              "binary": 0.0869,
+              "code": 0.3697,
+              "csv": 0.3566,
+              "gutenberg": 0.0595,
+              "json": 0.4597,
+              "log": 0.1377,
+              "mixed": 0.0761
+            },
+            "rss_gb": 2.7,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.13,
+            "ru_maxrss_gb": 9.42,
+            "scaled": true,
+            "seconds": 234.2,
+            "seed": 20260825,
+            "stage": "fdc:base64:k4",
+            "status": "fit",
+            "top1": 0.1999,
+            "top1_non_gutenberg": 0.2203,
+            "utc": "2026-09-09T09:05:02Z",
+            "val": null
+          },
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "03262eee7d218f940151755a19c391f64ad5894163626001634d7a925f3e814a",
+            "fit_rows_sorted_sha256": "a3246dcab2e4dffc9c4687f7c5817c7f9fce3cfd671e7ecbb8351f2eb0c3163f",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 2.4,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99125,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 2.4,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.83,
+            "ru_maxrss_gb": 9.12,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "fdc:base64:k4",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T08:56:18Z",
+            "val": null
+          },
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 42
+            },
+            "fit_rows_sha256": "03262eee7d218f940151755a19c391f64ad5894163626001634d7a925f3e814a",
+            "fit_rows_sorted_sha256": "a3246dcab2e4dffc9c4687f7c5817c7f9fce3cfd671e7ecbb8351f2eb0c3163f",
+            "head": "model",
+            "heartbeat_max_rss_gb": 3.13,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99125,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.0573,
+              "binary": 0.1023,
+              "code": 0.3006,
+              "csv": 0.3931,
+              "gutenberg": 0.061,
+              "json": 0.3733,
+              "log": 0.1254,
+              "mixed": 0.074
+            },
+            "rss_gb": 2.7,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.13,
+            "ru_maxrss_gb": 9.12,
+            "scaled": false,
+            "seconds": 334.8,
+            "seed": 20260825,
+            "stage": "fdc:base64:k4",
+            "status": "fit",
+            "top1": 0.1846,
+            "top1_non_gutenberg": 0.2026,
+            "utc": "2026-09-09T08:58:58Z",
+            "val": "frag"
+          }
         },
         "7": {
-          "logistic": null,
-          "logistic_l3": null,
-          "majority": null,
-          "model": null
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 400
+            },
+            "fit_rows_sha256": "56cbc8b3d4047aff2809485e5e0b22d788d25fd6835041bde894d789d6430079",
+            "fit_rows_sorted_sha256": "79d63cf2cca5579ec63036f490c8660e8e36f09ea4ceaaadd25cde9e818d9e2e",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 2.7,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99163,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.0633,
+              "binary": 0.0779,
+              "code": 0.1429,
+              "csv": 0.2047,
+              "gutenberg": 0.1151,
+              "json": 0.2214,
+              "log": 0.1695,
+              "mixed": 0.1142
+            },
+            "rss_gb": 2.7,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.13,
+            "ru_maxrss_gb": 9.42,
+            "scaled": false,
+            "seconds": 139.1,
+            "seed": 20260825,
+            "stage": "fdc:base64:k7",
+            "status": "fit",
+            "top1": 0.1384,
+            "top1_non_gutenberg": 0.1418,
+            "utc": "2026-09-09T09:09:11Z",
+            "val": null
+          },
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T09:19:47Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 547
+            },
+            "fit_rows_sha256": "56cbc8b3d4047aff2809485e5e0b22d788d25fd6835041bde894d789d6430079",
+            "fit_rows_sorted_sha256": "79d63cf2cca5579ec63036f490c8660e8e36f09ea4ceaaadd25cde9e818d9e2e",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 2.68,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99163,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.066,
+              "binary": 0.0828,
+              "code": 0.2898,
+              "csv": 0.3052,
+              "gutenberg": 0.1504,
+              "json": 0.3618,
+              "log": 0.353,
+              "mixed": 0.1154
+            },
+            "rss_gb": 2.68,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.11,
+            "ru_maxrss_gb": 9.42,
+            "scaled": true,
+            "seconds": 190.2,
+            "seed": 20260825,
+            "stage": "fdc:base64:k7",
+            "status": "fit",
+            "top1": 0.2154,
+            "top1_non_gutenberg": 0.2248,
+            "utc": "2026-09-09T09:16:25Z",
+            "val": null
+          },
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "56cbc8b3d4047aff2809485e5e0b22d788d25fd6835041bde894d789d6430079",
+            "fit_rows_sorted_sha256": "79d63cf2cca5579ec63036f490c8660e8e36f09ea4ceaaadd25cde9e818d9e2e",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 2.7,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99163,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 2.7,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.13,
+            "ru_maxrss_gb": 9.42,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "fdc:base64:k7",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T09:09:10Z",
+            "val": null
+          },
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 38
+            },
+            "fit_rows_sha256": "56cbc8b3d4047aff2809485e5e0b22d788d25fd6835041bde894d789d6430079",
+            "fit_rows_sorted_sha256": "79d63cf2cca5579ec63036f490c8660e8e36f09ea4ceaaadd25cde9e818d9e2e",
+            "head": "model",
+            "heartbeat_max_rss_gb": 3.12,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99163,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.0694,
+              "binary": 0.0931,
+              "code": 0.2327,
+              "csv": 0.3322,
+              "gutenberg": 0.1389,
+              "json": 0.2808,
+              "log": 0.3041,
+              "mixed": 0.1149
+            },
+            "rss_gb": 2.68,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.11,
+            "ru_maxrss_gb": 9.42,
+            "scaled": false,
+            "seconds": 267.3,
+            "seed": 20260825,
+            "stage": "fdc:base64:k7",
+            "status": "fit",
+            "top1": 0.1954,
+            "top1_non_gutenberg": 0.2037,
+            "utc": "2026-09-09T09:11:34Z",
+            "val": "frag"
+          }
         }
       },
       "depth": {
         "1225": {
-          "logistic": null,
-          "logistic_l3": null,
-          "majority": null,
-          "model": null
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 400
+            },
+            "fit_rows_sha256": "3d3642651ab55ae36aa17ba10c86d4db25be63238f9aa2ae9764f9b97fa83f31",
+            "fit_rows_sorted_sha256": "e78303c76bd090bda4a11a9c6ee55579229c6ceeed43e5961803653d1ba18923",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 1.85,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 24792,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.0675,
+              "binary": 0.096,
+              "code": 0.0449,
+              "csv": 0.037,
+              "gutenberg": 0.0377,
+              "json": 0.0369,
+              "log": 0.0346,
+              "mixed": 0.0744
+            },
+            "rss_gb": 1.85,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.28,
+            "ru_maxrss_gb": 9.42,
+            "scaled": false,
+            "seconds": 62.8,
+            "seed": 20260825,
+            "stage": "depth:base64:c1225",
+            "status": "fit",
+            "top1": 0.0536,
+            "top1_non_gutenberg": 0.0559,
+            "utc": "2026-09-09T09:23:13Z",
+            "val": null
+          },
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T09:26:00Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 170
+            },
+            "fit_rows_sha256": "3d3642651ab55ae36aa17ba10c86d4db25be63238f9aa2ae9764f9b97fa83f31",
+            "fit_rows_sorted_sha256": "e78303c76bd090bda4a11a9c6ee55579229c6ceeed43e5961803653d1ba18923",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 1.82,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 24792,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.0649,
+              "binary": 0.114,
+              "code": 0.0516,
+              "csv": 0.0338,
+              "gutenberg": 0.0273,
+              "json": 0.0221,
+              "log": 0.0367,
+              "mixed": 0.0766
+            },
+            "rss_gb": 1.82,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.25,
+            "ru_maxrss_gb": 9.42,
+            "scaled": true,
+            "seconds": 35.2,
+            "seed": 20260825,
+            "stage": "depth:base64:c1225",
+            "status": "fit",
+            "top1": 0.0533,
+            "top1_non_gutenberg": 0.0571,
+            "utc": "2026-09-09T09:25:17Z",
+            "val": null
+          },
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "3d3642651ab55ae36aa17ba10c86d4db25be63238f9aa2ae9764f9b97fa83f31",
+            "fit_rows_sorted_sha256": "e78303c76bd090bda4a11a9c6ee55579229c6ceeed43e5961803653d1ba18923",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 1.85,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 24792,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 1.85,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.28,
+            "ru_maxrss_gb": 9.42,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "depth:base64:c1225",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T09:23:12Z",
+            "val": null
+          },
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 11
+            },
+            "fit_rows_sha256": "3d3642651ab55ae36aa17ba10c86d4db25be63238f9aa2ae9764f9b97fa83f31",
+            "fit_rows_sorted_sha256": "e78303c76bd090bda4a11a9c6ee55579229c6ceeed43e5961803653d1ba18923",
+            "head": "model",
+            "heartbeat_max_rss_gb": 2.11,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 24792,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.0645,
+              "binary": 0.1036,
+              "code": 0.0418,
+              "csv": 0.0426,
+              "gutenberg": 0.0354,
+              "json": 0.0428,
+              "log": 0.0268,
+              "mixed": 0.0757
+            },
+            "rss_gb": 1.82,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.25,
+            "ru_maxrss_gb": 9.42,
+            "scaled": false,
+            "seconds": 46.3,
+            "seed": 20260825,
+            "stage": "depth:base64:c1225",
+            "status": "fit",
+            "top1": 0.0541,
+            "top1_non_gutenberg": 0.0568,
+            "utc": "2026-09-09T09:24:20Z",
+            "val": "frag"
+          }
         },
         "2450": {
-          "logistic": null,
-          "logistic_l3": null,
-          "majority": null,
-          "model": null
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 400
+            },
+            "fit_rows_sha256": "a5cc4b1f41cd2006c11beeaddcf188b3dbd650b8002795de9fa4648a91cb2c2d",
+            "fit_rows_sorted_sha256": "4806b86c03cde1c1889abf9b451c5e9338c787d51e1d0e67ee53f0360aebc965",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 2.25,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 49484,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.027,
+              "binary": 0.0996,
+              "code": 0.0441,
+              "csv": 0.0381,
+              "gutenberg": 0.0336,
+              "json": 0.0395,
+              "log": 0.0367,
+              "mixed": 0.0769
+            },
+            "rss_gb": 2.25,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.68,
+            "ru_maxrss_gb": 9.42,
+            "scaled": false,
+            "seconds": 86.2,
+            "seed": 20260825,
+            "stage": "depth:base64:c2450",
+            "status": "fit",
+            "top1": 0.0493,
+            "top1_non_gutenberg": 0.0516,
+            "utc": "2026-09-09T09:19:48Z",
+            "val": null
+          },
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T09:23:12Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 182
+            },
+            "fit_rows_sha256": "a5cc4b1f41cd2006c11beeaddcf188b3dbd650b8002795de9fa4648a91cb2c2d",
+            "fit_rows_sorted_sha256": "4806b86c03cde1c1889abf9b451c5e9338c787d51e1d0e67ee53f0360aebc965",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 2.28,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 49484,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.0646,
+              "binary": 0.118,
+              "code": 0.0569,
+              "csv": 0.0462,
+              "gutenberg": 0.0257,
+              "json": 0.0214,
+              "log": 0.0354,
+              "mixed": 0.0776
+            },
+            "rss_gb": 2.28,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.71,
+            "ru_maxrss_gb": 9.42,
+            "scaled": true,
+            "seconds": 39.9,
+            "seed": 20260825,
+            "stage": "depth:base64:c2450",
+            "status": "fit",
+            "top1": 0.0556,
+            "top1_non_gutenberg": 0.0599,
+            "utc": "2026-09-09T09:22:22Z",
+            "val": null
+          },
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "a5cc4b1f41cd2006c11beeaddcf188b3dbd650b8002795de9fa4648a91cb2c2d",
+            "fit_rows_sorted_sha256": "4806b86c03cde1c1889abf9b451c5e9338c787d51e1d0e67ee53f0360aebc965",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 2.25,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 49484,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 2.25,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.68,
+            "ru_maxrss_gb": 9.42,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "depth:base64:c2450",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T09:19:47Z",
+            "val": null
+          },
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 12
+            },
+            "fit_rows_sha256": "a5cc4b1f41cd2006c11beeaddcf188b3dbd650b8002795de9fa4648a91cb2c2d",
+            "fit_rows_sorted_sha256": "4806b86c03cde1c1889abf9b451c5e9338c787d51e1d0e67ee53f0360aebc965",
+            "head": "model",
+            "heartbeat_max_rss_gb": 2.71,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 49484,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.0643,
+              "binary": 0.1038,
+              "code": 0.0449,
+              "csv": 0.039,
+              "gutenberg": 0.0382,
+              "json": 0.0339,
+              "log": 0.0267,
+              "mixed": 0.0779
+            },
+            "rss_gb": 2.28,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.71,
+            "ru_maxrss_gb": 9.42,
+            "scaled": false,
+            "seconds": 54.4,
+            "seed": 20260825,
+            "stage": "depth:base64:c2450",
+            "status": "fit",
+            "top1": 0.0535,
+            "top1_non_gutenberg": 0.0557,
+            "utc": "2026-09-09T09:21:18Z",
+            "val": "frag"
+          }
         },
         "700": {
-          "logistic": null,
-          "logistic_l3": null,
-          "majority": null,
-          "model": null
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 350
+            },
+            "fit_rows_sha256": "7a0c0897ad8c5a8872569a328c101630da3fae2124f8d84bb7fbd3ea76a1a684",
+            "fit_rows_sorted_sha256": "dcd304f6c4cb3df18dd46257d0fa49cc198fb865b76278db4cd426aa701d113c",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 1.82,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 14152,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.0708,
+              "binary": 0.0887,
+              "code": 0.038,
+              "csv": 0.0331,
+              "gutenberg": 0.0371,
+              "json": 0.0363,
+              "log": 0.0321,
+              "mixed": 0.078
+            },
+            "rss_gb": 1.82,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.25,
+            "ru_maxrss_gb": 9.42,
+            "scaled": false,
+            "seconds": 61.9,
+            "seed": 20260825,
+            "stage": "depth:base64:c700",
+            "status": "fit",
+            "top1": 0.0518,
+            "top1_non_gutenberg": 0.0539,
+            "utc": "2026-09-09T09:26:02Z",
+            "val": null
+          },
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T09:28:37Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 151
+            },
+            "fit_rows_sha256": "7a0c0897ad8c5a8872569a328c101630da3fae2124f8d84bb7fbd3ea76a1a684",
+            "fit_rows_sorted_sha256": "dcd304f6c4cb3df18dd46257d0fa49cc198fb865b76278db4cd426aa701d113c",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 1.82,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 14152,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.0246,
+              "binary": 0.1098,
+              "code": 0.0529,
+              "csv": 0.0348,
+              "gutenberg": 0.0311,
+              "json": 0.0238,
+              "log": 0.0329,
+              "mixed": 0.077
+            },
+            "rss_gb": 1.82,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.25,
+            "ru_maxrss_gb": 9.42,
+            "scaled": true,
+            "seconds": 15.9,
+            "seed": 20260825,
+            "stage": "depth:base64:c700",
+            "status": "fit",
+            "top1": 0.0482,
+            "top1_non_gutenberg": 0.0507,
+            "utc": "2026-09-09T09:28:09Z",
+            "val": null
+          },
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "7a0c0897ad8c5a8872569a328c101630da3fae2124f8d84bb7fbd3ea76a1a684",
+            "fit_rows_sorted_sha256": "dcd304f6c4cb3df18dd46257d0fa49cc198fb865b76278db4cd426aa701d113c",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 1.82,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 14152,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 1.82,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.25,
+            "ru_maxrss_gb": 9.42,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "depth:base64:c700",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T09:26:01Z",
+            "val": null
+          },
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 11
+            },
+            "fit_rows_sha256": "7a0c0897ad8c5a8872569a328c101630da3fae2124f8d84bb7fbd3ea76a1a684",
+            "fit_rows_sorted_sha256": "dcd304f6c4cb3df18dd46257d0fa49cc198fb865b76278db4cd426aa701d113c",
+            "head": "model",
+            "heartbeat_max_rss_gb": 1.96,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 14152,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.0657,
+              "binary": 0.101,
+              "code": 0.0407,
+              "csv": 0.032,
+              "gutenberg": 0.0335,
+              "json": 0.0354,
+              "log": 0.0252,
+              "mixed": 0.0765
+            },
+            "rss_gb": 1.82,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.25,
+            "ru_maxrss_gb": 9.42,
+            "scaled": false,
+            "seconds": 47.9,
+            "seed": 20260825,
+            "stage": "depth:base64:c700",
+            "status": "fit",
+            "top1": 0.0512,
+            "top1_non_gutenberg": 0.0538,
+            "utc": "2026-09-09T09:27:11Z",
+            "val": "frag"
+          }
         }
       },
       "pred_k1": {
-        "logistic": null,
-        "logistic_l3": null,
-        "majority": null,
-        "model": null
+        "logistic": {
+          "block_refills": [],
+          "environment": {
+            "nice": 10,
+            "numpy": "2.4.6",
+            "python": "3.11.15",
+            "sklearn": "1.9.0",
+            "standardiser_probe": {
+              "block_gb": 0.177,
+              "ncols": 1108,
+              "peak_extra_fraction_of_block": 0.1005,
+              "probe_rows_per_pass": 2000,
+              "production_rows_per_pass": 20000,
+              "production_transient_gb": 0.177,
+              "rows": 20000
+            },
+            "threads": 3
+          },
+          "family": "logistic",
+          "fit_info": {
+            "n_iter": 400
+          },
+          "fit_rows_sha256": "8bf3783cf12d4511b1fd5845d2f57900cef929861c26c0b7e9aee03db9b32055",
+          "fit_rows_sorted_sha256": "2dca00111af073547d6cc9ee84365ff095345a793fc74b9fefa178b10a5014d3",
+          "head": "logistic",
+          "heartbeat_max_rss_gb": 2.67,
+          "id": "L1",
+          "interruptions_before_this_fit": 0,
+          "last_heartbeat_rss_gb_before_this_fit": null,
+          "n_fit_rows": 98209,
+          "params": {
+            "max_iter": 400
+          },
+          "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+          "per_family": {
+            "base64": 0.0732,
+            "binary": 0.0786,
+            "code": 0.0822,
+            "csv": 0.0956,
+            "gutenberg": 0.234,
+            "json": 0.1237,
+            "log": 0.0799,
+            "mixed": 0.0781
+          },
+          "rss_gb": 2.67,
+          "rss_gb_is": "anonymous (RssAnon)",
+          "rss_total_gb": 8.14,
+          "ru_maxrss_gb": 9.42,
+          "scaled": false,
+          "seconds": 141.5,
+          "seed": 20260825,
+          "stage": "pred:base64:k1",
+          "status": "fit",
+          "top1": 0.1059,
+          "top1_non_gutenberg": 0.0873,
+          "utc": "2026-09-09T09:28:40Z",
+          "val": null
+        },
+        "logistic_l3": {
+          "block_refills": [
+            {
+              "order": "canonical",
+              "probe_ok": true,
+              "utc": "2026-09-09T09:39:11Z"
+            }
+          ],
+          "environment": {
+            "nice": 10,
+            "numpy": "2.4.6",
+            "python": "3.11.15",
+            "sklearn": "1.9.0",
+            "standardiser_probe": {
+              "block_gb": 0.177,
+              "ncols": 1108,
+              "peak_extra_fraction_of_block": 0.1005,
+              "probe_rows_per_pass": 2000,
+              "production_rows_per_pass": 20000,
+              "production_transient_gb": 0.177,
+              "rows": 20000
+            },
+            "threads": 3
+          },
+          "family": "logistic",
+          "fit_info": {
+            "n_iter": 380
+          },
+          "fit_rows_sha256": "8bf3783cf12d4511b1fd5845d2f57900cef929861c26c0b7e9aee03db9b32055",
+          "fit_rows_sorted_sha256": "2dca00111af073547d6cc9ee84365ff095345a793fc74b9fefa178b10a5014d3",
+          "head": "logistic_l3",
+          "heartbeat_max_rss_gb": 2.72,
+          "id": "L3",
+          "interruptions_before_this_fit": 0,
+          "last_heartbeat_rss_gb_before_this_fit": null,
+          "n_fit_rows": 98209,
+          "params": {
+            "C": 1.0,
+            "max_iter": 1000
+          },
+          "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+          "per_family": {
+            "base64": 0.0725,
+            "binary": 0.0785,
+            "code": 0.0971,
+            "csv": 0.1014,
+            "gutenberg": 0.3554,
+            "json": 0.0945,
+            "log": 0.0919,
+            "mixed": 0.0883
+          },
+          "rss_gb": 2.72,
+          "rss_gb_is": "anonymous (RssAnon)",
+          "rss_total_gb": 8.18,
+          "ru_maxrss_gb": 9.48,
+          "scaled": true,
+          "seconds": 129.6,
+          "seed": 20260825,
+          "stage": "pred:base64:k1",
+          "status": "fit",
+          "top1": 0.1229,
+          "top1_non_gutenberg": 0.0891,
+          "utc": "2026-09-09T09:36:50Z",
+          "val": null
+        },
+        "majority": {
+          "block_refills": [],
+          "environment": {
+            "nice": 10,
+            "numpy": "2.4.6",
+            "python": "3.11.15",
+            "sklearn": "1.9.0",
+            "standardiser_probe": {
+              "block_gb": 0.177,
+              "ncols": 1108,
+              "peak_extra_fraction_of_block": 0.1005,
+              "probe_rows_per_pass": 2000,
+              "production_rows_per_pass": 20000,
+              "production_transient_gb": 0.177,
+              "rows": 20000
+            },
+            "threads": 3
+          },
+          "family": "dummy",
+          "fit_info": {},
+          "fit_rows_sha256": "8bf3783cf12d4511b1fd5845d2f57900cef929861c26c0b7e9aee03db9b32055",
+          "fit_rows_sorted_sha256": "2dca00111af073547d6cc9ee84365ff095345a793fc74b9fefa178b10a5014d3",
+          "head": "majority",
+          "heartbeat_max_rss_gb": 2.67,
+          "id": "U1",
+          "interruptions_before_this_fit": 0,
+          "last_heartbeat_rss_gb_before_this_fit": null,
+          "n_fit_rows": 98209,
+          "params": {
+            "strategy": "most_frequent"
+          },
+          "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+          "per_family": {
+            "base64": 0.0385,
+            "binary": 0.0385,
+            "code": 0.0385,
+            "csv": 0.0385,
+            "gutenberg": 0.0385,
+            "json": 0.0385,
+            "log": 0.0385,
+            "mixed": 0.0385
+          },
+          "rss_gb": 2.67,
+          "rss_gb_is": "anonymous (RssAnon)",
+          "rss_total_gb": 8.14,
+          "ru_maxrss_gb": 9.42,
+          "scaled": false,
+          "seconds": 0.0,
+          "seed": 20260825,
+          "stage": "pred:base64:k1",
+          "status": "fit",
+          "top1": 0.0385,
+          "top1_non_gutenberg": 0.0385,
+          "utc": "2026-09-09T09:28:38Z",
+          "val": null
+        },
+        "model": {
+          "block_refills": [],
+          "environment": {
+            "nice": 10,
+            "numpy": "2.4.6",
+            "python": "3.11.15",
+            "sklearn": "1.9.0",
+            "standardiser_probe": {
+              "block_gb": 0.177,
+              "ncols": 1108,
+              "peak_extra_fraction_of_block": 0.1005,
+              "probe_rows_per_pass": 2000,
+              "production_rows_per_pass": 20000,
+              "production_transient_gb": 0.177,
+              "rows": 20000
+            },
+            "threads": 3
+          },
+          "family": "hgb",
+          "fit_info": {
+            "n_iter": 40
+          },
+          "fit_rows_sha256": "8bf3783cf12d4511b1fd5845d2f57900cef929861c26c0b7e9aee03db9b32055",
+          "fit_rows_sorted_sha256": "2dca00111af073547d6cc9ee84365ff095345a793fc74b9fefa178b10a5014d3",
+          "head": "model",
+          "heartbeat_max_rss_gb": 3.15,
+          "id": "M1",
+          "interruptions_before_this_fit": 0,
+          "last_heartbeat_rss_gb_before_this_fit": null,
+          "n_fit_rows": 98209,
+          "params": {
+            "learning_rate": 0.15,
+            "max_iter": 200,
+            "max_leaf_nodes": 63,
+            "n_iter_no_change": 10
+          },
+          "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+          "per_family": {
+            "base64": 0.0339,
+            "binary": 0.0383,
+            "code": 0.0679,
+            "csv": 0.0535,
+            "gutenberg": 0.2587,
+            "json": 0.0659,
+            "log": 0.053,
+            "mixed": 0.0403
+          },
+          "rss_gb": 2.72,
+          "rss_gb_is": "anonymous (RssAnon)",
+          "rss_total_gb": 8.18,
+          "ru_maxrss_gb": 9.42,
+          "scaled": false,
+          "seconds": 314.4,
+          "seed": 20260825,
+          "stage": "pred:base64:k1",
+          "status": "fit",
+          "top1": 0.0768,
+          "top1_non_gutenberg": 0.0504,
+          "utc": "2026-09-09T09:31:05Z",
+          "val": "frag"
+        }
       }
     },
     "binary": {
       "by_k": {
         "1": {
-          "logistic": null,
-          "logistic_l3": null,
-          "majority": null,
-          "model": null
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 400
+            },
+            "fit_rows_sha256": "e77ce52541fe772f5ff448502e62323b38f50dc186376cd0da5bf47ebeda9317",
+            "fit_rows_sorted_sha256": "1020cab547322aab5c051814cc9871f9491672530eef68adef11ab2058ef130c",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 2.72,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 97972,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.0756,
+              "binary": 0.0762,
+              "code": 0.3354,
+              "csv": 0.1129,
+              "gutenberg": 0.0816,
+              "json": 0.1396,
+              "log": 0.1264,
+              "mixed": 0.0769
+            },
+            "rss_gb": 2.72,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.22,
+            "ru_maxrss_gb": 9.48,
+            "scaled": false,
+            "seconds": 153.5,
+            "seed": 20260825,
+            "stage": "fdc:binary:k1",
+            "status": "fit",
+            "top1": 0.1275,
+            "top1_non_gutenberg": 0.1342,
+            "utc": "2026-09-09T09:39:13Z",
+            "val": null
+          },
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T10:05:01Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 480
+            },
+            "fit_rows_sha256": "e77ce52541fe772f5ff448502e62323b38f50dc186376cd0da5bf47ebeda9317",
+            "fit_rows_sorted_sha256": "1020cab547322aab5c051814cc9871f9491672530eef68adef11ab2058ef130c",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 2.9,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 97972,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.0522,
+              "binary": 0.0388,
+              "code": 0.5836,
+              "csv": 0.0531,
+              "gutenberg": 0.045,
+              "json": 0.1343,
+              "log": 0.1233,
+              "mixed": 0.0381
+            },
+            "rss_gb": 2.9,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 5.94,
+            "ru_maxrss_gb": 9.48,
+            "scaled": true,
+            "seconds": 163.1,
+            "seed": 20260825,
+            "stage": "fdc:binary:k1",
+            "status": "fit",
+            "top1": 0.1325,
+            "top1_non_gutenberg": 0.1452,
+            "utc": "2026-09-09T10:02:05Z",
+            "val": null
+          },
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "e77ce52541fe772f5ff448502e62323b38f50dc186376cd0da5bf47ebeda9317",
+            "fit_rows_sorted_sha256": "1020cab547322aab5c051814cc9871f9491672530eef68adef11ab2058ef130c",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 2.72,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 97972,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 2.72,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.22,
+            "ru_maxrss_gb": 9.48,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "fdc:binary:k1",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T09:39:12Z",
+            "val": null
+          },
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 121
+            },
+            "fit_rows_sha256": "e77ce52541fe772f5ff448502e62323b38f50dc186376cd0da5bf47ebeda9317",
+            "fit_rows_sorted_sha256": "1020cab547322aab5c051814cc9871f9491672530eef68adef11ab2058ef130c",
+            "head": "model",
+            "heartbeat_max_rss_gb": 3.33,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 97972,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.0703,
+              "binary": 0.0782,
+              "code": 0.5121,
+              "csv": 0.0984,
+              "gutenberg": 0.0786,
+              "json": 0.136,
+              "log": 0.1434,
+              "mixed": 0.0769
+            },
+            "rss_gb": 2.9,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 5.67,
+            "ru_maxrss_gb": 9.48,
+            "scaled": false,
+            "seconds": 1132.7,
+            "seed": 20260825,
+            "stage": "fdc:binary:k1",
+            "status": "fit",
+            "top1": 0.1483,
+            "top1_non_gutenberg": 0.1585,
+            "utc": "2026-09-09T09:41:51Z",
+            "val": "frag"
+          }
         },
         "2": {
-          "logistic": null,
-          "logistic_l3": null,
-          "majority": null,
-          "model": null
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 400
+            },
+            "fit_rows_sha256": "f37f388ea3f4781bc2ea98b12bc99174a297fe4b25dc8dc999a79d94da4da30b",
+            "fit_rows_sorted_sha256": "b3cee52832c76ef74303bb80cdd4cd6ac62240ae6dd76a4335d4fe4f77b71f66",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 2.91,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98746,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.0757,
+              "binary": 0.0771,
+              "code": 0.1794,
+              "csv": 0.2885,
+              "gutenberg": 0.0599,
+              "json": 0.1452,
+              "log": 0.1154,
+              "mixed": 0.076
+            },
+            "rss_gb": 2.91,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 6.11,
+            "ru_maxrss_gb": 9.48,
+            "scaled": false,
+            "seconds": 138.3,
+            "seed": 20260825,
+            "stage": "fdc:binary:k2",
+            "status": "fit",
+            "top1": 0.1263,
+            "top1_non_gutenberg": 0.136,
+            "utc": "2026-09-09T10:05:04Z",
+            "val": null
+          },
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T10:17:49Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 735
+            },
+            "fit_rows_sha256": "f37f388ea3f4781bc2ea98b12bc99174a297fe4b25dc8dc999a79d94da4da30b",
+            "fit_rows_sorted_sha256": "b3cee52832c76ef74303bb80cdd4cd6ac62240ae6dd76a4335d4fe4f77b71f66",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 3.12,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98746,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.0647,
+              "binary": 0.0372,
+              "code": 0.4657,
+              "csv": 0.4109,
+              "gutenberg": 0.0537,
+              "json": 0.1492,
+              "log": 0.1357,
+              "mixed": 0.0369
+            },
+            "rss_gb": 2.91,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 5.55,
+            "ru_maxrss_gb": 9.48,
+            "scaled": true,
+            "seconds": 329.0,
+            "seed": 20260825,
+            "stage": "fdc:binary:k2",
+            "status": "fit",
+            "top1": 0.1674,
+            "top1_non_gutenberg": 0.1839,
+            "utc": "2026-09-09T10:12:13Z",
+            "val": null
+          },
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "f37f388ea3f4781bc2ea98b12bc99174a297fe4b25dc8dc999a79d94da4da30b",
+            "fit_rows_sorted_sha256": "b3cee52832c76ef74303bb80cdd4cd6ac62240ae6dd76a4335d4fe4f77b71f66",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 2.91,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98746,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 2.91,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 6.11,
+            "ru_maxrss_gb": 9.48,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "fdc:binary:k2",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T10:05:03Z",
+            "val": null
+          },
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 35
+            },
+            "fit_rows_sha256": "f37f388ea3f4781bc2ea98b12bc99174a297fe4b25dc8dc999a79d94da4da30b",
+            "fit_rows_sorted_sha256": "b3cee52832c76ef74303bb80cdd4cd6ac62240ae6dd76a4335d4fe4f77b71f66",
+            "head": "model",
+            "heartbeat_max_rss_gb": 3.29,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98746,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.0499,
+              "binary": 0.0407,
+              "code": 0.3743,
+              "csv": 0.4143,
+              "gutenberg": 0.0636,
+              "json": 0.126,
+              "log": 0.1077,
+              "mixed": 0.0393
+            },
+            "rss_gb": 2.91,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 6.11,
+            "ru_maxrss_gb": 9.48,
+            "scaled": false,
+            "seconds": 267.8,
+            "seed": 20260825,
+            "stage": "fdc:binary:k2",
+            "status": "fit",
+            "top1": 0.1502,
+            "top1_non_gutenberg": 0.1628,
+            "utc": "2026-09-09T10:07:26Z",
+            "val": "frag"
+          }
         },
         "4": {
-          "logistic": null,
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 400
+            },
+            "fit_rows_sha256": "1e2715d72d7a0cbcfed172f5c69bd39793a13d5e433778d57958951ea6c213b3",
+            "fit_rows_sorted_sha256": "0ff77c1187663ed20483d8c22a6cfaf8a04f11e49414e4337b1898da81e61cd7",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 2.91,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99153,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.0759,
+              "binary": 0.0772,
+              "code": 0.1578,
+              "csv": 0.2123,
+              "gutenberg": 0.101,
+              "json": 0.202,
+              "log": 0.177,
+              "mixed": 0.0869
+            },
+            "rss_gb": 2.91,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 5.79,
+            "ru_maxrss_gb": 9.48,
+            "scaled": false,
+            "seconds": 163.1,
+            "seed": 20260825,
+            "stage": "fdc:binary:k4",
+            "status": "fit",
+            "top1": 0.136,
+            "top1_non_gutenberg": 0.1411,
+            "utc": "2026-09-09T10:17:52Z",
+            "val": null
+          },
           "logistic_l3": null,
-          "majority": null,
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "1e2715d72d7a0cbcfed172f5c69bd39793a13d5e433778d57958951ea6c213b3",
+            "fit_rows_sorted_sha256": "0ff77c1187663ed20483d8c22a6cfaf8a04f11e49414e4337b1898da81e61cd7",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 2.91,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99153,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 2.91,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 5.79,
+            "ru_maxrss_gb": 9.48,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "fdc:binary:k4",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T10:17:50Z",
+            "val": null
+          },
           "model": null
         },
         "7": {
@@ -4368,45 +6564,657 @@
       "rss_gb": 2.4,
       "seconds": 149.9,
       "utc": "2026-09-09T08:49:10Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "88dec000e840b34f",
+      "name": "fold_base64_k2_model",
+      "pid": 30422,
+      "rss_gb": 2.4,
+      "utc": "2026-09-09T08:49:10Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "88dec000e840b34f",
+      "name": "fold_base64_k2_model",
+      "pid": 30422,
+      "rss_gb": 2.75,
+      "seconds": 223.7,
+      "utc": "2026-09-09T08:53:16Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "a6bb2c5f97f106ee",
+      "name": "fold_base64_k2_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 2.39,
+      "utc": "2026-09-09T08:53:16Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "a6bb2c5f97f106ee",
+      "name": "fold_base64_k2_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 2.4,
+      "seconds": 168.5,
+      "utc": "2026-09-09T08:56:17Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "6b8169e892dd44d6",
+      "name": "fold_base64_k4_majority",
+      "pid": 30422,
+      "rss_gb": 2.4,
+      "utc": "2026-09-09T08:56:18Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "6b8169e892dd44d6",
+      "name": "fold_base64_k4_majority",
+      "pid": 30422,
+      "rss_gb": 2.4,
+      "seconds": 0.0,
+      "utc": "2026-09-09T08:56:19Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "8f26b311c59341c2",
+      "name": "fold_base64_k4_logistic",
+      "pid": 30422,
+      "rss_gb": 2.4,
+      "utc": "2026-09-09T08:56:19Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "8f26b311c59341c2",
+      "name": "fold_base64_k4_logistic",
+      "pid": 30422,
+      "rss_gb": 2.4,
+      "seconds": 154.8,
+      "utc": "2026-09-09T08:58:58Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "2cabb6378a191774",
+      "name": "fold_base64_k4_model",
+      "pid": 30422,
+      "rss_gb": 2.4,
+      "utc": "2026-09-09T08:58:58Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "2cabb6378a191774",
+      "name": "fold_base64_k4_model",
+      "pid": 30422,
+      "rss_gb": 2.7,
+      "seconds": 334.8,
+      "utc": "2026-09-09T09:05:02Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "b1c1733c7b8edcbe",
+      "name": "fold_base64_k4_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 2.7,
+      "utc": "2026-09-09T09:05:02Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "b1c1733c7b8edcbe",
+      "name": "fold_base64_k4_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 2.7,
+      "seconds": 234.2,
+      "utc": "2026-09-09T09:09:09Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "5915241782e11f25",
+      "name": "fold_base64_k7_majority",
+      "pid": 30422,
+      "rss_gb": 2.7,
+      "utc": "2026-09-09T09:09:10Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "5915241782e11f25",
+      "name": "fold_base64_k7_majority",
+      "pid": 30422,
+      "rss_gb": 2.7,
+      "seconds": 0.0,
+      "utc": "2026-09-09T09:09:10Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "b513b01f4e866b8f",
+      "name": "fold_base64_k7_logistic",
+      "pid": 30422,
+      "rss_gb": 2.7,
+      "utc": "2026-09-09T09:09:11Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "b513b01f4e866b8f",
+      "name": "fold_base64_k7_logistic",
+      "pid": 30422,
+      "rss_gb": 2.7,
+      "seconds": 139.1,
+      "utc": "2026-09-09T09:11:34Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "3f1a175c967b5d86",
+      "name": "fold_base64_k7_model",
+      "pid": 30422,
+      "rss_gb": 2.7,
+      "utc": "2026-09-09T09:11:34Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "3f1a175c967b5d86",
+      "name": "fold_base64_k7_model",
+      "pid": 30422,
+      "rss_gb": 2.68,
+      "seconds": 267.3,
+      "utc": "2026-09-09T09:16:25Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "4416872b637bbb81",
+      "name": "fold_base64_k7_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 2.68,
+      "utc": "2026-09-09T09:16:25Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "4416872b637bbb81",
+      "name": "fold_base64_k7_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 2.68,
+      "seconds": 190.2,
+      "utc": "2026-09-09T09:19:47Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "1809c28f725375df",
+      "name": "depth_base64_c2450_majority",
+      "pid": 30422,
+      "rss_gb": 2.25,
+      "utc": "2026-09-09T09:19:47Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "1809c28f725375df",
+      "name": "depth_base64_c2450_majority",
+      "pid": 30422,
+      "rss_gb": 2.25,
+      "seconds": 0.0,
+      "utc": "2026-09-09T09:19:48Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "ff701959e52aeb19",
+      "name": "depth_base64_c2450_logistic",
+      "pid": 30422,
+      "rss_gb": 2.25,
+      "utc": "2026-09-09T09:19:48Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "ff701959e52aeb19",
+      "name": "depth_base64_c2450_logistic",
+      "pid": 30422,
+      "rss_gb": 2.25,
+      "seconds": 86.2,
+      "utc": "2026-09-09T09:21:18Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "67603fcd220b3ceb",
+      "name": "depth_base64_c2450_model",
+      "pid": 30422,
+      "rss_gb": 2.25,
+      "utc": "2026-09-09T09:21:18Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "67603fcd220b3ceb",
+      "name": "depth_base64_c2450_model",
+      "pid": 30422,
+      "rss_gb": 2.28,
+      "seconds": 54.4,
+      "utc": "2026-09-09T09:22:22Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "e77ecac68b8bae34",
+      "name": "depth_base64_c2450_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 2.28,
+      "utc": "2026-09-09T09:22:22Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "e77ecac68b8bae34",
+      "name": "depth_base64_c2450_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 2.28,
+      "seconds": 39.9,
+      "utc": "2026-09-09T09:23:12Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "f939a2e430f7f106",
+      "name": "depth_base64_c1225_majority",
+      "pid": 30422,
+      "rss_gb": 1.85,
+      "utc": "2026-09-09T09:23:12Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "f939a2e430f7f106",
+      "name": "depth_base64_c1225_majority",
+      "pid": 30422,
+      "rss_gb": 1.85,
+      "seconds": 0.0,
+      "utc": "2026-09-09T09:23:13Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "39078f8077e22275",
+      "name": "depth_base64_c1225_logistic",
+      "pid": 30422,
+      "rss_gb": 1.85,
+      "utc": "2026-09-09T09:23:13Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "39078f8077e22275",
+      "name": "depth_base64_c1225_logistic",
+      "pid": 30422,
+      "rss_gb": 1.85,
+      "seconds": 62.8,
+      "utc": "2026-09-09T09:24:20Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "4c6bb3090cf08ff7",
+      "name": "depth_base64_c1225_model",
+      "pid": 30422,
+      "rss_gb": 1.85,
+      "utc": "2026-09-09T09:24:20Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "4c6bb3090cf08ff7",
+      "name": "depth_base64_c1225_model",
+      "pid": 30422,
+      "rss_gb": 1.82,
+      "seconds": 46.3,
+      "utc": "2026-09-09T09:25:17Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "9861583454b920e8",
+      "name": "depth_base64_c1225_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 1.82,
+      "utc": "2026-09-09T09:25:17Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "9861583454b920e8",
+      "name": "depth_base64_c1225_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 1.82,
+      "seconds": 35.2,
+      "utc": "2026-09-09T09:26:01Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "1ae6c769b3a418fb",
+      "name": "depth_base64_c700_majority",
+      "pid": 30422,
+      "rss_gb": 1.82,
+      "utc": "2026-09-09T09:26:01Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "1ae6c769b3a418fb",
+      "name": "depth_base64_c700_majority",
+      "pid": 30422,
+      "rss_gb": 1.82,
+      "seconds": 0.0,
+      "utc": "2026-09-09T09:26:01Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "bd03aff3e430c007",
+      "name": "depth_base64_c700_logistic",
+      "pid": 30422,
+      "rss_gb": 1.82,
+      "utc": "2026-09-09T09:26:02Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "bd03aff3e430c007",
+      "name": "depth_base64_c700_logistic",
+      "pid": 30422,
+      "rss_gb": 1.82,
+      "seconds": 61.9,
+      "utc": "2026-09-09T09:27:11Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "f444a1f8e7afc13b",
+      "name": "depth_base64_c700_model",
+      "pid": 30422,
+      "rss_gb": 1.82,
+      "utc": "2026-09-09T09:27:11Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "f444a1f8e7afc13b",
+      "name": "depth_base64_c700_model",
+      "pid": 30422,
+      "rss_gb": 1.82,
+      "seconds": 47.9,
+      "utc": "2026-09-09T09:28:09Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "79251fd73843cd61",
+      "name": "depth_base64_c700_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 1.82,
+      "utc": "2026-09-09T09:28:09Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "79251fd73843cd61",
+      "name": "depth_base64_c700_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 1.82,
+      "seconds": 15.9,
+      "utc": "2026-09-09T09:28:37Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "c88b26d9ae423953",
+      "name": "pred_base64_k1_majority",
+      "pid": 30422,
+      "rss_gb": 2.67,
+      "utc": "2026-09-09T09:28:38Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "c88b26d9ae423953",
+      "name": "pred_base64_k1_majority",
+      "pid": 30422,
+      "rss_gb": 2.67,
+      "seconds": 0.0,
+      "utc": "2026-09-09T09:28:40Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "8cf1b0fd1149d5fa",
+      "name": "pred_base64_k1_logistic",
+      "pid": 30422,
+      "rss_gb": 2.67,
+      "utc": "2026-09-09T09:28:40Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "8cf1b0fd1149d5fa",
+      "name": "pred_base64_k1_logistic",
+      "pid": 30422,
+      "rss_gb": 2.67,
+      "seconds": 141.5,
+      "utc": "2026-09-09T09:31:05Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "1ba9ecfbc0ce3240",
+      "name": "pred_base64_k1_model",
+      "pid": 30422,
+      "rss_gb": 2.67,
+      "utc": "2026-09-09T09:31:05Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "1ba9ecfbc0ce3240",
+      "name": "pred_base64_k1_model",
+      "pid": 30422,
+      "rss_gb": 2.72,
+      "seconds": 314.4,
+      "utc": "2026-09-09T09:36:50Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "8a6129a142d68f96",
+      "name": "pred_base64_k1_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 2.72,
+      "utc": "2026-09-09T09:36:50Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "8a6129a142d68f96",
+      "name": "pred_base64_k1_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 2.72,
+      "seconds": 129.6,
+      "utc": "2026-09-09T09:39:11Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "7529f2110949bf32",
+      "name": "fold_binary_k1_majority",
+      "pid": 30422,
+      "rss_gb": 2.72,
+      "utc": "2026-09-09T09:39:12Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "7529f2110949bf32",
+      "name": "fold_binary_k1_majority",
+      "pid": 30422,
+      "rss_gb": 2.72,
+      "seconds": 0.0,
+      "utc": "2026-09-09T09:39:13Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "7a6bcedb71877df8",
+      "name": "fold_binary_k1_logistic",
+      "pid": 30422,
+      "rss_gb": 2.72,
+      "utc": "2026-09-09T09:39:13Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "7a6bcedb71877df8",
+      "name": "fold_binary_k1_logistic",
+      "pid": 30422,
+      "rss_gb": 2.72,
+      "seconds": 153.5,
+      "utc": "2026-09-09T09:41:51Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "d6dafde7795e4457",
+      "name": "fold_binary_k1_model",
+      "pid": 30422,
+      "rss_gb": 2.72,
+      "utc": "2026-09-09T09:41:51Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "d6dafde7795e4457",
+      "name": "fold_binary_k1_model",
+      "pid": 30422,
+      "rss_gb": 2.9,
+      "seconds": 1132.7,
+      "utc": "2026-09-09T10:02:04Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "641291c739282a74",
+      "name": "fold_binary_k1_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 2.9,
+      "utc": "2026-09-09T10:02:05Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "641291c739282a74",
+      "name": "fold_binary_k1_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 2.9,
+      "seconds": 163.1,
+      "utc": "2026-09-09T10:05:01Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "9f00e0cc4052cfd2",
+      "name": "fold_binary_k2_majority",
+      "pid": 30422,
+      "rss_gb": 2.91,
+      "utc": "2026-09-09T10:05:03Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "9f00e0cc4052cfd2",
+      "name": "fold_binary_k2_majority",
+      "pid": 30422,
+      "rss_gb": 2.91,
+      "seconds": 0.0,
+      "utc": "2026-09-09T10:05:04Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "7a3cf0608a7d34d2",
+      "name": "fold_binary_k2_logistic",
+      "pid": 30422,
+      "rss_gb": 2.91,
+      "utc": "2026-09-09T10:05:04Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "7a3cf0608a7d34d2",
+      "name": "fold_binary_k2_logistic",
+      "pid": 30422,
+      "rss_gb": 2.91,
+      "seconds": 138.3,
+      "utc": "2026-09-09T10:07:26Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "a9ea9e6a24022a43",
+      "name": "fold_binary_k2_model",
+      "pid": 30422,
+      "rss_gb": 2.91,
+      "utc": "2026-09-09T10:07:26Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "a9ea9e6a24022a43",
+      "name": "fold_binary_k2_model",
+      "pid": 30422,
+      "rss_gb": 2.91,
+      "seconds": 267.8,
+      "utc": "2026-09-09T10:12:13Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "9ba0cfd4bea593e9",
+      "name": "fold_binary_k2_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 2.91,
+      "utc": "2026-09-09T10:12:13Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "9ba0cfd4bea593e9",
+      "name": "fold_binary_k2_logistic_l3",
+      "pid": 30422,
+      "rss_gb": 2.91,
+      "seconds": 329.0,
+      "utc": "2026-09-09T10:17:49Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "fabe5531c2e04a76",
+      "name": "fold_binary_k4_majority",
+      "pid": 30422,
+      "rss_gb": 2.91,
+      "utc": "2026-09-09T10:17:50Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "fabe5531c2e04a76",
+      "name": "fold_binary_k4_majority",
+      "pid": 30422,
+      "rss_gb": 2.91,
+      "seconds": 0.0,
+      "utc": "2026-09-09T10:17:52Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "080e602823075f29",
+      "name": "fold_binary_k4_logistic",
+      "pid": 30422,
+      "rss_gb": 2.91,
+      "utc": "2026-09-09T10:17:52Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "080e602823075f29",
+      "name": "fold_binary_k4_logistic",
+      "pid": 30422,
+      "rss_gb": 2.91,
+      "seconds": 163.1,
+      "utc": "2026-09-09T10:20:39Z"
     }
   ],
   "missing_roles": [
-    "fold_base64_k2_model",
-    "fold_base64_k2_logistic_l3",
-    "fold_base64_k4_majority",
-    "fold_base64_k4_logistic",
-    "fold_base64_k4_model",
-    "fold_base64_k4_logistic_l3",
-    "fold_base64_k7_majority",
-    "fold_base64_k7_logistic",
-    "fold_base64_k7_model",
-    "fold_base64_k7_logistic_l3",
-    "depth_base64_c2450_majority",
-    "depth_base64_c2450_logistic",
-    "depth_base64_c2450_model",
-    "depth_base64_c2450_logistic_l3",
-    "depth_base64_c1225_majority",
-    "depth_base64_c1225_logistic",
-    "depth_base64_c1225_model",
-    "depth_base64_c1225_logistic_l3",
-    "depth_base64_c700_majority",
-    "depth_base64_c700_logistic",
-    "depth_base64_c700_model",
-    "depth_base64_c700_logistic_l3",
-    "pred_base64_k1_majority",
-    "pred_base64_k1_logistic",
-    "pred_base64_k1_model",
-    "pred_base64_k1_logistic_l3",
-    "fold_binary_k1_majority",
-    "fold_binary_k1_logistic",
-    "fold_binary_k1_model",
-    "fold_binary_k1_logistic_l3",
-    "fold_binary_k2_majority",
-    "fold_binary_k2_logistic",
-    "fold_binary_k2_model",
-    "fold_binary_k2_logistic_l3",
-    "fold_binary_k4_majority",
-    "fold_binary_k4_logistic",
     "fold_binary_k4_model",
     "fold_binary_k4_logistic_l3",
     "fold_binary_k7_majority",

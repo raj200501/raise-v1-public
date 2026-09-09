@@ -53,6 +53,8 @@ Preregistration 0016 (chain entry 16, frozen 2026-09-09) asks whether that failu
 families the model has seen: at a fixed plaintext budget of 4900 source chunks, 0003's recipes and 0014's standardised
 logistic are fitted on 1, 2, 4 or 7 of the other families and scored on the held-out one; the bar is 0.005 accuracy per
 doubling of families on the incumbent's stitched mixture. It is frozen and running; either outcome is published here.
+Preregistration 0017 (chain entry 17, frozen 2026-09-09) asks whether 0014's standardised logistic, fitted on 0015's
+eight sealed folds, leads the incumbent on unseen families by 0.02; it is frozen and queued behind 0016's run.
 The curve and the searched margin stand as measured, and they are statements about these eight
 content families, not about DEFLATE streams in general.
 Decomposed by content family, csv and log clear the bar at 2048 on both readings (+0.0554 and

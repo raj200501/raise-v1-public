@@ -67,6 +67,21 @@ def main() -> int:
     if not args.smoke and prereg.get("frozen") is not True:
         print("REFUSING: a real run needs a frozen preregistration (the reader's literals are generated from it)", file=sys.stderr)
         return 3
+    if not args.smoke:
+        # a real run never shares the machine with another tools/pivot runner (memory: this run peaks near 9.4 GB)
+        others = []
+        for pid in os.listdir("/proc"):
+            if not pid.isdigit() or int(pid) == os.getpid():
+                continue
+            try:
+                cmd = open(f"/proc/{pid}/cmdline", "rb").read().replace(b"\0", b" ").decode("utf-8", "replace")
+            except OSError:
+                continue
+            if "tools/pivot/run_" in cmd and "python" in cmd:
+                others.append(f"{pid}: {cmd.strip()[:120]}")
+        if others:
+            print("REFUSING: another tools/pivot runner is alive: " + "; ".join(others), file=sys.stderr)
+            return 3
     P = dict(prereg["scope"]["protocol"]); recipes = prereg["scope"]["recipes"]
     if args.smoke:
         P.update(prereg.get("smoke", {}))

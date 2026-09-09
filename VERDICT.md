@@ -297,7 +297,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 |---|---|---|
 | Every gate can be shown to fail | 313 mutations, 313 detected, 0 survived | primary-verifiable |
 | A number that is real but STALE is caught, not just a fabricated one | `tools/freshness.py`, 9 mutations | primary-verifiable |
-| Preregistration chain verifies, reader unchanged since freeze | 16 entries, head `bda56a78…` | primary-verifiable |
+| Preregistration chain verifies, reader unchanged since freeze | 17 entries, head `7c794a87…` | primary-verifiable |
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |
 | ACS PUMS record count reproduced | 392,318 records | primary-verifiable |
 | Instrument reproduces on a cold clone | preflight names cause and fix | primary-verifiable |
@@ -894,6 +894,13 @@ readings at each count stitch into one mixture, and the bar is 0.005 accuracy pe
 mixture (`DIVERSITY_HELPS` / `DIVERSITY_FLAT`), read by `tools/readers/fdc4096_verdict.py`. A single-family depth arm and a
 preceding-family arm are banked beside the curve. Nothing below this line changes until its frozen reader has read the
 completed run; the outcome, either way, is stated here at full size.
+
+**In flight — preregistration 0017 (chain seq 17, frozen 2026-09-09T10:23:16Z).** 0014's searched, standardised
+logistic fitted on 0015's eight sealed folds, hash for hash, and scored once each on the held-out family's sealed rows:
+the stitched count of correct rows against 0015's banked incumbent count plus 0.02 of the evaluation set
+(`L3_LEADS_INCUMBENT_UNDER_TRANSFER` / `L3_LEAD_BELOW_BAR`), read by `tools/readers/lofol3_4096_verdict.py`; whether the
+lead reaches the record's 0.05 margin and whether the logistic clears 0015's own transfer bar are banked as flags. Queued
+behind 0016's run; nothing below this line changes until its frozen reader has read the completed run.
 
 ### A learned representation over raw bytes does not rescue it either — `BYTE_MODEL_FAILS`
 

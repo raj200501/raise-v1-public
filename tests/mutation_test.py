@@ -3224,8 +3224,10 @@ def _good_lofol3(per_family=None, total_correct=None):
                    {"name": nm, "fingerprint": nm, "event": "completed", "utc": f"2026-09-09T20:{i:02d}:30Z"}]
     pfolds = {f: dict(folds[f], train_rows_of_heldout_family=0, train_chunks_shared_with_eval=0, train_rows_in_eval=0) for f in fam}
     partition = dict(part, folds=pfolds)
-    mm = lofo["logistic_l3"]["mixture_top1"]; ref = r17.REFERENCE_0015
+    mm = lofo["logistic_l3"]["mixture_top1"]; ref = r17.REFERENCE_0015; l3c = sum(mix)
     art = {"schema_version": 1, "schema": "raise-v1/lofo_l3_4096/1", "preregistration": "0017-lofo-l3-4096", "smoke": False,
+           "lofo_correct_l3": l3c, "lofo_margin_l3_over_0015_model_exact": round((l3c - ref["model_correct"]) / n_eval, 6),
+           "n_iter_by_fold": {f: 500 for f in fam}, "any_fold_at_iteration_cap": False,
            "stage": "run", "protocol": r17.PROTOCOL, "protocol_sha256": r17.PROTOCOL_SHA256, "recipes": rec,
            "recipes_sha256": r17.RECIPES_SHA256, "corpus": dict(r17.CORPUS), "partition": partition, "n_classes": 26,
            "class_names": [], "chance_accuracy": 0.038462, "environment": dict(_ENV12), "launch_environment": {},
@@ -3261,34 +3263,49 @@ def _lofol3(root, mutate=None, drop_artifact=False, drop_scores=False, **kw):
     if rc != 0:
         return rc, out
     v = json.load(open(os.path.join(piv, "lofo_l3_4096_verdict.json")))
-    ok = v["verdict"] == "TRANSFER_REVERSAL"
-    return (0 if ok else 1), (f"verdict={v['verdict']} mixture={v['lofo_mixture_top1_l3']} margin={v['lofo_margin_l3_over_0015_model']} "
-                              f"validity={v['validity_failed_clauses'][:2]} reversal={v['reversal_failed_clauses']}")
+    ok = v["verdict"] == "L3_LEADS_INCUMBENT_UNDER_TRANSFER"
+    return (0 if ok else 1), (f"verdict={v['verdict']} mixture={v['lofo_mixture_top1_l3']} margin={v['lofo_margin_l3_over_0015_model_exact']} "
+                              f"validity={v['validity_failed_clauses'][:2]} lead={v['lead_failed_clauses']}")
 
 
-@case("lofol3", "control-reversal-passes", "pass")
+@case("lofol3", "control-l3-lead-passes", "pass")
 def _(root):
     return _lofol3(root)
 
 
-@case("lofol3", "a-mixture-below-the-incumbent-plus-0.05-is-NO_TRANSFER_REVERSAL", "fail")
+@case("lofol3", "a-lead-below-the-margin-is-L3_LEAD_BELOW_BAR", "fail")
 def _(root):
-    rc, out = _lofol3(root, per_family={"gutenberg": 0.06, "base64": 0.06, "binary": 0.07, "code": 0.14, "csv": 0.13,
-                                        "json": 0.16, "log": 0.13, "mixed": 0.08})
-    if rc != 0 and "verdict=NO_TRANSFER_REVERSAL" not in out:
-        return 0, out + " !! a mixture below the margin did not read NO_TRANSFER_REVERSAL"
+    rc, out = _lofol3(root, per_family={"gutenberg": 0.06, "base64": 0.06, "binary": 0.07, "code": 0.1, "csv": 0.1,
+                                        "json": 0.1, "log": 0.1, "mixed": 0.08})
+    if rc != 0 and "verdict=L3_LEAD_BELOW_BAR" not in out:
+        return 0, out + " !! a lead below the margin did not read L3_LEAD_BELOW_BAR"
     return rc, out
 
 
-@case("lofol3", "a-mixture-of-exactly-0.1359-passes-and-0.1358-fails", "fail")
+@case("lofol3", "a-lead-of-exactly-the-margin-in-rows-passes-and-one-row-fewer-fails", "fail")
 def _(root):
-    rc0, out0 = _lofol3(root, total_correct=35334)            # 35334 / 260000 = 0.1359 = 0.0859 + 0.05
+    r17 = _lofol3_reader(); edge = r17.REFERENCE_0015["model_correct"] + r17.MARGIN_CORRECT
+    rc0, out0 = _lofol3(root, total_correct=edge)
     if rc0 != 0:
-        return 0, out0 + " !! 0.1359 is exactly 0015's incumbent plus 0.05 and should pass"
-    rc1, out1 = _lofol3(root, total_correct=35308)            # 35308 / 260000 = 0.1358
-    if rc1 != 0 and "verdict=NO_TRANSFER_REVERSAL" not in out1:
-        return 0, out1 + " !! 0.1358 did not read NO_TRANSFER_REVERSAL"
+        return 0, out0 + f" !! {edge} correct rows is exactly the incumbent's count plus the margin and should pass"
+    rc1, out1 = _lofol3(root, total_correct=edge - 1)
+    if rc1 != 0 and "verdict=L3_LEAD_BELOW_BAR" not in out1:
+        return 0, out1 + " !! one row fewer did not read L3_LEAD_BELOW_BAR"
     return rc1, out0 + " | " + out1
+
+
+@case("lofol3", "a-banked-correct-count-off-by-one-row-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["lofo_correct_l3"] += 1
+    return _lofol3(root, f)
+
+
+@case("lofol3", "a-missing-iteration-count-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["n_iter_by_fold"]["csv"] = None
+    return _lofol3(root, f)
 
 
 @case("lofol3", "a-different-evaluation-set-hash-is-VOID", "fail")
