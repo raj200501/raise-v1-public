@@ -45,7 +45,7 @@
     "n_source_chunks": 50000
   },
   "cost": {
-    "banked_fit_seconds_total": 27615.1,
+    "banked_fit_seconds_total": 29318.4,
     "checkpoints": "artifacts/pivot/fdc_4096_ckpt",
     "interruptions_by_name": {
       "depth_base64_c1225_logistic": 0,
@@ -132,6 +132,18 @@
       "depth_log_c700_logistic_l3": 0,
       "depth_log_c700_majority": 0,
       "depth_log_c700_model": 0,
+      "depth_mixed_c1225_logistic": 0,
+      "depth_mixed_c1225_logistic_l3": 0,
+      "depth_mixed_c1225_majority": 0,
+      "depth_mixed_c1225_model": 0,
+      "depth_mixed_c2450_logistic": 0,
+      "depth_mixed_c2450_logistic_l3": 0,
+      "depth_mixed_c2450_majority": 0,
+      "depth_mixed_c2450_model": 0,
+      "depth_mixed_c700_logistic": 0,
+      "depth_mixed_c700_logistic_l3": 0,
+      "depth_mixed_c700_majority": 0,
+      "depth_mixed_c700_model": 0,
       "fold_base64_k1_logistic": 0,
       "fold_base64_k1_logistic_l3": 0,
       "fold_base64_k1_majority": 0,
@@ -249,8 +261,17 @@
       "fold_mixed_k1_majority": 0,
       "fold_mixed_k1_model": 0,
       "fold_mixed_k2_logistic": 0,
+      "fold_mixed_k2_logistic_l3": 0,
       "fold_mixed_k2_majority": 0,
       "fold_mixed_k2_model": 0,
+      "fold_mixed_k4_logistic": 0,
+      "fold_mixed_k4_logistic_l3": 0,
+      "fold_mixed_k4_majority": 0,
+      "fold_mixed_k4_model": 0,
+      "fold_mixed_k7_logistic": 0,
+      "fold_mixed_k7_logistic_l3": 0,
+      "fold_mixed_k7_majority": 0,
+      "fold_mixed_k7_model": 0,
       "null": 0,
       "pred_base64_k1_logistic": 0,
       "pred_base64_k1_logistic_l3": 0,
@@ -280,6 +301,8 @@
       "pred_log_k1_logistic_l3": 0,
       "pred_log_k1_majority": 0,
       "pred_log_k1_model": 0,
+      "pred_mixed_k1_logistic": 0,
+      "pred_mixed_k1_majority": 0,
       "repro_100k": 0
     },
     "seconds_by_name": {
@@ -367,6 +390,18 @@
       "depth_log_c700_logistic_l3": 16.3,
       "depth_log_c700_majority": 0.0,
       "depth_log_c700_model": 23.1,
+      "depth_mixed_c1225_logistic": 57.1,
+      "depth_mixed_c1225_logistic_l3": 32.8,
+      "depth_mixed_c1225_majority": 0.0,
+      "depth_mixed_c1225_model": 69.4,
+      "depth_mixed_c2450_logistic": 81.7,
+      "depth_mixed_c2450_logistic_l3": 57.5,
+      "depth_mixed_c2450_majority": 0.0,
+      "depth_mixed_c2450_model": 99.8,
+      "depth_mixed_c700_logistic": 37.6,
+      "depth_mixed_c700_logistic_l3": 21.8,
+      "depth_mixed_c700_majority": 0.0,
+      "depth_mixed_c700_model": 52.1,
       "fold_base64_k1_logistic": 158.3,
       "fold_base64_k1_logistic_l3": 76.9,
       "fold_base64_k1_majority": 0.0,
@@ -484,8 +519,17 @@
       "fold_mixed_k1_majority": 0.0,
       "fold_mixed_k1_model": 239.2,
       "fold_mixed_k2_logistic": 122.8,
+      "fold_mixed_k2_logistic_l3": 139.3,
       "fold_mixed_k2_majority": 0.0,
       "fold_mixed_k2_model": 162.9,
+      "fold_mixed_k4_logistic": 124.3,
+      "fold_mixed_k4_logistic_l3": 164.3,
+      "fold_mixed_k4_majority": 0.0,
+      "fold_mixed_k4_model": 148.5,
+      "fold_mixed_k7_logistic": 122.7,
+      "fold_mixed_k7_logistic_l3": 183.0,
+      "fold_mixed_k7_majority": 0.0,
+      "fold_mixed_k7_model": 190.0,
       "null": 23.6,
       "pred_base64_k1_logistic": 141.5,
       "pred_base64_k1_logistic_l3": 129.6,
@@ -515,9 +559,11 @@
       "pred_log_k1_logistic_l3": 118.6,
       "pred_log_k1_majority": 0.0,
       "pred_log_k1_model": 786.4,
+      "pred_mixed_k1_logistic": 121.4,
+      "pred_mixed_k1_majority": 0.0,
       "repro_100k": 356.1
     },
-    "wall_seconds_this_invocation": 20578.0
+    "wall_seconds_this_invocation": 22450.7
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -563,11 +609,71 @@
             "mixed": 0.0795
           },
           "structured_four_top1": 0.1105
+        },
+        "4": {
+          "mixture_top1": 0.0818,
+          "mixture_top1_non_gutenberg": 0.0866,
+          "per_family": {
+            "base64": 0.0601,
+            "binary": 0.0772,
+            "code": 0.1167,
+            "csv": 0.0923,
+            "gutenberg": 0.0486,
+            "json": 0.0966,
+            "log": 0.0868,
+            "mixed": 0.0777
+          },
+          "structured_four_top1": 0.098
+        },
+        "7": {
+          "mixture_top1": 0.0947,
+          "mixture_top1_non_gutenberg": 0.0986,
+          "per_family": {
+            "base64": 0.0633,
+            "binary": 0.0782,
+            "code": 0.1056,
+            "csv": 0.1075,
+            "gutenberg": 0.068,
+            "json": 0.148,
+            "log": 0.111,
+            "mixed": 0.0766
+          },
+          "structured_four_top1": 0.1182
         }
       },
-      "composition_spread_k1": null,
+      "composition_spread_k1": -0.0075,
       "depth": {
         "by_chunks": {
+          "1225": {
+            "mixture_top1": 0.073,
+            "mixture_top1_non_gutenberg": 0.0794,
+            "per_family": {
+              "base64": 0.0675,
+              "binary": 0.0774,
+              "code": 0.061,
+              "csv": 0.1282,
+              "gutenberg": 0.0293,
+              "json": 0.1126,
+              "log": 0.0347,
+              "mixed": 0.076
+            },
+            "structured_four_top1": 0.0837
+          },
+          "2450": {
+            "mixture_top1": 0.0706,
+            "mixture_top1_non_gutenberg": 0.0771,
+            "per_family": {
+              "base64": 0.027,
+              "binary": 0.0773,
+              "code": 0.068,
+              "csv": 0.1365,
+              "gutenberg": 0.0261,
+              "json": 0.1139,
+              "log": 0.0384,
+              "mixed": 0.0811
+            },
+            "structured_four_top1": 0.0887
+          },
           "4900": {
             "mixture_top1": 0.0702,
             "mixture_top1_non_gutenberg": 0.076,
@@ -582,6 +688,21 @@
               "mixed": 0.0781
             },
             "structured_four_top1": 0.0872
+          },
+          "700": {
+            "mixture_top1": 0.0725,
+            "mixture_top1_non_gutenberg": 0.0791,
+            "per_family": {
+              "base64": 0.0708,
+              "binary": 0.0765,
+              "code": 0.0555,
+              "csv": 0.116,
+              "gutenberg": 0.0271,
+              "json": 0.1111,
+              "log": 0.0411,
+              "mixed": 0.0841
+            },
+            "structured_four_top1": 0.0806
           }
         },
         "chunks": [
@@ -592,64 +713,64 @@
         ],
         "mixture_top1_by_chunks": [
           0.0702,
-          null,
-          null,
-          null
+          0.0706,
+          0.073,
+          0.0725
         ],
         "per_family_by_chunks": {
           "base64": [
             0.0295,
-            null,
-            null,
-            null
+            0.027,
+            0.0675,
+            0.0708
           ],
           "binary": [
             0.0762,
-            null,
-            null,
-            null
+            0.0773,
+            0.0774,
+            0.0765
           ],
           "code": [
             0.0688,
-            null,
-            null,
-            null
+            0.068,
+            0.061,
+            0.0555
           ],
           "csv": [
             0.1351,
-            null,
-            null,
-            null
+            0.1365,
+            0.1282,
+            0.116
           ],
           "gutenberg": [
             0.0302,
-            null,
-            null,
-            null
+            0.0261,
+            0.0293,
+            0.0271
           ],
           "json": [
             0.1092,
-            null,
-            null,
-            null
+            0.1139,
+            0.1126,
+            0.1111
           ],
           "log": [
             0.0378,
-            null,
-            null,
-            null
+            0.0384,
+            0.0347,
+            0.0411
           ],
           "mixed": [
             0.0781,
-            null,
-            null,
-            null
+            0.0811,
+            0.076,
+            0.0841
           ]
         },
-        "row_effect_per_doubling_of_chunks": null,
-        "row_effect_within_family": null
+        "row_effect_per_doubling_of_chunks": -0.000819,
+        "row_effect_within_family": -0.0023
       },
-      "end_difference": null,
+      "end_difference": 0.0245,
       "family_counts": [
         1,
         2,
@@ -657,9 +778,9 @@
         7
       ],
       "family_effect_at_matched_depth": {
-        "2": null,
-        "4": null,
-        "7": null
+        "2": 0.0156,
+        "4": 0.0088,
+        "7": 0.0222
       },
       "log2_family_counts": [
         0.0,
@@ -670,8 +791,8 @@
       "mixture_top1_by_k": [
         0.0702,
         0.0862,
-        null,
-        null
+        0.0818,
+        0.0947
       ],
       "n_iter_by_k": {
         "1": [
@@ -702,7 +823,7 @@
           400,
           400,
           400,
-          null
+          400
         ],
         "7": [
           400,
@@ -712,72 +833,86 @@
           400,
           400,
           400,
-          null
+          400
         ]
       },
       "non_gutenberg_by_k": [
         0.076,
         0.0946,
-        null,
-        null
+        0.0866,
+        0.0986
       ],
       "per_family_by_k": {
         "base64": [
           0.0295,
           0.064,
-          null,
-          null
+          0.0601,
+          0.0633
         ],
         "binary": [
           0.0762,
           0.0771,
-          null,
-          null
+          0.0772,
+          0.0782
         ],
         "code": [
           0.0688,
           0.1218,
-          null,
-          null
+          0.1167,
+          0.1056
         ],
         "csv": [
           0.1351,
           0.1339,
-          null,
-          null
+          0.0923,
+          0.1075
         ],
         "gutenberg": [
           0.0302,
           0.0283,
-          null,
-          null
+          0.0486,
+          0.068
         ],
         "json": [
           0.1092,
           0.1121,
-          null,
-          null
+          0.0966,
+          0.148
         ],
         "log": [
           0.0378,
           0.0758,
-          null,
-          null
+          0.0868,
+          0.111
         ],
         "mixed": [
           0.0781,
           0.0795,
-          null,
-          null
+          0.0777,
+          0.0766
         ]
       },
-      "pred_k1": null,
-      "slope_per_doubling": null,
+      "pred_k1": {
+        "mixture_top1": 0.0777,
+        "mixture_top1_non_gutenberg": 0.0832,
+        "per_family": {
+          "base64": 0.0732,
+          "binary": 0.0764,
+          "code": 0.0512,
+          "csv": 0.1129,
+          "gutenberg": 0.0398,
+          "json": 0.0852,
+          "log": 0.107,
+          "mixed": 0.0763
+        },
+        "structured_four_top1": 0.0892
+      },
+      "slope_per_doubling": 0.007267,
       "structured_four_by_k": [
         0.0872,
         0.1105,
-        null,
-        null
+        0.098,
+        0.1182
       ]
     },
     "logistic_l3": {
@@ -796,11 +931,86 @@
             "mixed": 0.0883
           },
           "structured_four_top1": 0.087
+        },
+        "2": {
+          "mixture_top1": 0.0773,
+          "mixture_top1_non_gutenberg": 0.0838,
+          "per_family": {
+            "base64": 0.0642,
+            "binary": 0.0372,
+            "code": 0.1029,
+            "csv": 0.1245,
+            "gutenberg": 0.0323,
+            "json": 0.0985,
+            "log": 0.0765,
+            "mixed": 0.0846
+          },
+          "structured_four_top1": 0.1003
+        },
+        "4": {
+          "mixture_top1": 0.0839,
+          "mixture_top1_non_gutenberg": 0.0892,
+          "per_family": {
+            "base64": 0.0621,
+            "binary": 0.0635,
+            "code": 0.1026,
+            "csv": 0.1276,
+            "gutenberg": 0.0472,
+            "json": 0.1006,
+            "log": 0.0933,
+            "mixed": 0.0759
+          },
+          "structured_four_top1": 0.1058
+        },
+        "7": {
+          "mixture_top1": 0.0941,
+          "mixture_top1_non_gutenberg": 0.1003,
+          "per_family": {
+            "base64": 0.066,
+            "binary": 0.0763,
+            "code": 0.1114,
+            "csv": 0.1206,
+            "gutenberg": 0.0515,
+            "json": 0.1259,
+            "log": 0.127,
+            "mixed": 0.0751
+          },
+          "structured_four_top1": 0.1213
         }
       },
       "composition_spread_k1": null,
       "depth": {
         "by_chunks": {
+          "1225": {
+            "mixture_top1": 0.0682,
+            "mixture_top1_non_gutenberg": 0.0737,
+            "per_family": {
+              "base64": 0.0649,
+              "binary": 0.0387,
+              "code": 0.0496,
+              "csv": 0.1278,
+              "gutenberg": 0.0298,
+              "json": 0.119,
+              "log": 0.037,
+              "mixed": 0.0807
+            },
+            "structured_four_top1": 0.083
+          },
+          "2450": {
+            "mixture_top1": 0.0705,
+            "mixture_top1_non_gutenberg": 0.0764,
+            "per_family": {
+              "base64": 0.0646,
+              "binary": 0.0401,
+              "code": 0.0468,
+              "csv": 0.1324,
+              "gutenberg": 0.0303,
+              "json": 0.1261,
+              "log": 0.0357,
+              "mixed": 0.0906
+            },
+            "structured_four_top1": 0.0849
+          },
           "4900": {
             "mixture_top1": 0.0709,
             "mixture_top1_non_gutenberg": 0.0771,
@@ -815,6 +1025,21 @@
               "mixed": 0.0883
             },
             "structured_four_top1": 0.087
+          },
+          "700": {
+            "mixture_top1": 0.0626,
+            "mixture_top1_non_gutenberg": 0.0672,
+            "per_family": {
+              "base64": 0.0246,
+              "binary": 0.0396,
+              "code": 0.0517,
+              "csv": 0.1023,
+              "gutenberg": 0.0308,
+              "json": 0.1163,
+              "log": 0.0367,
+              "mixed": 0.1011
+            },
+            "structured_four_top1": 0.0766
           }
         },
         "chunks": [
@@ -825,64 +1050,64 @@
         ],
         "mixture_top1_by_chunks": [
           0.0709,
-          null,
-          null,
-          null
+          0.0705,
+          0.0682,
+          0.0626
         ],
         "per_family_by_chunks": {
           "base64": [
             0.0648,
-            null,
-            null,
-            null
+            0.0646,
+            0.0649,
+            0.0246
           ],
           "binary": [
             0.0388,
-            null,
-            null,
-            null
+            0.0401,
+            0.0387,
+            0.0396
           ],
           "code": [
             0.0506,
-            null,
-            null,
-            null
+            0.0468,
+            0.0496,
+            0.0517
           ],
           "csv": [
             0.1381,
-            null,
-            null,
-            null
+            0.1324,
+            0.1278,
+            0.1023
           ],
           "gutenberg": [
             0.0288,
-            null,
-            null,
-            null
+            0.0303,
+            0.0298,
+            0.0308
           ],
           "json": [
             0.1278,
-            null,
-            null,
-            null
+            0.1261,
+            0.119,
+            0.1163
           ],
           "log": [
             0.0329,
-            null,
-            null,
-            null
+            0.0357,
+            0.037,
+            0.0367
           ],
           "mixed": [
             0.0883,
-            null,
-            null,
-            null
+            0.0906,
+            0.0807,
+            0.1011
           ]
         },
-        "row_effect_per_doubling_of_chunks": null,
-        "row_effect_within_family": null
+        "row_effect_per_doubling_of_chunks": 0.002957,
+        "row_effect_within_family": 0.0083
       },
-      "end_difference": null,
+      "end_difference": 0.0232,
       "family_counts": [
         1,
         2,
@@ -890,9 +1115,9 @@
         7
       ],
       "family_effect_at_matched_depth": {
-        "2": null,
-        "4": null,
-        "7": null
+        "2": 0.0068,
+        "4": 0.0157,
+        "7": 0.0315
       },
       "log2_family_counts": [
         0.0,
@@ -902,9 +1127,9 @@
       ],
       "mixture_top1_by_k": [
         0.0709,
-        null,
-        null,
-        null
+        0.0773,
+        0.0839,
+        0.0941
       ],
       "n_iter_by_k": {
         "1": [
@@ -925,7 +1150,7 @@
           302,
           522,
           327,
-          null
+          453
         ],
         "4": [
           678,
@@ -935,7 +1160,7 @@
           484,
           496,
           450,
-          null
+          540
         ],
         "7": [
           545,
@@ -945,72 +1170,72 @@
           498,
           569,
           430,
-          null
+          600
         ]
       },
       "non_gutenberg_by_k": [
         0.0771,
-        null,
-        null,
-        null
+        0.0838,
+        0.0892,
+        0.1003
       ],
       "per_family_by_k": {
         "base64": [
           0.0648,
-          null,
-          null,
-          null
+          0.0642,
+          0.0621,
+          0.066
         ],
         "binary": [
           0.0388,
-          null,
-          null,
-          null
+          0.0372,
+          0.0635,
+          0.0763
         ],
         "code": [
           0.0506,
-          null,
-          null,
-          null
+          0.1029,
+          0.1026,
+          0.1114
         ],
         "csv": [
           0.1381,
-          null,
-          null,
-          null
+          0.1245,
+          0.1276,
+          0.1206
         ],
         "gutenberg": [
           0.0288,
-          null,
-          null,
-          null
+          0.0323,
+          0.0472,
+          0.0515
         ],
         "json": [
           0.1278,
-          null,
-          null,
-          null
+          0.0985,
+          0.1006,
+          0.1259
         ],
         "log": [
           0.0329,
-          null,
-          null,
-          null
+          0.0765,
+          0.0933,
+          0.127
         ],
         "mixed": [
           0.0883,
-          null,
-          null,
-          null
+          0.0846,
+          0.0759,
+          0.0751
         ]
       },
       "pred_k1": null,
-      "slope_per_doubling": null,
+      "slope_per_doubling": 0.008019,
       "structured_four_by_k": [
         0.087,
-        null,
-        null,
-        null
+        0.1003,
+        0.1058,
+        0.1213
       ]
     },
     "majority": {
@@ -1044,12 +1269,87 @@
             "mixed": 0.0385
           },
           "structured_four_top1": 0.0385
+        },
+        "4": {
+          "mixture_top1": 0.0385,
+          "mixture_top1_non_gutenberg": 0.0385,
+          "per_family": {
+            "base64": 0.0385,
+            "binary": 0.0385,
+            "code": 0.0385,
+            "csv": 0.0385,
+            "gutenberg": 0.0385,
+            "json": 0.0385,
+            "log": 0.0385,
+            "mixed": 0.0385
+          },
+          "structured_four_top1": 0.0385
+        },
+        "7": {
+          "mixture_top1": 0.0385,
+          "mixture_top1_non_gutenberg": 0.0385,
+          "per_family": {
+            "base64": 0.0385,
+            "binary": 0.0385,
+            "code": 0.0385,
+            "csv": 0.0385,
+            "gutenberg": 0.0385,
+            "json": 0.0385,
+            "log": 0.0385,
+            "mixed": 0.0385
+          },
+          "structured_four_top1": 0.0385
         }
       },
-      "composition_spread_k1": null,
+      "composition_spread_k1": 0.0,
       "depth": {
         "by_chunks": {
+          "1225": {
+            "mixture_top1": 0.0385,
+            "mixture_top1_non_gutenberg": 0.0385,
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "structured_four_top1": 0.0385
+          },
+          "2450": {
+            "mixture_top1": 0.0385,
+            "mixture_top1_non_gutenberg": 0.0385,
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "structured_four_top1": 0.0385
+          },
           "4900": {
+            "mixture_top1": 0.0385,
+            "mixture_top1_non_gutenberg": 0.0385,
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "structured_four_top1": 0.0385
+          },
+          "700": {
             "mixture_top1": 0.0385,
             "mixture_top1_non_gutenberg": 0.0385,
             "per_family": {
@@ -1073,64 +1373,64 @@
         ],
         "mixture_top1_by_chunks": [
           0.0385,
-          null,
-          null,
-          null
+          0.0385,
+          0.0385,
+          0.0385
         ],
         "per_family_by_chunks": {
           "base64": [
             0.0385,
-            null,
-            null,
-            null
+            0.0385,
+            0.0385,
+            0.0385
           ],
           "binary": [
             0.0385,
-            null,
-            null,
-            null
+            0.0385,
+            0.0385,
+            0.0385
           ],
           "code": [
             0.0385,
-            null,
-            null,
-            null
+            0.0385,
+            0.0385,
+            0.0385
           ],
           "csv": [
             0.0385,
-            null,
-            null,
-            null
+            0.0385,
+            0.0385,
+            0.0385
           ],
           "gutenberg": [
             0.0385,
-            null,
-            null,
-            null
+            0.0385,
+            0.0385,
+            0.0385
           ],
           "json": [
             0.0385,
-            null,
-            null,
-            null
+            0.0385,
+            0.0385,
+            0.0385
           ],
           "log": [
             0.0385,
-            null,
-            null,
-            null
+            0.0385,
+            0.0385,
+            0.0385
           ],
           "mixed": [
             0.0385,
-            null,
-            null,
-            null
+            0.0385,
+            0.0385,
+            0.0385
           ]
         },
-        "row_effect_per_doubling_of_chunks": null,
-        "row_effect_within_family": null
+        "row_effect_per_doubling_of_chunks": 0.0,
+        "row_effect_within_family": 0.0
       },
-      "end_difference": null,
+      "end_difference": 0.0,
       "family_counts": [
         1,
         2,
@@ -1138,9 +1438,9 @@
         7
       ],
       "family_effect_at_matched_depth": {
-        "2": null,
-        "4": null,
-        "7": null
+        "2": 0.0,
+        "4": 0.0,
+        "7": 0.0
       },
       "log2_family_counts": [
         0.0,
@@ -1151,8 +1451,8 @@
       "mixture_top1_by_k": [
         0.0385,
         0.0385,
-        null,
-        null
+        0.0385,
+        0.0385
       ],
       "n_iter_by_k": {
         "1": [
@@ -1199,66 +1499,80 @@
       "non_gutenberg_by_k": [
         0.0385,
         0.0385,
-        null,
-        null
+        0.0385,
+        0.0385
       ],
       "per_family_by_k": {
         "base64": [
           0.0385,
           0.0385,
-          null,
-          null
+          0.0385,
+          0.0385
         ],
         "binary": [
           0.0385,
           0.0385,
-          null,
-          null
+          0.0385,
+          0.0385
         ],
         "code": [
           0.0385,
           0.0385,
-          null,
-          null
+          0.0385,
+          0.0385
         ],
         "csv": [
           0.0385,
           0.0385,
-          null,
-          null
+          0.0385,
+          0.0385
         ],
         "gutenberg": [
           0.0385,
           0.0385,
-          null,
-          null
+          0.0385,
+          0.0385
         ],
         "json": [
           0.0385,
           0.0385,
-          null,
-          null
+          0.0385,
+          0.0385
         ],
         "log": [
           0.0385,
           0.0385,
-          null,
-          null
+          0.0385,
+          0.0385
         ],
         "mixed": [
           0.0385,
           0.0385,
-          null,
-          null
+          0.0385,
+          0.0385
         ]
       },
-      "pred_k1": null,
-      "slope_per_doubling": null,
+      "pred_k1": {
+        "mixture_top1": 0.0385,
+        "mixture_top1_non_gutenberg": 0.0385,
+        "per_family": {
+          "base64": 0.0385,
+          "binary": 0.0385,
+          "code": 0.0385,
+          "csv": 0.0385,
+          "gutenberg": 0.0385,
+          "json": 0.0385,
+          "log": 0.0385,
+          "mixed": 0.0385
+        },
+        "structured_four_top1": 0.0385
+      },
+      "slope_per_doubling": 0.0,
       "structured_four_by_k": [
         0.0385,
         0.0385,
-        null,
-        null
+        0.0385,
+        0.0385
       ]
     },
     "model": {
@@ -1292,11 +1606,71 @@
             "mixed": 0.04
           },
           "structured_four_top1": 0.0925
+        },
+        "4": {
+          "mixture_top1": 0.0736,
+          "mixture_top1_non_gutenberg": 0.0769,
+          "per_family": {
+            "base64": 0.0573,
+            "binary": 0.0395,
+            "code": 0.1179,
+            "csv": 0.0979,
+            "gutenberg": 0.0509,
+            "json": 0.0865,
+            "log": 0.0768,
+            "mixed": 0.0638
+          },
+          "structured_four_top1": 0.0945
+        },
+        "7": {
+          "mixture_top1": 0.0829,
+          "mixture_top1_non_gutenberg": 0.0876,
+          "per_family": {
+            "base64": 0.0694,
+            "binary": 0.0699,
+            "code": 0.1023,
+            "csv": 0.1002,
+            "gutenberg": 0.0507,
+            "json": 0.1083,
+            "log": 0.1033,
+            "mixed": 0.0598
+          },
+          "structured_four_top1": 0.1036
         }
       },
       "composition_spread_k1": null,
       "depth": {
         "by_chunks": {
+          "1225": {
+            "mixture_top1": 0.0658,
+            "mixture_top1_non_gutenberg": 0.0705,
+            "per_family": {
+              "base64": 0.0645,
+              "binary": 0.0525,
+              "code": 0.054,
+              "csv": 0.1399,
+              "gutenberg": 0.0331,
+              "json": 0.1096,
+              "log": 0.0366,
+              "mixed": 0.0381
+            },
+            "structured_four_top1": 0.0846
+          },
+          "2450": {
+            "mixture_top1": 0.0689,
+            "mixture_top1_non_gutenberg": 0.0745,
+            "per_family": {
+              "base64": 0.0643,
+              "binary": 0.0781,
+              "code": 0.0502,
+              "csv": 0.1428,
+              "gutenberg": 0.0302,
+              "json": 0.1115,
+              "log": 0.0354,
+              "mixed": 0.0409
+            },
+            "structured_four_top1": 0.0845
+          },
           "4900": {
             "mixture_top1": 0.0666,
             "mixture_top1_non_gutenberg": 0.0719,
@@ -1311,6 +1685,21 @@
               "mixed": 0.0403
             },
             "structured_four_top1": 0.0833
+          },
+          "700": {
+            "mixture_top1": 0.0686,
+            "mixture_top1_non_gutenberg": 0.074,
+            "per_family": {
+              "base64": 0.0657,
+              "binary": 0.078,
+              "code": 0.054,
+              "csv": 0.1409,
+              "gutenberg": 0.032,
+              "json": 0.1096,
+              "log": 0.0328,
+              "mixed": 0.0386
+            },
+            "structured_four_top1": 0.0838
           }
         },
         "chunks": [
@@ -1321,64 +1710,64 @@
         ],
         "mixture_top1_by_chunks": [
           0.0666,
-          null,
-          null,
-          null
+          0.0689,
+          0.0658,
+          0.0686
         ],
         "per_family_by_chunks": {
           "base64": [
             0.0517,
-            null,
-            null,
-            null
+            0.0643,
+            0.0645,
+            0.0657
           ],
           "binary": [
             0.0782,
-            null,
-            null,
-            null
+            0.0781,
+            0.0525,
+            0.078
           ],
           "code": [
             0.0524,
-            null,
-            null,
-            null
+            0.0502,
+            0.054,
+            0.054
           ],
           "csv": [
             0.1398,
-            null,
-            null,
-            null
+            0.1428,
+            0.1399,
+            0.1409
           ],
           "gutenberg": [
             0.0304,
-            null,
-            null,
-            null
+            0.0302,
+            0.0331,
+            0.032
           ],
           "json": [
             0.1046,
-            null,
-            null,
-            null
+            0.1115,
+            0.1096,
+            0.1096
           ],
           "log": [
             0.0382,
-            null,
-            null,
-            null
+            0.0354,
+            0.0366,
+            0.0328
           ],
           "mixed": [
             0.0403,
-            null,
-            null,
-            null
+            0.0409,
+            0.0381,
+            0.0386
           ]
         },
-        "row_effect_per_doubling_of_chunks": null,
-        "row_effect_within_family": null
+        "row_effect_per_doubling_of_chunks": -0.000712,
+        "row_effect_within_family": -0.002
       },
-      "end_difference": null,
+      "end_difference": 0.0163,
       "family_counts": [
         1,
         2,
@@ -1386,9 +1775,9 @@
         7
       ],
       "family_effect_at_matched_depth": {
-        "2": null,
-        "4": null,
-        "7": null
+        "2": -0.0036,
+        "4": 0.0078,
+        "7": 0.0143
       },
       "log2_family_counts": [
         0.0,
@@ -1399,8 +1788,8 @@
       "mixture_top1_by_k": [
         0.0666,
         0.0653,
-        null,
-        null
+        0.0736,
+        0.0829
       ],
       "n_iter_by_k": {
         "1": [
@@ -1431,7 +1820,7 @@
           31,
           25,
           21,
-          null
+          26
         ],
         "7": [
           29,
@@ -1441,84 +1830,84 @@
           26,
           26,
           28,
-          null
+          34
         ]
       },
       "non_gutenberg_by_k": [
         0.0719,
         0.0703,
-        null,
-        null
+        0.0769,
+        0.0876
       ],
       "per_family_by_k": {
         "base64": [
           0.0517,
           0.0413,
-          null,
-          null
+          0.0573,
+          0.0694
         ],
         "binary": [
           0.0782,
           0.0407,
-          null,
-          null
+          0.0395,
+          0.0699
         ],
         "code": [
           0.0524,
           0.1045,
-          null,
-          null
+          0.1179,
+          0.1023
         ],
         "csv": [
           0.1398,
           0.1055,
-          null,
-          null
+          0.0979,
+          0.1002
         ],
         "gutenberg": [
           0.0304,
           0.0312,
-          null,
-          null
+          0.0509,
+          0.0507
         ],
         "json": [
           0.1046,
           0.0932,
-          null,
-          null
+          0.0865,
+          0.1083
         ],
         "log": [
           0.0382,
           0.0682,
-          null,
-          null
+          0.0768,
+          0.1033
         ],
         "mixed": [
           0.0403,
           0.04,
-          null,
-          null
+          0.0638,
+          0.0598
         ]
       },
       "pred_k1": null,
-      "slope_per_doubling": null,
+      "slope_per_doubling": 0.00596,
       "structured_four_by_k": [
         0.0833,
         0.0925,
-        null,
-        null
+        0.0945,
+        0.1036
       ]
     }
   },
-  "fdc_end_difference": null,
+  "fdc_end_difference": 0.0163,
   "fdc_mixture_top1_by_k": [
     0.0666,
     0.0653,
-    null,
-    null
+    0.0736,
+    0.0829
   ],
-  "fdc_slope_model_minus_logistic": null,
-  "fdc_slope_per_doubling": null,
+  "fdc_slope_model_minus_logistic": -0.001307,
+  "fdc_slope_per_doubling": 0.00596,
   "folds": {
     "base64": {
       "by_k": {
@@ -15417,7 +15806,71 @@
             "utc": "2026-09-09T17:19:59Z",
             "val": null
           },
-          "logistic_l3": null,
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T17:27:30Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 453
+            },
+            "fit_rows_sha256": "d6014d267641f1611fcab38d939f721d441c4202778ffcc3f6861b577e245c54",
+            "fit_rows_sorted_sha256": "8eb74f99f4172f3345a2c6937227bf3cebe9ebfe39aa2ca7f434fa881092505c",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 2.75,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98516,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.1266,
+              "binary": 0.0713,
+              "code": 0.072,
+              "csv": 0.087,
+              "gutenberg": 0.306,
+              "json": 0.0656,
+              "log": 0.0782,
+              "mixed": 0.0846
+            },
+            "rss_gb": 2.75,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.4,
+            "ru_maxrss_gb": 9.73,
+            "scaled": true,
+            "seconds": 139.3,
+            "seed": 20260825,
+            "stage": "fdc:mixed:k2",
+            "status": "fit",
+            "top1": 0.1119,
+            "top1_non_gutenberg": 0.0837,
+            "utc": "2026-09-09T17:25:02Z",
+            "val": null
+          },
           "majority": {
             "block_refills": [],
             "environment": {
@@ -15537,42 +15990,1334 @@
           }
         },
         "4": {
-          "logistic": null,
-          "logistic_l3": null,
-          "majority": null,
-          "model": null
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 400
+            },
+            "fit_rows_sha256": "1eef594e14acb635693506aa5e7ab3761c754fd27ffefb2bfb1077fa1fb87ee6",
+            "fit_rows_sorted_sha256": "28d56593117062a9936d30c04e53f4798a3ff92e8473735fd9d7e6da7e16ff47",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 2.75,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98987,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.0875,
+              "binary": 0.0852,
+              "code": 0.1819,
+              "csv": 0.0854,
+              "gutenberg": 0.1592,
+              "json": 0.1233,
+              "log": 0.0808,
+              "mixed": 0.0777
+            },
+            "rss_gb": 2.75,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.41,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 124.3,
+            "seed": 20260825,
+            "stage": "fdc:mixed:k4",
+            "status": "fit",
+            "top1": 0.11,
+            "top1_non_gutenberg": 0.1029,
+            "utc": "2026-09-09T17:27:32Z",
+            "val": null
+          },
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T17:35:16Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 540
+            },
+            "fit_rows_sha256": "1eef594e14acb635693506aa5e7ab3761c754fd27ffefb2bfb1077fa1fb87ee6",
+            "fit_rows_sorted_sha256": "28d56593117062a9936d30c04e53f4798a3ff92e8473735fd9d7e6da7e16ff47",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 2.75,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98987,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.1065,
+              "binary": 0.0908,
+              "code": 0.3858,
+              "csv": 0.0965,
+              "gutenberg": 0.2142,
+              "json": 0.0972,
+              "log": 0.1061,
+              "mixed": 0.0759
+            },
+            "rss_gb": 2.75,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.41,
+            "ru_maxrss_gb": 9.73,
+            "scaled": true,
+            "seconds": 164.3,
+            "seed": 20260825,
+            "stage": "fdc:mixed:k4",
+            "status": "fit",
+            "top1": 0.1462,
+            "top1_non_gutenberg": 0.1363,
+            "utc": "2026-09-09T17:32:22Z",
+            "val": null
+          },
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "1eef594e14acb635693506aa5e7ab3761c754fd27ffefb2bfb1077fa1fb87ee6",
+            "fit_rows_sorted_sha256": "28d56593117062a9936d30c04e53f4798a3ff92e8473735fd9d7e6da7e16ff47",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 2.75,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98987,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 2.75,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.41,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "fdc:mixed:k4",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T17:27:31Z",
+            "val": null
+          },
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 26
+            },
+            "fit_rows_sha256": "1eef594e14acb635693506aa5e7ab3761c754fd27ffefb2bfb1077fa1fb87ee6",
+            "fit_rows_sorted_sha256": "28d56593117062a9936d30c04e53f4798a3ff92e8473735fd9d7e6da7e16ff47",
+            "head": "model",
+            "heartbeat_max_rss_gb": 3.19,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 98987,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.1324,
+              "binary": 0.1006,
+              "code": 0.3011,
+              "csv": 0.0953,
+              "gutenberg": 0.1847,
+              "json": 0.1,
+              "log": 0.1008,
+              "mixed": 0.0638
+            },
+            "rss_gb": 2.75,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.41,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 148.5,
+            "seed": 20260825,
+            "stage": "fdc:mixed:k4",
+            "status": "fit",
+            "top1": 0.1346,
+            "top1_non_gutenberg": 0.1273,
+            "utc": "2026-09-09T17:29:40Z",
+            "val": "frag"
+          }
         },
         "7": {
-          "logistic": null,
-          "logistic_l3": null,
-          "majority": null,
-          "model": null
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 400
+            },
+            "fit_rows_sha256": "94089fd7055c2e7f19c01680906cfcf98db0967b31c15fd1fb9467e0b60fd161",
+            "fit_rows_sorted_sha256": "f55d87fbf4c32f213cdf5b0f147ebfa0c4652b566b3c07113965a6c770605d2b",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 2.76,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99122,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.0662,
+              "binary": 0.0781,
+              "code": 0.1427,
+              "csv": 0.18,
+              "gutenberg": 0.111,
+              "json": 0.2116,
+              "log": 0.1623,
+              "mixed": 0.0766
+            },
+            "rss_gb": 2.76,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.41,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 122.7,
+            "seed": 20260825,
+            "stage": "fdc:mixed:k7",
+            "status": "fit",
+            "top1": 0.1285,
+            "top1_non_gutenberg": 0.131,
+            "utc": "2026-09-09T17:35:19Z",
+            "val": null
+          },
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T17:44:05Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 600
+            },
+            "fit_rows_sha256": "94089fd7055c2e7f19c01680906cfcf98db0967b31c15fd1fb9467e0b60fd161",
+            "fit_rows_sorted_sha256": "f55d87fbf4c32f213cdf5b0f147ebfa0c4652b566b3c07113965a6c770605d2b",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 2.76,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99122,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.0859,
+              "binary": 0.0831,
+              "code": 0.2876,
+              "csv": 0.313,
+              "gutenberg": 0.1488,
+              "json": 0.359,
+              "log": 0.3471,
+              "mixed": 0.0751
+            },
+            "rss_gb": 2.76,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.41,
+            "ru_maxrss_gb": 9.73,
+            "scaled": true,
+            "seconds": 183.0,
+            "seed": 20260825,
+            "stage": "fdc:mixed:k7",
+            "status": "fit",
+            "top1": 0.2123,
+            "top1_non_gutenberg": 0.2216,
+            "utc": "2026-09-09T17:40:51Z",
+            "val": null
+          },
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "94089fd7055c2e7f19c01680906cfcf98db0967b31c15fd1fb9467e0b60fd161",
+            "fit_rows_sorted_sha256": "f55d87fbf4c32f213cdf5b0f147ebfa0c4652b566b3c07113965a6c770605d2b",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 2.75,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99122,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 2.75,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.41,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "fdc:mixed:k7",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T17:35:17Z",
+            "val": null
+          },
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 34
+            },
+            "fit_rows_sha256": "94089fd7055c2e7f19c01680906cfcf98db0967b31c15fd1fb9467e0b60fd161",
+            "fit_rows_sorted_sha256": "f55d87fbf4c32f213cdf5b0f147ebfa0c4652b566b3c07113965a6c770605d2b",
+            "head": "model",
+            "heartbeat_max_rss_gb": 2.91,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 99122,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.1176,
+              "binary": 0.0983,
+              "code": 0.2323,
+              "csv": 0.3308,
+              "gutenberg": 0.1389,
+              "json": 0.2782,
+              "log": 0.301,
+              "mixed": 0.0598
+            },
+            "rss_gb": 2.76,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 8.41,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 190.0,
+            "seed": 20260825,
+            "stage": "fdc:mixed:k7",
+            "status": "fit",
+            "top1": 0.1944,
+            "top1_non_gutenberg": 0.2025,
+            "utc": "2026-09-09T17:37:25Z",
+            "val": "frag"
+          }
         }
       },
       "depth": {
         "1225": {
-          "logistic": null,
-          "logistic_l3": null,
-          "majority": null,
-          "model": null
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 400
+            },
+            "fit_rows_sha256": "192f5403fc896d5b7c84e2a2924003b6a761d89c1aeb8d6f6702e5900292cff5",
+            "fit_rows_sorted_sha256": "b04af3f7756524a73cc17d190f0e23a41cf3343fd199de6d9ae1ec05c29ed6a4",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 2.11,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 24761,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.073,
+              "binary": 0.0775,
+              "code": 0.0822,
+              "csv": 0.0858,
+              "gutenberg": 0.2177,
+              "json": 0.1191,
+              "log": 0.083,
+              "mixed": 0.076
+            },
+            "rss_gb": 2.11,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.76,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 57.1,
+            "seed": 20260825,
+            "stage": "depth:mixed:c1225",
+            "status": "fit",
+            "top1": 0.1021,
+            "top1_non_gutenberg": 0.0853,
+            "utc": "2026-09-09T17:48:37Z",
+            "val": null
+          },
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T17:51:45Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 225
+            },
+            "fit_rows_sha256": "192f5403fc896d5b7c84e2a2924003b6a761d89c1aeb8d6f6702e5900292cff5",
+            "fit_rows_sorted_sha256": "b04af3f7756524a73cc17d190f0e23a41cf3343fd199de6d9ae1ec05c29ed6a4",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 2.13,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 24761,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.0729,
+              "binary": 0.0779,
+              "code": 0.0926,
+              "csv": 0.1006,
+              "gutenberg": 0.3086,
+              "json": 0.0954,
+              "log": 0.0944,
+              "mixed": 0.0807
+            },
+            "rss_gb": 2.13,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.79,
+            "ru_maxrss_gb": 9.73,
+            "scaled": true,
+            "seconds": 32.8,
+            "seed": 20260825,
+            "stage": "depth:mixed:c1225",
+            "status": "fit",
+            "top1": 0.1157,
+            "top1_non_gutenberg": 0.0877,
+            "utc": "2026-09-09T17:51:02Z",
+            "val": null
+          },
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "192f5403fc896d5b7c84e2a2924003b6a761d89c1aeb8d6f6702e5900292cff5",
+            "fit_rows_sorted_sha256": "b04af3f7756524a73cc17d190f0e23a41cf3343fd199de6d9ae1ec05c29ed6a4",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 2.11,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 24761,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 2.11,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.76,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "depth:mixed:c1225",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T17:48:36Z",
+            "val": null
+          },
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 27
+            },
+            "fit_rows_sha256": "192f5403fc896d5b7c84e2a2924003b6a761d89c1aeb8d6f6702e5900292cff5",
+            "fit_rows_sorted_sha256": "b04af3f7756524a73cc17d190f0e23a41cf3343fd199de6d9ae1ec05c29ed6a4",
+            "head": "model",
+            "heartbeat_max_rss_gb": 2.19,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 24761,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.0331,
+              "binary": 0.0406,
+              "code": 0.088,
+              "csv": 0.0533,
+              "gutenberg": 0.2519,
+              "json": 0.0786,
+              "log": 0.0764,
+              "mixed": 0.0381
+            },
+            "rss_gb": 2.13,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.79,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 69.4,
+            "seed": 20260825,
+            "stage": "depth:mixed:c1225",
+            "status": "fit",
+            "top1": 0.0829,
+            "top1_non_gutenberg": 0.0583,
+            "utc": "2026-09-09T17:49:38Z",
+            "val": "frag"
+          }
         },
         "2450": {
-          "logistic": null,
-          "logistic_l3": null,
-          "majority": null,
-          "model": null
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 400
+            },
+            "fit_rows_sha256": "b01f3e33e64c833bbf47f5c7befcd6880a2fad58f6bca4738286e1fe10461783",
+            "fit_rows_sorted_sha256": "79b69e97da4611065c157984838781eafb5fa9f21f59a24f98840e9d890d00db",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 2.32,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 49410,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.0733,
+              "binary": 0.078,
+              "code": 0.0824,
+              "csv": 0.0945,
+              "gutenberg": 0.237,
+              "json": 0.1273,
+              "log": 0.0807,
+              "mixed": 0.0811
+            },
+            "rss_gb": 2.32,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.98,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 81.7,
+            "seed": 20260825,
+            "stage": "depth:mixed:c2450",
+            "status": "fit",
+            "top1": 0.1071,
+            "top1_non_gutenberg": 0.0882,
+            "utc": "2026-09-09T17:44:08Z",
+            "val": null
+          },
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T17:48:35Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 285
+            },
+            "fit_rows_sha256": "b01f3e33e64c833bbf47f5c7befcd6880a2fad58f6bca4738286e1fe10461783",
+            "fit_rows_sorted_sha256": "79b69e97da4611065c157984838781eafb5fa9f21f59a24f98840e9d890d00db",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 2.96,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 49410,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.0726,
+              "binary": 0.0791,
+              "code": 0.0938,
+              "csv": 0.1026,
+              "gutenberg": 0.3371,
+              "json": 0.0977,
+              "log": 0.0927,
+              "mixed": 0.0906
+            },
+            "rss_gb": 2.32,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.98,
+            "ru_maxrss_gb": 9.73,
+            "scaled": true,
+            "seconds": 57.5,
+            "seed": 20260825,
+            "stage": "depth:mixed:c2450",
+            "status": "fit",
+            "top1": 0.1212,
+            "top1_non_gutenberg": 0.0898,
+            "utc": "2026-09-09T17:47:28Z",
+            "val": null
+          },
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "b01f3e33e64c833bbf47f5c7befcd6880a2fad58f6bca4738286e1fe10461783",
+            "fit_rows_sorted_sha256": "79b69e97da4611065c157984838781eafb5fa9f21f59a24f98840e9d890d00db",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 2.32,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 49410,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 2.32,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.98,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "depth:mixed:c2450",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T17:44:06Z",
+            "val": null
+          },
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 28
+            },
+            "fit_rows_sha256": "b01f3e33e64c833bbf47f5c7befcd6880a2fad58f6bca4738286e1fe10461783",
+            "fit_rows_sorted_sha256": "79b69e97da4611065c157984838781eafb5fa9f21f59a24f98840e9d890d00db",
+            "head": "model",
+            "heartbeat_max_rss_gb": 2.41,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 49410,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.0365,
+              "binary": 0.0418,
+              "code": 0.0835,
+              "csv": 0.0566,
+              "gutenberg": 0.2503,
+              "json": 0.0749,
+              "log": 0.065,
+              "mixed": 0.0409
+            },
+            "rss_gb": 2.32,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.98,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 99.8,
+            "seed": 20260825,
+            "stage": "depth:mixed:c2450",
+            "status": "fit",
+            "top1": 0.0815,
+            "top1_non_gutenberg": 0.057,
+            "utc": "2026-09-09T17:45:33Z",
+            "val": "frag"
+          }
         },
         "700": {
-          "logistic": null,
-          "logistic_l3": null,
-          "majority": null,
-          "model": null
+          "logistic": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 400
+            },
+            "fit_rows_sha256": "1033d20ae45ed779dc777f42f9d57da27243e9b671b2622216c79fc6de900686",
+            "fit_rows_sorted_sha256": "c17b62c2907718198e7ce27cf51678464288b57e91504489bdd0b7182db73985",
+            "head": "logistic",
+            "heartbeat_max_rss_gb": 1.92,
+            "id": "L1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 14105,
+            "params": {
+              "max_iter": 400
+            },
+            "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+            "per_family": {
+              "base64": 0.0722,
+              "binary": 0.0773,
+              "code": 0.0737,
+              "csv": 0.076,
+              "gutenberg": 0.2015,
+              "json": 0.1124,
+              "log": 0.0768,
+              "mixed": 0.0841
+            },
+            "rss_gb": 1.92,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.57,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 37.6,
+            "seed": 20260825,
+            "stage": "depth:mixed:c700",
+            "status": "fit",
+            "top1": 0.097,
+            "top1_non_gutenberg": 0.0818,
+            "utc": "2026-09-09T17:51:47Z",
+            "val": null
+          },
+          "logistic_l3": {
+            "block_refills": [
+              {
+                "order": "canonical",
+                "probe_ok": true,
+                "utc": "2026-09-09T17:54:05Z"
+              }
+            ],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "logistic",
+            "fit_info": {
+              "n_iter": 233
+            },
+            "fit_rows_sha256": "1033d20ae45ed779dc777f42f9d57da27243e9b671b2622216c79fc6de900686",
+            "fit_rows_sorted_sha256": "c17b62c2907718198e7ce27cf51678464288b57e91504489bdd0b7182db73985",
+            "head": "logistic_l3",
+            "heartbeat_max_rss_gb": 3.13,
+            "id": "L3",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 14105,
+            "params": {
+              "C": 1.0,
+              "max_iter": 1000
+            },
+            "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+            "per_family": {
+              "base64": 0.0727,
+              "binary": 0.0784,
+              "code": 0.0871,
+              "csv": 0.1028,
+              "gutenberg": 0.2736,
+              "json": 0.0962,
+              "log": 0.0874,
+              "mixed": 0.1011
+            },
+            "rss_gb": 1.9,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.55,
+            "ru_maxrss_gb": 9.73,
+            "scaled": true,
+            "seconds": 21.8,
+            "seed": 20260825,
+            "stage": "depth:mixed:c700",
+            "status": "fit",
+            "top1": 0.1127,
+            "top1_non_gutenberg": 0.0893,
+            "utc": "2026-09-09T17:53:34Z",
+            "val": null
+          },
+          "majority": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "dummy",
+            "fit_info": {},
+            "fit_rows_sha256": "1033d20ae45ed779dc777f42f9d57da27243e9b671b2622216c79fc6de900686",
+            "fit_rows_sorted_sha256": "c17b62c2907718198e7ce27cf51678464288b57e91504489bdd0b7182db73985",
+            "head": "majority",
+            "heartbeat_max_rss_gb": 1.92,
+            "id": "U1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 14105,
+            "params": {
+              "strategy": "most_frequent"
+            },
+            "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+            "per_family": {
+              "base64": 0.0385,
+              "binary": 0.0385,
+              "code": 0.0385,
+              "csv": 0.0385,
+              "gutenberg": 0.0385,
+              "json": 0.0385,
+              "log": 0.0385,
+              "mixed": 0.0385
+            },
+            "rss_gb": 1.92,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.57,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 0.0,
+            "seed": 20260825,
+            "stage": "depth:mixed:c700",
+            "status": "fit",
+            "top1": 0.0385,
+            "top1_non_gutenberg": 0.0385,
+            "utc": "2026-09-09T17:51:46Z",
+            "val": null
+          },
+          "model": {
+            "block_refills": [],
+            "environment": {
+              "nice": 10,
+              "numpy": "2.4.6",
+              "python": "3.11.15",
+              "sklearn": "1.9.0",
+              "standardiser_probe": {
+                "block_gb": 0.177,
+                "ncols": 1108,
+                "peak_extra_fraction_of_block": 0.1005,
+                "probe_rows_per_pass": 2000,
+                "production_rows_per_pass": 20000,
+                "production_transient_gb": 0.177,
+                "rows": 20000
+              },
+              "threads": 3
+            },
+            "family": "hgb",
+            "fit_info": {
+              "n_iter": 24
+            },
+            "fit_rows_sha256": "1033d20ae45ed779dc777f42f9d57da27243e9b671b2622216c79fc6de900686",
+            "fit_rows_sorted_sha256": "c17b62c2907718198e7ce27cf51678464288b57e91504489bdd0b7182db73985",
+            "head": "model",
+            "heartbeat_max_rss_gb": 2.33,
+            "id": "M1",
+            "interruptions_before_this_fit": 0,
+            "last_heartbeat_rss_gb_before_this_fit": null,
+            "n_fit_rows": 14105,
+            "params": {
+              "learning_rate": 0.15,
+              "max_iter": 200,
+              "max_leaf_nodes": 63,
+              "n_iter_no_change": 10
+            },
+            "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+            "per_family": {
+              "base64": 0.0342,
+              "binary": 0.0395,
+              "code": 0.071,
+              "csv": 0.0628,
+              "gutenberg": 0.2397,
+              "json": 0.0766,
+              "log": 0.0731,
+              "mixed": 0.0386
+            },
+            "rss_gb": 1.9,
+            "rss_gb_is": "anonymous (RssAnon)",
+            "rss_total_gb": 7.55,
+            "ru_maxrss_gb": 9.73,
+            "scaled": false,
+            "seconds": 52.1,
+            "seed": 20260825,
+            "stage": "depth:mixed:c700",
+            "status": "fit",
+            "top1": 0.0798,
+            "top1_non_gutenberg": 0.0566,
+            "utc": "2026-09-09T17:52:29Z",
+            "val": "frag"
+          }
         }
       },
       "pred_k1": {
-        "logistic": null,
+        "logistic": {
+          "block_refills": [],
+          "environment": {
+            "nice": 10,
+            "numpy": "2.4.6",
+            "python": "3.11.15",
+            "sklearn": "1.9.0",
+            "standardiser_probe": {
+              "block_gb": 0.177,
+              "ncols": 1108,
+              "peak_extra_fraction_of_block": 0.1005,
+              "probe_rows_per_pass": 2000,
+              "production_rows_per_pass": 20000,
+              "production_transient_gb": 0.177,
+              "rows": 20000
+            },
+            "threads": 3
+          },
+          "family": "logistic",
+          "fit_info": {
+            "n_iter": 400
+          },
+          "fit_rows_sha256": "92d5f3d9cdce4b16a9954e25c719a07eb2d3d11f3b69141b659a34364525b91d",
+          "fit_rows_sorted_sha256": "5ffae736f58b10a6ecbbb6dc8ea0b2cdaf49ecf1bf3912d59420f33de5b90e5e",
+          "head": "logistic",
+          "heartbeat_max_rss_gb": 2.75,
+          "id": "L1",
+          "interruptions_before_this_fit": 0,
+          "last_heartbeat_rss_gb_before_this_fit": null,
+          "n_fit_rows": 98196,
+          "params": {
+            "max_iter": 400
+          },
+          "params_sha256": "70dc5d929b8e4ea4616833d1997d40e038e1ed8e6a1cd071117f08f7b0e31b52",
+          "per_family": {
+            "base64": 0.0743,
+            "binary": 0.0714,
+            "code": 0.1117,
+            "csv": 0.1036,
+            "gutenberg": 0.0685,
+            "json": 0.1092,
+            "log": 0.3674,
+            "mixed": 0.0763
+          },
+          "rss_gb": 2.75,
+          "rss_gb_is": "anonymous (RssAnon)",
+          "rss_total_gb": 8.4,
+          "ru_maxrss_gb": 9.73,
+          "scaled": false,
+          "seconds": 121.4,
+          "seed": 20260825,
+          "stage": "pred:mixed:k1",
+          "status": "fit",
+          "top1": 0.1235,
+          "top1_non_gutenberg": 0.1315,
+          "utc": "2026-09-09T17:54:09Z",
+          "val": null
+        },
         "logistic_l3": null,
-        "majority": null,
+        "majority": {
+          "block_refills": [],
+          "environment": {
+            "nice": 10,
+            "numpy": "2.4.6",
+            "python": "3.11.15",
+            "sklearn": "1.9.0",
+            "standardiser_probe": {
+              "block_gb": 0.177,
+              "ncols": 1108,
+              "peak_extra_fraction_of_block": 0.1005,
+              "probe_rows_per_pass": 2000,
+              "production_rows_per_pass": 20000,
+              "production_transient_gb": 0.177,
+              "rows": 20000
+            },
+            "threads": 3
+          },
+          "family": "dummy",
+          "fit_info": {},
+          "fit_rows_sha256": "92d5f3d9cdce4b16a9954e25c719a07eb2d3d11f3b69141b659a34364525b91d",
+          "fit_rows_sorted_sha256": "5ffae736f58b10a6ecbbb6dc8ea0b2cdaf49ecf1bf3912d59420f33de5b90e5e",
+          "head": "majority",
+          "heartbeat_max_rss_gb": 2.75,
+          "id": "U1",
+          "interruptions_before_this_fit": 0,
+          "last_heartbeat_rss_gb_before_this_fit": null,
+          "n_fit_rows": 98196,
+          "params": {
+            "strategy": "most_frequent"
+          },
+          "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+          "per_family": {
+            "base64": 0.0385,
+            "binary": 0.0385,
+            "code": 0.0385,
+            "csv": 0.0385,
+            "gutenberg": 0.0385,
+            "json": 0.0385,
+            "log": 0.0385,
+            "mixed": 0.0385
+          },
+          "rss_gb": 2.75,
+          "rss_gb_is": "anonymous (RssAnon)",
+          "rss_total_gb": 8.4,
+          "ru_maxrss_gb": 9.73,
+          "scaled": false,
+          "seconds": 0.0,
+          "seed": 20260825,
+          "stage": "pred:mixed:k1",
+          "status": "fit",
+          "top1": 0.0385,
+          "top1_non_gutenberg": 0.0385,
+          "utc": "2026-09-09T17:54:07Z",
+          "val": null
+        },
         "model": null
       }
     }
@@ -19807,32 +21552,423 @@
       "rss_gb": 2.75,
       "seconds": 162.9,
       "utc": "2026-09-09T17:25:01Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "6f9197b7d16137eb",
+      "name": "fold_mixed_k2_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "utc": "2026-09-09T17:25:02Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "6f9197b7d16137eb",
+      "name": "fold_mixed_k2_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "seconds": 139.3,
+      "utc": "2026-09-09T17:27:30Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "8beca4404a481857",
+      "name": "fold_mixed_k4_majority",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "utc": "2026-09-09T17:27:31Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "8beca4404a481857",
+      "name": "fold_mixed_k4_majority",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "seconds": 0.0,
+      "utc": "2026-09-09T17:27:31Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "e1160b0cf4e76642",
+      "name": "fold_mixed_k4_logistic",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "utc": "2026-09-09T17:27:32Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "e1160b0cf4e76642",
+      "name": "fold_mixed_k4_logistic",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "seconds": 124.3,
+      "utc": "2026-09-09T17:29:39Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "914e047de7aa9169",
+      "name": "fold_mixed_k4_model",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "utc": "2026-09-09T17:29:40Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "914e047de7aa9169",
+      "name": "fold_mixed_k4_model",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "seconds": 148.5,
+      "utc": "2026-09-09T17:32:21Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "a37f9cb774a7d536",
+      "name": "fold_mixed_k4_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "utc": "2026-09-09T17:32:22Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "a37f9cb774a7d536",
+      "name": "fold_mixed_k4_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "seconds": 164.3,
+      "utc": "2026-09-09T17:35:16Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "b54c7cdd9be85725",
+      "name": "fold_mixed_k7_majority",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "utc": "2026-09-09T17:35:17Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "b54c7cdd9be85725",
+      "name": "fold_mixed_k7_majority",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "seconds": 0.0,
+      "utc": "2026-09-09T17:35:18Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "caf49eb178e4a69d",
+      "name": "fold_mixed_k7_logistic",
+      "pid": 892,
+      "rss_gb": 2.76,
+      "utc": "2026-09-09T17:35:19Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "caf49eb178e4a69d",
+      "name": "fold_mixed_k7_logistic",
+      "pid": 892,
+      "rss_gb": 2.76,
+      "seconds": 122.7,
+      "utc": "2026-09-09T17:37:24Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "70926a56aa77031f",
+      "name": "fold_mixed_k7_model",
+      "pid": 892,
+      "rss_gb": 2.76,
+      "utc": "2026-09-09T17:37:25Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "70926a56aa77031f",
+      "name": "fold_mixed_k7_model",
+      "pid": 892,
+      "rss_gb": 2.76,
+      "seconds": 190.0,
+      "utc": "2026-09-09T17:40:51Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "105324e25a47be03",
+      "name": "fold_mixed_k7_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.76,
+      "utc": "2026-09-09T17:40:51Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "105324e25a47be03",
+      "name": "fold_mixed_k7_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.76,
+      "seconds": 183.0,
+      "utc": "2026-09-09T17:44:06Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "506a8be2f4a7f39b",
+      "name": "depth_mixed_c2450_majority",
+      "pid": 892,
+      "rss_gb": 2.32,
+      "utc": "2026-09-09T17:44:06Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "506a8be2f4a7f39b",
+      "name": "depth_mixed_c2450_majority",
+      "pid": 892,
+      "rss_gb": 2.32,
+      "seconds": 0.0,
+      "utc": "2026-09-09T17:44:07Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "0438be3447f0a4de",
+      "name": "depth_mixed_c2450_logistic",
+      "pid": 892,
+      "rss_gb": 2.32,
+      "utc": "2026-09-09T17:44:08Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "0438be3447f0a4de",
+      "name": "depth_mixed_c2450_logistic",
+      "pid": 892,
+      "rss_gb": 2.32,
+      "seconds": 81.7,
+      "utc": "2026-09-09T17:45:33Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "e4b3710069e6b557",
+      "name": "depth_mixed_c2450_model",
+      "pid": 892,
+      "rss_gb": 2.32,
+      "utc": "2026-09-09T17:45:33Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "e4b3710069e6b557",
+      "name": "depth_mixed_c2450_model",
+      "pid": 892,
+      "rss_gb": 2.32,
+      "seconds": 99.8,
+      "utc": "2026-09-09T17:47:27Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "2d765f12881f149e",
+      "name": "depth_mixed_c2450_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.32,
+      "utc": "2026-09-09T17:47:28Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "2d765f12881f149e",
+      "name": "depth_mixed_c2450_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.32,
+      "seconds": 57.5,
+      "utc": "2026-09-09T17:48:35Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "5bbedc1512ab6693",
+      "name": "depth_mixed_c1225_majority",
+      "pid": 892,
+      "rss_gb": 2.11,
+      "utc": "2026-09-09T17:48:36Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "5bbedc1512ab6693",
+      "name": "depth_mixed_c1225_majority",
+      "pid": 892,
+      "rss_gb": 2.11,
+      "seconds": 0.0,
+      "utc": "2026-09-09T17:48:37Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "5ceb581da7a481a1",
+      "name": "depth_mixed_c1225_logistic",
+      "pid": 892,
+      "rss_gb": 2.11,
+      "utc": "2026-09-09T17:48:37Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "5ceb581da7a481a1",
+      "name": "depth_mixed_c1225_logistic",
+      "pid": 892,
+      "rss_gb": 2.11,
+      "seconds": 57.1,
+      "utc": "2026-09-09T17:49:37Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "aa48c892508ca812",
+      "name": "depth_mixed_c1225_model",
+      "pid": 892,
+      "rss_gb": 2.11,
+      "utc": "2026-09-09T17:49:38Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "aa48c892508ca812",
+      "name": "depth_mixed_c1225_model",
+      "pid": 892,
+      "rss_gb": 2.13,
+      "seconds": 69.4,
+      "utc": "2026-09-09T17:51:02Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "10c2d8532c72ea0a",
+      "name": "depth_mixed_c1225_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.13,
+      "utc": "2026-09-09T17:51:02Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "10c2d8532c72ea0a",
+      "name": "depth_mixed_c1225_logistic_l3",
+      "pid": 892,
+      "rss_gb": 2.13,
+      "seconds": 32.8,
+      "utc": "2026-09-09T17:51:45Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "cd4017debc6237ac",
+      "name": "depth_mixed_c700_majority",
+      "pid": 892,
+      "rss_gb": 1.92,
+      "utc": "2026-09-09T17:51:46Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "cd4017debc6237ac",
+      "name": "depth_mixed_c700_majority",
+      "pid": 892,
+      "rss_gb": 1.92,
+      "seconds": 0.0,
+      "utc": "2026-09-09T17:51:46Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "998e626b79b575b4",
+      "name": "depth_mixed_c700_logistic",
+      "pid": 892,
+      "rss_gb": 1.92,
+      "utc": "2026-09-09T17:51:47Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "998e626b79b575b4",
+      "name": "depth_mixed_c700_logistic",
+      "pid": 892,
+      "rss_gb": 1.92,
+      "seconds": 37.6,
+      "utc": "2026-09-09T17:52:28Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "cde6a213b6f3f03d",
+      "name": "depth_mixed_c700_model",
+      "pid": 892,
+      "rss_gb": 1.92,
+      "utc": "2026-09-09T17:52:29Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "cde6a213b6f3f03d",
+      "name": "depth_mixed_c700_model",
+      "pid": 892,
+      "rss_gb": 1.9,
+      "seconds": 52.1,
+      "utc": "2026-09-09T17:53:34Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "21f86966fe944279",
+      "name": "depth_mixed_c700_logistic_l3",
+      "pid": 892,
+      "rss_gb": 1.9,
+      "utc": "2026-09-09T17:53:34Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "21f86966fe944279",
+      "name": "depth_mixed_c700_logistic_l3",
+      "pid": 892,
+      "rss_gb": 1.9,
+      "seconds": 21.8,
+      "utc": "2026-09-09T17:54:05Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "a46c9ccc20c8f9f8",
+      "name": "pred_mixed_k1_majority",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "utc": "2026-09-09T17:54:07Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "a46c9ccc20c8f9f8",
+      "name": "pred_mixed_k1_majority",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "seconds": 0.0,
+      "utc": "2026-09-09T17:54:08Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "37af9dd0d7928023",
+      "name": "pred_mixed_k1_logistic",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "utc": "2026-09-09T17:54:09Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "37af9dd0d7928023",
+      "name": "pred_mixed_k1_logistic",
+      "pid": 892,
+      "rss_gb": 2.75,
+      "seconds": 121.4,
+      "utc": "2026-09-09T17:56:13Z"
     }
   ],
   "missing_roles": [
-    "fold_mixed_k2_logistic_l3",
-    "fold_mixed_k4_majority",
-    "fold_mixed_k4_logistic",
-    "fold_mixed_k4_model",
-    "fold_mixed_k4_logistic_l3",
-    "fold_mixed_k7_majority",
-    "fold_mixed_k7_logistic",
-    "fold_mixed_k7_model",
-    "fold_mixed_k7_logistic_l3",
-    "depth_mixed_c2450_majority",
-    "depth_mixed_c2450_logistic",
-    "depth_mixed_c2450_model",
-    "depth_mixed_c2450_logistic_l3",
-    "depth_mixed_c1225_majority",
-    "depth_mixed_c1225_logistic",
-    "depth_mixed_c1225_model",
-    "depth_mixed_c1225_logistic_l3",
-    "depth_mixed_c700_majority",
-    "depth_mixed_c700_logistic",
-    "depth_mixed_c700_model",
-    "depth_mixed_c700_logistic_l3",
-    "pred_mixed_k1_majority",
-    "pred_mixed_k1_logistic",
     "pred_mixed_k1_model",
     "pred_mixed_k1_logistic_l3"
   ],
