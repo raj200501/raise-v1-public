@@ -1,0 +1,146 @@
+{
+  "schema": "raise-v1/engineering_log/1",
+  "preregistration": "0016-fdc-4096",
+  "status": "pre-freeze (this file is written before the freeze and extended as the run proceeds; nothing in it is a reading)",
+  "design": {
+    "question": "At a fixed plaintext budget of 4900 source chunks (every pool row of each chunk, about 20 encoder variants, about 98000 rows), does spreading the training data over more content families improve 0003's recipe's encoder identification on a family it never saw? The family-diversity transfer curve: eight held-out families x family counts 1, 2, 4, 7 x three fixed recipes, one scoring of the sealed set per fit, the mixture at each k stitched from the eight held-out readings, and the ordinary-least-squares slope of the model's mixture against log2(k) read against 0.005 per doubling; a single-family depth arm (the first successor alone at 2450, 1225 and 700 chunks) and a predecessor arm (k = 1 with the preceding family) banked beside it.",
+    "why_now": "0015 read TRANSFER_FAILS (model mixture 0.0859 against a bar of 0.0885; logistic 0.0928) and stated as not covered whether a recipe trained on more families would transfer better. That is the data-collection question a reader asks next, and the corpus answers it at seven families and below with no new data.",
+    "subset_rule": "for held-out family f, the k families that follow f cyclically in the corpus family order (gutenberg, base64, binary, code, csv, json, log, mixed); nested in k; 4900/k chunks per chosen family, each family's first chunks by first appearance in pool order with every pool row of each chunk, the union kept in pool order so the incumbent's last-10% early-stopping split is a mix of the chosen families",
+    "fixed_budget_not_fixed_rows_per_family": "the plaintext budget is fixed so that family count is the only thing that varies along the primary curve; the depth arm (one family at 2450, 1225, 700 chunks; the k = 1 fold is its 4900 point) measures the per-family depth effect at the same sizes so a flat curve can be read apart into 'families do not help' and 'the depth they displace hurts more'; the predecessor arm bounds the composition sensitivity at k = 1",
+    "bar": "slope >= 0.005 accuracy per doubling of families on the model's fixed-budget mixture -> DIVERSITY_HELPS, else DIVERSITY_FLAT; VOID on validity. Calibrated to the transfer regime (the whole dynamic range under transfer is about 0.04: chance 0.0385 to 0015's 0.0859), not to 0003's in-distribution row slope (0.0148 per doubling): a third of the plausible headroom and about 25 evaluation-noise standard errors of a 260000-row mixture. The first draft's 0.01 was calibrated to the in-distribution scale and would have been prior-favoured to FLAT (pre-freeze review).",
+    "controls": "M1 on the first 100000 pool rows (0003's 100000-row rung, same rows, same last-10% validation convention) within 0.005 of 0003's banked 0.1965; M1 on the first 20000 pool rows (0014's null block and shuffle) with shuffled labels at or below chance + 0.02, with 0014's 0.0383 and 0003's 0.0389 banked as drift references; sealed hashes for eval, pool, rung, null block and all 64 folds; four leakage counters per fold required to be 0; the subset rule recomputed by the reader from the family order and checked against the banked per-family chunk and row maps, independently of the hashes; one ledger completion per fit; recipe hashes; environment sealed in the protocol and refused at launch on mismatch; every stitched mixture, vector, ordinate list, slope, end difference and derived arm reading recomputed by the reader, whose own slope is the verdict's; every block checked before any fit to carry all 26 classes in both its fit rows and its validation rows."
+  },
+  "cost_anchors": {
+    "m1_100000_rows_0003_4_cores_s": 203.6,
+    "m1_700000_rows_0015_3_threads_s": [
+      1276.3,
+      1763.3
+    ],
+    "l1_800000_rows_0015_s": 929.7,
+    "l1_700000_rows_0015_s": [
+      803.6,
+      845.9
+    ],
+    "m1_100000_rows_anchor_check_3_threads_s": 341.4,
+    "anchor_check_n_iter": 49,
+    "extrapolation": "32 fixed-budget folds x (about 340 s M1 + about 120 s L1) + 24 depth folds x about 150 s + 8 predecessor folds x about 460 s + reproduction about 340 s + null about 60 s: about 22000 s (6 h) typical; worst case about 83000 s (23 h) with every HGB at its 200-iteration cap (200/49 of the measured anchor) and every logistic at 400; memory peak about 3 GB anonymous"
+  },
+  "pre_freeze_anchor_check": {
+    "what": "M1 fitted on the first 100000 pool rows under run_fit (val 'frag'), scored once on the sealed set, in the scratchpad, before the freeze; disclosed in scope.sealed_set_disclosure. A reproduction of a banked number, not a reading.",
+    "utc": "2026-09-09T01:51:33Z",
+    "top1": 0.1965,
+    "per_family": {
+      "gutenberg": 0.1366,
+      "base64": 0.1153,
+      "binary": 0.0947,
+      "code": 0.2248,
+      "csv": 0.3288,
+      "json": 0.2711,
+      "log": 0.2875,
+      "mixed": 0.1154
+    },
+    "n_iter": 49,
+    "seconds": 341.4,
+    "rss_gb": 2.36,
+    "heartbeat_max_rss_gb": 2.8,
+    "fit_rows_sha256": "659169fcf818b742154948c86e7d60dda61f798a7b5f671c29a0b64827f34297",
+    "against_0003": {
+      "banked_100k_rung": 0.1965,
+      "drift": 0.0
+    }
+  },
+  "pre_freeze_review": {
+    "how": "one adversarial-review workflow before the freeze: five refuters (experimental design; controls and anchors; runner/reader derivation; decision relevance; consistency with the record) on the design brief, each finding then attacked by three independent verifiers, and one synthesis; run on 2026-09-09 before any real fit",
+    "findings_adopted": [
+      {
+        "finding": "the row-level subset rule ('the first 98000/k pool rows of a family') would take about 20 encoder variants of about 5000 chunks at k = 1 and about 3 variants of about 5000 chunks at k = 7, so the k axis also varied the number of distinct plaintexts and how paired the training set was; and the budget unit (rows) treated manufactured labels as the cost when the plaintext is what a corpus costs",
+        "fix": "the budget is 4900 source chunks with every pool row of each chunk; chosen chunks are each family's first by first appearance in pool order; rows per fold 97797 to 99226; the design text states the cost model",
+        "severity_as_filed": "major"
+      },
+      {
+        "finding": "a fixed budget entangles family count with per-family depth (4900 chunks of one family against 700 of each of seven), so a FLAT verdict could mean 'families help but the depth they displace hurts more'",
+        "fix": "the depth arm: the first successor alone at 2450, 1225 and 700 chunks (24 folds x 3 recipes), family_effect_at_matched_depth per k and row_effect_within_family banked as readings; the FLAT meaning is stated as 'at a fixed plaintext budget, spreading it does not pay'",
+        "severity_as_filed": "major"
+      },
+      {
+        "finding": "the nested-cyclic rule gives one unreplicated composition per (f, k); the mixture is balanced (each family is a source in exactly k of the eight training sets at level k) but its composition sensitivity is unbounded",
+        "fix": "the predecessor arm: k = 1 refitted with the preceding family (8 folds x 3 recipes); composition_spread_k1 banked; the balance argument stated in the prereg",
+        "severity_as_filed": "major"
+      },
+      {
+        "finding": "the 0.01-per-doubling bar was calibrated to the in-distribution row slope in a transfer regime whose dynamic range is about 0.04, making FLAT the prior-favoured outcome",
+        "fix": "the bar is 0.005 per doubling, calibrated to the transfer regime (a third of the plausible headroom, about 25 evaluation-noise standard errors); the prior and the asymmetry are stated in expected_outcome_stated_in_advance",
+        "severity_as_filed": "major"
+      },
+      {
+        "finding": "the reader inherited a per-record sklearn/numpy check that would VOID an honest run after hours if the container image changed, while the runner refused nothing at launch",
+        "fix": "sklearn, numpy and python are sealed in the protocol block and the runner refuses to launch on a mismatch (exit 3, no NOT RUN file); MemAvailable precondition lowered from 12.0 to 6.0 GB for 100000-row blocks",
+        "severity_as_filed": "major"
+      },
+      {
+        "finding": "a reader/runner disagreement on slope arithmetic (log base, centering, rounding) would VOID an honest run, 0012's failure class",
+        "fix": "the reader recomputes the slope from its own recomputed 4-decimal mixtures at x = [0, 1, 2, log2 7] and reads the verdict on that; the runner's banked slope must agree within 1e-6; mutation cases at exactly 0.005 (pass) and 0.004999 (fail), and a natural-log banked slope that must be caught",
+        "severity_as_filed": "major"
+      },
+      {
+        "finding": "the per-fold composition was checked only by self-referential hashes produced by the same code that builds the blocks",
+        "fix": "the runner banks per fold the per-family row and chunk maps over all eight families; the reader recomputes the chosen families from the sealed family order and requires the chunk map to be exactly budget/k (or the depth size) for each chosen family and 0 for every other, and the row map to be 0 outside them",
+        "severity_as_filed": "minor"
+      },
+      {
+        "finding": "the worst case was stated as about 2x typical; the anchor stopped at 49 of 200 iterations at about 7 s per iteration, so a fit that runs to the cap costs about 4x",
+        "fix": "worst case restated at 200/49 of the HGB share (about 83000 s)",
+        "severity_as_filed": "minor"
+      },
+      {
+        "finding": "the recipe hash covers the free-text 'why' field; a rewritten 'why' would VOID every record against 0015's literals",
+        "fix": "the recipe objects are byte-identical to 0015's, stated in the prereg",
+        "severity_as_filed": "minor"
+      },
+      {
+        "finding": "the null block tr[:20000] and its shuffle are 0014's; 0014's 0.0383 is a free drift reference",
+        "fix": "0.0383 (0014, same block and shuffle) and 0.0389 (0003) banked as informational drift references; boundary mutation cases 0.0584 pass / 0.0585 VOID",
+        "severity_as_filed": "minor"
+      },
+      {
+        "finding": "the smoke block must respect divisibility and pool sizes, and the smoke reproduction can be compared with 0003's 10000-row rung for free",
+        "fix": "smoke: full pool, 1120 chunks, repro_rows 10000 (0003's 0.1415 rung rows) compared informally in this log",
+        "severity_as_filed": "minor"
+      },
+      {
+        "finding": "the verdict is about M1 while 0015 showed the logistic transfers better",
+        "fix": "the verdict's meaning names 0003's M1 recipe; the logistic's slope and curve are named readings",
+        "severity_as_filed": "minor"
+      }
+    ],
+    "findings_rejected_or_not_adopted": "recorded from the workflow's verification stage in this log once the synthesis has been read; nothing here changes a sealed number",
+    "synthesis": null
+  },
+  "smoke_runs": {
+    "note": "smoke runs of the runner on the scratchpad against corpus A with the sealed recipes; stamped smoke true; read VOID by the reader; never an input to any decision",
+    "launched": [
+      {
+        "utc": "2026-09-09T01:57Z",
+        "design": "row-level subset rule (superseded), 98000-row budget, smoke 2100 rows",
+        "outcome": "stopped by the operator after 42 of 98 fits when the pre-freeze review replaced the row rule with the chunk rule; no error in 42 fits; the reader parsed the partial artifact and emitted VOID on smoke clauses only"
+      },
+      {
+        "utc": "2026-09-09T02:15Z",
+        "design": "chunk rule with depth and predecessor arms, smoke 140 chunks on a 40000-row pool",
+        "outcome": "crashed after 22 fits: HGB refused a validation label absent from the fit rows in a 20-chunk depth fold (a 40000-row pool holds a row or two of each chunk, so the fold had about 400 rows); the runner now checks every block for all 26 classes in fit and validation rows before any fit"
+      },
+      {
+        "utc": "2026-09-09T02:24Z",
+        "design": "smoke 280 chunks on an 80000-row pool",
+        "outcome": "refused before any fit by the new class-coverage check (58 blocks short)"
+      },
+      {
+        "utc": "2026-09-09T02:26Z",
+        "design": "smoke 1120 chunks on the full 800000-row pool, repro 10000 rows, null 2000 rows",
+        "outcome": "running; recorded below on exit"
+      }
+    ]
+  },
+  "run_record": null,
+  "operator_procedure": "launch detached (setsid nohup) with the sealed invocation; poll every 30 minutes: commit and push new checkpoints, relaunch the identical command if the runner is dead and the run is not finished; the reader runs once on the completed artifact; publication states the verdict at the same size either way."
+}

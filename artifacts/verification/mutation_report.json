@@ -36,6 +36,10 @@
       "detected": 9,
       "total": 9
     },
+    "fdc4096": {
+      "detected": 40,
+      "total": 40
+    },
     "freshness": {
       "detected": 9,
       "total": 9
@@ -2287,10 +2291,370 @@
       "gate": "lofo4096",
       "mutation": "a-non-integer-chunk-id-is-VOID-not-a-crash",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=DIVERSITY_HELPS slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[] diversity=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "fdc4096",
+      "mutation": "control-diversity-helps-passes",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=DIVERSITY_FLAT slope=0.0 by_k=[0.0849, 0.0849, 0.0849, 0.0849] validity=[] diversity=[\"diversity: the model's fixed-budget mixture slope 0.0 per doubling of families is below 0.005\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-flat-curve-is-DIVERSITY_FLAT",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=DIVERSITY_HELPS slope=0.005 by_k=[0.05, 0.0552, 0.0605, 0.0639] validity=[] diversity=[] | verdict=DIVERSITY_FLAT slope=0.004999 by_k=[0.05, 0.0557, 0.0614, 0.0637] validity=[] diversity=[\"div",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-slope-of-exactly-0.005-passes-and-0.004999-fails",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.005 by_k=[0.05, 0.0552, 0.0605, 0.0639] validity=['curve: fdc.model.slope_per_doubling=0.007213, recomputed 0.005'] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-reader-that-computed-the-slope-in-natural-log-would-be-caught-by-the-boundary-fixture",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[\"sealed set: partition.eval_idx_sha256='<hash>', preregistered '<hash>'\", \"scores: the scores file is not this run's, or is ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-different-evaluation-set-hash-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['leakage: fold csv k=4.train_rows_of_heldout_family=1, must be 0'] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "one-held-out-family-row-in-a-fold's-training-rows-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['leakage: fold log k=2.train_rows_outside_chosen_families=1, must be 0'] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "one-training-row-outside-the-chosen-families-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[\"sealed set: fold code k=1.families=['json'], preregistered ['csv']\", \"subset rule: fold code k=1 banked families ['json'] a",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-fold-with-a-different-family-subset-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[\"subset rule: fold json k=4 per-family chunk counts {'gutenberg': 1226, 'base64': 1225, 'binary': 0, 'code': 0, 'csv': 0, 'j",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-per-family-chunk-map-that-disagrees-with-the-subset-rule-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[\"sealed set: depth binary c=700.families=['csv'], preregistered ['code']\", \"subset rule: depth binary c=700 banked families ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-depth-fold-drawn-from-the-wrong-family-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[\"sealed set: pred mixed k=1.families=['gutenberg'], preregistered ['log']\", \"subset rule: pred mixed k=1 banked families ['g",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-predecessor-fold-drawn-from-the-successor-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['fit: fold_json_k7_model was not fitted on the sealed rows with the preregistered seed'] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-fold-fitted-on-rows-other-than-the-sealed-ones-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['sealed set: partition.budget_chunks=4200, preregistered 4900'] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-budget-that-is-not-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['sealed set: partition.family_counts=[1, 2, 4, 8], preregistered [1, 2, 4, 7]', 'curve: fdc.majority abscissae are not the s",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-family-count-list-that-is-not-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=DIVERSITY_HELPS slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[] diversity=[] | verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[\"reproduction: the i",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-100k-reproduction-at-exactly-the-tolerance-passes-and-just-outside-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=DIVERSITY_HELPS slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[] diversity=[] | verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['null control: shuff",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-null-control-at-0.0584-passes-and-0.0585-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[\"scope: the banked recipes are not 0003's sealed recipes\", \"fit: fold_gutenberg_k1_model is not 0003's model recipe (id 'M1'",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "one-parameter-changed-in-one-recipe-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[\"fit: fold_mixed_k7_logistic status None; must be 'fit'\"] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-missing-fold-record-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[\"fit: depth_csv_c1225_model status None; must be 'fit'\"] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-missing-depth-record-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[\"fit: fold_binary_k2_model per-example vector missing, not 260000 characters, or not all '0'/'1'\"] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-per-example-vector-of-the-wrong-length-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[\"fit: fold_base64_k1_model per-example vector missing, not 260000 characters, or not all '0'/'1'\"] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-per-example-vector-with-a-character-that-is-not-0-or-1-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.1006, 0.0974] validity=[\"mixture: fdc.model.by_k.4.mixture_top1=0.1006 is not the reader's recomputation 0.0906\", 'curve: fdc.model.mixture_top1_by_",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-banked-mixture-that-is-not-the-recomputed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['curve: fdc.model.slope_per_doubling=0.05, recomputed 0.008481'] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-banked-slope-that-is-not-the-recomputed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[\"curve: fdc_slope_per_doubling missing, not finite, or not the model role's slope\", 'curve: fdc_slope_model_minus_logistic i",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-headline-slope-that-is-not-the-model-role's-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['mixture: the banked stitched vector fdc_mixture_k7_model is not the stitched one'] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-stitched-mixture-vector-that-is-not-the-stitch-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['arms: fdc.model.family_effect_at_matched_depth.7=0.5 is not 0.035'] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-family-effect-reading-that-is-not-the-arithmetic-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['arms: fdc.logistic.composition_spread_k1 is not 0.0'] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-composition-spread-that-is-not-the-arithmetic-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['depth: fdc.model.depth.by_chunks.4900 is not the k=1 mixture 0.0736', 'depth: fdc.model.depth sizes or ordinates are not th",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-depth-curve-whose-budget-point-is-not-the-k1-mixture-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['fit: fold_code_k4_model has 2 ledger completions, must be exactly 1'] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-fold-scored-twice-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['scope: smoke=True; a smoke run is not the preregistered run', \"scores: the scores file is not this run's, or is a smoke run",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-smoke-run-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[\"complete: complete=False; missing ['fold_mixed_k7_model']\", \"fit: fold_mixed_k7_model status None; must be 'fit'\"] diversit",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "complete-false-with-a-missing-fit-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[\"fit: fold_gutenberg_k1_model is not 0003's model recipe (id 'M1', params hash off-recipe)\"] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "one-record-whose-params-hash-is-off-recipe-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['mixture: fdc.model.by_k.2: fold fold_csv_k2_model banked 0.1172 on its held-out family, recomputed 0.1072'] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-fold's-held-out-reading-that-disagrees-with-its-vector-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[\"fit: fold_log_k4_logistic stage 'fdc:log:k2' is not 'fdc:log:k4'\"] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-fold-record-carrying-another-fold's-stage-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['scores: the scores file is absent', 'scores: eval_chunk_ids missing or not 260000 long'] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "an-absent-scores-file-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=[\"environment: sklearn='1.8.0', banked '1.9.0'\"] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-different-sklearn-in-the-banked-environment-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['fit: null was not fitted on the sealed rows with the preregistered seed'] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-null-block-that-is-not-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['fit: repro_100k was not fitted on the sealed rows with the preregistered seed'] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-reproduction-fitted-on-rows-other-than-0003's-rung-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=0.008481 by_k=[0.0736, 0.0821, 0.0906, 0.0974] validity=['scores: eval_chunk_ids contains a non-integer entry'] diversity=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-non-integer-chunk-id-is-VOID-not-a-crash",
+      "observed": "fail"
     }
   ],
-  "detected": 246,
+  "detected": 286,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 246
+  "total_mutations": 286
 }

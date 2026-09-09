@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 import shutil
 import subprocess
@@ -2631,6 +2632,519 @@ def _(root):
     if rc != 0 and "verdict=VOID" not in out:
         return 0, out + " !! the reader crashed instead of emitting VOID"
     return rc, out
+
+
+# ---------------------------------------------------------------- fdc4096 gate (0016)
+
+def _fdc_reader():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("r16", os.path.join(REPO, "tools", "readers", "fdc4096_verdict.py"))
+    r16 = importlib.util.module_from_spec(spec); spec.loader.exec_module(r16)
+    return r16
+
+
+def _good_fdc(model_acc=None, total_correct_by_k=None):
+    """A complete, valid family-diversity-curve artifact set. model_acc: function (family, k, chunks) -> the model's
+    held-out accuracy for a fit with k source families at `chunks` chunks each (the logistic gets 0.8x, the majority
+    0.0385); total_correct_by_k: four integers, the model's correct count at each fixed-budget k, spread over the
+    families so the mixture prints exactly count / 260000."""
+    r16 = _fdc_reader()
+    fam = list(r16.FAMILIES); ks = list(r16.KS); folds = r16.FOLDS; part = dict(r16.PARTITION); rec = r16.RECIPES
+    C = r16.BUDGET_CHUNKS; depth_sizes = list(r16.DEPTH_CHUNKS[1:])
+    n_eval = part["n_eval_rows"]
+    counts = {f: folds[f]["n_eval_rows"] for f in fam}
+    chunk_ids = []
+    for i, f in enumerate(fam):
+        chunk_ids += [i] * counts[f]            # family = chunk % 8, in family blocks
+    assert len(chunk_ids) == n_eval
+    starts = {}; pos = 0
+    for f in fam:
+        starts[f] = pos; pos += counts[f]
+    if model_acc is None:
+        def model_acc(f, k, chunks):  # noqa: E306
+            base = 0.08 if f in r16.STRUCTURED else 0.045
+            gain = 0.02 if f in r16.STRUCTURED else 0.005
+            return round(base + gain * math.log2(k) + 0.004 * math.log2(chunks / 700), 4)
+    role_acc = {"model": model_acc, "logistic": lambda f, k, c: round(model_acc(f, k, c) * 0.8, 4), "majority": lambda f, k, c: 0.0385}
+    # fold specs: (name_fmt, section, key, k, chunks, stage_fmt)
+    specs = []
+    for k in ks:
+        specs.append((f"fold_{{f}}_k{k}_{{r}}", "by_k", str(k), k, C // k, f"fdc:{{f}}:k{k}"))
+    for n in depth_sizes:
+        specs.append((f"depth_{{f}}_c{n}_{{r}}", "depth", str(n), 1, n, f"depth:{{f}}:c{n}"))
+    specs.append(("pred_{f}_k1_{r}", "pred_k1", None, 1, C, "pred:{f}:k1"))
+    correct = {}
+    for name_fmt, sec, key, k, chunks, _ in specs:
+        for r in role_acc:
+            for f in fam:
+                correct[(name_fmt.format(f=f, r=r))] = int(round(role_acc[r](f, k, chunks) * counts[f]))
+    if total_correct_by_k is not None:
+        for k, tc in zip(ks, total_correct_by_k):
+            base, extra = divmod(int(tc), len(fam))
+            for i, f in enumerate(fam):
+                correct[f"fold_{f}_k{k}_model"] = base + (1 if i < extra else 0)
+
+    def vec(name, f):
+        v = ["1"] * n_eval                      # rows of other families: trained-on, arbitrary here
+        c = correct[name]
+        for i in range(starts[f], starts[f] + counts[f]):
+            v[i] = "1" if i - starts[f] < c else "0"
+        return "".join(v)
+
+    def record(name, role, n_rows, rows_sha, sorted_sha, top1, perfam, stage):
+        c = rec[role]
+        return {"id": c["id"], "head": role, "family": c["family"], "params": c.get("params", {}),
+                "scaled": False, "val": c.get("val"), "seed": 20260825, "params_sha256": _sha12(c),
+                "stage": stage, "n_fit_rows": n_rows, "fit_rows_sha256": rows_sha, "fit_rows_sorted_sha256": sorted_sha,
+                "environment": dict(_ENV12), "interruptions_before_this_fit": 0, "status": "fit", "seconds": 1.0,
+                "top1": top1, "top1_non_gutenberg": top1, "per_family": perfam, "block_refills": [], "fit_info": {}}
+
+    mean = lambda xs: round(sum(xs) / len(xs), 4)  # noqa: E731
+    r6 = lambda a, b: round(a - b, 6)  # noqa: E731
+    per_example = {}
+    fold_recs = {f: {"by_k": {str(k): {} for k in ks}, "depth": {str(n): {} for n in depth_sizes}, "pred_k1": {}} for f in fam}
+    fdc = {}
+    non_g = [i for i in range(n_eval) if chunk_ids[i] != 0]
+    struct = [i for i in range(n_eval) if fam[chunk_ids[i]] in r16.STRUCTURED]
+
+    def sealed_of(f, sec, key):
+        return folds[f][sec] if key is None else folds[f][sec][key]
+
+    def stitched(role, name_fmt, sec, key, stage_fmt, vec_key):
+        mix = [0] * n_eval
+        for f in fam:
+            name = name_fmt.format(f=f, r=role); v = vec(name, f); per_example[name] = v
+            for i in range(starts[f], starts[f] + counts[f]):
+                mix[i] = 1 if v[i] == "1" else 0
+            perfam = {h: mean([1 if ch == "1" else 0 for ch in v[starts[h]:starts[h] + counts[h]]]) for h in fam}
+            sb = sealed_of(f, sec, key)
+            rr = record(name, role, sb["n_train_rows"], sb["train_idx_sha256"], sb["train_sorted_sha256"],
+                        mean([1 if ch == "1" else 0 for ch in v]), perfam, stage_fmt.format(f=f))
+            if key is None:
+                fold_recs[f][sec][role] = rr
+            else:
+                fold_recs[f][sec][key][role] = rr
+        m = lambda idx: mean([mix[i] for i in idx])  # noqa: E731
+        per_example[vec_key] = "".join("1" if x else "0" for x in mix)
+        return {"mixture_top1": m(range(n_eval)), "mixture_top1_non_gutenberg": m(non_g),
+                "structured_four_top1": m(struct), "per_family": {f: m(range(starts[f], starts[f] + counts[f])) for f in fam}}
+
+    for role in ("majority", "logistic", "model"):
+        by_k = {}; ys = []
+        for k in ks:
+            by_k[str(k)] = stitched(role, f"fold_{{f}}_k{k}_{{r}}", "by_k", str(k), f"fdc:{{f}}:k{k}", f"fdc_mixture_k{k}_{role}")
+            ys.append(by_k[str(k)]["mixture_top1"])
+        dby = {str(C): dict(by_k["1"])}; dys = [ys[0]]
+        for n in depth_sizes:
+            dby[str(n)] = stitched(role, f"depth_{{f}}_c{n}_{{r}}", "depth", str(n), f"depth:{{f}}:c{n}", f"depth_mixture_c{n}_{role}")
+            dys.append(dby[str(n)]["mixture_top1"])
+        pred = stitched(role, "pred_{f}_k1_{r}", "pred_k1", None, "pred:{f}:k1", f"pred_mixture_k1_{role}")
+        dsizes = [C] + depth_sizes
+        fdc[role] = {"by_k": by_k, "family_counts": ks, "log2_family_counts": r16.LOG2K, "mixture_top1_by_k": ys,
+                     "slope_per_doubling": round(r16.ols_slope(r16.LOG2K, ys), 6), "end_difference": r6(ys[-1], ys[0]),
+                     "structured_four_by_k": [by_k[str(k)]["structured_four_top1"] for k in ks],
+                     "non_gutenberg_by_k": [by_k[str(k)]["mixture_top1_non_gutenberg"] for k in ks],
+                     "per_family_by_k": {f: [by_k[str(k)]["per_family"][f] for k in ks] for f in fam},
+                     "depth": {"by_chunks": dby, "chunks": dsizes, "mixture_top1_by_chunks": dys,
+                               "per_family_by_chunks": {f: [dby[str(n)]["per_family"][f] for n in dsizes] for f in fam},
+                               "row_effect_within_family": r6(dys[0], dys[-1]),
+                               "row_effect_per_doubling_of_chunks": round((dys[0] - dys[-1]) / math.log2(dsizes[0] / dsizes[-1]), 6)},
+                     "pred_k1": pred,
+                     "family_effect_at_matched_depth": {str(k): r6(ys[i], dys[i]) for i, k in enumerate(ks) if i > 0},
+                     "composition_spread_k1": r6(ys[0], pred["mixture_top1"])}
+    inc = record("repro_100k", "model", part["repro_rows"], part["repro_idx_sha256"], part["repro_sorted_sha256"],
+                 r16.RUNG_100K_TOP1, {f: r16.RUNG_100K_TOP1 for f in fam}, "reproduction")
+    null = record("null", "model", part["null_rows"], "x", part["null_sorted_sha256"], 0.039, {f: 0.039 for f in fam}, "null")
+    null["head"] = "null"
+    per_example["repro_100k"] = "1" * n_eval
+    names = ["repro_100k", "null"]
+    for f in fam:
+        for name_fmt, _, _, _, _, _ in specs:
+            names += [name_fmt.format(f=f, r=r) for r in ("majority", "logistic", "model")]
+    ledger = []
+    for i, nm in enumerate(names):
+        ledger += [{"name": nm, "fingerprint": nm, "event": "started", "utc": f"2026-09-09T{3 + i // 60:02d}:{i % 60:02d}:00Z"},
+                   {"name": nm, "fingerprint": nm, "event": "completed", "utc": f"2026-09-09T{3 + i // 60:02d}:{i % 60:02d}:30Z"}]
+
+    def pblock(f, sb, chosen, per):
+        return dict(sb, train_rows_per_family={c: (sb["n_train_rows"] // len(chosen) if c in chosen else 0) for c in fam},
+                    train_chunks_per_family={c: (per if c in chosen else 0) for c in fam},
+                    train_rows_of_heldout_family=0, train_rows_outside_chosen_families=0,
+                    train_chunks_shared_with_eval=0, train_rows_in_eval=0)
+
+    pfolds = {}
+    for f in fam:
+        pf = {"n_eval_rows": folds[f]["n_eval_rows"], "eval_idx_sha256": folds[f]["eval_idx_sha256"], "n_eval_chunks": 1,
+              "by_k": {}, "depth": {}, "pred_k1": None}
+        for k in ks:
+            sb = folds[f]["by_k"][str(k)]; pf["by_k"][str(k)] = pblock(f, sb, sb["families"], C // k)
+        for n in depth_sizes:
+            sb = folds[f]["depth"][str(n)]; pf["depth"][str(n)] = pblock(f, sb, sb["families"], n)
+        sb = folds[f]["pred_k1"]; pf["pred_k1"] = pblock(f, sb, sb["families"], C)
+        # make the row maps sum exactly to the sealed rows (integer division above may lose a remainder)
+        for blk in list(pf["by_k"].values()) + list(pf["depth"].values()) + [pf["pred_k1"]]:
+            rm = blk["train_rows_per_family"]; chosen = blk["families"]
+            rm[chosen[0]] += blk["n_train_rows"] - sum(rm.values())
+        pfolds[f] = pf
+    partition = dict(part, folds=pfolds)
+    ms, ls = fdc["model"]["slope_per_doubling"], fdc["logistic"]["slope_per_doubling"]
+    art = {"schema_version": 1, "schema": "raise-v1/fdc_4096/1", "preregistration": "0016-fdc-4096", "smoke": False,
+           "stage": "run", "protocol": r16.PROTOCOL, "protocol_sha256": r16.PROTOCOL_SHA256, "recipes": rec,
+           "recipes_sha256": r16.RECIPES_SHA256, "corpus": dict(r16.CORPUS), "partition": partition, "n_classes": 26,
+           "class_names": [], "chance_accuracy": 0.038462, "environment": dict(_ENV12), "launch_environment": {},
+           "launch_number": 1, "complete": True, "missing_roles": [],
+           "reproduction": {"model_100k": inc}, "incumbent_100k_refit_top1": r16.RUNG_100K_TOP1,
+           "null_control": null, "shuffled_label_accuracy": 0.039, "null_rows": part["null_rows"],
+           "folds": fold_recs, "fdc": fdc, "fdc_slope_per_doubling": ms,
+           "fdc_mixture_top1_by_k": fdc["model"]["mixture_top1_by_k"], "fdc_end_difference": fdc["model"]["end_difference"],
+           "fdc_slope_model_minus_logistic": round(ms - ls, 6), "cluster_ci95_informational": {}, "ledger": ledger,
+           "cost": {}, "run_started_utc": "2026-09-09T03:00:00Z", "run_finished_utc": "2026-09-09T09:00:00Z"}
+    scores = {"schema": "raise-v1/fdc_4096_scores/1", "preregistration": "0016-fdc-4096", "smoke": False,
+              "eval_idx_sha256": part["eval_idx_sha256"], "eval_chunk_ids": chunk_ids, "families": fam,
+              "per_example": per_example}
+    return art, scores
+
+
+def _fdc(root, mutate=None, drop_artifact=False, drop_scores=False, **kw):
+    art, scores = _good_fdc(**kw)
+    if mutate:
+        r = mutate(art, scores)
+        if r is not None:
+            art = r
+    piv = os.path.join(root, "artifacts", "pivot"); os.makedirs(piv, exist_ok=True)
+    if not drop_scores:
+        json.dump(scores, open(os.path.join(piv, "fdc_4096_scores.json"), "w"))
+    if not drop_artifact:
+        json.dump(art, open(os.path.join(piv, "fdc_4096.json"), "w"))
+    shutil.copy(os.path.join(REPO, "tools", "readers", "fdc4096_verdict.py"),
+                os.path.join(root, "tools", "readers", "fdc4096_verdict.py"))
+    rc, out = run([PY, "tools/readers/fdc4096_verdict.py"], root)
+    if rc != 0:
+        return rc, out
+    v = json.load(open(os.path.join(piv, "fdc_4096_verdict.json")))
+    ok = v["verdict"] == "DIVERSITY_HELPS"
+    return (0 if ok else 1), (f"verdict={v['verdict']} slope={v['fdc_slope_per_doubling']} by_k={v['fdc_mixture_top1_by_k']} "
+                              f"validity={v['validity_failed_clauses'][:2]} diversity={v['diversity_failed_clauses']}")
+
+
+@case("fdc4096", "control-diversity-helps-passes", "pass")
+def _(root):
+    return _fdc(root)
+
+
+@case("fdc4096", "a-flat-curve-is-DIVERSITY_FLAT", "fail")
+def _(root):
+    rc, out = _fdc(root, model_acc=lambda f, k, c: 0.12 if f in ("code", "csv", "json", "log") else 0.05)
+    if rc != 0 and "verdict=DIVERSITY_FLAT" not in out:
+        return 0, out + " !! a flat curve did not read DIVERSITY_FLAT"
+    return rc, out
+
+
+@case("fdc4096", "a-slope-of-exactly-0.005-passes-and-0.004999-fails", "fail")
+def _(root):
+    # counts found by search over 4-decimal mixtures at x = [0, 1, 2, log2 7]: [13000, 14359, 15718, 16601] / 260000
+    # gives an OLS slope of exactly 0.005000; [13000, 14476, 15952, 16550] gives 0.004999
+    rc0, out0 = _fdc(root, total_correct_by_k=[13000, 14359, 15718, 16601])
+    if rc0 != 0:
+        return 0, out0 + " !! a slope of exactly 0.005 should pass"
+    rc1, out1 = _fdc(root, total_correct_by_k=[13000, 14476, 15952, 16550])
+    if rc1 != 0 and "verdict=DIVERSITY_FLAT" not in out1:
+        return 0, out1 + " !! 0.004999 did not read DIVERSITY_FLAT"
+    return rc1, out0 + " | " + out1
+
+
+@case("fdc4096", "a-reader-that-computed-the-slope-in-natural-log-would-be-caught-by-the-boundary-fixture", "fail")
+def _(root):
+    # the same exact-0.005 fixture with the runner's banked slope replaced by the ln-based value: the reader's own
+    # log2 computation disagrees with the banked value beyond 1e-6 and voids
+    def f(art, scores):
+        ys = art["fdc"]["model"]["mixture_top1_by_k"]; r16 = _fdc_reader()
+        xs = [math.log(k) for k in r16.KS]
+        art["fdc"]["model"]["slope_per_doubling"] = round(r16.ols_slope(xs, ys), 6); art["fdc_slope_per_doubling"] = art["fdc"]["model"]["slope_per_doubling"]
+        art["fdc_slope_model_minus_logistic"] = round(art["fdc_slope_per_doubling"] - art["fdc"]["logistic"]["slope_per_doubling"], 6)
+    return _fdc(root, f, total_correct_by_k=[13000, 14359, 15718, 16601])
+
+
+@case("fdc4096", "a-different-evaluation-set-hash-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["partition"]["eval_idx_sha256"] = "0" * 64; scores["eval_idx_sha256"] = "0" * 64
+    return _fdc(root, f)
+
+
+@case("fdc4096", "one-held-out-family-row-in-a-fold's-training-rows-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["partition"]["folds"]["csv"]["by_k"]["4"]["train_rows_of_heldout_family"] = 1
+    return _fdc(root, f)
+
+
+@case("fdc4096", "one-training-row-outside-the-chosen-families-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["partition"]["folds"]["log"]["by_k"]["2"]["train_rows_outside_chosen_families"] = 1
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-fold-with-a-different-family-subset-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        fk = art["partition"]["folds"]["code"]["by_k"]["1"]; fk["families"] = ["json"]
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-per-family-chunk-map-that-disagrees-with-the-subset-rule-is-VOID", "fail")
+def _(root):
+    # the hashes and the families list are the sealed ones; only the banked per-family chunk map disagrees with the rule
+    def f(art, scores):
+        cm = art["partition"]["folds"]["json"]["by_k"]["4"]["train_chunks_per_family"]; cm["log"] -= 1; cm["gutenberg"] += 1
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-depth-fold-drawn-from-the-wrong-family-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        blk = art["partition"]["folds"]["binary"]["depth"]["700"]; blk["families"] = ["csv"]
+        blk["train_chunks_per_family"] = {c: (700 if c == "csv" else 0) for c in blk["train_chunks_per_family"]}
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-predecessor-fold-drawn-from-the-successor-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        blk = art["partition"]["folds"]["mixed"]["pred_k1"]; blk["families"] = ["gutenberg"]
+        blk["train_chunks_per_family"] = {c: (4900 if c == "gutenberg" else 0) for c in blk["train_chunks_per_family"]}
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-fold-fitted-on-rows-other-than-the-sealed-ones-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["folds"]["json"]["by_k"]["7"]["model"]["fit_rows_sha256"] = "f" * 64
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-budget-that-is-not-the-sealed-one-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["partition"]["budget_chunks"] = 4200
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-family-count-list-that-is-not-the-sealed-one-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["partition"]["family_counts"] = [1, 2, 4, 8]
+        for r in art["fdc"].values():
+            r["family_counts"] = [1, 2, 4, 8]
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-100k-reproduction-at-exactly-the-tolerance-passes-and-just-outside-is-VOID", "fail")
+def _(root):
+    def edge(art, scores):
+        art["reproduction"]["model_100k"]["top1"] = 0.2015; art["incumbent_100k_refit_top1"] = 0.2015
+    rc0, out0 = _fdc(root, edge)
+    if rc0 != 0:
+        return 0, out0 + " !! 0.2015 is within 0.005 of 0.1965 and should pass"
+
+    def over(art, scores):
+        art["reproduction"]["model_100k"]["top1"] = 0.2016; art["incumbent_100k_refit_top1"] = 0.2016
+    rc1, out1 = _fdc(root, over)
+    return rc1, out0 + " | " + out1
+
+
+@case("fdc4096", "a-null-control-at-0.0584-passes-and-0.0585-is-VOID", "fail")
+def _(root):
+    def edge(art, scores):
+        art["null_control"]["top1"] = 0.0584; art["shuffled_label_accuracy"] = 0.0584
+    rc0, out0 = _fdc(root, edge)
+    if rc0 != 0:
+        return 0, out0 + " !! 0.0584 is within chance + 0.02 and should pass"
+
+    def over(art, scores):
+        art["null_control"]["top1"] = 0.0585; art["shuffled_label_accuracy"] = 0.0585
+    rc1, out1 = _fdc(root, over)
+    return rc1, out0 + " | " + out1
+
+
+@case("fdc4096", "one-parameter-changed-in-one-recipe-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["recipes"]["model"]["params"]["max_leaf_nodes"] = 64
+        art["recipes_sha256"] = _sha12(art["recipes"])
+        for fd in art["folds"].values():
+            for kd in fd["by_k"].values():
+                kd["model"]["params"] = art["recipes"]["model"]["params"]; kd["model"]["params_sha256"] = _sha12(art["recipes"]["model"])
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-missing-fold-record-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        del art["folds"]["mixed"]["by_k"]["7"]["logistic"]
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-missing-depth-record-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        del art["folds"]["csv"]["depth"]["1225"]["model"]
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-per-example-vector-of-the-wrong-length-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        scores["per_example"]["fold_binary_k2_model"] = scores["per_example"]["fold_binary_k2_model"][:-1]
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-per-example-vector-with-a-character-that-is-not-0-or-1-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        v = scores["per_example"]["fold_base64_k1_model"]; scores["per_example"]["fold_base64_k1_model"] = "2" + v[1:]
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-banked-mixture-that-is-not-the-recomputed-one-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        c = art["fdc"]["model"]; k = "4"
+        c["by_k"][k]["mixture_top1"] = round(c["by_k"][k]["mixture_top1"] + 0.01, 4)
+        c["mixture_top1_by_k"][2] = c["by_k"][k]["mixture_top1"]
+        art["fdc_mixture_top1_by_k"] = c["mixture_top1_by_k"]
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-banked-slope-that-is-not-the-recomputed-one-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fdc"]["model"]["slope_per_doubling"] = 0.05; art["fdc_slope_per_doubling"] = 0.05
+        art["fdc_slope_model_minus_logistic"] = round(0.05 - art["fdc"]["logistic"]["slope_per_doubling"], 6)
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-headline-slope-that-is-not-the-model-role's-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fdc_slope_per_doubling"] = art["fdc"]["logistic"]["slope_per_doubling"] + 0.03
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-stitched-mixture-vector-that-is-not-the-stitch-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        v = scores["per_example"]["fdc_mixture_k7_model"]
+        i = v.index("0"); scores["per_example"]["fdc_mixture_k7_model"] = v[:i] + "1" + v[i + 1:]
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-family-effect-reading-that-is-not-the-arithmetic-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fdc"]["model"]["family_effect_at_matched_depth"]["7"] = 0.5
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-composition-spread-that-is-not-the-arithmetic-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fdc"]["logistic"]["composition_spread_k1"] = -0.5
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-depth-curve-whose-budget-point-is-not-the-k1-mixture-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        d = art["fdc"]["model"]["depth"]; d["by_chunks"]["4900"]["mixture_top1"] = round(d["by_chunks"]["4900"]["mixture_top1"] + 0.01, 4)
+        d["mixture_top1_by_chunks"][0] = d["by_chunks"]["4900"]["mixture_top1"]
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-fold-scored-twice-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["ledger"].append({"name": "fold_code_k4_model", "fingerprint": "fold_code_k4_model", "event": "completed",
+                              "utc": "2026-09-09T10:00:00Z"})
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-smoke-run-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["smoke"] = True; scores["smoke"] = True
+    return _fdc(root, f)
+
+
+@case("fdc4096", "absent-artifact-emits-no-verdict", "fail")
+def _(root):
+    return _fdc(root, drop_artifact=True)
+
+
+@case("fdc4096", "complete-false-with-a-missing-fit-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["complete"] = False; art["missing_roles"] = ["fold_mixed_k7_model"]; del art["folds"]["mixed"]["by_k"]["7"]["model"]
+    return _fdc(root, f)
+
+
+@case("fdc4096", "one-record-whose-params-hash-is-off-recipe-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["folds"]["gutenberg"]["by_k"]["1"]["model"]["params_sha256"] = "e" * 64
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-fold's-held-out-reading-that-disagrees-with-its-vector-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        r = art["folds"]["csv"]["by_k"]["2"]["model"]; r["per_family"]["csv"] = round(r["per_family"]["csv"] + 0.01, 4)
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-fold-record-carrying-another-fold's-stage-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["folds"]["log"]["by_k"]["4"]["logistic"]["stage"] = "fdc:log:k2"
+    return _fdc(root, f)
+
+
+@case("fdc4096", "an-absent-scores-file-is-VOID", "fail")
+def _(root):
+    return _fdc(root, drop_scores=True)
+
+
+@case("fdc4096", "a-different-sklearn-in-the-banked-environment-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["environment"]["sklearn"] = "1.8.0"
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-null-block-that-is-not-the-sealed-one-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["null_control"]["fit_rows_sorted_sha256"] = "a" * 64
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-reproduction-fitted-on-rows-other-than-0003's-rung-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["reproduction"]["model_100k"]["fit_rows_sha256"] = "b" * 64
+    return _fdc(root, f)
+
+
+@case("fdc4096", "a-non-integer-chunk-id-is-VOID-not-a-crash", "fail")
+def _(root):
+    def f(art, scores):
+        scores["eval_chunk_ids"][5] = None
+    rc, out = _fdc(root, f)
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! the reader crashed instead of emitting VOID"
+    return rc, out
+
 
 
 def main() -> int:

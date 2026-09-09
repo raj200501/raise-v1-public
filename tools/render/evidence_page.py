@@ -52,6 +52,10 @@ rv4096 = json.load(open(_rv4096p, encoding="utf-8")) if os.path.exists(_rv4096p)
 _lofop = A("pivot", "lofo_4096.json"); _lofovp = A("pivot", "lofo_4096_verdict.json")
 lofo = json.load(open(_lofop, encoding="utf-8")) if os.path.exists(_lofop) else None
 lofov = json.load(open(_lofovp, encoding="utf-8")) if os.path.exists(_lofovp) else None
+# 0016 (family-diversity transfer curve at 4096) is rendered only once its artifact and frozen verdict exist.
+_fdcp = A("pivot", "fdc_4096.json"); _fdcvp = A("pivot", "fdc_4096_verdict.json")
+fdc = json.load(open(_fdcp, encoding="utf-8")) if os.path.exists(_fdcp) else None
+fdcv = json.load(open(_fdcvp, encoding="utf-8")) if os.path.exists(_fdcvp) else None
 
 git_head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO,
                           capture_output=True, text=True).stdout.strip()
@@ -174,7 +178,13 @@ chips = "".join([
            (f'leave-one-family-out at 4096 B: the model\'s mixture over rows whose family it never saw {lofo["lofo_mixture_top1"]} '
             f'vs chance {lofo["chance_accuracy"]} (bar {lofov["bar_applied"]["mixture_must_reach"]}); same-protocol logistic '
             f'{lofov["lofo_mixture_top1_logistic"]}') if lofov["verdict"] != "VOID" and lofo and lofo.get("complete")
-           else f'VOID: {"; ".join(lofov["validity_failed_clauses"])[:140]}')] if lofov else []))
+           else f'VOID: {"; ".join(lofov["validity_failed_clauses"])[:140]}')] if lofov else [])
+ + ([chip(fdcv["verdict"], {"DIVERSITY_HELPS": "pass", "DIVERSITY_FLAT": "fail", "VOID": "inc"}[fdcv["verdict"]], "0016",
+           (f'family-diversity curve at 4096 B, {fdc["partition"]["budget_chunks"]} source chunks spread over 1, 2, 4 or 7 families: '
+            f'the model\'s mixture on unseen families {fdc["fdc_mixture_top1_by_k"]}; slope {fdcv["fdc_slope_per_doubling"]} per '
+            f'doubling of families (bar {fdcv["bar_applied"]["slope_per_doubling_must_reach"]}); logistic slope '
+            f'{fdcv["fdc_slope_per_doubling_logistic"]}') if fdcv["verdict"] != "VOID" and fdc and fdc.get("complete")
+           else f'VOID: {"; ".join(fdcv["validity_failed_clauses"])[:140]}')] if fdcv else []))
 
 fam2048_table = ""
 _pf2048 = A("pivot", "per_family_curves_2048.json")
@@ -257,6 +267,28 @@ if lofo and lofov and lofov["verdict"] != "VOID" and lofo.get("complete"):
                      f'{lofov["lofo_mixture_top1_majority"]}. The incumbent refit reproduced 0003\'s {lofo["incumbent_refit_top1"]}.</p>'
                      f'<table><thead><tr><th>held-out family</th><th>LOFO accuracy</th><th>in-distribution (0003, top rung)</th>'
                      f'<th>LOFO logistic</th></tr></thead><tbody>{_rows}</tbody></table>')
+
+boundary_0016 = ""
+if fdc and fdcv and fdcv["verdict"] != "VOID" and fdc.get("complete"):
+    _ks = fdc["partition"]["family_counts"]; _pfk = fdc["fdc"]["model"]["per_family_by_k"]; _lpk = fdc["fdc"]["logistic"]["per_family_by_k"]
+    _rows = "".join(f'<tr><td class="mono">{f}</td>' + "".join(f'<td class="mono">{v}</td>' for v in _pfk[f])
+                    + f'<td class="mono">{_lpk[f][-1]}</td></tr>' for f in sorted(_pfk, key=lambda k: -_pfk[k][-1]))
+    _word = "moves" if fdcv["verdict"] == "DIVERSITY_HELPS" else "does not move"
+    boundary_0016 = (f'<p><strong>Spreading a fixed budget over more content families {_word} transfer: '
+                     f'<span class="mono">{fdcv["verdict"]}</span></strong> (preregistration 0016, chain entry 16, read by its own '
+                     f'frozen reader). With a plaintext budget of {fdc["partition"]["budget_chunks"]} source chunks held fixed and spread '
+                     f'over 1, 2, 4 or 7 of the families that follow each held-out family, 0003\'s recipe identifies the encoder on the '
+                     f'unseen family at {fdc["fdc_mixture_top1_by_k"]} (mixture over all evaluation rows, k = {_ks}): '
+                     f'{fdcv["fdc_slope_per_doubling"]} per doubling of families against a bar of '
+                     f'{fdcv["bar_applied"]["slope_per_doubling_must_reach"]}; the raw logistic gives '
+                     f'{fdcv["fdc_mixture_top1_by_k_logistic"]} (slope {fdcv["fdc_slope_per_doubling_logistic"]}). A single family '
+                     f'alone at the same per-family depths gives {fdcv["depth_mixture_top1_by_chunks_model"]} over '
+                     f'{fdcv["depth_chunks"]} chunks, so the family effect at matched depth is '
+                     f'{fdcv["family_effect_at_matched_depth_model"]}; refitting k = 1 with the preceding family moves the k = 1 '
+                     f'mixture by {fdcv["composition_spread_k1_model"]}. The incumbent on 0003\'s 100000-row rung reproduced '
+                     f'{fdc["incumbent_100k_refit_top1"]}.</p>'
+                     f'<table><thead><tr><th>held-out family</th>' + "".join(f'<th>k={k}</th>' for k in _ks)
+                     + f'<th>logistic, k={_ks[-1]}</th></tr></thead><tbody>{_rows}</tbody></table>')
 
 # ---------------------------------------------------------------- seed panel
 if seeds:
@@ -409,7 +441,7 @@ protocol returns <span class="mono">CARVE_FAILS</span>: within-size top-1
 (margin below the 0.05 bar), and a 4096-trained model transfers at {carve["transfer_top1"]} —
 chance. The byte-identity ceiling barely moves across carve sizes, so this is a modelling failure
 and is reported as one. Two learned byte-sequence attempts (preregs 0009, 0010) did not rescue it.</p>
-{boundary_2048}{boundary_0012}{boundary_0014}{boundary_0015}{fam2048_table}
+{boundary_2048}{boundary_0012}{boundary_0014}{boundary_0015}{boundary_0016}{fam2048_table}
 </div>
 <div class="panel good">
 <p><strong>And the leak correction ran against us.</strong> When an adversarial audit found source
