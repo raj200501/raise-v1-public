@@ -220,6 +220,21 @@
     ],
     "smoke_numbers_disclosed_not_used": "the 1120-chunk three-role smoke's stitched mixtures (model by k [0.0675, 0.0779, 0.0786, 0.0846], slope 0.00552; raw logistic slope 0.006131; depth [0.0675, 0.069, 0.0702, 0.0694]; predecessor k = 1 0.0656) and the 840-chunk four-role smoke's (model [0.0693, 0.0792, 0.0812, 0.085], slope 0.005243; raw logistic slope 0.004872; standardised logistic [0.0655, 0.0656, 0.0776, 0.0863], slope 0.007816; depth [0.0693, 0.0692, 0.0698, 0.0748]; predecessor k = 1 0.0686; incumbent boosting iterations 11 to 51) are smoke readings at a fifth to a quarter of the budget, stamped VOID; the 0.005 bar was fixed in the draft at about 02:10 UTC from the pre-freeze review, before either smoke finished, and was not changed after; the smokes sit near the bar, which is disclosed here and is not a reason to move it"
   },
-  "run_record": null,
+  "run_record": {
+    "launches": [
+      {
+        "launch": 1,
+        "utc": "2026-09-09T07:39:05Z",
+        "n_checkpoints_at_launch": 0,
+        "why": "first launch after the freeze"
+      },
+      {
+        "launch": 2,
+        "utc": "2026-09-09T10:41:29Z",
+        "n_checkpoints_at_launch": 76,
+        "why": "the container restarted at about 10:41 UTC (uptime 1 min at 10:42) and the detached runner died with it, mid-fit on fold binary k=4 model; the hourly watchdog's poll found no runner and no 'run exit' line and relaunched the identical sealed command, which resumed the 76 banked fits from their checkpoints; the interrupted fit is refitted and its interruption count banked in its record"
+      }
+    ]
+  },
   "operator_procedure": "launch detached (setsid nohup) with the sealed invocation; poll every 30 minutes: commit and push new checkpoints, relaunch the identical command if the runner is dead and the run is not finished; the reader runs once on the completed artifact; publication states the verdict at the same size either way."
 }
