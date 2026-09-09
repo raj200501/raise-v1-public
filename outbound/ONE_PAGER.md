@@ -105,8 +105,12 @@ and **+0.0576** without gutenberg, `RECIPE_CLEARS` — a smaller margin than the
 **+0.1003**, and the one this page now leads with. Unseen content is the boundary: with each of
 the eight content families withheld from training in turn (preregistration 0015), the recipe
 identifies the encoder on the withheld family at a stitched **0.0859** against chance **0.0385**
-and a **0.0885** bar — `TRANSFER_FAILS` — and a raw logistic does better, **0.0928**. Every number
-on this page is a statement about these eight content families.
+and a **0.0885** bar — `TRANSFER_FAILS` — and a raw logistic does better, **0.0928**. Diversity is
+the lever, not depth: at a fixed budget of 4900 source chunks the recipe's accuracy on an unseen
+family rises from **0.0666** with one training family to **0.0829** with seven, **0.00596** per
+doubling against a 0.005 bar (preregistration 0016, `DIVERSITY_HELPS`), while seeing seven times
+more of a single family moves it by **-0.002**. Every number on this page is a statement about
+these eight content families.
 The window boundary of
 this recipe lies in (2048, 4096]; every number above remains a 4096-byte-window number.
 
@@ -197,7 +201,7 @@ reported, and neither is quoted as the other.
 
 The verification-coverage map is machine-checked and prints its weakest class first, deliberately.
 
-**14 of 138 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
+**14 of 179 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
 including us. Eight are measurements made by subagents inside scratch directories that no longer
 exist, and **that includes measurements the conclusions rest on.** The ninth is worse than
 unverified: it is a figure we published and then failed to reproduce ourselves.
@@ -219,7 +223,7 @@ manufacturing a discrepancy against a subagent that turned out to be right.
 git clone <repo> && cd raise-v1
 python3 tools/preflight.py                        # interpreter + dependency floors, cause and fix
 python3 tools/prereg.py verify                    # chain order, sealed fields, reader hashes
-python3 tests/mutation_test.py                    # 313 deliberate mutations, 313 detected, 0 survived
+python3 tests/mutation_test.py                    # 315 deliberate mutations, 315 detected, 0 survived
 python3 tools/coverage.py                         # coverage map, weakest class first
 python3 tools/claimcheck.py outbound VERDICT.md   # every number traces to a banked artifact
 python3 tools/freshness.py                        # every live number equals its CURRENT artifact value

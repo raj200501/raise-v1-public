@@ -64,6 +64,18 @@ features transfers better (0.0928). Per family the model keeps 0.25 to 0.65 of i
 accuracy (`artifacts/pivot/lofo_4096_verdict.json`, `retention_per_family`). The curve and the
 searched margin stand as measured; they are statements about these eight content families.
 
+## "Would more content types fix that?"
+
+**Modestly, and depth would not** (prereg 0016, bar calibrated to the transfer regime before the
+freeze, expected outcome stated as close to even): at a fixed plaintext budget of 4900 source
+chunks spread over 1, 2, 4 or 7 of the other families, 0003's recipe identifies the encoder on the
+unseen family at 0.0666, 0.0653, 0.0736 and 0.0829, a slope of 0.00596 per doubling of families
+against a 0.005 bar, `DIVERSITY_HELPS` (`artifacts/pivot/fdc_4096_verdict.json`). A single family
+at 700 to 4900 chunks moves the same reading by -0.002, and the seven-family point at 700 chunks per
+family sits -0.003 from 0015's seven-family mixture at about 5000 chunks per family: under transfer
+the row axis is nearly flat. The per-family curves are composition curves under one sealed
+ordering and are banked; nothing extrapolates past seven families or beyond these eight.
+
 ## "Who buys it?"
 
 Uncleared, and filed in the coverage map's **weakest class** rather than dressed as a finding. The
@@ -96,7 +108,7 @@ python3 tools/pivot/corpus_manifest.py --check       # prove a rebuilt corpus is
 ```
 
 Corpora rebuild deterministically from shipped sources and generators; the manifest banks
-content hashes of every array so the rebuild is *proven* identical, not assumed. 313 mutations across 20 gates certify every gate can fail
+content hashes of every array so the rebuild is *proven* identical, not assumed. 315 mutations across 20 gates certify every gate can fail
 (that count is checked against the mutation report by `tools/freshness.py`, because an earlier
 version of this sentence said 132 while the artifact said 134); the reproduction that matters most — the audit — is
 banked with its kill-list included.

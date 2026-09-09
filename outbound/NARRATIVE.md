@@ -14,7 +14,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 >
 > Before we measured anything, we built the instrument. Bars frozen and hash-chained before the
 > data existed, verdict readers frozen by hash, and every gate proven able to fail —
-> 313 deliberate mutations, 313 detected, 0 survived.
+> 315 deliberate mutations, 315 detected, 0 survived.
 >
 > Then we ran the search the thesis demanded: 99 candidate domains over three rounds, 8 through
 > adversarial review with default posture reject, 0 selected. We published that negative under a
@@ -53,7 +53,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > hash-chained so nothing can be silently inserted between two that already exist, each anchored
 > to public randomness beacons — NIST and drand — with the verdict-emitting readers frozen by
 > sha256 before their data existed. Then we proved the instrument itself can fail:
-> 313 deliberate mutations across 20 gates, 313 detected, 0 survived. A gate that cannot fail is decoration, so
+> 315 deliberate mutations across 20 gates, 315 detected, 0 survived. A gate that cannot fail is decoration, so
 > we broke every one on purpose and checked that it noticed.
 
 **The search, and the negative we published.**
@@ -121,7 +121,12 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > training in turn (0015), and it does not, at the level we preregistered: the stitched accuracy
 > on withheld families is 0.0859 against chance 0.0385, 0.0026 short of the bar, and a raw
 > logistic transfers better, 0.0928. `TRANSFER_FAILS`, filed at full size: our headline is a
-> statement about eight content families. The boundary of our result is
+> statement about eight content families. Then we asked whether that is a matter of how many
+> content types the model has seen (0016): at a fixed budget of 4900 source chunks, spreading the
+> data over more families raises accuracy on the unseen one from 0.0666 with one family to 0.0829
+> with seven, 0.00596 per doubling against a 0.005 bar, `DIVERSITY_HELPS` — a narrow pass, a
+> non-monotone curve, and a depth arm that says seeing more of one family buys nothing (-0.002
+> over a seven-fold change in plaintexts). Diversity is the lever; it is a modest one. The boundary of our result is
 > bracketed to (2048, 4096], and the near-miss on the slack reading is published beside the
 > clear miss on the strict one.
 
@@ -143,7 +148,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 
 > So here is the honest inventory. A validated instrument that reproduces on a cold clone. One
 > real curve with its boundaries measured by the same instrument. A corrections ledger that costs
-> us something to keep. A verification map that prints its weakest class first — 14 of 138 claims
+> us something to keep. A verification map that prints its weakest class first — 14 of 179 claims
 > we ourselves cannot currently re-derive, and it says so. And no buyer yet: G5, a named buyer
 > type, is the gate this work has not cleared, and no result in the repository could have cleared
 > it, because that work happens outside the repository. We are raising to do exactly that work,

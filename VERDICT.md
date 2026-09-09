@@ -295,7 +295,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 
 | Result | Value | Class |
 |---|---|---|
-| Every gate can be shown to fail | 313 mutations, 313 detected, 0 survived | primary-verifiable |
+| Every gate can be shown to fail | 315 mutations, 315 detected, 0 survived | primary-verifiable |
 | A number that is real but STALE is caught, not just a fabricated one | `tools/freshness.py`, 9 mutations | primary-verifiable |
 | Preregistration chain verifies, reader unchanged since freeze | 17 entries, head `7c794a87…` | primary-verifiable |
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |
@@ -305,6 +305,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 | Assembly-provenance split leak re-derived | temporal split 0.4765 **loses** to a 0.4805 constant | primary-verifiable |
 | Assembly-provenance confound re-derived | a fake BioProject partition is predictable at 0.7772 | primary-verifiable |
 | **Carved-DEFLATE scaling curve** | **`CURVE_ESTABLISHED`** — +0.0491/decade, cluster-corrected 95% CI [0.048216, 0.050014], over 2.9031 decades; margin +0.1003 frozen and +0.0583 stricter under fixed recipes, both above 0.05 | primary-verifiable |
+| **Family-diversity curve at 4096 (0016)** | **`DIVERSITY_HELPS`** — at a fixed budget of 4900 source chunks, the incumbent's accuracy on an unseen family rises 0.00596 per doubling of training families (bar 0.005): 0.0666 with one family, 0.0829 with seven; per-family depth moves it by -0.002; the linear rules' curves are steeper. Chain entry 16. |
 | **Symmetric recipe search at 4096 (0014)** | **`RECIPE_CLEARS`** — the searched model (M4) reaches 0.2884 against a searched-and-floored bar of 0.2317 set by the standardised logistic: +0.0567 frozen, +0.0567 expanded, +0.0576 with the leaked family excluded, all above 0.05; the headline survives a fair baseline at a smaller margin than fixed recipes gave | primary-verifiable |
 
 ### Failed, or did not reach a conclusion
@@ -333,7 +334,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **14 of 138 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 179 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -362,8 +363,8 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 | Class | Count | Meaning |
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
-| `arithmetic-verifiable` | 21 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 103 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `arithmetic-verifiable` | 26 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
+| `primary-verifiable` | 139 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -886,14 +887,95 @@ whether a recipe trained on more families would transfer better — a separate p
 It establishes that 0003's recipe, trained on seven of these families, does not identify the
 encoder on the eighth at chance plus 0.05, and that a raw logistic does slightly better at it.
 
-**In flight — preregistration 0016 (chain seq 16, frozen 2026-09-09T07:38:33Z, NIST Beacon pulse 1933564, drand round
-6450283, git e0360996).** The family-diversity curve at 4096: at a fixed plaintext budget of 4900 source chunks (every
-pool row of each), 0003's three fixed recipes and 0014's standardised logistic are fitted for each held-out family on the
-1, 2, 4 or 7 families that follow it in the sealed order and scored once on the held-out family's sealed rows; the eight
-readings at each count stitch into one mixture, and the bar is 0.005 accuracy per doubling of families on the incumbent's
-mixture (`DIVERSITY_HELPS` / `DIVERSITY_FLAT`), read by `tools/readers/fdc4096_verdict.py`. A single-family depth arm and a
-preceding-family arm are banked beside the curve. Nothing below this line changes until its frozen reader has read the
-completed run; the outcome, either way, is stated here at full size.
+### Does content diversity buy transfer? — `DIVERSITY_HELPS` at 4096 (preregistration 0016)
+
+0015 left one question named and unmeasured: is the transfer failure a matter of how many content
+types the model has seen? Preregistration 0016 (chain seq 16, NIST Beacon pulse 1933564, drand round
+6450283) measured the family-diversity curve at a fixed plaintext budget. For each of the eight
+families held out in turn, 0003's three fixed recipes and 0014's standardised logistic were fitted
+on 4900 source chunks (every pool row of each; about 98000 rows) spread evenly over the 1, 2, 4 or 7
+families that follow the held-out one in the sealed order, and scored once on the held-out family's
+sealed rows; the eight readings at each count stitch into one mixture, and the bar was the slope of
+the incumbent's mixture against log2(families), 0.005 accuracy per doubling, calibrated to the
+transfer regime before the freeze. Two informational arms were fitted beside the curve: the single
+successor family alone at 2450, 1225 and 700 chunks (the depth arm), and the preceding family at
+4900 chunks (the composition arm). The pre-freeze review, its adopted findings and the smoke history
+are in `artifacts/pivot/engineering_log_0016.json`.
+
+| | |
+|---|---|
+| **Verdict** | `DIVERSITY_HELPS` — content diversity moves transfer for 0003's recipe, at a modest rate, over family counts one to seven |
+| **Emitted by** | `tools/readers/fdc4096_verdict.py`, frozen as chain entry 16; the reader's own recomputed slope is the verdict's |
+| **Artifact** | `artifacts/pivot/fdc_4096.json` with `fdc_4096_scores.json`; verdict in `fdc_4096_verdict.json` |
+| **Cost** | 29665.6 s of banked fit time (258 fits) at 3 threads, nice 10, on 4 cores, no GPU; three launches across two container restarts, each resumed from checkpoints; peak 4.0 GB anonymous; `artifacts/pivot/engineering_log_0016.json` |
+
+| Clause | Bar | Read | Result |
+|---|---|---|---|
+| Incumbent on 0003's 100000-row rung reproduces 0003 | within 0.005 of 0.1965 | **0.1965** | pass |
+| Null control | ≤ chance + 0.02 | **0.0389** | pass |
+| Every fold: held-out rows, rows outside the chosen families, shared chunks | 0 | **0** | pass |
+| Slope of the incumbent's mixture per doubling of families | ≥ 0.005 | **0.00596** | pass |
+
+**Finding 1 — the curve rises, modestly, and the pass is narrow.** The incumbent's mixture over
+all 260000 evaluation rows, each row predicted by a fit that never saw its family, is
+**0.0666** with one training family, **0.0653** with two, **0.0736** with four and **0.0829** with
+seven; the slope is **0.00596** per doubling, **0.00096** over the bar, and the end-to-end
+difference is **0.0163** with non-overlapping cluster intervals at the two ends ([0.0656, 0.0676]
+against [0.0819, 0.0839]). The curve is not monotone: the two-family point sits below the
+one-family point. The raw logistic's curve is steeper (0.0702 → 0.0947, slope 0.007267) and so is
+0014's standardised logistic's (0.0709 → 0.0941, slope 0.008019); both linear rules end above the
+incumbent, as 0015 found at full rows.
+
+| Families seen | k = 1 | k = 2 | k = 4 | k = 7 |
+|---|---:|---:|---:|---:|
+| Incumbent, mixture on the unseen family | **0.0666** | **0.0653** | **0.0736** | **0.0829** |
+| Raw logistic | 0.0702 | 0.0862 | 0.0818 | 0.0947 |
+| Standardised logistic (0014's L3) | 0.0709 | 0.0773 | 0.0839 | 0.0941 |
+| Majority rule | 0.0385 | 0.0385 | 0.0385 | 0.0385 |
+| Incumbent, structured four | 0.0833 | 0.0925 | 0.0945 | 0.1036 |
+
+**Finding 2 — under transfer, depth buys nothing; which families were seen is what moves.** The
+depth arm holds the family count at one and varies how much of that family the model sees: at
+4900, 2450, 1225 and 700 chunks the incumbent's mixture is **0.0666**, **0.0689**, **0.0658** and
+**0.0686** — a seven-fold change in plaintexts moves it by **-0.002**. Read against the curve,
+seven families at 700 chunks each beat one family at 700 chunks by **0.0143** (the family effect at
+matched depth), while the seven-family point at 700 chunks per family (0.0829) sits **-0.003** from
+0015's seven-family mixture at about 5000 chunks per family (0.0859). On this corpus the row axis
+under transfer is nearly flat and the family axis is not.
+
+| Chunks per family, one family alone | 4900 | 2450 | 1225 | 700 |
+|---|---:|---:|---:|---:|
+| Incumbent, depth arm | **0.0666** | **0.0689** | **0.0658** | **0.0686** |
+| Raw logistic, depth arm | 0.0702 | 0.0706 | 0.073 | 0.0725 |
+| Family effect at matched depth (incumbent) | — | -0.0036 | 0.0078 | 0.0143 |
+
+**Finding 3 — the per-family curves are composition curves.** Under the sealed successor rule
+each held-out family's one-family point is one particular neighbour: csv trained on json alone
+scores **0.1398** and falls as the other families join (0.1002 at seven); log trained on mixed
+alone scores **0.0382** and rises to **0.1033**; code rises from **0.0524** to **0.1023**. The
+mixture balances the source marginal (each family is a source in exactly k of the eight training
+sets at level k) but not the pairings, which is why the bar was read on the mixture. Refitting the
+one-family point with the preceding family instead moves the incumbent's mixture by **-0.0028**
+(0.0694 against 0.0666), the raw logistic's by -0.0075.
+
+| Held-out family | k = 1 | k = 2 | k = 4 | k = 7 | logistic, k = 7 |
+|---|---:|---:|---:|---:|---:|
+| json | **0.1046** | **0.0932** | **0.0865** | **0.1083** | 0.148 |
+| log | **0.0382** | **0.0682** | **0.0768** | **0.1033** | 0.111 |
+| code | **0.0524** | **0.1045** | **0.1179** | **0.1023** | 0.1056 |
+| csv | **0.1398** | **0.1055** | **0.0979** | **0.1002** | 0.1075 |
+| binary | **0.0782** | **0.0407** | **0.0395** | **0.0699** | 0.0782 |
+| base64 | **0.0517** | **0.0413** | **0.0573** | **0.0694** | 0.0633 |
+| mixed | **0.0403** | **0.04** | **0.0638** | **0.0598** | 0.0766 |
+| gutenberg | **0.0304** | **0.0312** | **0.0509** | **0.0507** | 0.068 |
+
+**What it establishes, and what it does not.** That at a fixed plaintext budget of 4900 chunks,
+spreading the data over more of the corpus builder's families (seven parametric generators and one
+real-prose family) raises 0003's recipe's accuracy on an unseen family by about 0.006 per doubling
+of families, over family counts one to seven under one sealed ordering; that per-family depth does
+not; and that the linear rules' curves are steeper. It does not extrapolate past seven families,
+does not speak to content outside these eight, does not revise 0015's `TRANSFER_FAILS` (the
+seven-family point here is 0.0829, still under 0015's 0.0885 bar), and establishes no buyer.
 
 **In flight — preregistration 0017 (chain seq 17, frozen 2026-09-09T10:23:16Z).** 0014's searched, standardised
 logistic fitted on 0015's eight sealed folds, hash for hash, and scored once each on the held-out family's sealed rows:

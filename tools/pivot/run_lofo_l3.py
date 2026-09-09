@@ -74,11 +74,14 @@ def main() -> int:
             if not pid.isdigit() or int(pid) == os.getpid():
                 continue
             try:
-                cmd = open(f"/proc/{pid}/cmdline", "rb").read().replace(b"\0", b" ").decode("utf-8", "replace")
+                parts = open(f"/proc/{pid}/cmdline", "rb").read().split(b"\0")
             except OSError:
                 continue
-            if "tools/pivot/run_" in cmd and "python" in cmd:
-                others.append(f"{pid}: {cmd.strip()[:120]}")
+            # a runner is an interpreter process whose own arguments name a tools/pivot/run_ script; a shell whose
+            # command text merely mentions one (an operator's grep) is not (first launch attempt, 18:03 UTC)
+            argv = [x.decode("utf-8", "replace") for x in parts if x]
+            if argv and os.path.basename(argv[0]).startswith("python") and any("tools/pivot/run_" in a for a in argv[1:]):
+                others.append(f"{pid}: {' '.join(argv)[:120]}")
         if others:
             print("REFUSING: another tools/pivot runner is alive: " + "; ".join(others), file=sys.stderr)
             return 3

@@ -49,10 +49,12 @@ recipes fitted on the other seven and scored once on the held-out family's seale
 readings stitched into one leave-one-family-out mixture read against chance plus 0.05 — and the
 answer is no at the preregistered level: the stitched mixture is 0.0859 against chance 0.0385,
 0.0026 short of the bar, and a raw logistic transfers better (0.0928); verdict `TRANSFER_FAILS`.
-Preregistration 0016 (chain entry 16, frozen 2026-09-09) asks whether that failure is a matter of how many content
-families the model has seen: at a fixed plaintext budget of 4900 source chunks, 0003's recipes and 0014's standardised
-logistic are fitted on 1, 2, 4 or 7 of the other families and scored on the held-out one; the bar is 0.005 accuracy per
-doubling of families on the incumbent's stitched mixture. It is frozen and running; either outcome is published here.
+Preregistration 0016 (chain entry 16) asked whether that failure is a matter of how many content
+families the model has seen: at a fixed plaintext budget of 4900 source chunks, the recipes were fitted on 1, 2, 4 or 7
+of the other families and scored on the held-out one, and the answer is yes, modestly: the incumbent's accuracy on the
+unseen family rises from 0.0666 with one training family to 0.0829 with seven, 0.00596 per doubling against a 0.005
+bar, verdict `DIVERSITY_HELPS`; seeing more of a single family (700 to 4900 chunks) moves it by -0.002, and the linear
+rules' curves are steeper (0.0947 and 0.0941 at seven families).
 Preregistration 0017 (chain entry 17, frozen 2026-09-09) asks whether 0014's standardised logistic, fitted on 0015's
 eight sealed folds, leads the incumbent on unseen families by 0.02; it is frozen and queued behind 0016's run.
 The curve and the searched margin stand as measured, and they are statements about these eight

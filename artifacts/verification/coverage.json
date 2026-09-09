@@ -2,12 +2,12 @@
   "claims": [
     {
       "artifact": "artifacts/verification/mutation_report.json",
-      "claim": "Every gate in this repository is shown capable of failing: 313 deliberate mutations across 20 gates, 313 detected, 0 survived.",
+      "claim": "Every gate in this repository is shown capable of failing: 315 deliberate mutations across 20 gates, 315 detected, 0 survived.",
       "class": "primary-verifiable",
       "id": "mutations-detected",
       "json_path": "$.detected",
       "reverify": "python3 tests/mutation_test.py",
-      "value": 313
+      "value": 315
     },
     {
       "artifact": "artifacts/verification/mutation_report.json",
@@ -1222,6 +1222,375 @@
       "class": "primary-verifiable",
       "reverify": "python3 tools/readers/lofo4096_verdict.py",
       "claim": "With mixed held out of training, the model identifies the encoder on mixed's 32188 sealed evaluation rows at 0.0738 (in-distribution 0003: 0.1143)."
+    },
+    {
+      "id": "fdc4096-verdict",
+      "artifact": "artifacts/pivot/fdc_4096_verdict.json",
+      "json_path": "$.verdict",
+      "value": "DIVERSITY_HELPS",
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "Preregistration 0016's frozen reader emits DIVERSITY_HELPS: at a fixed plaintext budget of 4900 source chunks, spreading them over more content families raises 0003's recipe's accuracy on a family it never saw by at least 0.005 per doubling of families."
+    },
+    {
+      "id": "fdc4096-slope-model",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc_slope_per_doubling",
+      "value": 0.00596,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "The ordinary-least-squares slope of the model's leave-one-family-out mixture against log2(families seen) over k = 1, 2, 4, 7 at 4900 source chunks is 0.00596 accuracy per doubling of families (bar 0.005)."
+    },
+    {
+      "id": "fdc4096-slope-logistic",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.logistic.slope_per_doubling",
+      "value": 0.007267,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "The same slope for the raw logistic is 0.007267 per doubling."
+    },
+    {
+      "id": "fdc4096-end-difference",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc_end_difference",
+      "value": 0.0163,
+      "class": "arithmetic-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "The model's mixture at seven families minus at one family is 0.0163 (0.0829 against 0.0666); informational, not a clause."
+    },
+    {
+      "id": "fdc4096-incumbent-100k-reproduced",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.incumbent_100k_refit_top1",
+      "value": 0.1965,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "The incumbent refit on 0003's 100000-row rung scores 0.1965 against 0003's banked 0.1965."
+    },
+    {
+      "id": "fdc4096-null-control",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.shuffled_label_accuracy",
+      "value": 0.0389,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "The null control with 0003's recipe on shuffled labels lands at 0.0389, within chance 0.038462 plus 0.02."
+    },
+    {
+      "id": "fdc4096-fit-seconds",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.cost.banked_fit_seconds_total",
+      "value": 29665.6,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "The whole 0016 run cost 29665.6 s of banked fit time at 3 threads and nice 10 on 4 cores, no GPU."
+    },
+    {
+      "id": "fdc4096-k7-minus-0015",
+      "artifact": "artifacts/pivot/fdc_4096_verdict.json",
+      "json_path": "$.k7_at_budget_minus_0015_k7_at_full_rows",
+      "value": -0.003,
+      "class": "arithmetic-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "The model's seven-family mixture at 4900 chunks, 700 per family (0.0829), minus 0015's seven-family mixture at about 5000 chunks per family (0.0859) is -0.003; the row axis under transfer, derived, not a clause."
+    },
+    {
+      "id": "fdc4096-depth-row-effect",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.depth.row_effect_within_family",
+      "value": -0.002,
+      "class": "arithmetic-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With one family alone, going from 700 to 4900 chunks moves the model's mixture on the unseen family by -0.002 (0.0686 to 0.0666); the depth arm, informational."
+    },
+    {
+      "id": "fdc4096-family-effect-k7",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.family_effect_at_matched_depth.7",
+      "value": 0.0143,
+      "class": "arithmetic-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "Seven families at 700 chunks each against one family at 700 chunks: 0.0143 (0.0829 against 0.0686); the family effect at matched depth, informational."
+    },
+    {
+      "id": "fdc4096-composition-spread-k1",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.composition_spread_k1",
+      "value": -0.0028,
+      "class": "arithmetic-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "Refitting k = 1 with the family that precedes each held-out family instead of the one that follows it moves the model's k = 1 mixture by -0.0028 (0.0666 against 0.0694); the composition-sensitivity reading, informational."
+    },
+    {
+      "id": "fdc4096-depth-model-c2450",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.depth.mixture_top1_by_chunks[1]",
+      "value": 0.0689,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With one family alone at 2450 chunks, the model's stitched mixture on the unseen families is 0.0689."
+    },
+    {
+      "id": "fdc4096-depth-model-c1225",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.depth.mixture_top1_by_chunks[2]",
+      "value": 0.0658,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With one family alone at 1225 chunks, the model's stitched mixture on the unseen families is 0.0658."
+    },
+    {
+      "id": "fdc4096-depth-model-c700",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.depth.mixture_top1_by_chunks[3]",
+      "value": 0.0686,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With one family alone at 700 chunks, the model's stitched mixture on the unseen families is 0.0686."
+    },
+    {
+      "id": "fdc4096-slope-logistic-l3",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.logistic_l3.slope_per_doubling",
+      "value": 0.008019,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "The same slope for 0014's standardised logistic L3 is 0.008019 per doubling; its mixtures at k = 1, 2, 4, 7 are [0.0709, 0.0773, 0.0839, 0.0941]."
+    },
+    {
+      "id": "fdc4096-structured-four-k7",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.structured_four_by_k[3]",
+      "value": 0.1036,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "Over the code, csv, json and log evaluation rows the model's mixture at seven families is 0.1036 (at one family 0.0833)."
+    },
+    {
+      "id": "fdc4096-pred-k1-model",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.pred_k1.mixture_top1",
+      "value": 0.0694,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "Under the predecessor rule at k = 1 (4900 chunks of the preceding family), the model's stitched mixture is 0.0694."
+    },
+    {
+      "id": "fdc4096-mixture-model-k1",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc_mixture_top1_by_k[0]",
+      "value": 0.0666,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With 4900 source chunks spread over 1 family, the model's stitched mixture over all 260000 sealed evaluation rows, each predicted by the fit that held out its family, is 0.0666."
+    },
+    {
+      "id": "fdc4096-mixture-logistic-k1",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.logistic.mixture_top1_by_k[0]",
+      "value": 0.0702,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "The raw logistic's mixture at 1 family is 0.0702."
+    },
+    {
+      "id": "fdc4096-mixture-model-k2",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc_mixture_top1_by_k[1]",
+      "value": 0.0653,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With 4900 source chunks spread over 2 families, the model's stitched mixture over all 260000 sealed evaluation rows, each predicted by the fit that held out its family, is 0.0653."
+    },
+    {
+      "id": "fdc4096-mixture-logistic-k2",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.logistic.mixture_top1_by_k[1]",
+      "value": 0.0862,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "The raw logistic's mixture at 2 families is 0.0862."
+    },
+    {
+      "id": "fdc4096-mixture-model-k4",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc_mixture_top1_by_k[2]",
+      "value": 0.0736,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With 4900 source chunks spread over 4 families, the model's stitched mixture over all 260000 sealed evaluation rows, each predicted by the fit that held out its family, is 0.0736."
+    },
+    {
+      "id": "fdc4096-mixture-logistic-k4",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.logistic.mixture_top1_by_k[2]",
+      "value": 0.0818,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "The raw logistic's mixture at 4 families is 0.0818."
+    },
+    {
+      "id": "fdc4096-mixture-model-k7",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc_mixture_top1_by_k[3]",
+      "value": 0.0829,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With 4900 source chunks spread over 7 families, the model's stitched mixture over all 260000 sealed evaluation rows, each predicted by the fit that held out its family, is 0.0829."
+    },
+    {
+      "id": "fdc4096-mixture-logistic-k7",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.logistic.mixture_top1_by_k[3]",
+      "value": 0.0947,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "The raw logistic's mixture at 7 families is 0.0947."
+    },
+    {
+      "id": "fdc4096-family-gutenberg-k7",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.per_family_by_k.gutenberg[3]",
+      "value": 0.0507,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With gutenberg held out and 4900 chunks spread over the other seven families, the model identifies the encoder on gutenberg's sealed evaluation rows at 0.0507 (at one family: 0.0304)."
+    },
+    {
+      "id": "fdc4096-family-gutenberg-k1",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.per_family_by_k.gutenberg[0]",
+      "value": 0.0304,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With gutenberg held out and all 4900 chunks from the single family that follows it, the model reaches 0.0304 on gutenberg."
+    },
+    {
+      "id": "fdc4096-family-base64-k7",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.per_family_by_k.base64[3]",
+      "value": 0.0694,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With base64 held out and 4900 chunks spread over the other seven families, the model identifies the encoder on base64's sealed evaluation rows at 0.0694 (at one family: 0.0517)."
+    },
+    {
+      "id": "fdc4096-family-base64-k1",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.per_family_by_k.base64[0]",
+      "value": 0.0517,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With base64 held out and all 4900 chunks from the single family that follows it, the model reaches 0.0517 on base64."
+    },
+    {
+      "id": "fdc4096-family-binary-k7",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.per_family_by_k.binary[3]",
+      "value": 0.0699,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With binary held out and 4900 chunks spread over the other seven families, the model identifies the encoder on binary's sealed evaluation rows at 0.0699 (at one family: 0.0782)."
+    },
+    {
+      "id": "fdc4096-family-binary-k1",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.per_family_by_k.binary[0]",
+      "value": 0.0782,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With binary held out and all 4900 chunks from the single family that follows it, the model reaches 0.0782 on binary."
+    },
+    {
+      "id": "fdc4096-family-code-k7",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.per_family_by_k.code[3]",
+      "value": 0.1023,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With code held out and 4900 chunks spread over the other seven families, the model identifies the encoder on code's sealed evaluation rows at 0.1023 (at one family: 0.0524)."
+    },
+    {
+      "id": "fdc4096-family-code-k1",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.per_family_by_k.code[0]",
+      "value": 0.0524,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With code held out and all 4900 chunks from the single family that follows it, the model reaches 0.0524 on code."
+    },
+    {
+      "id": "fdc4096-family-csv-k7",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.per_family_by_k.csv[3]",
+      "value": 0.1002,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With csv held out and 4900 chunks spread over the other seven families, the model identifies the encoder on csv's sealed evaluation rows at 0.1002 (at one family: 0.1398)."
+    },
+    {
+      "id": "fdc4096-family-csv-k1",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.per_family_by_k.csv[0]",
+      "value": 0.1398,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With csv held out and all 4900 chunks from the single family that follows it, the model reaches 0.1398 on csv."
+    },
+    {
+      "id": "fdc4096-family-json-k7",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.per_family_by_k.json[3]",
+      "value": 0.1083,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With json held out and 4900 chunks spread over the other seven families, the model identifies the encoder on json's sealed evaluation rows at 0.1083 (at one family: 0.1046)."
+    },
+    {
+      "id": "fdc4096-family-json-k1",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.per_family_by_k.json[0]",
+      "value": 0.1046,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With json held out and all 4900 chunks from the single family that follows it, the model reaches 0.1046 on json."
+    },
+    {
+      "id": "fdc4096-family-log-k7",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.per_family_by_k.log[3]",
+      "value": 0.1033,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With log held out and 4900 chunks spread over the other seven families, the model identifies the encoder on log's sealed evaluation rows at 0.1033 (at one family: 0.0382)."
+    },
+    {
+      "id": "fdc4096-family-log-k1",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.per_family_by_k.log[0]",
+      "value": 0.0382,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With log held out and all 4900 chunks from the single family that follows it, the model reaches 0.0382 on log."
+    },
+    {
+      "id": "fdc4096-family-mixed-k7",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.per_family_by_k.mixed[3]",
+      "value": 0.0598,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With mixed held out and 4900 chunks spread over the other seven families, the model identifies the encoder on mixed's sealed evaluation rows at 0.0598 (at one family: 0.0403)."
+    },
+    {
+      "id": "fdc4096-family-mixed-k1",
+      "artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.per_family_by_k.mixed[0]",
+      "value": 0.0403,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/fdc4096_verdict.py",
+      "claim": "With mixed held out and all 4900 chunks from the single family that follows it, the model reaches 0.0403 on mixed."
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

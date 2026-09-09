@@ -26,8 +26,12 @@ is a **4096-byte-window** number; at 1024 and at 2048 bytes the task fails its o
 **No transfer to unseen content.** With each of the eight content families withheld from training
 in turn (preregistration 0015), the headline recipe identifies the encoder on the withheld family
 at a stitched **0.0859** against chance **0.0385**, short of the preregistered chance + 0.05 bar
-by **0.0026**, and a raw logistic does better (**0.0928**): `TRANSFER_FAILS`. Every number below
-is a statement about these eight content families.
+by **0.0026**, and a raw logistic does better (**0.0928**): `TRANSFER_FAILS`. **Diversity moves
+it, depth does not.** At a fixed budget of 4900 source chunks spread over 1, 2, 4 or 7 families
+(preregistration 0016), the recipe's accuracy on the unseen family goes **0.0666 → 0.0653 → 0.0736
+→ 0.0829**, a slope of **0.00596** per doubling of families against a 0.005 bar: `DIVERSITY_HELPS`;
+a single family at 700 to 4900 chunks moves it by **-0.002**. Every number below is a statement
+about these eight content families.
 
 ## The headline curve, with corrected statistics
 
@@ -111,6 +115,13 @@ reading available, fixed before the run; the looser reading would have given **+
   0.1352), the incumbent refit reproduces 0003's **0.2395** exactly. The headline margin under
   fixed recipes (+0.1003) is stated beside its searched size, and the searched size is the one to
   quote.
+- **Family-diversity curve at 4096: `DIVERSITY_HELPS`, slope 0.00596 per doubling of families
+  against a 0.005 bar.** Eight held-out families times 1, 2, 4 and 7 training families at a fixed
+  4900-chunk budget, four recipes, 258 fits, every fold sealed by hash with its per-family chunk
+  counts checked against the subset rule; the reader's own recomputed slope is the verdict's. The
+  end-to-end rise is 0.0163 with non-overlapping cluster intervals; the two-family point dips; the
+  depth arm (one family at 700 to 4900 chunks) is flat at -0.002; the linear rules' slopes are
+  0.007267 and 0.008019.
 - **Leave-one-family-out transfer at 4096: `TRANSFER_FAILS`, stitched mixture 0.0859 against a
   0.0885 bar.** 0003's recipes fitted on seven families and scored on the eighth, eight times,
   every fold sealed by hash with zero withheld rows and zero shared chunks in training. Per
@@ -172,7 +183,7 @@ rerun would have said something different. It would not have.
 
 **17** preregistrations, hash-chained (entry *N* carries entry *N−1*'s hash) and anchored to NIST
 Beacon 2.0 and drand; readers frozen by sha256 before their data existed.
-**313** deliberate mutations across **20** gates, **313** detected, **0** survived — every gate provably capable of
+**315** deliberate mutations across **20** gates, **315** detected, **0** survived — every gate provably capable of
 failing. **15** corrections filed against this work at full size, including a **54-agent
 adversarial audit** whose 13 confirmed findings (three critical) were each fixed — the load-bearing ones by new measurement,
 with the audit record banked — rejected findings included — so the filter itself can be audited.
