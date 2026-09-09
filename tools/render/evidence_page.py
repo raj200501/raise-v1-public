@@ -56,6 +56,10 @@ lofov = json.load(open(_lofovp, encoding="utf-8")) if os.path.exists(_lofovp) el
 _fdcp = A("pivot", "fdc_4096.json"); _fdcvp = A("pivot", "fdc_4096_verdict.json")
 fdc = json.load(open(_fdcp, encoding="utf-8")) if os.path.exists(_fdcp) else None
 fdcv = json.load(open(_fdcvp, encoding="utf-8")) if os.path.exists(_fdcvp) else None
+# 0017 (the searched logistic under leave-one-family-out transfer) is rendered only once its artifact and verdict exist.
+_l3p = A("pivot", "lofo_l3_4096.json"); _l3vp = A("pivot", "lofo_l3_4096_verdict.json")
+l3a = json.load(open(_l3p, encoding="utf-8")) if os.path.exists(_l3p) else None
+l3v = json.load(open(_l3vp, encoding="utf-8")) if os.path.exists(_l3vp) else None
 
 git_head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO,
                           capture_output=True, text=True).stdout.strip()
@@ -184,7 +188,12 @@ chips = "".join([
             f'the model\'s mixture on unseen families {fdc["fdc_mixture_top1_by_k"]}; slope {fdcv["fdc_slope_per_doubling"]} per '
             f'doubling of families (bar {fdcv["bar_applied"]["slope_per_doubling_must_reach"]}); logistic slope '
             f'{fdcv["fdc_slope_per_doubling_logistic"]}') if fdcv["verdict"] != "VOID" and fdc and fdc.get("complete")
-           else f'VOID: {"; ".join(fdcv["validity_failed_clauses"])[:140]}')] if fdcv else []))
+           else f'VOID: {"; ".join(fdcv["validity_failed_clauses"])[:140]}')] if fdcv else [])
+ + ([chip(l3v["verdict"], {"TRANSFER_REVERSAL": "fail", "NO_TRANSFER_REVERSAL": "pass", "VOID": "inc"}[l3v["verdict"]], "0017",
+           (f'0014\'s standardised logistic on 0015\'s eight folds: mixture on unseen families {l3v["lofo_mixture_top1_l3"]} against '
+            f'0015\'s incumbent {l3v["bar_applied"]["reference_0015_incumbent_mixture"]} (margin {l3v["lofo_margin_l3_over_0015_model"]}; '
+            f'bar {l3v["bar_applied"]["margin"]})') if l3v["verdict"] != "VOID" and l3a and l3a.get("complete")
+           else f'VOID: {"; ".join(l3v["validity_failed_clauses"])[:140]}')] if l3v else []))
 
 fam2048_table = ""
 _pf2048 = A("pivot", "per_family_curves_2048.json")
@@ -290,6 +299,22 @@ if fdc and fdcv and fdcv["verdict"] != "VOID" and fdc.get("complete"):
                      f'{fdc["incumbent_100k_refit_top1"]}.</p>'
                      f'<table><thead><tr><th>held-out family</th>' + "".join(f'<th>k={k}</th>' for k in _ks)
                      + f'<th>logistic, k={_ks[-1]}</th></tr></thead><tbody>{_rows}</tbody></table>')
+
+boundary_0017 = ""
+if l3a and l3v and l3v["verdict"] != "VOID" and l3a.get("complete"):
+    _pf = l3v["per_family_l3"]; _ref = l3v["reference_0015"]
+    _rows = "".join(f'<tr><td class="mono">{f}</td><td class="mono">{_pf[f]}</td><td class="mono">{_ref["model_per_family"][f]}</td>'
+                    f'<td class="mono">{_ref["logistic_per_family"][f]}</td></tr>' for f in sorted(_pf, key=lambda k: -_pf[k]))
+    _word = "is reversed" if l3v["verdict"] == "TRANSFER_REVERSAL" else "is not reversed"
+    boundary_0017 = (f'<p><strong>Under transfer the in-distribution ordering {_word} by the record\'s own margin: '
+                     f'<span class="mono">{l3v["verdict"]}</span></strong> (preregistration 0017, chain entry 17, read by its own '
+                     f'frozen reader). 0014\'s searched, standardised logistic, fitted on 0015\'s eight sealed folds, identifies the '
+                     f'encoder on the unseen family at {l3v["lofo_mixture_top1_l3"]} (stitched mixture) against 0015\'s incumbent '
+                     f'{_ref["model_mixture_top1"]} and raw logistic {_ref["logistic_mixture_top1"]}: a margin of '
+                     f'{l3v["lofo_margin_l3_over_0015_model"]} over the incumbent against a bar of {l3v["bar_applied"]["margin"]}. '
+                     f'The refit on the full pool reproduced 0014\'s {l3a["logistic_l3_refit_top1"]}.</p>'
+                     f'<table><thead><tr><th>held-out family</th><th>standardised logistic</th><th>0015 incumbent</th>'
+                     f'<th>0015 raw logistic</th></tr></thead><tbody>{_rows}</tbody></table>')
 
 # ---------------------------------------------------------------- seed panel
 if seeds:
@@ -442,7 +467,7 @@ protocol returns <span class="mono">CARVE_FAILS</span>: within-size top-1
 (margin below the 0.05 bar), and a 4096-trained model transfers at {carve["transfer_top1"]} —
 chance. The byte-identity ceiling barely moves across carve sizes, so this is a modelling failure
 and is reported as one. Two learned byte-sequence attempts (preregs 0009, 0010) did not rescue it.</p>
-{boundary_2048}{boundary_0012}{boundary_0014}{boundary_0015}{boundary_0016}{fam2048_table}
+{boundary_2048}{boundary_0012}{boundary_0014}{boundary_0015}{boundary_0016}{boundary_0017}{fam2048_table}
 </div>
 <div class="panel good">
 <p><strong>And the leak correction ran against us.</strong> When an adversarial audit found source

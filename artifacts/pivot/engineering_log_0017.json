@@ -1,0 +1,35 @@
+{
+  "schema": "raise-v1/engineering_log/1",
+  "preregistration": "0017-lofo-l3-4096",
+  "status": "pre-freeze (written before the freeze and extended as the run proceeds; nothing in it is a reading)",
+  "design": {
+    "question": "Under leave-one-family-out transfer at 4096 on 0015's eight sealed folds, does 0014's searched, standardised logistic L3 beat 0003's incumbent by the 0.05 margin every in-distribution margin clause is built on? Eight L3 fits, one scoring each, the stitched mixture read against 0015's banked incumbent mixture 0.0859 plus 0.05 (TRANSFER_REVERSAL / NO_TRANSFER_REVERSAL).",
+    "why_now": "0015's Finding 2 (the raw logistic beats the incumbent under transfer, 0.0928 against 0.0859, while hitting its iteration cap) was named by 0016's pre-freeze review as the record's most consequential open anomaly: whether a linear rule genuinely transfers at least as well or an unconverged fit merely regularised, and whether the searched in-distribution margin has any transfer meaning. Eight fits of the converged, standardised linear rule the record already has answer both without a new partition.",
+    "bar": "L3 mixture - 0.0859 >= 0.05 (the mixture reaches 0.1359); the record's own margin bar, applied in the opposite direction on unseen content; the other side is 0015's banked number, sealed as a reference in the protocol block",
+    "controls": "L3 on the full 800000-row pool within 0.005 of 0014's same-convention confirmatory refit 0.2317 (the same block, the same machinery); L3 on 0015's null block with shuffled labels <= chance + 0.02; 0015's sealed hashes for eval, pool, null block and every fold; three leakage counters per fold required to be 0; one ledger completion per fit; the recipe hash and scaled flag on every record; environment sealed and refused at launch; the mixture, the stitched vector and the margins recomputed by the reader, whose own mixture is the verdict's.",
+    "not_fitted": "the searched model M4 (0014's selected recipe, 15874 s per fit at 800000 rows): eight folds would cost about 31 h of fit time; a separate, costed decision after this result"
+  },
+  "cost_anchors": {
+    "l3_800000_rows_0014_s": 1164.3,
+    "l3_n_iter_0014": 728,
+    "l3_heartbeat_peak_gb_0014": 9.37,
+    "l1_700000_rows_0015_s": [
+      803.6,
+      845.9
+    ],
+    "extrapolation": "8 x about 1000 s + reproduction about 1200 s + null about 40 s + gathers: about 3 h; peak about 9.4 GB anonymous; must not run beside 0016's runner (MemAvailable precondition 12.0 GB)"
+  },
+  "pre_freeze_review": null,
+  "smoke_runs": {
+    "note": "smoke runs of the runner on the scratchpad against corpus A with the sealed recipe and tiny folds (3000 training rows per fold, 12000-row reproduction pool, 2000 null rows); stamped smoke true; read VOID by the reader; never an input to any decision",
+    "launched": [
+      {
+        "utc": "2026-09-09T07:46Z",
+        "outcome": "completed: run exit 0 at 07:51:31Z after 303.8 s wall (163.1 s of fits); all 10 fits banked (8 folds, 1 reproduction, 1 null) and scored on the sealed set; every fold record carries scaled True and one probe-checked refill; the reader, run in a sandbox against a copy of the output, parsed every field and emitted VOID on smoke clauses only (smoke true; 3000-row folds and their hashes; 12000-row pool; 2000-row null block; the reproduction 0.1464 against 0.2317); the mixture clause is skipped by the reader when fit clauses void, as in 0015, so the reader's recomputation is exercised by the 27 mutation cases and by the sealed-set patch check used for 0016 if repeated here",
+        "smoke_mixture_disclosed_not_used": 0.0753
+      }
+    ]
+  },
+  "run_record": null,
+  "operator_procedure": "launch detached after 0016's run has exited and its checkpoints are committed; poll every 30 minutes: commit and push new checkpoints, relaunch the identical command if the runner is dead and the run is not finished; the reader runs once on the completed artifact; publication states the verdict at the same size either way."
+}

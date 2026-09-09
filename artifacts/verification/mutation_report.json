@@ -48,6 +48,10 @@
       "detected": 25,
       "total": 25
     },
+    "lofol3": {
+      "detected": 27,
+      "total": 27
+    },
     "pivot-curve": {
       "detected": 11,
       "total": 11
@@ -2651,10 +2655,253 @@
       "gate": "fdc4096",
       "mutation": "a-non-integer-chunk-id-is-VOID-not-a-crash",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=TRANSFER_REVERSAL mixture=0.1448 margin=0.0589 validity=[] reversal=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "lofol3",
+      "mutation": "control-reversal-passes",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=NO_TRANSFER_REVERSAL mixture=0.1036 margin=0.0177 validity=[] reversal=[\"reversal: L3's LOFO mixture 0.1036 minus 0015's incumbent mixture 0.0859 = 0.0177 is below 0.05\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-mixture-below-the-incumbent-plus-0.05-is-NO_TRANSFER_REVERSAL",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=TRANSFER_REVERSAL mixture=0.1359 margin=0.05 validity=[] reversal=[] | verdict=NO_TRANSFER_REVERSAL mixture=0.1358 margin=0.0499 validity=[] reversal=[\"reversal: L3's LOFO mixture 0.1358 minus",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-mixture-of-exactly-0.1359-passes-and-0.1358-fails",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=[\"sealed set: partition.eval_idx_sha256='<hash>', preregistered '<hash>'\", \"scores: the scores file is not this run's, or is a smoke run's\"] reversal",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-different-evaluation-set-hash-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=['leakage: fold csv.train_rows_of_heldout_family=1, must be 0'] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "one-held-out-family-row-in-a-fold's-training-rows-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=['fit: fold_json_logistic_l3 was not fitted on the sealed rows with the preregistered seed'] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-fold-fitted-on-rows-other-than-0015's-sealed-ones-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=TRANSFER_REVERSAL mixture=0.1448 margin=0.0589 validity=[] reversal=[] | verdict=VOID mixture=0.1448 margin=0.0589 validity=[\"reproduction: L3 on the full pool scores 0.2368 against 0014's sam",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "an-L3-reproduction-at-exactly-the-tolerance-passes-and-just-outside-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=['null control: shuffled labels reached 0.06, above chance 0.038462 + 0.02 \u2014 the pipeline leaks'] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-null-control-above-chance-plus-0.02-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=[\"scope: the banked recipe is not 0014's sealed L3\", \"fit: fold_gutenberg_logistic_l3 is not 0014's L3 (id 'L3', params hash off-recipe, or not stand",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "one-parameter-changed-in-the-recipe-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=[\"fit: fold_log_logistic_l3 is not 0014's L3 (id 'L3', params hash off-recipe, or not standardised)\"] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "an-unstandardised-fit-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=[\"fit: fold_mixed_logistic_l3 status None; must be 'fit'\"] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-missing-fold-record-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=['fit: fold_binary_logistic_l3 per-example vector missing or not 260000 long'] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-per-example-vector-of-the-wrong-length-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0689 validity=[\"mixture: lofo.logistic_l3.mixture_top1=0.1548 is not the reader's recomputation 0.1448\"] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-banked-mixture-that-is-not-the-recomputed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.5 validity=[\"margin: lofo_margin_l3_over_0015_model is not the mixture minus 0015's incumbent mixture\"] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-banked-margin-that-is-not-the-arithmetic-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0948 validity=['scope: the banked 0015 references are not the sealed ones', \"margin: lofo_margin_l3_over_0015_model is not the mixture minus 0015's incumbent mixtu",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-0015-reference-that-is-not-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=['fit: fold_code_logistic_l3 has 2 ledger completions, must be exactly 1'] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-fold-scored-twice-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=['scope: smoke=True; a smoke run is not the preregistered run', \"scores: the scores file is not this run's, or is a smoke run's\"] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-smoke-run-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "absent-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=[\"complete: complete=False; missing ['fold_mixed_logistic_l3']\", \"fit: fold_mixed_logistic_l3 status None; must be 'fit'\"] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "complete-false-with-a-missing-fit-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=[\"fit: fold_gutenberg_logistic_l3 is not 0014's L3 (id 'L3', params hash off-recipe, or not standardised)\"] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "one-record-whose-params-hash-is-off-recipe-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=['mixture: fold csv logistic_l3 banked 0.21 on its held-out family, recomputed 0.2'] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-fold's-held-out-reading-that-disagrees-with-its-vector-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=['mixture: the banked stitched vector lofo_mixture_logistic_l3 is not the stitched one'] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-stitched-mixture-vector-that-is-not-the-stitch-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=['scores: the scores file is absent', 'scores: eval_chunk_ids missing or not 260000 long'] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "an-absent-scores-file-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=[\"environment: sklearn='1.8.0', banked '1.9.0'\"] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-different-sklearn-in-the-banked-environment-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=['fit: null was not fitted on the sealed rows with the preregistered seed'] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-null-block-that-is-not-0015's-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=['fit: fold_base64_logistic_l3 banked a failed block probe check'] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-failed-block-probe-after-standardising-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID mixture=0.1448 margin=0.0589 validity=['scores: eval_chunk_ids contains a non-integer entry'] reversal=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-non-integer-chunk-id-is-VOID-not-a-crash",
+      "observed": "fail"
     }
   ],
-  "detected": 286,
+  "detected": 313,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 286
+  "total_mutations": 313
 }
