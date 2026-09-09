@@ -7,3 +7,5 @@
 {"name": "fold_base64_logistic_l3", "fingerprint": "99d0dc1abccdaf92", "event": "started", "utc": "2026-09-09T19:10:25Z", "rss_gb": 7.58, "pid": 11052, "attempt": 1}
 {"name": "fold_base64_logistic_l3", "fingerprint": "99d0dc1abccdaf92", "event": "completed", "utc": "2026-09-09T19:39:07Z", "rss_gb": 7.58, "pid": 11052, "seconds": 1707.3}
 {"name": "fold_binary_logistic_l3", "fingerprint": "d6ae2c35bc05d559", "event": "started", "utc": "2026-09-09T19:39:12Z", "rss_gb": 7.58, "pid": 11052, "attempt": 1}
+{"name": "fold_binary_logistic_l3", "fingerprint": "d6ae2c35bc05d559", "event": "completed", "utc": "2026-09-09T20:06:39Z", "rss_gb": 7.58, "pid": 11052, "seconds": 1634.8}
+{"name": "fold_code_logistic_l3", "fingerprint": "89760cf5007dffe8", "event": "started", "utc": "2026-09-09T20:06:49Z", "rss_gb": 7.57, "pid": 11052, "attempt": 1}
