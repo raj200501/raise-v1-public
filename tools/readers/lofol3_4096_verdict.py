@@ -1,22 +1,26 @@
 #!/usr/bin/env python3
 """Frozen reader for preregistration 0017 — under leave-one-family-out transfer at 4096, does 0014's
-searched, standardised logistic L3 beat the incumbent by the record's 0.05 margin?
+searched, standardised logistic L3 lead the incumbent by the preregistered margin (0.02, i.e. 5200 of
+260000 rows)?
 
 Written and committed BEFORE any fold was fitted under this preregistration.
 
 WHY THIS EXISTS. 0015 found that under transfer the raw logistic L1 (0.0928) beat the incumbent HGB
 M1 (0.0859) while hitting its 400-iteration cap in every fold, which left open whether a linear rule
 generalises at least as well as the boosted model or an unconverged fit merely regularised. Every
-in-distribution margin clause in this record is the boosted model over linear baselines by at least
-0.05. This reader takes the runner's artifact (tools/pivot/run_lofo_l3.py) and checks, clause by
+in-distribution margin clause in this record is the boosted model over a baseline set by at least 0.05
+(0003 over the frozen set whose best member is the raw logistic and over the expanded set whose best
+member is a depth-16 tree; 0014's searched model over the searched logistic L3). This reader takes the runner's artifact (tools/pivot/run_lofo_l3.py) and checks, clause by
 clause: the sealed corpus, split and 0015's eight folds (every hash a literal below, identical to
 0015's); that no fold's training rows contain a row of the held-out family or a chunk of the
 evaluation set; that every fit is 0014's L3 (params hash below), fitted on the sealed rows with the
 sealed seed and scored exactly once; that the reproduction control lands on 0014's same-convention
 0.2317; that the null control sits at chance; and that the LOFO mixture equals what this reader
-recomputes from the per-example vectors. Then one clause: L3's LOFO mixture against 0015's banked
-incumbent mixture 0.0859 plus 0.05. TRANSFER_REVERSAL or NO_TRANSFER_REVERSAL, published at the same
-size; VOID on any validity failure.
+recomputes from the per-example vectors. Then one clause: L3's stitched correct count against 0015's
+banked incumbent count plus the margin. L3_LEADS_INCUMBENT_UNDER_TRANSFER or L3_LEAD_BELOW_BAR, published at the same
+size; VOID on any validity failure. The in-distribution gap between this pair is small (0014 banked the incumbent at
+0.2395 and L3 at 0.2317); the clause is the record's margin discipline applied to the linear rule under transfer,
+not the reversal of any one in-distribution clause.
 
 Every constant below is 0015's sealed partition (computed 2026-09-08 from data/pivot/full_c4096.npz
 with tools/pivot/run_carve.py grouped_split(seed 20260825, eval_frac 0.2, cap 800000) and the family
@@ -70,7 +74,7 @@ PROTOCOL = {'seed': 20260825,
  'null_rows': 20000,
  'structured_families': ['code', 'csv', 'json', 'log'],
  'caps': {'memory_kill_gb': 13.0},
- 'launch': {'min_disk_free_gb': 0.25, 'min_mem_available_gb': 12.0},
+ 'launch': {'min_disk_free_gb': 0.25, 'min_mem_available_gb': 14.5},
  'environment': {'sklearn': '1.9.0', 'numpy': '2.4.6', 'python': '3.11.15'},
  'reference_0015': {'source': 'artifacts/pivot/lofo_4096.json',
                     'model_mixture_top1': 0.0859,
@@ -93,11 +97,18 @@ PROTOCOL = {'seed': 20260825,
                                             'log': 0.1104,
                                             'mixed': 0.0762},
                     'model_structured_four_top1': 0.1081,
-                    'logistic_structured_four_top1': 0.1167},
- 'bar': {'l3_mixture_minus_0015_incumbent_mixture': 0.05},
+                    'logistic_structured_four_top1': 0.1167,
+                    'model_correct': 22343,
+                    'logistic_correct': 24131,
+                    'n_eval_rows': 260000,
+                    'counts_source': 'sum of the stitched vectors lofo_mixture_model and '
+                                     'lofo_mixture_logistic in artifacts/pivot/lofo_4096_scores.json (22343 '
+                                     '/ 260000 = 0.085935, banked 0.0859; 24131 / 260000 = 0.092812, banked '
+                                     '0.0928)'},
+ 'bar': {'l3_correct_minus_0015_incumbent_correct_over_n_eval': 0.02},
  'reproduction_tolerance': 0.005,
  'null_tolerance': 0.02}
-PROTOCOL_SHA256 = "8ab6f40475c291722fb8ebe2d264f0704dea20c16869fa348844aa950aa4fc6d"
+PROTOCOL_SHA256 = "6a0f5fc20f706bf922f0cd826aca614353e8ed253f99d6d28e13092ed79a1d8b"
 # 0014's searched logistic L3, byte for byte 0014's sealed roster entry; its canonical-JSON hash is what
 # every record's params_sha256 must equal.
 RECIPES = {'logistic_l3': {'family': 'logistic',
@@ -205,14 +216,24 @@ REFERENCE_0015 = {'source': 'artifacts/pivot/lofo_4096.json',
                          'log': 0.1104,
                          'mixed': 0.0762},
  'model_structured_four_top1': 0.1081,
- 'logistic_structured_four_top1': 0.1167}
+ 'logistic_structured_four_top1': 0.1167,
+ 'model_correct': 22343,
+ 'logistic_correct': 24131,
+ 'n_eval_rows': 260000,
+ 'counts_source': 'sum of the stitched vectors lofo_mixture_model and lofo_mixture_logistic in '
+                  'artifacts/pivot/lofo_4096_scores.json (22343 / 260000 = 0.085935, banked 0.0859; 24131 / '
+                  '260000 = 0.092812, banked 0.0928)'}
 # The reproduction anchor: 0014's confirmatory refit of this exact recipe on this exact 800000-row pool
 # block with this machinery (artifacts/pivot/recipe_search_4096.json final.logistic.top1, 728
 # iterations), the same-convention value; compared at the 4-decimal precision the accuracies are banked
 # at (0.2367 passes, 0.2368 fails).
 L3_TOP1_0014, REPRODUCTION_TOLERANCE = 0.2317, 0.005
-MARGIN_BAR, NULL_TOLERANCE, CHANCE = 0.05, 0.02, 0.038462
-MIXTURE_MUST_REACH = 0.1359   # 0015's incumbent mixture + MARGIN_BAR, the value a 4-decimal mixture must reach
+MARGIN_BAR, NULL_TOLERANCE, CHANCE = 0.02, 0.02, 0.038462
+# The clause is read on EXACT correct counts, not on 4-decimal mixtures: L3's stitched correct count (recomputed here
+# from the per-example vectors) minus 0015's banked incumbent correct count (REFERENCE_0015["model_correct"], the sum
+# of 0015's stitched vector) must be at least MARGIN_BAR x 260000 = MARGIN_CORRECT rows.
+MARGIN_CORRECT = 5200
+MIXTURE_MUST_REACH = 0.105935   # the same bar restated as a mixture, for reading: model_correct + MARGIN_CORRECT over 260000, 6 decimals
 ENV = {"threads": 3, "nice": 10, "sklearn": "1.9.0", "numpy": "2.4.6"}
 SEED = 20260825
 ROLES = ["logistic_l3"]
@@ -393,7 +414,7 @@ def main() -> int:
             v = scores.get(f"fold_{f}_{r}")
             if isinstance(v, list) and len(v) == PARTITION["n_eval_rows"] and not _ints(v, PARTITION["n_eval_rows"], (0, 1)):
                 void.append(f"scores: fold_{f}_{r} per-example vector contains an entry that is not 0 or 1")
-    l3_mix = None
+    l3_mix = None; l3_correct = None
     if chunk_ids is not None and not any(m.startswith("fit:") or m.startswith("scores:") for m in void):
         fam_e = [FAMILIES[int(c) % 8] for c in chunk_ids]
         n = PARTITION["n_eval_rows"]
@@ -421,59 +442,85 @@ def main() -> int:
                     void.append(f"mixture: fold {f} {r} banked {fr.get(f)!r} on its held-out family, recomputed "
                                 f"{rec_mix['per_family'][f]!r}")
             if r == "logistic_l3":
-                l3_mix = rec_mix["mixture_top1"]
+                l3_mix = rec_mix["mixture_top1"]; l3_correct = sum(mix)
     banked_mix = num(g("lofo_mixture_top1"))
     if banked_mix is None or banked_mix != ((lofo.get("logistic_l3") or {}).get("mixture_top1")):
         void.append("mixture: lofo_mixture_top1 missing, not finite, or not L3's mixture")
     ref_m = REFERENCE_0015["model_mixture_top1"]; ref_l = REFERENCE_0015["logistic_mixture_top1"]
+    ref_mc = REFERENCE_0015["model_correct"]; n_rows = REFERENCE_0015["n_eval_rows"]
     if banked_mix is not None:
         if num(g("lofo_margin_l3_over_0015_model")) != round(banked_mix - ref_m, 6):
             void.append("margin: lofo_margin_l3_over_0015_model is not the mixture minus 0015's incumbent mixture")
         if num(g("lofo_margin_l3_over_0015_logistic")) != round(banked_mix - ref_l, 6):
             void.append("margin: lofo_margin_l3_over_0015_logistic is not the mixture minus 0015's logistic mixture")
-    if not void and l3_mix is None:
+    if l3_correct is not None:
+        if g("lofo_correct_l3") != l3_correct:
+            void.append(f"margin: lofo_correct_l3={g('lofo_correct_l3')!r} is not the reader's stitched correct count {l3_correct}")
+        if num(g("lofo_margin_l3_over_0015_model_exact")) != round((l3_correct - ref_mc) / n_rows, 6):
+            void.append("margin: lofo_margin_l3_over_0015_model_exact is not (correct counts difference) / 260000")
+    nib = g("n_iter_by_fold") or {}
+    if any(not isinstance(nib.get(f), int) or isinstance(nib.get(f), bool) for f in FAMILIES):
+        void.append("fit: n_iter_by_fold is missing an integer iteration count for some fold")
+    if not void and (l3_mix is None or l3_correct is None):
         void.append("mixture: the reader could not recompute L3's mixture")
 
-    # ---- the one clause, on the reader's own mixture
+    # ---- the one clause, on the reader's own stitched correct count against 0015's banked count
     fails: list[str] = []
+    margin_exact = None; below_cap = None
     if not void:
-        margin = round(l3_mix - ref_m, 6)
-        if margin < MARGIN_BAR - 1e-9:
-            fails.append(f"reversal: L3's LOFO mixture {l3_mix} minus 0015's incumbent mixture {ref_m} = {margin} is below {MARGIN_BAR}")
+        margin_exact = round((l3_correct - ref_mc) / n_rows, 6)
+        below_cap = sum(1 for f in FAMILIES if nib[f] < RECIPES["logistic_l3"]["params"]["max_iter"])
+        if l3_correct - ref_mc < MARGIN_CORRECT:
+            fails.append(f"lead: L3's stitched correct count {l3_correct} minus 0015's incumbent count {ref_mc} = "
+                         f"{l3_correct - ref_mc} rows ({margin_exact}) is below {MARGIN_CORRECT} rows ({MARGIN_BAR})")
 
     if void:
         verdict, meaning = "VOID", ("A validity or control clause fails, or the artifact is incomplete. This run says "
                                     "nothing about the searched logistic under transfer in either direction.")
+        # noqa: the banked mixture is not restated under VOID
     elif fails:
-        verdict, meaning = "NO_TRANSFER_REVERSAL", (
-            "Under leave-one-family-out transfer at 4096, 0014's searched, standardised logistic does not beat 0003's "
-            "incumbent by the 0.05 margin the incumbent beat linear baselines by in-distribution. Whatever the linear "
-            "rule's advantage under transfer is, it is smaller than the record's margin bar. A statement about these "
-            "eight families at 4096 bytes and this pair of recipes; nothing here establishes a buyer.")
+        verdict, meaning = "L3_LEAD_BELOW_BAR", (
+            f"Under leave-one-family-out transfer at 4096 on 0015's folds, 0014's searched, standardised logistic does not "
+            f"lead 0003's fixed incumbent by {MARGIN_BAR}: the standardised linear rule's lead over the incumbent on unseen "
+            f"families, if any (the exact margin {margin_exact} may be negative), is below the preregistered bar; iteration "
+            f"counts are banked ({below_cap} of 8 folds below the 1000 cap). L3 is a searched recipe and the incumbent is not; "
+            "0014's searched model is not measured here. A statement about the corpus builder's eight families (seven "
+            "parametric generators and one real-prose family) at 4096 bytes and this pair of recipes; nothing here "
+            "establishes a buyer.")
     else:
-        verdict, meaning = "TRANSFER_REVERSAL", (
-            "Under leave-one-family-out transfer at 4096, 0014's searched, standardised logistic beats 0003's incumbent "
-            "by at least the 0.05 margin the incumbent beat linear baselines by in-distribution: on content the models "
-            "never saw, the ordering of every in-distribution margin clause in this record is reversed by the record's "
-            "own bar. A statement about these eight families at 4096 bytes and this pair of recipes; nothing here "
-            "establishes a buyer, and nothing here revises 0003, 0014 or 0015.")
+        verdict, meaning = "L3_LEADS_INCUMBENT_UNDER_TRANSFER", (
+            f"Under leave-one-family-out transfer at 4096 on 0015's folds, 0014's searched, standardised logistic leads "
+            f"0003's fixed incumbent by at least {MARGIN_BAR}: on content the models never saw, the standardised linear rule "
+            f"(iteration counts banked; {below_cap} of 8 folds below the 1000 cap) identifies the encoder materially better "
+            "than the boosted incumbent, while in-distribution the incumbent leads it by 0.0078 (0.2395 against 0.2317). L3 "
+            "is a searched recipe and the incumbent is not; 0014's searched model is not measured here and its in-distribution "
+            "clause is untouched. A statement about the corpus builder's eight families at 4096 bytes and this pair of "
+            "recipes; nothing here establishes a buyer, and nothing here revises 0003, 0014 or 0015.")
 
     pf = (lofo.get("logistic_l3") or {}).get("per_family") or {}
     result = {
         "schema": "raise-v1/lofo_l3_4096_verdict/1",
         "preregistration": PREREG, "source_artifact": os.path.relpath(ARTIFACT, REPO),
         "verdict": verdict, "meaning": meaning,
-        "validity_failed_clauses": void, "reversal_failed_clauses": fails,
-        "bar_applied": {"reference_0015_incumbent_mixture": ref_m, "margin": MARGIN_BAR, "mixture_must_reach": MIXTURE_MUST_REACH},
-        "lofo_mixture_top1_l3": l3_mix if l3_mix is not None else banked_mix,
+        "validity_failed_clauses": void, "lead_failed_clauses": fails,
+        "bar_applied": {"reference_0015_incumbent_mixture": ref_m, "reference_0015_incumbent_correct": ref_mc, "margin": MARGIN_BAR,
+                        "margin_correct_rows": MARGIN_CORRECT, "mixture_must_reach": MIXTURE_MUST_REACH,
+                        "reaches_record_margin_bar_0.05": (l3_correct - ref_mc >= round(0.05 * n_rows)) if l3_correct is not None and not void else None,
+                        # 0015's own transfer bar, its TRANSFERS comparison verbatim on the 4-decimal mixture (0.0885 passes)
+                        "reaches_0015_transfer_bar": (round(l3_mix - CHANCE, 6) >= 0.05 - 1e-9) if l3_mix is not None and not void else None},
+        "n_iter_by_fold": g("n_iter_by_fold"), "any_fold_at_iteration_cap": g("any_fold_at_iteration_cap"),
+        "lofo_mixture_top1_l3": l3_mix if verdict != "VOID" else None,
+        "lofo_correct_l3": l3_correct if verdict != "VOID" else None,
+        "lofo_margin_l3_over_0015_model_exact": margin_exact,
         "lofo_mixture_top1_l3_banked_by_runner": banked_mix,
-        "lofo_margin_l3_over_0015_model": num(g("lofo_margin_l3_over_0015_model")),
-        "lofo_margin_l3_over_0015_logistic": num(g("lofo_margin_l3_over_0015_logistic")),
-        "lofo_mixture_minus_chance_l3": round(banked_mix - CHANCE, 6) if banked_mix is not None else None,
-        "per_family_l3": pf,
+        "lofo_margin_l3_over_0015_model": num(g("lofo_margin_l3_over_0015_model")) if verdict != "VOID" else None,
+        "lofo_margin_l3_over_0015_logistic": num(g("lofo_margin_l3_over_0015_logistic")) if verdict != "VOID" else None,
+        "lofo_mixture_minus_chance_l3": round(banked_mix - CHANCE, 6) if banked_mix is not None and verdict != "VOID" else None,
+        "per_family_l3": pf if verdict != "VOID" else None,
         "per_family_margin_over_0015_model": g("lofo_per_family_margin_over_0015_model"),
         "reference_0015": REFERENCE_0015,
-        "structured_four_top1_l3": num((lofo.get("logistic_l3") or {}).get("structured_four_top1")),
+        "structured_four_top1_l3": num((lofo.get("logistic_l3") or {}).get("structured_four_top1")) if verdict != "VOID" else None,
+        "folds_below_iteration_cap": below_cap,
         "l3_reproduction_drift": round(num(l3.get("top1")) - L3_TOP1_0014, 6) if num(l3.get("top1")) is not None else None,
         "informational_only": "the margin over 0015's logistic, the per-family readings, the structured-four reading, the "
                               "reproduction drift and the artifact's cluster intervals are informational: not a verdict, "
@@ -481,7 +528,8 @@ def main() -> int:
         "establishes_a_buyer": False, "revises_0003_0014_0015": False,
         "read": {k: g(k) for k in (
             "preregistration", "smoke", "stage", "complete", "missing_roles", "lofo_mixture_top1",
-            "lofo_margin_l3_over_0015_model", "lofo_margin_l3_over_0015_logistic", "logistic_l3_refit_top1",
+            "lofo_margin_l3_over_0015_model", "lofo_margin_l3_over_0015_model_exact", "lofo_correct_l3",
+            "lofo_margin_l3_over_0015_logistic", "logistic_l3_refit_top1", "n_iter_by_fold", "any_fold_at_iteration_cap",
             "shuffled_label_accuracy", "chance_accuracy", "null_rows", "n_classes")},
         "lofo": lofo,
     }
@@ -499,7 +547,7 @@ def main() -> int:
         for f in void:
             print(f"    · {f}")
     if fails:
-        print(f"\n  REVERSAL FAILED CLAUSES ({len(fails)}):")
+        print(f"\n  LEAD FAILED CLAUSES ({len(fails)}):")
         for f in fails:
             print(f"    · {f}")
     print(f"\n  VERDICT: {verdict}")

@@ -1,0 +1,440 @@
+{
+  "id": "0017",
+  "slug": "lofo-l3-4096",
+  "title": "Under leave-one-family-out transfer at 4096, does 0014's searched, standardised logistic lead the incumbent by a preregistered margin? L3 fitted on 0015's eight sealed folds (every pool row of the other seven families), scored once each on the held-out family's sealed rows, the eight readings stitched into one count of correct rows and read against 0015's banked incumbent count plus the margin.",
+  "scope": {
+    "one_line": "One corpus (corpus A, the 0003 corpus, not rebuilt), one seed (20260825), 0015's eight sealed folds hash for hash, one recipe (0014's L3: LogisticRegression(C=1.0, max_iter=1000) on standardised inputs, byte-identical to 0014's sealed roster entry), 0003's sealed evaluation set scored once per fit. It asks whether the linear rule's advantage under transfer that 0015 found (raw logistic 0.0928 against the incumbent 0.0859, 1788 of 260000 rows) is, for the standardised linear rule the record has, at least 0.02 (5200 rows), a bar calibrated to the transfer regime; whether it also reaches the record's in-distribution margin of 0.05, and whether L3 clears 0015's own transfer bar of chance + 0.05, are banked as flags, not clauses.",
+    "why_this_is_the_biggest_open_risk": "Every margin clause in this record is the boosted model over a baseline set by at least 0.05, in-distribution: 0003's +0.1003 over the frozen set (whose best member is the raw logistic) and +0.0583 over the expanded set (whose best member is a depth-16 tree), 0014's +0.0567 for the searched model over the searched logistic L3. 0015 found that on content the models never saw the raw logistic L1 beat the incumbent (0.0928 against 0.0859, cluster intervals not overlapping), while L1 hit its 400-iteration cap in every fold and in the reproduction. Two readings are open at once: whether a linear rule genuinely generalises at least as well as the boosted model or an unconverged fit merely regularised, and whether the searched in-distribution margin has any transfer meaning. 0014's searched logistic L3 (0.2317 in-distribution against L1's 0.1352) is the converged, standardised linear rule the record already has; fitting it on 0015's folds answers both with eight fits and no new partition. In-distribution the incumbent leads L3 by 0.0078 (0.2395 against 0.2317, 0014's refits), so this is not the reversal of any one in-distribution clause; it is the record's margin discipline applied to the linear rule on unseen content: if L3 leads the incumbent under transfer by the preregistered margin, the linear rule's transfer advantage is real and material and every outbound document that states an in-distribution margin carries that beside it; if not, the linear advantage under transfer is bounded below the bar. Either answer is published at the same size. 0014's 100000-row selection stage (artifacts/pivot/recipe_search_4096_selection.json) separates the two changes in-distribution: the raw logistic L1 at its 400-iteration cap 0.1433, the raw logistic L2 converged at 827 iterations 0.1439, the standardised L3 at 522 iterations 0.2114 — convergence alone was worth 0.0006, standardisation 0.068. Whether standardisation's gain carries to an unseen family is the live question; 0017 does not separate the two under transfer.",
+    "corpus": "data/pivot/full_c4096.npz exactly as 0003 left it: 1300000 rows from 50000 source chunks 0..49999, 1108 features, carve 4096 by sealed cache identity (the cache carries no build metadata): y sha256 2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093, g sha256 eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9. A row's family is FAMILIES[chunk_id % 8] with FAMILIES = [\"gutenberg\", \"base64\", \"binary\", \"code\", \"csv\", \"json\", \"log\", \"mixed\"], the corpus builder's rule.",
+    "seed": "20260825 throughout, as in 0003, 0014, 0015 and 0016: the grouped split, the pool order and the null-label shuffle (drawn from the split's generator after the split, as in 0015) all come from it.",
+    "design": "0015's design with one recipe: the sealed split is 0003's (grouped_split(seed 20260825, eval_frac 0.2, cap 800000)); for each held-out family f in the sealed order the training rows are every pool row of the other seven families in pool order (0015's train_idx_sha256 literals, unchanged), and L3 is fitted once on them and scored once on the whole sealed evaluation set; the reading for f is the accuracy on f's evaluation rows; the LOFO mixture stitches the eight readings over all 260000 evaluation rows, every row predicted by a fit that never saw a row of its family, banked to 4 decimals and re-derived by the reader from the per-example vectors and the banked chunk ids. L3 standardises the block in place (chunkwise, probe-checked as in 0014) and the machinery refills the block from the cache afterwards. One reproduction control precedes the folds: L3 on the full 800000-row pool must score within 0.005 of 0014's same-convention confirmatory refit 0.2317 (artifacts/pivot/recipe_search_4096.json final.logistic, the same block, the same machinery, 728 iterations) - a check of pool order, machinery, environment and evaluation set. A null control follows: L3 fitted on 0015's sealed 20000-row null block with labels shuffled by the split's generator must score at or below chance + 0.02 on the sealed set. The one clause is read on exact counts, not on 4-decimal mixtures: L3's stitched count of correct evaluation rows (recomputed by the reader from the per-example vectors) minus 0015's banked incumbent count 22343 (the sum of 0015's stitched vector lofo_mixture_model in artifacts/pivot/lofo_4096_scores.json; 22343 / 260000 = 0.085935, banked 0.0859) must be at least 0.02 x 260000 = 5200 rows; the same bar restated as a mixture (0.105935) is banked for reading. Whether the lead also reaches the record's in-distribution margin bar of 0.05 (13000 rows) is banked as an informational flag. The margin over 0015's logistic mixture 0.0928, the per-family readings and their margins over 0015's incumbent per-family readings, the structured-four reading and the cluster intervals are banked as readings and gate nothing. Two informational flags are banked with their meanings written now: whether the lead also reaches 13000 rows (the record's in-distribution margin bar of 0.05), and whether L3's 4-decimal mixture clears 0015's own transfer bar, chance + 0.05 = 0.0885 (0015's TRANSFERS comparison verbatim; the incumbent missed it by 0.0026 and 0015's raw logistic cleared it at 0.0928). L3_LEAD_BELOW_BAR with the 0015 flag true means L3 transfers, by 0015's preregistered level, but not materially better than the incumbent; with it false, the standardised rule transfers no better than 0015's raw one did. Neither flag is a verdict.",
+    "partition_sealed_before_any_fit": "0015's sealed partition, restated hash for hash on 2026-09-09 before any 0017 fit; every hash is a literal in the frozen reader and in scope.sealed_partition below (eval, pool, null block and the eight folds, with the counts of held-out-family rows in training, chunks shared with the evaluation set and training rows in the evaluation set all 0). Digest convention as 0012/0014/0015/0016. No partition is drawn.",
+    "recipe_is_0014s": "L3 verbatim from 0014's sealed roster (params hash 6c963004... in the reader), including its 'why' string, so that its params hash is the same literal as in 0014's and 0016's readers; scaled True is required of every record. Nothing is searched or selected. The incumbent is not refitted: 0015 banked it on these exact folds and that number is the sealed other side of the margin.",
+    "what_this_measures_and_does_not": "It measures whether 0014's searched, standardised logistic L3 leads 0003's fixed incumbent on unseen families by at least 0.02 (5200 of 260000 rows) at 4096 bytes on the corpus builder's eight families (seven parametric generators from one script and one real-prose family). L3 is a searched recipe and the incumbent is not; the symmetric comparison, 0014's searched model M4 under transfer, is not measured here (eight fits at about 14000 s each, a separate and costed decision). L3 differs from 0015's raw logistic in two things at once, standardisation and the iteration cap, so a lead is attributed to neither. It does not measure other carve sizes, content outside the eight families, or a buyer; an L3_LEADS_INCUMBENT_UNDER_TRANSFER says the standardised linear rule leads the boosted incumbent on this corpus's unseen families by the preregistered margin, not that linear rules are better in general, and not that any in-distribution clause is reversed (the in-distribution gap between this pair is 0.0078 the other way, and 0014's clause pairs its searched model with L3).",
+    "cost": "EXTRAPOLATION from banked fits. 0014 banked 1164.3 s for L3 on the 800000-row pool (728 iterations, heartbeat peak 9.37 GB anonymous); a fold has about 700000 rows, so about 1000 s per fold: 8 folds about 8000 s, the reproduction about 1200 s, the null about 40 s, nine gathers of 20000 to 800000 rows from the memmapped cache (about two minutes each from a cold cache for the pool) and one probe-checked refill per fold: about 3 h typical; worst case every fit to its 1000-iteration cap, about 1.4x. Memory: a 700000 x 1108 float64 block is 6.2 GB, the evaluation block 1.15 GB, the standardiser's chunk buffer under 0.2 GB: peak about 9.4 GB anonymous as 0014; kill threshold 13.0 GB; launch precondition 14.5 GB MemAvailable (16.46 GB total; 0014 and 0015 launched at 15.66 and 15.7 GB available; a 13.0 GB floor did not reliably refuse a launch beside 0016's runner, whose anonymous RSS varies by stage between about 1.8 and 2.9 GB), and the runner refuses (exit 3, writes nothing) while another tools/pivot runner process is alive; the operator rule is unchanged: launch only after 0016 has exited and its checkpoints are committed. Every fit is standardised, so the shared machinery refills each block after the fit and the runner then discards it: about 15 minutes of gathers over the run, accepted rather than changing machinery 0016 is running from. The runner refuses to launch when sklearn, numpy or python differ from the sealed versions. Outputs: the artifact under 1 MB; the scores file about 10 MB (10 int-list vectors, 0015's convention); 10 checkpoints.",
+    "sealed_set_disclosure": "This is the fifth preregistration scored on 0003's sealed evaluation set (0003 12 times, 0006 for top-k, 0014 10 plus 10 in a smoke, 0015 27 plus smokes, 0016 258 plus smokes); 0017 adds 10 scorings (8 folds, 1 reproduction, 1 null), all of one fixed recipe with no selection, and its smoke runs add their own, counted in artifacts/pivot/engineering_log_0017.json. The bar's other side is 0015's banked number, known when this was written; the recipe was selected by 0014 on a chunk-rule holdout of the pool that never touched the evaluation set, before 0015 existed.",
+    "expected_outcome_stated_in_advance": "Genuinely uncertain, and stated so. Two banked retention ratios bracket it. If L3 keeps the share of its in-distribution accuracy that 0015's incumbent kept (0.0859 / 0.2395 = 0.359 raw; 0.236 on the excess over chance), L3 lands at 0.083 to 0.084, below the incumbent, and the clause fails with both flags false. If it keeps the share the raw logistic kept (0.0928 / 0.1352 = 0.686 raw; 0.562 on the excess), L3 lands at 0.147 to 0.159 and the clause passes with both flags true. The bar, 0.105935 as a mixture, sits between them; the prior is close to even; either outcome is published at the same size.",
+    "what_this_does_not_cover": "The searched model M4 under transfer, other carve sizes, searched recipes beyond L3, content outside the eight families, the diversity axis (0016), calibration, or a buyer. Nothing here establishes a buyer, a customer, a user or a partner.",
+    "protocol": {
+      "seed": 20260825,
+      "eval_frac": 0.2,
+      "top_rung": 800000,
+      "threads": 3,
+      "nice": 10,
+      "carve": 4096,
+      "chunk_offset": 0,
+      "chunk_size": 32768,
+      "cache_identity": {
+        "y_sha256": "2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093",
+        "g_sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9"
+      },
+      "families": [
+        "gutenberg",
+        "base64",
+        "binary",
+        "code",
+        "csv",
+        "json",
+        "log",
+        "mixed"
+      ],
+      "fold_rows": "all",
+      "roles": [
+        "logistic_l3"
+      ],
+      "order": [
+        "reproduction_l3",
+        "null",
+        "folds"
+      ],
+      "null_rows": 20000,
+      "structured_families": [
+        "code",
+        "csv",
+        "json",
+        "log"
+      ],
+      "caps": {
+        "memory_kill_gb": 13.0
+      },
+      "launch": {
+        "min_disk_free_gb": 0.25,
+        "min_mem_available_gb": 14.5
+      },
+      "environment": {
+        "sklearn": "1.9.0",
+        "numpy": "2.4.6",
+        "python": "3.11.15"
+      },
+      "reference_0015": {
+        "source": "artifacts/pivot/lofo_4096.json",
+        "model_mixture_top1": 0.0859,
+        "logistic_mixture_top1": 0.0928,
+        "majority_mixture_top1": 0.0385,
+        "model_per_family": {
+          "base64": 0.0653,
+          "binary": 0.0618,
+          "code": 0.1135,
+          "csv": 0.0968,
+          "gutenberg": 0.0552,
+          "json": 0.1134,
+          "log": 0.1083,
+          "mixed": 0.0738
+        },
+        "logistic_per_family": {
+          "base64": 0.0596,
+          "binary": 0.0773,
+          "code": 0.1023,
+          "csv": 0.103,
+          "gutenberg": 0.0635,
+          "json": 0.1504,
+          "log": 0.1104,
+          "mixed": 0.0762
+        },
+        "model_structured_four_top1": 0.1081,
+        "logistic_structured_four_top1": 0.1167,
+        "model_correct": 22343,
+        "logistic_correct": 24131,
+        "n_eval_rows": 260000,
+        "counts_source": "sum of the stitched vectors lofo_mixture_model and lofo_mixture_logistic in artifacts/pivot/lofo_4096_scores.json (22343 / 260000 = 0.085935, banked 0.0859; 24131 / 260000 = 0.092812, banked 0.0928)"
+      },
+      "bar": {
+        "l3_correct_minus_0015_incumbent_correct_over_n_eval": 0.02
+      },
+      "reproduction_tolerance": 0.005,
+      "null_tolerance": 0.02
+    },
+    "recipes": {
+      "logistic_l3": {
+        "family": "logistic",
+        "id": "L3",
+        "params": {
+          "C": 1.0,
+          "max_iter": 1000
+        },
+        "scaled": true,
+        "why": "standardised inputs with C 1.0: the single most standard fix for an lbfgs logistic on 1108 unscaled hand-engineered columns"
+      }
+    },
+    "sealed_partition": {
+      "eval": {
+        "n_rows": 260000,
+        "n_chunks": 10000,
+        "n_non_gutenberg": 227006,
+        "eval_idx_sha256": "7da1099e0cf9d4c3903dad62f52c91f67b751113fc4bfc0a62c53f05dccf1efa",
+        "eval_y_sha256": "92b95cf02a21945cea2a7bd756a1e1096b07ec351b478c39e795a8a2267400d1"
+      },
+      "pool": {
+        "n_rows": 800000,
+        "n_chunks": 40000,
+        "pool_idx_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+        "pool_y_sha256": "d519612b4e46991f6ea1850fc92271e0de581e3cc378dd05fec59ff678dc72ea",
+        "pool_sorted_sha256": "923cd266c3bf2a45683b2c479d36b046b311cc8f2e53426c962b6dd5ae836094"
+      },
+      "null": {
+        "n_rows": 20000,
+        "null_sorted_sha256": "0653cc12293ae078dd68b900c8778d93e701261ca93414be9eb7bb8e7ee686db"
+      },
+      "folds": {
+        "gutenberg": {
+          "n_eval_rows": 32994,
+          "eval_idx_sha256": "a6a1bef8036511315d2ac17e4a0f7078c6be848ca1c2c4b42d4ee6a084a56202",
+          "n_eval_chunks": 1269,
+          "n_train_rows": 700288,
+          "train_idx_sha256": "036d65b93a92e3ebb950e4fe37c0a0354c18c8e258961ba21db37b6196f561e3",
+          "train_sorted_sha256": "e9c059873523e8543196c8bbb32fcaf0f628124a94c8b9766c75fdf5a2ab9648",
+          "n_train_chunks": 35019,
+          "train_rows_of_heldout_family": 0,
+          "train_chunks_shared_with_eval": 0,
+          "train_rows_in_eval": 0
+        },
+        "base64": {
+          "n_eval_rows": 32864,
+          "eval_idx_sha256": "bdebc4239afd64ccdfc6c27415326d95f29d1bcd8b46a4cf87b2c7fb63ad04eb",
+          "n_eval_chunks": 1264,
+          "n_train_rows": 700560,
+          "train_idx_sha256": "989a2bb2df796f435a81dce996f0a9f5764044696c2eafaa85dcb58043854c32",
+          "train_sorted_sha256": "32a0e6e6e99c0ff3140c0004c4b78faf3ea7958584191a835e47406d04b6d404",
+          "n_train_chunks": 35014,
+          "train_rows_of_heldout_family": 0,
+          "train_chunks_shared_with_eval": 0,
+          "train_rows_in_eval": 0
+        },
+        "binary": {
+          "n_eval_rows": 32474,
+          "eval_idx_sha256": "f91f609e7fb8739a17c0bb3a6fce9afdf1599b8282e14e366823461fb1dbd8c4",
+          "n_eval_chunks": 1249,
+          "n_train_rows": 699897,
+          "train_idx_sha256": "986eb2ee3bf4193c97d3a0d730ab01d158292c864252633864122a218a51c653",
+          "train_sorted_sha256": "9a5c958d8122ecda681a4292ed85d25fb8c6690c6f78a7f0d24a64e2a5ebf6a4",
+          "n_train_chunks": 34999,
+          "train_rows_of_heldout_family": 0,
+          "train_chunks_shared_with_eval": 0,
+          "train_rows_in_eval": 0
+        },
+        "code": {
+          "n_eval_rows": 31850,
+          "eval_idx_sha256": "578248b2f2350e7aa5d3f7b2a832ecdb14fbd97d93e4690b7b4ea1e73a504bec",
+          "n_eval_chunks": 1225,
+          "n_train_rows": 699654,
+          "train_idx_sha256": "14a38f73e27f9a4906b91e6803cae5cbe89fe0da1fa1e18b241038ff2653c222",
+          "train_sorted_sha256": "39f72aa942c473a4ac8867c11d056a0527b5e6f0f4602c2e643157a2eff73775",
+          "n_train_chunks": 34975,
+          "train_rows_of_heldout_family": 0,
+          "train_chunks_shared_with_eval": 0,
+          "train_rows_in_eval": 0
+        },
+        "csv": {
+          "n_eval_rows": 31616,
+          "eval_idx_sha256": "b4ccfb51f5b8b54b2ef856b54af6e79cc7ca6ed62bc0d8cc8a7bfcac09dc5555",
+          "n_eval_chunks": 1216,
+          "n_train_rows": 699440,
+          "train_idx_sha256": "8ae358528d974d213f64ee1d8d7800af18babba31b96dec37d6feb561afdf612",
+          "train_sorted_sha256": "8f6fee17a72ee29f6bb8c2215e7b4bad24b367c2444e6eaa84e5ea7002017233",
+          "n_train_chunks": 34966,
+          "train_rows_of_heldout_family": 0,
+          "train_chunks_shared_with_eval": 0,
+          "train_rows_in_eval": 0
+        },
+        "json": {
+          "n_eval_rows": 32760,
+          "eval_idx_sha256": "8eacb2d465c04006d1dbfd1452653d2cb4eab3a9ca633b1301b0b0064a17aaa4",
+          "n_eval_chunks": 1260,
+          "n_train_rows": 700071,
+          "train_idx_sha256": "6f4c8110a832e4c3a1b184bbb212ae7d417e74784de11628369d7aa8e8726e25",
+          "train_sorted_sha256": "f9d7de73a4ffd623c962bdd8a82f8e8ab4959ab49b0989e3ca3907d22dfedb5d",
+          "n_train_chunks": 35010,
+          "train_rows_of_heldout_family": 0,
+          "train_chunks_shared_with_eval": 0,
+          "train_rows_in_eval": 0
+        },
+        "log": {
+          "n_eval_rows": 33254,
+          "eval_idx_sha256": "1dab3cc04aa0ae442fc9cab1dd0f0cafd5b1b2e0cf3de25341ab39d8752e1d8b",
+          "n_eval_chunks": 1279,
+          "n_train_rows": 700473,
+          "train_idx_sha256": "03ac48cec4a2761b22d023db503e17403e69251891387bd1836ae57e09635695",
+          "train_sorted_sha256": "72a9d924f37f03ee6727e434ff839f04d101d697f413503d01c0106e39ae3fcb",
+          "n_train_chunks": 35029,
+          "train_rows_of_heldout_family": 0,
+          "train_chunks_shared_with_eval": 0,
+          "train_rows_in_eval": 0
+        },
+        "mixed": {
+          "n_eval_rows": 32188,
+          "eval_idx_sha256": "3749067dd47d4a788ada22122dcf43c159d462ba5ade7904398735bdf94a80f1",
+          "n_eval_chunks": 1238,
+          "n_train_rows": 699617,
+          "train_idx_sha256": "21870ebf6835b9e404baf3e729bf8cf5236da421479014ed7ae295df82ec1425",
+          "train_sorted_sha256": "7705b06a505570c34bb5ade21e6be99c704fc8b012d854891bb8df5a81b7c5f7",
+          "n_train_chunks": 34988,
+          "train_rows_of_heldout_family": 0,
+          "train_chunks_shared_with_eval": 0,
+          "train_rows_in_eval": 0
+        }
+      }
+    },
+    "what_a_lead_would_mean_for_the_record": "That on content the models never saw, the converged linear rule leads the boosted incumbent by a material, preregistered margin while trailing it in-distribution. 0003 and 0014 stand as measured (their clauses are in-distribution and say so), and every document that states a margin carries the lead beside it at full size; no correction is owed, because no document claims a margin under transfer.",
+    "iteration_counts_banked": "The premise 'converged' is banked, not assumed: the runner banks each fold's iteration count (fit_info.n_iter) as n_iter_by_fold and a flag any_fold_at_iteration_cap (true if any fold reached max_iter 1000); the reader requires the counts to be present and restates them; neither is a clause, and a fold at the cap is reported beside the verdict.",
+    "bar_calibration": "The bar is 0.02 (= 5200 of 260000 rows), calibrated to the transfer regime as 0016's was, not to the in-distribution margin scale: under transfer the whole dynamic range on this corpus is about 0.04 (chance 0.0385 to 0015's 0.0928), 0015's raw logistic led the incumbent by 0.0069 (24131 - 22343 = 1788 rows), and the cluster-bootstrap intervals of the two 0015 mixtures are about 0.002 wide; a lead of 0.02 is about three times the raw logistic's lead, about ten interval widths, and well inside the plausible range of L3's transfer accuracy, so the clause can genuinely fail either way. The record's in-distribution margin bar of 0.05 (13000 rows; a mixture of 0.1359) sits inside the raw-logistic-like prediction's range only (0.147 to 0.159) and 0.053 above the incumbent-like one; 0.02 places the bar between the two banked predictions rather than at the edge of one (pre-freeze review); whether the lead nonetheless reaches 0.05 is banked as a flag."
+  },
+  "bar": {
+    "scope_parameters_sealed": {
+      "direction": "equality",
+      "threshold": 0,
+      "passes_if": "preregistration == '0017-lofo-l3-4096'; smoke is False; stage == 'run'; the corpus block equals the sealed constants; the banked protocol equals the sealed protocol key by key and hashes to the reader's PROTOCOL_SHA256; the banked recipe hashes to the reader's RECIPES_SHA256 and equals 0014's L3; the banked 0015 references equal the sealed ones; n_classes 26 and chance 0.038462."
+    },
+    "sealed_sets": {
+      "direction": "equality",
+      "threshold": 0,
+      "passes_if": "The banked partition equals 0015's sealed constants field by field: eval (260000 rows, 10000 chunks, idx and y hashes), pool (800000 rows, idx, y and sorted hashes), every fold's training and evaluation hashes and counts, and the null block's sorted hash."
+    },
+    "no_leakage": {
+      "direction": "equality",
+      "threshold": 0,
+      "passes_if": "For every fold the banked counts train_rows_of_heldout_family, train_chunks_shared_with_eval and train_rows_in_eval are 0 and the fold's training index hash equals the sealed one; every fit record's fit_rows_sha256 and fit_rows_sorted_sha256 equal the fold's sealed hashes with n_fit_rows equal to the sealed count and the preregistered seed."
+    },
+    "complete_one_scoring_per_fit": {
+      "direction": "equality",
+      "threshold": 0,
+      "passes_if": "complete is True; the 8 fold records, the reproduction record and the null record have status 'fit' with finite top-1, non-gutenberg top-1 and eight finite per-family accuracies; every name has exactly one 'completed' event in the ledger; every fold record and the reproduction record has a per-example vector of length 260000 in the scores file; each record's params hash equals the sealed hash of L3 and its scaled flag is True; each record's stage is 'reproduction', 'null' or 'lofo:<family>' as its name says; the banked environment (threads 3, nice 10, sklearn 1.9.0, numpy 2.4.6) matches in every record."
+    },
+    "reproduces_0014_l3": {
+      "direction": "lower_is_better",
+      "threshold": 0.005,
+      "passes_if": "abs(logistic_l3_refit_top1 - 0.2317) <= 0.005, compared as round(abs(a - b), 6) <= 0.005 on an accuracy banked to 4 decimals (0.2367 passes, 0.2368 fails), for L3 on the full 800000-row pool scored once on the sealed set; 0.2317 is 0014's same-convention confirmatory refit of this recipe on this block with this machinery. Failure is VOID."
+    },
+    "null_control": {
+      "direction": "lower_is_better",
+      "threshold": 0.02,
+      "passes_if": "shuffled_label_accuracy <= chance_accuracy + 0.02, the control being L3 fitted on 0015's sealed 20000-row null block with shuffled labels and scored on the sealed set."
+    },
+    "mixture_arithmetic": {
+      "direction": "equality",
+      "threshold": 0,
+      "passes_if": "The reader recomputes L3's LOFO mixture from the eight fold per-example vectors and the banked evaluation chunk ids (family = FAMILIES[chunk % 8]) and requires the banked mixture_top1, mixture_top1_non_gutenberg, structured_four_top1 and per_family values to equal the recomputation at 4 decimals and the banked stitched vector to equal the stitched one; the banked lofo_mixture_top1 must be L3's mixture; the banked margins must equal the mixture minus 0015's incumbent and logistic mixtures at 6 decimals. The reader's own recomputed mixture is the verdict's."
+    },
+    "lead": {
+      "direction": "higher_is_better",
+      "threshold": 0.02,
+      "passes_if": "L3's stitched count of correct evaluation rows, recomputed by the reader from the eight fold per-example vectors and the banked chunk ids, minus 0015's banked incumbent count 22343 is at least 5200 rows, i.e. 0.02 x 260000 (compared as integers; 27543 correct rows passes, 27542 fails; restated as a mixture the count must reach 0.105935). Verdict L3_LEADS_INCUMBENT_UNDER_TRANSFER if it passes, L3_LEAD_BELOW_BAR if not. Whether the lead also reaches 13000 rows (the record's in-distribution margin bar of 0.05) and whether L3's mixture clears 0015's transfer bar of 0.0885 are banked as informational flags; the margin over 0015's logistic count 24131, the per-family readings and margins, the structured-four reading, the iteration counts and the cluster intervals are banked as readings and gate nothing."
+    }
+  },
+  "readings": [
+    {
+      "name": "verdict",
+      "unit": "enum{L3_LEADS_INCUMBENT_UNDER_TRANSFER,L3_LEAD_BELOW_BAR,VOID}",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096_verdict.json",
+      "json_path": "$.verdict"
+    },
+    {
+      "name": "lofo_mixture_top1_l3",
+      "unit": "fraction correct over all 260000 evaluation rows, each predicted by the L3 fold that held out its family",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo_mixture_top1"
+    },
+    {
+      "name": "lofo_margin_l3_over_0015_model",
+      "unit": "L3's mixture minus 0015's banked incumbent mixture 0.0859, 6 decimals; the clause reads the reader's recomputation",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo_margin_l3_over_0015_model"
+    },
+    {
+      "name": "lofo_margin_l3_over_0015_model_exact",
+      "unit": "(L3's stitched correct count minus 0015's banked incumbent count 22343) / 260000, 6 decimals; the clause reads the reader's recomputed count",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo_margin_l3_over_0015_model_exact"
+    },
+    {
+      "name": "lofo_correct_l3",
+      "unit": "L3's stitched count of correct evaluation rows out of 260000",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo_correct_l3"
+    },
+    {
+      "name": "lofo_margin_l3_over_0015_logistic",
+      "unit": "L3's mixture minus 0015's banked raw-logistic mixture 0.0928, 6 decimals, informational",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo_margin_l3_over_0015_logistic"
+    },
+    {
+      "name": "lofo_per_family_l3",
+      "unit": "map of family to L3's accuracy on that family's evaluation rows from the fold that held it out",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo.logistic_l3.per_family"
+    },
+    {
+      "name": "lofo_per_family_margin_over_0015_model",
+      "unit": "map of family to L3's held-out accuracy minus 0015's incumbent held-out accuracy on the same rows, 6 decimals, informational",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo_per_family_margin_over_0015_model"
+    },
+    {
+      "name": "lofo_structured_four_top1_l3",
+      "unit": "L3's mixture over the code, csv, json and log evaluation rows, informational",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo.logistic_l3.structured_four_top1"
+    },
+    {
+      "name": "logistic_l3_refit_top1",
+      "unit": "fraction correct on the sealed set for L3 on the full pool; must be within 0.005 of 0.2317",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.logistic_l3_refit_top1"
+    },
+    {
+      "name": "shuffled_label_accuracy",
+      "unit": "fraction correct on the sealed set for L3 on the null block with shuffled labels; must be <= chance + 0.02",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.shuffled_label_accuracy"
+    },
+    {
+      "name": "eval_idx_sha256",
+      "unit": "sha256 of the evaluation index array; must equal the sealed constant",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.partition.eval_idx_sha256"
+    },
+    {
+      "name": "fold_train_idx_sha256",
+      "unit": "per fold, sha256 of the training index array; must equal 0015's sealed constants",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.partition.folds.*.train_idx_sha256"
+    },
+    {
+      "name": "complete",
+      "unit": "bool; every fit banked",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.complete"
+    },
+    {
+      "name": "cluster_ci95_informational",
+      "unit": "95% cluster-bootstrap intervals over evaluation chunks for every fold's held-out reading and the mixture; informational",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.cluster_ci95_informational"
+    },
+    {
+      "name": "cost",
+      "unit": "fit seconds per name, interruptions, banked total, checkpoint directory; informational",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.cost"
+    },
+    {
+      "name": "n_iter_by_fold",
+      "unit": "map of held-out family to L3's lbfgs iteration count on that fold (cap 1000), informational",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.n_iter_by_fold"
+    },
+    {
+      "name": "any_fold_at_iteration_cap",
+      "unit": "bool; true if any fold's fit reached max_iter, informational",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.any_fold_at_iteration_cap"
+    },
+    {
+      "name": "reaches_0015_transfer_bar",
+      "unit": "bool; L3's mixture minus chance >= 0.05 (0015's TRANSFERS comparison on the 4-decimal mixture), informational",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096_verdict.json",
+      "json_path": "$.bar_applied.reaches_0015_transfer_bar"
+    },
+    {
+      "name": "reaches_record_margin_bar_0.05",
+      "unit": "bool; the lead reaches 13000 rows, the record's in-distribution margin bar, informational",
+      "source_artifact": "artifacts/pivot/lofo_l3_4096_verdict.json",
+      "json_path": "$.bar_applied.reaches_record_margin_bar_0.05"
+    }
+  ],
+  "arms": [
+    "REPRODUCTION: L3 on the full 800000-row pool, scored once on the sealed set; must give 0.2317 within 0.005.",
+    "NULL: L3 on 0015's sealed 20000-row null block with shuffled labels, scored once; at or below chance + 0.02.",
+    "EIGHT FOLDS, in the sealed family order gutenberg, base64, binary, code, csv, json, log, mixed: L3 fitted on every pool row of the other seven families (0015's sealed rows) and scored once on the sealed set. The reading is the held-out family's accuracy; the eight readings stitch into the count of correct rows the verdict is read from, against 0015's banked incumbent count plus the margin."
+  ],
+  "stop_rules": [
+    "L3_LEAD_BELOW_BAR is published at the same size as L3_LEADS_INCUMBENT_UNDER_TRANSFER would have been, as a bound on the linear rule's transfer advantage in every document that states a margin.",
+    "A validity or control failure is VOID: the clause is named, nothing is counted in either direction; a VOID run may be resumed from its checkpoints under the identical invocation and is never re-parameterised.",
+    "NOT RUN is reachable only before the first checkpoint and only by the three-launches-without-a-new-checkpoint rule; it is filed as artifacts/pivot/lofo_l3_4096_not_run.json, the reader prints it and exits 2, and it is not a verdict. A failed launch precondition (threads, nice, disk, MemAvailable, sealed library versions, an unfrozen preregistration, another tools/pivot runner alive) refuses to launch with exit 3 and writes nothing. A lost checkpoint directory after the first checkpoint is a published VOID, not a fresh start.",
+    "Once any checkpoint exists the artifact exists at the sealed path with complete false and reads VOID naming the missing fits until every fit is banked; abandonment after that point is a published VOID.",
+    "No recipe, fold or role is added, removed or re-parameterised after freeze: the recipe hashes to a literal in the frozen reader and sits under the sealed scope; a record whose params hash is off-recipe or whose rows are off-seal reads VOID.",
+    "The sealed evaluation set is scored exactly once per fit; no fold is re-fitted; interruptions are counted, never turned into a status; infeasible_memory is stamped only on a caught MemoryError or a kill at the 13.0 GB anonymous-RSS threshold and reads VOID.",
+    "The margin is not lowered, the other side of the margin (0015's banked count 22343) is not replaced, the mixture is not re-weighted, no family is dropped from it, and absence, NaN or inf read as VOID.",
+    "This cannot revise 0003, 0006, 0007, 0011, 0014, 0015 or 0016; revises_0003_0014_0015 and establishes_a_buyer are emitted False unconditionally; no customer, user, partner or buyer is claimed.",
+    "Cost is banked beside the result (fit seconds, ru_maxrss and heartbeat anonymous RSS per record, launches, interruptions, refills, the environment) and gates nothing in the reader; every cost figure in scope.cost is an extrapolation and is replaced by the banked figures in the record.",
+    "The corpus, the evaluation set, the pool, the null block and the folds are 0015's one draw and are not redrawn; smoke runs write only to the scratchpad, are stamped smoke true, and read VOID."
+  ],
+  "thesis": {
+    "what_would_make_it_fail_honestly": "An L3 count of correct rows short of 22343 + 5200: the standardised linear rule transfers no more than 0.02 better than the incumbent — possibly about as the raw one did, possibly below the incumbent.",
+    "what_a_pass_would_mean": "That on unseen families the standardised linear rule leads the boosted incumbent by the preregistered margin while trailing it in-distribution: the linear advantage under transfer 0015 found is real and material on this corpus for this pair; nothing about universality, nothing about the searched model M4 (not fitted here), and nothing about a buyer.",
+    "what_neither_outcome_means": "Neither names a buyer. Neither revises 0003, 0014, 0015 or 0016. Neither says anything about carve sizes other than 4096, about content outside the corpus builder's families, or about recipes other than L3 and the banked incumbent."
+  },
+  "reader": "tools/readers/lofol3_4096_verdict.py",
+  "invocation": "export OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3; nice -n 10 python3 tools/pivot/run_lofo_l3.py --stage run --prereg-file prereg/0017-lofo-l3-4096.json --cache data/pivot/full_c4096.npz --workdir artifacts/pivot/lofo_l3_4096_ckpt --out artifacts/pivot/lofo_l3_4096.json --scores-out artifacts/pivot/lofo_l3_4096_scores.json; then python3 tools/readers/lofol3_4096_verdict.py. Relaunching the identical command after a container restart is the whole recovery procedure; checkpoints are committed and pushed as they land.",
+  "smoke": {
+    "top_rung": 12000,
+    "fold_rows": 3000,
+    "null_rows": 2000,
+    "launch": {
+      "min_disk_free_gb": 0.0,
+      "min_mem_available_gb": 0.0
+    },
+    "invocation": "The invocation above with --smoke added and --workdir, --out and --scores-out pointed under the session scratchpad; the runner refuses --smoke with any output path under artifacts/ and a real run with any output path outside it. The smoke block replaces top_rung, fold_rows, null_rows and launch; everything else is the sealed protocol."
+  },
+  "frozen": false
+}
