@@ -233,8 +233,15 @@
         "utc": "2026-09-09T10:41:29Z",
         "n_checkpoints_at_launch": 76,
         "why": "the container restarted at about 10:41 UTC (uptime 1 min at 10:42) and the detached runner died with it, mid-fit on fold binary k=4 model; the hourly watchdog's poll found no runner and no 'run exit' line and relaunched the identical sealed command, which resumed the 76 banked fits from their checkpoints; the interrupted fit is refitted and its interruption count banked in its record"
+      },
+      {
+        "launch": 3,
+        "utc": "2026-09-09T11:41:59Z",
+        "n_checkpoints_at_launch": 76,
+        "why": "the container restarted again at about 11:41 UTC, on the hourly watchdog's wake. Diagnosis from the log and the heartbeat file: after launch 2 the runner resumed the 76 banked fits, gathered fold binary k=4 (10:49) and wrote its last heartbeat at 10:49:58; the session had gone idle at about 10:47, and nothing ran until the wake at 11:40, when the container restarted and the detached runner died with it. The machine suspends the detached runner whenever this session is idle and restarts the container on the next wake, so compute happens only while the session is active; from launch 3 on the session is kept active with a checkpoint monitor for the whole run, and each interruption is counted in the interrupted fit's record"
       }
-    ]
+    ],
+    "operating_note": "the detached runner does not run while the session is idle; every wake after an idle period restarts the container and kills the runner, which the watchdog relaunches from its checkpoints. Wall clock therefore includes suspended time; fit seconds are banked per fit and are unaffected."
   },
   "operator_procedure": "launch detached (setsid nohup) with the sealed invocation; poll every 30 minutes: commit and push new checkpoints, relaunch the identical command if the runner is dead and the run is not finished; the reader runs once on the completed artifact; publication states the verdict at the same size either way."
 }
