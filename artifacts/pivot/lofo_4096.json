@@ -28,9 +28,126 @@
     "isal-3",
     "zopfli"
   ],
-  "cluster_ci95_informational": {},
+  "cluster_ci95_informational": {
+    "fold_base64_logistic": [
+      0.0583,
+      0.0608
+    ],
+    "fold_base64_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_base64_model": [
+      0.0637,
+      0.0669
+    ],
+    "fold_binary_logistic": [
+      0.0759,
+      0.0787
+    ],
+    "fold_binary_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_binary_model": [
+      0.0597,
+      0.0638
+    ],
+    "fold_code_logistic": [
+      0.0997,
+      0.105
+    ],
+    "fold_code_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_code_model": [
+      0.1106,
+      0.1164
+    ],
+    "fold_csv_logistic": [
+      0.1008,
+      0.1052
+    ],
+    "fold_csv_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_csv_model": [
+      0.0941,
+      0.0996
+    ],
+    "fold_gutenberg_logistic": [
+      0.0611,
+      0.0661
+    ],
+    "fold_gutenberg_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_gutenberg_model": [
+      0.0527,
+      0.0577
+    ],
+    "fold_json_logistic": [
+      0.1475,
+      0.1533
+    ],
+    "fold_json_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_json_model": [
+      0.1107,
+      0.1162
+    ],
+    "fold_log_logistic": [
+      0.1081,
+      0.1127
+    ],
+    "fold_log_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_log_model": [
+      0.1057,
+      0.111
+    ],
+    "fold_mixed_logistic": [
+      0.0751,
+      0.0774
+    ],
+    "fold_mixed_majority": [
+      0.0385,
+      0.0385
+    ],
+    "fold_mixed_model": [
+      0.072,
+      0.0755
+    ],
+    "lofo_mixture_logistic": [
+      0.0919,
+      0.0938
+    ],
+    "lofo_mixture_majority": [
+      0.0385,
+      0.0385
+    ],
+    "lofo_mixture_model": [
+      0.085,
+      0.0868
+    ],
+    "repro_logistic": [
+      0.1338,
+      0.1367
+    ],
+    "repro_model": [
+      0.2366,
+      0.2421
+    ]
+  },
   "cluster_ci95_note": "95% cluster-bootstrap intervals over the held-out family's evaluation chunks (2000 resamples) for each fold and role, and over all 10000 chunks for each mixture; informational, never a clause",
-  "complete": false,
+  "complete": true,
   "corpus": {
     "cache_g_sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9",
     "cache_y_sha256": "2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093",
@@ -45,7 +162,7 @@
     "n_source_chunks": 50000
   },
   "cost": {
-    "banked_fit_seconds_total": 19801.0,
+    "banked_fit_seconds_total": 21446.3,
     "checkpoints": "artifacts/pivot/lofo_4096_ckpt",
     "interruptions_by_name": {
       "fold_base64_logistic": 0,
@@ -71,6 +188,7 @@
       "fold_log_model": 0,
       "fold_mixed_logistic": 0,
       "fold_mixed_majority": 0,
+      "fold_mixed_model": 0,
       "null": 0,
       "repro_logistic": 0,
       "repro_model": 0
@@ -99,11 +217,12 @@
       "fold_log_model": 1472.6,
       "fold_mixed_logistic": 809.6,
       "fold_mixed_majority": 0.0,
+      "fold_mixed_model": 1645.3,
       "null": 24.0,
       "repro_logistic": 929.7,
       "repro_model": 1666.6
     },
-    "wall_seconds_this_invocation": 20307.4
+    "wall_seconds_this_invocation": 21977.2
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -1472,7 +1591,67 @@
         "utc": "2026-09-09T00:49:48Z",
         "val": null
       },
-      "model": null
+      "model": {
+        "block_refills": [],
+        "environment": {
+          "nice": 10,
+          "numpy": "2.4.6",
+          "python": "3.11.15",
+          "sklearn": "1.9.0",
+          "standardiser_probe": {
+            "block_gb": 0.177,
+            "ncols": 1108,
+            "peak_extra_fraction_of_block": 0.1005,
+            "probe_rows_per_pass": 2000,
+            "production_rows_per_pass": 20000,
+            "production_transient_gb": 0.177,
+            "rows": 20000
+          },
+          "threads": 3
+        },
+        "family": "hgb",
+        "fit_info": {
+          "n_iter": 38
+        },
+        "fit_rows_sha256": "21870ebf6835b9e404baf3e729bf8cf5236da421479014ed7ae295df82ec1425",
+        "fit_rows_sorted_sha256": "7705b06a505570c34bb5ade21e6be99c704fc8b012d854891bb8df5a81b7c5f7",
+        "head": "model",
+        "heartbeat_max_rss_gb": 9.02,
+        "id": "M1",
+        "interruptions_before_this_fit": 0,
+        "last_heartbeat_rss_gb_before_this_fit": null,
+        "n_fit_rows": 699617,
+        "params": {
+          "learning_rate": 0.15,
+          "max_iter": 200,
+          "max_leaf_nodes": 63,
+          "n_iter_no_change": 10
+        },
+        "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+        "per_family": {
+          "base64": 0.1205,
+          "binary": 0.1043,
+          "code": 0.2983,
+          "csv": 0.3918,
+          "gutenberg": 0.1656,
+          "json": 0.3695,
+          "log": 0.3849,
+          "mixed": 0.0738
+        },
+        "rss_gb": 8.25,
+        "rss_gb_is": "anonymous (RssAnon)",
+        "rss_total_gb": 12.18,
+        "ru_maxrss_gb": 13.93,
+        "scaled": false,
+        "seconds": 1645.3,
+        "seed": 20260825,
+        "stage": "lofo:mixed",
+        "status": "fit",
+        "top1": 0.2384,
+        "top1_non_gutenberg": 0.2489,
+        "utc": "2026-09-09T01:03:29Z",
+        "val": "frag"
+      }
     }
   },
   "incumbent_refit_top1": 0.2395,
@@ -1961,6 +2140,24 @@
       "rss_gb": 8.21,
       "seconds": 809.6,
       "utc": "2026-09-09T01:03:26Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "82fb4eefd5b1164b",
+      "name": "fold_mixed_model",
+      "pid": 6914,
+      "rss_gb": 8.21,
+      "utc": "2026-09-09T01:03:29Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "82fb4eefd5b1164b",
+      "name": "fold_mixed_model",
+      "pid": 6914,
+      "rss_gb": 8.25,
+      "seconds": 1645.3,
+      "utc": "2026-09-09T01:31:12Z"
     }
   ],
   "lofo": {
@@ -1995,14 +2192,28 @@
         "mixed": 0.0385
       },
       "structured_four_top1": 0.0385
+    },
+    "model": {
+      "mixture_top1": 0.0859,
+      "mixture_top1_non_gutenberg": 0.0904,
+      "mixture_vector_key": "lofo_mixture_model",
+      "per_family": {
+        "base64": 0.0653,
+        "binary": 0.0618,
+        "code": 0.1135,
+        "csv": 0.0968,
+        "gutenberg": 0.0552,
+        "json": 0.1134,
+        "log": 0.1083,
+        "mixed": 0.0738
+      },
+      "structured_four_top1": 0.1081
     }
   },
-  "lofo_margin_model_over_logistic": null,
-  "lofo_mixture_top1": null,
+  "lofo_margin_model_over_logistic": -0.0069,
+  "lofo_mixture_top1": 0.0859,
   "logistic_l1_refit_top1": 0.1352,
-  "missing_roles": [
-    "fold_mixed_model"
-  ],
+  "missing_roles": [],
   "n_classes": 26,
   "null_control": {
     "block_refills": [],
@@ -2402,7 +2613,7 @@
       "val": "frag"
     }
   },
-  "run_finished_utc": null,
+  "run_finished_utc": "2026-09-09T01:31:16Z",
   "run_started_utc": "2026-09-08T19:25:06Z",
   "schema": "raise-v1/lofo_4096/1",
   "schema_version": 1,
