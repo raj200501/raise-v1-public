@@ -203,14 +203,14 @@
       "pred_gutenberg_k1_model": 73.3,
       "repro_100k": 356.1
     },
-    "wall_seconds_this_invocation": 9705.1
+    "wall_seconds_this_invocation": 309.6
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
     "cpu_cores": 4,
-    "disk_free_gb": 5.78,
+    "disk_free_gb": 5.41,
     "gpu": "none",
-    "mem_available_gb": 15.67,
+    "mem_available_gb": 15.78,
     "nice": 10,
     "numpy": "2.4.6",
     "python": "3.11.15",
@@ -5831,9 +5831,9 @@
     "env": {
       "cgroup_memory_limit": "unlimited",
       "cpu_cores": 4,
-      "disk_free_gb": 5.78,
+      "disk_free_gb": 5.41,
       "gpu": "none",
-      "mem_available_gb": 15.67,
+      "mem_available_gb": 15.78,
       "nice": 10,
       "numpy": "2.4.6",
       "python": "3.11.15",
@@ -5843,7 +5843,7 @@
     "ok": true,
     "problems": []
   },
-  "launch_number": 1,
+  "launch_number": 2,
   "ledger": [
     {
       "attempt": 1,
@@ -7211,6 +7211,15 @@
       "pid": 30422,
       "rss_gb": 2.91,
       "seconds": 163.1,
+      "utc": "2026-09-09T10:20:39Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "26c68039b34afff3",
+      "name": "fold_binary_k4_model",
+      "pid": 30422,
+      "rss_gb": 2.91,
       "utc": "2026-09-09T10:20:39Z"
     }
   ],
@@ -10032,7 +10041,7 @@
     }
   },
   "run_finished_utc": null,
-  "run_started_utc": "2026-09-09T07:39:05Z",
+  "run_started_utc": "2026-09-09T10:41:29Z",
   "schema": "raise-v1/fdc_4096/1",
   "schema_version": 1,
   "shuffled_label_accuracy": 0.0389,
