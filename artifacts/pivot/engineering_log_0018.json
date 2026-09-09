@@ -1,0 +1,172 @@
+{
+  "schema": "raise-v1/engineering_log/1",
+  "preregistration": "0018-oob-4096",
+  "status": "draft: instrument built, smoke run, under pre-freeze review",
+  "design": {
+    "question": "Does the headline recipe (0014's searched HGB M4, 0.2884 in distribution) identify the encoder at chance + 0.05 on eight content families the corpus builder never produced, when fitted on the builder's 800000-row pool? 0003's incumbent M1 and 0014's standardised logistic L3 beside it as flags.",
+    "why_now": "0015, 0016 and 0017 measured transfer only among the builder's own families (seven parametric generators sharing one syllable vocabulary, one Gutenberg family); the headline recipe M4 was never fitted under transfer; no model in the record has ever been scored outside the builder. This is the buyer's question in its strongest form the record can currently afford: content nobody manufactured for this record.",
+    "extension_corpus": {
+      "builder": "tools/pivot/corpus_ext.py (imports corpus.py's CONFIGS/compress/carve and features.py unchanged)",
+      "families": [
+        "c_src",
+        "hexdump",
+        "pe_bin",
+        "py_src",
+        "rfc_txt",
+        "rst_doc",
+        "sql",
+        "xml"
+      ],
+      "real": [
+        "c_src",
+        "pe_bin",
+        "py_src",
+        "rfc_txt",
+        "rst_doc"
+      ],
+      "synthetic": [
+        "hexdump",
+        "sql",
+        "xml"
+      ],
+      "n_per_family": 300,
+      "chunk_size": 32768,
+      "carve": 4096,
+      "seed": 20260909,
+      "n_rows": 61409,
+      "rows_dropped_short_stream": 991,
+      "per_family": {
+        "c_src": {
+          "n_rows": 7800,
+          "ceiling_distinct_fragments": 0.9751,
+          "ceiling_distinct_streams": 0.9818,
+          "kind": "real"
+        },
+        "hexdump": {
+          "n_rows": 7800,
+          "ceiling_distinct_fragments": 0.9987,
+          "ceiling_distinct_streams": 1.0,
+          "kind": "synthetic"
+        },
+        "pe_bin": {
+          "n_rows": 7407,
+          "ceiling_distinct_fragments": 0.8949,
+          "ceiling_distinct_streams": 0.9499,
+          "kind": "real"
+        },
+        "py_src": {
+          "n_rows": 7709,
+          "ceiling_distinct_fragments": 0.9828,
+          "ceiling_distinct_streams": 0.9959,
+          "kind": "real"
+        },
+        "rfc_txt": {
+          "n_rows": 7761,
+          "ceiling_distinct_fragments": 0.9768,
+          "ceiling_distinct_streams": 0.9856,
+          "kind": "real"
+        },
+        "rst_doc": {
+          "n_rows": 7775,
+          "ceiling_distinct_fragments": 0.9538,
+          "ceiling_distinct_streams": 0.966,
+          "kind": "real"
+        },
+        "sql": {
+          "n_rows": 7357,
+          "ceiling_distinct_fragments": 0.8987,
+          "ceiling_distinct_streams": 0.9533,
+          "kind": "synthetic"
+        },
+        "xml": {
+          "n_rows": 7800,
+          "ceiling_distinct_fragments": 0.9512,
+          "ceiling_distinct_streams": 0.9524,
+          "kind": "synthetic"
+        }
+      },
+      "build_seconds": 361.5,
+      "determinism_probe": "corpus_ext.py --probe: 3 chunks per family built twice in two task orders, identical arrays (2026-09-09 23:00 UTC)",
+      "sources": "tools/pivot/ext_source_pins.json (82 files pinned by sha256; fetched 2026-09-09 22:55 UTC by tools/pivot/fetch_ext_sources.sh); licences in docs/compliance/EXT_SOURCES.md",
+      "why_non_overlapping_chunks": "the audit found gutenberg's random offsets let evaluation windows overlap; the extension cuts consecutive chunks and picks by seeded permutation without replacement",
+      "why_own_chunk_id_space_and_fam_array": "the builder's family rule is FAMILIES[chunk_id % 8]; the extension's ids start at 10000000 and its family is an explicit array so no reader can confuse the two"
+    },
+    "fits": "M1 (0003's incumbent, val frag), L3 (0014's, standardised), M4 (0014's searched, val frag), each once on the sealed pool (hash 17b0dc0b...); null: M4 on the first 20000 pool rows with shuffled labels; every fit scored once on [sealed evaluation rows; extension rows] through run_recipe_search.run_fit unchanged, so the record's top1 is over the concatenation and the readings are split by index range (banked under `readings`, recomputed by the reader)",
+    "clause": "M4's correct extension rows >= ceil(n_ext x (1/26 + 0.05)) = 5433 of 61409 -> OOB_TRANSFERS else OOB_TRANSFER_FAILS; validity: reproductions within 0.005 of 0.2395 / 0.2317 / 0.2884, null <= chance + 0.02 on the extension rows, sealed hashes, one scoring per fit, readings arithmetic",
+    "flags_not_clauses": [
+      "L3 and M1 at the same bar",
+      "M4 minus L3 and M4 minus M1 as exact counts, and whether each reaches 0.05",
+      "per-family readings, structured-text / high-entropy / real / synthetic subsets",
+      "per-family ceilings (distinct carved fragments among the 26 configurations)"
+    ],
+    "expected_outcome": "see prereg scope.expected_outcome_stated_in_advance: prior close to even"
+  },
+  "cost_anchors": {
+    "source": "artifacts/pivot/recipe_search_4096.json (same pool, same machinery) and 0017",
+    "M4_pool_seconds": 15874.2,
+    "M4_heartbeat_peak_gb": 10.34,
+    "M4_selection_peak_gb": 12.19,
+    "M1_pool_seconds": 1428.4,
+    "L3_pool_seconds_0014": 1164.3,
+    "L3_pool_seconds_0017": 1817.5,
+    "null_M4_20000_seconds": 71.6,
+    "extension_build_seconds": 361.5,
+    "scoring_set_rows": 321409,
+    "estimate": "about 5.4 h of fit plus scoring of 321409 rows per fit; MemAvailable must be >= 14.5 GB at launch"
+  },
+  "smoke_runs": [
+    {
+      "utc": "2026-09-09T23:07Z to 23:21Z",
+      "invocation": "--smoke with top_rung 12000, fit_rows 10000, null_rows 2000, a 5-chunk-per-family extension build (1040 rows) sealed in smoke.ext_corpus; outputs under the scratchpad",
+      "wall_seconds": 840.7,
+      "seconds_by_name": {
+        "incumbent": 34.5,
+        "logistic_l3": 23.6,
+        "model": 318.0,
+        "null": 376.1
+      },
+      "n_iter": {
+        "incumbent": {
+          "n_iter": 20
+        },
+        "logistic_l3": {
+          "n_iter": 237
+        },
+        "model": {
+          "n_iter": 109
+        },
+        "null": {
+          "n_iter": 20
+        }
+      },
+      "numbers_disclosed_not_used": {
+        "reproductions_at_10000_rows": {
+          "incumbent": 0.1415,
+          "logistic_l3": 0.1398,
+          "model": 0.1708
+        },
+        "extension_top1": {
+          "incumbent": 0.0683,
+          "logistic_l3": 0.0644,
+          "model": 0.0779
+        },
+        "null_extension": 0.0279,
+        "ext_per_family_model": {
+          "c_src": 0.0692,
+          "hexdump": 0.0846,
+          "pe_bin": 0.0846,
+          "py_src": 0.0615,
+          "rfc_txt": 0.0769,
+          "rst_doc": 0.0538,
+          "sql": 0.1154,
+          "xml": 0.0769
+        }
+      },
+      "what_it_checked": "the runner's refusals, the extension seal, the concatenated scoring, the readings split, checkpoints and the artifact/scores layout; the reader was then exercised end to end on this output with its pool, null and extension literals patched to the smoke's (scratchpad script reader_on_smoke_0018.py)",
+      "note": "a 10000-row fit cannot reproduce the full-pool references and the reader voids it; the numbers above are from tiny fits and say nothing about the preregistered question"
+    }
+  ],
+  "pre_freeze_review": null,
+  "run_record": null,
+  "operator_procedure": "launch detached (setsid nohup) with the sealed invocation after the freeze; keep the session active for the whole run (an idle session suspends the runner and the container restarts on the next wake: 0016's finding); poll every 30 minutes: commit and push new checkpoints, relaunch the identical command if the runner is dead and the run is not finished; the reader runs once on the completed artifact; publication states the verdict at the same size either way."
+}

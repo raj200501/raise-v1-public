@@ -60,6 +60,10 @@ fdcv = json.load(open(_fdcvp, encoding="utf-8")) if os.path.exists(_fdcvp) else 
 _l3p = A("pivot", "lofo_l3_4096.json"); _l3vp = A("pivot", "lofo_l3_4096_verdict.json")
 l3a = json.load(open(_l3p, encoding="utf-8")) if os.path.exists(_l3p) else None
 l3v = json.load(open(_l3vp, encoding="utf-8")) if os.path.exists(_l3vp) else None
+# 0018 (out-of-builder transfer) is rendered only once its artifact and frozen verdict exist.
+_oobp = A("pivot", "oob_4096.json"); _oobvp = A("pivot", "oob_4096_verdict.json")
+oob = json.load(open(_oobp, encoding="utf-8")) if os.path.exists(_oobp) else None
+oobv = json.load(open(_oobvp, encoding="utf-8")) if os.path.exists(_oobvp) else None
 
 git_head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO,
                           capture_output=True, text=True).stdout.strip()
@@ -195,7 +199,14 @@ chips = "".join([
             f'{l3v["lofo_correct_l3"]} correct rows against the incumbent\'s {l3v["bar_applied"]["reference_0015_incumbent_correct"]}, '
             f'a lead of {l3v["lofo_margin_l3_over_0015_model_exact"]} (bar {l3v["bar_applied"]["margin"]}, '
             f'{l3v["bar_applied"]["margin_correct_rows"]} rows)') if l3v["verdict"] != "VOID" and l3a and l3a.get("complete")
-           else f'VOID: {"; ".join(l3v["validity_failed_clauses"])[:140]}')] if l3v else []))
+           else f'VOID: {"; ".join(l3v["validity_failed_clauses"])[:140]}')] if l3v else [])
+ + ([chip(oobv["verdict"], {"OOB_TRANSFERS": "pass", "OOB_TRANSFER_FAILS": "fail", "VOID": "inc"}[oobv["verdict"]], "0018",
+           (f'the headline recipe (0014\'s searched M4) fitted on the builder\'s eight families and scored on eight families the '
+            f'builder never produced: {oobv["ext_correct_model"]} of {oobv["bar_applied"]["n_ext_rows"]} extension rows correct '
+            f'({oobv["ext_top1_model"]}) against {oobv["bar_applied"]["min_correct"]} needed (chance + 0.05); incumbent '
+            f'{oobv["ext_top1"]["incumbent"]}, standardised logistic {oobv["ext_top1"]["logistic_l3"]}')
+           if oobv["verdict"] != "VOID" and oob and oob.get("complete")
+           else f'VOID: {"; ".join(oobv["validity_failed_clauses"])[:140]}')] if oobv else []))
 
 fam2048_table = ""
 _pf2048 = A("pivot", "per_family_curves_2048.json")
@@ -331,6 +342,31 @@ if l3a and l3v and l3v["verdict"] != "VOID" and l3a.get("complete"):
                      f'nothing here revises 0003, 0014 or 0015, and nothing here establishes a buyer.</p>'
                      f'<table><thead><tr><th>held-out family</th><th>standardised logistic</th><th>0015 incumbent</th>'
                      f'<th>0015 raw logistic</th><th>lead over incumbent</th></tr></thead><tbody>{_rows}</tbody></table>')
+
+boundary_0018 = ""
+if oob and oobv and oobv["verdict"] != "VOID" and oob.get("complete"):
+    _pf = oobv["ext_per_family"]; _ceil = oobv["ext_ceiling_distinct_fragments"]; _rpf = oobv["ext_rows_per_family"]
+    _ba = oobv["bar_applied"]; _fl = _ba.get("flags") or {}
+    _rows = "".join(f'<tr><td class="mono">{f}</td><td class="mono">{_rpf[f]}</td><td class="mono">{_pf["model"][f]}</td>'
+                    f'<td class="mono">{_pf["logistic_l3"][f]}</td><td class="mono">{_pf["incumbent"][f]}</td><td class="mono">{_ceil[f]}</td></tr>'
+                    for f in sorted(_pf["model"], key=lambda k: -_pf["model"][k]))
+    _word = "reaches" if oobv["verdict"] == "OOB_TRANSFERS" else "does not reach"
+    _sub = oobv["ext_subsets"]["model"]
+    boundary_0018 = (f'<p><strong>On content the corpus builder never produced, the headline recipe {_word} the bar: '
+                     f'<span class="mono">{oobv["verdict"]}</span></strong> (preregistration 0018, chain entry 18, read by its own '
+                     f'frozen reader, which recounts every reading from the banked score vectors). 0014\'s searched model, fitted once on '
+                     f'0003\'s sealed 800000-row pool (reproduction {oobv["reproduction_top1"]["model"]} against 0014\'s 0.2884), '
+                     f'identifies the encoder on {oobv["ext_correct_model"]} of {_ba["n_ext_rows"]} extension rows '
+                     f'({oobv["ext_top1_model"]}) against {_ba["min_correct"]} needed for chance + {_ba["bar"]}; the incumbent reads '
+                     f'{oobv["ext_top1"]["incumbent"]} and the standardised logistic {oobv["ext_top1"]["logistic_l3"]} on the same rows '
+                     f'(flags at the same bar: {"yes" if _fl.get("incumbent_reaches_bar") else "no"} and '
+                     f'{"yes" if _fl.get("logistic_l3_reaches_bar") else "no"}). Over the six structured-text families the model reads '
+                     f'{_sub["ext_structured_text_top1"]}, over the two high-entropy families {_sub["ext_high_entropy_top1"]}; real '
+                     f'families {_sub["ext_real_top1"]}, synthetic {_sub["ext_synthetic_top1"]}. The null control on the extension rows '
+                     f'is {oobv["shuffled_label_accuracy_ext"]}. The extension families are eight more families chosen before any fit '
+                     f'touched them; nothing here revises 0015, 0016 or 0017, and nothing here establishes a buyer.</p>'
+                     f'<table><thead><tr><th>extension family</th><th>rows</th><th>searched model</th><th>standardised logistic</th>'
+                     f'<th>incumbent</th><th>ceiling (distinct fragments)</th></tr></thead><tbody>{_rows}</tbody></table>')
 
 # ---------------------------------------------------------------- seed panel
 if seeds:
@@ -483,7 +519,7 @@ protocol returns <span class="mono">CARVE_FAILS</span>: within-size top-1
 (margin below the 0.05 bar), and a 4096-trained model transfers at {carve["transfer_top1"]} —
 chance. The byte-identity ceiling barely moves across carve sizes, so this is a modelling failure
 and is reported as one. Two learned byte-sequence attempts (preregs 0009, 0010) did not rescue it.</p>
-{boundary_2048}{boundary_0012}{boundary_0014}{boundary_0015}{boundary_0016}{boundary_0017}{fam2048_table}
+{boundary_2048}{boundary_0012}{boundary_0014}{boundary_0015}{boundary_0016}{boundary_0017}{boundary_0018}{fam2048_table}
 </div>
 <div class="panel good">
 <p><strong>And the leak correction ran against us.</strong> When an adversarial audit found source
