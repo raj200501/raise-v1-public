@@ -196,7 +196,7 @@ rerun would have said something different. It would not have.
 
 **17** preregistrations, hash-chained (entry *N* carries entry *N−1*'s hash) and anchored to NIST
 Beacon 2.0 and drand; readers frozen by sha256 before their data existed.
-**315** deliberate mutations across **20** gates, **315** detected, **0** survived — every gate provably capable of
+**353** deliberate mutations across **21** gates, **353** detected, **0** survived — every gate provably capable of
 failing. **15** corrections filed against this work at full size, including a **54-agent
 adversarial audit** whose 13 confirmed findings (three critical) were each fixed — the load-bearing ones by new measurement,
 with the audit record banked — rejected findings included — so the filter itself can be audited.
