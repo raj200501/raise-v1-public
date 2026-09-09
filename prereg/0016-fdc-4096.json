@@ -1,0 +1,2780 @@
+{
+  "id": "0016",
+  "slug": "fdc-4096",
+  "title": "At a fixed plaintext budget, does spreading the training data over more content families improve encoder identification on a family the model has never seen? The family-diversity curve (FDC) at 4096 with 0003's fixed recipes and 0014's searched logistic: for each of the eight content families and each family count k in {1, 2, 4, 7}, fit on 4900 source chunks (every pool row of each) drawn evenly from the k families that follow it in the sealed order, score once on the held-out family's sealed evaluation rows, stitch the eight readings into one mixture per k, and read the slope of the mixture against log2(k) against 0.005 per doubling; a single-family depth arm, a preceding-family arm and the standardised logistic's own curve are banked beside it.",
+  "scope": {
+    "one_line": "One corpus (corpus A, data/pivot/full_c4096.npz, the 0003 corpus, not rebuilt), one seed (20260825), one plaintext budget (4900 source chunks per fit, every pool row of each chunk), four family counts (1, 2, 4, 7), eight held-out families, 0003's three fixed recipes plus 0014's searched logistic L3 (standardised inputs, C 1.0, 1000 iterations) as a fourth fixed role, 0003's sealed evaluation set (260000 rows from 10000 held-out chunks) scored once per fit; two informational arms (single-family depth at 2450, 1225 and 700 chunks; the preceding family at k = 1). It asks whether the transfer failure 0015 measured is a matter of how many content types the model has seen: with the plaintext budget held fixed, does accuracy on an unseen family rise with the number of families the budget is spread over?",
+    "why_this_is_the_biggest_open_risk": "0015 bounded the headline: 0003's recipe fitted on seven families identifies the encoder on the eighth at 0.0859 against a bar of 0.0885, and a raw logistic does slightly better (0.0928). 0015 stated as not covered 'whether a recipe trained on more families would transfer better'. That is the data-collection question a reader has next: is transfer bought by more content types, or is the signal bound to the families it was fitted on, so that more of the same kind of data would not help? The corpus can answer it at seven families and below without new data. Either answer is published at the same size; a DIVERSITY_FLAT says that more families of this kind will not, at this rate, fix 0015's failure; a DIVERSITY_HELPS says diversity is a lever, bounded to seven families and this corpus.",
+    "corpus": "data/pivot/full_c4096.npz exactly as 0003 left it: 1300000 rows from 50000 source chunks 0..49999, 1108 features, carve 4096 by sealed cache identity (the cache carries no build metadata): y sha256 2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093, g sha256 eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9. A row's family is FAMILIES[chunk_id % 8] with FAMILIES = [\"gutenberg\", \"base64\", \"binary\", \"code\", \"csv\", \"json\", \"log\", \"mixed\"], the corpus builder's rule.",
+    "seed": "20260825 throughout, as in 0003, 0014 and 0015: the grouped split, the pool order and the null-label shuffle (drawn from the split's generator after the split, as in 0015) all come from it.",
+    "design": "The sealed split is 0003's (grouped_split(seed 20260825, eval_frac 0.2, cap 800000)): 260000 evaluation rows from 10000 chunks, an 800000-row pool from 40000 chunks in generator order, with per-family pool counts of {\"gutenberg\": 4981, \"base64\": 4986, \"binary\": 5001, \"code\": 5025, \"csv\": 5034, \"json\": 4990, \"log\": 4971, \"mixed\": 5012} chunks and {\"gutenberg\": 99712, \"base64\": 99440, \"binary\": 100103, \"code\": 100346, \"csv\": 100560, \"json\": 99929, \"log\": 99527, \"mixed\": 100383} rows. The BUDGET is 4900 source chunks per fit, counted in plaintexts because that is what a corpus costs: every pool row of a chosen chunk is taken (the pool holds about 20 of the 26 encoder variants of each chunk, so a fit sees about 98000 rows, 97797 to 99226 across the fixed-budget folds), and along the curve the number of encoder variants per plaintext is held at the pool's rather than traded against plaintext count (a row-level rule would take about 20 variants of 5000 chunks at k = 1 and about 3 variants of 5000 chunks at k = 7, varying plaintexts and pairing along k; found in the pre-freeze review). For each held-out family f in the sealed order and each family count k in [1, 2, 4, 7], the training subset is the k families that FOLLOW f cyclically in the sealed family order (gutenberg, base64, binary, code, csv, json, log, mixed), nested in k; each chosen family contributes its FIRST 4900/k chunks by first appearance in pool order (4900, 2450, 1225, 700 chunks — exact for all four counts; 4900 is below the smallest per-family pool chunk count, 4971), with every pool row of those chunks, and the union is kept in pool order so the incumbent's last-10% early-stopping validation split is a mix of the chosen families in generator order; each family's chunk sets are nested across k. Four fits per (f, k) in the order majority, logistic, model, logistic_l3 (the standardised logistic last: it scales the block in place and the machinery refills the block from the cache afterwards, probe-checked, as in 0014), each scored once on the whole sealed evaluation set; the per-family accuracies are banked for every fit, and the fit's READING is its held-out family's accuracy. The mixture at k for a role is the accuracy over all 260000 evaluation rows where row i's correctness is taken from the (f, k) fit that held out i's family; it is banked to 4 decimals and re-derived by the reader from the per-example vectors and the banked chunk ids. The CURVE for a role is the mixture at k against log2(k) (0, 1, 2, 2.807355); its ordinary-least-squares slope over the four points, in accuracy per doubling of families, is computed by the reader from the four banked 4-decimal mixtures and rounded to 6 decimals; the bar is read on the model's slope. Two informational arms, fitted with the same four recipes and scored the same way, separate what the curve entangles. DEPTH: for each f, the single successor family alone at 2450, 1225 and 700 chunks (its first chunks in pool order, nested), so that with k = 1's 4900-chunk fit the depth curve holds the family count at one and varies per-family depth over the same sizes the fixed-budget curve spreads over k families; family_effect_at_matched_depth(k) = mixture(k families at 4900/k chunks each) - mixture(one family at 4900/k chunks) is banked per k, and row_effect_within_family = mixture(one family at 4900) - mixture(one family at 700). PREDECESSOR: for each f, k = 1 refitted with the family that PRECEDES f cyclically at 4900 chunks; composition_spread_k1 = mixture(successor rule) - mixture(predecessor rule) is banked as the composition-sensitivity reading. Neither arm enters the bar. One reproduction control precedes the folds: M1 fitted on the FIRST 100000 pool rows — 0003's 100000-row rung, the same rows in the same order, with the same last-10% validation convention — must score within 0.005 of 0003's banked 0.1965 (artifacts/pivot/deflate_curve.json): the clause checks pool order, machinery, environment and evaluation set against a banked rung, and does not place the folds on the ladder (the rung is 100000 rows scattered over about 37000 chunks; a fold is about 98000 rows over 4900 chunks); the sealed row hashes and the recipe hash (val 'frag') certify row identity and convention, and the anchor certifies machinery, environment and evaluation set. A null control follows: M1 fitted on the first 20000 pool rows (0003's and 0014's null block) with labels shuffled by the split's generator must score at or below chance + 0.02 on the sealed set; 0014's 0.0383 on the same block and shuffle and 0003's 0.0389 are banked as informational drift references. The curve's abscissa is log2(k) at 6 decimals, [0, 1, 2, 2.807355], the same literal in the runner and the reader, so the two run the identical slope arithmetic on identical floats; the reader's own slope is the verdict's and the runner's banked slope must agree with it within 1e-6. The number of boosting iterations each incumbent fit ran (fit_info.n_iter) is banked per fold and listed per k as n_iter_by_k, informational, so the curve can be read against training length.",
+    "subset_rule_stated_and_its_confound": "Family COUNT and family COMPOSITION cannot be separated with eight families at this cost: every k = 1 point is one particular pairing, and the curve's shape depends on which families follow which. The rule is fixed by the corpus builder's family order, which predates every preregistration in this chain, and is applied identically to every held-out family, so at every k each family appears as a source in exactly k of the eight training sets (the source marginal is balanced at the mixture level); that is why the bar is read on the mixture and not on any family's own curve. The predecessor arm bounds the composition sensitivity at k = 1 with one alternative pairing per family; a rule that averaged over compositions (every subset of size k) would cost 7 + 21 + 35 + 1 fits per held-out family per role and is not run. The per-family curves are banked so a reader can see which pairings carry the mixture. The fixed budget entangles family count with per-family depth (4900 chunks of one family against 700 chunks of each of seven); the depth arm measures the per-family depth effect at the same sizes so the two can be read apart, and a DIVERSITY_FLAT is stated as 'at a fixed plaintext budget, spreading it over more families does not pay', not as 'families do not matter'.",
+    "partition_sealed_before_any_fit": "Computed on 2026-09-09 from the cache's y and g arrays before any 0016 fit; every hash is a literal in the frozen reader and in scope.sealed_partition below. Digest convention as 0012/0014/0015: sha256 of np.ascontiguousarray(a).tobytes(); index arrays int64 in grouped_split / np.nonzero order; sorted sets np.sort(...).astype(np.int64). EVAL and POOL are 0015's, hash for hash. REPRODUCTION RUNG: the first 100000 pool rows, repro_idx_sha256 659169fcf818b742154948c86e7d60dda61f798a7b5f671c29a0b64827f34297, repro_sorted_sha256 38de80c9bf49f2ea8be8e52545632a0904de4b57dc00256c165123efeed7596a. NULL: the first 20000 pool rows, null_sorted_sha256 822b61020d276a04620440eb2d2e7e60376e1efba83e89607c33c09c39fa1425 (0014's block). FOLDS: gutenberg (held out; 32994 evaluation rows from 1269 chunks, eval_idx_sha256 a6a1bef8036511315d2ac17e4a0f7078c6be848ca1c2c4b42d4ee6a084a56202): k=1: base64 at 4900 chunks each = 97797 rows from 4900 chunks, train_idx_sha256 898e252261186184cd372e04c0521618a2476de333820ca18876bdca5a12a230, train_sorted_sha256 db6001d26d18cccaab51e4cf573614517225bb62566833fc137866f0fd639f6d; k=2: base64+binary at 2450 chunks each = 98590 rows from 4900 chunks, train_idx_sha256 83469fa3e5fe2ad0f74d9b2e3f687fe70ed949843dd345718af2f3961fceee60, train_sorted_sha256 fc2adccbadbad600e79a60e1b0c010696eec2db9a2e9862455d4c76fb54f00ad; k=4: base64+binary+code+csv at 1225 chunks each = 98973 rows from 4900 chunks, train_idx_sha256 a1945e4e5a003786b7524c2f6d444933691c0eda4d052a9a5b85d80af5f80a5d, train_sorted_sha256 e7ff9ce368436e33e2a3c8d0c247e658fb24c918d4dbd5deeb3d5ed22ba12fb4; k=7: base64+binary+code+csv+json+log+mixed at 700 chunks each = 99226 rows from 4900 chunks, train_idx_sha256 12ee75ea7d9d0239fe0bd8aec9195db85ee4e684d169ca5597b511bf1b943433, train_sorted_sha256 29f2cab72ec354e574c2c270b06731e9c9c5f377b3318e26f2ca73a8881678ea; depth 2450 chunks of base64 alone = 49106 rows, train_idx_sha256 823b61c05221790ca54862af7b3bcb216f0f61e7fef23a85782545f12b501339, train_sorted_sha256 24639de0439a3c925dfb9fa1bc7ee79912672969b680e8b262d3117373bb02f0; depth 1225 chunks of base64 alone = 24678 rows, train_idx_sha256 b0c28e21d3a2ce64456ce80b016c8b26b3096ff144a187116080fcdf0e0bf746, train_sorted_sha256 461acf59431a8c50481b1c6989ba013c0619a33b0c9fc5243209cd559f15a401; depth 700 chunks of base64 alone = 14168 rows, train_idx_sha256 895278c2769e56ea188d11247f890a8c973f7a4c275801c7ee8ee69972dac6de, train_sorted_sha256 532c2f1d079cc2e658d42e4c121d7bdc20d41ac07a42653c0e0deed6e3e3acfd; predecessor k=1: mixed at 4900 chunks = 98225 rows from 4900 chunks, train_idx_sha256 d2659b4480017fedd17a67ba1540fd5a3cc5bc02a75626dbcb9a2739bdffc344, train_sorted_sha256 535fd1dff1587ff8904102743929b6eb81742ab94a9db58add52dadbe2f1b803 | base64 (held out; 32864 evaluation rows from 1264 chunks, eval_idx_sha256 bdebc4239afd64ccdfc6c27415326d95f29d1bcd8b46a4cf87b2c7fb63ad04eb): k=1: binary at 4900 chunks each = 98161 rows from 4900 chunks, train_idx_sha256 fdbe4640d1be305d6cb91c4484453fae488192bf2b38503153e47a0eeaf0567a, train_sorted_sha256 5ea3f980141929b44118829217844d29fb4c86212b704bfb01c1b7cc1b04235e; k=2: binary+code at 2450 chunks each = 98888 rows from 4900 chunks, train_idx_sha256 993a95e3743346f8da2bf42d4c7de8808e7520460bf7c3fa4793707bb765a276, train_sorted_sha256 ec9e645a44d6e3ff9047c5a6ba7ec750f557f8f43f83e9fbeb606f3f822d0ca1; k=4: binary+code+csv+json at 1225 chunks each = 99125 rows from 4900 chunks, train_idx_sha256 03262eee7d218f940151755a19c391f64ad5894163626001634d7a925f3e814a, train_sorted_sha256 a3246dcab2e4dffc9c4687f7c5817c7f9fce3cfd671e7ecbb8351f2eb0c3163f; k=7: binary+code+csv+json+log+mixed+gutenberg at 700 chunks each = 99163 rows from 4900 chunks, train_idx_sha256 56cbc8b3d4047aff2809485e5e0b22d788d25fd6835041bde894d789d6430079, train_sorted_sha256 79d63cf2cca5579ec63036f490c8660e8e36f09ea4ceaaadd25cde9e818d9e2e; depth 2450 chunks of binary alone = 49484 rows, train_idx_sha256 a5cc4b1f41cd2006c11beeaddcf188b3dbd650b8002795de9fa4648a91cb2c2d, train_sorted_sha256 4806b86c03cde1c1889abf9b451c5e9338c787d51e1d0e67ee53f0360aebc965; depth 1225 chunks of binary alone = 24792 rows, train_idx_sha256 3d3642651ab55ae36aa17ba10c86d4db25be63238f9aa2ae9764f9b97fa83f31, train_sorted_sha256 e78303c76bd090bda4a11a9c6ee55579229c6ceeed43e5961803653d1ba18923; depth 700 chunks of binary alone = 14152 rows, train_idx_sha256 7a0c0897ad8c5a8872569a328c101630da3fae2124f8d84bb7fbd3ea76a1a684, train_sorted_sha256 dcd304f6c4cb3df18dd46257d0fa49cc198fb865b76278db4cd426aa701d113c; predecessor k=1: gutenberg at 4900 chunks = 98209 rows from 4900 chunks, train_idx_sha256 8bf3783cf12d4511b1fd5845d2f57900cef929861c26c0b7e9aee03db9b32055, train_sorted_sha256 2dca00111af073547d6cc9ee84365ff095345a793fc74b9fefa178b10a5014d3 | binary (held out; 32474 evaluation rows from 1249 chunks, eval_idx_sha256 f91f609e7fb8739a17c0bb3a6fce9afdf1599b8282e14e366823461fb1dbd8c4): k=1: code at 4900 chunks each = 97972 rows from 4900 chunks, train_idx_sha256 e77ce52541fe772f5ff448502e62323b38f50dc186376cd0da5bf47ebeda9317, train_sorted_sha256 1020cab547322aab5c051814cc9871f9491672530eef68adef11ab2058ef130c; k=2: code+csv at 2450 chunks each = 98746 rows from 4900 chunks, train_idx_sha256 f37f388ea3f4781bc2ea98b12bc99174a297fe4b25dc8dc999a79d94da4da30b, train_sorted_sha256 b3cee52832c76ef74303bb80cdd4cd6ac62240ae6dd76a4335d4fe4f77b71f66; k=4: code+csv+json+log at 1225 chunks each = 99153 rows from 4900 chunks, train_idx_sha256 1e2715d72d7a0cbcfed172f5c69bd39793a13d5e433778d57958951ea6c213b3, train_sorted_sha256 0ff77c1187663ed20483d8c22a6cfaf8a04f11e49414e4337b1898da81e61cd7; k=7: code+csv+json+log+mixed+gutenberg+base64 at 700 chunks each = 99179 rows from 4900 chunks, train_idx_sha256 6221ced168fb6cbf7a5a52375a05d1e71b229d593c4ad9ae33b745ffba8432a7, train_sorted_sha256 5005f1ed676441ec1d1a223cb172ebedc403a01c79e67d0e131726bcd1fa5068; depth 2450 chunks of code alone = 49404 rows, train_idx_sha256 99c54c680d77a9f3987a6a8b10c97075841a160638336ed3e439035dbd330419, train_sorted_sha256 9701f4bb4f02a13c808439f301fc32f61e77492886e81394856a1f522e63abe8; depth 1225 chunks of code alone = 24756 rows, train_idx_sha256 30a9feee69ad2c81fc67aefab649a0026753e1b303515925742a9e45de38769d, train_sorted_sha256 a94f81ec0dd3b02072012324c5534326dc0d2bf91f7b0f426501331c16596652; depth 700 chunks of code alone = 14193 rows, train_idx_sha256 7101752816c35496f8a46d1e6dbed1d975f843446783bd93040c962d9bb7a6de, train_sorted_sha256 5a6c256fa9d52e454c93b52d52d1d6eb590828639318896cfc2716422b5fe5ac; predecessor k=1: base64 at 4900 chunks = 97797 rows from 4900 chunks, train_idx_sha256 898e252261186184cd372e04c0521618a2476de333820ca18876bdca5a12a230, train_sorted_sha256 db6001d26d18cccaab51e4cf573614517225bb62566833fc137866f0fd639f6d | code (held out; 31850 evaluation rows from 1225 chunks, eval_idx_sha256 578248b2f2350e7aa5d3f7b2a832ecdb14fbd97d93e4690b7b4ea1e73a504bec): k=1: csv at 4900 chunks each = 98014 rows from 4900 chunks, train_idx_sha256 0974848f4c6be567f08eca89abd59195e574bea7f5c6d30d5f354e02a92ad3d8, train_sorted_sha256 eeb08d0cb90bd61b19f936960f067840bd8a33dda278863a4f4d70d08a140066; k=2: csv+json at 2450 chunks each = 98814 rows from 4900 chunks, train_idx_sha256 273d50cf42d75d662f7edc83d42e4e78f13e410655a73b2aa03074d722e41f9a, train_sorted_sha256 076ad077ed62239fb66ca465a329a4bd0c0ab9791ea1d199dc209edf5244c7ad; k=4: csv+json+log+mixed at 1225 chunks each = 99186 rows from 4900 chunks, train_idx_sha256 377721f410a09833cfebe6d3bf551c23438a54dfc9734e7bb810790f34189a34, train_sorted_sha256 40ff603c682e531ce87c1130b02e5b7dbc931cccd9358431a686ee650ccb7741; k=7: csv+json+log+mixed+gutenberg+base64+binary at 700 chunks each = 99138 rows from 4900 chunks, train_idx_sha256 82fb3a4bb0245d925e5ff834f35f2d32a72856e66a8247b1a37e01a0e4c0285e, train_sorted_sha256 3eab8ddb9daab873edf69efd2bf9dd7f7e7908909b0016ed04af29e521b8cb10; depth 2450 chunks of csv alone = 49342 rows, train_idx_sha256 b3afb883eba6abd247f3ddb2ae7c31f85d3c147681851ff48bf278e28827fb1d, train_sorted_sha256 ee3e778ce359b46cb033e4ae564a81d7fd20f2ffe94cb0e3764f7984d6a0b873; depth 1225 chunks of csv alone = 24747 rows, train_idx_sha256 142892aefd3462fa21436e23a9e618637c2b648e633ae1c65ab7a711953c0043, train_sorted_sha256 99a28d0da94daa04ff56cb0fe311dda059f71776bc67b25a7146ea2b18f76bc9; depth 700 chunks of csv alone = 14108 rows, train_idx_sha256 45ac1626dbd3f38a82d01f7b94b14f2ded6c162da766b9bf70ae951ce892a6db, train_sorted_sha256 f4359a1d0959902b3c0ce9cab2f24e58c32bcacf1785a8c809416b6320e1b01a; predecessor k=1: binary at 4900 chunks = 98161 rows from 4900 chunks, train_idx_sha256 fdbe4640d1be305d6cb91c4484453fae488192bf2b38503153e47a0eeaf0567a, train_sorted_sha256 5ea3f980141929b44118829217844d29fb4c86212b704bfb01c1b7cc1b04235e | csv (held out; 31616 evaluation rows from 1216 chunks, eval_idx_sha256 b4ccfb51f5b8b54b2ef856b54af6e79cc7ca6ed62bc0d8cc8a7bfcac09dc5555): k=1: json at 4900 chunks each = 98230 rows from 4900 chunks, train_idx_sha256 f86222b9a341f631276af6dfdcaaba7f9c93d6226d79f6dfca0bfa257110b3ec, train_sorted_sha256 198287b668a26f4d32fcd735450b8c87b9c0d16cd0d972cef9c5be84617a43dd; k=2: json+log at 2450 chunks each = 98949 rows from 4900 chunks, train_idx_sha256 b7fe0d843d91a0d570b99ed366b05fbed5d98037bfa37e3fab2db2f068adeb59, train_sorted_sha256 c429e88ec6bc3b2c3fcb573993ed45633dd7405b00be0bfc8449a5c31eea4ffc; k=4: json+log+mixed+gutenberg at 1225 chunks each = 99200 rows from 4900 chunks, train_idx_sha256 93af21c1784eb641b73bedb633d7dda057225b818eccfae0242f327803cb626b, train_sorted_sha256 ed36c7f11dd85093c83069e622b68eab9226ac017d3e72772cf5f803041c8745; k=7: json+log+mixed+gutenberg+base64+binary+code at 700 chunks each = 99223 rows from 4900 chunks, train_idx_sha256 046cb26f8b1dd64a77390cbc52cd90d8f260abd4e2e81b73db8fbc0622e1a98f, train_sorted_sha256 85a1db7ce815f7a6b9f4ebf7a5a8e7ed7a8427a7b844dadc5855a89e08655b2b; depth 2450 chunks of json alone = 49472 rows, train_idx_sha256 4c83372481e380ea447ad56bc6ee491523d82e7dae9a9612f8fa9dc16f9cb6fb, train_sorted_sha256 0ac0a6e3884684569c905a818772eb4019844b3f129dc36e29c292e2c17d2fe8; depth 1225 chunks of json alone = 24830 rows, train_idx_sha256 2f1aa613a9e03023a058a8559be80cf6603ebd7937781631cfb4005a5206d016, train_sorted_sha256 bbddb776eff3bb61c21da2e2ea69603cafbbfd6d7268a299c1fc174ae5eb6cff; depth 700 chunks of json alone = 14212 rows, train_idx_sha256 89ae26ece37013533106da66ca1815104e9e5b5f3e3b5be757b7a5761e94d92c, train_sorted_sha256 bc21816dfd1ed9455366a837a06164fc69883504b89747fec2759524c4b55a57; predecessor k=1: code at 4900 chunks = 97972 rows from 4900 chunks, train_idx_sha256 e77ce52541fe772f5ff448502e62323b38f50dc186376cd0da5bf47ebeda9317, train_sorted_sha256 1020cab547322aab5c051814cc9871f9491672530eef68adef11ab2058ef130c | json (held out; 32760 evaluation rows from 1260 chunks, eval_idx_sha256 8eacb2d465c04006d1dbfd1452653d2cb4eab3a9ca633b1301b0b0064a17aaa4): k=1: log at 4900 chunks each = 98196 rows from 4900 chunks, train_idx_sha256 92d5f3d9cdce4b16a9954e25c719a07eb2d3d11f3b69141b659a34364525b91d, train_sorted_sha256 5ffae736f58b10a6ecbbb6dc8ea0b2cdaf49ecf1bf3912d59420f33de5b90e5e; k=2: log+mixed at 2450 chunks each = 98861 rows from 4900 chunks, train_idx_sha256 d188ab2fe88da8f303c2160b33a82269865b4e7cd7da40e6cf248286de7e9fa3, train_sorted_sha256 4c2111ea4b1fb8ad473c7135eba3786e90b29e8d37387534f64c217a91e5fe86; k=4: log+mixed+gutenberg+base64 at 1225 chunks each = 99048 rows from 4900 chunks, train_idx_sha256 0c3e961fab35618ec371cc3f9bdfe41327db60ed9a241aed14c60bd7d8210451, train_sorted_sha256 77507fc24d3adbe4944af7dea3e5363094c389e5765aa104930de44621e8db6e; k=7: log+mixed+gutenberg+base64+binary+code+csv at 700 chunks each = 99119 rows from 4900 chunks, train_idx_sha256 487faedac353a291894417ba1c721feff93df26f2f7d2eb83e91ece068e0c89c, train_sorted_sha256 c3367143e029000db4c0ac6787fc5709b705d34af55316019f0c9e1e8611683b; depth 2450 chunks of log alone = 49477 rows, train_idx_sha256 ba49a90c0956866e3a1fbd329700cdad26ab7cac410032c798043b5e03fab245, train_sorted_sha256 3a21b0a9bc3ba6ade18c9cf7d1b5365e252422d86baa07f03ce43c5f2eea5835; depth 1225 chunks of log alone = 24820 rows, train_idx_sha256 43927c734774d9f9d2da317c2dd92a5926fb3970936e288bc5bd626eb595d785, train_sorted_sha256 073c7c6d8098dfd24ba665c5177c8daba565ad474bdf3edcd8e54086cd83ada2; depth 700 chunks of log alone = 14184 rows, train_idx_sha256 ccb7ef7c17bcaadc47f99e49534570ff0faac03021b2a1db807efa1c02e564b6, train_sorted_sha256 5f66f5048e02d1a69158317f3950a47d74a74a7f20b967fa82085e5540ba9721; predecessor k=1: csv at 4900 chunks = 98014 rows from 4900 chunks, train_idx_sha256 0974848f4c6be567f08eca89abd59195e574bea7f5c6d30d5f354e02a92ad3d8, train_sorted_sha256 eeb08d0cb90bd61b19f936960f067840bd8a33dda278863a4f4d70d08a140066 | log (held out; 33254 evaluation rows from 1279 chunks, eval_idx_sha256 1dab3cc04aa0ae442fc9cab1dd0f0cafd5b1b2e0cf3de25341ab39d8752e1d8b): k=1: mixed at 4900 chunks each = 98225 rows from 4900 chunks, train_idx_sha256 d2659b4480017fedd17a67ba1540fd5a3cc5bc02a75626dbcb9a2739bdffc344, train_sorted_sha256 535fd1dff1587ff8904102743929b6eb81742ab94a9db58add52dadbe2f1b803; k=2: mixed+gutenberg at 2450 chunks each = 98794 rows from 4900 chunks, train_idx_sha256 a599d8c06f109f0b52430161d3e53065a9ab705bc1c7890d115b8a5f300eee63, train_sorted_sha256 a12c20347cb917500ebd419fb3b30c31a714936612e5eb7130153bff5423bb93; k=4: mixed+gutenberg+base64+binary at 1225 chunks each = 99020 rows from 4900 chunks, train_idx_sha256 9ec478edab285c410570ada805ee0ad7a2fa7e92e75cfb703d8ed62da24c9a76, train_sorted_sha256 3394fb5f1f89dfc205c0878815df2377d5706065f966ec59507134b6d96aed0f; k=7: mixed+gutenberg+base64+binary+code+csv+json at 700 chunks each = 99147 rows from 4900 chunks, train_idx_sha256 18a7948b4526092c76659cf594965ca95433b88e39631079671c79cb19c3a473, train_sorted_sha256 b270c048b7dd318a750b75ef916a4b504ac5d3d24bc6e35ce0c9c3310f7490dd; depth 2450 chunks of mixed alone = 49384 rows, train_idx_sha256 5e1b6495fe869f556ed8af68d5c110365a960dce39d2fc4c4a9608cfdc4c549f, train_sorted_sha256 ef726b41ed69cab7901edfd00502291e5fa2ceb9e3e831303423d97016a441d0; depth 1225 chunks of mixed alone = 24789 rows, train_idx_sha256 321cf749bc2417ed826747dc11713eedba4df4331188a9393f22a400f7f7d81c, train_sorted_sha256 7e85ebd2ba381d0baa7f40d4b2bd14f6a5f38508a6f0cb5f89716d549333d19f; depth 700 chunks of mixed alone = 14209 rows, train_idx_sha256 b055508c1d6c0868f77a0b544fd026f936ae6a19fb4d4be6ec23414fb7f40c7f, train_sorted_sha256 0a79db10144307c3a475fbbdf2d313ac7fc45b0dbc77eb24e4ed177b4f6fe3ba; predecessor k=1: json at 4900 chunks = 98230 rows from 4900 chunks, train_idx_sha256 f86222b9a341f631276af6dfdcaaba7f9c93d6226d79f6dfca0bfa257110b3ec, train_sorted_sha256 198287b668a26f4d32fcd735450b8c87b9c0d16cd0d972cef9c5be84617a43dd | mixed (held out; 32188 evaluation rows from 1238 chunks, eval_idx_sha256 3749067dd47d4a788ada22122dcf43c159d462ba5ade7904398735bdf94a80f1): k=1: gutenberg at 4900 chunks each = 98209 rows from 4900 chunks, train_idx_sha256 8bf3783cf12d4511b1fd5845d2f57900cef929861c26c0b7e9aee03db9b32055, train_sorted_sha256 2dca00111af073547d6cc9ee84365ff095345a793fc74b9fefa178b10a5014d3; k=2: gutenberg+base64 at 2450 chunks each = 98516 rows from 4900 chunks, train_idx_sha256 d6014d267641f1611fcab38d939f721d441c4202778ffcc3f6861b577e245c54, train_sorted_sha256 8eb74f99f4172f3345a2c6937227bf3cebe9ebfe39aa2ca7f434fa881092505c; k=4: gutenberg+base64+binary+code at 1225 chunks each = 98987 rows from 4900 chunks, train_idx_sha256 1eef594e14acb635693506aa5e7ab3761c754fd27ffefb2bfb1077fa1fb87ee6, train_sorted_sha256 28d56593117062a9936d30c04e53f4798a3ff92e8473735fd9d7e6da7e16ff47; k=7: gutenberg+base64+binary+code+csv+json+log at 700 chunks each = 99122 rows from 4900 chunks, train_idx_sha256 94089fd7055c2e7f19c01680906cfcf98db0967b31c15fd1fb9467e0b60fd161, train_sorted_sha256 f55d87fbf4c32f213cdf5b0f147ebfa0c4652b566b3c07113965a6c770605d2b; depth 2450 chunks of gutenberg alone = 49410 rows, train_idx_sha256 b01f3e33e64c833bbf47f5c7befcd6880a2fad58f6bca4738286e1fe10461783, train_sorted_sha256 79b69e97da4611065c157984838781eafb5fa9f21f59a24f98840e9d890d00db; depth 1225 chunks of gutenberg alone = 24761 rows, train_idx_sha256 192f5403fc896d5b7c84e2a2924003b6a761d89c1aeb8d6f6702e5900292cff5, train_sorted_sha256 b04af3f7756524a73cc17d190f0e23a41cf3343fd199de6d9ae1ec05c29ed6a4; depth 700 chunks of gutenberg alone = 14105 rows, train_idx_sha256 1033d20ae45ed779dc777f42f9d57da27243e9b671b2622216c79fc6de900686, train_sorted_sha256 c17b62c2907718198e7ce27cf51678464288b57e91504489bdd0b7182db73985; predecessor k=1: log at 4900 chunks = 98196 rows from 4900 chunks, train_idx_sha256 92d5f3d9cdce4b16a9954e25c719a07eb2d3d11f3b69141b659a34364525b91d, train_sorted_sha256 5ffae736f58b10a6ecbbb6dc8ea0b2cdaf49ecf1bf3912d59420f33de5b90e5e. Every fold has 0 rows of its held-out family, 0 rows outside its chosen families, 0 chunks shared with the evaluation set and 0 training rows in the evaluation set, measured and banked by the runner and required by the reader; the reader also recomputes the chosen families from the sealed family order and requires the banked per-family chunk counts to be exactly the budget over k for each chosen family and 0 for every other, independently of the hashes.",
+    "recipes_are_0003s": "M1, L1 and U1 verbatim from 0015's sealed recipes (0014's roster; params hashes in the reader): the incumbent HGB (learning rate 0.15, 63 leaves, 200 iterations with patience 10 on the last 10% of rows), LogisticRegression(max_iter=400) on raw features, DummyClassifier(most_frequent); and L3 verbatim from 0014's sealed roster (LogisticRegression(C=1.0, max_iter=1000) on standardised inputs, 0014's selected logistic at 0.2317 in-distribution), added because 0015 found the raw logistic transferring better than the incumbent while hitting its 400-iteration cap in every fold, so a converged, standardised linear rule is the more informative comparator under transfer (pre-freeze review). Nothing is searched or selected; the bar is on M1, the standardised logistic's curve is a named reading. The four recipe objects are byte-identical to their sealed sources, including their 'why' strings (which describe their roles in 0014 and 0015: the raw logistic's mentions 0003's frozen-set bar and a reproduction clause 0016 does not have), so that every params hash is the same literal as in the earlier readers; 0016's only reproduction clause is the incumbent on the 100000-row rung.",
+    "what_the_curve_measures_and_does_not": "It measures, at 4900 source chunks and 4096 bytes, how the accuracy of 0003's recipe on an unseen family changes with the number of families the budget is spread over, from one to seven, with the depth and predecessor arms beside it. It does not measure the row axis under transfer beyond the depth arm and one derived comparison (0015's k = 7 point at about 700000 rows, about 5000 chunks per family, is banked beside the k = 7 point here at 700 chunks per family); it does not measure transfer to content outside the corpus builder's eight families, to more than seven training families, to other carve sizes or other encoder sets; a DIVERSITY_HELPS says 'among these families, diversity at a fixed plaintext budget moves transfer at this rate for 0003's M1 recipe', not that the signal is universal. The incompressible families (base64, binary, mixed) sit near the byte-identity collision ceiling in-distribution and are expected near chance at every k; the mixture counts them.",
+    "reference_0015_lofo_at_full_rows": {
+      "source": "artifacts/pivot/lofo_4096.json",
+      "model_mixture_top1": 0.0859,
+      "logistic_mixture_top1": 0.0928,
+      "majority_mixture_top1": 0.0385,
+      "rows_per_fold_about": 700000,
+      "use": "informational: the row axis under transfer, derived by the reader as the model's k = 7 mixture at 700 chunks per family minus 0.0859 (about 5000 chunks per family)"
+    },
+    "cost": "EXTRAPOLATION from banked fits. The pre-freeze anchor check fitted M1 on 100000 rows in 341.4 s over 49 boosting iterations at 3 threads, nice 10 (about 7 s per iteration); 0015 banked 804 to 846 s for L1 at about 700000 rows (929.7 s for 400 iterations at 800000), so about 120 s at 98000 rows. 0014 banked 1164.3 s for L3 at 800000 rows (728 iterations), so about 150 s at 98000 rows. Fixed-budget folds: 32 x (about 340 s M1 + about 120 s L1 + about 150 s L3 + 0 s majority) about 19500 s; depth arm: 24 folds at 14000 to 49500 rows, about 24 x 220 s = 5300 s; predecessor arm: 8 folds at about 98000 rows, about 4900 s; reproduction about 340 s; null about 60 s; 66 gathers of 14000 to 100000 rows from the memmapped cache plus one probe-checked refill per fold after the standardised fit, seconds each. Typical total about 30000 s (8.5 h) of fit time; the raw logistic reaching its 400-iteration cap is the typical case (every 0015 fold did), not a worst case. Worst case: every HGB fit to its 200-iteration cap (200/49 of the measured anchor, about 1400 s at 98000 rows) and every standardised logistic to its 1000-iteration cap: about 40 x 1400 + 24 x 700 + 40 x 200 + 24 x 100 + 40 x 210 + 24 x 100 = 94000 s (26 h); no fit has a time cap. Memory (anonymous RSS): a 98000 x 1108 float64 block is 0.87 GB, the evaluation block 1.15 GB, HGB's binned copy and bin-mapper subsample under 0.3 GB: the anchor check peaked at 2.8 GB; launch precondition 6.0 GB MemAvailable (0014 and 0015 asked 12.0 GB for their 7.09 GB pool blocks; nothing here gathers more than 100000 rows); kill threshold 13.0 GB anonymous as before. The runner refuses to launch when sklearn, numpy or python differ from the sealed versions, because the reader voids every record on a version mismatch and a refusal costs nothing where a VOID after hours would. Every fit scores the sealed set, so NOT RUN is reachable only by a failed launch precondition or three launches without a new checkpoint before the first one exists. Outputs: the artifact about 1 MB; the scores file about 77 MB (about 290 per-example vectors of 260000 characters), committed once at the final bank; 258 checkpoints of a few hundred KB each committed as they land.",
+    "sealed_set_disclosure": "This is the fourth preregistration scored on 0003's sealed evaluation set: 0003 scored it 12 times, 0006 for top-k, 0014 10 times plus 10 in a smoke confirm, 0015 27 times plus its smokes; 0016 adds 258 scorings (128 fixed-budget fits, 96 depth-arm fits, 32 predecessor fits, 1 reproduction, 1 null), all of them fixed recipes with no selection, and its smoke runs add their own, counted in artifacts/pivot/engineering_log_0016.json. The reproduction anchor was checked once before the freeze on this machinery (M1 on the first 100000 pool rows, scored on the sealed set, in the scratchpad): top-1 0.1965, exactly 0003's banked rung, in 341.4 s over 49 boosting iterations at 2.36 GB anonymous RSS (the record is kept in the session scratchpad and the value is restated in artifacts/pivot/engineering_log_0016.json; that check built its candidate from the incumbent's parameters without 0015's recipe object around them, so its params hash is not the sealed M1 hash, but its parameters and validation convention equal the sealed recipe's key for key); disclosed here so that the control clause is known to be reachable by an honest run, the failure class 0015's pre-freeze review caught on its logistic anchor.",
+    "expected_outcome_stated_in_advance": "Genuinely uncertain, and stated so, with the prior leaning to DIVERSITY_FLAT. Prior: the structured families gain from structured neighbours (code held out sees csv first; csv sees json first), gutenberg, base64 and binary sit near chance at every k, and mixed is a mixture of the others. The whole dynamic range under transfer is small: 0015's seven-family mixture at about 5000 chunks per family is 0.0859, so the k = 7 point here (700 chunks per family) is expected below that, perhaps 0.06 to 0.08, and the k = 1 point (one family at 4900 chunks) near 0.045 to 0.06; the end-to-end difference is plausibly 0.005 to 0.03, i.e. a slope of 0.002 to 0.011 per doubling, and the bar of 0.005 sits inside that range (about a third of the plausible headroom and about 25 evaluation-noise standard errors of a mixture over 260000 rows). In-distribution a doubling of rows buys 0.0148 (0003's slope x log10(2)); the bar is calibrated to the transfer regime, not to that. A DIVERSITY_FLAT does not revise 0015, 0014 or 0003; it says that at a fixed plaintext budget, spreading it over more content types of this kind is not, at this rate, what fixes transfer for 0003's recipe. The depth arm is expected to show per-family depth mattering (a single family at 4900 chunks above the same family at 700); how much of the fixed-budget slope survives after that is the reading the arm exists for. The standardised logistic's curve is expected above the raw logistic's at every k (0014 banked 0.2317 against 0.1352 in-distribution) and is banked as a reading, not a clause; whether its slope exceeds the incumbent's is open.",
+    "what_a_fail_would_mean_for_the_record": "A DIVERSITY_FLAT is filed as a second boundary of the headline in VERDICT.md, README.md and every outbound document at full size: the encoder signature 0003's recipe learns is bound to the families it is fitted on, and spreading a fixed plaintext budget over more of the corpus builder's families does not move accuracy on an unseen one by 0.005 per doubling. No correction is owed, because no document claims that diversity would fix transfer; 0015's 'not covered' becomes 'measured, and it does not, at this budget and rate'.",
+    "what_this_does_not_cover": "Other carve sizes, searched model recipes, content outside the eight families, more than seven training families, the row axis under transfer beyond the depth arm and one derived comparison, compositions other than the successor and predecessor rules, the standardised logistic on 0015's full folds (a separate preregistration), calibration, or a buyer. Nothing here establishes a buyer, a customer, a user or a partner.",
+    "protocol": {
+      "seed": 20260825,
+      "eval_frac": 0.2,
+      "top_rung": 800000,
+      "threads": 3,
+      "nice": 10,
+      "carve": 4096,
+      "chunk_offset": 0,
+      "chunk_size": 32768,
+      "cache_identity": {
+        "y_sha256": "2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093",
+        "g_sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9"
+      },
+      "families": [
+        "gutenberg",
+        "base64",
+        "binary",
+        "code",
+        "csv",
+        "json",
+        "log",
+        "mixed"
+      ],
+      "family_counts": [
+        1,
+        2,
+        4,
+        7
+      ],
+      "subset_rule": "following_cyclic_nested_by_chunk",
+      "repro_rows": 100000,
+      "roles": [
+        "majority",
+        "logistic",
+        "model",
+        "logistic_l3"
+      ],
+      "order": [
+        "reproduction_100k",
+        "null",
+        "folds"
+      ],
+      "null_rows": 20000,
+      "structured_families": [
+        "code",
+        "csv",
+        "json",
+        "log"
+      ],
+      "caps": {
+        "memory_kill_gb": 13.0
+      },
+      "launch": {
+        "min_disk_free_gb": 0.25,
+        "min_mem_available_gb": 6.0
+      },
+      "bar": {
+        "slope_per_doubling_of_families": 0.005
+      },
+      "reproduction_tolerance": 0.005,
+      "null_tolerance": 0.02,
+      "budget_chunks": 4900,
+      "environment": {
+        "sklearn": "1.9.0",
+        "numpy": "2.4.6",
+        "python": "3.11.15"
+      }
+    },
+    "recipes": {
+      "model": {
+        "id": "M1",
+        "family": "hgb",
+        "val": "frag",
+        "params": {
+          "learning_rate": 0.15,
+          "max_leaf_nodes": 63,
+          "max_iter": 200,
+          "n_iter_no_change": 10
+        },
+        "why": "0003's incumbent verbatim (run_study.py make_model 'hgb', run_carve.py's explicit last-10% validation split); every other parameter at the sklearn 1.9.0 default"
+      },
+      "logistic": {
+        "id": "L1",
+        "family": "logistic",
+        "params": {
+          "max_iter": 400
+        },
+        "why": "0003's logistic verbatim (LogisticRegression(max_iter=400), lbfgs, C 1.0, raw features): the frozen-set bar at 0.1392; its confirmatory reproduction within 0.005 is a validity clause"
+      },
+      "majority": {
+        "id": "U1",
+        "family": "dummy",
+        "params": {
+          "strategy": "most_frequent"
+        },
+        "why": "no hyperparameter; confirmatory fit only, as in 0003 (0.0385 banked)"
+      },
+      "logistic_l3": {
+        "family": "logistic",
+        "id": "L3",
+        "params": {
+          "C": 1.0,
+          "max_iter": 1000
+        },
+        "scaled": true,
+        "why": "standardised inputs with C 1.0: the single most standard fix for an lbfgs logistic on 1108 unscaled hand-engineered columns"
+      }
+    },
+    "sealed_partition": {
+      "eval": {
+        "n_rows": 260000,
+        "n_chunks": 10000,
+        "n_non_gutenberg": 227006,
+        "eval_idx_sha256": "7da1099e0cf9d4c3903dad62f52c91f67b751113fc4bfc0a62c53f05dccf1efa",
+        "eval_y_sha256": "92b95cf02a21945cea2a7bd756a1e1096b07ec351b478c39e795a8a2267400d1"
+      },
+      "pool": {
+        "n_rows": 800000,
+        "n_chunks": 40000,
+        "pool_idx_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+        "pool_y_sha256": "d519612b4e46991f6ea1850fc92271e0de581e3cc378dd05fec59ff678dc72ea",
+        "pool_sorted_sha256": "923cd266c3bf2a45683b2c479d36b046b311cc8f2e53426c962b6dd5ae836094",
+        "rows_per_family": {
+          "gutenberg": 99712,
+          "base64": 99440,
+          "binary": 100103,
+          "code": 100346,
+          "csv": 100560,
+          "json": 99929,
+          "log": 99527,
+          "mixed": 100383
+        },
+        "chunks_per_family": {
+          "gutenberg": 4981,
+          "base64": 4986,
+          "binary": 5001,
+          "code": 5025,
+          "csv": 5034,
+          "json": 4990,
+          "log": 4971,
+          "mixed": 5012
+        }
+      },
+      "repro": {
+        "rows": 100000,
+        "idx_sha256": "659169fcf818b742154948c86e7d60dda61f798a7b5f671c29a0b64827f34297",
+        "sorted_sha256": "38de80c9bf49f2ea8be8e52545632a0904de4b57dc00256c165123efeed7596a",
+        "rows_are": "the first 100000 pool rows, 0003's 100000-row rung"
+      },
+      "null": {
+        "rows": 20000,
+        "sorted_sha256": "822b61020d276a04620440eb2d2e7e60376e1efba83e89607c33c09c39fa1425",
+        "rows_are": "the first 20000 pool rows, labels shuffled by the split's generator"
+      },
+      "family_counts": [
+        1,
+        2,
+        4,
+        7
+      ],
+      "subset_rule": "following_cyclic_nested_by_chunk",
+      "folds": {
+        "gutenberg": {
+          "n_eval_rows": 32994,
+          "eval_idx_sha256": "a6a1bef8036511315d2ac17e4a0f7078c6be848ca1c2c4b42d4ee6a084a56202",
+          "n_eval_chunks": 1269,
+          "by_k": {
+            "1": {
+              "families": [
+                "base64"
+              ],
+              "chunks_per_family": 4900,
+              "n_train_rows": 97797,
+              "train_idx_sha256": "898e252261186184cd372e04c0521618a2476de333820ca18876bdca5a12a230",
+              "train_sorted_sha256": "db6001d26d18cccaab51e4cf573614517225bb62566833fc137866f0fd639f6d",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 97797,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 4900,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "2": {
+              "families": [
+                "base64",
+                "binary"
+              ],
+              "chunks_per_family": 2450,
+              "n_train_rows": 98590,
+              "train_idx_sha256": "83469fa3e5fe2ad0f74d9b2e3f687fe70ed949843dd345718af2f3961fceee60",
+              "train_sorted_sha256": "fc2adccbadbad600e79a60e1b0c010696eec2db9a2e9862455d4c76fb54f00ad",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 49106,
+                "binary": 49484,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 2450,
+                "binary": 2450,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "4": {
+              "families": [
+                "base64",
+                "binary",
+                "code",
+                "csv"
+              ],
+              "chunks_per_family": 1225,
+              "n_train_rows": 98973,
+              "train_idx_sha256": "a1945e4e5a003786b7524c2f6d444933691c0eda4d052a9a5b85d80af5f80a5d",
+              "train_sorted_sha256": "e7ff9ce368436e33e2a3c8d0c247e658fb24c918d4dbd5deeb3d5ed22ba12fb4",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 24678,
+                "binary": 24792,
+                "code": 24756,
+                "csv": 24747,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 1225,
+                "binary": 1225,
+                "code": 1225,
+                "csv": 1225,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "7": {
+              "families": [
+                "base64",
+                "binary",
+                "code",
+                "csv",
+                "json",
+                "log",
+                "mixed"
+              ],
+              "chunks_per_family": 700,
+              "n_train_rows": 99226,
+              "train_idx_sha256": "12ee75ea7d9d0239fe0bd8aec9195db85ee4e684d169ca5597b511bf1b943433",
+              "train_sorted_sha256": "29f2cab72ec354e574c2c270b06731e9c9c5f377b3318e26f2ca73a8881678ea",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 14168,
+                "binary": 14152,
+                "code": 14193,
+                "csv": 14108,
+                "json": 14212,
+                "log": 14184,
+                "mixed": 14209
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 700,
+                "binary": 700,
+                "code": 700,
+                "csv": 700,
+                "json": 700,
+                "log": 700,
+                "mixed": 700
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            }
+          },
+          "depth": {
+            "2450": {
+              "families": [
+                "base64"
+              ],
+              "chunks_per_family": 2450,
+              "n_train_rows": 49106,
+              "train_idx_sha256": "823b61c05221790ca54862af7b3bcb216f0f61e7fef23a85782545f12b501339",
+              "train_sorted_sha256": "24639de0439a3c925dfb9fa1bc7ee79912672969b680e8b262d3117373bb02f0",
+              "n_train_chunks": 2450,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 49106,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 2450,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "1225": {
+              "families": [
+                "base64"
+              ],
+              "chunks_per_family": 1225,
+              "n_train_rows": 24678,
+              "train_idx_sha256": "b0c28e21d3a2ce64456ce80b016c8b26b3096ff144a187116080fcdf0e0bf746",
+              "train_sorted_sha256": "461acf59431a8c50481b1c6989ba013c0619a33b0c9fc5243209cd559f15a401",
+              "n_train_chunks": 1225,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 24678,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 1225,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "700": {
+              "families": [
+                "base64"
+              ],
+              "chunks_per_family": 700,
+              "n_train_rows": 14168,
+              "train_idx_sha256": "895278c2769e56ea188d11247f890a8c973f7a4c275801c7ee8ee69972dac6de",
+              "train_sorted_sha256": "532c2f1d079cc2e658d42e4c121d7bdc20d41ac07a42653c0e0deed6e3e3acfd",
+              "n_train_chunks": 700,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 14168,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 700,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            }
+          },
+          "pred_k1": {
+            "families": [
+              "mixed"
+            ],
+            "chunks_per_family": 4900,
+            "n_train_rows": 98225,
+            "train_idx_sha256": "d2659b4480017fedd17a67ba1540fd5a3cc5bc02a75626dbcb9a2739bdffc344",
+            "train_sorted_sha256": "535fd1dff1587ff8904102743929b6eb81742ab94a9db58add52dadbe2f1b803",
+            "n_train_chunks": 4900,
+            "train_rows_per_family": {
+              "gutenberg": 0,
+              "base64": 0,
+              "binary": 0,
+              "code": 0,
+              "csv": 0,
+              "json": 0,
+              "log": 0,
+              "mixed": 98225
+            },
+            "train_chunks_per_family": {
+              "gutenberg": 0,
+              "base64": 0,
+              "binary": 0,
+              "code": 0,
+              "csv": 0,
+              "json": 0,
+              "log": 0,
+              "mixed": 4900
+            },
+            "train_rows_of_heldout_family": 0,
+            "train_rows_outside_chosen_families": 0,
+            "train_chunks_shared_with_eval": 0,
+            "train_rows_in_eval": 0
+          }
+        },
+        "base64": {
+          "n_eval_rows": 32864,
+          "eval_idx_sha256": "bdebc4239afd64ccdfc6c27415326d95f29d1bcd8b46a4cf87b2c7fb63ad04eb",
+          "n_eval_chunks": 1264,
+          "by_k": {
+            "1": {
+              "families": [
+                "binary"
+              ],
+              "chunks_per_family": 4900,
+              "n_train_rows": 98161,
+              "train_idx_sha256": "fdbe4640d1be305d6cb91c4484453fae488192bf2b38503153e47a0eeaf0567a",
+              "train_sorted_sha256": "5ea3f980141929b44118829217844d29fb4c86212b704bfb01c1b7cc1b04235e",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 98161,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 4900,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "2": {
+              "families": [
+                "binary",
+                "code"
+              ],
+              "chunks_per_family": 2450,
+              "n_train_rows": 98888,
+              "train_idx_sha256": "993a95e3743346f8da2bf42d4c7de8808e7520460bf7c3fa4793707bb765a276",
+              "train_sorted_sha256": "ec9e645a44d6e3ff9047c5a6ba7ec750f557f8f43f83e9fbeb606f3f822d0ca1",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 49484,
+                "code": 49404,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 2450,
+                "code": 2450,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "4": {
+              "families": [
+                "binary",
+                "code",
+                "csv",
+                "json"
+              ],
+              "chunks_per_family": 1225,
+              "n_train_rows": 99125,
+              "train_idx_sha256": "03262eee7d218f940151755a19c391f64ad5894163626001634d7a925f3e814a",
+              "train_sorted_sha256": "a3246dcab2e4dffc9c4687f7c5817c7f9fce3cfd671e7ecbb8351f2eb0c3163f",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 24792,
+                "code": 24756,
+                "csv": 24747,
+                "json": 24830,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 1225,
+                "code": 1225,
+                "csv": 1225,
+                "json": 1225,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "7": {
+              "families": [
+                "binary",
+                "code",
+                "csv",
+                "json",
+                "log",
+                "mixed",
+                "gutenberg"
+              ],
+              "chunks_per_family": 700,
+              "n_train_rows": 99163,
+              "train_idx_sha256": "56cbc8b3d4047aff2809485e5e0b22d788d25fd6835041bde894d789d6430079",
+              "train_sorted_sha256": "79d63cf2cca5579ec63036f490c8660e8e36f09ea4ceaaadd25cde9e818d9e2e",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 14105,
+                "base64": 0,
+                "binary": 14152,
+                "code": 14193,
+                "csv": 14108,
+                "json": 14212,
+                "log": 14184,
+                "mixed": 14209
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 700,
+                "base64": 0,
+                "binary": 700,
+                "code": 700,
+                "csv": 700,
+                "json": 700,
+                "log": 700,
+                "mixed": 700
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            }
+          },
+          "depth": {
+            "2450": {
+              "families": [
+                "binary"
+              ],
+              "chunks_per_family": 2450,
+              "n_train_rows": 49484,
+              "train_idx_sha256": "a5cc4b1f41cd2006c11beeaddcf188b3dbd650b8002795de9fa4648a91cb2c2d",
+              "train_sorted_sha256": "4806b86c03cde1c1889abf9b451c5e9338c787d51e1d0e67ee53f0360aebc965",
+              "n_train_chunks": 2450,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 49484,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 2450,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "1225": {
+              "families": [
+                "binary"
+              ],
+              "chunks_per_family": 1225,
+              "n_train_rows": 24792,
+              "train_idx_sha256": "3d3642651ab55ae36aa17ba10c86d4db25be63238f9aa2ae9764f9b97fa83f31",
+              "train_sorted_sha256": "e78303c76bd090bda4a11a9c6ee55579229c6ceeed43e5961803653d1ba18923",
+              "n_train_chunks": 1225,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 24792,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 1225,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "700": {
+              "families": [
+                "binary"
+              ],
+              "chunks_per_family": 700,
+              "n_train_rows": 14152,
+              "train_idx_sha256": "7a0c0897ad8c5a8872569a328c101630da3fae2124f8d84bb7fbd3ea76a1a684",
+              "train_sorted_sha256": "dcd304f6c4cb3df18dd46257d0fa49cc198fb865b76278db4cd426aa701d113c",
+              "n_train_chunks": 700,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 14152,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 700,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            }
+          },
+          "pred_k1": {
+            "families": [
+              "gutenberg"
+            ],
+            "chunks_per_family": 4900,
+            "n_train_rows": 98209,
+            "train_idx_sha256": "8bf3783cf12d4511b1fd5845d2f57900cef929861c26c0b7e9aee03db9b32055",
+            "train_sorted_sha256": "2dca00111af073547d6cc9ee84365ff095345a793fc74b9fefa178b10a5014d3",
+            "n_train_chunks": 4900,
+            "train_rows_per_family": {
+              "gutenberg": 98209,
+              "base64": 0,
+              "binary": 0,
+              "code": 0,
+              "csv": 0,
+              "json": 0,
+              "log": 0,
+              "mixed": 0
+            },
+            "train_chunks_per_family": {
+              "gutenberg": 4900,
+              "base64": 0,
+              "binary": 0,
+              "code": 0,
+              "csv": 0,
+              "json": 0,
+              "log": 0,
+              "mixed": 0
+            },
+            "train_rows_of_heldout_family": 0,
+            "train_rows_outside_chosen_families": 0,
+            "train_chunks_shared_with_eval": 0,
+            "train_rows_in_eval": 0
+          }
+        },
+        "binary": {
+          "n_eval_rows": 32474,
+          "eval_idx_sha256": "f91f609e7fb8739a17c0bb3a6fce9afdf1599b8282e14e366823461fb1dbd8c4",
+          "n_eval_chunks": 1249,
+          "by_k": {
+            "1": {
+              "families": [
+                "code"
+              ],
+              "chunks_per_family": 4900,
+              "n_train_rows": 97972,
+              "train_idx_sha256": "e77ce52541fe772f5ff448502e62323b38f50dc186376cd0da5bf47ebeda9317",
+              "train_sorted_sha256": "1020cab547322aab5c051814cc9871f9491672530eef68adef11ab2058ef130c",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 97972,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 4900,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "2": {
+              "families": [
+                "code",
+                "csv"
+              ],
+              "chunks_per_family": 2450,
+              "n_train_rows": 98746,
+              "train_idx_sha256": "f37f388ea3f4781bc2ea98b12bc99174a297fe4b25dc8dc999a79d94da4da30b",
+              "train_sorted_sha256": "b3cee52832c76ef74303bb80cdd4cd6ac62240ae6dd76a4335d4fe4f77b71f66",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 49404,
+                "csv": 49342,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 2450,
+                "csv": 2450,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "4": {
+              "families": [
+                "code",
+                "csv",
+                "json",
+                "log"
+              ],
+              "chunks_per_family": 1225,
+              "n_train_rows": 99153,
+              "train_idx_sha256": "1e2715d72d7a0cbcfed172f5c69bd39793a13d5e433778d57958951ea6c213b3",
+              "train_sorted_sha256": "0ff77c1187663ed20483d8c22a6cfaf8a04f11e49414e4337b1898da81e61cd7",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 24756,
+                "csv": 24747,
+                "json": 24830,
+                "log": 24820,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 1225,
+                "csv": 1225,
+                "json": 1225,
+                "log": 1225,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "7": {
+              "families": [
+                "code",
+                "csv",
+                "json",
+                "log",
+                "mixed",
+                "gutenberg",
+                "base64"
+              ],
+              "chunks_per_family": 700,
+              "n_train_rows": 99179,
+              "train_idx_sha256": "6221ced168fb6cbf7a5a52375a05d1e71b229d593c4ad9ae33b745ffba8432a7",
+              "train_sorted_sha256": "5005f1ed676441ec1d1a223cb172ebedc403a01c79e67d0e131726bcd1fa5068",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 14105,
+                "base64": 14168,
+                "binary": 0,
+                "code": 14193,
+                "csv": 14108,
+                "json": 14212,
+                "log": 14184,
+                "mixed": 14209
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 700,
+                "base64": 700,
+                "binary": 0,
+                "code": 700,
+                "csv": 700,
+                "json": 700,
+                "log": 700,
+                "mixed": 700
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            }
+          },
+          "depth": {
+            "2450": {
+              "families": [
+                "code"
+              ],
+              "chunks_per_family": 2450,
+              "n_train_rows": 49404,
+              "train_idx_sha256": "99c54c680d77a9f3987a6a8b10c97075841a160638336ed3e439035dbd330419",
+              "train_sorted_sha256": "9701f4bb4f02a13c808439f301fc32f61e77492886e81394856a1f522e63abe8",
+              "n_train_chunks": 2450,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 49404,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 2450,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "1225": {
+              "families": [
+                "code"
+              ],
+              "chunks_per_family": 1225,
+              "n_train_rows": 24756,
+              "train_idx_sha256": "30a9feee69ad2c81fc67aefab649a0026753e1b303515925742a9e45de38769d",
+              "train_sorted_sha256": "a94f81ec0dd3b02072012324c5534326dc0d2bf91f7b0f426501331c16596652",
+              "n_train_chunks": 1225,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 24756,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 1225,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "700": {
+              "families": [
+                "code"
+              ],
+              "chunks_per_family": 700,
+              "n_train_rows": 14193,
+              "train_idx_sha256": "7101752816c35496f8a46d1e6dbed1d975f843446783bd93040c962d9bb7a6de",
+              "train_sorted_sha256": "5a6c256fa9d52e454c93b52d52d1d6eb590828639318896cfc2716422b5fe5ac",
+              "n_train_chunks": 700,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 14193,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 700,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            }
+          },
+          "pred_k1": {
+            "families": [
+              "base64"
+            ],
+            "chunks_per_family": 4900,
+            "n_train_rows": 97797,
+            "train_idx_sha256": "898e252261186184cd372e04c0521618a2476de333820ca18876bdca5a12a230",
+            "train_sorted_sha256": "db6001d26d18cccaab51e4cf573614517225bb62566833fc137866f0fd639f6d",
+            "n_train_chunks": 4900,
+            "train_rows_per_family": {
+              "gutenberg": 0,
+              "base64": 97797,
+              "binary": 0,
+              "code": 0,
+              "csv": 0,
+              "json": 0,
+              "log": 0,
+              "mixed": 0
+            },
+            "train_chunks_per_family": {
+              "gutenberg": 0,
+              "base64": 4900,
+              "binary": 0,
+              "code": 0,
+              "csv": 0,
+              "json": 0,
+              "log": 0,
+              "mixed": 0
+            },
+            "train_rows_of_heldout_family": 0,
+            "train_rows_outside_chosen_families": 0,
+            "train_chunks_shared_with_eval": 0,
+            "train_rows_in_eval": 0
+          }
+        },
+        "code": {
+          "n_eval_rows": 31850,
+          "eval_idx_sha256": "578248b2f2350e7aa5d3f7b2a832ecdb14fbd97d93e4690b7b4ea1e73a504bec",
+          "n_eval_chunks": 1225,
+          "by_k": {
+            "1": {
+              "families": [
+                "csv"
+              ],
+              "chunks_per_family": 4900,
+              "n_train_rows": 98014,
+              "train_idx_sha256": "0974848f4c6be567f08eca89abd59195e574bea7f5c6d30d5f354e02a92ad3d8",
+              "train_sorted_sha256": "eeb08d0cb90bd61b19f936960f067840bd8a33dda278863a4f4d70d08a140066",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 98014,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 4900,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "2": {
+              "families": [
+                "csv",
+                "json"
+              ],
+              "chunks_per_family": 2450,
+              "n_train_rows": 98814,
+              "train_idx_sha256": "273d50cf42d75d662f7edc83d42e4e78f13e410655a73b2aa03074d722e41f9a",
+              "train_sorted_sha256": "076ad077ed62239fb66ca465a329a4bd0c0ab9791ea1d199dc209edf5244c7ad",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 49342,
+                "json": 49472,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 2450,
+                "json": 2450,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "4": {
+              "families": [
+                "csv",
+                "json",
+                "log",
+                "mixed"
+              ],
+              "chunks_per_family": 1225,
+              "n_train_rows": 99186,
+              "train_idx_sha256": "377721f410a09833cfebe6d3bf551c23438a54dfc9734e7bb810790f34189a34",
+              "train_sorted_sha256": "40ff603c682e531ce87c1130b02e5b7dbc931cccd9358431a686ee650ccb7741",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 24747,
+                "json": 24830,
+                "log": 24820,
+                "mixed": 24789
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 1225,
+                "json": 1225,
+                "log": 1225,
+                "mixed": 1225
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "7": {
+              "families": [
+                "csv",
+                "json",
+                "log",
+                "mixed",
+                "gutenberg",
+                "base64",
+                "binary"
+              ],
+              "chunks_per_family": 700,
+              "n_train_rows": 99138,
+              "train_idx_sha256": "82fb3a4bb0245d925e5ff834f35f2d32a72856e66a8247b1a37e01a0e4c0285e",
+              "train_sorted_sha256": "3eab8ddb9daab873edf69efd2bf9dd7f7e7908909b0016ed04af29e521b8cb10",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 14105,
+                "base64": 14168,
+                "binary": 14152,
+                "code": 0,
+                "csv": 14108,
+                "json": 14212,
+                "log": 14184,
+                "mixed": 14209
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 700,
+                "base64": 700,
+                "binary": 700,
+                "code": 0,
+                "csv": 700,
+                "json": 700,
+                "log": 700,
+                "mixed": 700
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            }
+          },
+          "depth": {
+            "2450": {
+              "families": [
+                "csv"
+              ],
+              "chunks_per_family": 2450,
+              "n_train_rows": 49342,
+              "train_idx_sha256": "b3afb883eba6abd247f3ddb2ae7c31f85d3c147681851ff48bf278e28827fb1d",
+              "train_sorted_sha256": "ee3e778ce359b46cb033e4ae564a81d7fd20f2ffe94cb0e3764f7984d6a0b873",
+              "n_train_chunks": 2450,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 49342,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 2450,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "1225": {
+              "families": [
+                "csv"
+              ],
+              "chunks_per_family": 1225,
+              "n_train_rows": 24747,
+              "train_idx_sha256": "142892aefd3462fa21436e23a9e618637c2b648e633ae1c65ab7a711953c0043",
+              "train_sorted_sha256": "99a28d0da94daa04ff56cb0fe311dda059f71776bc67b25a7146ea2b18f76bc9",
+              "n_train_chunks": 1225,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 24747,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 1225,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "700": {
+              "families": [
+                "csv"
+              ],
+              "chunks_per_family": 700,
+              "n_train_rows": 14108,
+              "train_idx_sha256": "45ac1626dbd3f38a82d01f7b94b14f2ded6c162da766b9bf70ae951ce892a6db",
+              "train_sorted_sha256": "f4359a1d0959902b3c0ce9cab2f24e58c32bcacf1785a8c809416b6320e1b01a",
+              "n_train_chunks": 700,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 14108,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 700,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            }
+          },
+          "pred_k1": {
+            "families": [
+              "binary"
+            ],
+            "chunks_per_family": 4900,
+            "n_train_rows": 98161,
+            "train_idx_sha256": "fdbe4640d1be305d6cb91c4484453fae488192bf2b38503153e47a0eeaf0567a",
+            "train_sorted_sha256": "5ea3f980141929b44118829217844d29fb4c86212b704bfb01c1b7cc1b04235e",
+            "n_train_chunks": 4900,
+            "train_rows_per_family": {
+              "gutenberg": 0,
+              "base64": 0,
+              "binary": 98161,
+              "code": 0,
+              "csv": 0,
+              "json": 0,
+              "log": 0,
+              "mixed": 0
+            },
+            "train_chunks_per_family": {
+              "gutenberg": 0,
+              "base64": 0,
+              "binary": 4900,
+              "code": 0,
+              "csv": 0,
+              "json": 0,
+              "log": 0,
+              "mixed": 0
+            },
+            "train_rows_of_heldout_family": 0,
+            "train_rows_outside_chosen_families": 0,
+            "train_chunks_shared_with_eval": 0,
+            "train_rows_in_eval": 0
+          }
+        },
+        "csv": {
+          "n_eval_rows": 31616,
+          "eval_idx_sha256": "b4ccfb51f5b8b54b2ef856b54af6e79cc7ca6ed62bc0d8cc8a7bfcac09dc5555",
+          "n_eval_chunks": 1216,
+          "by_k": {
+            "1": {
+              "families": [
+                "json"
+              ],
+              "chunks_per_family": 4900,
+              "n_train_rows": 98230,
+              "train_idx_sha256": "f86222b9a341f631276af6dfdcaaba7f9c93d6226d79f6dfca0bfa257110b3ec",
+              "train_sorted_sha256": "198287b668a26f4d32fcd735450b8c87b9c0d16cd0d972cef9c5be84617a43dd",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 98230,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 4900,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "2": {
+              "families": [
+                "json",
+                "log"
+              ],
+              "chunks_per_family": 2450,
+              "n_train_rows": 98949,
+              "train_idx_sha256": "b7fe0d843d91a0d570b99ed366b05fbed5d98037bfa37e3fab2db2f068adeb59",
+              "train_sorted_sha256": "c429e88ec6bc3b2c3fcb573993ed45633dd7405b00be0bfc8449a5c31eea4ffc",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 49472,
+                "log": 49477,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 2450,
+                "log": 2450,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "4": {
+              "families": [
+                "json",
+                "log",
+                "mixed",
+                "gutenberg"
+              ],
+              "chunks_per_family": 1225,
+              "n_train_rows": 99200,
+              "train_idx_sha256": "93af21c1784eb641b73bedb633d7dda057225b818eccfae0242f327803cb626b",
+              "train_sorted_sha256": "ed36c7f11dd85093c83069e622b68eab9226ac017d3e72772cf5f803041c8745",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 24761,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 24830,
+                "log": 24820,
+                "mixed": 24789
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 1225,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 1225,
+                "log": 1225,
+                "mixed": 1225
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "7": {
+              "families": [
+                "json",
+                "log",
+                "mixed",
+                "gutenberg",
+                "base64",
+                "binary",
+                "code"
+              ],
+              "chunks_per_family": 700,
+              "n_train_rows": 99223,
+              "train_idx_sha256": "046cb26f8b1dd64a77390cbc52cd90d8f260abd4e2e81b73db8fbc0622e1a98f",
+              "train_sorted_sha256": "85a1db7ce815f7a6b9f4ebf7a5a8e7ed7a8427a7b844dadc5855a89e08655b2b",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 14105,
+                "base64": 14168,
+                "binary": 14152,
+                "code": 14193,
+                "csv": 0,
+                "json": 14212,
+                "log": 14184,
+                "mixed": 14209
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 700,
+                "base64": 700,
+                "binary": 700,
+                "code": 700,
+                "csv": 0,
+                "json": 700,
+                "log": 700,
+                "mixed": 700
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            }
+          },
+          "depth": {
+            "2450": {
+              "families": [
+                "json"
+              ],
+              "chunks_per_family": 2450,
+              "n_train_rows": 49472,
+              "train_idx_sha256": "4c83372481e380ea447ad56bc6ee491523d82e7dae9a9612f8fa9dc16f9cb6fb",
+              "train_sorted_sha256": "0ac0a6e3884684569c905a818772eb4019844b3f129dc36e29c292e2c17d2fe8",
+              "n_train_chunks": 2450,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 49472,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 2450,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "1225": {
+              "families": [
+                "json"
+              ],
+              "chunks_per_family": 1225,
+              "n_train_rows": 24830,
+              "train_idx_sha256": "2f1aa613a9e03023a058a8559be80cf6603ebd7937781631cfb4005a5206d016",
+              "train_sorted_sha256": "bbddb776eff3bb61c21da2e2ea69603cafbbfd6d7268a299c1fc174ae5eb6cff",
+              "n_train_chunks": 1225,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 24830,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 1225,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "700": {
+              "families": [
+                "json"
+              ],
+              "chunks_per_family": 700,
+              "n_train_rows": 14212,
+              "train_idx_sha256": "89ae26ece37013533106da66ca1815104e9e5b5f3e3b5be757b7a5761e94d92c",
+              "train_sorted_sha256": "bc21816dfd1ed9455366a837a06164fc69883504b89747fec2759524c4b55a57",
+              "n_train_chunks": 700,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 14212,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 700,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            }
+          },
+          "pred_k1": {
+            "families": [
+              "code"
+            ],
+            "chunks_per_family": 4900,
+            "n_train_rows": 97972,
+            "train_idx_sha256": "e77ce52541fe772f5ff448502e62323b38f50dc186376cd0da5bf47ebeda9317",
+            "train_sorted_sha256": "1020cab547322aab5c051814cc9871f9491672530eef68adef11ab2058ef130c",
+            "n_train_chunks": 4900,
+            "train_rows_per_family": {
+              "gutenberg": 0,
+              "base64": 0,
+              "binary": 0,
+              "code": 97972,
+              "csv": 0,
+              "json": 0,
+              "log": 0,
+              "mixed": 0
+            },
+            "train_chunks_per_family": {
+              "gutenberg": 0,
+              "base64": 0,
+              "binary": 0,
+              "code": 4900,
+              "csv": 0,
+              "json": 0,
+              "log": 0,
+              "mixed": 0
+            },
+            "train_rows_of_heldout_family": 0,
+            "train_rows_outside_chosen_families": 0,
+            "train_chunks_shared_with_eval": 0,
+            "train_rows_in_eval": 0
+          }
+        },
+        "json": {
+          "n_eval_rows": 32760,
+          "eval_idx_sha256": "8eacb2d465c04006d1dbfd1452653d2cb4eab3a9ca633b1301b0b0064a17aaa4",
+          "n_eval_chunks": 1260,
+          "by_k": {
+            "1": {
+              "families": [
+                "log"
+              ],
+              "chunks_per_family": 4900,
+              "n_train_rows": 98196,
+              "train_idx_sha256": "92d5f3d9cdce4b16a9954e25c719a07eb2d3d11f3b69141b659a34364525b91d",
+              "train_sorted_sha256": "5ffae736f58b10a6ecbbb6dc8ea0b2cdaf49ecf1bf3912d59420f33de5b90e5e",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 98196,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 4900,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "2": {
+              "families": [
+                "log",
+                "mixed"
+              ],
+              "chunks_per_family": 2450,
+              "n_train_rows": 98861,
+              "train_idx_sha256": "d188ab2fe88da8f303c2160b33a82269865b4e7cd7da40e6cf248286de7e9fa3",
+              "train_sorted_sha256": "4c2111ea4b1fb8ad473c7135eba3786e90b29e8d37387534f64c217a91e5fe86",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 49477,
+                "mixed": 49384
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 2450,
+                "mixed": 2450
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "4": {
+              "families": [
+                "log",
+                "mixed",
+                "gutenberg",
+                "base64"
+              ],
+              "chunks_per_family": 1225,
+              "n_train_rows": 99048,
+              "train_idx_sha256": "0c3e961fab35618ec371cc3f9bdfe41327db60ed9a241aed14c60bd7d8210451",
+              "train_sorted_sha256": "77507fc24d3adbe4944af7dea3e5363094c389e5765aa104930de44621e8db6e",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 24761,
+                "base64": 24678,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 24820,
+                "mixed": 24789
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 1225,
+                "base64": 1225,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 1225,
+                "mixed": 1225
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "7": {
+              "families": [
+                "log",
+                "mixed",
+                "gutenberg",
+                "base64",
+                "binary",
+                "code",
+                "csv"
+              ],
+              "chunks_per_family": 700,
+              "n_train_rows": 99119,
+              "train_idx_sha256": "487faedac353a291894417ba1c721feff93df26f2f7d2eb83e91ece068e0c89c",
+              "train_sorted_sha256": "c3367143e029000db4c0ac6787fc5709b705d34af55316019f0c9e1e8611683b",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 14105,
+                "base64": 14168,
+                "binary": 14152,
+                "code": 14193,
+                "csv": 14108,
+                "json": 0,
+                "log": 14184,
+                "mixed": 14209
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 700,
+                "base64": 700,
+                "binary": 700,
+                "code": 700,
+                "csv": 700,
+                "json": 0,
+                "log": 700,
+                "mixed": 700
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            }
+          },
+          "depth": {
+            "2450": {
+              "families": [
+                "log"
+              ],
+              "chunks_per_family": 2450,
+              "n_train_rows": 49477,
+              "train_idx_sha256": "ba49a90c0956866e3a1fbd329700cdad26ab7cac410032c798043b5e03fab245",
+              "train_sorted_sha256": "3a21b0a9bc3ba6ade18c9cf7d1b5365e252422d86baa07f03ce43c5f2eea5835",
+              "n_train_chunks": 2450,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 49477,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 2450,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "1225": {
+              "families": [
+                "log"
+              ],
+              "chunks_per_family": 1225,
+              "n_train_rows": 24820,
+              "train_idx_sha256": "43927c734774d9f9d2da317c2dd92a5926fb3970936e288bc5bd626eb595d785",
+              "train_sorted_sha256": "073c7c6d8098dfd24ba665c5177c8daba565ad474bdf3edcd8e54086cd83ada2",
+              "n_train_chunks": 1225,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 24820,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 1225,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "700": {
+              "families": [
+                "log"
+              ],
+              "chunks_per_family": 700,
+              "n_train_rows": 14184,
+              "train_idx_sha256": "ccb7ef7c17bcaadc47f99e49534570ff0faac03021b2a1db807efa1c02e564b6",
+              "train_sorted_sha256": "5f66f5048e02d1a69158317f3950a47d74a74a7f20b967fa82085e5540ba9721",
+              "n_train_chunks": 700,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 14184,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 700,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            }
+          },
+          "pred_k1": {
+            "families": [
+              "csv"
+            ],
+            "chunks_per_family": 4900,
+            "n_train_rows": 98014,
+            "train_idx_sha256": "0974848f4c6be567f08eca89abd59195e574bea7f5c6d30d5f354e02a92ad3d8",
+            "train_sorted_sha256": "eeb08d0cb90bd61b19f936960f067840bd8a33dda278863a4f4d70d08a140066",
+            "n_train_chunks": 4900,
+            "train_rows_per_family": {
+              "gutenberg": 0,
+              "base64": 0,
+              "binary": 0,
+              "code": 0,
+              "csv": 98014,
+              "json": 0,
+              "log": 0,
+              "mixed": 0
+            },
+            "train_chunks_per_family": {
+              "gutenberg": 0,
+              "base64": 0,
+              "binary": 0,
+              "code": 0,
+              "csv": 4900,
+              "json": 0,
+              "log": 0,
+              "mixed": 0
+            },
+            "train_rows_of_heldout_family": 0,
+            "train_rows_outside_chosen_families": 0,
+            "train_chunks_shared_with_eval": 0,
+            "train_rows_in_eval": 0
+          }
+        },
+        "log": {
+          "n_eval_rows": 33254,
+          "eval_idx_sha256": "1dab3cc04aa0ae442fc9cab1dd0f0cafd5b1b2e0cf3de25341ab39d8752e1d8b",
+          "n_eval_chunks": 1279,
+          "by_k": {
+            "1": {
+              "families": [
+                "mixed"
+              ],
+              "chunks_per_family": 4900,
+              "n_train_rows": 98225,
+              "train_idx_sha256": "d2659b4480017fedd17a67ba1540fd5a3cc5bc02a75626dbcb9a2739bdffc344",
+              "train_sorted_sha256": "535fd1dff1587ff8904102743929b6eb81742ab94a9db58add52dadbe2f1b803",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 98225
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 4900
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "2": {
+              "families": [
+                "mixed",
+                "gutenberg"
+              ],
+              "chunks_per_family": 2450,
+              "n_train_rows": 98794,
+              "train_idx_sha256": "a599d8c06f109f0b52430161d3e53065a9ab705bc1c7890d115b8a5f300eee63",
+              "train_sorted_sha256": "a12c20347cb917500ebd419fb3b30c31a714936612e5eb7130153bff5423bb93",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 49410,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 49384
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 2450,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 2450
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "4": {
+              "families": [
+                "mixed",
+                "gutenberg",
+                "base64",
+                "binary"
+              ],
+              "chunks_per_family": 1225,
+              "n_train_rows": 99020,
+              "train_idx_sha256": "9ec478edab285c410570ada805ee0ad7a2fa7e92e75cfb703d8ed62da24c9a76",
+              "train_sorted_sha256": "3394fb5f1f89dfc205c0878815df2377d5706065f966ec59507134b6d96aed0f",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 24761,
+                "base64": 24678,
+                "binary": 24792,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 24789
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 1225,
+                "base64": 1225,
+                "binary": 1225,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 1225
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "7": {
+              "families": [
+                "mixed",
+                "gutenberg",
+                "base64",
+                "binary",
+                "code",
+                "csv",
+                "json"
+              ],
+              "chunks_per_family": 700,
+              "n_train_rows": 99147,
+              "train_idx_sha256": "18a7948b4526092c76659cf594965ca95433b88e39631079671c79cb19c3a473",
+              "train_sorted_sha256": "b270c048b7dd318a750b75ef916a4b504ac5d3d24bc6e35ce0c9c3310f7490dd",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 14105,
+                "base64": 14168,
+                "binary": 14152,
+                "code": 14193,
+                "csv": 14108,
+                "json": 14212,
+                "log": 0,
+                "mixed": 14209
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 700,
+                "base64": 700,
+                "binary": 700,
+                "code": 700,
+                "csv": 700,
+                "json": 700,
+                "log": 0,
+                "mixed": 700
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            }
+          },
+          "depth": {
+            "2450": {
+              "families": [
+                "mixed"
+              ],
+              "chunks_per_family": 2450,
+              "n_train_rows": 49384,
+              "train_idx_sha256": "5e1b6495fe869f556ed8af68d5c110365a960dce39d2fc4c4a9608cfdc4c549f",
+              "train_sorted_sha256": "ef726b41ed69cab7901edfd00502291e5fa2ceb9e3e831303423d97016a441d0",
+              "n_train_chunks": 2450,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 49384
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 2450
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "1225": {
+              "families": [
+                "mixed"
+              ],
+              "chunks_per_family": 1225,
+              "n_train_rows": 24789,
+              "train_idx_sha256": "321cf749bc2417ed826747dc11713eedba4df4331188a9393f22a400f7f7d81c",
+              "train_sorted_sha256": "7e85ebd2ba381d0baa7f40d4b2bd14f6a5f38508a6f0cb5f89716d549333d19f",
+              "n_train_chunks": 1225,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 24789
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 1225
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "700": {
+              "families": [
+                "mixed"
+              ],
+              "chunks_per_family": 700,
+              "n_train_rows": 14209,
+              "train_idx_sha256": "b055508c1d6c0868f77a0b544fd026f936ae6a19fb4d4be6ec23414fb7f40c7f",
+              "train_sorted_sha256": "0a79db10144307c3a475fbbdf2d313ac7fc45b0dbc77eb24e4ed177b4f6fe3ba",
+              "n_train_chunks": 700,
+              "train_rows_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 14209
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 0,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 700
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            }
+          },
+          "pred_k1": {
+            "families": [
+              "json"
+            ],
+            "chunks_per_family": 4900,
+            "n_train_rows": 98230,
+            "train_idx_sha256": "f86222b9a341f631276af6dfdcaaba7f9c93d6226d79f6dfca0bfa257110b3ec",
+            "train_sorted_sha256": "198287b668a26f4d32fcd735450b8c87b9c0d16cd0d972cef9c5be84617a43dd",
+            "n_train_chunks": 4900,
+            "train_rows_per_family": {
+              "gutenberg": 0,
+              "base64": 0,
+              "binary": 0,
+              "code": 0,
+              "csv": 0,
+              "json": 98230,
+              "log": 0,
+              "mixed": 0
+            },
+            "train_chunks_per_family": {
+              "gutenberg": 0,
+              "base64": 0,
+              "binary": 0,
+              "code": 0,
+              "csv": 0,
+              "json": 4900,
+              "log": 0,
+              "mixed": 0
+            },
+            "train_rows_of_heldout_family": 0,
+            "train_rows_outside_chosen_families": 0,
+            "train_chunks_shared_with_eval": 0,
+            "train_rows_in_eval": 0
+          }
+        },
+        "mixed": {
+          "n_eval_rows": 32188,
+          "eval_idx_sha256": "3749067dd47d4a788ada22122dcf43c159d462ba5ade7904398735bdf94a80f1",
+          "n_eval_chunks": 1238,
+          "by_k": {
+            "1": {
+              "families": [
+                "gutenberg"
+              ],
+              "chunks_per_family": 4900,
+              "n_train_rows": 98209,
+              "train_idx_sha256": "8bf3783cf12d4511b1fd5845d2f57900cef929861c26c0b7e9aee03db9b32055",
+              "train_sorted_sha256": "2dca00111af073547d6cc9ee84365ff095345a793fc74b9fefa178b10a5014d3",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 98209,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 4900,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "2": {
+              "families": [
+                "gutenberg",
+                "base64"
+              ],
+              "chunks_per_family": 2450,
+              "n_train_rows": 98516,
+              "train_idx_sha256": "d6014d267641f1611fcab38d939f721d441c4202778ffcc3f6861b577e245c54",
+              "train_sorted_sha256": "8eb74f99f4172f3345a2c6937227bf3cebe9ebfe39aa2ca7f434fa881092505c",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 49410,
+                "base64": 49106,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 2450,
+                "base64": 2450,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "4": {
+              "families": [
+                "gutenberg",
+                "base64",
+                "binary",
+                "code"
+              ],
+              "chunks_per_family": 1225,
+              "n_train_rows": 98987,
+              "train_idx_sha256": "1eef594e14acb635693506aa5e7ab3761c754fd27ffefb2bfb1077fa1fb87ee6",
+              "train_sorted_sha256": "28d56593117062a9936d30c04e53f4798a3ff92e8473735fd9d7e6da7e16ff47",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 24761,
+                "base64": 24678,
+                "binary": 24792,
+                "code": 24756,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 1225,
+                "base64": 1225,
+                "binary": 1225,
+                "code": 1225,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "7": {
+              "families": [
+                "gutenberg",
+                "base64",
+                "binary",
+                "code",
+                "csv",
+                "json",
+                "log"
+              ],
+              "chunks_per_family": 700,
+              "n_train_rows": 99122,
+              "train_idx_sha256": "94089fd7055c2e7f19c01680906cfcf98db0967b31c15fd1fb9467e0b60fd161",
+              "train_sorted_sha256": "f55d87fbf4c32f213cdf5b0f147ebfa0c4652b566b3c07113965a6c770605d2b",
+              "n_train_chunks": 4900,
+              "train_rows_per_family": {
+                "gutenberg": 14105,
+                "base64": 14168,
+                "binary": 14152,
+                "code": 14193,
+                "csv": 14108,
+                "json": 14212,
+                "log": 14184,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 700,
+                "base64": 700,
+                "binary": 700,
+                "code": 700,
+                "csv": 700,
+                "json": 700,
+                "log": 700,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            }
+          },
+          "depth": {
+            "2450": {
+              "families": [
+                "gutenberg"
+              ],
+              "chunks_per_family": 2450,
+              "n_train_rows": 49410,
+              "train_idx_sha256": "b01f3e33e64c833bbf47f5c7befcd6880a2fad58f6bca4738286e1fe10461783",
+              "train_sorted_sha256": "79b69e97da4611065c157984838781eafb5fa9f21f59a24f98840e9d890d00db",
+              "n_train_chunks": 2450,
+              "train_rows_per_family": {
+                "gutenberg": 49410,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 2450,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "1225": {
+              "families": [
+                "gutenberg"
+              ],
+              "chunks_per_family": 1225,
+              "n_train_rows": 24761,
+              "train_idx_sha256": "192f5403fc896d5b7c84e2a2924003b6a761d89c1aeb8d6f6702e5900292cff5",
+              "train_sorted_sha256": "b04af3f7756524a73cc17d190f0e23a41cf3343fd199de6d9ae1ec05c29ed6a4",
+              "n_train_chunks": 1225,
+              "train_rows_per_family": {
+                "gutenberg": 24761,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 1225,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            },
+            "700": {
+              "families": [
+                "gutenberg"
+              ],
+              "chunks_per_family": 700,
+              "n_train_rows": 14105,
+              "train_idx_sha256": "1033d20ae45ed779dc777f42f9d57da27243e9b671b2622216c79fc6de900686",
+              "train_sorted_sha256": "c17b62c2907718198e7ce27cf51678464288b57e91504489bdd0b7182db73985",
+              "n_train_chunks": 700,
+              "train_rows_per_family": {
+                "gutenberg": 14105,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_chunks_per_family": {
+                "gutenberg": 700,
+                "base64": 0,
+                "binary": 0,
+                "code": 0,
+                "csv": 0,
+                "json": 0,
+                "log": 0,
+                "mixed": 0
+              },
+              "train_rows_of_heldout_family": 0,
+              "train_rows_outside_chosen_families": 0,
+              "train_chunks_shared_with_eval": 0,
+              "train_rows_in_eval": 0
+            }
+          },
+          "pred_k1": {
+            "families": [
+              "log"
+            ],
+            "chunks_per_family": 4900,
+            "n_train_rows": 98196,
+            "train_idx_sha256": "92d5f3d9cdce4b16a9954e25c719a07eb2d3d11f3b69141b659a34364525b91d",
+            "train_sorted_sha256": "5ffae736f58b10a6ecbbb6dc8ea0b2cdaf49ecf1bf3912d59420f33de5b90e5e",
+            "n_train_chunks": 4900,
+            "train_rows_per_family": {
+              "gutenberg": 0,
+              "base64": 0,
+              "binary": 0,
+              "code": 0,
+              "csv": 0,
+              "json": 0,
+              "log": 98196,
+              "mixed": 0
+            },
+            "train_chunks_per_family": {
+              "gutenberg": 0,
+              "base64": 0,
+              "binary": 0,
+              "code": 0,
+              "csv": 0,
+              "json": 0,
+              "log": 4900,
+              "mixed": 0
+            },
+            "train_rows_of_heldout_family": 0,
+            "train_rows_outside_chosen_families": 0,
+            "train_chunks_shared_with_eval": 0,
+            "train_rows_in_eval": 0
+          }
+        }
+      },
+      "budget_chunks": 4900,
+      "depth_chunks": [
+        4900,
+        2450,
+        1225,
+        700
+      ]
+    },
+    "reference_null_drift": {
+      "null_0014_same_block_and_shuffle": 0.0383,
+      "null_0003_banked": 0.0389,
+      "source": "artifacts/pivot/recipe_search_4096.json null_control.top1; artifacts/pivot/deflate_curve.json shuffled_label_accuracy",
+      "use": "informational drift references beside the null reading; the clause is chance + 0.02"
+    },
+    "families_are_generators": "Seven of the eight content families are parametric generators in tools/pivot/corpus.py sharing one vocabulary (base64, binary, code, csv, json, log, mixed); one (gutenberg) is real prose. The curve is therefore a statement about diversity among this builder's generators, read over family counts one to seven under one sealed ordering, and is not extrapolated past seven families or to real content types; that bound is written into both verdict texts.",
+    "reference_0014_l3": {
+      "source": "artifacts/pivot/recipe_search_4096.json final.logistic",
+      "in_distribution_top1": 0.2317,
+      "fit_seconds_at_800000_rows": 1164.3,
+      "n_iter": 728,
+      "use": "informational: L3's in-distribution value beside its transfer curve"
+    }
+  },
+  "bar": {
+    "scope_parameters_sealed": {
+      "direction": "equality",
+      "threshold": 0,
+      "passes_if": "preregistration == '0016-fdc-4096'; smoke is False; stage == 'run'; the corpus block equals the sealed constants (carve 4096 by sealed cache identity, chunk size 32768, offset 0, chunk ids 0..49999, 50000 chunks, 1300000 rows, 1108 features, the y and g hashes); the banked protocol equals the sealed protocol key by key and hashes to the reader's PROTOCOL_SHA256; the banked recipes hash to the reader's RECIPES_SHA256; n_classes 26 and chance 0.038462."
+    },
+    "sealed_sets": {
+      "direction": "equality",
+      "threshold": 0,
+      "passes_if": "The banked partition equals the sealed constants field by field: eval (260000 rows, 10000 chunks, idx and y hashes), pool (800000 rows, idx, y and sorted hashes, per-family row and chunk counts), the reproduction rung (100000 rows, idx and sorted hashes), the null block's sorted hash, the budget 4900 chunks, the family counts [1, 2, 4, 7], the depth sizes [4900, 2450, 1225, 700], the subset rule, and for every fold — the 32 fixed-budget (family, k) folds, the 24 depth folds and the 8 predecessor folds — the chosen families, chunks per family, training row count, training index and sorted hashes, chunk count and the per-family row and chunk maps."
+    },
+    "no_leakage": {
+      "direction": "equality",
+      "threshold": 0,
+      "passes_if": "For every fold the banked counts train_rows_of_heldout_family, train_rows_outside_chosen_families, train_chunks_shared_with_eval and train_rows_in_eval are 0; the reader recomputes the chosen families from the sealed family order (the k successors of the held-out family; the first successor alone for the depth arm; the predecessor for the predecessor arm) and requires the banked per-family chunk map to be exactly 4900/k (or the depth size) for each chosen family and 0 for every other family, and the per-family row map to be 0 outside the chosen families; every fit record's fit_rows_sha256 and fit_rows_sorted_sha256 equal the fold's sealed hashes with n_fit_rows equal to the sealed count and the preregistered seed; the reproduction record carries the sealed 100000-row hashes and the null record the sealed sorted hash."
+    },
+    "complete_one_scoring_per_fit": {
+      "direction": "equality",
+      "threshold": 0,
+      "passes_if": "complete is True; all 256 fold records (128 fixed-budget, 96 depth, 32 predecessor; four roles each), the reproduction record and the null record have status 'fit' with finite top-1, non-gutenberg top-1 and eight finite per-family accuracies; every name has exactly one 'completed' event in the ledger; every fold record and the reproduction record has a per-example vector in the scores file that is a string of exactly 260000 '0'/'1' characters; each fold record's stage is 'fdc:<family>:k<k>', 'depth:<family>:c<chunks>' or 'pred:<family>:k1' as its name says; each record's params hash equals the sealed hash of its recipe; the banked environment (threads 3, nice 10, sklearn 1.9.0, numpy 2.4.6) matches in every record."
+    },
+    "reproduces_0003_100k_rung": {
+      "direction": "lower_is_better",
+      "threshold": 0.005,
+      "passes_if": "abs(incumbent_100k_refit_top1 - 0.1965) <= 0.005, compared as round(abs(a - b), 6) <= 0.005 on an accuracy banked to 4 decimals (0.2015 passes, 0.2016 fails), for M1 fitted on the first 100000 pool rows with its last 10% as the early-stopping validation split, scored once on the sealed set. 0.1965 is 0003's banked 100000-row rung (artifacts/pivot/deflate_curve.json rungs[2]); 0014 reproduced the 800000-row rung exactly under this machinery, and the anchor was checked once before the freeze (scope.sealed_set_disclosure). Failure is VOID: the run is not measuring 0003's pipeline at this row scale."
+    },
+    "null_control": {
+      "direction": "lower_is_better",
+      "threshold": 0.02,
+      "passes_if": "shuffled_label_accuracy <= chance_accuracy + 0.02, the control being M1 fitted on the sealed 20000-row null block with shuffled labels and scored on the sealed set."
+    },
+    "mixture_and_curve_arithmetic": {
+      "direction": "equality",
+      "threshold": 0,
+      "passes_if": "The reader recomputes every stitched mixture — each role at each k, each depth size and the predecessor k = 1 — from the eight per-example vectors and the banked evaluation chunk ids (family = FAMILIES[chunk % 8]) and requires the banked mixture_top1, mixture_top1_non_gutenberg, structured_four_top1 and per_family values to equal the recomputation at 4 decimals and each banked stitched vector to equal the stitched one; requires each role's mixture_top1_by_k to be the four fixed-budget mixtures in the sealed order of family counts, its slope_per_doubling to equal the ordinary-least-squares slope of the four 4-decimal mixtures against the sealed abscissa log2(k) = [0, 1, 2, 2.807355] (6-decimal literals shared by runner and reader), rounded to 6 decimals (the reader's own computation is the verdict's; the banked value must agree within 1e-6), its end_difference, depth readings (mixture_top1_by_chunks, row_effect_within_family, row_effect_per_doubling_of_chunks), family_effect_at_matched_depth per k and composition_spread_k1 to equal the reader's recomputation at 6 decimals; the banked fdc_slope_per_doubling, fdc_mixture_top1_by_k and fdc_end_difference must be the model role's, and fdc_slope_model_minus_logistic the difference of the two slopes."
+    },
+    "diversity": {
+      "direction": "higher_is_better",
+      "threshold": 0.005,
+      "passes_if": "the reader's recomputed slope of the model's fixed-budget mixture against log2(families), rounded to 6 decimals, is >= 0.005 - 1e-9, i.e. 0003's M1 recipe gains at least 0.005 in accuracy on an unseen family per doubling of the number of training families at a fixed plaintext budget of 4900 chunks (0.005 passes, 0.004999 fails). Verdict DIVERSITY_HELPS if it passes, DIVERSITY_FLAT if not; the verdict is a statement about 0003's M1 recipe at this budget, over family counts one to seven under the sealed successor rule, with no extrapolation past seven. The end difference, the raw logistic's, standardised logistic's and majority's curves, the depth arm, the predecessor arm, the per-family and structured-four readings, the comparison with 0015's full-row mixture and the cluster intervals are banked as readings and gate nothing."
+    }
+  },
+  "readings": [
+    {
+      "name": "verdict",
+      "unit": "enum{DIVERSITY_HELPS,DIVERSITY_FLAT,VOID}",
+      "source_artifact": "artifacts/pivot/fdc_4096_verdict.json",
+      "json_path": "$.verdict"
+    },
+    {
+      "name": "fdc_slope_per_doubling",
+      "unit": "accuracy per doubling of training families: OLS slope of the model's fixed-budget mixture against log2(k) over k in {1,2,4,7}, 6 decimals; the reader's own recomputation is the verdict's",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc_slope_per_doubling"
+    },
+    {
+      "name": "fdc_mixture_top1_by_k",
+      "unit": "list of four fractions correct over all 260000 evaluation rows, each row predicted by the (family, k) fit that held out its family; the model role, k = 1, 2, 4, 7",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc_mixture_top1_by_k"
+    },
+    {
+      "name": "fdc_end_difference",
+      "unit": "model mixture at k=7 minus at k=1, 6 decimals, informational",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc_end_difference"
+    },
+    {
+      "name": "fdc_slope_per_doubling_logistic",
+      "unit": "the same slope for the raw logistic, informational",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.logistic.slope_per_doubling"
+    },
+    {
+      "name": "fdc_mixture_top1_by_k_logistic",
+      "unit": "the raw logistic's four mixtures, informational",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.logistic.mixture_top1_by_k"
+    },
+    {
+      "name": "fdc_mixture_top1_by_k_majority",
+      "unit": "the majority rule's four mixtures, informational",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.majority.mixture_top1_by_k"
+    },
+    {
+      "name": "fdc_slope_model_minus_logistic",
+      "unit": "model slope minus logistic slope, informational",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc_slope_model_minus_logistic"
+    },
+    {
+      "name": "fdc_per_family_by_k_model",
+      "unit": "map of held-out family to its four accuracies (k = 1, 2, 4, 7) from the fits that held it out; the model role",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.per_family_by_k"
+    },
+    {
+      "name": "fdc_structured_four_by_k_model",
+      "unit": "the model's mixture over the code, csv, json and log evaluation rows at each k, informational",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.structured_four_by_k"
+    },
+    {
+      "name": "k7_at_budget_minus_0015_k7_at_full_rows",
+      "unit": "the model's k=7 mixture at 98000 rows minus 0015's mixture at about 700000 rows (0.0859), informational",
+      "source_artifact": "artifacts/pivot/fdc_4096_verdict.json",
+      "json_path": "$.k7_at_budget_minus_0015_k7_at_full_rows"
+    },
+    {
+      "name": "incumbent_100k_refit_top1",
+      "unit": "fraction correct on the sealed set for M1 on the first 100000 pool rows; must be within 0.005 of 0.1965",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.incumbent_100k_refit_top1"
+    },
+    {
+      "name": "shuffled_label_accuracy",
+      "unit": "fraction correct on the sealed set for M1 on the null block with shuffled labels; must be <= chance + 0.02",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.shuffled_label_accuracy"
+    },
+    {
+      "name": "eval_idx_sha256",
+      "unit": "sha256 of the evaluation index array; must equal the sealed constant",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.partition.eval_idx_sha256"
+    },
+    {
+      "name": "complete",
+      "unit": "bool; every fit banked",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.complete"
+    },
+    {
+      "name": "cluster_ci95_informational",
+      "unit": "95% cluster-bootstrap intervals over evaluation chunks for every fit's held-out reading and every mixture; informational",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.cluster_ci95_informational"
+    },
+    {
+      "name": "cost",
+      "unit": "fit seconds per name, interruptions, banked total, checkpoint directory; informational",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.cost"
+    },
+    {
+      "name": "fdc_depth_mixture_top1_by_chunks_model",
+      "unit": "the model's stitched mixture with a single family at 4900, 2450, 1225 and 700 chunks (the 4900 point is the k = 1 fold), informational",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.depth.mixture_top1_by_chunks"
+    },
+    {
+      "name": "fdc_family_effect_at_matched_depth_model",
+      "unit": "map of k to mixture(k families at 4900/k chunks each) minus mixture(one family at 4900/k chunks), 6 decimals, informational",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.family_effect_at_matched_depth"
+    },
+    {
+      "name": "fdc_row_effect_within_family_model",
+      "unit": "mixture(one family at 4900 chunks) minus mixture(one family at 700 chunks), 6 decimals, informational",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.depth.row_effect_within_family"
+    },
+    {
+      "name": "fdc_composition_spread_k1_model",
+      "unit": "mixture at k = 1 under the successor rule minus under the predecessor rule, 6 decimals, informational",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.composition_spread_k1"
+    },
+    {
+      "name": "fdc_pred_k1_mixture_model",
+      "unit": "the model's stitched mixture at k = 1 under the predecessor rule, informational",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.pred_k1.mixture_top1"
+    },
+    {
+      "name": "fold_train_idx_sha256",
+      "unit": "per fold (fixed-budget, depth, predecessor), sha256 of the training index array; must equal the sealed constants",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.partition.folds.*.(by_k|depth|pred_k1).*.train_idx_sha256"
+    },
+    {
+      "name": "fdc_slope_per_doubling_logistic_l3",
+      "unit": "the same slope for 0014's standardised logistic L3, informational",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.logistic_l3.slope_per_doubling"
+    },
+    {
+      "name": "fdc_mixture_top1_by_k_logistic_l3",
+      "unit": "the standardised logistic's four mixtures, informational",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.logistic_l3.mixture_top1_by_k"
+    },
+    {
+      "name": "fdc_n_iter_by_k_model",
+      "unit": "map of k to the eight incumbent fits' boosting iteration counts, informational",
+      "source_artifact": "artifacts/pivot/fdc_4096.json",
+      "json_path": "$.fdc.model.n_iter_by_k"
+    }
+  ],
+  "arms": [
+    "REPRODUCTION: M1 on the first 100000 pool rows (0003's 100000-row rung), scored once on the sealed set; must give 0.1965 within 0.005.",
+    "NULL: M1 on the sealed 20000-row null block (0014's) with shuffled labels, scored once; at or below chance + 0.02.",
+    "THIRTY-TWO FIXED-BUDGET FOLDS, in the sealed family order gutenberg, base64, binary, code, csv, json, log, mixed and within each family k = 1, 2, 4, 7: majority, then logistic, then model, then the standardised logistic, each fitted on 4900 source chunks (every pool row of each) drawn evenly from the k families that follow the held-out family and scored once on the sealed set. The reading is the held-out family's accuracy; the eight readings at each k stitch into the mixture at k, and the four mixtures make the curve the verdict is read from.",
+    "TWENTY-FOUR DEPTH FOLDS (informational): for each held-out family, its first successor alone at 2450, 1225 and 700 chunks, the same four recipes, scored once each; with the k = 1 fold they give the single-family depth curve over the sizes the fixed-budget curve spreads over k families.",
+    "EIGHT PREDECESSOR FOLDS (informational): for each held-out family, k = 1 refitted with the family that precedes it at 4900 chunks, the same four recipes, scored once each; the successor-minus-predecessor spread at k = 1 is the composition-sensitivity reading."
+  ],
+  "stop_rules": [
+    "DIVERSITY_FLAT is published at the same size as DIVERSITY_HELPS would have been, as a boundary of the headline in every document that states the headline.",
+    "A validity or control failure is VOID: the clause is named, nothing is counted in either direction; a VOID run may be resumed from its checkpoints under the identical invocation and is never re-parameterised.",
+    "NOT RUN is reachable only before the first checkpoint and only by the three-launches-without-a-new-checkpoint rule; it is filed as artifacts/pivot/fdc_4096_not_run.json, the reader prints it and exits 2, and it is not a verdict. A failed launch precondition (threads, nice, disk, MemAvailable) refuses to launch and counts as a launch without a checkpoint. A lost checkpoint directory after the first checkpoint is a published VOID, not a fresh start.",
+    "Once any checkpoint exists the artifact exists at the sealed path with complete false and reads VOID naming the missing fits until every fit is banked; abandonment after that point is a published VOID.",
+    "No recipe, family count, budget, subset, arm, fold or role is added, removed or re-parameterised after freeze: the recipes hash to a literal in the frozen reader and sit under the sealed scope; a record whose params hash is off-recipe or whose rows are off-seal reads VOID.",
+    "The sealed evaluation set is scored exactly once per fit; no fold is re-fitted; interruptions are counted, never turned into a status; infeasible_memory is stamped only on a caught MemoryError or a kill at the 13.0 GB anonymous-RSS threshold and reads VOID.",
+    "The 0.005 bar is not lowered, the abscissa is not changed, the mixture is not re-weighted, no family and no k is dropped from the curve, the depth and predecessor arms and the logistic curves never enter the bar, and absence, NaN or inf read as VOID.",
+    "This cannot revise 0003, 0006, 0007, 0011, 0014 or 0015; revises_0003_0014_0015 and establishes_a_buyer are emitted False unconditionally; no customer, user, partner or buyer is claimed.",
+    "Cost is banked beside the result (fit seconds, ru_maxrss and heartbeat anonymous RSS per record, launches, interruptions, refills, the environment) and gates nothing in the reader; every cost figure in scope.cost is an extrapolation and is replaced by the banked figures in the record.",
+    "The corpus, the evaluation set, the pool, the reproduction rung, the null block and every fold are one draw and are not redrawn; smoke runs write only to the scratchpad, are stamped smoke true, and read VOID."
+  ],
+  "thesis": {
+    "what_would_make_it_fail_honestly": "A fixed-budget mixture that does not rise with the number of families: near-chance readings on gutenberg, base64 and binary at every k, structured families gaining little from structured neighbours, and a slope under 0.005 per doubling — the signature of eight family-bound encoder signatures that a fixed plaintext budget cannot spread; the depth arm then says how much of the flatness is per-family depth displaced by diversity.",
+    "what_a_pass_would_mean": "That at a fixed plaintext budget diversity among this builder's families moves transfer at 0.005 or more per doubling of families for 0003's M1 recipe, over family counts one to seven under the sealed successor rule: content variety is a lever on the failure 0015 measured within those bounds; nothing about universality, nothing past seven families, and nothing about the searched recipes or the logistics, whose curves are banked beside it.",
+    "what_neither_outcome_means": "Neither names a buyer. Neither revises 0003, 0014 or 0015. Neither says anything about carve sizes other than 4096, about searched recipes, about more than seven families, or about content outside the corpus builder's families."
+  },
+  "reader": "tools/readers/fdc4096_verdict.py",
+  "invocation": "export OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3; nice -n 10 python3 tools/pivot/run_fdc.py --stage run --prereg-file prereg/0016-fdc-4096.json --cache data/pivot/full_c4096.npz --workdir artifacts/pivot/fdc_4096_ckpt --out artifacts/pivot/fdc_4096.json --scores-out artifacts/pivot/fdc_4096_scores.json; then python3 tools/readers/fdc4096_verdict.py. Relaunching the identical command after a container restart is the whole recovery procedure; checkpoints are committed and pushed as they land.",
+  "smoke": {
+    "top_rung": 800000,
+    "budget_chunks": 840,
+    "repro_rows": 10000,
+    "null_rows": 2000,
+    "launch": {
+      "min_disk_free_gb": 0.0,
+      "min_mem_available_gb": 0.0
+    },
+    "invocation": "The invocation above with --smoke added and --workdir, --out and --scores-out pointed under the session scratchpad; the runner refuses --smoke with any output path under artifacts/ and a real run with any output path outside it. The smoke block replaces budget_chunks, repro_rows, null_rows and launch and keeps the full 800000-row pool at 840 chunks (a smoke at 1120 chunks with three roles completed before the fourth role was added; the fourth role's smoke is at 840 chunks) (a smaller pool holds only a row or two of each chunk, so chunk-budget folds would be too small to carry all 26 classes in their fit and validation rows, which the runner checks before any fit: two smoke attempts at 140 and 280 chunks were refused for that reason); everything else is the sealed protocol. The smoke's reproduction fits 0003's 10000-row rung rows exactly (0.1415 banked) and is compared with it informally in the engineering log; the reader voids every smoke run."
+  },
+  "frozen": false
+}
