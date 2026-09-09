@@ -43,3 +43,5 @@
 {"name": "fold_log_majority", "fingerprint": "50d78c16fe16f1ec", "event": "started", "utc": "2026-09-09T00:11:12Z", "rss_gb": 8.21, "pid": 6914, "attempt": 1}
 {"name": "fold_log_majority", "fingerprint": "50d78c16fe16f1ec", "event": "completed", "utc": "2026-09-09T00:11:15Z", "rss_gb": 8.21, "pid": 6914, "seconds": 0.0}
 {"name": "fold_log_logistic", "fingerprint": "8b77ee17ee1b248c", "event": "started", "utc": "2026-09-09T00:11:17Z", "rss_gb": 8.21, "pid": 6914, "attempt": 1}
+{"name": "fold_log_logistic", "fingerprint": "8b77ee17ee1b248c", "event": "completed", "utc": "2026-09-09T00:24:45Z", "rss_gb": 8.21, "pid": 6914, "seconds": 803.6}
+{"name": "fold_log_model", "fingerprint": "223737e2c06e90be", "event": "started", "utc": "2026-09-09T00:24:47Z", "rss_gb": 8.21, "pid": 6914, "attempt": 1}
