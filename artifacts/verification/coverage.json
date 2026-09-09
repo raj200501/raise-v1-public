@@ -1060,6 +1060,168 @@
       "class": "primary-verifiable",
       "reverify": "python3 tools/readers/recipe4096_verdict.py",
       "claim": "The whole 0014 run cost 47302.7 s of banked fit time (27351.0 s selection, the rest confirmatory) at 3 threads and nice 10 on 4 cores, no GPU."
+    },
+    {
+      "id": "lofo4096-verdict",
+      "artifact": "artifacts/pivot/lofo_4096_verdict.json",
+      "json_path": "$.verdict",
+      "value": "TRANSFER_FAILS",
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "Preregistration 0015's frozen reader emits TRANSFER_FAILS: on content its training set never contained, 0003's recipe does not identify the encoder at chance + 0.05 on the stitched leave-one-family-out mixture; a boundary of the headline, filed at full size."
+    },
+    {
+      "id": "lofo4096-mixture-model",
+      "artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo_mixture_top1",
+      "value": 0.0859,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "The model's leave-one-family-out mixture accuracy over all 260000 sealed evaluation rows, each predicted by the fold that held out its family, is 0.0859 against chance 0.038462."
+    },
+    {
+      "id": "lofo4096-mixture-logistic",
+      "artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo.logistic.mixture_top1",
+      "value": 0.0928,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "The same-protocol raw logistic's leave-one-family-out mixture is 0.0928."
+    },
+    {
+      "id": "lofo4096-mixture-majority",
+      "artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo.majority.mixture_top1",
+      "value": 0.0385,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "The majority rule's leave-one-family-out mixture is 0.0385."
+    },
+    {
+      "id": "lofo4096-margin-over-logistic",
+      "artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo_margin_model_over_logistic",
+      "value": -0.0069,
+      "class": "arithmetic-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "Under transfer the model's mixture exceeds the logistic's by -0.0069 (0.0859 against 0.0928); informational, not a clause."
+    },
+    {
+      "id": "lofo4096-structured-four",
+      "artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo.model.structured_four_top1",
+      "value": 0.1081,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "Over the code, csv, json and log evaluation rows, each predicted by a model that never saw its family, the model reaches 0.1081."
+    },
+    {
+      "id": "lofo4096-incumbent-reproduced",
+      "artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.incumbent_refit_top1",
+      "value": 0.2395,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "The incumbent refit on 0003's pool scores 0.2395 against 0003's banked 0.2395."
+    },
+    {
+      "id": "lofo4096-l1-reproduced",
+      "artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.logistic_l1_refit_top1",
+      "value": 0.1352,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "The 0003 logistic refit scores 0.1352 against 0014's same-convention 0.1352 (0003 banked 0.1392)."
+    },
+    {
+      "id": "lofo4096-null-control",
+      "artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.shuffled_label_accuracy",
+      "value": 0.0384,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "The null control with 0003's recipe on shuffled labels lands at 0.0384, within chance 0.038462 plus 0.02."
+    },
+    {
+      "id": "lofo4096-fit-seconds",
+      "artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.cost.banked_fit_seconds_total",
+      "value": 21446.3,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "The whole 0015 run cost 21446.3 s of banked fit time at 3 threads and nice 10 on 4 cores, no GPU."
+    },
+    {
+      "id": "lofo4096-family-gutenberg",
+      "artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo.model.per_family.gutenberg",
+      "value": 0.0552,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "With gutenberg held out of training, the model identifies the encoder on gutenberg's 32994 sealed evaluation rows at 0.0552 (in-distribution 0003: 0.1596)."
+    },
+    {
+      "id": "lofo4096-family-base64",
+      "artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo.model.per_family.base64",
+      "value": 0.0653,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "With base64 held out of training, the model identifies the encoder on base64's 32864 sealed evaluation rows at 0.0653 (in-distribution 0003: 0.1221)."
+    },
+    {
+      "id": "lofo4096-family-binary",
+      "artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo.model.per_family.binary",
+      "value": 0.0618,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "With binary held out of training, the model identifies the encoder on binary's 32474 sealed evaluation rows at 0.0618 (in-distribution 0003: 0.1049)."
+    },
+    {
+      "id": "lofo4096-family-code",
+      "artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo.model.per_family.code",
+      "value": 0.1135,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "With code held out of training, the model identifies the encoder on code's 31850 sealed evaluation rows at 0.1135 (in-distribution 0003: 0.2944)."
+    },
+    {
+      "id": "lofo4096-family-csv",
+      "artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo.model.per_family.csv",
+      "value": 0.0968,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "With csv held out of training, the model identifies the encoder on csv's 31616 sealed evaluation rows at 0.0968 (in-distribution 0003: 0.3888)."
+    },
+    {
+      "id": "lofo4096-family-json",
+      "artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo.model.per_family.json",
+      "value": 0.1134,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "With json held out of training, the model identifies the encoder on json's 32760 sealed evaluation rows at 0.1134 (in-distribution 0003: 0.3581)."
+    },
+    {
+      "id": "lofo4096-family-log",
+      "artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo.model.per_family.log",
+      "value": 0.1083,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "With log held out of training, the model identifies the encoder on log's 33254 sealed evaluation rows at 0.1083 (in-distribution 0003: 0.3756)."
+    },
+    {
+      "id": "lofo4096-family-mixed",
+      "artifact": "artifacts/pivot/lofo_4096.json",
+      "json_path": "$.lofo.model.per_family.mixed",
+      "value": 0.0738,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofo4096_verdict.py",
+      "claim": "With mixed held out of training, the model identifies the encoder on mixed's 32188 sealed evaluation rows at 0.0738 (in-distribution 0003: 0.1143)."
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

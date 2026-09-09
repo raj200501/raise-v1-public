@@ -23,6 +23,11 @@ plaintext — measured under bars frozen and hash-chained **before the data exis
 **No customer, no user, no partner, no buyer.** G5 — a named buyer type — is uncleared, filed in
 the verification map's weakest class, and no result here could have cleared it. Every number below
 is a **4096-byte-window** number; at 1024 and at 2048 bytes the task fails its own bar.
+**No transfer to unseen content.** With each of the eight content families withheld from training
+in turn (preregistration 0015), the headline recipe identifies the encoder on the withheld family
+at a stitched **0.0859** against chance **0.0385**, short of the preregistered chance + 0.05 bar
+by **0.0026**, and a raw logistic does better (**0.0928**): `TRANSFER_FAILS`. Every number below
+is a statement about these eight content families.
 
 ## The headline curve, with corrected statistics
 
@@ -106,6 +111,15 @@ reading available, fixed before the run; the looser reading would have given **+
   0.1352), the incumbent refit reproduces 0003's **0.2395** exactly. The headline margin under
   fixed recipes (+0.1003) is stated beside its searched size, and the searched size is the one to
   quote.
+- **Leave-one-family-out transfer at 4096: `TRANSFER_FAILS`, stitched mixture 0.0859 against a
+  0.0885 bar.** 0003's recipes fitted on seven families and scored on the eighth, eight times,
+  every fold sealed by hash with zero withheld rows and zero shared chunks in training. Per
+  withheld family the model keeps between a quarter and two thirds of its in-distribution
+  accuracy (code **0.1135** against 0.2944, csv **0.0968** against 0.3888, gutenberg **0.0552**
+  against 0.1596); over the four structured families **0.1081**. The raw logistic's mixture,
+  **0.0928**, sits above the model's by 0.0069 with non-overlapping cluster intervals: under
+  transfer the linear rule generalises at least as well as the boosted model. The incumbent refit
+  reproduced 0003's **0.2395** exactly and the null control sat at **0.0384**.
 - **2048-byte carve: `CARVE_FAILS` on every reading — by 0.0025 on the slackest, 0.0206 on the
   binding one.** Within-size margin **+0.0475** over the frozen
   baseline set against the 0.05 bar, **+0.0294** over all baselines, **+0.0308** with the leaked

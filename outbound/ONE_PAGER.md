@@ -102,7 +102,11 @@ standardised logistic baseline to **0.1886**, and the margin fell to **+0.0234**
 The same search at 4096 (preregistration 0014) leaves the headline standing: the searched model
 reaches **0.2884** against a searched logistic at **0.2317**, margins **+0.0567** on both readings
 and **+0.0576** without gutenberg, `RECIPE_CLEARS` — a smaller margin than the fixed-recipe
-**+0.1003**, and the one this page now leads with.
+**+0.1003**, and the one this page now leads with. Unseen content is the boundary: with each of
+the eight content families withheld from training in turn (preregistration 0015), the recipe
+identifies the encoder on the withheld family at a stitched **0.0859** against chance **0.0385**
+and a **0.0885** bar — `TRANSFER_FAILS` — and a raw logistic does better, **0.0928**. Every number
+on this page is a statement about these eight content families.
 The window boundary of
 this recipe lies in (2048, 4096]; every number above remains a 4096-byte-window number.
 
@@ -193,7 +197,7 @@ reported, and neither is quoted as the other.
 
 The verification-coverage map is machine-checked and prints its weakest class first, deliberately.
 
-**14 of 120 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
+**14 of 138 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
 including us. Eight are measurements made by subagents inside scratch directories that no longer
 exist, and **that includes measurements the conclusions rest on.** The ninth is worse than
 unverified: it is a figure we published and then failed to reproduce ourselves.

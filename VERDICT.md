@@ -311,6 +311,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 
 | Result | What happened | Class |
 |---|---|---|
+| **Leave-one-family-out transfer at 4096 (0015)** | **`TRANSFER_FAILS`** — with each content family withheld from training, 0003's recipe identifies the encoder on that family at a stitched 0.0859 against chance 0.0385, 0.0026 short of the chance + 0.05 bar; the raw logistic transfers better (0.0928); per family the model keeps 0.25 to 0.65 of its in-distribution accuracy. The headline is a statement about these eight content families | primary-verifiable |
 | **Phase 0 domain selection** | **Terminated with no domain. 99 candidates, 8 adversarial reviews, 0 SELECT.** | arithmetic-verifiable |
 | Phase 1 (falsify the data thesis) | Delivered on the pivot, not on a selected domain. The null control, the grouped split and the trivial-baseline floor were all measured before any learned number was believed. | primary-verifiable |
 | Phase 2 (the scaling curve) | **Delivered on the pivot.** `CURVE_ESTABLISHED` over 2.9031 decades, both margins clearing 0.05. It is a real curve on a real task — and on a domain that reached it through the archived trial rather than through Phase 0 selection, and that still has no buyer. | primary-verifiable |
@@ -332,7 +333,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **14 of 120 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 138 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -361,8 +362,8 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 | Class | Count | Meaning |
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
-| `arithmetic-verifiable` | 20 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 86 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `arithmetic-verifiable` | 21 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
+| `primary-verifiable` | 103 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -811,16 +812,79 @@ scored 0.2878 against M7's 0.2851 and was selected. Fitted once on the 800000-ro
 **What it does not establish.** A buyer. Anything about recipes off the roster, architectures off
 the roster, carve sizes other than 4096, or the feature set. It establishes that under this protocol, at 4096 bytes, one of eight model recipes clears a bar that a symmetric search of the baselines raised from 0.1392 to 0.2317 — and that the headline was not a recipe artefact, while the 2048 failure was not one either.
 
-**Transfer to unseen content, in flight.** Every verdict above trains and scores on the same eight
-content families. Preregistration 0015 (chain seq 15, NIST Beacon pulse 1932826, drand round 6448808)
-asks whether the encoder signal survives content the model has never seen: for each family, 0003's
-fixed recipes are fitted on every pool row of the other seven families and scored once on the held-out
-family's sealed evaluation rows; the eight readings are stitched into one leave-one-family-out mixture,
-read against chance plus 0.05 (`TRANSFERS` or `TRANSFER_FAILS`). The expected outcome is written in the
-preregistration as genuinely uncertain, with the mixture bar at 0.0885. Three refuter passes before the
-freeze are recorded in `artifacts/pivot/engineering_log_0015.json`. It is frozen, and it is running. No
-0015 number appears in this document until its frozen reader emits one; a `TRANSFER_FAILS` is filed as a
-boundary of the headline at full size in every document that states the headline.
+### Transfer to unseen content — `TRANSFER_FAILS` at 4096 (preregistration 0015)
+
+Every verdict above trains and scores on the same eight content families. The grouped split and
+the null control rule out memorising source chunks; nothing above rules out eight family-specific
+encoder signatures. Preregistration 0015 (chain seq 15, NIST Beacon pulse 1932826, drand round
+6448808) held each family out in turn: 0003's fixed recipes — the incumbent HGB, the raw logistic,
+the majority rule — were fitted on every pool row of the other seven families (about 700000 rows,
+in pool order, zero rows of the held-out family and zero chunks shared with the evaluation set,
+both measured and sealed by hash before any fit) and scored once on the sealed evaluation set; the
+fold's reading is the accuracy on the held-out family's rows, and the eight readings stitch into
+one leave-one-family-out mixture over all 260000 evaluation rows, every row predicted by a model
+that never saw a row of its family. The bar was the model's mixture against chance plus 0.05,
+written in advance as genuinely uncertain. Three refuter passes before the freeze are recorded in
+`artifacts/pivot/engineering_log_0015.json`; the blocking one re-anchored the logistic
+reproduction clause on the value this machinery produces (0.1352, 0014's) rather than 0003's
+0.1392, which would have left an honest run 0.001 from a VOID on a control clause.
+
+| | |
+|---|---|
+| **Verdict** | `TRANSFER_FAILS` — a boundary of the headline, not a revision of it |
+| **Emitted by** | `tools/readers/lofo4096_verdict.py`, frozen as chain entry 15 |
+| **Artifact** | `artifacts/pivot/lofo_4096.json` with `lofo_4096_scores.json`; verdict in `lofo_4096_verdict.json` |
+| **Cost** | 21446.3 s of banked fit time (27 fits) at 3 threads, nice 10, on 4 cores, no GPU; wall clock 19:24 UTC on 2026-09-08 to 01:31 UTC on 2026-09-09 with no interruption; peak 9.91 GB anonymous; `artifacts/pivot/engineering_log_0015.json` |
+
+| Clause | Bar | Read | Result |
+|---|---|---|---|
+| Incumbent refit reproduces 0003 | within 0.005 of 0.2395 | **0.2395** | pass |
+| 0003 logistic refit reproduces the same-convention value | within 0.005 of 0.1352 | **0.1352** | pass |
+| Null control with 0003's recipe | ≤ chance + 0.02 | **0.0384** | pass |
+| Every fold: held-out rows and shared chunks in training | 0 | **0** | pass |
+| Leave-one-family-out mixture, model | ≥ chance + 0.05 = 0.0885 | 0.0859 − 0.038462 = **+0.0474** | **fail** |
+
+**Finding 1 — the signal is largely family-specific.** With a family withheld, the model
+identifies the encoder on that family at between a quarter and two thirds of its in-distribution
+accuracy, and on the four structured families — where the curve lives — at less than four tenths
+of it:
+
+| Held-out family | Model, family withheld | Raw logistic, family withheld | In-distribution (0003, top rung) | Retention |
+|---|---:|---:|---:|---:|
+| code | **0.1135** | 0.1023 | 0.2944 | 0.3855 |
+| json | **0.1134** | 0.1504 | 0.3581 | 0.3167 |
+| log | **0.1083** | 0.1104 | 0.3756 | 0.2883 |
+| csv | **0.0968** | 0.103 | 0.3888 | 0.249 |
+| mixed | **0.0738** | 0.0762 | 0.1143 | 0.6457 |
+| base64 | **0.0653** | 0.0596 | 0.1221 | 0.5348 |
+| binary | **0.0618** | 0.0773 | 0.1049 | 0.5891 |
+| gutenberg | **0.0552** | 0.0635 | 0.1596 | 0.3459 |
+
+Over the four structured families the stitched accuracy is **0.1081**; over the non-gutenberg
+rows **0.0904**; over everything **0.0859**, which is 0.0474 above chance and **0.0026 short** of
+the preregistered bar. The informational cluster interval on the mixture is [0.085, 0.0868].
+
+**Finding 2 — under transfer the dumb rule does better than the model.** The raw logistic's
+leave-one-family-out mixture is **0.0928**, above the model's by **0.0069** and above the bar the
+model had to reach; its cluster interval, [0.0919, 0.0938],
+does not overlap the model's. In-distribution the same two recipes stand at 0.2395 and 0.1352. The
+boosted model's advantage — every margin clause in this record — is an advantage on content it
+was trained on; on content it was not, a linear rule on the same 1108 features generalises at least
+as well. The bar was preregistered on the model, and the logistic reading is informational: it
+cannot make the verdict a pass, and it is stated because it is the more informative number.
+
+**Finding 3 — what this bounds, and what it does not revise.** The curve (0003), the searched
+margin (0014) and the boundaries at 1024 and 2048 stand exactly as measured; each was a
+within-distribution measurement and said so. What they now carry, in every document that states
+the headline, is this: they are statements about eight manufactured content families, not about
+DEFLATE streams in general. No document claimed transfer, so no correction is owed; the claim that
+this verdict withdraws is the implicit one.
+
+**What it does not establish.** A buyer. Anything about searched recipes under transfer, about
+carve sizes other than 4096, about content outside the corpus builder's eight families, or about
+whether a recipe trained on more families would transfer better — a separate preregistration each.
+It establishes that 0003's recipe, trained on seven of these families, does not identify the
+encoder on the eighth at chance plus 0.05, and that a raw logistic does slightly better at it.
 
 ### A learned representation over raw bytes does not rescue it either — `BYTE_MODEL_FAILS`
 

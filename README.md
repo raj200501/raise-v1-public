@@ -46,8 +46,11 @@ verdict `RECIPE_CLEARS`. The headline margin is therefore quoted at its searched
 beside the +0.1003 that fixed recipes gave. Preregistration 0015 asks whether that signal survives
 content the model has never seen — each of the eight content families held out in turn, 0003's fixed
 recipes fitted on the other seven and scored once on the held-out family's sealed rows, the eight
-readings stitched into one leave-one-family-out mixture read against chance plus 0.05; it is frozen
-(chain entry 15) and running, and no 0015 number appears here until its frozen reader emits one.
+readings stitched into one leave-one-family-out mixture read against chance plus 0.05 — and the
+answer is no at the preregistered level: the stitched mixture is 0.0859 against chance 0.0385,
+0.0026 short of the bar, and a raw logistic transfers better (0.0928); verdict `TRANSFER_FAILS`.
+The curve and the searched margin stand as measured, and they are statements about these eight
+content families, not about DEFLATE streams in general.
 Decomposed by content family, csv and log clear the bar at 2048 on both readings (+0.0554 and
 +0.0501 against the strongest baseline) and the structured four clear it as a set (+0.0549), but
 the mixture fails even with the three incompressible families removed (+0.0478); the verdict is

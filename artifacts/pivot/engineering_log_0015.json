@@ -91,7 +91,141 @@
     }
   },
   "run_record": {
-    "note": "filled after the run from the banked artifact and ledger; PENDING"
+    "note": "what the run actually did, from the banked artifact and ledger; the verdict is the reader's, not this log's",
+    "derived_arithmetic": {
+      "derivation": "round(a - b, 4) or a / b from artifacts/pivot/lofo_4096.json and the verdict file; arithmetic, not a reader output",
+      "mixture_minus_chance_model": 0.0474,
+      "mixture_minus_chance_logistic": 0.0543,
+      "mixture_minus_chance_majority": 0.0,
+      "bar_the_mixture_had_to_reach": 0.0885,
+      "clearance_over_the_bar": -0.0026,
+      "per_family_lofo_minus_chance": {
+        "gutenberg": 0.0167,
+        "base64": 0.0268,
+        "binary": 0.0233,
+        "code": 0.075,
+        "csv": 0.0583,
+        "json": 0.0749,
+        "log": 0.0698,
+        "mixed": 0.0353
+      },
+      "retention_per_family": {
+        "base64": 0.5348,
+        "binary": 0.5891,
+        "code": 0.3855,
+        "csv": 0.249,
+        "gutenberg": 0.3459,
+        "json": 0.3167,
+        "log": 0.2883,
+        "mixed": 0.6457
+      },
+      "structured_four_minus_chance": 0.0696
+    },
+    "launches": "one launch at 2026-09-08T19:24:59Z, exit 0 at 2026-09-09T01:31:19Z; 27 fits, no interruption, no relaunch; 21977.2 s wall, 21446.3 s of banked fit time",
+    "interruptions_banked": "none",
+    "reproductions": {
+      "incumbent_M1": 0.2395,
+      "logistic_L1": 0.1352,
+      "null": 0.0384
+    },
+    "lofo_mixtures": {
+      "logistic": 0.0928,
+      "majority": 0.0385,
+      "model": 0.0859
+    },
+    "lofo_per_family_model": {
+      "base64": 0.0653,
+      "binary": 0.0618,
+      "code": 0.1135,
+      "csv": 0.0968,
+      "gutenberg": 0.0552,
+      "json": 0.1134,
+      "log": 0.1083,
+      "mixed": 0.0738
+    },
+    "lofo_per_family_logistic": {
+      "base64": 0.0596,
+      "binary": 0.0773,
+      "code": 0.1023,
+      "csv": 0.103,
+      "gutenberg": 0.0635,
+      "json": 0.1504,
+      "log": 0.1104,
+      "mixed": 0.0762
+    },
+    "structured_four_model": 0.1081,
+    "non_gutenberg_model": 0.0904,
+    "cluster_ci95_informational": {
+      "lofo_mixture_model": [
+        0.085,
+        0.0868
+      ],
+      "lofo_mixture_logistic": [
+        0.0919,
+        0.0938
+      ],
+      "lofo_mixture_majority": [
+        0.0385,
+        0.0385
+      ],
+      "repro_model": [
+        0.2366,
+        0.2421
+      ],
+      "repro_logistic": [
+        0.1338,
+        0.1367
+      ]
+    },
+    "seconds_by_name": {
+      "fold_base64_logistic": 845.9,
+      "fold_base64_majority": 0.1,
+      "fold_base64_model": 1620.2,
+      "fold_binary_logistic": 834.5,
+      "fold_binary_majority": 0.0,
+      "fold_binary_model": 1763.3,
+      "fold_code_logistic": 805.1,
+      "fold_code_majority": 0.0,
+      "fold_code_model": 1351.4,
+      "fold_csv_logistic": 818.7,
+      "fold_csv_majority": 0.0,
+      "fold_csv_model": 1514.5,
+      "fold_gutenberg_logistic": 817.6,
+      "fold_gutenberg_majority": 0.0,
+      "fold_gutenberg_model": 1634.9,
+      "fold_json_logistic": 812.4,
+      "fold_json_majority": 0.0,
+      "fold_json_model": 1276.3,
+      "fold_log_logistic": 803.6,
+      "fold_log_majority": 0.0,
+      "fold_log_model": 1472.6,
+      "fold_mixed_logistic": 809.6,
+      "fold_mixed_majority": 0.0,
+      "fold_mixed_model": 1645.3,
+      "null": 24.0,
+      "repro_logistic": 929.7,
+      "repro_model": 1666.6
+    },
+    "against_the_extrapolation": "the preregistration's typical case was about 18000 s of fit time; the run banked 21446.3 s: the eight model folds took 1276.3 to 1763.3 s (30 to 40 iterations, early stopping fired in every fold) and the eight logistic folds 803.6 to 845.9 s (every one at its 400-iteration cap); the worst case of 70000 s was not approached",
+    "memory_observed": {
+      "unit": "anonymous RSS (RssAnon), GB",
+      "reproduction_pool_heartbeat_max": 9.91,
+      "fold_heartbeat_max": 9.03,
+      "projection_in_scope_cost": "about 10 GB for a fold, about 10.9 GB for the reproduction pool; threshold 13.0; ceiling about 13.9"
+    },
+    "environment_banked": {
+      "cgroup_memory_limit": "unlimited",
+      "cpu_cores": 4,
+      "disk_free_gb": 6.65,
+      "gpu": "none",
+      "mem_available_gb": 15.7,
+      "nice": 10,
+      "numpy": "2.4.6",
+      "python": "3.11.15",
+      "sklearn": "1.9.0",
+      "threads": 3
+    },
+    "reader_outcome": "TRANSFER_FAILS from the frozen 0015 reader on the first read: LOFO mixture 0.0859 against chance 0.038462 (0.0474 above chance, 0.0026 short of the 0.0885 bar); the raw logistic's mixture 0.0928 sits above the model's by 0.0069 and above the bar the model had to reach; per held-out family the model retains 0.25 to 0.65 of its in-distribution accuracy (retention_per_family in the verdict file)"
   },
   "operator_procedure": {
     "repeated_launches_of_one_fit": "a fit killed within 30 s of its last heartbeat is never stamped infeasible_memory; repeated launches of the same fit with no new checkpoint are the operator's signal to stop and file the VOID by hand, with the launches ledger as evidence",

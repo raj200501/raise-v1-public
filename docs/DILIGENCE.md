@@ -54,6 +54,16 @@ expected outcome stated in advance as uncertain) clears: 0.2884 against a search
 size rather than the +0.1003 fixed recipes gave. Every number in this repository is a
 4096-byte-window number and the documents say so.
 
+## "Does it work on content it has never seen?"
+
+**No, at the preregistered level, and that is published at full size** (prereg 0015, expected
+outcome stated in advance as uncertain): with each of the eight content families withheld from
+training in turn, 0003's recipe identifies the encoder on the withheld family at a stitched 0.0859
+against chance 0.0385, 0.0026 short of the chance + 0.05 bar, and a raw logistic on the same
+features transfers better (0.0928). Per family the model keeps 0.25 to 0.65 of its in-distribution
+accuracy (`artifacts/pivot/lofo_4096_verdict.json`, `retention_per_family`). The curve and the
+searched margin stand as measured; they are statements about these eight content families.
+
 ## "Who buys it?"
 
 Uncleared, and filed in the coverage map's **weakest class** rather than dressed as a finding. The

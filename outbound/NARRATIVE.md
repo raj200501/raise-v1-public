@@ -116,7 +116,12 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > expecting nothing in particular and saying so in advance: the model rose to 0.2884, the
 > standardised logistic to 0.2317, and the margin held at +0.0567 on every reading, verdict
 > `RECIPE_CLEARS` — the headline survives a fair baseline, at a smaller margin than we had
-> been quoting, and that is the margin we quote now. The boundary of our result is
+> been quoting, and that is the margin we quote now. Then we asked the question every buyer would:
+> does it work on content it has never seen? We held each of the eight content families out of
+> training in turn (0015), and it does not, at the level we preregistered: the stitched accuracy
+> on withheld families is 0.0859 against chance 0.0385, 0.0026 short of the bar, and a raw
+> logistic transfers better, 0.0928. `TRANSFER_FAILS`, filed at full size: our headline is a
+> statement about eight content families. The boundary of our result is
 > bracketed to (2048, 4096], and the near-miss on the slack reading is published beside the
 > clear miss on the strict one.
 
@@ -138,7 +143,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 
 > So here is the honest inventory. A validated instrument that reproduces on a cold clone. One
 > real curve with its boundaries measured by the same instrument. A corrections ledger that costs
-> us something to keep. A verification map that prints its weakest class first — 14 of 120 claims
+> us something to keep. A verification map that prints its weakest class first — 14 of 138 claims
 > we ourselves cannot currently re-derive, and it says so. And no buyer yet: G5, a named buyer
 > type, is the gate this work has not cleared, and no result in the repository could have cleared
 > it, because that work happens outside the repository. We are raising to do exactly that work,
@@ -184,7 +189,9 @@ allows and explicitly hedged where it does not.
 > margin at both sizes — 0.0403 at 1024, which is chance, and 0.0455 at 2048 against a 0.1266
 > baseline; a symmetric recipe search at 2048 then widened the miss to +0.0234 because the
 > standardised logistic baseline gained more (0.1266 to 0.1886) than the model (0.1741 to 0.212),
-> while at 4096 the same search left the headline margin at +0.0567, above the bar;
+> while at 4096 the same search left the headline margin at +0.0567, above the bar; and on
+> content the model never trained on it identifies the encoder at 0.0859 stitched over withheld
+> families, short of chance + 0.05, with a raw logistic doing better;
 > we preregistered those tests ourselves, they failed, and every number we quote is a
 > 4096-byte-window number labelled as such.
 
