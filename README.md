@@ -55,8 +55,9 @@ of the other families and scored on the held-out one, and the answer is yes, mod
 unseen family rises from 0.0666 with one training family to 0.0829 with seven, 0.00596 per doubling against a 0.005
 bar, verdict `DIVERSITY_HELPS`; seeing more of a single family (700 to 4900 chunks) moves it by -0.002, and the linear
 rules' curves are steeper (0.0947 and 0.0941 at seven families).
-Preregistration 0017 (chain entry 17, frozen 2026-09-09) asks whether 0014's standardised logistic, fitted on 0015's
-eight sealed folds, leads the incumbent on unseen families by 0.02; it is frozen and queued behind 0016's run.
+Preregistration 0017 (chain entry 17) then asked whether 0014's standardised logistic, fitted on 0015's eight sealed folds, leads the
+incumbent on unseen families by 0.02: it does not, a stitched 0.0951 against 0015's 0.0859 (2393 more correct rows of 260000 against a
+5200-row bar), verdict `L3_LEAD_BELOW_BAR`; the lead does not reach the record's 0.05 margin, and every fold converged.
 The curve and the searched margin stand as measured, and they are statements about these eight
 content families, not about DEFLATE streams in general.
 Decomposed by content family, csv and log clear the bar at 2048 on both readings (+0.0554 and

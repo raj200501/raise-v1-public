@@ -1591,6 +1591,177 @@
       "class": "primary-verifiable",
       "reverify": "python3 tools/readers/fdc4096_verdict.py",
       "claim": "With mixed held out and all 4900 chunks from the single family that follows it, the model reaches 0.0403 on mixed."
+    },
+    {
+      "id": "lofol3-verdict",
+      "artifact": "artifacts/pivot/lofo_l3_4096_verdict.json",
+      "json_path": "$.verdict",
+      "value": "L3_LEAD_BELOW_BAR",
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "Preregistration 0017's frozen reader emits L3_LEAD_BELOW_BAR: on 0015's sealed leave-one-family-out folds, 0014's standardised logistic does not lead 0003's incumbent by 0.02 of the evaluation set (24736 against 22343 correct rows); a bound on the linear rule's transfer advantage, filed at full size."
+    },
+    {
+      "id": "lofol3-mixture",
+      "artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo_mixture_top1",
+      "value": 0.0951,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "0014's standardised logistic's leave-one-family-out mixture over all 260000 sealed evaluation rows, each predicted by the fold that held out its family, is 0.0951 (24736 correct rows) against chance 0.038462."
+    },
+    {
+      "id": "lofol3-correct",
+      "artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo_correct_l3",
+      "value": 24736,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "L3's stitched count of correct evaluation rows is 24736 of 260000."
+    },
+    {
+      "id": "lofol3-margin-exact",
+      "artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo_margin_l3_over_0015_model_exact",
+      "value": 0.009204,
+      "class": "arithmetic-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "L3's correct count minus 0015's incumbent count 22343, over 260000, is 0.009204; the clause reads the reader's own recomputation of the count."
+    },
+    {
+      "id": "lofol3-margin-over-0015-logistic",
+      "artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo_margin_l3_over_0015_logistic",
+      "value": 0.0023,
+      "class": "arithmetic-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "L3's mixture minus 0015's raw-logistic mixture 0.0928 is 0.0023; informational."
+    },
+    {
+      "id": "lofol3-reproduced",
+      "artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.logistic_l3_refit_top1",
+      "value": 0.2317,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "L3 refitted on 0003's full pool scores 0.2317 against 0014's same-convention 0.2317."
+    },
+    {
+      "id": "lofol3-null-control",
+      "artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.shuffled_label_accuracy",
+      "value": 0.0383,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "The null control with L3 on 0015's null block with shuffled labels lands at 0.0383, within chance 0.038462 plus 0.02."
+    },
+    {
+      "id": "lofol3-fit-seconds",
+      "artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.cost.banked_fit_seconds_total",
+      "value": 15574.9,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "The whole 0017 run cost 15574.9 s of banked fit time at 3 threads and nice 10 on 4 cores, no GPU."
+    },
+    {
+      "id": "lofol3-structured-four",
+      "artifact": "artifacts/pivot/lofo_l3_4096_verdict.json",
+      "json_path": "$.structured_four_top1_l3",
+      "value": 0.1228,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "Over the code, csv, json and log evaluation rows, each predicted by an L3 fold that never saw its family, L3 reaches 0.1228."
+    },
+    {
+      "id": "lofol3-flag-0015-bar",
+      "artifact": "artifacts/pivot/lofo_l3_4096_verdict.json",
+      "json_path": "$.bar_applied.reaches_0015_transfer_bar",
+      "value": true,
+      "class": "arithmetic-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "Whether L3's mixture clears 0015's own transfer bar of chance + 0.05 (0.0885): True; a flag, not a clause."
+    },
+    {
+      "id": "lofol3-flag-record-margin",
+      "artifact": "artifacts/pivot/lofo_l3_4096_verdict.json",
+      "json_path": "$.bar_applied.reaches_record_margin_bar_0.05",
+      "value": false,
+      "class": "arithmetic-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "Whether L3's lead over 0015's incumbent reaches the record's in-distribution margin bar of 0.05 (13000 rows): False; a flag, not a clause."
+    },
+    {
+      "id": "lofol3-family-gutenberg",
+      "artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo.logistic_l3.per_family.gutenberg",
+      "value": 0.0518,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "With gutenberg held out of training, L3 identifies the encoder on gutenberg's sealed evaluation rows at 0.0518 (0015's incumbent on the same rows: 0.0552; 0015's raw logistic: 0.0635)."
+    },
+    {
+      "id": "lofol3-family-base64",
+      "artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo.logistic_l3.per_family.base64",
+      "value": 0.0655,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "With base64 held out of training, L3 identifies the encoder on base64's sealed evaluation rows at 0.0655 (0015's incumbent on the same rows: 0.0653; 0015's raw logistic: 0.0596)."
+    },
+    {
+      "id": "lofol3-family-binary",
+      "artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo.logistic_l3.per_family.binary",
+      "value": 0.0769,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "With binary held out of training, L3 identifies the encoder on binary's sealed evaluation rows at 0.0769 (0015's incumbent on the same rows: 0.0618; 0015's raw logistic: 0.0773)."
+    },
+    {
+      "id": "lofol3-family-code",
+      "artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo.logistic_l3.per_family.code",
+      "value": 0.1181,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "With code held out of training, L3 identifies the encoder on code's sealed evaluation rows at 0.1181 (0015's incumbent on the same rows: 0.1135; 0015's raw logistic: 0.1023)."
+    },
+    {
+      "id": "lofol3-family-csv",
+      "artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo.logistic_l3.per_family.csv",
+      "value": 0.1105,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "With csv held out of training, L3 identifies the encoder on csv's sealed evaluation rows at 0.1105 (0015's incumbent on the same rows: 0.0968; 0015's raw logistic: 0.103)."
+    },
+    {
+      "id": "lofol3-family-json",
+      "artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo.logistic_l3.per_family.json",
+      "value": 0.1347,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "With json held out of training, L3 identifies the encoder on json's sealed evaluation rows at 0.1347 (0015's incumbent on the same rows: 0.1134; 0015's raw logistic: 0.1504)."
+    },
+    {
+      "id": "lofol3-family-log",
+      "artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo.logistic_l3.per_family.log",
+      "value": 0.1272,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "With log held out of training, L3 identifies the encoder on log's sealed evaluation rows at 0.1272 (0015's incumbent on the same rows: 0.1083; 0015's raw logistic: 0.1104)."
+    },
+    {
+      "id": "lofol3-family-mixed",
+      "artifact": "artifacts/pivot/lofo_l3_4096.json",
+      "json_path": "$.lofo.logistic_l3.per_family.mixed",
+      "value": 0.077,
+      "class": "primary-verifiable",
+      "reverify": "python3 tools/readers/lofol3_4096_verdict.py",
+      "claim": "With mixed held out of training, L3 identifies the encoder on mixed's sealed evaluation rows at 0.077 (0015's incumbent on the same rows: 0.0738; 0015's raw logistic: 0.0762)."
     }
   ],
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",

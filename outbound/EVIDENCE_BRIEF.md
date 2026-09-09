@@ -30,7 +30,11 @@ by **0.0026**, and a raw logistic does better (**0.0928**): `TRANSFER_FAILS`. **
 it, depth does not.** At a fixed budget of 4900 source chunks spread over 1, 2, 4 or 7 families
 (preregistration 0016), the recipe's accuracy on the unseen family goes **0.0666 → 0.0653 → 0.0736
 → 0.0829**, a slope of **0.00596** per doubling of families against a 0.005 bar: `DIVERSITY_HELPS`;
-a single family at 700 to 4900 chunks moves it by **-0.002**. Every number below is a statement
+a single family at 700 to 4900 chunks moves it by **-0.002**.
+**The linear rule's lead under transfer stays under the bar.** 0014's standardised logistic, fitted on 0015's eight
+sealed folds (preregistration 0017), identifies the encoder on unseen families at a stitched **0.0951**
+against the incumbent's **0.0859**: 2393 more correct rows of 260000 against a 5200-row bar (0.02),
+`L3_LEAD_BELOW_BAR`; the lead does not reach the record's 0.05 in-distribution margin. Every number below is a statement
 about these eight content families.
 
 ## The headline curve, with corrected statistics
@@ -122,6 +126,15 @@ reading available, fixed before the run; the looser reading would have given **+
   end-to-end rise is 0.0163 with non-overlapping cluster intervals; the two-family point dips; the
   depth arm (one family at 700 to 4900 chunks) is flat at -0.002; the linear rules' slopes are
   0.007267 and 0.008019.
+- **Linear rule under transfer at 4096: `L3_LEAD_BELOW_BAR`, 0.0951 against 0015's incumbent 0.0859,
+  2393 more correct rows of 260000 against a 5200-row bar.** 0014's searched, standardised logistic on
+  0015's eight sealed folds, hash for hash, one fit per fold, every fold converged (774 to 954
+  iterations of a 1000 cap); the reader recounts the correct rows from the banked score vectors and
+  reads the clause on exact counts. Leads the incumbent on 7 of eight families; over the structured
+  four 0.1228 against the incumbent's 0.1081. In distribution the incumbent leads this rule by 0.0078;
+  as a flag, L3's mixture clears the chance + 0.05 bar 0015 applied to 0003's recipe (0.0951 against
+  0.0885), which 0015's clause did not; 0014's searched model was not fitted here, and 0015's
+  `TRANSFER_FAILS` is not revised.
 - **Leave-one-family-out transfer at 4096: `TRANSFER_FAILS`, stitched mixture 0.0859 against a
   0.0885 bar.** 0003's recipes fitted on seven families and scored on the eighth, eight times,
   every fold sealed by hash with zero withheld rows and zero shared chunks in training. Per

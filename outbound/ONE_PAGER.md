@@ -109,7 +109,10 @@ and a **0.0885** bar — `TRANSFER_FAILS` — and a raw logistic does better, **
 the lever, not depth: at a fixed budget of 4900 source chunks the recipe's accuracy on an unseen
 family rises from **0.0666** with one training family to **0.0829** with seven, **0.00596** per
 doubling against a 0.005 bar (preregistration 0016, `DIVERSITY_HELPS`), while seeing seven times
-more of a single family moves it by **-0.002**. Every number on this page is a statement about
+more of a single family moves it by **-0.002**.
+The linear rule does not lead under transfer by the preregistered margin: 0014's standardised logistic on the same eight folds reaches **0.0951** on unseen
+families against the incumbent's **0.0859**, 2393 more correct rows of 260000 against a 5200-row bar
+(preregistration 0017, `L3_LEAD_BELOW_BAR`). Every number on this page is a statement about
 these eight content families.
 The window boundary of
 this recipe lies in (2048, 4096]; every number above remains a 4096-byte-window number.
@@ -201,7 +204,7 @@ reported, and neither is quoted as the other.
 
 The verification-coverage map is machine-checked and prints its weakest class first, deliberately.
 
-**14 of 179 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
+**14 of 198 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
 including us. Eight are measurements made by subagents inside scratch directories that no longer
 exist, and **that includes measurements the conclusions rest on.** The ninth is worse than
 unverified: it is a figure we published and then failed to reproduce ourselves.

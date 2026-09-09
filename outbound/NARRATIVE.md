@@ -126,7 +126,11 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > data over more families raises accuracy on the unseen one from 0.0666 with one family to 0.0829
 > with seven, 0.00596 per doubling against a 0.005 bar, `DIVERSITY_HELPS` — a narrow pass, a
 > non-monotone curve, and a depth arm that says seeing more of one family buys nothing (-0.002
-> over a seven-fold change in plaintexts). Diversity is the lever; it is a modest one. The boundary of our result is
+> over a seven-fold change in plaintexts). Diversity is the lever; it is a modest one.
+> Then we asked whether the linear rule that set the in-distribution bar leads our recipe on
+> unseen content by a margin we named in advance (0017): it does not, 0.0951 against 0.0859 on
+> the same eight folds, 2393 more correct rows against a bar of 5200, `L3_LEAD_BELOW_BAR` — a point lead that does not reach the bar, filed as such.
+> The boundary of our result is
 > bracketed to (2048, 4096], and the near-miss on the slack reading is published beside the
 > clear miss on the strict one.
 
@@ -148,7 +152,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 
 > So here is the honest inventory. A validated instrument that reproduces on a cold clone. One
 > real curve with its boundaries measured by the same instrument. A corrections ledger that costs
-> us something to keep. A verification map that prints its weakest class first — 14 of 179 claims
+> us something to keep. A verification map that prints its weakest class first — 14 of 198 claims
 > we ourselves cannot currently re-derive, and it says so. And no buyer yet: G5, a named buyer
 > type, is the gate this work has not cleared, and no result in the repository could have cleared
 > it, because that work happens outside the repository. We are raising to do exactly that work,

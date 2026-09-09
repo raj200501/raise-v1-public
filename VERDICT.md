@@ -312,6 +312,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 
 | Result | What happened | Class |
 |---|---|---|
+| **Linear rule under transfer at 4096 (0017)** | **`L3_LEAD_BELOW_BAR`** — 0014's standardised logistic on 0015's eight sealed folds reaches a stitched 0.0951 on unseen families against 0015's incumbent 0.0859: 2393 more correct rows of 260000 (0.009204) against a 5200-row bar (0.02); under the record's 0.05 margin; every fold converged. Chain entry 17. | primary-verifiable |
 | **Leave-one-family-out transfer at 4096 (0015)** | **`TRANSFER_FAILS`** — with each content family withheld from training, 0003's recipe identifies the encoder on that family at a stitched 0.0859 against chance 0.0385, 0.0026 short of the chance + 0.05 bar; the raw logistic transfers better (0.0928); per family the model keeps 0.25 to 0.65 of its in-distribution accuracy. The headline is a statement about these eight content families | primary-verifiable |
 | **Phase 0 domain selection** | **Terminated with no domain. 99 candidates, 8 adversarial reviews, 0 SELECT.** | arithmetic-verifiable |
 | Phase 1 (falsify the data thesis) | Delivered on the pivot, not on a selected domain. The null control, the grouped split and the trivial-baseline floor were all measured before any learned number was believed. | primary-verifiable |
@@ -334,7 +335,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **14 of 179 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 198 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -363,8 +364,8 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 | Class | Count | Meaning |
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
-| `arithmetic-verifiable` | 26 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 139 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `arithmetic-verifiable` | 30 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
+| `primary-verifiable` | 154 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -977,12 +978,76 @@ not; and that the linear rules' curves are steeper. It does not extrapolate past
 does not speak to content outside these eight, does not revise 0015's `TRANSFER_FAILS` (the
 seven-family point here is 0.0829, still under 0015's 0.0885 bar), and establishes no buyer.
 
-**In flight — preregistration 0017 (chain seq 17, frozen 2026-09-09T10:23:16Z).** 0014's searched, standardised
-logistic fitted on 0015's eight sealed folds, hash for hash, and scored once each on the held-out family's sealed rows:
-the stitched count of correct rows against 0015's banked incumbent count plus 0.02 of the evaluation set
-(`L3_LEADS_INCUMBENT_UNDER_TRANSFER` / `L3_LEAD_BELOW_BAR`), read by `tools/readers/lofol3_4096_verdict.py`; whether the
-lead reaches the record's 0.05 margin and whether the logistic clears 0015's own transfer bar are banked as flags. Queued
-behind 0016's run; nothing below this line changes until its frozen reader has read the completed run.
+### Does the linear rule lead the incumbent under transfer? — `L3_LEAD_BELOW_BAR` at 4096 (preregistration 0017)
+
+0015 read its verdict on 0003's incumbent and noted, in the same artifact, that a raw logistic
+transferred better; 0016's review argued that the more informative comparator under transfer is
+0014's searched, standardised logistic (L3), the recipe that set the in-distribution bar the
+headline clears. Preregistration 0017 (chain seq 17, frozen 2026-09-09T10:23:16Z) fitted L3 once on
+each of 0015's eight sealed folds, hash for hash, scored each fit once on the held-out family's
+sealed rows, and read the stitched count of correct rows against 0015's banked incumbent count,
+22343 of 260000: the bar was a lead of 5200 rows (0.02 of the evaluation set), and the reader
+recounts the rows from the banked score vectors rather than trusting the runner's figure. Two
+flags were banked beside the verdict, not as clauses: whether the lead reaches the record's
+in-distribution margin bar of 0.05, and whether L3's mixture clears 0015's own transfer bar of
+chance + 0.05. The pre-freeze review and the smoke history are in
+`artifacts/pivot/engineering_log_0017.json`.
+
+| | |
+|---|---|
+| **Verdict** | `L3_LEAD_BELOW_BAR` — 0014's searched, standardised logistic does not lead 0003's fixed incumbent on unseen families by the preregistered 0.02 (2393 rows against a 5200-row bar) |
+| **Emitted by** | `tools/readers/lofol3_4096_verdict.py`, frozen as chain entry 17; the reader's own recount of correct rows is the verdict's |
+| **Artifact** | `artifacts/pivot/lofo_l3_4096.json` with `lofo_l3_4096_scores.json`; verdict in `lofo_l3_4096_verdict.json` |
+| **Cost** | 15574.9 s of banked fit time (10 fits) at 3 threads, nice 10, on 4 cores, no GPU; fold fits 1534.7 to 1918.0 s at 774 to 954 iterations of a 1000-iteration cap; peak 8.44 GB resident; `artifacts/pivot/engineering_log_0017.json` |
+
+| Clause | Bar | Read | Result |
+|---|---|---|---|
+| L3 on 0003's full pool reproduces 0014 | within 0.005 of 0.2317 | **0.2317** | pass |
+| Null control (L3, 0015's null block, shuffled labels) | ≤ chance + 0.02 | **0.0383** | pass |
+| Every fold: held-out rows and shared chunks in training | 0 | **0** | pass |
+| L3's correct rows minus 0015's incumbent count 22343 | ≥ 5200 rows (0.02) | **2393** (0.009204) | **fail** |
+
+**Finding 1 — the linear rule's lead under transfer stays under the bar.** L3's mixture over all
+260000 evaluation rows, each row predicted by the fold that never saw its family, is **0.0951**
+(24736 correct rows) against 0015's incumbent at **0.0859** (22343 rows) and
+0015's raw logistic at 0.0928 (24131 rows): a lead of **0.009204** over the
+incumbent (2393 rows against the 5200-row bar) and 0.0023 over the raw logistic. The mixture's
+cluster interval is [0.0941, 0.0962]. The lead does not reach the record's in-distribution margin bar of
+0.05 (under 13000 rows), and the mixture clears 0015's transfer bar of chance + 0.05
+(0.0951 against 0.0885; chance + 0.056638). Over the structured four (code, csv, json, log) L3 reaches
+**0.1228** against 0015's incumbent 0.1081 and raw logistic 0.1167; without
+gutenberg the mixture is 0.1014. Every fold converged below the cap (774 to 954 iterations), so the
+comparison is with a converged linear rule, which 0015's raw logistic at its 400-iteration cap
+was not. The preregistration bracketed the outcome in advance with two banked retention ratios: 0.083
+to 0.084 if L3 kept the share of its in-distribution accuracy that 0015's incumbent kept, 0.147 to
+0.159 if it kept the raw logistic's share, with the 0.105935 bar between them and the prior stated as
+close to even; the reading, 0.0951, falls between the brackets and under the bar.
+
+| Held-out family | L3 (0014's standardised logistic) | 0015 incumbent | 0015 raw logistic | L3 minus incumbent |
+|---|---:|---:|---:|---:|
+| json | **0.1347** | 0.1134 | 0.1504 | 0.0213 |
+| log | **0.1272** | 0.1083 | 0.1104 | 0.0189 |
+| code | **0.1181** | 0.1135 | 0.1023 | 0.0046 |
+| csv | **0.1105** | 0.0968 | 0.103 | 0.0137 |
+| mixed | **0.077** | 0.0738 | 0.0762 | 0.0032 |
+| binary | **0.0769** | 0.0618 | 0.0773 | 0.0151 |
+| base64 | **0.0655** | 0.0653 | 0.0596 | 0.0002 |
+| gutenberg | **0.0518** | 0.0552 | 0.0635 | -0.0034 |
+
+**Finding 2 — the lead is broad across families.** L3 leads 0015's incumbent on 7 of the eight
+held-out families and 0015's raw logistic on 5; the largest lead over the incumbent is on
+json (0.0213) and the smallest on gutenberg (-0.0034). In distribution the ordering is the other way:
+0003's incumbent scores 0.2395 on the sealed evaluation set against L3's 0.2317 here (0014's 0.2317,
+reproduced exactly), so the point ordering reverses under transfer (L3 ahead by 0.009204), but the preregistered margin does not certify a reversal: the clause was 0.02 and the lead is under half of it.
+
+**What it establishes, and what it does not.** That on this corpus, under leave-one-family-out
+transfer at 4096 with 0015's sealed folds, a converged, standardised linear rule
+does not beat 0003's boosted recipe on unseen families by 0.02 of the evaluation set, whatever its point lead; that 0015's
+`TRANSFER_FAILS` stands (as a flag, L3's mixture clears the chance + 0.05 bar 0015 applied to 0003's recipe, 0.0951 against
+0.0885; that flag was preregistered as informational, 0015's clause was about 0003's recipe, and 0015 is not revised); that L3 is a
+searched recipe read against a fixed one, so the comparison is asymmetric by design and says
+nothing about 0014's searched model M4, which was not fitted here; that nothing here revises 0003,
+0014 or 0015; and that no buyer is established.
 
 ### A learned representation over raw bytes does not rescue it either — `BYTE_MODEL_FAILS`
 

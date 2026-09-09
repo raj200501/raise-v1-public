@@ -1,7 +1,7 @@
 {
   "schema": "raise-v1/engineering_log/1",
   "preregistration": "0017-lofo-l3-4096",
-  "status": "frozen (chain seq 17), running since 2026-09-09T18:04:26Z",
+  "status": "complete: run banked and read (L3_LEAD_BELOW_BAR), published",
   "design": {
     "question": "Under leave-one-family-out transfer at 4096 on 0015's eight sealed folds, does 0014's searched, standardised logistic L3 lead 0003's fixed incumbent by a preregistered margin of 0.02 (5200 of 260000 rows)? Eight L3 fits, one scoring each, the stitched count of correct rows read against 0015's banked incumbent count 22343 plus 5200 (L3_LEADS_INCUMBENT_UNDER_TRANSFER / L3_LEAD_BELOW_BAR); two flags banked beside it (the record's 0.05 margin; 0015's own transfer bar).",
     "why_now": "0016's pre-freeze review adopted the finding that 'the primary reading was on the recipe 0015 showed transfers worst (M1), beside a raw logistic that hit its 400-iteration cap in every fold; a converged, standardised linear rule is the more informative comparator under transfer' (severity major) and, separately, argued that L3 on 0015's full folds is the most decision-relevant next measurement; eight fits of the standardised linear rule the record already has answer it without a new partition.",
@@ -156,7 +156,109 @@
       "seconds": 1817.5,
       "note": "exactly 0014's same-convention value and iteration count; slower than 0014's 1164.3 s because the operator's gate suite and mirror build shared the machine"
     },
-    "operating_note": "as for 0016, the runner is suspended whenever this session is idle; the session is kept active for the run"
+    "operating_note": "as for 0016, the runner is suspended whenever this session is idle; the session was kept active with bounded waits for the whole run, so this run completed in one launch with no container restart (wall 15842.9 s against 15574.9 s of banked fit time)",
+    "derived_arithmetic": {
+      "derivation": "round(a - b, 4) from artifacts/pivot/lofo_l3_4096.json and the verdict file; arithmetic, not a reader output",
+      "mixture_minus_chance": 0.056638,
+      "margin_rows_over_0015_incumbent": 2393,
+      "margin_rows_minus_bar_rows": -2807,
+      "per_family_l3_minus_0015_logistic": {
+        "gutenberg": -0.0117,
+        "base64": 0.0059,
+        "binary": -0.0004,
+        "code": 0.0158,
+        "csv": 0.0075,
+        "json": -0.0157,
+        "log": 0.0168,
+        "mixed": 0.0008
+      },
+      "per_family_l3_minus_0015_model": {
+        "base64": 0.0002,
+        "binary": 0.0151,
+        "code": 0.0046,
+        "csv": 0.0137,
+        "gutenberg": -0.0034,
+        "json": 0.0213,
+        "log": 0.0189,
+        "mixed": 0.0032
+      },
+      "fold_seconds_min_median_max": [
+        1534.7,
+        1707.3,
+        1918.0
+      ]
+    },
+    "status": "complete: one launch, no interruption, run exit 0 at 2026-09-09T22:28:48Z",
+    "run_started_utc": "2026-09-09T18:04:50Z",
+    "run_finished_utc": "2026-09-09T22:28:47Z",
+    "wall_seconds": 15842.9,
+    "banked_fit_seconds_total": 15574.9,
+    "seconds_by_name": {
+      "fold_base64_logistic_l3": 1707.3,
+      "fold_binary_logistic_l3": 1634.8,
+      "fold_code_logistic_l3": 1800.3,
+      "fold_csv_logistic_l3": 1590.3,
+      "fold_gutenberg_logistic_l3": 1918.0,
+      "fold_json_logistic_l3": 1807.2,
+      "fold_log_logistic_l3": 1675.6,
+      "fold_mixed_logistic_l3": 1534.7,
+      "null": 89.2,
+      "repro_l3": 1817.5
+    },
+    "interruptions_by_name": {
+      "fold_base64_logistic_l3": 0,
+      "fold_binary_logistic_l3": 0,
+      "fold_code_logistic_l3": 0,
+      "fold_csv_logistic_l3": 0,
+      "fold_gutenberg_logistic_l3": 0,
+      "fold_json_logistic_l3": 0,
+      "fold_log_logistic_l3": 0,
+      "fold_mixed_logistic_l3": 0,
+      "null": 0,
+      "repro_l3": 0
+    },
+    "n_iter_by_fold": {
+      "base64": 826,
+      "binary": 796,
+      "code": 851,
+      "csv": 774,
+      "gutenberg": 954,
+      "json": 915,
+      "log": 869,
+      "mixed": 848
+    },
+    "any_fold_at_iteration_cap": false,
+    "memory": {
+      "peak_rss_gb_ledger": 8.44,
+      "anonymous_rss_gb_at_fold_materialisation_run_log": "7.57 to 7.58",
+      "mem_available_gb_at_launch": 15.67,
+      "note": "the ledger banks resident size per fit event; the run log prints anonymous RSS after each fold materialises its 700000-row training block"
+    },
+    "null_control": {
+      "shuffled_label_accuracy": 0.0383,
+      "n_iter": 708,
+      "seconds": 89.2
+    },
+    "reader_outcome": {
+      "verdict": "L3_LEAD_BELOW_BAR",
+      "lofo_mixture_top1_l3": 0.0951,
+      "lofo_correct_l3": 24736,
+      "lead_rows_over_0015_incumbent": 2393,
+      "bar_rows": 5200,
+      "lofo_margin_l3_over_0015_model_exact": 0.009204,
+      "lofo_margin_l3_over_0015_logistic": 0.0023,
+      "flags": {
+        "reaches_record_margin_bar_0.05": false,
+        "reaches_0015_transfer_bar": true
+      },
+      "structured_four_top1_l3": 0.1228,
+      "cluster_ci95_mixture": [
+        0.0941,
+        0.0962
+      ],
+      "read_utc": "2026-09-09T22:29Z",
+      "against_expected_outcome": "the preregistration bracketed the reading between 0.083-0.084 (incumbent retention) and 0.147-0.159 (raw-logistic retention) with the 0.105935 bar between; the reading 0.0951 falls between the brackets and under the bar"
+    }
   },
   "operator_procedure": "launch detached after 0016's run has exited and its checkpoints are committed; poll every 30 minutes: commit and push new checkpoints, relaunch the identical command if the runner is dead and the run is not finished; the reader runs once on the completed artifact; publication states the verdict at the same size either way.",
   "freeze_note": "The first freeze attempt (10:21:56 UTC) copied the draft to a wrongly named file (prereg/0017-fdc-4096.json, a scripting slip that reused 0016's file name) and appended a chain entry pointing at it; nothing had been committed or pushed, so the entry and the file were discarded and the freeze redone with the correct path. The chain's append-only discipline concerns the published record: no published entry was altered. The discarded entry's anchors (NIST pulse and drand round at 10:21 UTC) are simply earlier not-before evidence than the entry that stands."

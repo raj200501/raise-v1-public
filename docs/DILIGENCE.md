@@ -76,6 +76,16 @@ family sits -0.003 from 0015's seven-family mixture at about 5000 chunks per fam
 the row axis is nearly flat. The per-family curves are composition curves under one sealed
 ordering and are banked; nothing extrapolates past seven families or beyond these eight.
 
+## "Is the boosted recipe even the right one for unseen content?"
+
+**Not shown, at the preregistered margin** (prereg 0017, expected outcome stated in advance as uncertain): 0014's
+searched, standardised logistic, fitted on 0015's eight sealed folds, identifies the encoder on unseen
+families at a stitched 0.0951 against 0003's recipe at 0.0859, 2393 more correct rows of 260000 against
+a bar of 5200 (0.02), `L3_LEAD_BELOW_BAR` (`artifacts/pivot/lofo_l3_4096_verdict.json`); the lead does not reach the
+record's 0.05 margin. In distribution the boosted recipe leads the same linear rule by 0.0078; under transfer the
+point ordering reverses (the linear rule ahead by 0.0092), but the preregistered margin does not certify it. 0014's searched model was not fitted under transfer;
+that is a separate preregistration.
+
 ## "Who buys it?"
 
 Uncleared, and filed in the coverage map's **weakest class** rather than dressed as a finding. The
