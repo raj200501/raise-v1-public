@@ -45,7 +45,7 @@
     "n_source_chunks": 50000
   },
   "cost": {
-    "banked_fit_seconds_total": 17518.8,
+    "banked_fit_seconds_total": 18991.4,
     "checkpoints": "artifacts/pivot/lofo_4096_ckpt",
     "interruptions_by_name": {
       "fold_base64_logistic": 0,
@@ -68,6 +68,8 @@
       "fold_json_model": 0,
       "fold_log_logistic": 0,
       "fold_log_majority": 0,
+      "fold_log_model": 0,
+      "fold_mixed_majority": 0,
       "null": 0,
       "repro_logistic": 0,
       "repro_model": 0
@@ -93,11 +95,13 @@
       "fold_json_model": 1276.3,
       "fold_log_logistic": 803.6,
       "fold_log_majority": 0.0,
+      "fold_log_model": 1472.6,
+      "fold_mixed_majority": 0.0,
       "null": 24.0,
       "repro_logistic": 929.7,
       "repro_model": 1666.6
     },
-    "wall_seconds_this_invocation": 17985.6
+    "wall_seconds_this_invocation": 19491.5
   },
   "environment": {
     "cgroup_memory_limit": "unlimited",
@@ -1289,11 +1293,126 @@
         "utc": "2026-09-09T00:11:12Z",
         "val": null
       },
-      "model": null
+      "model": {
+        "block_refills": [],
+        "environment": {
+          "nice": 10,
+          "numpy": "2.4.6",
+          "python": "3.11.15",
+          "sklearn": "1.9.0",
+          "standardiser_probe": {
+            "block_gb": 0.177,
+            "ncols": 1108,
+            "peak_extra_fraction_of_block": 0.1005,
+            "probe_rows_per_pass": 2000,
+            "production_rows_per_pass": 20000,
+            "production_transient_gb": 0.177,
+            "rows": 20000
+          },
+          "threads": 3
+        },
+        "family": "hgb",
+        "fit_info": {
+          "n_iter": 35
+        },
+        "fit_rows_sha256": "03ac48cec4a2761b22d023db503e17403e69251891387bd1836ae57e09635695",
+        "fit_rows_sorted_sha256": "72a9d924f37f03ee6727e434ff839f04d101d697f413503d01c0106e39ae3fcb",
+        "head": "model",
+        "heartbeat_max_rss_gb": 9.03,
+        "id": "M1",
+        "interruptions_before_this_fit": 0,
+        "last_heartbeat_rss_gb_before_this_fit": null,
+        "n_fit_rows": 700473,
+        "params": {
+          "learning_rate": 0.15,
+          "max_iter": 200,
+          "max_leaf_nodes": 63,
+          "n_iter_no_change": 10
+        },
+        "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+        "per_family": {
+          "base64": 0.1231,
+          "binary": 0.1039,
+          "code": 0.3091,
+          "csv": 0.4076,
+          "gutenberg": 0.1835,
+          "json": 0.3854,
+          "log": 0.1083,
+          "mixed": 0.115
+        },
+        "rss_gb": 8.3,
+        "rss_gb_is": "anonymous (RssAnon)",
+        "rss_total_gb": 12.23,
+        "ru_maxrss_gb": 13.93,
+        "scaled": false,
+        "seconds": 1472.6,
+        "seed": 20260825,
+        "stage": "lofo:log",
+        "status": "fit",
+        "top1": 0.2159,
+        "top1_non_gutenberg": 0.2206,
+        "utc": "2026-09-09T00:24:47Z",
+        "val": "frag"
+      }
     },
     "mixed": {
       "logistic": null,
-      "majority": null,
+      "majority": {
+        "block_refills": [],
+        "environment": {
+          "nice": 10,
+          "numpy": "2.4.6",
+          "python": "3.11.15",
+          "sklearn": "1.9.0",
+          "standardiser_probe": {
+            "block_gb": 0.177,
+            "ncols": 1108,
+            "peak_extra_fraction_of_block": 0.1005,
+            "probe_rows_per_pass": 2000,
+            "production_rows_per_pass": 20000,
+            "production_transient_gb": 0.177,
+            "rows": 20000
+          },
+          "threads": 3
+        },
+        "family": "dummy",
+        "fit_info": {},
+        "fit_rows_sha256": "21870ebf6835b9e404baf3e729bf8cf5236da421479014ed7ae295df82ec1425",
+        "fit_rows_sorted_sha256": "7705b06a505570c34bb5ade21e6be99c704fc8b012d854891bb8df5a81b7c5f7",
+        "head": "majority",
+        "heartbeat_max_rss_gb": 8.21,
+        "id": "U1",
+        "interruptions_before_this_fit": 0,
+        "last_heartbeat_rss_gb_before_this_fit": null,
+        "n_fit_rows": 699617,
+        "params": {
+          "strategy": "most_frequent"
+        },
+        "params_sha256": "0f9cdb98d303f47ace1c67a9814e51aa16642656480352724ea4f01a2aa8046a",
+        "per_family": {
+          "base64": 0.0385,
+          "binary": 0.0385,
+          "code": 0.0385,
+          "csv": 0.0385,
+          "gutenberg": 0.0385,
+          "json": 0.0385,
+          "log": 0.0385,
+          "mixed": 0.0385
+        },
+        "rss_gb": 8.21,
+        "rss_gb_is": "anonymous (RssAnon)",
+        "rss_total_gb": 12.51,
+        "ru_maxrss_gb": 13.93,
+        "scaled": false,
+        "seconds": 0.0,
+        "seed": 20260825,
+        "stage": "lofo:mixed",
+        "status": "fit",
+        "top1": 0.0385,
+        "top1_non_gutenberg": 0.0385,
+        "utc": "2026-09-09T00:49:48Z",
+        "val": null
+      },
       "model": null
     }
   },
@@ -1729,15 +1848,66 @@
       "rss_gb": 8.21,
       "seconds": 803.6,
       "utc": "2026-09-09T00:24:45Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "223737e2c06e90be",
+      "name": "fold_log_model",
+      "pid": 6914,
+      "rss_gb": 8.21,
+      "utc": "2026-09-09T00:24:47Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "223737e2c06e90be",
+      "name": "fold_log_model",
+      "pid": 6914,
+      "rss_gb": 8.3,
+      "seconds": 1472.6,
+      "utc": "2026-09-09T00:49:35Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "63f0ec0c07baca3a",
+      "name": "fold_mixed_majority",
+      "pid": 6914,
+      "rss_gb": 8.21,
+      "utc": "2026-09-09T00:49:48Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "63f0ec0c07baca3a",
+      "name": "fold_mixed_majority",
+      "pid": 6914,
+      "rss_gb": 8.21,
+      "seconds": 0.0,
+      "utc": "2026-09-09T00:49:51Z"
     }
   ],
-  "lofo": {},
+  "lofo": {
+    "majority": {
+      "mixture_top1": 0.0385,
+      "mixture_top1_non_gutenberg": 0.0385,
+      "mixture_vector_key": "lofo_mixture_majority",
+      "per_family": {
+        "base64": 0.0385,
+        "binary": 0.0385,
+        "code": 0.0385,
+        "csv": 0.0385,
+        "gutenberg": 0.0385,
+        "json": 0.0385,
+        "log": 0.0385,
+        "mixed": 0.0385
+      },
+      "structured_four_top1": 0.0385
+    }
+  },
   "lofo_margin_model_over_logistic": null,
   "lofo_mixture_top1": null,
   "logistic_l1_refit_top1": 0.1352,
   "missing_roles": [
-    "fold_log_model",
-    "fold_mixed_majority",
     "fold_mixed_logistic",
     "fold_mixed_model"
   ],
