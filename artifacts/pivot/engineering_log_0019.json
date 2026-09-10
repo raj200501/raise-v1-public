@@ -1,0 +1,34 @@
+{
+  "schema": "raise-v1/engineering_log/1",
+  "preregistration": "0019-oob-4096-reread",
+  "status": "written before the freeze; nothing here is a measurement",
+  "why": "0018's frozen reader emitted VOID on one wrong sealed literal (the null block hash restated from 0017's fold-based block instead of the pool block the design, the arms and the runner use); every other clause passed. 0013's precedent: re-read the same banked artifact under the same clauses with the one literal corrected, disclose every known number, commit to the outcome they give, and never edit a frozen file.",
+  "known_numbers": "prereg/0019-oob-4096-reread.json scope.numbers_known_when_this_was_written, copied from artifacts/pivot/oob_4096.json readings by the preregistration writer and checked by the pre-freeze check",
+  "reader_derivation": {
+    "method": "tools/readers/oob4096_reread_verdict.py is generated from the frozen 0018 reader by the declared substitutions only (scope.what_changes_from_0018.declared_substitutions); the generator refuses if any substitution's occurrence count differs from the declared one",
+    "diff_line_counts": {
+      "removed_from_0018": 13,
+      "added": 44,
+      "note": "diff -u line counts; the added lines are the docstring prefix plus the substituted lines"
+    },
+    "gate": "oob4096 gate: control artifacts built from either reader's literals; 0018's reader must VOID the runner's block (the filed defect); the re-read reader must VOID 0018's literal, VOID a third hash, read OOB_TRANSFER_FAILS one row under the bar, VOID an artifact stamped 0019; the re-read reader must equal 0018's reader plus the declared substitutions and a tampered copy must be detected (8 cases added to 0018's 72)"
+  },
+  "pre_freeze_check": {
+    "script": "session scratchpad prefreeze_check_0019.py",
+    "checks": [
+      "0018 reader is the frozen file (sha256 47a3f654...)",
+      "0019 reader == 0018 reader + declared substitutions",
+      "corrected literal == first 20000 pool rows recomputed from y and g with the runner's split == artifact partition == null fit rows == 0014's null control == 0016's sealed null",
+      "old literal == recomputed first-fold block == 0018's and 0017's sealed null",
+      "every known number == the artifact's readings",
+      "clause quoted as 3402 of 38452, the mixture threshold not quoted as the clause",
+      "scratch copy of the 0019 reader (output redirected to the scratchpad) reads OOB_TRANSFER_FAILS with no validity failure",
+      "no re-read verdict file under artifacts/ before the freeze",
+      "chain verifies, head 0018",
+      "artifact file hashes == the prereg's artifact_identity"
+    ],
+    "result": "PASS on 2026-09-10 before the freeze"
+  },
+  "expected_outcome": "OOB_TRANSFER_FAILS, committed to in the preregistration from the known numbers (2450 of 38452 against 3402); anything else is published as emitted with a further correction",
+  "cost": "no fit, no scoring; the reader recounts 321409-entry vectors four times (seconds)"
+}

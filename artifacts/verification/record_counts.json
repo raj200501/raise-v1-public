@@ -1,5 +1,5 @@
 {
-  "corrections_entries": 16,
+  "corrections_entries": 18,
   "corrections_first_date": "2026-08-25",
   "corrections_latest_date": "2026-09-10",
   "rule": "one entry per heading of the form '## YYYY-MM-DD '; the template heading does not match",

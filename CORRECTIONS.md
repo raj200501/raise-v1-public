@@ -19,6 +19,105 @@ Format:
 
 ---
 
+## 2026-09-10 — Preregistration 0018 sealed the wrong null-block hash, and its frozen reader voided an honest run on it
+
+**Claimed:** `prereg/0018-oob-4096.json` `scope.sealed_partition.null.null_sorted_sha256` =
+`0653cc12…`, described in `scope.partition_sealed_before_any_fit` as "0003's sealed split, restated
+hash for hash from 0017's sealed_partition (eval, pool, null)", beside `scope.design` and the NULL
+arm, which say the null control is "M4 on the first 20000 pool rows with shuffled labels"; the
+frozen reader `tools/readers/oob4096_verdict.py` carries the same literal, and by freezing it into
+chain entry 18 with 72 mutation cases behind it we claimed it would emit a verdict on any complete,
+valid run of the protocol. `VERDICT.md`'s in-flight paragraph said nothing below it changes until
+the frozen reader has read the completed run.
+
+**Actual:** Two different row blocks have served as "the null block" in this record. 0014
+(`artifacts/pivot/recipe_search_4096.json`, `null_control.fit_rows_sorted_sha256`) and 0016
+(`prereg/0016-fdc-4096.json`, `sealed_partition.null.sorted_sha256`, "the first 20000 pool rows")
+use the first 20000 rows of 0003's sealed pool in its sealed order, `822b6102…`. 0015 and 0017
+(`tools/pivot/run_lofo.py`, `tools/pivot/run_lofo_l3.py`: `null_rows = folds[families[0]][:nn]`)
+use the first 20000 training rows of the first leave-one-family-out fold (gutenberg withheld),
+`0653cc12…`. 0018's design, its arms and its runner (`tools/pivot/run_oob.py`: `null_rows =
+tr[:nn]`) use the pool block, and the run fitted the null control on it
+(`artifacts/pivot/oob_4096.json`: `partition.null_sorted_sha256` and
+`fits.null.fit_rows_sorted_sha256` both `822b6102…`; labels permuted, same multiset); the
+preregistration sealed 0017's fold block. The reader compared the block's hash, and the fingerprint
+derived from it, against the wrong literal and emitted `VOID` on five clauses, all of them that one
+hash (`artifacts/pivot/oob_4096_verdict.json`, banked as emitted). Every other clause passed: the
+three pool fits reproduce 0014's 0.2395, 0.2317 and 0.2884 exactly, the null control reads 0.0371
+on the extension rows and 0.0383 on the sealed rows, the extension arrays, chunk layout and pool
+hash to the sealed values, and both measured overlaps are 0. Recomputed on 2026-09-10 from the
+cache's `y` and `g` arrays with the runner's own split function: the first 20000 pool rows hash to
+`822b6102…` and the first fold's first 20000 training rows to `0653cc12…`. A scratch copy of the
+reader with that one literal changed, its output redirected to the session scratchpad, reads
+`OOB_TRANSFER_FAILS` (2450 of 38452 real-family rows correct, 0.0637, against 3402 needed) with no
+validity clause failing; that scratch reading is not a verdict and is quoted here only to size the
+defect.
+
+**Size:** One preregistration's verdict, from a reading of the run to no reading of the run, after
+21995.4 s of banked fit time (one launch, 02:25 to 08:38 UTC). In the bar's units, nothing: the
+literal has no arithmetic content, and the numbers it hid point the way the preregistration's own
+discount of its within-builder arithmetic allowed for (a fail, with the real-family reading below
+the 0.097 to 0.118 bracket that arithmetic gave).
+
+**Cause:** Two. (1) The preregistration generator restated the sealed partition "hash for hash from
+0017" because 0017 and 0018 share the pool and the evaluation set, and the null block travelled in
+the same three-field block; nobody checked that 0017's null block is 0015's fold block rather than
+the pool block the design names, and the sealed field did not say which block it was. (2) The 0018
+pre-freeze check compared the reader's literals to the preregistration's, so both were wrong
+together, and the mutation gate built its control artifact from the reader's literals; neither
+compared against the block the runner builds on the real pool. The smoke run could not catch it: a
+smoke's null block is required to be smaller than the sealed one, so the smoke's reader exercise
+had the null-block clause patched out. This is the 2026-09-03 failure in a new coat: a control that
+shares an assumption with the reader cannot see the reader disagree with the world
+(`docs/OPERATING_RULES.md` §4), and this time the shared assumption was a sealed literal rather
+than a code path.
+
+**Fix:** 0018 stands `VOID` on its own reader; nothing sealed changes. Preregistration 0019 re-reads
+the same banked artifact under a reader that is 0018's frozen file with exactly the substitutions
+declared in the preregistration (the output path, the stamp, the schema name, the print prefix, a
+docstring prefix and the one literal), with every known number disclosed and the outcome the
+numbers give committed to in advance (0013's precedent). The 0019 pre-freeze check recomputes the
+null block from the cache's `y` and `g` with the runner's split and requires the literal to equal
+it, the artifact's partition, 0014's null control and 0016's sealed null. The oob4096 mutation
+gate now builds control artifacts from either reader's literals and keeps the defect visible:
+0018's reader must `VOID` the block the runner fits, the re-read reader must `VOID` 0018's literal,
+and the re-read reader must equal 0018's reader plus the declared substitutions, with a tampered
+copy detected. Any later preregistration that restates a null block from a predecessor must say
+which block it is beside the hash, and its pre-freeze check must recompute it from data.
+
+---
+
+## 2026-09-10 — VERDICT.md's in-flight paragraph for 0018 described the clause the pre-freeze review had replaced
+
+**Claimed:** `VERDICT.md`, the in-flight paragraph for 0018, from the freeze commit (7e4207e,
+2026-09-10 02:24 UTC) until this entry's commit: "One clause, read by
+`tools/readers/oob4096_verdict.py` on the recounted score vectors: M4's correct extension rows must
+reach 5433 of 61409 (chance + 0.05)".
+
+**Actual:** The sealed clause (`prereg/0018-oob-4096.json` `bar.transfer`, `scope.protocol.bar`,
+the frozen reader's `MIN_CORRECT_REAL`) is M4's correct rows over the 38452 rows of the five
+real-file families, 3402 needed; the eight-family mixture at 5433 of 61409 is a flag, banked and
+never quoted as the verdict. The pre-freeze review re-scoped the clause from the mixture to the real
+families before the freeze, because a mixture could be carried by the three families this record's
+own generators produced; the paragraph kept the pre-review wording.
+
+**Size:** One number pair in one paragraph, for about seven hours, describing a bar the sealed
+instrument does not apply. The preregistration, the reader, the 72-case gate and the verdict file
+were right throughout; no number in the paragraph was quoted as a result. The README's in-flight
+sentence named no count.
+
+**Cause:** The freeze-time documentation script carried the clause sentence from the design note
+that the review superseded, and an in-flight paragraph is not a registered live claim, so no gate
+compared it to the sealed clause.
+
+**Fix:** The paragraph is replaced by the 0018/0019 section, which quotes the clause from the
+verdict file. The 0019 pre-freeze check asserts that the 0019 preregistration quotes the clause as
+3402 of 38452 and does not quote the mixture threshold as the clause; the 0019 publication script
+refuses to apply the documents if the replaced sentence survives anywhere in `VERDICT.md` or
+`README.md`.
+
+---
+
 ## 2026-09-10 — Three sealed preregistrations count their own place in the sealed-set ledger one short
 
 **Claimed:** `prereg/0015-lofo-4096.json` `scope.sealed_set_disclosure`: "This is the third

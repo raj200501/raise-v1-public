@@ -3493,11 +3493,30 @@ def _(root):
 
 # ---------------------------------------------------------------- oob4096 gate (0018)
 
-def _oob_reader():
+def _oob_reader(reader="oob4096_verdict.py"):
+    """0018's frozen reader, or (reader="oob4096_reread_verdict.py") 0019's re-read reader: the same module shape, one literal apart."""
     import importlib.util
-    spec = importlib.util.spec_from_file_location("r18", os.path.join(REPO, "tools", "readers", "oob4096_verdict.py"))
+    spec = importlib.util.spec_from_file_location(reader.replace(".py", ""), os.path.join(REPO, "tools", "readers", reader))
     m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
     return m
+
+
+_OOB_READERS = {"0018": ("oob4096_verdict.py", "oob_4096_verdict.json"),
+                "0019": ("oob4096_reread_verdict.py", "oob_4096_reread_verdict.json")}
+_OOB_RUNNER_NULL = "822b61020d276a04620440eb2d2e7e60376e1efba83e89607c33c09c39fa1425"   # sorted first 20000 pool rows (0014, 0016, run_oob.py)
+_OOB_0018_NULL = "0653cc12293ae078dd68b900c8778d93e701261ca93414be9eb7bb8e7ee686db"     # 0015/0017's fold block, sealed by 0018 in error
+
+
+def _reread_0019_expected_text():
+    """0018's frozen reader with exactly the substitutions declared (and sealed) in prereg/0019: what the re-read reader must be."""
+    pr = json.load(open(os.path.join(REPO, "prereg", "0019-oob-4096-reread.json")))
+    subs = pr["scope"]["what_changes_from_0018"]["declared_substitutions"]
+    text = open(os.path.join(REPO, "tools", "readers", "oob4096_verdict.py"), encoding="utf-8").read()
+    for sub in subs:
+        if text.count(sub["old"]) != sub["occurrences"]:
+            return None, f"substitution {sub['old'][:40]!r}: {text.count(sub['old'])} occurrences, declared {sub['occurrences']}"
+        text = text.replace(sub["old"], sub["new"])
+    return text, None
 
 
 def _oob_readings(r18, v, fam_x, fam_e):
@@ -3518,12 +3537,14 @@ def _oob_readings(r18, v, fam_x, fam_e):
             "reproduction_per_family": {f: m4([rep[i] for i in range(n_eval) if fam_e[i] == f]) for f in r18.FAMILIES}}
 
 
-def _good_oob(ext_acc=None, model_real_correct=None, model_synth_acc=None, repro=None):
+def _good_oob(ext_acc=None, model_real_correct=None, model_synth_acc=None, repro=None, reader="oob4096_verdict.py"):
     """A complete, valid 0018 artifact set whose extension arrays reproduce the sealed fam and g arrays exactly (the fam
     array is family-major, g is the expansion of the sealed chunk ids by their row counts). ext_acc: extension accuracy per
     role (spread evenly over families); model_real_correct overrides M4's correct count over the real-family rows exactly;
-    model_synth_acc overrides M4's accuracy on the synthetic families; repro overrides a role's reproduction accuracy."""
-    r18 = _oob_reader()
+    model_synth_acc overrides M4's accuracy on the synthetic families; repro overrides a role's reproduction accuracy.
+    reader names the module whose sealed literals (partition hashes, fingerprints) the artifact is built from: 0018's carries
+    the fold-block null hash it sealed in error, 0019's the pool block the runner fits (CORRECTIONS.md 2026-09-10)."""
+    r18 = _oob_reader(reader)
     part = dict(r18.PARTITION); n_eval = part["n_eval_rows"]; n_ext = r18.N_EXT; rec = r18.RECIPES; roles = list(r18.ROLES)
     fams = list(r18.EXT_FAMILIES); rpf = r18.EXT["rows_per_family"]
     fam_idx = []
@@ -3626,8 +3647,11 @@ def _good_oob(ext_acc=None, model_real_correct=None, model_synth_acc=None, repro
     return art, scores
 
 
-def _oob(root, mutate=None, drop_artifact=False, drop_scores=False, **kw):
-    art, scores = _good_oob(**kw)
+def _oob(root, mutate=None, drop_artifact=False, drop_scores=False, prereg="0018", build_from=None, **kw):
+    """Run preregistration `prereg`'s reader (0018's frozen reader by default; "0019" for the re-read reader) on an artifact
+    built from `build_from`'s literals (the same preregistration unless given)."""
+    reader, verdict_file = _OOB_READERS[prereg]
+    art, scores = _good_oob(reader=_OOB_READERS[build_from or prereg][0], **kw)
     if mutate:
         r = mutate(art, scores)
         if r is not None:
@@ -3637,11 +3661,11 @@ def _oob(root, mutate=None, drop_artifact=False, drop_scores=False, **kw):
         json.dump(scores, open(os.path.join(piv, "oob_4096_scores.json"), "w"))
     if not drop_artifact:
         json.dump(art, open(os.path.join(piv, "oob_4096.json"), "w"))
-    shutil.copy(os.path.join(REPO, "tools", "readers", "oob4096_verdict.py"), os.path.join(root, "tools", "readers", "oob4096_verdict.py"))
-    rc, out = run([PY, "tools/readers/oob4096_verdict.py"], root)
+    shutil.copy(os.path.join(REPO, "tools", "readers", reader), os.path.join(root, "tools", "readers", reader))
+    rc, out = run([PY, f"tools/readers/{reader}"], root)
     if rc != 0:
         return rc, out
-    v = json.load(open(os.path.join(piv, "oob_4096_verdict.json")))
+    v = json.load(open(os.path.join(piv, verdict_file)))
     ok = v["verdict"] == "OOB_TRANSFERS"
     return (0 if ok else 1), (f"verdict={v['verdict']} real={v.get('ext_real_top1_model')} correct={v.get('ext_real_correct_model')} "
                               f"validity={v['validity_failed_clauses'][:2]} transfer={v['transfer_failed_clauses']}")
@@ -4191,6 +4215,83 @@ def _(root):
         return 0, out0 + " !! the mixture flag should read False here"
     rc1, out1 = _oob(root, model_real_correct=r18.MIN_CORRECT_REAL - 1, model_synth_acc=0.5)
     return rc1, out0 + " | " + out1
+
+
+# ---- the re-read (preregistration 0019): the same clauses, one literal apart; the filed defect stays visible
+
+@case("oob4096", "0018s-frozen-reader-VOIDs-the-runners-null-block-(the-filed-defect)", "fail")
+def _(root):
+    # CORRECTIONS.md 2026-09-10: 0018 sealed 0017's fold-based null block hash; the runner fits the first 20000 pool rows.
+    # An artifact built the way the runner builds it (0019's literals) must stay VOID under 0018's frozen reader, on that hash.
+    rc, out = _oob(root, prereg="0018", build_from="0019")
+    if rc != 0 and ("null_sorted_sha256" not in out or "verdict=VOID" not in out):
+        return 0, out + " !! 0018's reader no longer VOIDs on the null block hash; the filed defect changed shape"
+    return rc, out
+
+
+@case("oob4096", "control-passes-under-the-re-read-reader", "pass")
+def _(root):
+    return _oob(root, prereg="0019")
+
+
+@case("oob4096", "0018s-sealed-null-literal-is-VOID-under-the-re-read-reader", "fail")
+def _(root):
+    # the fold block 0018 sealed is not the block the runner fits; under the corrected literal it is a hash mismatch like any other
+    return _oob_void(root, None, expect_clause="null_sorted_sha256", prereg="0019", build_from="0018")
+
+
+@case("oob4096", "a-null-block-that-is-neither-sealed-literal-is-VOID-under-the-re-read-reader", "fail")
+def _(root):
+    def f(art, scores):
+        art["partition"]["null_sorted_sha256"] = "0" * 64; art["fits"]["null"]["fit_rows_sorted_sha256"] = "0" * 64
+    return _oob_void(root, f, expect_clause="null_sorted_sha256", prereg="0019")
+
+
+@case("oob4096", "one-real-family-row-under-the-bar-is-OOB_TRANSFER_FAILS-under-the-re-read-reader", "fail")
+def _(root):
+    r19 = _oob_reader("oob4096_reread_verdict.py")
+    rc, out = _oob(root, prereg="0019", model_real_correct=r19.MIN_CORRECT_REAL - 1)
+    if rc != 0 and "verdict=OOB_TRANSFER_FAILS" not in out:
+        return 0, out + " !! detected but not as OOB_TRANSFER_FAILS"
+    return rc, out
+
+
+@case("oob4096", "an-artifact-stamped-0019-is-VOID-under-both-readers-(the-re-read-reads-0018s-artifact)", "fail")
+def _(root):
+    def f(art, scores):
+        art["preregistration"] = "0019-oob-4096-reread"; scores["preregistration"] = "0019-oob-4096-reread"
+    rc19, out19 = _oob_void(root, f, expect_clause="preregistration", prereg="0019")
+    rc18, out18 = _oob_void(root, f, expect_clause="preregistration", prereg="0018", build_from="0019")
+    if rc19 == 0 or rc18 == 0:
+        return 0, f"0019: {out19[:120]} | 0018: {out18[:120]}"
+    return 1, f"0019: {out19[:120]} | 0018: {out18[:120]}"
+
+
+@case("oob4096", "the-re-read-reader-is-0018s-frozen-reader-plus-exactly-the-declared-substitutions", "pass")
+def _(root):
+    expected, problem = _reread_0019_expected_text()
+    if expected is None:
+        return 1, problem
+    actual = open(os.path.join(REPO, "tools", "readers", "oob4096_reread_verdict.py"), encoding="utf-8").read()
+    if actual != expected:
+        import difflib
+        d = [l for l in difflib.unified_diff(expected.splitlines(), actual.splitlines(), lineterm="", n=0) if l[:1] in "+-"][:6]
+        return 1, "the re-read reader differs from 0018's reader plus the declared substitutions: " + " | ".join(d)
+    return 0, "identical to 0018's frozen reader plus the declared substitutions"
+
+
+@case("oob4096", "a-re-read-reader-with-any-other-line-changed-is-detected", "fail")
+def _(root):
+    # a mutation of the structural check above: one undeclared change (the bar) must be caught by the same comparison
+    expected, problem = _reread_0019_expected_text()
+    if expected is None:
+        return 1, problem
+    actual = open(os.path.join(REPO, "tools", "readers", "oob4096_reread_verdict.py"), encoding="utf-8").read()
+    tampered = actual.replace("BAR = 0.05", "BAR = 0.04")
+    if tampered == actual:
+        return 0, "!! the tamper target was not found; the structural check was not exercised"
+    return (1 if tampered != expected else 0), ("tampered copy differs from 0018 plus the declared substitutions" if tampered != expected
+                                                 else "!! a tampered reader passed the structural check")
 
 
 def main() -> int:

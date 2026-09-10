@@ -1,0 +1,278 @@
+{
+  "id": "0019",
+  "slug": "oob-4096-reread",
+  "title": "Re-read of preregistration 0018's banked artifact under its own clauses with the reader's one wrong literal corrected: the sealed hash of the null control's row block is the first 20000 pool rows the runner fitted (822b6102...), not 0017's fold-based block (0653cc12...) that 0018 restated by mistake. No new measurement. Every 0018 number was known when this was written and is quoted here; under these clauses they read OOB_TRANSFER_FAILS.",
+  "scope": {
+    "one_line": "Same corpus, same seed, same sealed pool and evaluation set, same extension corpus, same artifact (artifacts/pivot/oob_4096.json and oob_4096_scores.json as committed at 4dcc2b6), same three recipes, same clause, same bar, same tolerances, same flags as 0018. Nothing is fitted and nothing is scored; the reader reads what 0018 banked.",
+    "why_this_exists": "0018's frozen reader emitted VOID with five clauses named, all of them one hash: partition.null_sorted_sha256='822b61020d276a04620440eb2d2e7e60376e1efba83e89607c33c09c39fa1425' against the preregistered '0653cc12293ae078dd68b900c8778d93e701261ca93414be9eb7bb8e7ee686db', and the null fit's fingerprint, ledger events and 'fitted on the sealed rows' clause that derive from it. The runner fitted the null control on the block 0018's design names (scope.design: 'M4 on the first 20000 pool rows with shuffled labels'; arms[0]; tools/pivot/run_oob.py: null_rows = tr[:nn] with tr the sealed pool in its sealed order), which is the block 0014 fitted (artifacts/pivot/recipe_search_4096.json null_control.fit_rows_sorted_sha256) and 0016 sealed (prereg/0016-fdc-4096.json sealed_partition.null.sorted_sha256: 'the first 20000 pool rows'). 0018's scope.partition_sealed_before_any_fit restated the null block 'hash for hash from 0017', and 0017's null block, like 0015's, is the first 20000 training rows of the first leave-one-family-out fold (tools/pivot/run_lofo_l3.py: null_rows = folds[families[0]][:nn]). Every other clause of 0018's reader passed on the artifact. The defect, the pre-freeze check that compared the reader to the preregistration and never to the runner's block, and the gate that built its control from the reader's literals are filed in CORRECTIONS.md (2026-09-10).",
+    "what_changes_from_0018": {
+      "summary": "One literal in the reader (PARTITION['null_sorted_sha256']), plus the output path (oob_4096_reread_verdict.json), the preregistration stamp the verdict carries (preregistration 0019-oob-4096-reread with reads_artifact_of 0018-oob-4096; the artifact it reads is still required to be stamped 0018-oob-4096), the verdict schema name, the 'READER 0019' print prefix and a docstring prefix. Every constant, hash, clause, tolerance, flag and recomputation is 0018's reader verbatim: the reader file is 0018's frozen file (sha256 47a3f6544f3d623c54c4c5ed8b23da5b182d37e864e9789e052ccb2b1ffd2598) with exactly the substitutions below applied, and the oob4096 mutation gate rebuilds that text from 0018's file and these substitutions and fails if the re-read reader differs by any other line.",
+      "declared_substitutions": [
+        {
+          "old": "\"\"\"Frozen reader for preregistration 0018",
+          "new": "\"\"\"Frozen reader for preregistration 0019 — a RE-READ of 0018's banked artifact under 0018's own clauses with the\nreader's one wrong literal corrected: the sealed hash of the null control's row block.\n\nWHAT HAPPENED. 0018's frozen reader (tools/readers/oob4096_verdict.py, sealed in chain entry 18) emitted VOID on an\nhonest, complete run for a reason that lies in one sealed literal, not in the run: the preregistration's sealed_partition\nrestated the null block hash for hash from 0017, and 0017's null block (like 0015's) is the first 20000 rows of the first\nleave-one-family-out fold's training set (0653cc12...), while 0018's design text, its arms and its runner\n(tools/pivot/run_oob.py: null_rows = tr[:20000]) use the first 20000 rows of the sealed pool in its sealed order\n(822b6102...), the block 0014 and 0016 sealed and fitted. The runner fitted the null control on the block the design\nnames; the reader compared its hash, and the fingerprint derived from it, against the wrong literal. Five clauses failed,\nall of them that one hash; every other clause passed. The 0018 pre-freeze check compared the reader's literal to the\npreregistration's and never to the block the runner builds on the real pool; that is filed in CORRECTIONS.md\n(2026-09-10). A frozen reader is not edited after it has seen a number, so 0018 stands VOID on the record, and this\nreader re-reads the SAME banked artifact under the SAME clauses with that one literal changed.\n\nDISCLOSED IN FULL. Every 0018 number was known when this reader and its preregistration were written, because 0018's\nreader printed them beside its VOID: M4's correct real-family rows 2450 of 38452 (0.0637) against 3402 needed; the\nstandardised logistic 2755 (0.0716) and the incumbent 2439 (0.0634) on the same rows; the eight-family mixture 4703 of\n61409 (0.0766); reproductions 0.2395, 0.2317 and 0.2884, each exactly 0014's value; the null control 0.0371 on the\nextension rows and 0.0383 on the sealed rows. Under the clauses below those numbers read OOB_TRANSFER_FAILS on the one\nclause, with every validity clause passing. This preregistration therefore commits, before the reader is hashed into\nthe chain, to the outcome the known numbers give; its only freedom would have been to change a clause, and no clause\nis changed. It cannot revise 0018's VOID, 0003, 0014, 0015, 0016 or 0017, and it establishes no buyer.\n\nEverything after this paragraph is 0018's reader verbatim except the substitutions listed in\nprereg/0019-oob-4096-reread.json scope.what_changes_from_0018.declared_substitutions: the output path, the\npreregistration stamp the verdict carries (the artifact it reads is still required to be stamped 0018-oob-4096), the\nverdict schema name, the \"READER 0019\" print prefix, and the one literal.\n\n--- 0018 READER DOCSTRING, RETAINED ---\nFrozen reader for preregistration 0018",
+          "occurrences": 1
+        },
+        {
+          "old": "OUT = os.path.join(REPO, \"artifacts\", \"pivot\", \"oob_4096_verdict.json\")",
+          "new": "OUT = os.path.join(REPO, \"artifacts\", \"pivot\", \"oob_4096_reread_verdict.json\")",
+          "occurrences": 1
+        },
+        {
+          "old": "PREREG = \"0018-oob-4096\"",
+          "new": "PREREG = \"0018-oob-4096\"          # the artifact this reader reads is 0018's\nREREAD = \"0019-oob-4096-reread\"   # this reader's own preregistration",
+          "occurrences": 1
+        },
+        {
+          "old": " 'null_sorted_sha256': '0653cc12293ae078dd68b900c8778d93e701261ca93414be9eb7bb8e7ee686db',",
+          "new": " 'null_sorted_sha256': '822b61020d276a04620440eb2d2e7e60376e1efba83e89607c33c09c39fa1425',   # the first 20000 pool rows, as run_oob.py fits the null control and as 0014 and 0016 sealed; 0018 sealed 0017's fold-based block by mistake (CORRECTIONS.md 2026-09-10)",
+          "occurrences": 1
+        },
+        {
+          "old": "\"schema\": \"raise-v1/oob_4096_verdict/1\"",
+          "new": "\"schema\": \"raise-v1/oob_4096_reread_verdict/1\"",
+          "occurrences": 2
+        },
+        {
+          "old": "\"preregistration\": PREREG,",
+          "new": "\"preregistration\": REREAD, \"reads_artifact_of\": PREREG,",
+          "occurrences": 2
+        },
+        {
+          "old": "READER 0018",
+          "new": "READER 0019",
+          "occurrences": 6
+        }
+      ],
+      "reader_sha256_of_0018": "47a3f6544f3d623c54c4c5ed8b23da5b182d37e864e9789e052ccb2b1ffd2598",
+      "the_corrected_literal": {
+        "was": "0653cc12293ae078dd68b900c8778d93e701261ca93414be9eb7bb8e7ee686db",
+        "is": "822b61020d276a04620440eb2d2e7e60376e1efba83e89607c33c09c39fa1425",
+        "is_what": "sha256 of np.sort(pool[:20000]).astype(int64) where pool is 0003's sealed 800000-row pool in its sealed order (pool_idx_sha256 17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5)",
+        "recomputed_before_this_was_written": "from data/pivot/full_c4096.npz's y and g arrays alone with tools/pivot/run_carve.grouped_split(y, g, 20260825, 0.2, 800000) on 2026-09-10: the first 20000 pool rows hash to 822b61020d276a04620440eb2d2e7e60376e1efba83e89607c33c09c39fa1425 and the first fold's (gutenberg withheld) first 20000 training rows to 0653cc12293ae078dd68b900c8778d93e701261ca93414be9eb7bb8e7ee686db; the same recomputation is the 0019 pre-freeze check and it must agree with the literal",
+        "in_the_artifact": "partition.null_sorted_sha256 and fits.null.fit_rows_sorted_sha256 both equal the corrected literal; null_labels_permuted true, null_labels_same_multiset true; the null control read 0.0371 on the extension rows and 0.0383 on the sealed rows"
+      }
+    },
+    "numbers_known_when_this_was_written": {
+      "source": "artifacts/pivot/oob_4096.json (readings, banked by the runner and recounted by the reader from the score vectors) and artifacts/pivot/oob_4096_verdict.json (0018's VOID, banked as emitted) as committed at 4dcc2b6",
+      "model_real_correct": 2450,
+      "n_real_rows": 38452,
+      "model_real_top1": 0.0637,
+      "min_correct_real": 3402,
+      "logistic_l3_real_correct": 2755,
+      "logistic_l3_real_top1": 0.0716,
+      "incumbent_real_correct": 2439,
+      "incumbent_real_top1": 0.0634,
+      "model_mixture_correct": 4703,
+      "n_ext_rows": 61409,
+      "model_mixture_top1": 0.0766,
+      "mixture_flag_min_correct": 5433,
+      "model_synthetic_correct": 2253,
+      "model_synthetic_top1": 0.0981,
+      "model_per_family_top1": {
+        "c_src": 0.0579,
+        "hexdump": 0.0768,
+        "pe_bin": 0.0767,
+        "py_src": 0.0528,
+        "rfc_txt": 0.071,
+        "rst_doc": 0.0607,
+        "sql": 0.1116,
+        "xml": 0.1068
+      },
+      "model_per_family_correct": {
+        "c_src": 452,
+        "hexdump": 599,
+        "pe_bin": 568,
+        "py_src": 407,
+        "rfc_txt": 551,
+        "rst_doc": 472,
+        "sql": 821,
+        "xml": 833
+      },
+      "model_subsets": {
+        "ext_structured_text_top1": 0.0765,
+        "ext_high_entropy_top1": 0.0767,
+        "ext_real_top1": 0.0637,
+        "ext_synthetic_top1": 0.0981
+      },
+      "reproduction_top1": {
+        "incumbent": 0.2395,
+        "logistic_l3": 0.2317,
+        "model": 0.2884
+      },
+      "reference_top1": {
+        "incumbent": 0.2395,
+        "logistic_l3": 0.2317,
+        "model": 0.2884
+      },
+      "null_control": {
+        "ext": 0.0371,
+        "eval": 0.0383
+      },
+      "n_iter_by_role": {
+        "incumbent": 33,
+        "logistic_l3": 728,
+        "model": 250
+      },
+      "banked_fit_seconds_total": 21995.4,
+      "seconds_by_name": {
+        "incumbent": 1694.1,
+        "logistic_l3": 1567.4,
+        "model": 18650.2,
+        "null": 83.7
+      },
+      "launches": 1,
+      "0018_verdict": "VOID",
+      "0018_validity_failed_clauses": [
+        "sealed set: partition.null_sorted_sha256='822b61020d276a04620440eb2d2e7e60376e1efba83e89607c33c09c39fa1425', preregistered '0653cc12293ae078dd68b900c8778d93e701261ca93414be9eb7bb8e7ee686db'",
+        "fit: null was not fitted on the sealed rows with the preregistered seed",
+        "fit: null fingerprint 'b3e65a003c1b0b31' is not the one recomputed from the sealed literals",
+        "fit: null's completion event does not carry the sealed fingerprint",
+        "fit: null has no 'started' event with its fingerprint before its completion"
+      ]
+    },
+    "what_the_known_numbers_give_under_these_clauses": "OOB_TRANSFER_FAILS on the one clause: M4's correct real-family rows 2450 of 38452 (0.0637) is below 3402 (chance 0.038462 + 0.05); every validity clause passes. A scratch copy of 0018's reader with the one literal changed, run with its output redirected to the session scratchpad, read exactly that before this file was written; that scratch reading is not a verdict. This preregistration commits to that outcome before its reader is hashed into the chain; the only way it could have produced anything else is by changing a clause, and no clause is changed.",
+    "flags_stated_in_advance_as_they_will_read": "0018's flags, applied to the known numbers: the standardised logistic's real-family count (2755) exceeds M4's (2450), so the record says beside the verdict that the headline recipe is not its best transfer recipe on this content, as 0017 found within the builder for the incumbent, and that a comparison under a preregistered margin is a new preregistration, not a revision; neither the incumbent (2439) nor the logistic reaches the bar on the real families; M4 leads the incumbent by 11 real-family rows and trails the logistic by 305, neither lead flag at 0.02 or 0.05 of 38452 rows is set; the eight-family mixture 4703 of 61409 is under its 5433-row flag threshold; the three synthetic families (2253 of 22957) are at their flag threshold; M4 reaches the per-family bar on sql and xml only, both synthetic; every reproduction is exact; M4 stopped at its iteration cap (250 of 250), which is said beside the verdict.",
+    "corpus": "Unchanged from 0018: data/pivot/full_c4096.npz and data/pivot/ext_c4096.npz, not touched by this preregistration.",
+    "seed": "Unchanged from 0018 (20260825); no random draw is made by this preregistration.",
+    "rungs": "Unchanged from 0018 (the 800000-row pool, the 20000-row null block); no fit is made by this preregistration.",
+    "artifact_identity": {
+      "commit": "4dcc2b688b06dcef96e23cbe02a70fe2836bdfac",
+      "sha256": {
+        "artifacts/pivot/oob_4096.json": "11487114c6a13b6ab51c152ac95ca4324f3e6318531f8812f3c8141962d0d536",
+        "artifacts/pivot/oob_4096_scores.json": "e37670585e53ef521828cfb1996bcaa4121a5ab91dadcd164536db5427a2daf0",
+        "artifacts/pivot/oob_4096_verdict.json": "f1ddf78c57b111ca67027c9ea61e3396ff4e3caf130b90e45bdac27db6d0c0c9"
+      },
+      "note": "the reader binds the artifact by its sealed hashes and fingerprints, not by file hash; these file hashes say which committed files were read when this was written"
+    },
+    "sealed_set_disclosure": "This preregistration scores nothing; the sealed-set ledger is unchanged (0018's four scorings stand as disclosed in prereg/0018-oob-4096.json).",
+    "what_this_does_not_cover": "Everything 0018 did not cover, unchanged. In addition: it does not revise 0018's VOID, which stands as the verdict of 0018's frozen reader on 0018's artifact. It does not license quoting a 0018 number as a pass of anything. It is a reading of one banked artifact and nothing else.",
+    "sealed_hashes": {
+      "protocol_sha256": "1b05d86755f43b9393c011074f5bcce666c16109416b6da41b0bf6c8152271e6",
+      "recipes_sha256": "b821bc5b1cad78eee5883c6e2f47592cbb835c1535f9f95b0fc5ecd1f4ec5d35",
+      "recipe_sha256": {
+        "incumbent": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+        "logistic_l3": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+        "model": "9c19bb4d24ea1b96659e43a3e7ce8c71c2980a1bf4abe5066afe9761380a41a8"
+      },
+      "note": "canonical-JSON sha256 (sort_keys, separators (',', ':')) of scope.protocol, of scope.recipes and of each recipe; the reader carries the same literals and every banked record's params_sha256 must equal its recipe's, which equals 0014's banked params_sha256 for the same recipe",
+      "null_sorted_sha256": "822b61020d276a04620440eb2d2e7e60376e1efba83e89607c33c09c39fa1425",
+      "reader_sha256_of_0018": "47a3f6544f3d623c54c4c5ed8b23da5b182d37e864e9789e052ccb2b1ffd2598"
+    }
+  },
+  "bar": {
+    "identical_to_0018": {
+      "direction": "equality",
+      "threshold": 0,
+      "passes_if": "Every validity, control and transfer clause of prereg/0018-oob-4096.json, applied unchanged by the re-read reader, whose only behavioural change is the null block literal; the declared substitutions above are the whole specification of the change, and the mutation gate rebuilds the reader from them."
+    },
+    "transfer": {
+      "direction": "higher_is_better",
+      "threshold": 3402,
+      "passes_if": "M4's correct rows over the 38452 real-family extension rows, recounted by the reader from the banked score vector, >= 3402 (ceil(38452 x (1/26 + 0.05))); on the known numbers 2450, fails."
+    }
+  },
+  "readings": [
+    {
+      "name": "verdict",
+      "unit": "enum{OOB_TRANSFERS,OOB_TRANSFER_FAILS,VOID}",
+      "source_artifact": "artifacts/pivot/oob_4096_reread_verdict.json",
+      "json_path": "$.verdict"
+    },
+    {
+      "name": "reads_artifact_of",
+      "unit": "the preregistration stamp of the artifact read; must be 0018-oob-4096",
+      "source_artifact": "artifacts/pivot/oob_4096_reread_verdict.json",
+      "json_path": "$.reads_artifact_of"
+    },
+    {
+      "name": "ext_real_correct_model",
+      "unit": "count of correct real-family extension rows, from 0018's artifact (2450 known)",
+      "source_artifact": "artifacts/pivot/oob_4096_reread_verdict.json",
+      "json_path": "$.ext_real_correct_model"
+    },
+    {
+      "name": "ext_real_top1_model",
+      "unit": "accuracy over the real-family extension rows, 4 decimals (0.0637 known)",
+      "source_artifact": "artifacts/pivot/oob_4096_reread_verdict.json",
+      "json_path": "$.ext_real_top1_model"
+    },
+    {
+      "name": "validity_failed_clauses",
+      "unit": "list; must be empty for a non-VOID verdict",
+      "source_artifact": "artifacts/pivot/oob_4096_reread_verdict.json",
+      "json_path": "$.validity_failed_clauses"
+    },
+    {
+      "name": "transfer_failed_clauses",
+      "unit": "list of the failed transfer clauses with their arithmetic",
+      "source_artifact": "artifacts/pivot/oob_4096_reread_verdict.json",
+      "json_path": "$.transfer_failed_clauses"
+    },
+    {
+      "name": "flags",
+      "unit": "booleans and exact row leads (informational)",
+      "source_artifact": "artifacts/pivot/oob_4096_reread_verdict.json",
+      "json_path": "$.bar_applied.flags"
+    },
+    {
+      "name": "ext_real_top1 by role",
+      "unit": "accuracy, 4 decimals",
+      "source_artifact": "artifacts/pivot/oob_4096_reread_verdict.json",
+      "json_path": "$.ext_real_top1"
+    },
+    {
+      "name": "ext_top1_model",
+      "unit": "accuracy over all extension rows, 4 decimals (flag)",
+      "source_artifact": "artifacts/pivot/oob_4096_reread_verdict.json",
+      "json_path": "$.ext_top1_model"
+    },
+    {
+      "name": "ext_per_family by role",
+      "unit": "accuracy, 4 decimals",
+      "source_artifact": "artifacts/pivot/oob_4096_reread_verdict.json",
+      "json_path": "$.ext_per_family"
+    },
+    {
+      "name": "reproduction_top1 by role",
+      "unit": "accuracy on the sealed evaluation set, 4 decimals",
+      "source_artifact": "artifacts/pivot/oob_4096_reread_verdict.json",
+      "json_path": "$.reproduction_top1"
+    },
+    {
+      "name": "shuffled_label_accuracy_ext",
+      "unit": "accuracy",
+      "source_artifact": "artifacts/pivot/oob_4096_reread_verdict.json",
+      "json_path": "$.shuffled_label_accuracy_ext"
+    },
+    {
+      "name": "model_real_correct_in_the_artifact",
+      "unit": "count, from 0018's artifact as banked by the runner (2450 known)",
+      "source_artifact": "artifacts/pivot/oob_4096.json",
+      "json_path": "$.readings.model.ext_real_correct"
+    }
+  ],
+  "arms": [
+    "ONE ARM: the re-read reader on 0018's banked artifact and scores file, unchanged.",
+    "RIVAL EXPLANATION, closed by construction: 'the successor was shaped by the numbers'. Yes, and it says so: the numbers are quoted above, the committed outcome is OOB_TRANSFER_FAILS, and the only change is a row-block hash that has no arithmetic content and that the pre-freeze check recomputes from the data."
+  ],
+  "stop_rules": [
+    "If the re-read reader emits anything other than OOB_TRANSFER_FAILS on the banked artifact, that is published as emitted and a further correction is filed, because it would mean either that another reader defect exists or that the numbers quoted here were misread; in neither case is a clause changed.",
+    "0018's VOID is not revised, softened or annotated away; its verdict file stays banked as the frozen reader emitted it.",
+    "No number from 0018 or 0019 is quoted as a pass of the bar; the readings are banked measurements, not verdicts, and OOB_TRANSFER_FAILS is published at the same size as OOB_TRANSFERS would have been, in VERDICT.md, README.md, the outbound documents, DILIGENCE.md and the evidence page, with the flags stated in advance said beside it.",
+    "This cannot revise 0003, 0014, 0015, 0016, 0017 or 0018; establishes_a_buyer and revises_0003_0014_0015_0016_0017 are emitted False unconditionally; no customer, user, partner or buyer is claimed.",
+    "The artifact and scores file are the committed ones (4dcc2b6); if either is missing or altered so that a sealed hash or fingerprint no longer matches, the reader's clauses read VOID.",
+    "No sealed parameter, recipe, family list, chunk count, bar or tolerance changes; a further defect found afterwards is a further preregistration (0013's precedent), never an edit to this file or its reader after the freeze."
+  ],
+  "thesis": {
+    "what_a_sealed_literal_defect_costs": "One preregistration entry, one correction at full size, the disclosure above, and a pre-freeze check that recomputes the literal from data instead of copying it. What it must not cost is a quiet edit to a frozen file.",
+    "what_the_re_read_establishes": "That at 4096 bytes, fitted on the builder's eight families, 0014's searched model does not identify the encoder at chance + 0.05 on the mixture over the 38452 rows of five pinned real-file families the builder never produced (2450 against 3402 needed, 0.0637 against 0.088462); that the standardised logistic (2755) and the incumbent (2439) do not either; that the observed real-family reading sits below the 0.097 to 0.118 bracket 0018's expected-outcome paragraph derived from within-builder retention and discounted; and that the reading is carried by the synthetic families (at their flag threshold) rather than the real ones (sql and xml at the per-family bar, no real family).",
+    "what_neither_outcome_means": "Neither names a buyer. Neither revises 0003, 0014, 0015, 0016 or 0017. OOB_TRANSFER_FAILS says that this recipe, fitted on this builder, does not carry chance + 0.05 to these five real families as pinned; not that no recipe or no training corpus could."
+  },
+  "reader": "tools/readers/oob4096_reread_verdict.py",
+  "frozen": false,
+  "invocation": "python3 tools/readers/oob4096_reread_verdict.py — no runner, no fit, no scoring; the reader reads artifacts/pivot/oob_4096.json and artifacts/pivot/oob_4096_scores.json as committed and writes artifacts/pivot/oob_4096_reread_verdict.json.",
+  "smoke": {
+    "none": "nothing is fitted or scored; the reader is exercised by the oob4096 mutation gate (control artifacts built from each reader's literals; the filed defect kept visible) and by the scratch copy on the banked artifact disclosed above, whose output stayed in the session scratchpad."
+  }
+}
