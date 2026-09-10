@@ -58,6 +58,9 @@ rules' curves are steeper (0.0947 and 0.0941 at seven families).
 Preregistration 0017 (chain entry 17) then asked whether 0014's standardised logistic, fitted on 0015's eight sealed folds, leads the
 incumbent on unseen families by 0.02: it does not, a stitched 0.0951 against 0015's 0.0859 (2393 more correct rows of 260000 against a
 5200-row bar), verdict `L3_LEAD_BELOW_BAR`; the lead does not reach the record's 0.05 margin, and every fold converged.
+Preregistration 0018 (chain entry 18, frozen 2026-09-10) asks whether the headline recipe identifies the encoder on eight content
+families the corpus builder never produced (61409 evaluation-only rows: real source code, documentation, RFC text and machine code, pinned
+by hash, plus three fresh synthetic generators), at chance + 0.05; it is frozen and running.
 The curve and the searched margin stand as measured, and they are statements about these eight
 content families, not about DEFLATE streams in general.
 Decomposed by content family, csv and log clear the bar at 2048 on both readings (+0.0554 and

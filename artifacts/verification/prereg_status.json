@@ -373,10 +373,32 @@
       "reader_sha256": "11d79df70c4db52bf259ac88be480350ca853da24834185153c8f32989bde96b",
       "seq": 17,
       "slug": "lofo-l3-4096"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "d230714374f9d0aab212bdea775bfd09fa6f027685b9e0f468aaa1e8664d7b02",
+          "round": 6452502
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "34D01F2C3059C58A13813B6645148658D57E45695CBE66ABE2BF6755A30187FDCFE7A3EB0C175764D58C4453CFE622BE1453AAC5D58341BA351351EE3C1ECF6D",
+          "pulse": 1934673,
+          "time_stamp": "2026-09-10T02:07:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-09-10T02:08:10Z",
+      "hash": "02210ad5ef909f10c4fe04fbc60da781b451aecf7f324125a436eaa8f8d34b78",
+      "id": "0018",
+      "prev_hash": "7c794a8709596a37ef77dd23eb28bc2e7048b4b42c19d67c031cb965238258f1",
+      "reader": "tools/readers/oob4096_verdict.py",
+      "reader_sha256": "47a3f6544f3d623c54c4c5ed8b23da5b182d37e864e9789e052ccb2b1ffd2598",
+      "seq": 18,
+      "slug": "oob-4096"
     }
   ],
-  "entries": 17,
-  "head": "7c794a8709596a37ef77dd23eb28bc2e7048b4b42c19d67c031cb965238258f1",
+  "entries": 18,
+  "head": "02210ad5ef909f10c4fe04fbc60da781b451aecf7f324125a436eaa8f8d34b78",
   "problems": 0,
   "schema": "raise-v1/prereg_status/1",
   "verified": true

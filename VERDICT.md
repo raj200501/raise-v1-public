@@ -297,7 +297,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 |---|---|---|
 | Every gate can be shown to fail | 387 mutations, 387 detected, 0 survived | primary-verifiable |
 | A number that is real but STALE is caught, not just a fabricated one | `tools/freshness.py`, 9 mutations | primary-verifiable |
-| Preregistration chain verifies, reader unchanged since freeze | 17 entries, head `7c794a87…` | primary-verifiable |
+| Preregistration chain verifies, reader unchanged since freeze | 18 entries, head `02210ad5…` | primary-verifiable |
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |
 | ACS PUMS record count reproduced | 392,318 records | primary-verifiable |
 | Instrument reproduces on a cold clone | preflight names cause and fix | primary-verifiable |
@@ -1048,6 +1048,16 @@ does not beat 0003's boosted recipe on unseen families by 0.02 of the evaluation
 searched recipe read against a fixed one, so the comparison is asymmetric by design and says
 nothing about 0014's searched model M4, which was not fitted here; that nothing here revises 0003,
 0014 or 0015; and that no buyer is established.
+
+**In flight — preregistration 0018 (chain seq 18, frozen 2026-09-10T02:08:10Z).** Out-of-builder transfer at 4096: 0003's incumbent, 0014's
+standardised logistic and 0014's searched model M4, each fitted once on 0003's sealed 800000-row pool, scored once on the sealed
+evaluation set (the reproduction, within 0.005 of 0.2395, 0.2317 and 0.2884) and on an evaluation-only extension corpus of
+61409 rows from eight content families the corpus builder never produced (five real, pinned by sha256: CPython source and
+documentation, the SQLite amalgamation, 79 RFC texts, the CPython embeddable package's PE files; three fresh synthetic
+generators: xml, sql, hexdump), sealed by array hash before any fit. One clause, read by `tools/readers/oob4096_verdict.py`
+on the recounted score vectors: M4's correct extension rows must reach 5433 of 61409 (chance + 0.05), `OOB_TRANSFERS` or
+`OOB_TRANSFER_FAILS`; the incumbent and the logistic at the same bar are flags. Nothing below this line changes until its
+frozen reader has read the completed run.
 
 ### A learned representation over raw bytes does not rescue it either — `BYTE_MODEL_FAILS`
 

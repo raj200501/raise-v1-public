@@ -1,7 +1,7 @@
 {
   "schema": "raise-v1/engineering_log/1",
   "preregistration": "0018-oob-4096",
-  "status": "draft: instrument rebuilt after the pre-freeze review; second smoke run; freeze pending",
+  "status": "frozen (chain seq 18, 2026-09-10T02:08:10Z); launch pending",
   "design": {
     "question": "Does the headline recipe (0014's searched HGB M4, 0.2884 in distribution), fitted on the builder's eight families, identify the encoder at chance + 0.05 over the 38452 rows of five pinned real-file families the corpus builder never produced? 0003's incumbent M1 and 0014's standardised logistic L3 beside it as flags, with the eight-family mixture (three synthetic families from this record's own generators included) and the synthetic families as flags.",
     "why_now": "0015, 0016 and 0017 measured transfer only among the builder's own families (seven parametric generators sharing one syllable vocabulary, one Gutenberg family); the headline recipe M4 was never fitted under transfer; no model in the record has ever been read outside the builder under a preregistered clause. This is the strongest out-of-builder question the record can currently afford: five families of upstream files nobody wrote for this record, pinned by hash.",
@@ -505,5 +505,26 @@
     ]
   },
   "run_record": null,
-  "operator_procedure": "launch detached (setsid nohup) with the sealed invocation after the freeze; keep the session active for the whole run (an idle session suspends the runner and the container restarts on the next wake: 0016's finding); poll every 30 minutes: commit and push new checkpoints, relaunch the identical command if the runner is dead and the run is not finished; the reader runs once on the completed artifact; publication states the verdict at the same size either way."
+  "operator_procedure": "launch detached (setsid nohup) with the sealed invocation after the freeze; keep the session active for the whole run (an idle session suspends the runner and the container restarts on the next wake: 0016's finding); poll every 30 minutes: commit and push new checkpoints, relaunch the identical command if the runner is dead and the run is not finished; the reader runs once on the completed artifact; publication states the verdict at the same size either way.",
+  "freeze": {
+    "chain_seq": 18,
+    "chain_hash": "02210ad5ef909f10c4fe04fbc60da781b451aecf7f324125a436eaa8f8d34b78",
+    "prev_hash": "7c794a8709596a37ef77dd23eb28bc2e7048b4b42c19d67c031cb965238258f1",
+    "frozen_utc": "2026-09-10T02:08:10Z",
+    "reader_sha256": "47a3f6544f3d623c54c4c5ed8b23da5b182d37e864e9789e052ccb2b1ffd2598",
+    "git_commit": "12ee607a718a86ac9f3079b08a022d707361deb1",
+    "anchors": {
+      "nist_beacon_v2": {
+        "chain": 2,
+        "pulse": 1934673,
+        "time_stamp": "2026-09-10T02:07:00.000Z",
+        "output_value": "34D01F2C3059C58A13813B6645148658D57E45695CBE66ABE2BF6755A30187FDCFE7A3EB0C175764D58C4453CFE622BE1453AAC5D58341BA351351EE3C1ECF6D"
+      },
+      "drand": {
+        "round": 6452502,
+        "randomness": "d230714374f9d0aab212bdea775bfd09fa6f027685b9e0f468aaa1e8664d7b02"
+      }
+    },
+    "note": "frozen after the pre-freeze review's synthesis (fix then freeze) with every must-change item landed and the 72-case gate green; the full suite read 387/387 across 21 gates"
+  }
 }
