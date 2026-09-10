@@ -3500,25 +3500,29 @@ def _oob_reader():
     return m
 
 
-def _oob_readings(r18, v, fam_x):
+def _oob_readings(r18, v, fam_x, fam_e):
     n_eval, n_ext = r18.PARTITION["n_eval_rows"], r18.N_EXT
     rep, ex = v[:n_eval], v[n_eval:]
     by = {f: [] for f in r18.EXT_FAMILIES}
     for i in range(n_ext):
         by[fam_x[i]].append(ex[i])
     m4 = lambda xs: round(sum(xs) / len(xs), 4) if xs else None  # noqa: E731
+    real = [x for f in r18.REAL_FAMILIES for x in by[f]]; synth = [x for f in r18.SYNTH_FAMILIES for x in by[f]]
     return {"reproduction_top1": m4(rep), "reproduction_correct": sum(rep), "ext_top1": m4(ex), "ext_correct": sum(ex),
             "n_ext_rows": n_ext, "ext_per_family": {f: m4(by[f]) for f in r18.EXT_FAMILIES},
             "ext_per_family_correct": {f: sum(by[f]) for f in r18.EXT_FAMILIES},
             "ext_structured_text_top1": m4([x for f in r18.STRUCTURED_TEXT for x in by[f]]),
             "ext_high_entropy_top1": m4([x for f in r18.HIGH_ENTROPY for x in by[f]]),
-            "ext_real_top1": m4([x for f in r18.REAL_FAMILIES for x in by[f]]),
-            "ext_synthetic_top1": m4([x for f in r18.SYNTH_FAMILIES for x in by[f]])}
+            "ext_real_top1": m4(real), "ext_real_correct": sum(real), "n_ext_real_rows": len(real),
+            "ext_synthetic_correct": sum(synth), "ext_synthetic_top1": m4(synth),
+            "reproduction_per_family": {f: m4([rep[i] for i in range(n_eval) if fam_e[i] == f]) for f in r18.FAMILIES}}
 
 
-def _good_oob(ext_acc=None, model_correct=None, repro=None):
-    """A complete, valid 0018 artifact set. ext_acc: extension accuracy per role (spread evenly over families);
-    model_correct overrides M4's correct extension count exactly; repro overrides a role's reproduction accuracy."""
+def _good_oob(ext_acc=None, model_real_correct=None, model_synth_acc=None, repro=None):
+    """A complete, valid 0018 artifact set whose extension arrays reproduce the sealed fam and g arrays exactly (the fam
+    array is family-major, g is the expansion of the sealed chunk ids by their row counts). ext_acc: extension accuracy per
+    role (spread evenly over families); model_real_correct overrides M4's correct count over the real-family rows exactly;
+    model_synth_acc overrides M4's accuracy on the synthetic families; repro overrides a role's reproduction accuracy."""
     r18 = _oob_reader()
     part = dict(r18.PARTITION); n_eval = part["n_eval_rows"]; n_ext = r18.N_EXT; rec = r18.RECIPES; roles = list(r18.ROLES)
     fams = list(r18.EXT_FAMILIES); rpf = r18.EXT["rows_per_family"]
@@ -3527,19 +3531,31 @@ def _good_oob(ext_acc=None, model_correct=None, repro=None):
         fam_idx += [k] * rpf[f]
     assert len(fam_idx) == n_ext
     fam_x = [fams[i] for i in fam_idx]
+    ext_ids = [c for c, n in zip(r18.EXT_CHUNK_IDS, r18.EXT_ROWS_PER_CHUNK) for _ in range(n)]
+    assert len(ext_ids) == n_ext
+    # a sealed-looking evaluation set: 10000 distinct builder chunk ids, 26 rows each, 1269 of them gutenberg (id % 8 == 0)
+    n_gut = (n_eval - part["n_eval_non_gutenberg"]) // 26; n_chunks = part["n_eval_chunks"]
+    gut_ids = [8 * i for i in range(n_gut)]; other = [c for c in range(1, 49999) if c % 8 != 0][: n_chunks - n_gut]
+    eval_ids = [c for c in gut_ids + other for _ in range(26)]
+    fam_e = [r18.FAMILIES[c % 8] for c in eval_ids]
     acc = dict({"incumbent": 0.09, "logistic_l3": 0.10, "model": 0.12, "null": 0.038}, **(ext_acc or {}))
     reps = dict(r18.REFERENCE_TOP1, null=0.038); reps.update(repro or {})
+    real = set(r18.REAL_FAMILIES)
 
     def vec(name):
         v = [0] * (n_eval + n_ext)
         k = int(round(reps[name] * n_eval))
         for i in range(k):
             v[i] = 1
-        if name == "model" and model_correct is not None:
-            base, extra = divmod(int(model_correct), len(fams))
-            per = {f: base + (1 if j < extra else 0) for j, f in enumerate(fams)}
-        else:
-            per = {f: int(round(acc[name] * rpf[f])) for f in fams}
+        per = {f: int(round(acc[name] * rpf[f])) for f in fams}
+        if name == "model" and model_real_correct is not None:
+            rf = [f for f in fams if f in real]; base, extra = divmod(int(model_real_correct), len(rf))
+            for j, f in enumerate(rf):
+                per[f] = base + (1 if j < extra else 0)
+        if name == "model" and model_synth_acc is not None:
+            for f in fams:
+                if f not in real:
+                    per[f] = int(round(model_synth_acc * rpf[f]))
         pos = n_eval
         for f in fams:
             for i in range(pos, pos + per[f]):
@@ -3547,47 +3563,65 @@ def _good_oob(ext_acc=None, model_correct=None, repro=None):
             pos += rpf[f]
         return v
 
-    def record(name, role, head, n_rows, rows_sha, sorted_sha, stage, top1):
-        c = rec[role]
+    def fp(name):
+        role = "null" if name == "null" else name
+        return r18.fingerprint(prereg=r18.PREREG, seed=20260825, role=role, cand=rec["model"] if name == "null" else rec[name],
+                               stage="null" if name == "null" else "pool",
+                               rows=part["null_sorted_sha256"] if name == "null" else part["pool_idx_sha256"],
+                               eval=part["eval_idx_sha256"], ext=r18.EXT["arrays"]["X"]["sha256"])
+
+    def record(name, role, head, n_rows, rows_sha, sorted_sha, stage, v):
+        c = rec[role]; m4 = lambda xs: round(sum(xs) / len(xs), 4)  # noqa: E731
+        ng = [v[i] for i in range(n_eval) if fam_e[i] != "gutenberg"] + v[n_eval:]
         return {"id": c["id"], "head": head, "family": c["family"], "params": c.get("params", {}), "scaled": bool(c.get("scaled", False)),
                 "val": c.get("val"), "seed": 20260825, "params_sha256": _sha12(c), "stage": stage, "n_fit_rows": n_rows,
                 "fit_rows_sha256": rows_sha, "fit_rows_sorted_sha256": sorted_sha, "environment": dict(_ENV12),
-                "interruptions_before_this_fit": 0, "status": "fit", "seconds": 1.0, "top1": top1, "top1_non_gutenberg": top1,
-                "per_family": {f: top1 for f in r18.FAMILIES}, "block_refills": [{"probe_ok": True}], "fit_info": {"n_iter": 100}}
+                "interruptions_before_this_fit": 0, "status": "fit", "seconds": 1.0, "top1": m4(v), "top1_non_gutenberg": m4(ng),
+                "per_family": {f: m4([v[i] for i in range(n_eval) if fam_e[i] == f]) for f in r18.FAMILIES},
+                "block_refills": [{"probe_ok": True}], "fit_info": {"n_iter": 100}, "fingerprint": fp(name),
+                "per_example_sha256": hashlib.sha256(bytes(v)).hexdigest()}
 
     per_example, reads, fits = {}, {}, {}
-    for name in roles + ["null"]:
-        v = vec(name); per_example[name] = v; reads[name] = _oob_readings(r18, v, fam_x)
+    for name in ["null"] + roles:
+        v = vec(name); per_example[name] = v; reads[name] = _oob_readings(r18, v, fam_x, fam_e)
     for r in roles:
-        fits[r] = record(r, r, r, part["n_pool_rows"], part["pool_idx_sha256"], part["pool_sorted_sha256"], "pool",
-                         round(sum(per_example[r]) / (n_eval + n_ext), 4))
-    fits["null"] = record("null", "model", "null", part["null_rows"], "x", part["null_sorted_sha256"], "null", 0.04)
+        fits[r] = record(r, r, r, part["n_pool_rows"], part["pool_idx_sha256"], part["pool_sorted_sha256"], "pool", per_example[r])
+    fits["null"] = record("null", "model", "null", part["null_rows"], "x", part["null_sorted_sha256"], "null", per_example["null"])
     ledger = []
     for i, nm in enumerate(["null"] + roles):
-        ledger += [{"name": nm, "fingerprint": nm, "event": "started", "utc": f"2026-09-10T00:{i:02d}:00Z"},
-                   {"name": nm, "fingerprint": nm, "event": "completed", "utc": f"2026-09-10T00:{i:02d}:30Z"}]
+        ledger += [{"name": nm, "fingerprint": fp(nm), "event": "started", "utc": f"2026-09-10T00:{i:02d}:00Z"},
+                   {"name": nm, "fingerprint": fp(nm), "event": "completed", "utc": f"2026-09-10T00:{i:02d}:30Z"}]
     mc, lc, ic = (reads[r]["ext_correct"] for r in ("model", "logistic_l3", "incumbent"))
+    part.update({"pool_chunks_shared_with_ext": 0, "eval_chunks_shared_with_ext": 0, "pool_rows_identical_to_an_ext_row": 0,
+                 "eval_rows_identical_to_an_ext_row": 0, "null_y_shuffled_sha256": "0" * 64, "null_labels_permuted": True,
+                 "null_labels_same_multiset": True})
+    n_real = reads["model"]["n_ext_real_rows"]
     art = {"schema_version": 1, "schema": "raise-v1/oob_4096/1", "preregistration": "0018-oob-4096", "smoke": False, "stage": "run",
            "protocol": r18.PROTOCOL, "protocol_sha256": r18.PROTOCOL_SHA256, "recipes": rec, "recipes_sha256": r18.RECIPES_SHA256,
            "corpus": dict(r18.CORPUS), "ext_corpus": dict(r18.EXT), "partition": part, "n_classes": 26, "class_names": [],
-           "chance_accuracy": 0.038462, "environment": dict(_ENV12), "launch_environment": {}, "launch_number": 1,
-           "complete": True, "missing_roles": [], "fits": fits, "readings": reads,
+           "chance_accuracy": 0.038462, "environment": dict(_ENV12),
+           "launch_environment": {"ok": True, "problems": [], "env": dict(_ENV12), "loadavg_1_5_15": [0.1, 0.1, 0.1]},
+           "launch_number": 1, "complete": True, "missing_roles": [], "fits": fits, "readings": reads,
            "reproduction_top1": {r: reads[r]["reproduction_top1"] for r in roles},
            "reproduction_drift": {r: round(reads[r]["reproduction_top1"] - r18.REFERENCE_TOP1[r], 6) for r in roles},
            "reference_top1": dict(r18.REFERENCE_TOP1),
            "ext_top1": {r: reads[r]["ext_top1"] for r in roles}, "ext_correct": {r: reads[r]["ext_correct"] for r in roles},
-           "ext_top1_model": reads["model"]["ext_top1"], "ext_correct_model": mc,
+           "ext_real_top1": {r: reads[r]["ext_real_top1"] for r in roles},
+           "ext_real_correct": {r: reads[r]["ext_real_correct"] for r in roles},
+           "ext_top1_model": reads["model"]["ext_top1"], "ext_correct_model": mc, "ext_real_correct_model": reads["model"]["ext_real_correct"],
+           "n_ext_real_rows": n_real, "ext_real_families": list(r18.REAL_FAMILIES), "ext_synthetic_families": list(r18.SYNTH_FAMILIES),
+           "ext_label_histogram": list(r18.EXT_LABEL_HISTOGRAM), "ext_majority_class_rate": round(max(r18.EXT_LABEL_HISTOGRAM) / n_ext, 6),
            "ext_margin_model_over_logistic_l3_exact": round((mc - lc) / n_ext, 6),
            "ext_margin_model_over_incumbent_exact": round((mc - ic) / n_ext, 6),
            "ext_per_family": {r: reads[r]["ext_per_family"] for r in roles},
            "null_control": fits["null"], "shuffled_label_accuracy_ext": reads["null"]["ext_top1"],
            "shuffled_label_accuracy_eval": reads["null"]["reproduction_top1"], "null_rows": part["null_rows"],
-           "n_ext_rows": n_ext, "n_eval_rows": n_eval, "fit_info_by_role": {r: {"n_iter": 100} for r in roles},
+           "n_ext_rows": n_ext, "n_eval_rows": n_eval, "fit_info_by_role": {r: fits[r]["fit_info"] for r in roles},
            "cluster_ci95_informational": {}, "ledger": ledger, "cost": {},
-           "run_started_utc": "2026-09-10T00:00:00Z", "run_finished_utc": "2026-09-10T06:00:00Z"}
+           "run_started_utc": "2026-09-10T00:00:00Z", "first_launch_utc": "2026-09-10T00:00:00Z", "run_finished_utc": "2026-09-10T06:00:00Z"}
     scores = {"schema": "raise-v1/oob_4096_scores/1", "preregistration": "0018-oob-4096", "smoke": False,
               "n_eval_rows": n_eval, "n_ext_rows": n_ext, "eval_idx_sha256": part["eval_idx_sha256"],
-              "eval_chunk_ids": [], "ext_chunk_ids": list(range(n_ext)), "ext_fam": fam_idx, "ext_families": fams,
+              "eval_chunk_ids": eval_ids, "ext_chunk_ids": ext_ids, "ext_fam": fam_idx, "ext_families": fams,
               "ext_arrays_sha256": {k: v["sha256"] for k, v in r18.EXT["arrays"].items()}, "per_example": per_example}
     return art, scores
 
@@ -3609,16 +3643,26 @@ def _oob(root, mutate=None, drop_artifact=False, drop_scores=False, **kw):
         return rc, out
     v = json.load(open(os.path.join(piv, "oob_4096_verdict.json")))
     ok = v["verdict"] == "OOB_TRANSFERS"
-    return (0 if ok else 1), (f"verdict={v['verdict']} ext={v['ext_top1_model']} correct={v['ext_correct_model']} "
+    return (0 if ok else 1), (f"verdict={v['verdict']} real={v.get('ext_real_top1_model')} correct={v.get('ext_real_correct_model')} "
                               f"validity={v['validity_failed_clauses'][:2]} transfer={v['transfer_failed_clauses']}")
 
 
-@case("oob4096", "control-model-clears-the-bar", "pass")
+def _oob_void(root, mutate, expect_clause=None, **kw):
+    """A mutation that must read VOID (or, for a missing artifact, emit no verdict); the harness counts rc != 0 as detected."""
+    rc, out = _oob(root, mutate, **kw)
+    if rc != 0 and "verdict=VOID" not in out and "No verdict emitted" not in out and "VOID:" not in out:
+        return 0, out + " !! detected but not as VOID"
+    if expect_clause and expect_clause not in out:
+        return 0, out + f" !! VOID for another reason than {expect_clause!r}"
+    return rc, out
+
+
+@case("oob4096", "control-model-clears-the-bar-on-the-real-families", "pass")
 def _(root):
     return _oob(root)
 
 
-@case("oob4096", "model-below-the-bar-is-OOB_TRANSFER_FAILS", "fail")
+@case("oob4096", "model-below-the-bar-on-the-real-families-is-OOB_TRANSFER_FAILS", "fail")
 def _(root):
     rc, out = _oob(root, ext_acc={"model": 0.07})
     if rc != 0 and "verdict=OOB_TRANSFER_FAILS" not in out:
@@ -3626,192 +3670,391 @@ def _(root):
     return rc, out
 
 
-@case("oob4096", "exactly-min-correct-rows-passes-and-one-row-fewer-fails", "fail")
+@case("oob4096", "a-pass-carried-by-the-synthetic-families-alone-is-OOB_TRANSFER_FAILS", "fail")
 def _(root):
     r18 = _oob_reader()
-    rc0, out0 = _oob(root, model_correct=r18.MIN_CORRECT)
+    rc, out = _oob(root, model_real_correct=int(0.039 * r18.N_REAL), model_synth_acc=0.30)
+    if rc != 0 and "verdict=OOB_TRANSFER_FAILS" not in out:
+        return 0, out + " !! synthetic families alone carried the verdict"
+    return rc, out
+
+
+@case("oob4096", "exactly-min-correct-real-rows-passes-and-one-row-fewer-fails", "fail")
+def _(root):
+    r18 = _oob_reader()
+    rc0, out0 = _oob(root, model_real_correct=r18.MIN_CORRECT_REAL)
     if rc0 != 0:
-        return 0, out0 + f" !! {r18.MIN_CORRECT} correct rows is exactly the bar and should pass"
-    rc1, out1 = _oob(root, model_correct=r18.MIN_CORRECT - 1)
+        return 0, out0 + f" !! {r18.MIN_CORRECT_REAL} correct real rows is exactly the bar and should pass"
+    rc1, out1 = _oob(root, model_real_correct=r18.MIN_CORRECT_REAL - 1)
     if rc1 != 0 and "verdict=OOB_TRANSFER_FAILS" not in out1:
         return 0, out1 + " !! one row fewer did not read OOB_TRANSFER_FAILS"
     return rc1, out0 + " | " + out1
 
 
-@case("oob4096", "a-banked-correct-count-off-by-one-row-is-VOID", "fail")
+@case("oob4096", "a-banked-real-correct-count-off-by-one-row-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["ext_correct_model"] += 1
-    return _oob(root, f)
+    def f(a, s):
+        a["ext_real_correct_model"] += 1
+    return _oob_void(root, f, "ext_real_correct_model")
+
+
+@case("oob4096", "a-banked-mixture-count-off-by-one-row-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["ext_correct_model"] += 1
+    return _oob_void(root, f)
 
 
 @case("oob4096", "a-banked-per-family-reading-off-by-0.0001-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["ext_per_family"]["model"]["xml"] = round(art["ext_per_family"]["model"]["xml"] + 0.0001, 4)
-    return _oob(root, f)
+    def f(a, s):
+        a["ext_per_family"]["model"]["c_src"] = round(a["ext_per_family"]["model"]["c_src"] + 0.0001, 4)
+    return _oob_void(root, f)
 
 
-@case("oob4096", "a-reproduction-drift-of-exactly-0.005-passes-and-0.0051-is-VOID", "fail")
+@case("oob4096", "a-reproduction-drift-of-plus-or-minus-0.005-passes-and-0.0051-is-VOID", "fail")
 def _(root):
-    rc0, out0 = _oob(root, repro={"model": 0.2934})
-    if rc0 != 0:
-        return 0, out0 + " !! a drift of exactly 0.005 should pass"
-    rc1, out1 = _oob(root, repro={"model": 0.2935})
+    r18 = _oob_reader(); ref = r18.REFERENCE_TOP1["model"]
+    for sign in (1, -1):
+        rc0, out0 = _oob(root, repro={"model": round(ref + sign * 0.005, 4)})
+        if rc0 != 0:
+            return 0, out0 + " !! a drift of exactly 0.005 should pass"
+    rc1, out1 = _oob(root, repro={"model": round(ref + 0.0051, 4)})
     if rc1 != 0 and "verdict=VOID" not in out1:
         return 0, out1 + " !! a drift of 0.0051 did not VOID"
-    return rc1, out0 + " | " + out1
+    rc2, out2 = _oob(root, repro={"model": round(ref - 0.0051, 4)})
+    if rc2 != 0 and "verdict=VOID" not in out2:
+        return 0, out2 + " !! a drift of -0.0051 did not VOID"
+    return (rc1 or rc2), out1 + " | " + out2
 
 
 @case("oob4096", "the-incumbent-reproduction-off-by-0.006-is-VOID", "fail")
 def _(root):
-    return _oob(root, repro={"incumbent": 0.2455})
+    r18 = _oob_reader()
+    return _oob_void(root, None, "reproduction", repro={"incumbent": round(r18.REFERENCE_TOP1["incumbent"] + 0.006, 4)})
 
 
-@case("oob4096", "null-control-above-chance-plus-0.02-on-the-extension-rows-is-VOID", "fail")
+@case("oob4096", "null-control-above-chance-plus-0.01-on-the-extension-rows-is-VOID", "fail")
 def _(root):
-    return _oob(root, ext_acc={"null": 0.06})
+    return _oob_void(root, None, "null control", ext_acc={"null": 0.06})
+
+
+@case("oob4096", "null-control-above-chance-plus-0.01-on-the-sealed-rows-is-VOID", "fail")
+def _(root):
+    return _oob_void(root, None, "null control", repro={"null": 0.06})
+
+
+@case("oob4096", "null-control-at-0.0484-passes-and-0.0485-is-VOID", "fail")
+def _(root):
+    rc0, out0 = _oob(root, ext_acc={"null": 0.0484})
+    if rc0 != 0:
+        return 0, out0 + " !! a null of 0.0484 (chance + 0.0099) should pass"
+    return _oob_void(root, None, "null control", ext_acc={"null": 0.0485})
 
 
 @case("oob4096", "a-smoke-artifact-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["smoke"] = True; scores["smoke"] = True
-    return _oob(root, f)
+    def f(a, s):
+        a["smoke"] = True; s["smoke"] = True
+    return _oob_void(root, f, "smoke")
+
+
+@case("oob4096", "a-stage-other-than-run-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["stage"] = "selection"
+    return _oob_void(root, f, "stage")
+
+
+@case("oob4096", "a-corpus-literal-changed-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["corpus"]["cache_y_sha256"] = "0" * 64
+    return _oob_void(root, f, "corpus")
 
 
 @case("oob4096", "extension-array-hash-changed-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["ext_corpus"]["arrays"] = dict(art["ext_corpus"]["arrays"]); a = dict(art["ext_corpus"]["arrays"]["X"]); a["sha256"] = "0" * 64
-        art["ext_corpus"]["arrays"]["X"] = a
-    return _oob(root, f)
+    def f(a, s):
+        a["ext_corpus"]["arrays"] = dict(a["ext_corpus"]["arrays"], X={"sha256": "<hash>", "shape": [61409, 1108], "dtype": "float32"})
+    return _oob_void(root, f, "extension corpus")
 
 
 @case("oob4096", "extension-rows-per-family-changed-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["ext_corpus"]["rows_per_family"] = dict(art["ext_corpus"]["rows_per_family"]); art["ext_corpus"]["rows_per_family"]["xml"] += 1
-    return _oob(root, f)
+    def f(a, s):
+        a["ext_corpus"]["rows_per_family"] = dict(a["ext_corpus"]["rows_per_family"], c_src=7799)
+    return _oob_void(root, f, "extension corpus")
+
+
+@case("oob4096", "extension-label-histogram-changed-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["ext_label_histogram"][0] += 1
+    return _oob_void(root, f, "label histogram")
 
 
 @case("oob4096", "scores-file-naming-a-different-extension-corpus-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        scores["ext_arrays_sha256"] = dict(scores["ext_arrays_sha256"]); scores["ext_arrays_sha256"]["y"] = "1" * 64
-    return _oob(root, f)
+    def f(a, s):
+        s["ext_arrays_sha256"]["X"] = "0" * 64
+    return _oob_void(root, f, "scores")
 
 
 @case("oob4096", "one-extension-row-moved-to-another-family-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        scores["ext_fam"] = list(scores["ext_fam"]); scores["ext_fam"][0] = 7
-    return _oob(root, f)
+    def f(a, s):
+        s["ext_fam"][0] = 1
+    return _oob_void(root, f, "scores")
+
+
+@case("oob4096", "two-extension-rows-swapped-across-families-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        i, j = 0, len(s["ext_fam"]) - 1
+        s["ext_fam"][i], s["ext_fam"][j] = s["ext_fam"][j], s["ext_fam"][i]
+    return _oob_void(root, f, "ext_fam")
 
 
 @case("oob4096", "an-extension-family-index-out-of-range-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        scores["ext_fam"] = list(scores["ext_fam"]); scores["ext_fam"][5] = 8
-    return _oob(root, f)
+    def f(a, s):
+        s["ext_fam"][5] = 8
+    return _oob_void(root, f, "ext_fam")
+
+
+@case("oob4096", "extension-chunk-ids-shifted-by-one-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        s["ext_chunk_ids"] = [c + 1 for c in s["ext_chunk_ids"]]
+    return _oob_void(root, f, "ext_chunk_ids")
+
+
+@case("oob4096", "extension-chunk-ids-inside-the-builder-id-space-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        s["ext_chunk_ids"] = [c - 10000000 for c in s["ext_chunk_ids"]]
+    return _oob_void(root, f, "ext_chunk_ids")
+
+
+@case("oob4096", "extension-chunk-ids-reordered-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        s["ext_chunk_ids"] = s["ext_chunk_ids"][::-1]
+    return _oob_void(root, f, "ext_chunk_ids")
+
+
+@case("oob4096", "evaluation-chunk-ids-with-the-wrong-gutenberg-share-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        s["eval_chunk_ids"] = [c + 1 for c in s["eval_chunk_ids"]]
+    return _oob_void(root, f, "eval_chunk_ids")
 
 
 @case("oob4096", "a-per-example-vector-one-entry-short-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        scores["per_example"]["model"] = scores["per_example"]["model"][:-1]
-    return _oob(root, f)
+    def f(a, s):
+        s["per_example"]["model"] = s["per_example"]["model"][:-1]
+    return _oob_void(root, f, "per-example")
 
 
 @case("oob4096", "a-per-example-entry-of-2-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        scores["per_example"]["model"] = list(scores["per_example"]["model"]); scores["per_example"]["model"][-1] = 2
-    return _oob(root, f)
+    def f(a, s):
+        s["per_example"]["model"][0] = 2
+    return _oob_void(root, f, "per-example")
+
+
+@case("oob4096", "a-per-example-sha-not-the-vectors-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["fits"]["model"]["per_example_sha256"] = "0" * 64
+    return _oob_void(root, f, "per_example_sha256")
+
+
+@case("oob4096", "a-record-top1-not-its-vectors-mean-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["fits"]["model"]["top1"] = round(a["fits"]["model"]["top1"] + 0.001, 4)
+    return _oob_void(root, f, "record top1")
+
+
+@case("oob4096", "a-record-per-family-not-its-vectors-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["fits"]["incumbent"]["per_family"]["csv"] = round(a["fits"]["incumbent"]["per_family"]["csv"] + 0.001, 4)
+    return _oob_void(root, f, "per_family")
 
 
 @case("oob4096", "the-model-fit-under-another-recipe-hash-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["fits"]["model"]["params_sha256"] = "f" * 64
-    return _oob(root, f)
+    r18 = _oob_reader()
+    def f(a, s):
+        a["fits"]["model"]["params_sha256"] = r18.RECIPE_SHA256["incumbent"]
+    return _oob_void(root, f, "sealed M4")
+
+
+@case("oob4096", "the-model-params-changed-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["fits"]["model"]["params"] = dict(a["fits"]["model"]["params"], max_iter=300)
+    return _oob_void(root, f, "sealed M4")
 
 
 @case("oob4096", "the-model-fitted-on-rows-that-are-not-the-sealed-pool-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["fits"]["model"]["fit_rows_sha256"] = "e" * 64
-    return _oob(root, f)
+    def f(a, s):
+        a["fits"]["model"]["fit_rows_sha256"] = "0" * 64
+    return _oob_void(root, f, "sealed rows")
 
 
 @case("oob4096", "the-logistic-fitted-on-one-row-fewer-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["fits"]["logistic_l3"]["n_fit_rows"] -= 1
-    return _oob(root, f)
+    def f(a, s):
+        a["fits"]["logistic_l3"]["n_fit_rows"] -= 1
+    return _oob_void(root, f, "sealed rows")
 
 
 @case("oob4096", "the-logistic-not-standardised-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["fits"]["logistic_l3"]["scaled"] = False
-    return _oob(root, f)
+    def f(a, s):
+        a["fits"]["logistic_l3"]["scaled"] = False
+    return _oob_void(root, f, "sealed L3")
 
 
 @case("oob4096", "the-model-fitted-with-group-validation-instead-of-frag-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["fits"]["model"]["val"] = "group"
-    return _oob(root, f)
+    def f(a, s):
+        a["fits"]["model"]["val"] = "group"
+    return _oob_void(root, f, "sealed M4")
+
+
+@case("oob4096", "a-record-without-an-iteration-count-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["fits"]["model"]["fit_info"] = {}; a["fit_info_by_role"]["model"] = {}
+    return _oob_void(root, f, "iteration count")
+
+
+@case("oob4096", "fit-info-by-role-not-the-records-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["fit_info_by_role"]["model"] = {"n_iter": 250}
+    return _oob_void(root, f, "fit_info_by_role")
 
 
 @case("oob4096", "two-ledger-completions-for-the-model-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["ledger"] = art["ledger"] + [{"name": "model", "fingerprint": "model", "event": "completed", "utc": "2026-09-10T07:00:00Z"}]
-    return _oob(root, f)
+    def f(a, s):
+        a["ledger"].append(dict(a["ledger"][-1]))
+    return _oob_void(root, f, "ledger completions")
 
 
 @case("oob4096", "a-missing-ledger-completion-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["ledger"] = [e for e in art["ledger"] if not (e["name"] == "incumbent" and e["event"] == "completed")]
-    return _oob(root, f)
+    def f(a, s):
+        a["ledger"] = [e for e in a["ledger"] if not (e["name"] == "incumbent" and e["event"] == "completed")]
+    return _oob_void(root, f, "ledger completions")
+
+
+@case("oob4096", "a-completion-under-another-fingerprint-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        for e in a["ledger"]:
+            if e["name"] == "model" and e["event"] == "completed":
+                e["fingerprint"] = "0" * 16
+    return _oob_void(root, f, "fingerprint")
+
+
+@case("oob4096", "a-record-fingerprint-not-recomputable-from-the-sealed-literals-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["fits"]["model"]["fingerprint"] = "0" * 16
+    return _oob_void(root, f, "fingerprint")
+
+
+@case("oob4096", "a-completion-without-a-preceding-start-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["ledger"] = [e for e in a["ledger"] if not (e["name"] == "model" and e["event"] == "started")]
+    return _oob_void(root, f, "started")
+
+
+@case("oob4096", "completions-out-of-the-sealed-order-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["ledger"] = a["ledger"][2:] + a["ledger"][:2]   # the null's two events moved to the end
+    return _oob_void(root, f, "sealed order")
 
 
 @case("oob4096", "an-incomplete-artifact-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["complete"] = False; art["missing_roles"] = ["model"]
-    return _oob(root, f)
+    def f(a, s):
+        a["complete"] = False; a["missing_roles"] = ["model"]
+    return _oob_void(root, f, "complete")
+
+
+@case("oob4096", "a-complete-artifact-without-a-finish-time-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["run_finished_utc"] = None
+    return _oob_void(root, f, "complete")
 
 
 @case("oob4096", "a-protocol-with-a-lower-bar-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["protocol"] = dict(art["protocol"]); art["protocol"]["bar"] = {"model_ext_correct_over_n_ext_minus_chance": 0.04}
-    return _oob(root, f)
+    def f(a, s):
+        a["protocol"] = dict(a["protocol"], bar={"model_real_correct_over_n_real_minus_chance": 0.04})
+    return _oob_void(root, f, "protocol")
 
 
 @case("oob4096", "a-recipe-with-more-iterations-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["recipes"] = json.loads(json.dumps(art["recipes"])); art["recipes"]["model"]["params"]["max_iter"] = 300
-    return _oob(root, f)
+    def f(a, s):
+        a["recipes"] = dict(a["recipes"], model=dict(a["recipes"]["model"], params=dict(a["recipes"]["model"]["params"], max_iter=300)))
+    return _oob_void(root, f, "recipes")
 
 
 @case("oob4096", "a-changed-in-distribution-reference-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["reference_top1"] = dict(art["reference_top1"]); art["reference_top1"]["model"] = 0.2800
-    return _oob(root, f)
+    def f(a, s):
+        a["reference_top1"] = dict(a["reference_top1"], model=0.28)
+    return _oob_void(root, f, "references")
 
 
 @case("oob4096", "a-different-sklearn-version-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["environment"] = dict(art["environment"]); art["environment"]["sklearn"] = "1.8.0"
-    return _oob(root, f)
+    def f(a, s):
+        a["environment"] = dict(a["environment"], sklearn="1.8.0")
+    return _oob_void(root, f, "environment")
+
+
+@case("oob4096", "a-different-python-version-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["fits"]["model"]["environment"] = dict(a["fits"]["model"]["environment"], python="3.12.1")
+    return _oob_void(root, f, "environment")
+
+
+@case("oob4096", "a-launch-environment-with-a-problem-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["launch_environment"]["ok"] = False; a["launch_environment"]["problems"] = ["MemAvailable 12.0 GB < 14.5"]
+    return _oob_void(root, f, "launch_environment")
+
+
+@case("oob4096", "a-not-run-file-beside-an-artifact-is-no-verdict", "fail")
+def _(root):
+    piv = os.path.join(root, "artifacts", "pivot"); os.makedirs(piv, exist_ok=True)
+    json.dump({"schema": "raise-v1/oob_4096_not_run/1", "preregistration": "0018-oob-4096", "stage": "run",
+               "reason": "null control read 0.06 on the extension rows", "utc": "2026-09-10T00:02:00Z", "n_checkpoints": 1},
+              open(os.path.join(piv, "oob_4096_not_run.json"), "w"))
+    rc, out = _oob(root)   # a complete, passing artifact sits beside the marker
+    if os.path.exists(os.path.join(piv, "oob_4096_verdict.json")):
+        return 0, out + " !! a verdict was emitted beside a NOT RUN marker"
+    if rc != 2 or "NOT RUN" not in out:
+        return 0, out + " !! the reader did not report NOT RUN with exit 2"
+    return rc, out
 
 
 @case("oob4096", "artifact-absent-is-no-verdict", "fail")
@@ -3821,64 +4064,133 @@ def _(root):
 
 @case("oob4096", "scores-file-absent-is-VOID", "fail")
 def _(root):
-    return _oob(root, drop_scores=True)
+    return _oob_void(root, None, "scores", drop_scores=True)
 
 
 @case("oob4096", "another-preregistration-id-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["preregistration"] = "0017-lofo-l3-4096"
-    return _oob(root, f)
+    def f(a, s):
+        a["preregistration"] = "0017-lofo-l3-4096"
+    return _oob_void(root, f, "preregistration")
 
 
 @case("oob4096", "the-null-record-not-a-null-stage-fit-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["fits"]["null"]["head"] = "model"; art["null_control"] = art["fits"]["null"]
-    return _oob(root, f)
+    def f(a, s):
+        a["fits"]["null"]["head"] = "model"; a["null_control"] = a["fits"]["null"]
+    return _oob_void(root, f)
+
+
+@case("oob4096", "the-null-fitted-with-the-incumbent-recipe-is-VOID", "fail")
+def _(root):
+    r18 = _oob_reader()
+    def f(a, s):
+        a["fits"]["null"]["id"] = "M1"; a["fits"]["null"]["params_sha256"] = r18.RECIPE_SHA256["incumbent"]; a["null_control"] = a["fits"]["null"]
+    return _oob_void(root, f, "sealed M4")
+
+
+@case("oob4096", "the-null-labels-not-a-permutation-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["partition"]["null_labels_permuted"] = False
+    return _oob_void(root, f, "permutation")
 
 
 @case("oob4096", "a-fit-with-another-seed-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["fits"]["incumbent"]["seed"] = 20260826
-    return _oob(root, f)
+    def f(a, s):
+        a["fits"]["incumbent"]["seed"] = 1
+    return _oob_void(root, f, "seed")
 
 
 @case("oob4096", "a-banked-exact-margin-off-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["ext_margin_model_over_logistic_l3_exact"] = round(art["ext_margin_model_over_logistic_l3_exact"] + 0.000001, 6)
-    return _oob(root, f)
+    def f(a, s):
+        a["ext_margin_model_over_logistic_l3_exact"] = round(a["ext_margin_model_over_logistic_l3_exact"] + 0.000001, 6)
+    return _oob_void(root, f, "margin")
 
 
 @case("oob4096", "extension-chunk-ids-not-disjoint-from-the-builder-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["ext_corpus"]["chunk_ids_disjoint_from_builder"] = False
-    return _oob(root, f)
+    def f(a, s):
+        a["ext_corpus"]["chunk_ids_disjoint_from_builder"] = False
+    return _oob_void(root, f, "disjoint")
+
+
+@case("oob4096", "a-measured-overlap-of-one-row-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["partition"]["pool_rows_identical_to_an_ext_row"] = 1
+    return _oob_void(root, f, "leakage")
+
+
+@case("oob4096", "a-shared-evaluation-chunk-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["partition"]["eval_chunks_shared_with_ext"] = 1
+    return _oob_void(root, f, "leakage")
 
 
 @case("oob4096", "a-banked-subset-reading-off-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["readings"]["model"]["ext_real_top1"] = round(art["readings"]["model"]["ext_real_top1"] + 0.0001, 4)
-    return _oob(root, f)
+    def f(a, s):
+        a["readings"]["model"]["ext_real_top1"] = round(a["readings"]["model"]["ext_real_top1"] + 0.0001, 4)
+    return _oob_void(root, f, "readings")
 
 
 @case("oob4096", "the-banked-null-extension-reading-not-the-recomputed-one-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["shuffled_label_accuracy_ext"] = 0.03
-    return _oob(root, f)
+    def f(a, s):
+        a["shuffled_label_accuracy_ext"] = round(a["shuffled_label_accuracy_ext"] + 0.0001, 4)
+    return _oob_void(root, f, "null control")
 
 
 @case("oob4096", "a-pool-fit-with-a-failed-block-probe-is-VOID", "fail")
 def _(root):
-    def f(art, scores):
-        art["fits"]["model"]["block_refills"] = [{"probe_ok": False}]
-    return _oob(root, f)
+    def f(a, s):
+        a["fits"]["model"]["block_refills"] = [{"probe_ok": False}]
+    return _oob_void(root, f, "probe")
 
+
+@case("oob4096", "a-record-with-memory-infeasible-status-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["fits"]["model"]["status"] = "infeasible_memory"
+    return _oob_void(root, f, "status")
+
+
+@case("oob4096", "a-partition-with-another-evaluation-hash-is-VOID", "fail")
+def _(root):
+    def f(a, s):
+        a["partition"]["eval_idx_sha256"] = "0" * 64
+    return _oob_void(root, f, "sealed set")
+
+
+@case("oob4096", "an-artifact-whose-fits-block-is-a-list-is-VOID-not-a-traceback", "fail")
+def _(root):
+    def f(a, s):
+        a["fits"] = [a["fits"]["model"]]
+    rc, out = _oob(root, f)
+    piv = os.path.join(root, "artifacts", "pivot")
+    if not os.path.exists(os.path.join(piv, "oob_4096_verdict.json")):
+        return 0, out + " !! no verdict file was written"
+    v = json.load(open(os.path.join(piv, "oob_4096_verdict.json")))
+    return (1 if v["verdict"] == "VOID" else 0), f"verdict={v['verdict']} validity={v['validity_failed_clauses'][:1]}"
+
+
+@case("oob4096", "the-mixture-flag-is-banked-but-does-not-decide-the-verdict", "fail")
+def _(root):
+    # M4 clears the real-family bar while the eight-family mixture stays under its flag threshold: the verdict passes and
+    # the flag reads False, so a reader that decided on the mixture would disagree with this reader
+    r18 = _oob_reader()
+    rc0, out0 = _oob(root, model_real_correct=r18.MIN_CORRECT_REAL + 50, model_synth_acc=0.01)
+    if rc0 != 0:
+        return 0, out0 + " !! the real-family clause should pass regardless of the synthetic families"
+    piv = os.path.join(root, "artifacts", "pivot"); v = json.load(open(os.path.join(piv, "oob_4096_verdict.json")))
+    if v["bar_applied"]["flags"]["mixture_reaches_bar"] is not False:
+        return 0, out0 + " !! the mixture flag should read False here"
+    rc1, out1 = _oob(root, model_real_correct=r18.MIN_CORRECT_REAL - 1, model_synth_acc=0.5)
+    return rc1, out0 + " | " + out1
 
 
 def main() -> int:

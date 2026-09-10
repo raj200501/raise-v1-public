@@ -3,16 +3,19 @@
 
 The label factory is the builder's, unchanged: the same 26 (implementation, level) configurations, the same
 32768-byte source chunks, the same mid-stream carve, the same feature extractor (tools/pivot/corpus.py and
-tools/pivot/features.py are imported, not copied). What differs is the content: eight families that share
-nothing with the builder's seven parametric generators and one Gutenberg family -
+tools/pivot/features.py are imported, not copied). What differs is the content: eight families the builder never
+produced - five of upstream files nobody wrote for this record, three from generators written for this record by
+the builder's own method (a random.Random seeded per chunk id drawing from a small word list) with new syntax -
 
   real, pinned by sha256 (tools/pivot/ext_source_pins.json; fetched by tools/pivot/fetch_ext_sources.sh):
     py_src    CPython 3.11.9  Lib/**/*.py   (PSF-2.0)
     rst_doc   CPython 3.11.9  Doc/**/*.rst  (PSF-2.0)
     c_src     SQLite 3.45.3 amalgamation .c/.h (public domain)
-    rfc_txt   RFC texts from rfc-editor.org (IETF Trust Legal Provisions)
+    rfc_txt   RFC texts from rfc-editor.org, concatenated in file-name order (IETF Trust Legal Provisions)
     pe_bin    *.dll / *.exe / *.pyd from the CPython 3.11.9 Windows embeddable package (PSF-2.0 and bundled licences)
-  synthetic, seeded per chunk, vocabulary disjoint from corpus.py's syllable words:
+  synthetic, seeded per chunk id, an 80-word English list disjoint from corpus.py's syllable words (the literals
+  true/false/null occur in both); structured records like the builder's json and csv, or random bytes rendered as
+  text like its base64, so builder-style content with new syntax rather than content of a new kind:
     xml       nested elements with attributes
     sql       an INSERT dump with typed columns
     hexdump   xxd-style hex lines over random bytes
@@ -286,12 +289,27 @@ def _sha(a):
     return hashlib.sha256(np.ascontiguousarray(a).tobytes()).hexdigest()
 
 
+def _library_versions():
+    out = {"python": __import__("platform").python_version(), "numpy": np.__version__, "zlib": __import__("zlib").ZLIB_VERSION}
+    for mod, key in (("deflate", "libdeflate"), ("isal", "isal"), ("zopfli", "zopfli")):
+        try:
+            out[key] = getattr(__import__(mod), "__version__", "unknown")
+        except Exception:  # noqa: BLE001
+            out[key] = "unavailable"
+    return out
+
+
 def manifest_of(X, Y, G, F, meta, n_per_family, chunk_size, carve_len, seed, build_s, pins, sel):
     fam_names = np.array(EXT_FAMILIES)
+    # chunks whose every stream was shorter than the carve contribute no row: they are built, listed, and absent from g
+    ids_with_rows, first_pos, rows_per_chunk = np.unique(G, return_index=True, return_counts=True)
+    order = np.argsort(first_pos); ids_with_rows = ids_with_rows[order]; rows_per_chunk = rows_per_chunk[order]
+    without = sorted(set(int(c) for c in meta["chunk_ids"]) - set(int(c) for c in ids_with_rows))
     per_family = {}
     for fi, f in enumerate(EXT_FAMILIES):
         m = F == fi; cm = meta["chunk_fam"] == fi
         per_family[f] = {"n_rows": int(m.sum()), "n_chunks": int(cm.sum()),
+                         "n_chunks_with_rows": int(np.unique(G[m]).size),
                          "rows_per_chunk_mean": round(float(m.sum() / max(cm.sum(), 1)), 4),
                          "ceiling_distinct_streams": round(float(meta["distinct_streams"][cm].mean() / N_CONFIGS), 4),
                          "ceiling_distinct_fragments": round(float(meta["distinct_fragments"][cm].mean() / N_CONFIGS), 4),
@@ -303,7 +321,14 @@ def manifest_of(X, Y, G, F, meta, n_per_family, chunk_size, carve_len, seed, bui
             "npz": os.path.relpath(NPZ_PATH, REPO), "families": EXT_FAMILIES, "real_families": REAL_FAMILIES,
             "synthetic_families": SYNTH_FAMILIES, "n_per_family": n_per_family, "chunk_size": chunk_size, "carve": carve_len,
             "seed": seed, "chunk_id_base": CHUNK_ID_BASE, "family_stride": FAMILY_STRIDE, "n_rows": int(len(Y)),
-            "n_chunks": int(len(meta["chunk_ids"])), "n_classes": N_CONFIGS, "class_names": CONFIG_NAMES,
+            "n_chunks": int(len(meta["chunk_ids"])), "n_chunks_with_rows": int(len(ids_with_rows)),
+            "chunks_without_rows": without,
+            "chunk_ids_with_rows": [int(c) for c in ids_with_rows], "rows_per_chunk": [int(c) for c in rows_per_chunk],
+            "chunk_order_note": "chunk_ids_with_rows and rows_per_chunk are in row order: g equals their expansion, fam is family-major",
+            "label_histogram": np.bincount(np.asarray(Y), minlength=N_CONFIGS).tolist(),
+            "majority_class_rate": round(float(np.bincount(np.asarray(Y)).max() / max(len(Y), 1)), 6),
+            "library_versions": _library_versions(),
+            "n_classes": N_CONFIGS, "class_names": CONFIG_NAMES,
             "arrays": {"X": {"sha256": _sha(X), "shape": list(X.shape), "dtype": str(X.dtype)},
                        "y": {"sha256": _sha(Y), "shape": list(Y.shape), "dtype": str(Y.dtype)},
                        "g": {"sha256": _sha(G), "shape": list(G.shape), "dtype": str(G.dtype)},

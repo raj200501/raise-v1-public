@@ -1,39 +1,378 @@
 {
-  "arrays": {
-    "X": {
+ "id": "0018",
+ "slug": "oob-4096",
+ "title": "Out-of-builder transfer at 4096: does the headline recipe (0014's searched M4), fitted on the builder's eight families, identify the encoder at chance + 0.05 on five pinned real-file families the builder never produced? Three recipes fitted once on 0003's sealed pool, scored once on the sealed evaluation set (reproduction) and on an evaluation-only extension corpus of eight new families (five real, pinned by hash; three synthetic, from generators written for this record and kept out of the clause).",
+ "scope": {
+  "one_line": "One fit corpus (corpus A: 0003's 800000-row pool, hash for hash the fit set of 0014's confirmatory fits and of 0017's reproduction control, pool_idx_sha256 17b0dc0b...), one seed (20260825), three recipes (0003's M1, 0014's L3 and M4, roster entries verbatim) fitted once each, one evaluation-only extension corpus (data/pivot/ext_c4096.npz, 61409 rows, sealed by array hash before any fit), one clause: M4's correct count over the 38452 rows of the five real families against chance + 0.05; the eight-family mixture, the three synthetic families, the incumbent and the standardised logistic are flags.",
+  "why_this_is_the_biggest_open_risk": "Every transfer reading in this record (0015 TRANSFER_FAILS, 0016 DIVERSITY_HELPS, 0017 L3_LEAD_BELOW_BAR) was taken inside the corpus builder: seven parametric generators that share one syllable vocabulary and one Gutenberg family. The question any outside reader of this record would put first is whether the headline recipe identifies the encoder on content the builder never produced: here five families of upstream files nobody wrote for this record, and three synthetic families from generators written for this record by the builder's own method, outside the builder and its vocabulary. 0014's searched model has never been fitted under transfer, and no model in this record has ever been read outside the builder under a preregistered clause.",
+  "corpus": "Fit corpus: data/pivot/full_c4096.npz exactly as 0003 left it (sealed cache identity below), split by grouped_split(seed 20260825, eval_frac 0.2, cap 800000): the 800000-row pool is the fit set, the 260000-row sealed evaluation set is the reproduction set. Extension corpus: data/pivot/ext_c4096.npz built by tools/pivot/corpus_ext.py from the same label factory (26 configurations, 32768-byte chunks, mid-stream carve of 4096 bytes, tools/pivot/features.py) over eight families the builder never produced, 300 non-overlapping chunks per family, chunk ids from 10000000 (disjoint from the builder's 0..49999), family by its own array; sealed by the sha256 of its X, y, g and fam arrays (scope.protocol.ext_corpus). Its rows are scored, never fitted.",
+  "extension_families": {
+   "real (upstream files nobody wrote for this record, pinned by sha256 in tools/pivot/ext_source_pins.json, fetched by tools/pivot/fetch_ext_sources.sh, never committed; each family is its files concatenated in sorted file-name order and cut into consecutive 32768-byte windows, so a window may straddle two files)": {
+    "py_src": "CPython 3.11.9 Lib/**/*.py (1828 files, 854 of them under Lib/test, 31.9 MB), PSF-2.0",
+    "rst_doc": "CPython 3.11.9 Doc/**/*.rst (501 files, 11.2 MB), PSF-2.0",
+    "c_src": "SQLite 3.45.3 amalgamation: shell.c, sqlite3.c, sqlite3.h, sqlite3ext.h (10.6 MB), public domain",
+    "rfc_txt": "79 RFC text files from rfc-editor.org (12.8 MB), IETF Trust Legal Provisions",
+    "pe_bin": "the 30 .dll, .exe and .pyd files of the CPython 3.11.9 Windows embeddable package (16.7 MB): whole PE images, so machine code, import tables, resources and zero padding together; PSF-2.0, with the bundled OpenSSL and SQLite DLLs and the Microsoft C runtime under their own terms (docs/compliance/EXT_SOURCES.md)"
+   },
+   "synthetic (tools/pivot/corpus_ext.py generators written for this record by the builder's method - a random.Random seeded per chunk id drawing from a small word list - with new syntax and an 80-word English list disjoint from corpus.py's syllable words; the literals true, false and null occur in both the builder's json and these; xml and sql are structured records like the builder's json and csv, hexdump is random bytes rendered as text like the builder's base64; kept out of the clause for that reason)": {
+    "xml": "nested elements with attributes, dates, units and numbers",
+    "sql": "an INSERT dump with typed columns",
+    "hexdump": "xxd-style hex lines over random bytes"
+   },
+   "subsets": "structured_text is the six families of text with record or markup structure (c_src, py_src, rfc_txt, rst_doc, sql, xml); high_entropy is the two families whose streams are the least compressible of the eight (pe_bin: machine code, import tables, resources and zero padding together; hexdump: random bytes rendered as hex text), a name for the least-compressible pair rather than a claim that either is near-incompressible; real and synthetic are the two kinds above. All four are informational subsets of the readings.",
+   "chunking": "real families: the blob is cut into consecutive non-overlapping 32768-byte chunks and a permutation seeded by (seed 20260909, family index) picks 300 without replacement, so no two chunks share a byte (the audit's gutenberg finding); synthetic families: one generator call per chunk id. Rows whose stream is shorter than the carve plus 64 bytes are dropped by the builder's rule, which the builder's own families never triggered; here 991 of 62400 rows were dropped, on the most compressible chunks and the strongest configurations (pe_bin 7407, sql 7357, py_src 7709, rfc_txt 7761, rst_doc 7775 rows of 7800), and 13 chunks (ids [10200064, 10200093, 10200108, 10200122, 10200152, 10200156, 10200180, 10200199, 10200206, 10200207, 10200259, 10200263, 10600139]) contributed no row at all because every one of their 26 streams was shorter than the carve, so the sealed per-family row counts are unequal, 2387 of 2400 built chunks carry rows, the label mix is not exactly uniform (largest class 2387 of 61409 rows = 0.038871; over the real families 0.038698), and the per-family readings on sql and pe_bin are over a label set thinner in the strongest configurations."
+  },
+  "seed": "20260825 for the split, the pool order, the fits and the null-label shuffle (drawn from the split's generator after the split, as in 0014-0017); 20260909 for the extension corpus's chunk selection.",
+  "design": "Four fits in the sealed order: the null control (M4 on the first 20000 pool rows with shuffled labels), then M1, L3 and M4 each on the whole 800000-row pool. Every fit is scored exactly once, on the concatenation of the sealed evaluation set and the extension corpus; the per-example correctness vector is banked in full (0015's convention: int lists) and the reader recomputes every reading from it: the reproduction (first 260000 entries) must land within 0.005 of the banked in-distribution value for that recipe, the extension readings (remaining entries, split by the sealed family array) are the measurement. The clause is on M4's count of correct rows over the five real families. The runner also measures, before any fit, that no pool row and no evaluation row is byte-identical to an extension feature row and that no chunk id is shared; both counts are banked and the reader requires 0.",
+  "partition_sealed_before_any_fit": "0003's sealed split, restated hash for hash from 0017's sealed_partition (eval, pool, null); the extension corpus's array hashes were computed by corpus_ext.py at build time and are sealed in scope.protocol.ext_corpus; a real run refuses if the pool or the extension arrays hash differently.",
+  "recipes_are_0003s_and_0014s": "M1, L3 and M4 are 0014's sealed roster entries verbatim (canonical-JSON hashes 618e8484..., 6c963004..., 9c19bb4d..., equal to 0014's banked params_sha256 for incumbent_refit, final.logistic and final.model), so every 0018 record's params_sha256 chains to a 0014 record. M1 is 0003's recipe as 0014 refitted it (0.2395); L3 and M4 are 0014's searched logistic and searched model (0.2317, 0.2884). No recipe is searched or selected here.",
+  "what_this_measures_and_does_not": "It measures whether the headline recipe, fitted on the builder's eight families, identifies the encoder at chance + 0.05 over the 38452 rows of five real-file families outside the builder, with the eight-family mixture, the three synthetic families, the incumbent and the standardised logistic beside it as flags. It does not measure other carve sizes, encoders outside the 26, or 'all content': the five real families are one CPython release, one SQLite release, 79 RFCs of our choosing and one Windows package, chosen by us before any fit touched them; each family rests on 300 chunks and no single family reading is a result. Per-family readings and the per-family ceilings (the fraction of the 26 configurations whose carved fragments are distinct, banked in the manifest) are informational.",
+  "cost": "EXTRAPOLATION from banked fits on this exact pool with this machinery (artifacts/pivot/recipe_search_4096.json, engineering_log_0014.json): M4 15874.2 s (heartbeat peak 10.34 GB anonymous; 0014's 12.19 GB confirm-stage peak was the depth-16 deep_tree fit, not run here), M1 1428.4 s, L3 1164.3 s (0017: 1817.5 s with the machine shared), null 71.6 s: 18539 to 19192 s, about 5.2 to 5.3 h of fit at 3 threads and nice 10 on 4 cores, no GPU, plus four scorings of the 321409-row scoring set (1.42 GB float32 instead of 0014's 1.15 GB), the pool gather and one streamed row-identity scan of the cache. The runner refuses under 14.5 GB MemAvailable, under 0.5 GB of free disk, beside any other tools/pivot runner, when the 1-minute load average exceeds 2.0 (banked as launch_environment.loadavg_1_5_15; the other-runner scan sees only tools/pivot runners), and on any sealed-environment mismatch; the memory kill threshold is 0017's 13.0 GB.",
+  "sealed_set_disclosure": "This is the seventh preregistration scored on 0003's sealed evaluation set (0003 12 times, 0006 for top-k, 0014 10 plus 10 in a smoke, 0015 27 plus smokes, 0016 258 plus smokes, 0017 10 plus smokes); 0018 adds 4 scorings (M1, L3 and M4 on the pool, one null), all fixed recipes with no selection, and the sealed set serves here only as the reproduction control. The extension corpus: the smoke run scored 10000-row fits (and a 2000-row null) on a 1040-row scratchpad build that is a subset of the sealed extension corpus (40 of its 2400 chunks: k = 0..4 of every family), so 1040 of the 61409 sealed rows were scored by tiny fits before the freeze; those readings are disclosed in the engineering log and not used, and the smoke also scored the whole sealed evaluation set four times with those fits. No recipe fitted on the whole 800000-row pool has scored an extension row.",
+  "expected_outcome_stated_in_advance": "Genuinely uncertain, and stated so, with the banked arithmetic beside it. If M4 keeps the share of its in-distribution excess over chance that 0015's incumbent kept under leave-one-family-out (0.236), it lands near 0.097 on unseen content; if it keeps the standardised logistic's share from 0017 (0.293), near 0.112; on raw retention (0.359 and 0.410), 0.103 and 0.118. All four sit above the 0.0885 bar, so the banked within-builder arithmetic predicts a pass; a fail needs excess retention below 0.20. We discount that arithmetic, without a banked number for it, because the within-builder readings were taken on held-out families that share the builder's syllable vocabulary and generator style with the training families, while the five real families share neither; the disclosed 10000-row smoke fits read 0.069 on the real families and 0.092 on the synthetic ones against 0.14-0.17 in distribution, which is retention near the low end of the bracket at a tenth of the data. The prior is stated as close to even on that assumption, and either outcome is published at the same size.",
+  "flags_stated_in_advance": "If the incumbent or the standardised logistic reaches the bar on the real families and M4 does not, the record says so beside the verdict and does not restate the verdict; if the logistic's real-family count exceeds M4's, the record says the headline recipe is not its best transfer recipe on this content, as 0017 found within the builder for the incumbent, and a comparison under a preregistered margin is a new preregistration, not a revision. The eight-family mixture at 5433 of 61409 is banked as a flag and is never quoted as the verdict. Lead flags are banked at 0.02 and 0.05 of the real rows as exact counts. A reproduction drift that is nonzero but within 0.005 is reported as a finding, not absorbed.",
+  "what_this_does_not_cover": "Other carve sizes, encoders outside the 26 configurations, recipes beyond these three, fitting on the extension families (they are evaluation only), the diversity axis (0016), calibration or abstention, and any buyer, customer, user or partner.",
+  "protocol": {
+   "seed": 20260825,
+   "eval_frac": 0.2,
+   "top_rung": 800000,
+   "threads": 3,
+   "nice": 10,
+   "carve": 4096,
+   "chunk_offset": 0,
+   "chunk_size": 32768,
+   "cache_identity": {
+    "y_sha256": "2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093",
+    "g_sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9"
+   },
+   "families": [
+    "gutenberg",
+    "base64",
+    "binary",
+    "code",
+    "csv",
+    "json",
+    "log",
+    "mixed"
+   ],
+   "ext_families": [
+    "c_src",
+    "hexdump",
+    "pe_bin",
+    "py_src",
+    "rfc_txt",
+    "rst_doc",
+    "sql",
+    "xml"
+   ],
+   "fit_rows": "all",
+   "roles": [
+    "incumbent",
+    "logistic_l3",
+    "model"
+   ],
+   "order": [
+    "null",
+    "incumbent",
+    "logistic_l3",
+    "model"
+   ],
+   "null_rows": 20000,
+   "pool_idx_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+   "caps": {
+    "memory_kill_gb": 13.0
+   },
+   "launch": {
+    "min_disk_free_gb": 0.5,
+    "min_mem_available_gb": 14.5,
+    "max_load1": 2.0
+   },
+   "environment": {
+    "sklearn": "1.9.0",
+    "numpy": "2.4.6",
+    "python": "3.11.15"
+   },
+   "reference_top1": {
+    "incumbent": 0.2395,
+    "logistic_l3": 0.2317,
+    "model": 0.2884
+   },
+   "reference_source": "artifacts/pivot/recipe_search_4096.json: incumbent_refit.top1, final.logistic.top1, final.model.top1",
+   "ext_corpus": {
+    "npz": "data/pivot/ext_c4096.npz",
+    "manifest": "artifacts/pivot/ext_corpus_manifest.json",
+    "arrays": {
+     "X": {
       "dtype": "float32",
       "sha256": "c578eaf142dfd776fe2c9433420133ae6b2d304cdd546f2bdbbc50b397c4f5db",
       "shape": [
-        61409,
-        1108
+       61409,
+       1108
       ]
-    },
-    "fam": {
+     },
+     "fam": {
       "dtype": "int8",
       "sha256": "21b066e7020c5a4ba247101e679ba31f23cbeae5500ab67e64f453b83e61f917",
       "shape": [
-        61409
+       61409
       ]
-    },
-    "g": {
+     },
+     "g": {
       "dtype": "int32",
       "sha256": "2f5b8a86cc0463c1376d1ceb379ffe710e709899f2db4e1a527d355d6fcfc8b9",
       "shape": [
-        61409
+       61409
       ]
-    },
-    "y": {
+     },
+     "y": {
       "dtype": "int16",
       "sha256": "edbf9b3a9aa810338807a4a397884b58b27a28bbf0d99826050403bdeeabdd46",
       "shape": [
-        61409
+       61409
       ]
-    }
+     }
+    },
+    "n_rows": 61409,
+    "n_chunks": 2387,
+    "n_chunks_built": 2400,
+    "chunks_without_rows": [
+     10200064,
+     10200093,
+     10200108,
+     10200122,
+     10200152,
+     10200156,
+     10200180,
+     10200199,
+     10200206,
+     10200207,
+     10200259,
+     10200263,
+     10600139
+    ],
+    "families": [
+     "c_src",
+     "hexdump",
+     "pe_bin",
+     "py_src",
+     "rfc_txt",
+     "rst_doc",
+     "sql",
+     "xml"
+    ],
+    "real_families": [
+     "c_src",
+     "pe_bin",
+     "py_src",
+     "rfc_txt",
+     "rst_doc"
+    ],
+    "synthetic_families": [
+     "hexdump",
+     "sql",
+     "xml"
+    ],
+    "n_real_rows": 38452,
+    "n_synthetic_rows": 22957,
+    "rows_per_family": {
+     "c_src": 7800,
+     "hexdump": 7800,
+     "pe_bin": 7407,
+     "py_src": 7709,
+     "rfc_txt": 7761,
+     "rst_doc": 7775,
+     "sql": 7357,
+     "xml": 7800
+    },
+    "chunks_per_family": {
+     "c_src": 300,
+     "hexdump": 300,
+     "pe_bin": 288,
+     "py_src": 300,
+     "rfc_txt": 300,
+     "rst_doc": 300,
+     "sql": 299,
+     "xml": 300
+    },
+    "chunks_built_per_family": {
+     "c_src": 300,
+     "hexdump": 300,
+     "pe_bin": 300,
+     "py_src": 300,
+     "rfc_txt": 300,
+     "rst_doc": 300,
+     "sql": 300,
+     "xml": 300
+    },
+    "ceiling_distinct_fragments": {
+     "c_src": 0.9751,
+     "hexdump": 0.9987,
+     "pe_bin": 0.8949,
+     "py_src": 0.9828,
+     "rfc_txt": 0.9768,
+     "rst_doc": 0.9538,
+     "sql": 0.8987,
+     "xml": 0.9512
+    },
+    "ceiling_distinct_streams": {
+     "c_src": 0.9818,
+     "hexdump": 1.0,
+     "pe_bin": 0.9499,
+     "py_src": 0.9959,
+     "rfc_txt": 0.9856,
+     "rst_doc": 0.966,
+     "sql": 0.9533,
+     "xml": 0.9524
+    },
+    "chunk_id_min": 10000000,
+    "chunk_id_max": 10700299,
+    "chunk_id_base": 10000000,
+    "family_stride": 100000,
+    "rows_dropped_short_stream": 991,
+    "seed": 20260909,
+    "n_per_family": 300,
+    "label_histogram": [
+     2381,
+     2377,
+     2375,
+     2369,
+     2364,
+     2357,
+     2356,
+     2353,
+     2353,
+     2375,
+     2372,
+     2370,
+     2367,
+     2359,
+     2356,
+     2350,
+     2348,
+     2348,
+     2346,
+     2339,
+     2339,
+     2387,
+     2377,
+     2377,
+     2377,
+     2337
+    ],
+    "majority_class_rate": 0.038871,
+    "majority_class_rate_real": 0.038698,
+    "source_pins_sha256_of_file": "2403ba48846503b6f92744558e1d34453124aa3e56d6058614a49da864e5f694"
+   },
+   "bar": {
+    "model_real_correct_over_n_real_minus_chance": 0.05
+   },
+   "n_ext_real_rows": 38452,
+   "min_correct_real": 3402,
+   "mixture_flag": {
+    "model_ext_correct_over_n_ext_minus_chance": 0.05
+   },
+   "min_correct": 5433,
+   "reproduction_tolerance": 0.005,
+   "null_tolerance": 0.01,
+   "subsets": {
+    "real": [
+     "c_src",
+     "pe_bin",
+     "py_src",
+     "rfc_txt",
+     "rst_doc"
+    ],
+    "synthetic": [
+     "hexdump",
+     "sql",
+     "xml"
+    ],
+    "structured_text": [
+     "c_src",
+     "py_src",
+     "rfc_txt",
+     "rst_doc",
+     "sql",
+     "xml"
+    ],
+    "high_entropy": [
+     "hexdump",
+     "pe_bin"
+    ]
+   }
   },
-  "build_seconds": 216.1,
-  "carve": 4096,
-  "chunk_id_base": 10000000,
-  "chunk_ids_with_rows": [
+  "recipes": {
+   "incumbent": {
+    "family": "hgb",
+    "id": "M1",
+    "params": {
+     "learning_rate": 0.15,
+     "max_iter": 200,
+     "max_leaf_nodes": 63,
+     "n_iter_no_change": 10
+    },
+    "val": "frag",
+    "why": "0003's incumbent verbatim (run_study.py make_model 'hgb', run_carve.py's explicit last-10% validation split); every other parameter at the sklearn 1.9.0 default"
+   },
+   "logistic_l3": {
+    "family": "logistic",
+    "id": "L3",
+    "params": {
+     "C": 1.0,
+     "max_iter": 1000
+    },
+    "scaled": true,
+    "why": "standardised inputs with C 1.0: the single most standard fix for an lbfgs logistic on 1108 unscaled hand-engineered columns"
+   },
+   "model": {
+    "family": "hgb",
+    "id": "M4",
+    "params": {
+     "l2_regularization": 1.0,
+     "learning_rate": 0.05,
+     "max_iter": 250,
+     "max_leaf_nodes": 127,
+     "n_iter_no_change": 20
+    },
+    "val": "frag",
+    "why": "capacity plus regularisation plus a lower rate together: 800000 rows x 26 classes supports bigger trees than 63 leaves, and the deep-tree baseline gained 0.1459 -> 0.1812 from depth 8 to 16 at 4096"
+   }
+  },
+  "sealed_partition": {
+   "eval": {
+    "n_rows": 260000,
+    "n_chunks": 10000,
+    "n_non_gutenberg": 227006,
+    "eval_idx_sha256": "7da1099e0cf9d4c3903dad62f52c91f67b751113fc4bfc0a62c53f05dccf1efa",
+    "eval_y_sha256": "92b95cf02a21945cea2a7bd756a1e1096b07ec351b478c39e795a8a2267400d1"
+   },
+   "pool": {
+    "n_rows": 800000,
+    "n_chunks": 40000,
+    "pool_idx_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+    "pool_y_sha256": "d519612b4e46991f6ea1850fc92271e0de581e3cc378dd05fec59ff678dc72ea",
+    "pool_sorted_sha256": "923cd266c3bf2a45683b2c479d36b046b311cc8f2e53426c962b6dd5ae836094"
+   },
+   "null": {
+    "n_rows": 20000,
+    "null_sorted_sha256": "0653cc12293ae078dd68b900c8778d93e701261ca93414be9eb7bb8e7ee686db"
+   }
+  },
+  "what_a_pass_would_mean_for_the_record": "That the headline recipe carries at least chance + 0.05 to the mixture over 38452 rows of five real-file families the builder never produced, not necessarily to every one of them (the per-family readings say which); the first preregistered transfer reading in this record taken outside the builder. It would not revise 0015 (a different recipe and a different question) and would not establish a buyer.",
+  "bar_calibration": "chance (1/26 = 0.038462) + 0.05 on the mixture over the 38452 real-family rows, 0015's transfer bar verbatim, read on exact counts: M4's correct real-family rows must reach ceil(38452 x (1/26 + 0.05)) = 3402. The bar is a fixed floor inherited from 0015, not a statistical test: with 38452 rows it sits far outside sampling noise, between the record's three within-builder transfer readings (0.0859, 0.0928, 0.0951), and a pass is an 8.85 percent floor, not a usable identification rate. The sealed label mix is not exactly uniform after the short-stream drops (largest class 0.038698 of the real rows against 1/26 = 0.038462); the bar is read against 1/26 as in 0015 and the difference is disclosed, not corrected for. The eight-family mixture at ceil(61409 x (1/26 + 0.05)) = 5433 of 61409, the three synthetic families, and flags at the same bar for L3 and M1 with M4's lead over each as an exact count, are banked beside the verdict and are not clauses.",
+  "sealed_hashes": {
+   "protocol_sha256": "1b05d86755f43b9393c011074f5bcce666c16109416b6da41b0bf6c8152271e6",
+   "recipes_sha256": "b821bc5b1cad78eee5883c6e2f47592cbb835c1535f9f95b0fc5ecd1f4ec5d35",
+   "recipe_sha256": {
+    "incumbent": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+    "logistic_l3": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+    "model": "9c19bb4d24ea1b96659e43a3e7ce8c71c2980a1bf4abe5066afe9761380a41a8"
+   },
+   "note": "canonical-JSON sha256 (sort_keys, separators (',', ':')) of scope.protocol, of scope.recipes and of each recipe; the reader carries the same literals and every banked record's params_sha256 must equal its recipe's, which equals 0014's banked params_sha256 for the same recipe"
+  },
+  "ext_chunk_layout": {
+   "why": "the extension chunk ids that carry rows, in row order, with their row counts: g is exactly their expansion and fam is family-major; sealed here (scope is a sealed field) and carried by the reader as literals, kept out of scope.protocol so the banked protocol stays small",
+   "chunk_ids_with_rows": [
     10000000,
     10000001,
     10000002,
@@ -2421,206 +2760,8 @@
     10700297,
     10700298,
     10700299
-  ],
-  "chunk_meta_sha256": {
-    "chunk_fam": "478ea89941f00d5269f84ac1671df128ed954dff6f2b140d7aa7e50fb2e8c8f9",
-    "chunk_ids": "e1a1b1e641f4a16fa64677b52321dc5326ed91cfdc5e097e66670971e29dd0d9",
-    "chunk_k": "29cd680988b315517600f2333ed9b6007d741e5f50da901635a0223bb1a7f2db",
-    "distinct_fragments": "27d931c906e60992145b712c3444b176b4b88d494eeddbdb161c85e8ac0b5bd6",
-    "distinct_streams": "8e3ba0d126a57bc09ed7043139e047df2bd64012e01f610a355e2a65559f7000",
-    "src_sha256": "cf2251c1ba63876edd9c226e3c88e37be420e1663720c91e343dba22bb5115b8"
-  },
-  "chunk_order_note": "chunk_ids_with_rows and rows_per_chunk are in row order: g equals their expansion, fam is family-major",
-  "chunk_size": 32768,
-  "chunks_without_rows": [
-    10200064,
-    10200093,
-    10200108,
-    10200122,
-    10200152,
-    10200156,
-    10200180,
-    10200199,
-    10200206,
-    10200207,
-    10200259,
-    10200263,
-    10600139
-  ],
-  "class_names": [
-    "zlib-1",
-    "zlib-2",
-    "zlib-3",
-    "zlib-4",
-    "zlib-5",
-    "zlib-6",
-    "zlib-7",
-    "zlib-8",
-    "zlib-9",
-    "libdeflate-1",
-    "libdeflate-2",
-    "libdeflate-3",
-    "libdeflate-4",
-    "libdeflate-5",
-    "libdeflate-6",
-    "libdeflate-7",
-    "libdeflate-8",
-    "libdeflate-9",
-    "libdeflate-10",
-    "libdeflate-11",
-    "libdeflate-12",
-    "isal-0",
-    "isal-1",
-    "isal-2",
-    "isal-3",
-    "zopfli"
-  ],
-  "families": [
-    "c_src",
-    "hexdump",
-    "pe_bin",
-    "py_src",
-    "rfc_txt",
-    "rst_doc",
-    "sql",
-    "xml"
-  ],
-  "family_stride": 100000,
-  "generated_utc": "2026-09-10T01:08:35Z",
-  "label_histogram": [
-    2381,
-    2377,
-    2375,
-    2369,
-    2364,
-    2357,
-    2356,
-    2353,
-    2353,
-    2375,
-    2372,
-    2370,
-    2367,
-    2359,
-    2356,
-    2350,
-    2348,
-    2348,
-    2346,
-    2339,
-    2339,
-    2387,
-    2377,
-    2377,
-    2377,
-    2337
-  ],
-  "library_versions": {
-    "isal": "1.8.0",
-    "libdeflate": "0.9.0",
-    "numpy": "2.4.6",
-    "python": "3.11.15",
-    "zlib": "1.3",
-    "zopfli": "0.4.3"
-  },
-  "majority_class_rate": 0.038871,
-  "n_chunks": 2400,
-  "n_chunks_with_rows": 2387,
-  "n_classes": 26,
-  "n_per_family": 300,
-  "n_rows": 61409,
-  "npz": "data/pivot/ext_c4096.npz",
-  "per_family": {
-    "c_src": {
-      "ceiling_distinct_fragments": 0.9751,
-      "ceiling_distinct_streams": 0.9818,
-      "kind": "real",
-      "n_chunks": 300,
-      "n_chunks_with_rows": 300,
-      "n_rows": 7800,
-      "rows_per_chunk_mean": 26.0,
-      "selection_sha256": "2c1a3a1296432a3aa22330062afe76b716e7d651655776bf98f5b1c375ed028b"
-    },
-    "hexdump": {
-      "ceiling_distinct_fragments": 0.9987,
-      "ceiling_distinct_streams": 1.0,
-      "kind": "synthetic",
-      "n_chunks": 300,
-      "n_chunks_with_rows": 300,
-      "n_rows": 7800,
-      "rows_per_chunk_mean": 26.0,
-      "selection_sha256": null
-    },
-    "pe_bin": {
-      "ceiling_distinct_fragments": 0.8949,
-      "ceiling_distinct_streams": 0.9499,
-      "kind": "real",
-      "n_chunks": 300,
-      "n_chunks_with_rows": 288,
-      "n_rows": 7407,
-      "rows_per_chunk_mean": 24.69,
-      "selection_sha256": "e639be9693ad0761b2f6f42810deaf43828e6b36d5520cfc4cd2f3136d7ee7e0"
-    },
-    "py_src": {
-      "ceiling_distinct_fragments": 0.9828,
-      "ceiling_distinct_streams": 0.9959,
-      "kind": "real",
-      "n_chunks": 300,
-      "n_chunks_with_rows": 300,
-      "n_rows": 7709,
-      "rows_per_chunk_mean": 25.6967,
-      "selection_sha256": "5bdcad7483f47098d6a9a01e8e7ec21c8934ca96f5de0d1c26b6168f7a954859"
-    },
-    "rfc_txt": {
-      "ceiling_distinct_fragments": 0.9768,
-      "ceiling_distinct_streams": 0.9856,
-      "kind": "real",
-      "n_chunks": 300,
-      "n_chunks_with_rows": 300,
-      "n_rows": 7761,
-      "rows_per_chunk_mean": 25.87,
-      "selection_sha256": "9c2ff6b6f4f6478e7f899b86587d4dbb30ef351d7889689f914ea057efba931d"
-    },
-    "rst_doc": {
-      "ceiling_distinct_fragments": 0.9538,
-      "ceiling_distinct_streams": 0.966,
-      "kind": "real",
-      "n_chunks": 300,
-      "n_chunks_with_rows": 300,
-      "n_rows": 7775,
-      "rows_per_chunk_mean": 25.9167,
-      "selection_sha256": "c92db7c37cc8c66afcfbd05450166070acacd1e85045c37384505f624c5a0316"
-    },
-    "sql": {
-      "ceiling_distinct_fragments": 0.8987,
-      "ceiling_distinct_streams": 0.9533,
-      "kind": "synthetic",
-      "n_chunks": 300,
-      "n_chunks_with_rows": 299,
-      "n_rows": 7357,
-      "rows_per_chunk_mean": 24.5233,
-      "selection_sha256": null
-    },
-    "xml": {
-      "ceiling_distinct_fragments": 0.9512,
-      "ceiling_distinct_streams": 0.9524,
-      "kind": "synthetic",
-      "n_chunks": 300,
-      "n_chunks_with_rows": 300,
-      "n_rows": 7800,
-      "rows_per_chunk_mean": 26.0,
-      "selection_sha256": null
-    }
-  },
-  "real_families": [
-    "c_src",
-    "pe_bin",
-    "py_src",
-    "rfc_txt",
-    "rst_doc"
-  ],
-  "rows_dropped_short_stream": 991,
-  "rows_per_chunk": [
+   ],
+   "rows_per_chunk": [
     26,
     26,
     26,
@@ -5008,277 +5149,413 @@
     26,
     26,
     26
-  ],
-  "schema": "raise-v1/ext_corpus_manifest/1",
-  "seed": 20260909,
-  "source_pins": {
-    "Python-3.11.9.tgz": {
-      "families": [
-        "py_src",
-        "rst_doc"
-      ],
-      "licence": "PSF-2.0 (LICENSE inside the archive)",
-      "sha256": "e7de3240a8bc2b1e1ba5c81bf943f06861ff494b69fda990ce2722a504c6153d",
-      "url": "https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz"
-    },
-    "python-3.11.9-embed-amd64.zip": {
-      "families": [
-        "pe_bin"
-      ],
-      "licence": "PSF-2.0 (LICENSE.txt inside the archive); bundled OpenSSL 3 (Apache-2.0) and SQLite (public domain) DLLs",
-      "sha256": "009d6bf7e3b2ddca3d784fa09f90fe54336d5b60f0e0f305c37f400bf83cfd3b",
-      "url": "https://www.python.org/ftp/python/3.11.9/python-3.11.9-embed-amd64.zip"
-    },
-    "rfc/rfc1034.txt": {
-      "sha256": "d6b10a71441df879cc2817d23f2dad120c8a5f87e74eba1e4ed4b743a76a891a"
-    },
-    "rfc/rfc1035.txt": {
-      "sha256": "d14ae809fc9b41bbcae26bb38c937c9515808b944f3252b00de9fe0e95f4fdfb"
-    },
-    "rfc/rfc1950.txt": {
-      "sha256": "8f0475a5c984657bf26277f73df9456c9b97f175084f0c1748f1eb1f0b9b10b9"
-    },
-    "rfc/rfc1951.txt": {
-      "sha256": "5ebf4b5b7fe1c3a0c0ab9aa3ac8c0f3853a7dc484905e76e03b0b0f301350009"
-    },
-    "rfc/rfc1952.txt": {
-      "sha256": "164ef0897b4cbec63abf1b57f069f3599bd0fb7c72c2a4dee21bd7e03ec9af67"
-    },
-    "rfc/rfc2119.txt": {
-      "sha256": "3c2ceb7bfc84cd34720f4a5271338ab9d8280d34bdd1eb250c64306202f2ed8b"
-    },
-    "rfc/rfc2328.txt": {
-      "sha256": "981690e297fbba9e8ef655802552b5529cb17f1ffe790ad2d55706cc522ff50c"
-    },
-    "rfc/rfc2460.txt": {
-      "sha256": "e48b421dc2635deef363c91af689576c707abd4ffb1be20ff26c00f785f909f2"
-    },
-    "rfc/rfc2616.txt": {
-      "sha256": "10211d2885196b97b1c78e1672f3f68ae97c294596ef2b7fd890cbd30a3427bf"
-    },
-    "rfc/rfc3261.txt": {
-      "sha256": "d513777f77fea01a4de9c0a2d9d6713cb53b8231f1b7a2ab56705f8d51b066dc"
-    },
-    "rfc/rfc3339.txt": {
-      "sha256": "9ab2b8864a85dca73a88f49b0927bc7bc85f596926e4fd1890905777924e700a"
-    },
-    "rfc/rfc3501.txt": {
-      "sha256": "4437974dde85859f2391f32215295e7b20ce157c3bd2adbe7e5b443e990f15cf"
-    },
-    "rfc/rfc3550.txt": {
-      "sha256": "4c210e9434b5b4c029e8536ad8991f3709bc3cbfa0999e951bcb4c2143c539e8"
-    },
-    "rfc/rfc3986.txt": {
-      "sha256": "3102dae4b68cebe40337730312fcb612297b8928547267e8b3d1ee6002b2d683"
-    },
-    "rfc/rfc4180.txt": {
-      "sha256": "5d9ec035aa40c0108362cb767c9e2d08c30f7225cb2a4715f484cb13c29b5f21"
-    },
-    "rfc/rfc4251.txt": {
-      "sha256": "23a5052796d29edc2f0ff4f5be557df244544d129cfc26ed51971a6485eff4ef"
-    },
-    "rfc/rfc4252.txt": {
-      "sha256": "a36b882cf77b107335d49921b5e955b4ba78e253205dfbce5096ebc0e78bdf14"
-    },
-    "rfc/rfc4253.txt": {
-      "sha256": "b471173305154f6c66facffcf7a4a25fc5c32765cb30542120be6c20a88f1ed3"
-    },
-    "rfc/rfc4254.txt": {
-      "sha256": "bfc727e9350067eaa49edeecc3d32f1e3518dd57cf3c36ceed02177156c5703f"
-    },
-    "rfc/rfc4271.txt": {
-      "sha256": "98b851146abcd56ecbb398dd1a818bcde2dcac6fde3d901c423d988f86eaab76"
-    },
-    "rfc/rfc4301.txt": {
-      "sha256": "a2411e90515f59665e1059b1bb66d8123bd9e384ccfc8b7ccca65db85d5d7736"
-    },
-    "rfc/rfc4303.txt": {
-      "sha256": "d22f9d4120e5645525b63ac7bbf8ef78c334fe003a2c48bf1e25ac25f6e7dc58"
-    },
-    "rfc/rfc4443.txt": {
-      "sha256": "f20d1de8878e1142000bfeaa3ad1b0540fab7653a395cf7b07e81d2da2f650bf"
-    },
-    "rfc/rfc4566.txt": {
-      "sha256": "3934e9a7476f37489285947e475ef472959391efab7fa4247dcb3233899c1c29"
-    },
-    "rfc/rfc4648.txt": {
-      "sha256": "84e14418f795d503be5f34bf23ce4ebaa119e9ec7c9f667d8caeb111385b178f"
-    },
-    "rfc/rfc5234.txt": {
-      "sha256": "fc871020f53baa6b60fc6835c557b433f38d53c5cc41ab56d03622b084f53a12"
-    },
-    "rfc/rfc5246.txt": {
-      "sha256": "2ebe1b8e651696aeacc8ab3848bedb465505737901ea3b691acf40c392958feb"
-    },
-    "rfc/rfc5280.txt": {
-      "sha256": "a2f2628c0a83b873fc4786abd921f9b2c02395954b655d190bf16b831633345d"
-    },
-    "rfc/rfc5321.txt": {
-      "sha256": "7d560eddff1b213c17d4e1e5f95005728b2f05bc2b3947f0fcc91717c6707634"
-    },
-    "rfc/rfc5322.txt": {
-      "sha256": "cb459acca15a2aa895863eaeff6f1d5b9c4ca15578ae3e3706f757787a385969"
-    },
-    "rfc/rfc5340.txt": {
-      "sha256": "ebd26855ec97df248b124eb87308ce9a737cc02767b18c8e8c883b3b1f15251c"
-    },
-    "rfc/rfc5424.txt": {
-      "sha256": "24d91f90a05d2536730ada929c296f45ae9cd72226e22b6775ad8c04cae37a53"
-    },
-    "rfc/rfc5905.txt": {
-      "sha256": "8b7abd903c60202e2953ee012fefa6916666c3b0c71825c748cdd262024fb268"
-    },
-    "rfc/rfc6120.txt": {
-      "sha256": "a64e922cba1b4b69bfc96192e59692efdb296c828800870ffb35c1fb7aad2ee8"
-    },
-    "rfc/rfc6347.txt": {
-      "sha256": "16c851f2ee94586e653566cc3276c6c58256f0b54f3331a68784a6d55357104b"
-    },
-    "rfc/rfc6455.txt": {
-      "sha256": "765775326aee0ecca9b04bde3fd1f52932d498e33e34e428bd61b8a24da0fa3b"
-    },
-    "rfc/rfc6749.txt": {
-      "sha256": "f204fc8661d6c92d2ec6e0b54808f961a9ad26e792f57f312d9528335519bd71"
-    },
-    "rfc/rfc6762.txt": {
-      "sha256": "ede39b2b619d188d0920ebb18bfcb20f4301b05923a1435e9f8408f47da74196"
-    },
-    "rfc/rfc6763.txt": {
-      "sha256": "624208b2b36b91809475c0612a9bd168b34a4e2d4fdca8302ba99ffb43de98e7"
-    },
-    "rfc/rfc7011.txt": {
-      "sha256": "59b7ddb1c0350ae711ba41d771d93f4d440ee04755403446f580bb777b928f73"
-    },
-    "rfc/rfc7230.txt": {
-      "sha256": "c7fdc8bebdf1f8195f731592c47f5ea822b489436fd905b01b55ef531fca4120"
-    },
-    "rfc/rfc7231.txt": {
-      "sha256": "a83d026937f6f7929a0e53f8a9bfec4104285f0f89d6dbabd3927c4208a715b2"
-    },
-    "rfc/rfc7232.txt": {
-      "sha256": "3788e183becfbdaf93121082cd90ac7c1324e871fe425438805942a10207b1b4"
-    },
-    "rfc/rfc7233.txt": {
-      "sha256": "da3d69c64efad7c05bed9b92a7ccd3444d2d47702e7415af56b0beedd6883592"
-    },
-    "rfc/rfc7234.txt": {
-      "sha256": "1d084238ae6692d1e3322fa0850dbb9596812332d92b76d9a815c5ed9b600dea"
-    },
-    "rfc/rfc7235.txt": {
-      "sha256": "abfb45a43fdebffc640b51fae46f480e65fc01238f244f94b1bcf2c20da0b862"
-    },
-    "rfc/rfc7252.txt": {
-      "sha256": "abfe8cce3370b5b32487421b35725eb6eaf962ea454cad008b5a5cd052e27c5f"
-    },
-    "rfc/rfc7515.txt": {
-      "sha256": "ecbf84674118e62526511c1237e1deaa86aada86d25b247623a2a7e04ae62e40"
-    },
-    "rfc/rfc7516.txt": {
-      "sha256": "722cfcddc15f58e746891ba4b846853d3711153a774e4dd55ad6db100474a21f"
-    },
-    "rfc/rfc7517.txt": {
-      "sha256": "681c19b92a85068716b7e89c5815aa821bd3f11c755ff1c641b40ae9851bb33c"
-    },
-    "rfc/rfc7518.txt": {
-      "sha256": "9a9ae524b09ea700ad3f189bac115df95ba69af84b26ffdbe3cdfb8d2152b1fc"
-    },
-    "rfc/rfc7519.txt": {
-      "sha256": "fecd930e9ccf2276b95c0017c6c4ff5d09352e4bc3c7629946447894e0f97248"
-    },
-    "rfc/rfc7540.txt": {
-      "sha256": "6a67e8d7fdfa7b5272fc55f8fba62b266f932031c7f39e29c52f83e129bc2967"
-    },
-    "rfc/rfc7541.txt": {
-      "sha256": "2239d7f8fb839b69ae2e928e685559b11376888269f131512197a0e3bacf7f7a"
-    },
-    "rfc/rfc7858.txt": {
-      "sha256": "872e634c8d5ca4219a90147d356570e7d10046ad12d560e7d8b24f3aa340fdf0"
-    },
-    "rfc/rfc791.txt": {
-      "sha256": "6cfb387fcecfc1b72f2f69343c5b6951b5d263d708162e2b5c66ab8f394f6265"
-    },
-    "rfc/rfc793.txt": {
-      "sha256": "e55b1faa35edbeecceb2400233a16ae81897bdf9c31d5b3031e91139e5ea8142"
-    },
-    "rfc/rfc7950.txt": {
-      "sha256": "b71ae68e7aaff84a3321e1538a0cd788f549e4889ac375bf891f67cd8876908d"
-    },
-    "rfc/rfc8017.txt": {
-      "sha256": "1e72dc473d18df3fc5598cdc12795a9f18f36f1aef15abc23a55eb0d58151d11"
-    },
-    "rfc/rfc8040.txt": {
-      "sha256": "ab4b8cf15065cf34a6dd982dbaaf8db794fca90cdba795de452d8384a4b7e15c"
-    },
-    "rfc/rfc8174.txt": {
-      "sha256": "5ca0e2f90be0bc5928ee465f76518fee316dfa775aed885658a29a419cc293b7"
-    },
-    "rfc/rfc8200.txt": {
-      "sha256": "371ae3f133d562db5d6385e6def4ca9914c4f831be228ea7779fd28799c2f490"
-    },
-    "rfc/rfc8259.txt": {
-      "sha256": "61a5378f4255c720beb2a4b4a63b29540147c140f36988bf086291989b4cd2d7"
-    },
-    "rfc/rfc8323.txt": {
-      "sha256": "8580e89363131387f9fc5ba7ffe664cfb7f66c6232be9cffa3900c7e17f21ed7"
-    },
-    "rfc/rfc8446.txt": {
-      "sha256": "47871bc8820a2c3b6ea89f061055577058862cf543686b82d10131239702b3bd"
-    },
-    "rfc/rfc8484.txt": {
-      "sha256": "c2cb41fb72bf45935ba7372fef9d83478ed2ecc7f3749ea9a16b52b06ef0f343"
-    },
-    "rfc/rfc8555.txt": {
-      "sha256": "a40983bbf91f2bd3a976d1c16520aa4418c02ba6d6f1ddcaf772881f823b2497"
-    },
-    "rfc/rfc8949.txt": {
-      "sha256": "f1164a5b31a39350ad46abe29b83575eb933ca6c45366989c118b6b1058a214a"
-    },
-    "rfc/rfc8996.txt": {
-      "sha256": "a8250792df7fc533328f2021dbdcce847bbdfbc703de89a93e18ce165d4b8d14"
-    },
-    "rfc/rfc9000.txt": {
-      "sha256": "f88aae47f8b18e102024916e975e919201d8dde689cba79b01079eaedd402e22"
-    },
-    "rfc/rfc9001.txt": {
-      "sha256": "3bbaecdf5afd278052a2c48348ce118c4ff8d0cf6b9915549858171b3f98a591"
-    },
-    "rfc/rfc9002.txt": {
-      "sha256": "3a8a54eea1ad5d1c134a548bf15edfa0e21bfb4106dbd7db3c09cace842099af"
-    },
-    "rfc/rfc9051.txt": {
-      "sha256": "acf52a50eb748ea21b5ffdcb31c761d3fbba6242d53d4f53c2555de039c5c3cf"
-    },
-    "rfc/rfc9110.txt": {
-      "sha256": "21c1cdce6ab0e5509b04d84a28000836c7a087cf786efe6f04877ebfff47232a"
-    },
-    "rfc/rfc9111.txt": {
-      "sha256": "aeb52adb3279d5f23dae34f68af11bd5cef0a0aff7ffcd014c9ca93c5302cf3e"
-    },
-    "rfc/rfc9112.txt": {
-      "sha256": "e4f426bac6206b67fdf9e0da826154f70588db2133a0a86b15cde4ff725d8937"
-    },
-    "rfc/rfc9113.txt": {
-      "sha256": "a00ef91b64e111a282e77ec66980f5242e77c0bb5e33e0927e3b6757080506de"
-    },
-    "rfc/rfc9114.txt": {
-      "sha256": "6b84555c88eeebcf5d2b2e1d9d7b58630abc97ab877b2cf62dee4cd635db34e4"
-    },
-    "rfc/rfc9293.txt": {
-      "sha256": "6d9ac8be4b0286f8c3d337addf442b2eb6a9b14e1366594ea7fbc273f93dc2d9"
-    },
-    "sqlite-amalgamation-3450300.zip": {
-      "families": [
-        "c_src"
-      ],
-      "licence": "public domain (blessing in the source header)",
-      "sha256": "ea170e73e447703e8359308ca2e4366a3ae0c4304a8665896f068c736781c651",
-      "url": "https://sqlite.org/2024/sqlite-amalgamation-3450300.zip"
-    }
+   ],
+   "n_chunks_with_rows": 2387,
+   "sum_rows": 61409
+  }
+ },
+ "bar": {
+  "scope_parameters_sealed": {
+   "direction": "equality",
+   "threshold": 0,
+   "passes_if": "preregistration == '0018-oob-4096'; smoke is False; stage == 'run'; the corpus block equals the sealed constants; the banked protocol equals the sealed PROTOCOL key by key and hashes to PROTOCOL_SHA256; the banked recipes equal the sealed three and hash to RECIPES_SHA256; the banked reference_top1 equals the sealed references."
   },
-  "synthetic_families": [
+  "extension_corpus_sealed": {
+   "direction": "equality",
+   "threshold": 0,
+   "passes_if": "The banked ext_corpus block equals the sealed one: array sha256/shape/dtype for X, y, g and fam, row and chunk counts overall and per family, the family order, real and synthetic family lists, and chunk ids disjoint from the builder's; the scores file's ext_fam bytes hash to the sealed fam array and its ext_chunk_ids (int32 little-endian) hash to the sealed g array, every chunk id lies in the sealed id range and maps to its row's family by the sealed base and stride, and the distinct chunk ids per family equal the sealed counts."
+  },
+  "sealed_sets": {
+   "direction": "equality",
+   "threshold": 0,
+   "passes_if": "The banked partition equals 0003's sealed constants field by field (eval, pool, null); every pool fit's fit_rows_sha256 and fit_rows_sorted_sha256 are the sealed pool hashes and the null fit's sorted hash is the sealed null hash; the runner's measured overlap counts pool_chunks_shared_with_ext, eval_chunks_shared_with_ext, pool_rows_identical_to_an_ext_row and eval_rows_identical_to_an_ext_row are all 0; the null block's labels were a permutation of the sealed labels (null_labels_permuted true, null_labels_same_multiset true)."
+  },
+  "complete_one_scoring_per_fit": {
+   "direction": "equality",
+   "threshold": 0,
+   "passes_if": "complete is True with run_finished_utc set; the three role records and the null record have status 'fit', the sealed recipe (id, family, params, params hash, scaled, val), the sealed seed and rows, an integer iteration count, a fingerprint that the reader recomputes from the sealed literals, exactly one 'completed' ledger event carrying that fingerprint preceded by a 'started' event with it, completions in the sealed order, and a per-example vector of n_eval + n_ext entries in {0, 1} whose sha256 the record carries; each record's top1, top1_non_gutenberg and per_family equal the reader's recomputation from the vector."
+  },
+  "reproduces_in_distribution": {
+   "direction": "lower_is_better",
+   "threshold": 0.005,
+   "passes_if": "For each role, the reproduction accuracy recomputed from the first 260000 entries of its vector (rounded to 4 decimals) lies within 0.005 of the sealed reference (0.2395, 0.2317, 0.2884), compared as round(abs(a - b), 6) <= 0.005, and equals the banked reproduction_top1."
+  },
+  "null_control": {
+   "direction": "lower_is_better",
+   "threshold": 0.01,
+   "passes_if": "The null control (M4 fitted on the sealed 20000-row null block with shuffled labels) reads <= chance + 0.01 on the extension rows and <= chance + 0.01 on the sealed evaluation rows; it runs first, and the runner files NOT RUN if it fails, so a leaking scoring path costs minutes, not hours."
+  },
+  "environment": {
+   "direction": "equality",
+   "threshold": 0,
+   "passes_if": "The top-level environment, every record's environment and launch_environment.env carry threads 3, nice 10, sklearn 1.9.0, numpy 2.4.6 and python 3.11.15; launch_environment.ok is true with no problems."
+  },
+  "readings_arithmetic": {
+   "direction": "equality",
+   "threshold": 0,
+   "passes_if": "The reader recomputes every banked reading from the per-example vectors and the extension family indices: ext_correct, ext_top1, real-family and synthetic-family counts, per-family readings, the subset readings and the exact margins; each must equal the banked value."
+  },
+  "transfer": {
+   "direction": "higher_is_better",
+   "threshold": 0.05,
+   "passes_if": "M4's count of correct rows over the 38452 real-family extension rows, recomputed by the reader, is at least 3402 (chance 1/26 + 0.05 over the real rows). OOB_TRANSFERS if so, OOB_TRANSFER_FAILS otherwise; VOID on any clause above. The eight-family mixture against 5433 of 61409 is a flag."
+  }
+ },
+ "readings": [
+  {
+   "name": "verdict",
+   "unit": "enum{OOB_TRANSFERS,OOB_TRANSFER_FAILS,VOID}",
+   "source_artifact": "artifacts/pivot/oob_4096_verdict.json",
+   "json_path": "$.verdict"
+  },
+  {
+   "name": "ext_real_top1_model",
+   "unit": "accuracy over the real-family extension rows, 4 decimals",
+   "source_artifact": "artifacts/pivot/oob_4096_verdict.json",
+   "json_path": "$.ext_real_top1_model"
+  },
+  {
+   "name": "ext_real_correct_model",
+   "unit": "count of correct real-family extension rows",
+   "source_artifact": "artifacts/pivot/oob_4096_verdict.json",
+   "json_path": "$.ext_real_correct_model"
+  },
+  {
+   "name": "ext_top1_model",
+   "unit": "accuracy over all extension rows, 4 decimals (flag)",
+   "source_artifact": "artifacts/pivot/oob_4096_verdict.json",
+   "json_path": "$.ext_top1_model"
+  },
+  {
+   "name": "ext_top1 by role",
+   "unit": "accuracy, 4 decimals",
+   "source_artifact": "artifacts/pivot/oob_4096_verdict.json",
+   "json_path": "$.ext_top1"
+  },
+  {
+   "name": "ext_real_top1 by role",
+   "unit": "accuracy, 4 decimals",
+   "source_artifact": "artifacts/pivot/oob_4096_verdict.json",
+   "json_path": "$.ext_real_top1"
+  },
+  {
+   "name": "ext_per_family by role",
+   "unit": "accuracy, 4 decimals",
+   "source_artifact": "artifacts/pivot/oob_4096_verdict.json",
+   "json_path": "$.ext_per_family"
+  },
+  {
+   "name": "ext_subsets by role",
+   "unit": "accuracy, 4 decimals",
+   "source_artifact": "artifacts/pivot/oob_4096_verdict.json",
+   "json_path": "$.ext_subsets"
+  },
+  {
+   "name": "flags",
+   "unit": "booleans and exact row leads",
+   "source_artifact": "artifacts/pivot/oob_4096_verdict.json",
+   "json_path": "$.bar_applied.flags"
+  },
+  {
+   "name": "reproduction_top1 by role",
+   "unit": "accuracy on the sealed evaluation set, 4 decimals",
+   "source_artifact": "artifacts/pivot/oob_4096_verdict.json",
+   "json_path": "$.reproduction_top1"
+  },
+  {
+   "name": "shuffled_label_accuracy_ext",
+   "unit": "accuracy",
+   "source_artifact": "artifacts/pivot/oob_4096_verdict.json",
+   "json_path": "$.shuffled_label_accuracy_ext"
+  },
+  {
+   "name": "ext_margin_model_over_logistic_l3_exact",
+   "unit": "(correct counts difference) / n_ext, 6 decimals",
+   "source_artifact": "artifacts/pivot/oob_4096.json",
+   "json_path": "$.ext_margin_model_over_logistic_l3_exact"
+  },
+  {
+   "name": "ext_margin_model_over_incumbent_exact",
+   "unit": "(correct counts difference) / n_ext, 6 decimals",
+   "source_artifact": "artifacts/pivot/oob_4096.json",
+   "json_path": "$.ext_margin_model_over_incumbent_exact"
+  },
+  {
+   "name": "banked_fit_seconds_total",
+   "unit": "seconds",
+   "source_artifact": "artifacts/pivot/oob_4096.json",
+   "json_path": "$.cost.banked_fit_seconds_total"
+  }
+ ],
+ "arms": [
+  "NULL: M4 on 0003's pool's first 20000 rows with shuffled labels, scored once on the sealed set and the extension rows; both readings must be <= chance + 0.01; the runner files NOT RUN otherwise.",
+  "INCUMBENT: 0003's M1 on the full 800000-row pool; reproduction must give 0.2395 within 0.005 (NOT RUN otherwise); extension readings banked with flags at the bar.",
+  "LOGISTIC_L3: 0014's L3 on the full pool; reproduction 0.2317 within 0.005; extension readings banked with flags at the bar.",
+  "MODEL: 0014's M4 on the full pool; reproduction 0.2884 within 0.005; its real-family count is the clause, its eight-family mixture a flag."
+ ],
+ "stop_rules": [
+  "OOB_TRANSFER_FAILS is published at the same size as OOB_TRANSFERS would have been, as a bound on the headline recipe's reach outside the builder, in VERDICT.md, README.md, the outbound documents, DILIGENCE.md and the evidence page.",
+  "No sealed parameter, recipe, family list, chunk count or bar changes after the freeze; a defect found afterwards is a new preregistration (0013's precedent).",
+  "A validity or control failure is VOID: the clause is named, nothing is counted in either direction; a VOID run may be resumed from its checkpoints under the identical invocation and is never re-parameterised.",
+  "NOT RUN is filed as artifacts/pivot/oob_4096_not_run.json, and the reader prints it and emits no verdict, when: three consecutive launches produce no new checkpoint (reachable only before the first checkpoint); the null control reads above chance + 0.01 on either row set; a pool fit's reproduction drifts more than 0.005 from its reference (known after the incumbent, about 25 minutes in, not after the 4.4 h M4 fit). A refusal exits 3 before any checkpoint exists, writes nothing, and is filed by the operator in the engineering log; the poll script does not relaunch after a refusal.",
+  "After the first checkpoint, relaunches are unbounded and M4, which has no intra-fit checkpoint, must complete within one container lifetime; every launch and interruption is banked (launches.jsonl, interruptions_by_name). A lost checkpoint directory after the first checkpoint is a published VOID, never a silent restart.",
+  "A container restart is recovered by relaunching the identical command from checkpoints; nothing else CPU-heavy runs on the machine during the run (the runner's other-runner scan sees only tools/pivot runners; the load refusal covers the launch only).",
+  "An incomplete artifact (complete false) is read as VOID; the reader is run once on the completed artifact and its output is banked as the verdict file."
+ ],
+ "thesis": {
+  "what_would_make_it_fail_honestly": "An M4 count of correct real-family rows under 3402: the headline recipe does not identify the encoder on the mixture over five real-file families outside the builder at the bar the record applied inside it. The carve-collision ceilings (0.89 to 1.0 distinct fragments per chunk) sit far above the bar, so a fail is not a ceiling effect; the reproductions say it is not the machinery; the per-family readings say whether it is uniform or carried by one family; the synthetic flag says whether builder-style content still transfers when real content does not.",
+  "what_a_pass_would_mean": "That the headline recipe carries at least chance + 0.05 to the mixture over 38452 rows of five real-file families nobody wrote for this record, at 4096 bytes, not necessarily to every one of them.",
+  "what_neither_outcome_means": "Neither names a buyer, a customer, a user or a partner. Neither revises 0003, 0014, 0015, 0016 or 0017. Neither is a statement about M1 or L3 (their readings are flags), about any single extension family (each rests on 300 chunks and is informational), about the three synthetic families (a flag), about carve sizes other than 4096, about encoders outside the 26 configurations, or about content beyond these eight families as pinned: one CPython release, one SQLite release, 79 RFCs of our choosing, one Windows package and three generators of ours, not 'code', 'documentation' or 'binaries' in general."
+ },
+ "reader": "tools/readers/oob4096_verdict.py",
+ "invocation": "export OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3; nice -n 10 python3 tools/pivot/run_oob.py --stage run --prereg-file prereg/0018-oob-4096.json --cache data/pivot/full_c4096.npz --ext data/pivot/ext_c4096.npz --workdir artifacts/pivot/oob_4096_ckpt --out artifacts/pivot/oob_4096.json --scores-out artifacts/pivot/oob_4096_scores.json",
+ "smoke": {
+  "top_rung": 12000,
+  "fit_rows": 10000,
+  "null_rows": 2000,
+  "launch": {
+   "min_disk_free_gb": 0.0,
+   "min_mem_available_gb": 0.0,
+   "max_load1": 1000.0
+  },
+  "invocation": "The invocation above with --smoke added and --workdir, --out and --scores-out pointed under the session scratchpad, and --ext pointed at a small scratchpad build of the extension corpus (its hashes sealed in smoke.ext_corpus); the runner refuses --smoke with an output under artifacts/, with the sealed extension arrays, with more than 20000 fit rows or with a null block as large as the sealed one, and a real run with any output outside artifacts/. The reader voids a smoke artifact.",
+  "ext_corpus": {
+   "npz": "(scratchpad) smoke_oob/ext_small.npz",
+   "manifest": "(scratchpad) smoke_oob/ext_small_manifest.json",
+   "arrays": {
+    "X": {
+     "dtype": "float32",
+     "sha256": "a1e2d9869a4f2eee1a74a8fc7dbd1805d480ab60fae3bb4c441579a6b93877b3",
+     "shape": [
+      1040,
+      1108
+     ]
+    },
+    "fam": {
+     "dtype": "int8",
+     "sha256": "b5978f6e2d678678b0f6d3e41260fb1dc87872a83544dffdce52caad0772c10a",
+     "shape": [
+      1040
+     ]
+    },
+    "g": {
+     "dtype": "int32",
+     "sha256": "8f842cff919ae2010a32a0008dce00802f3571c5d4435f15570ee9d27ddda41c",
+     "shape": [
+      1040
+     ]
+    },
+    "y": {
+     "dtype": "int16",
+     "sha256": "b91d9ff6929ec91dff30a7bc1760ef5421a1857aef54f7005f50c586a5a3d863",
+     "shape": [
+      1040
+     ]
+    }
+   },
+   "n_rows": 1040,
+   "n_chunks": 40,
+   "n_chunks_built": 40,
+   "chunks_without_rows": [],
+   "families": [
+    "c_src",
+    "hexdump",
+    "pe_bin",
+    "py_src",
+    "rfc_txt",
+    "rst_doc",
+    "sql",
+    "xml"
+   ],
+   "real_families": [
+    "c_src",
+    "pe_bin",
+    "py_src",
+    "rfc_txt",
+    "rst_doc"
+   ],
+   "synthetic_families": [
     "hexdump",
     "sql",
     "xml"
-  ],
-  "why": "content hashes of the extension corpus arrays and per-family ceilings; a rebuilt corpus is proven identical by `python3 tools/pivot/corpus_ext.py --check`, and preregistration 0018 seals these hashes"
+   ],
+   "n_real_rows": 650,
+   "n_synthetic_rows": 390,
+   "rows_per_family": {
+    "c_src": 130,
+    "hexdump": 130,
+    "pe_bin": 130,
+    "py_src": 130,
+    "rfc_txt": 130,
+    "rst_doc": 130,
+    "sql": 130,
+    "xml": 130
+   },
+   "chunks_per_family": {
+    "c_src": 5,
+    "hexdump": 5,
+    "pe_bin": 5,
+    "py_src": 5,
+    "rfc_txt": 5,
+    "rst_doc": 5,
+    "sql": 5,
+    "xml": 5
+   },
+   "chunks_built_per_family": {
+    "c_src": 5,
+    "hexdump": 5,
+    "pe_bin": 5,
+    "py_src": 5,
+    "rfc_txt": 5,
+    "rst_doc": 5,
+    "sql": 5,
+    "xml": 5
+   },
+   "ceiling_distinct_fragments": {
+    "c_src": 0.9615,
+    "hexdump": 1.0,
+    "pe_bin": 0.9769,
+    "py_src": 1.0,
+    "rfc_txt": 0.9615,
+    "rst_doc": 0.9615,
+    "sql": 0.9692,
+    "xml": 0.9538
+   },
+   "ceiling_distinct_streams": {
+    "c_src": 0.9692,
+    "hexdump": 1.0,
+    "pe_bin": 0.9769,
+    "py_src": 1.0,
+    "rfc_txt": 0.9615,
+    "rst_doc": 0.9615,
+    "sql": 0.9692,
+    "xml": 0.9538
+   },
+   "chunk_id_min": 10000000,
+   "chunk_id_max": 10700004,
+   "chunk_id_base": 10000000,
+   "family_stride": 100000,
+   "rows_dropped_short_stream": 0,
+   "seed": 20260909,
+   "n_per_family": 5,
+   "label_histogram": [
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40
+   ],
+   "majority_class_rate": 0.038462,
+   "majority_class_rate_real": 0.038462,
+   "source_pins_sha256_of_file": "2403ba48846503b6f92744558e1d34453124aa3e56d6058614a49da864e5f694"
+  },
+  "ext_chunk_layout": {
+   "chunk_ids_with_rows": [
+    10000000,
+    10000001,
+    10000002,
+    10000003,
+    10000004,
+    10100000,
+    10100001,
+    10100002,
+    10100003,
+    10100004,
+    10200000,
+    10200001,
+    10200002,
+    10200003,
+    10200004,
+    10300000,
+    10300001,
+    10300002,
+    10300003,
+    10300004,
+    10400000,
+    10400001,
+    10400002,
+    10400003,
+    10400004,
+    10500000,
+    10500001,
+    10500002,
+    10500003,
+    10500004,
+    10600000,
+    10600001,
+    10600002,
+    10600003,
+    10600004,
+    10700000,
+    10700001,
+    10700002,
+    10700003,
+    10700004
+   ],
+   "rows_per_chunk": [
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26,
+    26
+   ]
+  }
+ },
+ "frozen": false
 }

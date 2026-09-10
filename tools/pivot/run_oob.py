@@ -9,7 +9,8 @@ standardised logistic L3 and 0014's searched model M4. Each fit is scored once o
 the sealed evaluation set (260000 rows: the reproduction, which must land within 0.005 of the banked
 0.2395 / 0.2317 / 0.2884) and the extension corpus (tools/pivot/corpus_ext.py: eight new families,
 evaluation only, sealed by array hash). The reading is the accuracy on the extension rows; the clause
-is on the headline recipe's count of correct extension rows against chance + 0.05.
+is on the headline recipe's count of correct rows over the five real-file families against chance + 0.05 (the
+eight-family mixture, the three synthetic families, the incumbent and the standardised logistic are flags).
 
 Reuses tools/pivot/run_recipe_search.py's machinery (blocks, fits, checkpoints, heartbeat, memory
 accounting, launch rules) unchanged. Nothing here searches or selects a recipe, and no extension row is
@@ -82,7 +83,7 @@ def main() -> int:
         print("REFUSING: a real run needs a frozen preregistration (the reader's literals are generated from it)", file=sys.stderr)
         return 3
     if not args.smoke:
-        # a real run never shares the machine with another tools/pivot runner (M4 on the pool peaked at 12.19 GB in 0014)
+        # a real run never shares the machine with another tools/pivot runner (M4 on the pool peaked at 10.34 GB anonymous in 0014's confirmatory fit; 12.19 GB was the depth-16 tree)
         others = []
         for pid in os.listdir("/proc"):
             if not pid.isdigit() or int(pid) == os.getpid():
@@ -103,16 +104,21 @@ def main() -> int:
     stamp = f"{prereg['id']}-{prereg['slug']}"
     seed = int(P["seed"]); eval_frac = float(P["eval_frac"]); top_rung = int(P["top_rung"]); caps = P["caps"]
     families = list(P["families"])
-    assert families == FAMILIES, "the sealed builder family order must be the corpus family order"
+    if families != FAMILIES:
+        print("REFUSING: the sealed builder family order is not the corpus family order", file=sys.stderr)
+        return 3
     ext_families = list(P["ext_families"])
-    assert ext_families == EXT_FAMILIES, "the sealed extension family order must be corpus_ext's order"
+    if ext_families != EXT_FAMILIES:
+        print("REFUSING: the sealed extension family order is not corpus_ext's order", file=sys.stderr)
+        return 3
     roles = list(P["roles"])
     if roles != REFERENCE_ROLES or set(recipes) != set(REFERENCE_ROLES):
         print(f"REFUSING: roles must be {REFERENCE_ROLES} with their recipes", file=sys.stderr)
         return 3
     refs = dict(P["reference_top1"])   # banked in-distribution readings the reproductions must reproduce
     env = environment()
-    launch_env = {"env": env, "ok": True, "problems": []}
+    load1, load5, load15 = os.getloadavg()
+    launch_env = {"env": env, "loadavg_1_5_15": [round(load1, 2), round(load5, 2), round(load15, 2)], "problems": []}
     if env["threads"] != P["threads"]:
         launch_env["problems"].append(f"threads {env['threads']} != preregistered {P['threads']}")
     if env["nice"] != P["nice"]:
@@ -124,6 +130,12 @@ def main() -> int:
         launch_env["problems"].append(f"disk free {env['disk_free_gb']} GB < {P['launch']['min_disk_free_gb']}")
     if (env["mem_available_gb"] or 0) < P["launch"]["min_mem_available_gb"]:
         launch_env["problems"].append(f"MemAvailable {env['mem_available_gb']} GB < {P['launch']['min_mem_available_gb']}")
+    max_load = float(P["launch"].get("max_load1", 2.0))
+    if not args.smoke and load1 > max_load:
+        # the other-runner scan sees only tools/pivot runners; any other job on the box slows the fits (the smoke's null fit
+        # ran 5x slow beside two runaway processes), so a loaded machine is a refusal, not a slower run
+        launch_env["problems"].append(f"1-minute load {load1:.2f} > {max_load}: the machine is not idle")
+    launch_env["ok"] = not launch_env["problems"]
     if launch_env["problems"]:
         print("REFUSING TO LAUNCH: " + "; ".join(launch_env["problems"]), file=sys.stderr)
         return 3
@@ -172,6 +184,19 @@ def main() -> int:
         print(f"REFUSING: extension corpus arrays {mism} do not hash to the preregistration's sealed ext_corpus.arrays",
               file=sys.stderr)
         return 3
+    if args.smoke:
+        # a smoke is a tiny rehearsal, never a measurement on the sealed corpus (0018 review): it may not score the sealed
+        # extension arrays, fit more than 20000 rows, or use a null block as large as the sealed one
+        sealed_x = (((prereg["scope"]["protocol"].get("ext_corpus") or {}).get("arrays") or {}).get("X") or {}).get("sha256")
+        if ext_hashes["X"]["sha256"] == sealed_x:
+            print("REFUSING: a smoke must never score the sealed extension corpus", file=sys.stderr)
+            return 3
+        if P["fit_rows"] == "all" or int(P["fit_rows"]) > 20000:
+            print("REFUSING: a smoke fits at most 20000 rows", file=sys.stderr)
+            return 3
+        if int(P["null_rows"]) >= int(prereg["scope"]["protocol"]["null_rows"]):
+            print("REFUSING: a smoke's null block must be smaller than the sealed one", file=sys.stderr)
+            return 3
     Xx = np.load(_io.BytesIO(_zf.ZipFile(args.ext).read("X.npy"))).astype(np.float32, copy=False)
     with _zf.ZipFile(args.ext) as zf:
         yx = np.load(_io.BytesIO(zf.read("y.npy"))); gx = np.load(_io.BytesIO(zf.read("g.npy")))
@@ -205,7 +230,29 @@ def main() -> int:
                  "pool_idx_sha256": _sha(tr), "pool_y_sha256": _sha(np.asarray(y[tr])),
                  "pool_sorted_sha256": _sha(np.sort(tr).astype(np.int64)),
                  "fit_rows": P["fit_rows"], "families": families,
-                 "pool_rows_in_ext": 0, "eval_rows_in_ext": 0}
+                 "pool_chunks_shared_with_ext": int(np.intersect1d(np.unique(g[tr]), np.unique(gx)).size),
+                 "eval_chunks_shared_with_ext": int(np.intersect1d(ev_chunks, np.unique(gx)).size)}
+    # Row identity, measured rather than assumed (0018 review): every extension feature row is digested and the builder
+    # cache is streamed once over the pool rows and the evaluation rows; a fit block could contain an extension row only
+    # if a builder row were byte-identical to one, and that count is banked and must be 0.
+    t_id = time.perf_counter()
+    ext_digests = {hashlib.blake2b(np.ascontiguousarray(Xx[i], dtype=np.float32).tobytes(), digest_size=16).digest()
+                   for i in range(len(Xx))}
+
+    def _identical(rows):
+        n_same = 0; order = np.sort(np.asarray(rows))
+        for i in range(0, len(order), 20000):
+            blk = np.ascontiguousarray(X[order[i:i + 20000], :ncols], dtype=np.float32)
+            for j in range(len(blk)):
+                if hashlib.blake2b(blk[j].tobytes(), digest_size=16).digest() in ext_digests:
+                    n_same += 1
+        return int(n_same)
+    partition["pool_rows_identical_to_an_ext_row"] = _identical(tr)
+    partition["eval_rows_identical_to_an_ext_row"] = _identical(ev)
+    partition["row_identity_digest"] = "blake2b-128 of the contiguous float32 feature row"
+    print(f"[2] row identity scan: {partition['pool_rows_identical_to_an_ext_row']} pool rows and "
+          f"{partition['eval_rows_identical_to_an_ext_row']} evaluation rows are byte-identical to an extension row "
+          f"({time.perf_counter() - t_id:.0f}s)", flush=True)
     if not args.smoke and partition["pool_idx_sha256"] != P["pool_idx_sha256"]:
         print(f"REFUSING: the fit pool hashes to {partition['pool_idx_sha256'][:12]}..., not the sealed "
               f"{P['pool_idx_sha256'][:12]}... (0014's pool)", file=sys.stderr)
@@ -243,6 +290,9 @@ def main() -> int:
                "ext_structured_text_top1": r4(ex[np.isin(fam_x, STRUCTURED_TEXT)].mean()),
                "ext_high_entropy_top1": r4(ex[np.isin(fam_x, HIGH_ENTROPY)].mean()),
                "ext_real_top1": r4(ex[np.isin(fam_x, REAL_FAMILIES)].mean()),
+               "ext_real_correct": int(ex[np.isin(fam_x, REAL_FAMILIES)].sum()),
+               "n_ext_real_rows": int(np.isin(fam_x, REAL_FAMILIES).sum()),
+               "ext_synthetic_correct": int(ex[np.isin(fam_x, SYNTH_FAMILIES)].sum()),
                "ext_synthetic_top1": r4(ex[np.isin(fam_x, SYNTH_FAMILIES)].mean()),
                "reproduction_per_family": {f: r4(rep[fam_e == f].mean()) for f in families}}
         return out
@@ -252,12 +302,21 @@ def main() -> int:
         r6 = lambda a, b: round(a - b, 6) if a is not None and b is not None else None  # noqa: E731
         mc = (reads.get("model") or {}).get("ext_correct"); lc = (reads.get("logistic_l3") or {}).get("ext_correct")
         ic = (reads.get("incumbent") or {}).get("ext_correct")
+        n_real = int(np.isin(fam_x, REAL_FAMILIES).sum())
+        first_launch = None
+        try:
+            with open(os.path.join(args.workdir, "launches.jsonl")) as fh:
+                first_launch = json.loads(fh.readline()).get("utc")
+        except Exception:  # noqa: BLE001
+            pass
         doc = dict(common,
                    environment=env, launch_environment=launch_env, launch_number=launch_no,
                    complete=complete, missing_roles=[n for n in names_expected if n not in records],
                    fits={n: records.get(n) for n in names_expected},
-                   fit_record_top1_is="accuracy over the CONCATENATED scoring set (sealed evaluation rows then extension rows); "
-                                      "informational only - the reproduction and the extension readings are in `readings`",
+                   fit_record_top1_is="in each fit record: top1 is over the CONCATENATED scoring set (sealed evaluation rows then "
+                                      "extension rows); top1_non_gutenberg is over the sealed non-gutenberg rows plus every extension "
+                                      "row; per_family covers the sealed evaluation rows only. All three are informational; the "
+                                      "reproduction and the extension readings are in `readings`, recomputed by the reader",
                    readings=reads,
                    reproduction_top1={r: (reads.get(r) or {}).get("reproduction_top1") for r in roles},
                    reproduction_drift={r: r6((reads.get(r) or {}).get("reproduction_top1"), refs.get(r)) for r in roles},
@@ -266,6 +325,12 @@ def main() -> int:
                    ext_correct={r: (reads.get(r) or {}).get("ext_correct") for r in roles},
                    ext_top1_model=(reads.get("model") or {}).get("ext_top1"),
                    ext_correct_model=mc,
+                   ext_real_top1={r: (reads.get(r) or {}).get("ext_real_top1") for r in roles},
+                   ext_real_correct={r: (reads.get(r) or {}).get("ext_real_correct") for r in roles},
+                   ext_real_correct_model=(reads.get("model") or {}).get("ext_real_correct"),
+                   n_ext_real_rows=n_real, ext_real_families=list(REAL_FAMILIES), ext_synthetic_families=list(SYNTH_FAMILIES),
+                   ext_label_histogram=np.bincount(np.asarray(yx), minlength=N_CONFIGS).tolist(),
+                   ext_majority_class_rate=round(float(np.bincount(np.asarray(yx)).max() / n_ext), 6),
                    ext_margin_model_over_logistic_l3_exact=(round((mc - lc) / n_ext, 6) if mc is not None and lc is not None else None),
                    ext_margin_model_over_incumbent_exact=(round((mc - ic) / n_ext, 6) if mc is not None and ic is not None else None),
                    ext_per_family={r: (reads.get(r) or {}).get("ext_per_family") for r in roles},
@@ -284,7 +349,7 @@ def main() -> int:
                          "interruptions_by_name": {k: v.get("interruptions_before_this_fit") for k, v in records.items()},
                          "banked_fit_seconds_total": round(sum((v.get("seconds") or 0) for v in records.values()), 1),
                          "checkpoints": os.path.relpath(args.workdir, REPO)},
-                   run_started_utc=started, run_finished_utc=_utc() if complete else None)
+                   run_started_utc=started, first_launch_utc=first_launch, run_finished_utc=_utc() if complete else None)
         os.makedirs(os.path.dirname(args.out), exist_ok=True)
         with open(args.out + ".tmp", "w") as fh:
             json.dump(doc, fh, indent=2, sort_keys=True); fh.write("\n")
@@ -316,14 +381,30 @@ def main() -> int:
             r, pe = run_fit(store, name, fp, role, cand, seed, block, y_all if y_all is not None else y, g,
                             Xs, ys, fam_s, stage, caps, keep_per_example=True, confirmatory=True)
             del block
-            records[name] = r
+            records[name] = dict(r, fingerprint=fp,
+                                 per_example_sha256=(hashlib.sha256(np.asarray(pe, np.int8).tobytes()).hexdigest()
+                                                     if pe is not None else None))
             if pe is not None:
                 per_ex[name] = pe
             rd = readings(name)
             if rd:
-                print(f"      {name:<12} reproduction {rd['reproduction_top1']} | extension {rd['ext_top1']} "
-                      f"({rd['ext_correct']}/{n_ext}) {rd['ext_per_family']}", flush=True)
+                print(f"      {name:<12} (the fit line above is over the concatenated scoring set) REPRODUCTION "
+                      f"{rd['reproduction_top1']} | EXTENSION {rd['ext_top1']} ({rd['ext_correct']}/{n_ext}; real families "
+                      f"{rd['ext_real_correct']}/{rd['n_ext_real_rows']}) {rd['ext_per_family']}", flush=True)
             assemble(False, launch_no)
+            if rd and not args.smoke:
+                # a run the reader will VOID is filed NOT RUN as soon as that is known, not after the 4.4 h M4 fit (0018 review)
+                chance = 1.0 / N_CONFIGS
+                if name == "null":
+                    tol = float(P["null_tolerance"])
+                    if rd["ext_top1"] > chance + tol or rd["reproduction_top1"] > chance + tol:
+                        raise NotRun(f"null control read {rd['ext_top1']} on the extension rows and {rd['reproduction_top1']} "
+                                     f"on the sealed rows against chance {chance:.6f} + {tol}: the scoring path leaks")
+                elif stage == "pool":
+                    drift = round(abs(rd["reproduction_top1"] - float(refs[role])), 6)
+                    if drift > float(P["reproduction_tolerance"]):
+                        raise NotRun(f"{name} reproduced {rd['reproduction_top1']} against the banked {refs[role]} (drift {drift} > "
+                                     f"{P['reproduction_tolerance']}): the pool, the evaluation set or the machinery is not 0014's")
             return r
 
         pool_holder = {}
@@ -337,6 +418,9 @@ def main() -> int:
         for step in P["order"]:
             if step == "null":
                 y_sh = np.asarray(y[null_rows]).copy(); rng.shuffle(y_sh)
+                partition["null_y_shuffled_sha256"] = _sha(y_sh)
+                partition["null_labels_permuted"] = bool(not np.array_equal(y_sh, np.asarray(y[null_rows])))
+                partition["null_labels_same_multiset"] = bool(np.array_equal(np.sort(y_sh), np.sort(np.asarray(y[null_rows]))))
                 y_view = y.copy(); y_view[null_rows] = y_sh
                 fit("null", "null", recipes["model"], lambda: Block(X, null_rows, ncols, "null"), "null",
                     partition["null_sorted_sha256"], y_all=y_view)

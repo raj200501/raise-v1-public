@@ -1,10 +1,10 @@
 {
   "schema": "raise-v1/engineering_log/1",
   "preregistration": "0018-oob-4096",
-  "status": "draft: instrument built, smoke run, under pre-freeze review",
+  "status": "draft: instrument rebuilt after the pre-freeze review; second smoke run; freeze pending",
   "design": {
-    "question": "Does the headline recipe (0014's searched HGB M4, 0.2884 in distribution) identify the encoder at chance + 0.05 on eight content families the corpus builder never produced, when fitted on the builder's 800000-row pool? 0003's incumbent M1 and 0014's standardised logistic L3 beside it as flags.",
-    "why_now": "0015, 0016 and 0017 measured transfer only among the builder's own families (seven parametric generators sharing one syllable vocabulary, one Gutenberg family); the headline recipe M4 was never fitted under transfer; no model in the record has ever been scored outside the builder. This is the buyer's question in its strongest form the record can currently afford: content nobody manufactured for this record.",
+    "question": "Does the headline recipe (0014's searched HGB M4, 0.2884 in distribution), fitted on the builder's eight families, identify the encoder at chance + 0.05 over the 38452 rows of five pinned real-file families the corpus builder never produced? 0003's incumbent M1 and 0014's standardised logistic L3 beside it as flags, with the eight-family mixture (three synthetic families from this record's own generators included) and the synthetic families as flags.",
+    "why_now": "0015, 0016 and 0017 measured transfer only among the builder's own families (seven parametric generators sharing one syllable vocabulary, one Gutenberg family); the headline recipe M4 was never fitted under transfer; no model in the record has ever been read outside the builder under a preregistered clause. This is the strongest out-of-builder question the record can currently afford: five families of upstream files nobody wrote for this record, pinned by hash.",
     "extension_corpus": {
       "builder": "tools/pivot/corpus_ext.py (imports corpus.py's CONFIGS/compress/carve and features.py unchanged)",
       "families": [
@@ -89,30 +89,89 @@
       "determinism_probe": "corpus_ext.py --probe: 3 chunks per family built twice in two task orders, identical arrays (2026-09-09 23:00 UTC)",
       "sources": "tools/pivot/ext_source_pins.json (82 files pinned by sha256; fetched 2026-09-09 22:55 UTC by tools/pivot/fetch_ext_sources.sh); licences in docs/compliance/EXT_SOURCES.md",
       "why_non_overlapping_chunks": "the audit found gutenberg's random offsets let evaluation windows overlap; the extension cuts consecutive chunks and picks by seeded permutation without replacement",
-      "why_own_chunk_id_space_and_fam_array": "the builder's family rule is FAMILIES[chunk_id % 8]; the extension's ids start at 10000000 and its family is an explicit array so no reader can confuse the two"
+      "why_own_chunk_id_space_and_fam_array": "the builder's family rule is FAMILIES[chunk_id % 8]; the extension's ids start at 10000000 and its family is an explicit array so no reader can confuse the two",
+      "n_chunks_built": 2400,
+      "n_chunks_with_rows": 2387,
+      "chunks_without_rows": [
+        10200064,
+        10200093,
+        10200108,
+        10200122,
+        10200152,
+        10200156,
+        10200180,
+        10200199,
+        10200206,
+        10200207,
+        10200259,
+        10200263,
+        10600139
+      ],
+      "why_chunks_without_rows": "every one of their 26 streams was shorter than the carve plus 64 bytes (12 pe_bin chunks of zero padding or resources, 1 sql chunk); the builder's rule, which its own families never triggered",
+      "library_versions": {
+        "isal": "1.8.0",
+        "libdeflate": "0.9.0",
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "zlib": "1.3",
+        "zopfli": "0.4.3"
+      },
+      "label_histogram": [
+        2381,
+        2377,
+        2375,
+        2369,
+        2364,
+        2357,
+        2356,
+        2353,
+        2353,
+        2375,
+        2372,
+        2370,
+        2367,
+        2359,
+        2356,
+        2350,
+        2348,
+        2348,
+        2346,
+        2339,
+        2339,
+        2387,
+        2377,
+        2377,
+        2377,
+        2337
+      ],
+      "majority_class_rate": 0.038871,
+      "rebuild": "rebuilt 2026-09-10 01:07 UTC after corpus_ext.py gained manifest fields (chunk layout, label histogram, library versions) and honest docstring wording; arrays identical to the first build (manifest arrays block equal; corpus_ext.py --check IDENTICAL)"
     },
     "fits": "M1 (0003's incumbent, val frag), L3 (0014's, standardised), M4 (0014's searched, val frag), each once on the sealed pool (hash 17b0dc0b...); null: M4 on the first 20000 pool rows with shuffled labels; every fit scored once on [sealed evaluation rows; extension rows] through run_recipe_search.run_fit unchanged, so the record's top1 is over the concatenation and the readings are split by index range (banked under `readings`, recomputed by the reader)",
-    "clause": "M4's correct extension rows >= ceil(n_ext x (1/26 + 0.05)) = 5433 of 61409 -> OOB_TRANSFERS else OOB_TRANSFER_FAILS; validity: reproductions within 0.005 of 0.2395 / 0.2317 / 0.2884, null <= chance + 0.02 on the extension rows, sealed hashes, one scoring per fit, readings arithmetic",
+    "clause": "M4's correct rows over the 38452 real-family extension rows >= ceil(38452 x (1/26 + 0.05)) = 3402 -> OOB_TRANSFERS else OOB_TRANSFER_FAILS (re-scoped from the eight-family mixture by the pre-freeze review: a mixture clause could be carried by the three synthetic families, which are builder-style content with new syntax); the eight-family mixture (5433 of 61409) is a flag; validity: reproductions within 0.005 of 0.2395 / 0.2317 / 0.2884, null <= chance + 0.01 on both row sets, sealed hashes with the scores file's family and chunk-id arrays bound to them, measured overlap counts 0, one scoring per fit with recomputed fingerprints, readings arithmetic",
     "flags_not_clauses": [
-      "L3 and M1 at the same bar",
-      "M4 minus L3 and M4 minus M1 as exact counts, and whether each reaches 0.05",
-      "per-family readings, structured-text / high-entropy / real / synthetic subsets",
-      "per-family ceilings (distinct carved fragments among the 26 configurations)"
+      "the eight-family mixture at 5433 of 61409",
+      "the three synthetic families at their own bar",
+      "L3 and M1 on the real rows at the same bar",
+      "M4 minus L3 and M4 minus M1 on the real rows as exact counts, and whether each reaches 0.02 and 0.05",
+      "per-family readings on exact counts, structured-text / high-entropy / real / synthetic subsets",
+      "per-family ceilings (distinct carved fragments among the 26 configurations)",
+      "reproduction exactness and iteration counts per role"
     ],
     "expected_outcome": "see prereg scope.expected_outcome_stated_in_advance: prior close to even"
   },
   "cost_anchors": {
     "source": "artifacts/pivot/recipe_search_4096.json (same pool, same machinery) and 0017",
     "M4_pool_seconds": 15874.2,
-    "M4_heartbeat_peak_gb": 10.34,
-    "M4_selection_peak_gb": 12.19,
     "M1_pool_seconds": 1428.4,
     "L3_pool_seconds_0014": 1164.3,
     "L3_pool_seconds_0017": 1817.5,
     "null_M4_20000_seconds": 71.6,
     "extension_build_seconds": 361.5,
     "scoring_set_rows": 321409,
-    "estimate": "about 5.4 h of fit plus scoring of 321409 rows per fit; MemAvailable must be >= 14.5 GB at launch"
+    "estimate": "18539 to 19192 s of fit (5.2 to 5.3 h: M4 15874.2 + M1 1428.4 + L3 1164.3 or 1817.5 + null 71.6) at 3 threads and nice 10 on an idle machine, plus four scorings of 321409 rows, the pool gather and a streamed row-identity scan (about 20 s); MemAvailable must be >= 14.5 GB, the 1-minute load <= 2.0 and no other tools/pivot runner alive at launch; the memory kill threshold is 13.0 GB",
+    "deep_tree_confirm_peak_gb_0014": 12.19,
+    "M4_confirmatory_heartbeat_peak_gb": 10.34
   },
   "smoke_runs": [
     {
@@ -162,11 +221,289 @@
           "xml": 0.0769
         }
       },
-      "what_it_checked": "the runner's refusals, the extension seal, the concatenated scoring, the readings split, checkpoints and the artifact/scores layout; the reader was then exercised end to end on this output with its pool, null and extension literals patched to the smoke's (scratchpad script reader_on_smoke_0018.py)",
-      "note": "a 10000-row fit cannot reproduce the full-pool references and the reader voids it; the numbers above are from tiny fits and say nothing about the preregistered question"
+      "what_it_checked": "the runner's refusals, the extension seal, the concatenated scoring, the readings split, checkpoints and the artifact/scores layout; the first reader-on-smoke exercise (reader_on_smoke_0018.py, first version) patched the wrong literals and voided on two scope mismatches before its readings ran, so it exercised nothing beyond the scope checks (the wording review found this); the reading and clause paths were exercised by the mutation gate (38 cases then, 71 now) and by the second exercise below",
+      "note": "a 10000-row fit cannot reproduce the full-pool references and the reader voids it; the numbers above are from tiny fits and say nothing about the preregistered question",
+      "machine_shared_with": "two runaway `rev` processes from an earlier operator shell (pids 27751, 27778, killed 23:13 UTC) and, for part of the run, the full extension build; the null fit's 376.1 s for 2000 rows (0014: 71.6 s for 20000) and the incumbent's 34.5 s are not anchors",
+      "timings_are_not_anchors": true,
+      "smoke_rows_in_sealed_ext": "1040 of 61409 (40 of the 2400 built chunks: k = 0..4 of every family, a byte-identical subset by seeded construction)"
+    },
+    {
+      "utc": "2026-09-10T01:12Z to 01:23Z",
+      "invocation": "the same smoke invocation on the reviewed runner (row identity scan, smoke guards, load refusal, null hashes, fingerprints, real-family counts) with the rebuilt 1040-row extension build",
+      "wall_seconds": 674.4,
+      "seconds_by_name": {
+        "incumbent": 40.0,
+        "logistic_l3": 114.1,
+        "model": 391.2,
+        "null": 14.6
+      },
+      "n_iter": {
+        "incumbent": {
+          "n_iter": 20
+        },
+        "logistic_l3": {
+          "n_iter": 237
+        },
+        "model": {
+          "n_iter": 109
+        },
+        "null": {
+          "n_iter": 20
+        }
+      },
+      "row_identity_scan": {
+        "pool_rows_identical_to_an_ext_row": 0,
+        "eval_rows_identical_to_an_ext_row": 0,
+        "seconds": "4 (270000 builder rows)"
+      },
+      "numbers_disclosed_not_used": {
+        "reproductions_at_10000_rows": {
+          "incumbent": 0.1415,
+          "logistic_l3": 0.1398,
+          "model": 0.1708
+        },
+        "extension_top1": {
+          "incumbent": 0.0683,
+          "logistic_l3": 0.0644,
+          "model": 0.0779
+        },
+        "extension_real_correct": {
+          "incumbent": 34,
+          "logistic_l3": 36,
+          "model": 45
+        },
+        "n_ext_real_rows": 650,
+        "null_extension": 0.0279,
+        "null_eval": 0.0365
+      },
+      "reader_exercise": {
+        "script": "scratchpad reader_on_smoke_0018.py: the reader's PARTITION, EXT, chunk layout, N_EXT/N_REAL and thresholds patched to the smoke's, PROTOCOL to the banked draft's, the smoke checks off, the reproduction tolerance widened; nothing in the repository changed",
+        "validity_failed_clauses": [],
+        "outcome_on_smoke_data": "OOB_TRANSFER_FAILS",
+        "real_correct": 45,
+        "n_real": 650,
+        "min_correct_real": 58,
+        "flags": {
+          "at_iteration_cap": {
+            "incumbent": false,
+            "logistic_l3": false,
+            "model": false
+          },
+          "families_where_model_reaches_bar": [
+            "sql"
+          ],
+          "incumbent_reaches_bar_real": false,
+          "logistic_l3_reaches_bar_real": false,
+          "mixture_min_correct": 92,
+          "mixture_reaches_bar": false,
+          "model_leads_incumbent_by_0.02": false,
+          "model_leads_incumbent_by_0.05": false,
+          "model_leads_incumbent_real_rows": 11,
+          "model_leads_logistic_l3_by_0.02": false,
+          "model_leads_logistic_l3_by_0.05": false,
+          "model_leads_logistic_l3_real_rows": 9,
+          "n_iter_by_role": {
+            "incumbent": 20,
+            "logistic_l3": 237,
+            "model": 109
+          },
+          "per_family_min_correct": {
+            "c_src": 12,
+            "hexdump": 12,
+            "pe_bin": 12,
+            "py_src": 12,
+            "rfc_txt": 12,
+            "rst_doc": 12,
+            "sql": 12,
+            "xml": 12
+          },
+          "reproduction_exact": {
+            "incumbent": false,
+            "logistic_l3": false,
+            "model": false
+          },
+          "synthetic_min_correct": 35,
+          "synthetic_reaches_bar": true
+        },
+        "note": "an exercise of the reader's reading and clause code on 10000-row fits over 1040 rows; not a verdict, not a reading of the preregistered question"
+      },
+      "machine_shared_with": "nothing CPU-heavy (the review agents are API-bound); the null fit took 14.6 s against 376.1 s in the first smoke"
     }
   ],
-  "pre_freeze_review": null,
+  "pre_freeze_review": {
+    "method": "Workflow: six hostile reviewers (design, leakage, runner, reader, corpus, wording) over the design brief, the prereg draft, corpus_ext.py, run_oob.py, the reader, the mutation gate, the manifest, the pins and the compliance note; every blocker/major finding adversarially verified by an independent agent (default refuted); then a synthesis. The first two launches of the workflow were killed (an operator interruption at 23:30 UTC, a worker restart at 00:36 UTC); the third resumed from the four cached reviewer results.",
+    "findings_adopted": [
+      {
+        "severity": "major (synthesis)",
+        "finding": "the reader consulted the NOT RUN marker only when the artifact was absent; the runner's new NOT RUN paths leave an artifact beside the marker, so they would have read as VOID",
+        "fix": "the marker takes precedence over any artifact; no verdict is emitted (exit 2); mutation case a-not-run-file-beside-an-artifact-is-no-verdict"
+      },
+      {
+        "severity": "blocker",
+        "finding": "the mixture clause over 61409 rows could pass on the three synthetic families alone (37 percent of rows) while the verdict text claimed content the builder never produced",
+        "fix": "clause re-scoped to the 38452 real-family rows (3402 needed); the eight-family mixture is a flag; verdict texts say 'the mixture over the five pinned real-file families ... not necessarily on every family'"
+      },
+      {
+        "severity": "blocker",
+        "finding": "M1 and M4 recipe entries were not 0014's roster entries verbatim (an added scaled key and new why texts changed their canonical hashes), and M1's why text stated a falsehood ('every transfer reading so far was taken on' M1)",
+        "fix": "all three recipes are 0014's roster entries byte for byte; the pre-freeze check asserts their hashes equal 0014's banked params_sha256 and that no why text says 'every transfer reading so far'"
+      },
+      {
+        "severity": "major",
+        "finding": "pool_rows_in_ext / eval_rows_in_ext were hard-coded zeros presented as a checked equality (three reviewers)",
+        "fix": "the runner digests every extension feature row (blake2b-128) and streams the builder cache over the pool and evaluation rows, banking pool_rows_identical_to_an_ext_row and eval_rows_identical_to_an_ext_row plus chunk-level overlaps; the reader requires all four to be 0"
+      },
+      {
+        "severity": "major",
+        "finding": "the reader never bound the scores file's ext_fam and ext_chunk_ids to the sealed arrays",
+        "fix": "the reader hashes ext_fam (int8 bytes) and ext_chunk_ids (int32 little-endian) against the sealed fam and g hashes, checks the id range, the per-family distinct counts, the family-from-id mapping and the exact expansion of the sealed chunk layout (scope.ext_chunk_layout)"
+      },
+      {
+        "severity": "major",
+        "finding": "the unsealed smoke block let a post-freeze 'smoke' rehearse the real run on the sealed corpus",
+        "fix": "run_oob.py refuses --smoke with the sealed extension arrays, with more than 20000 fit rows, or with a null block as large as the sealed one"
+      },
+      {
+        "severity": "major",
+        "finding": "'never scored by any fitted model' was false: the smoke's 1040 rows are a subset of the sealed corpus",
+        "fix": "sealed_set_disclosure rewritten (seventh preregistration on the sealed set; 4 scorings added; the smoke's 1040 rows named); banked here"
+      },
+      {
+        "severity": "major",
+        "finding": "'prior close to even' was not derived from banked ratios; all banked retention ratios predict a pass",
+        "fix": "expected_outcome restated with the four banked-ratio landings (0.097 to 0.118) and the stated, unbanked reason for discounting them"
+      },
+      {
+        "severity": "major",
+        "finding": "synthetic families are the builder's method with new syntax; 'share nothing', 'vocabulary disjoint' and 'content nobody manufactured for this record' overclaimed",
+        "fix": "corpus_ext.py docstring and the prereg describe them as builder-style content with new syntax and an 80-word list disjoint from the syllable words; the pass-meaning text names the five real families; the synthetic families are out of the clause"
+      },
+      {
+        "severity": "major",
+        "finding": "the pre-written failure explanation 'near their own carve-collision ceiling' is arithmetically impossible at a 0.0885 bar",
+        "fix": "removed; what_would_make_it_fail_honestly names causes that can operate"
+      },
+      {
+        "severity": "major",
+        "finding": "stop rules covered four cases against 0017's ten; the reachable NOT RUN window and refusal handling were unstated",
+        "fix": "seven stop rules; poll.sh does not relaunch after a refusal; refusals are filed by the operator"
+      },
+      {
+        "severity": "major",
+        "finding": "scope.cost carried the pre-drop scoring-set size (322400) and misattributed 0014's 12.19 GB peak to M4",
+        "fix": "321409 rows / 1.42 GB; M4's 10.34 GB heartbeat peak; the fit-time sum stated as 5.2 to 5.3 h"
+      },
+      {
+        "severity": "major",
+        "finding": "the reader-on-smoke exercise had patched the wrong literals and voided before its readings",
+        "fix": "exercise rewritten (PARTITION and EXT to the smoke's, PROTOCOL to the banked one, tolerance widened) and re-run on the second smoke; its output is banked below as an exercise, not a verdict"
+      },
+      {
+        "severity": "major",
+        "finding": "the runner's new load refusal was not in the sealed protocol",
+        "fix": "protocol.launch.max_load1 = 2.0 sealed and stated in scope.cost"
+      },
+      {
+        "severity": "major",
+        "finding": "what_neither_outcome_means omitted the exclusions a pass would be stretched over",
+        "fix": "rewritten to exclude M1/L3 as statements, single families, the synthetic families, and content beyond these eight families as pinned"
+      },
+      {
+        "severity": "minor",
+        "finding": "reproduction exactness and iteration counts not required or banked",
+        "fix": "the reader requires an integer n_iter per record, banks reproduction_exact and at_iteration_cap per role as flags; fit_info_by_role must equal the records"
+      },
+      {
+        "severity": "minor",
+        "finding": "null tolerance 0.02 loose for a leak detector with 61409 rows; the eval-side null reading banked but unread; shuffled labels not hashed",
+        "fix": "tolerance 0.01 on both row sets; null_y_shuffled_sha256, null_labels_permuted and null_labels_same_multiset banked and required; the runner files NOT RUN if the null fails, before any pool fit"
+      },
+      {
+        "severity": "minor",
+        "finding": "a cheap-fit reproduction failure was known within an hour but the runner would still spend 4.4 h on M4",
+        "fix": "the runner raises NOT RUN on a reproduction drift above 0.005 after each pool fit"
+      },
+      {
+        "severity": "minor",
+        "finding": "record-level scores (top1, top1_non_gutenberg, per_family, reproduction_per_family) accepted unreconciled; eval_chunk_ids unread; fingerprints and completion order unenforced; per-example vectors bound to records by name only",
+        "fix": "records carry fingerprint and per_example_sha256; the reader recomputes the fingerprint from sealed literals, requires a started event before the single completion, the sealed completion order, the vector hash, and every record-level score from the vector and eval_chunk_ids"
+      },
+      {
+        "severity": "minor",
+        "finding": "reader ENV omitted python; launch_environment unread; a type-confused artifact would traceback and leave a stale verdict",
+        "fix": "python sealed in ENV; launch_environment ok/problems/env required; the reader removes a stale verdict first and emits VOID on an unexpected shape"
+      },
+      {
+        "severity": "minor",
+        "finding": "flags computed on rounded values against the exact-count convention; no 0.02 lead flag; flag outcomes not pre-stated",
+        "fix": "per-family and synthetic flags on exact counts with their thresholds banked; leads at 0.02 and 0.05 of the real rows; flags_stated_in_advance in the prereg"
+      },
+      {
+        "severity": "minor",
+        "finding": "asserts instead of refusals; launch_env.ok never False; run_started_utc is the last launch's",
+        "fix": "refusals; ok set from problems; first_launch_utc banked"
+      },
+      {
+        "severity": "minor",
+        "finding": "the record's three score fields cover three row sets and the run log line was unlabelled",
+        "fix": "fit_record_top1_is documents all three; the runner prints REPRODUCTION / EXTENSION in capitals after run_fit's line"
+      },
+      {
+        "severity": "minor",
+        "finding": "24 reader clauses had no mutation case; boundary cases one-sided",
+        "fix": "71 cases (two-sided drift, null boundary, chunk/family bindings, fingerprints, order, python, launch env, overlap counts, shape robustness, the synthetic-only scenario, the mixture-flag independence)"
+      },
+      {
+        "severity": "minor",
+        "finding": "text: RFC 'sorted by number' (file name), py_src composition (854 of 1828 files under Lib/test), pe_bin as whole PE images, 'hash for hash the fit set of 0014 and 0017' (0017's clause fits were folds), 'the buyer's question', 'sixth' preregistration",
+        "fix": "all rewritten in the draft"
+      },
+      {
+        "severity": "note",
+        "finding": "label mix not exactly uniform after the drops (majority 0.038871; 0.038698 on the real rows); 13 built chunks carry no row",
+        "fix": "disclosed in chunking and bar_calibration; the manifest and the sealed ext_corpus carry the histogram, the majority rate and the chunk layout"
+      },
+      {
+        "severity": "note",
+        "finding": "the manifest should record compressor library versions",
+        "fix": "library_versions in the manifest (zlib 1.3, libdeflate 0.9.0, isal 1.8.0, zopfli 0.4.3)"
+      },
+      {
+        "severity": "major (synthesis)",
+        "finding": "the evidence-page renderer printed the eight-family mixture against 5433 as the clause",
+        "fix": "chip and panel rewritten to the real-family count against 3402; the mixture is shown as a flag"
+      }
+    ],
+    "findings_declined": [
+      {
+        "finding": "keep the mixture clause and add a real-family flag (the blocker's verifier's smaller fix)",
+        "why": "the re-scope is the harder clause and the only one that licenses the question as titled; the smoke's disclosed split (real below synthetic) makes the re-scope the conservative choice, not the convenient one"
+      },
+      {
+        "finding": "replace hexdump with a synthetic regime of a genuinely different match structure",
+        "why": "the clause no longer rests on the synthetic families; replacing a family after the corpus was built would be a second build for a flag"
+      },
+      {
+        "finding": "have the reader recompute every checkpoint fingerprint AND cross-check the committed checkpoint files",
+        "why": "the reader recomputes and requires the fingerprints from the artifact and ledger; the checkpoint directory is committed for audit and is not one of the reader's two inputs by design"
+      },
+      {
+        "finding": "revert the memory kill threshold to 13.0 GB or justify 14.0",
+        "why": "reverted to 0017's 13.0 GB (adopted as 'revert')"
+      },
+      {
+        "finding": "bank per-class label counts per family and compare per-family flags against per-family class mixes",
+        "why": "the histogram over all rows and over the real rows is sealed; per-family per-class counts add nothing a flag needs"
+      }
+    ],
+    "synthesis": "Synthesis (workflow wf_667d7775, 28 agents, 2026-09-10 01:38 UTC): fix then freeze. The design core - one exact-count clause on the five pinned real families, 0015's bar verbatim, three reproductions at 0.005, a two-sided null at 0.01 run first, hash-bound extension arrays, a measured leakage scan, recomputed fingerprints and readings - is sound and every confirmed finding was already in the working tree and exercised by a green 71-case gate. Three items had to land before the freeze: (1) the reader consulted the NOT RUN marker only when the artifact was absent, while the runner files NOT RUN after writing an in-progress artifact, so a failed null or a reproduction drift would have read as a resumable VOID instead of NOT RUN - fixed in the reader template (the marker now takes precedence; one mutation case added, 72 in the gate); (2) this review record was incomplete and the log's question, why_now and cost anchors still carried the pre-review clause, an overclaim and a misattributed peak - restated here; (3) the evidence-page renderer printed the eight-family mixture against 5433 as the clause - rewritten to the real-family count against 3402 with the mixture as a flag. Five minor wording items adopted (the least-compressible subset described in words, the sealed_set_disclosure's last clause, the runner's docstring and memory comment, the RFC copyright statement in EXT_SOURCES.md verified by grep, a CORRECTIONS line on 0015-0017's sealed ordinals). Declined: reverting to the mixture clause with a real-family flag (the verifier of the blocker preferred that smaller fix because the smoke had shown the real families scoring below the synthetic ones; the record keeps the re-scope because it is the harder clause and the only one that can license the claim the question makes, and choosing the harder clause after that disclosure is the conservative direction); replacing hexdump or rebuilding the smoke corpus on a disjoint seed; renaming the high_entropy subset key; adding smoke/invocation to the chain's sealed fields (would fail every earlier entry); a reader cross-check of committed checkpoint files; a mechanical relaunch bound. Frozen after these landed and the full suite read 387/387.",
+    "verified_by_execution": [
+      "fill_f32 into the Xs[:n_eval] slice writes through (np.shares_memory); the per-example vector is [eval order; extension file order] and fam_x, gx, yx share that order",
+      "L3's in-place standardisation is refilled with a probe check before M4 (smoke: block_refills probe_ok on the model record)",
+      "the row identity scan reads 0 pool and 0 evaluation rows identical to an extension row (smoke: 270000 builder rows, 4 s; the real run streams 1060000)",
+      "the reader's mean4 equals the runner's r4 bit for bit on int8 0/1 vectors (both divide an exact integer sum)"
+    ]
+  },
   "run_record": null,
   "operator_procedure": "launch detached (setsid nohup) with the sealed invocation after the freeze; keep the session active for the whole run (an idle session suspends the runner and the container restarts on the next wake: 0016's finding); poll every 30 minutes: commit and push new checkpoints, relaunch the identical command if the runner is dead and the run is not finished; the reader runs once on the completed artifact; publication states the verdict at the same size either way."
 }

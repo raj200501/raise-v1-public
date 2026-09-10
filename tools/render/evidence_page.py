@@ -201,10 +201,11 @@ chips = "".join([
             f'{l3v["bar_applied"]["margin_correct_rows"]} rows)') if l3v["verdict"] != "VOID" and l3a and l3a.get("complete")
            else f'VOID: {"; ".join(l3v["validity_failed_clauses"])[:140]}')] if l3v else [])
  + ([chip(oobv["verdict"], {"OOB_TRANSFERS": "pass", "OOB_TRANSFER_FAILS": "fail", "VOID": "inc"}[oobv["verdict"]], "0018",
-           (f'the headline recipe (0014\'s searched M4) fitted on the builder\'s eight families and scored on eight families the '
-            f'builder never produced: {oobv["ext_correct_model"]} of {oobv["bar_applied"]["n_ext_rows"]} extension rows correct '
-            f'({oobv["ext_top1_model"]}) against {oobv["bar_applied"]["min_correct"]} needed (chance + 0.05); incumbent '
-            f'{oobv["ext_top1"]["incumbent"]}, standardised logistic {oobv["ext_top1"]["logistic_l3"]}')
+           (f'the headline recipe (0014\'s searched M4) fitted on the builder\'s eight families and scored on five pinned real-file '
+            f'families the builder never produced: {oobv["ext_real_correct_model"]} of {oobv["bar_applied"]["n_real_rows"]} real-family '
+            f'rows correct ({oobv["ext_real_top1_model"]}) against {oobv["bar_applied"]["min_correct_real"]} needed (chance + 0.05); '
+            f'incumbent {oobv["ext_real_top1"]["incumbent"]}, standardised logistic {oobv["ext_real_top1"]["logistic_l3"]} on the same '
+            f'rows; eight-family mixture {oobv["ext_top1_model"]} (a flag)')
            if oobv["verdict"] != "VOID" and oob and oob.get("complete")
            else f'VOID: {"; ".join(oobv["validity_failed_clauses"])[:140]}')] if oobv else []))
 
@@ -346,25 +347,28 @@ if l3a and l3v and l3v["verdict"] != "VOID" and l3a.get("complete"):
 boundary_0018 = ""
 if oob and oobv and oobv["verdict"] != "VOID" and oob.get("complete"):
     _pf = oobv["ext_per_family"]; _ceil = oobv["ext_ceiling_distinct_fragments"]; _rpf = oobv["ext_rows_per_family"]
-    _ba = oobv["bar_applied"]; _fl = _ba.get("flags") or {}
-    _rows = "".join(f'<tr><td class="mono">{f}</td><td class="mono">{_rpf[f]}</td><td class="mono">{_pf["model"][f]}</td>'
-                    f'<td class="mono">{_pf["logistic_l3"][f]}</td><td class="mono">{_pf["incumbent"][f]}</td><td class="mono">{_ceil[f]}</td></tr>'
+    _ba = oobv["bar_applied"]; _fl = _ba.get("flags") or {}; _real = set(oob.get("ext_real_families") or [])
+    _rows = "".join(f'<tr><td class="mono">{f}{" (real)" if f in _real else " (synthetic)"}</td><td class="mono">{_rpf[f]}</td>'
+                    f'<td class="mono">{_pf["model"][f]}</td><td class="mono">{_pf["logistic_l3"][f]}</td>'
+                    f'<td class="mono">{_pf["incumbent"][f]}</td><td class="mono">{_ceil[f]}</td></tr>'
                     for f in sorted(_pf["model"], key=lambda k: -_pf["model"][k]))
     _word = "reaches" if oobv["verdict"] == "OOB_TRANSFERS" else "does not reach"
     _sub = oobv["ext_subsets"]["model"]
-    boundary_0018 = (f'<p><strong>On content the corpus builder never produced, the headline recipe {_word} the bar: '
+    boundary_0018 = (f'<p><strong>On real content the corpus builder never produced, the headline recipe {_word} the bar: '
                      f'<span class="mono">{oobv["verdict"]}</span></strong> (preregistration 0018, chain entry 18, read by its own '
                      f'frozen reader, which recounts every reading from the banked score vectors). 0014\'s searched model, fitted once on '
                      f'0003\'s sealed 800000-row pool (reproduction {oobv["reproduction_top1"]["model"]} against 0014\'s 0.2884), '
-                     f'identifies the encoder on {oobv["ext_correct_model"]} of {_ba["n_ext_rows"]} extension rows '
-                     f'({oobv["ext_top1_model"]}) against {_ba["min_correct"]} needed for chance + {_ba["bar"]}; the incumbent reads '
-                     f'{oobv["ext_top1"]["incumbent"]} and the standardised logistic {oobv["ext_top1"]["logistic_l3"]} on the same rows '
-                     f'(flags at the same bar: {"yes" if _fl.get("incumbent_reaches_bar") else "no"} and '
-                     f'{"yes" if _fl.get("logistic_l3_reaches_bar") else "no"}). Over the six structured-text families the model reads '
-                     f'{_sub["ext_structured_text_top1"]}, over the two high-entropy families {_sub["ext_high_entropy_top1"]}; real '
-                     f'families {_sub["ext_real_top1"]}, synthetic {_sub["ext_synthetic_top1"]}. The null control on the extension rows '
-                     f'is {oobv["shuffled_label_accuracy_ext"]}. The extension families are eight more families chosen before any fit '
-                     f'touched them; nothing here revises 0015, 0016 or 0017, and nothing here establishes a buyer.</p>'
+                     f'identifies the encoder on {oobv["ext_real_correct_model"]} of {_ba["n_real_rows"]} rows from five pinned real-file '
+                     f'families ({oobv["ext_real_top1_model"]}) against {_ba["min_correct_real"]} needed for chance + {_ba["bar"]}; the '
+                     f'incumbent reads {oobv["ext_real_top1"]["incumbent"]} and the standardised logistic {oobv["ext_real_top1"]["logistic_l3"]} '
+                     f'on the same rows (flags at the same bar: {"yes" if _fl.get("incumbent_reaches_bar_real") else "no"} and '
+                     f'{"yes" if _fl.get("logistic_l3_reaches_bar_real") else "no"}). The eight-family mixture, three synthetic families '
+                     f'included, reads {oobv["ext_top1_model"]} (a flag; {"at" if _fl.get("mixture_reaches_bar") else "under"} its own bar), '
+                     f'the three synthetic families {_sub["ext_synthetic_top1"]}; over the six structured-text families '
+                     f'{_sub["ext_structured_text_top1"]}, over the two least-compressible families {_sub["ext_high_entropy_top1"]}. '
+                     f'The null control on the extension rows is {oobv["shuffled_label_accuracy_ext"]}. The extension families are eight '
+                     f'more families chosen before any fit touched them; nothing here revises 0015, 0016 or 0017, and nothing here '
+                     f'establishes a buyer.</p>'
                      f'<table><thead><tr><th>extension family</th><th>rows</th><th>searched model</th><th>standardised logistic</th>'
                      f'<th>incumbent</th><th>ceiling (distinct fragments)</th></tr></thead><tbody>{_rows}</tbody></table>')
 

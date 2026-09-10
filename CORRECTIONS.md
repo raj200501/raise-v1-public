@@ -19,6 +19,34 @@ Format:
 
 ---
 
+## 2026-09-10 — Three sealed preregistrations count their own place in the sealed-set ledger one short
+
+**Claimed:** `prereg/0015-lofo-4096.json` `scope.sealed_set_disclosure`: "This is the third
+preregistration scored on 0003's sealed evaluation set: 0003 scored it 12 times, 0006 for top-k,
+0014 10 times plus 10 in a smoke confirm; 0015 adds 27 scorings"; `prereg/0016-fdc-4096.json`: "the
+fourth preregistration"; `prereg/0017-lofo-l3-4096.json`: "the fifth preregistration".
+
+**Actual:** Each sentence lists its predecessors correctly and then names an ordinal that counts
+them without the entry itself: 0003, 0006 and 0014 are three, so 0015 is the fourth preregistration
+scored on the sealed set, 0016 the fifth and 0017 the sixth. Preregistration 0018 says "the
+seventh", which is right. The scoring counts in the same sentences (12, top-k, 10 plus 10, 27, 258,
+10) are unchanged and traceable to the artifacts they name.
+
+**Size:** One in an ordinal, in three sealed documents. No measurement, clause, hash or scoring
+count moved, and no reader read the ordinal.
+
+**Cause:** The sentence was copied forward from 0015 to 0016 to 0017 with the predecessor list
+extended by one and the ordinal incremented by one, so the original off-by-one propagated; nobody
+recounted the list against the ordinal. It was found by the 0018 pre-freeze review's wording
+reviewer, who counted.
+
+**Fix:** The three sentences are sealed by the chain and stay as written; this entry is the
+correction (the chain's append-only rule, `docs/OPERATING_RULES.md`). The 0018 pre-freeze check
+now asserts that the ordinal in its own disclosure equals one plus the number of predecessors it
+lists, so the sentence cannot be copied forward with a stale ordinal again.
+
+---
+
 ## 2026-09-04 — Three different counts of this ledger, and two of the preregistration chain, in the outbound documents
 
 **Claimed:** `outbound/EVIDENCE_BRIEF.md`: "**11** preregistrations, hash-chained" and "**13**

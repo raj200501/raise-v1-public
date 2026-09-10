@@ -53,8 +53,8 @@
       "total": 29
     },
     "oob4096": {
-      "detected": 38,
-      "total": 38
+      "detected": 72,
+      "total": 72
     },
     "pivot-curve": {
       "detected": 11,
@@ -2923,43 +2923,61 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=OOB_TRANSFERS ext=0.12 correct=7369 validity=[] transfer=[]",
+      "evidence": "verdict=OOB_TRANSFERS real=0.12 correct=4614 validity=[] transfer=[]",
       "exit_code": 0,
       "expected": "pass",
       "gate": "oob4096",
-      "mutation": "control-model-clears-the-bar",
+      "mutation": "control-model-clears-the-bar-on-the-real-families",
       "observed": "pass"
     },
     {
       "detected": true,
-      "evidence": "verdict=OOB_TRANSFER_FAILS ext=0.07 correct=4298 validity=[] transfer=[\"transfer: M4's correct extension rows 4298 of 61409 (0.07) is below 5433 (chance 0.038462 + 0.05 = 0.088462)\"]",
+      "evidence": "verdict=OOB_TRANSFER_FAILS real=0.07 correct=2691 validity=[] transfer=[\"transfer: M4's correct real-family rows 2691 of 38452 (0.07) is below 3402 (chance 0.038462 + 0.05 = 0.088462)\"]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
-      "mutation": "model-below-the-bar-is-OOB_TRANSFER_FAILS",
+      "mutation": "model-below-the-bar-on-the-real-families-is-OOB_TRANSFER_FAILS",
       "observed": "fail"
     },
     {
       "detected": true,
-      "evidence": "verdict=OOB_TRANSFERS ext=0.0885 correct=5433 validity=[] transfer=[] | verdict=OOB_TRANSFER_FAILS ext=0.0885 correct=5432 validity=[] transfer=[\"transfer: M4's correct extension rows 5432 of 61409 (0",
+      "evidence": "verdict=OOB_TRANSFER_FAILS real=0.039 correct=1499 validity=[] transfer=[\"transfer: M4's correct real-family rows 1499 of 38452 (0.039) is below 3402 (chance 0.038462 + 0.05 = 0.088462)\"]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
-      "mutation": "exactly-min-correct-rows-passes-and-one-row-fewer-fails",
+      "mutation": "a-pass-carried-by-the-synthetic-families-alone-is-OOB_TRANSFER_FAILS",
       "observed": "fail"
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['readings: ext_top1_model or ext_correct_model is not the recomputed value'] transfer=[]",
+      "evidence": "verdict=OOB_TRANSFERS real=0.0885 correct=3402 validity=[] transfer=[] | verdict=OOB_TRANSFER_FAILS real=0.0884 correct=3401 validity=[] transfer=[\"transfer: M4's correct real-family rows 3401 of 3845",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
-      "mutation": "a-banked-correct-count-off-by-one-row-is-VOID",
+      "mutation": "exactly-min-correct-real-rows-passes-and-one-row-fewer-fails",
       "observed": "fail"
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=[\"readings: model.ext_per_family={'c_src': 0.12, 'hexdump': 0.12, 'pe_bin': 0.12, 'py_src': 0.12, 'rfc_txt': 0.12, 'rst_doc': 0.12, 'sql': 0.12, 'xml': 0.12",
+      "evidence": "verdict=VOID real=None correct=None validity=['readings: ext_top1_model, ext_correct_model or ext_real_correct_model is not the recomputed value'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-banked-real-correct-count-off-by-one-row-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['readings: ext_top1_model, ext_correct_model or ext_real_correct_model is not the recomputed value'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-banked-mixture-count-off-by-one-row-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"readings: model.ext_per_family={'c_src': 0.1201, 'hexdump': 0.12, 'pe_bin': 0.12, 'py_src': 0.12, 'rfc_txt': 0.12, 'rst_doc': 0.12, 'sql': 0.12, 'xml': 0",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -2968,16 +2986,16 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=OOB_TRANSFERS ext=0.12 correct=7369 validity=[] transfer=[] | verdict=VOID ext=None correct=None validity=[\"reproduction: model on the full pool scores 0.2935 against the banked 0.2884; the po",
+      "evidence": "verdict=VOID real=None correct=None validity=[\"reproduction: model on the full pool scores 0.2935 against the banked 0.2884; the pool, the evaluation set or the machinery is not 0014's\"] transfer=[] |",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
-      "mutation": "a-reproduction-drift-of-exactly-0.005-passes-and-0.0051-is-VOID",
+      "mutation": "a-reproduction-drift-of-plus-or-minus-0.005-passes-and-0.0051-is-VOID",
       "observed": "fail"
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=[\"reproduction: incumbent on the full pool scores 0.2455 against the banked 0.2395; the pool, the evaluation set or the machinery is not 0014's\"] transfer=[",
+      "evidence": "verdict=VOID real=None correct=None validity=[\"reproduction: incumbent on the full pool scores 0.2455 against the banked 0.2395; the pool, the evaluation set or the machinery is not 0014's\"] transfer=",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -2986,16 +3004,34 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['null control: shuffled labels reached 0.06 on the extension rows, above chance 0.038462 + 0.02 \u2014 the pipeline leaks'] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['null control: shuffled labels reached 0.06 on the extension rows and 0.038 on the sealed rows, against chance 0.038462 + 0.01 \u2014 the pipeline leaks'] tran",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
-      "mutation": "null-control-above-chance-plus-0.02-on-the-extension-rows-is-VOID",
+      "mutation": "null-control-above-chance-plus-0.01-on-the-extension-rows-is-VOID",
       "observed": "fail"
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['scope: smoke=True; a smoke run is not the preregistered run', \"scores: the scores file is not this run's, or is a smoke run's, or names a different extens",
+      "evidence": "verdict=VOID real=None correct=None validity=['null control: shuffled labels reached 0.038 on the extension rows and 0.06 on the sealed rows, against chance 0.038462 + 0.01 \u2014 the pipeline leaks'] tran",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "null-control-above-chance-plus-0.01-on-the-sealed-rows-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['null control: shuffled labels reached 0.0485 on the extension rows and 0.038 on the sealed rows, against chance 0.038462 + 0.01 \u2014 the pipeline leaks'] tr",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "null-control-at-0.0484-passes-and-0.0485-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scope: smoke=True; a smoke run is not the preregistered run', \"scores: the scores file is not this run's, or is a smoke run's, or names a different exten",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3004,7 +3040,25 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=[\"extension corpus: ext_corpus.arrays={'X': {'dtype': 'float32', 'sha256': '<hash>', 'shape': [61409, 1108]}, 'fam': {'dtype': 'int8', 'sha256': '<hash>', '",
+      "evidence": "verdict=VOID real=None correct=None validity=[\"scope: stage='selection'\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-stage-other-than-run-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"scope: corpus.cache_y_sha256='<hash>', preregistered '<hash>'\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-corpus-literal-changed-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"extension corpus: ext_corpus.arrays={'X': {'sha256': '<hash>', 'shape': [61409, 1108], 'dtype': 'float32'}, 'fam': {'dtype': 'int8', 'sha256': '<hash>', ",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3013,7 +3067,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=[\"extension corpus: ext_corpus.rows_per_family={'c_src': 7800, 'hexdump': 7800, 'pe_bin': 7407, 'py_src': 7709, 'rfc_txt': 7761, 'rst_doc': 7775, 'sql': 735",
+      "evidence": "verdict=VOID real=None correct=None validity=[\"extension corpus: ext_corpus.rows_per_family={'c_src': 7799, 'hexdump': 7800, 'pe_bin': 7407, 'py_src': 7709, 'rfc_txt': 7761, 'rst_doc': 7775, 'sql': 73",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3022,7 +3076,16 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=[\"scores: the scores file is not this run's, or is a smoke run's, or names a different extension corpus\"] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['extension corpus: the banked label histogram is not the sealed one'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "extension-label-histogram-changed-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"scores: the scores file is not this run's, or is a smoke run's, or names a different extension corpus\"] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3031,7 +3094,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=[\"scores: ext_fam row counts {'c_src': 7799, 'hexdump': 7800, 'pe_bin': 7407, 'py_src': 7709, 'rfc_txt': 7761, 'rst_doc': 7775, 'sql': 7357, 'xml': 7801} ar",
+      "evidence": "verdict=VOID real=None correct=None validity=['scores: ext_fam does not hash to the sealed fam array'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3040,7 +3103,16 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['scores: ext_fam missing, not N_EXT long, or not family indices'] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['scores: ext_fam does not hash to the sealed fam array'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "two-extension-rows-swapped-across-families-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scores: ext_fam missing, not N_EXT long, or not family indices'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3049,7 +3121,43 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['fit: model per-example vector missing, not 321409 long, or not in {0, 1}'] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['scores: ext_chunk_ids do not hash to the sealed g array', 'scores: ext_chunk_ids are outside the sealed id range, not the sealed chunk count, or not in b",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "extension-chunk-ids-shifted-by-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scores: ext_chunk_ids do not hash to the sealed g array', 'scores: ext_chunk_ids are outside the sealed id range, not the sealed chunk count, or not in b",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "extension-chunk-ids-inside-the-builder-id-space-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scores: ext_chunk_ids do not hash to the sealed g array', 'scores: ext_chunk_ids are outside the sealed id range, not the sealed chunk count, or not in b",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "extension-chunk-ids-reordered-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scores: eval_chunk_ids missing, not the sealed evaluation chunks, or not the sealed family mix'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "evaluation-chunk-ids-with-the-wrong-gutenberg-share-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: model per-example vector missing, not 321409 long, or not in {0, 1}'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3058,7 +3166,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['fit: model per-example vector missing, not 321409 long, or not in {0, 1}'] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: model per-example vector missing, not 321409 long, or not in {0, 1}'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3067,7 +3175,34 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=[\"fit: model is not the sealed M4 (id 'M4', params hash, scaled or val off-recipe)\"] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: model per_example_sha256 is not the hash of its banked vector'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-per-example-sha-not-the-vectors-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: model record top1 0.2572 is not its vector's mean 0.2562\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-record-top1-not-its-vectors-mean-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: incumbent record per_family is not its vector's per-family means over the sealed evaluation rows\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-record-per-family-not-its-vectors-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: model is not the sealed M4 (id, params, params hash, family, scaled, val or head off-recipe)'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3076,7 +3211,16 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['fit: model was not fitted on the sealed rows with the preregistered seed'] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: model is not the sealed M4 (id, params, params hash, family, scaled, val or head off-recipe)'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "the-model-params-changed-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: model was not fitted on the sealed rows with the preregistered seed'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3085,7 +3229,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['fit: logistic_l3 was not fitted on the sealed rows with the preregistered seed'] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: logistic_l3 was not fitted on the sealed rows with the preregistered seed'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3094,7 +3238,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=[\"fit: logistic_l3 is not the sealed L3 (id 'L3', params hash, scaled or val off-recipe)\"] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: logistic_l3 is not the sealed L3 (id, params, params hash, family, scaled, val or head off-recipe)'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3103,7 +3247,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=[\"fit: model is not the sealed M4 (id 'M4', params hash, scaled or val off-recipe)\"] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: model is not the sealed M4 (id, params, params hash, family, scaled, val or head off-recipe)'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3112,7 +3256,25 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['fit: model has 2 ledger completions, must be exactly 1'] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: model has no integer iteration count'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-record-without-an-iteration-count-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: fit_info_by_role is not the records' fit_info\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "fit-info-by-role-not-the-records-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: model has 2 ledger completions, must be exactly 1'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3121,7 +3283,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['fit: incumbent has 0 ledger completions, must be exactly 1'] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: incumbent has 0 ledger completions, must be exactly 1'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3130,7 +3292,43 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=[\"complete: complete=False; missing ['model']\"] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: model's completion event does not carry the sealed fingerprint\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-completion-under-another-fingerprint-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: model fingerprint '<hash>' is not the one recomputed from the sealed literals\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-record-fingerprint-not-recomputable-from-the-sealed-literals-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: model has no 'started' event with its fingerprint before its completion\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-completion-without-a-preceding-start-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: the ledger's completions are not in the sealed order null, incumbent, logistic_l3, model\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "completions-out-of-the-sealed-order-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"complete: complete=False, run_finished_utc='2026-09-10T06:00:00Z'; missing ['model']\"] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3139,7 +3337,16 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=[\"scope: protocol.bar={'model_ext_correct_over_n_ext_minus_chance': 0.04}, preregistered {'model_ext_correct_over_n_ext_minus_chance': 0.05}\", 'scope: the b",
+      "evidence": "verdict=VOID real=None correct=None validity=['complete: complete=True, run_finished_utc=None; missing []'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-complete-artifact-without-a-finish-time-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"scope: protocol.bar={'model_real_correct_over_n_real_minus_chance': 0.04}, preregistered {'model_real_correct_over_n_real_minus_chance': 0.05}\", 'scope: ",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3148,7 +3355,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['scope: the banked recipes are not the sealed M1, L3 and M4'] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['scope: the banked recipes are not the sealed M1, L3 and M4'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3157,7 +3364,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['scope: the banked in-distribution references are not the sealed ones'] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['scope: the banked in-distribution references are not the sealed ones'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3166,11 +3373,38 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=[\"environment: sklearn='1.8.0', banked '1.9.0'\"] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=[\"environment: sklearn='1.8.0', banked '1.9.0'\"] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
       "mutation": "a-different-sklearn-version-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"environment: model python='3.12.1', banked '3.11.15'\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-different-python-version-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['environment: launch_environment is not ok with the sealed environment'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-launch-environment-with-a-problem-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "READER 0018: NOT RUN \u2014 'null control read 0.06 on the extension rows' (stage run, filed 2026-09-10T00:02:00Z, 1 checkpoints). A NOT RUN is not a verdict.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-not-run-file-beside-an-artifact-is-no-verdict",
       "observed": "fail"
     },
     {
@@ -3184,7 +3418,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['scores: the scores file is absent', 'scores: ext_fam missing, not N_EXT long, or not family indices'] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['scores: the scores file is absent', 'scores: ext_fam missing, not N_EXT long, or not family indices'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3193,7 +3427,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=[\"scope: preregistration='0017-lofo-l3-4096', this reader is frozen for 0018-oob-4096\"] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=[\"scope: preregistration='0017-lofo-l3-4096', this reader is frozen for 0018-oob-4096\"] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3202,7 +3436,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['null control: the null record is not the null-stage fit'] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: null is not the sealed M4 (id, params, params hash, family, scaled, val or head off-recipe)'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3211,7 +3445,25 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['fit: incumbent was not fitted on the sealed rows with the preregistered seed'] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: null is not the sealed M4 (id, params, params hash, family, scaled, val or head off-recipe)'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "the-null-fitted-with-the-incumbent-recipe-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"null control: the null block's labels are not banked as a permutation of the sealed labels\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "the-null-labels-not-a-permutation-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: incumbent was not fitted on the sealed rows with the preregistered seed'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3220,7 +3472,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['margin: ext_margin_model_over_logistic_l3_exact is not (correct counts difference) / N_EXT'] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['margin: ext_margin_model_over_logistic_l3_exact is not (correct counts difference) / N_EXT'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3229,7 +3481,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['extension corpus: ext_corpus.chunk_ids_disjoint_from_builder=False, preregistered True'] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['extension corpus: ext_corpus.chunk_ids_disjoint_from_builder=False, preregistered True'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3238,7 +3490,25 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=[\"readings: model.ext_real_top1=0.1201 is not the reader's recomputation 0.12\"] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.pool_rows_identical_to_an_ext_row=1, must be the measured 0'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-measured-overlap-of-one-row-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.eval_chunks_shared_with_ext=1, must be the measured 0'] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-shared-evaluation-chunk-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"readings: model.ext_real_top1=0.1201 is not the reader's recomputation 0.12\"] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3247,7 +3517,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['null control: shuffled_label_accuracy_ext is not the recomputed value'] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['null control: shuffled_label_accuracy_ext or shuffled_label_accuracy_eval is not the recomputed value'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
@@ -3256,16 +3526,52 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID ext=None correct=None validity=['fit: model banked a failed block probe check'] transfer=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: model banked a failed block probe check'] transfer=[]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "oob4096",
       "mutation": "a-pool-fit-with-a-failed-block-probe-is-VOID",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: model status 'infeasible_memory'; must be 'fit'\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-record-with-memory-infeasible-status-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"sealed set: partition.eval_idx_sha256='<hash>', preregistered '<hash>'\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-partition-with-another-evaluation-hash-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID validity=['fit: fits is not a mapping']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "an-artifact-whose-fits-block-is-a-list-is-VOID-not-a-traceback",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OOB_TRANSFERS real=0.0898 correct=3452 validity=[] transfer=[] | verdict=OOB_TRANSFER_FAILS real=0.0884 correct=3401 validity=[] transfer=[\"transfer: M4's correct real-family rows 3401 of 3845",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "the-mixture-flag-is-banked-but-does-not-decide-the-verdict",
+      "observed": "fail"
     }
   ],
-  "detected": 353,
+  "detected": 387,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 353
+  "total_mutations": 387
 }
