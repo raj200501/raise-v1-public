@@ -1,3 +1,7 @@
 {"name": "null", "fingerprint": "b3e65a003c1b0b31", "event": "started", "utc": "2026-09-10T02:25:57Z", "rss_gb": 1.79, "pid": 15370, "attempt": 1}
 {"name": "null", "fingerprint": "b3e65a003c1b0b31", "event": "completed", "utc": "2026-09-10T02:27:46Z", "rss_gb": 2.04, "pid": 15370, "seconds": 83.7}
 {"name": "incumbent", "fingerprint": "5c7371f8a04b9f65", "event": "started", "utc": "2026-09-10T02:28:12Z", "rss_gb": 8.79, "pid": 15370, "attempt": 1}
+{"name": "incumbent", "fingerprint": "5c7371f8a04b9f65", "event": "completed", "utc": "2026-09-10T02:56:51Z", "rss_gb": 9.14, "pid": 15370, "seconds": 1694.1}
+{"name": "logistic_l3", "fingerprint": "9ea2e67db9696c8f", "event": "started", "utc": "2026-09-10T02:56:52Z", "rss_gb": 8.81, "pid": 15370, "attempt": 1}
+{"name": "logistic_l3", "fingerprint": "9ea2e67db9696c8f", "event": "completed", "utc": "2026-09-10T03:23:14Z", "rss_gb": 8.91, "pid": 15370, "seconds": 1567.4}
+{"name": "model", "fingerprint": "f2a0aff918f518ed", "event": "started", "utc": "2026-09-10T03:23:15Z", "rss_gb": 8.91, "pid": 15370, "attempt": 1}
