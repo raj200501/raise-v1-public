@@ -1,0 +1,1396 @@
+{
+  "chance_accuracy": 0.038462,
+  "class_names": [
+    "zlib-1",
+    "zlib-2",
+    "zlib-3",
+    "zlib-4",
+    "zlib-5",
+    "zlib-6",
+    "zlib-7",
+    "zlib-8",
+    "zlib-9",
+    "libdeflate-1",
+    "libdeflate-2",
+    "libdeflate-3",
+    "libdeflate-4",
+    "libdeflate-5",
+    "libdeflate-6",
+    "libdeflate-7",
+    "libdeflate-8",
+    "libdeflate-9",
+    "libdeflate-10",
+    "libdeflate-11",
+    "libdeflate-12",
+    "isal-0",
+    "isal-1",
+    "isal-2",
+    "isal-3",
+    "zopfli"
+  ],
+  "cluster_ci95_informational": {
+    "incumbent_ext": [
+      0.07,
+      0.074
+    ],
+    "incumbent_ext_c_src": [
+      0.055,
+      0.0655
+    ],
+    "incumbent_ext_hexdump": [
+      0.0531,
+      0.0621
+    ],
+    "incumbent_ext_pe_bin": [
+      0.0664,
+      0.0756
+    ],
+    "incumbent_ext_py_src": [
+      0.0527,
+      0.0619
+    ],
+    "incumbent_ext_rfc_txt": [
+      0.0635,
+      0.0741
+    ],
+    "incumbent_ext_rst_doc": [
+      0.0549,
+      0.0658
+    ],
+    "incumbent_ext_sql": [
+      0.0974,
+      0.1093
+    ],
+    "incumbent_ext_xml": [
+      0.0949,
+      0.1045
+    ],
+    "incumbent_reproduction": [
+      0.2366,
+      0.2421
+    ],
+    "logistic_l3_ext": [
+      0.0812,
+      0.0848
+    ],
+    "logistic_l3_ext_c_src": [
+      0.0576,
+      0.0677
+    ],
+    "logistic_l3_ext_hexdump": [
+      0.0854,
+      0.0933
+    ],
+    "logistic_l3_ext_pe_bin": [
+      0.0729,
+      0.0816
+    ],
+    "logistic_l3_ext_py_src": [
+      0.0538,
+      0.0637
+    ],
+    "logistic_l3_ext_rfc_txt": [
+      0.0722,
+      0.0819
+    ],
+    "logistic_l3_ext_rst_doc": [
+      0.0777,
+      0.0883
+    ],
+    "logistic_l3_ext_sql": [
+      0.1068,
+      0.1173
+    ],
+    "logistic_l3_ext_xml": [
+      0.1,
+      0.1101
+    ],
+    "logistic_l3_reproduction": [
+      0.229,
+      0.2344
+    ],
+    "model_ext": [
+      0.0747,
+      0.0785
+    ],
+    "model_ext_c_src": [
+      0.0527,
+      0.0632
+    ],
+    "model_ext_hexdump": [
+      0.0731,
+      0.0806
+    ],
+    "model_ext_pe_bin": [
+      0.0727,
+      0.0809
+    ],
+    "model_ext_py_src": [
+      0.0482,
+      0.0574
+    ],
+    "model_ext_rfc_txt": [
+      0.0653,
+      0.0765
+    ],
+    "model_ext_rst_doc": [
+      0.0553,
+      0.0663
+    ],
+    "model_ext_sql": [
+      0.1063,
+      0.1169
+    ],
+    "model_ext_xml": [
+      0.1014,
+      0.1123
+    ],
+    "model_reproduction": [
+      0.285,
+      0.2917
+    ],
+    "null_ext": [
+      0.0357,
+      0.0386
+    ],
+    "null_ext_c_src": [
+      0.0342,
+      0.0428
+    ],
+    "null_ext_hexdump": [
+      0.0299,
+      0.0377
+    ],
+    "null_ext_pe_bin": [
+      0.0318,
+      0.04
+    ],
+    "null_ext_py_src": [
+      0.0381,
+      0.0466
+    ],
+    "null_ext_rfc_txt": [
+      0.0334,
+      0.0415
+    ],
+    "null_ext_rst_doc": [
+      0.0323,
+      0.0408
+    ],
+    "null_ext_sql": [
+      0.0347,
+      0.043
+    ],
+    "null_ext_xml": [
+      0.03,
+      0.0378
+    ],
+    "null_reproduction": [
+      0.0375,
+      0.039
+    ]
+  },
+  "cluster_ci95_note": "95% cluster-bootstrap intervals over source chunks (2000 resamples): per extension family, over all extension chunks, and over the sealed evaluation chunks for each reproduction; informational, never a clause",
+  "complete": true,
+  "corpus": {
+    "cache_g_sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9",
+    "cache_y_sha256": "2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093",
+    "carve_bytes": 4096,
+    "carve_bytes_source": "sealed cache identity (sha256 of y and g); the cache carries no build metadata",
+    "chunk_id_max": 49999,
+    "chunk_id_min": 0,
+    "chunk_offset": 0,
+    "chunk_size": 32768,
+    "n_features": 1108,
+    "n_rows": 1300000,
+    "n_source_chunks": 50000
+  },
+  "cost": {
+    "banked_fit_seconds_total": 21995.4,
+    "checkpoints": "artifacts/pivot/oob_4096_ckpt",
+    "interruptions_by_name": {
+      "incumbent": 0,
+      "logistic_l3": 0,
+      "model": 0,
+      "null": 0
+    },
+    "seconds_by_name": {
+      "incumbent": 1694.1,
+      "logistic_l3": 1567.4,
+      "model": 18650.2,
+      "null": 83.7
+    },
+    "wall_seconds_this_invocation": 22386.6
+  },
+  "environment": {
+    "cgroup_memory_limit": "unlimited",
+    "cpu_cores": 4,
+    "disk_free_gb": 4.75,
+    "gpu": "none",
+    "mem_available_gb": 15.65,
+    "nice": 10,
+    "numpy": "2.4.6",
+    "python": "3.11.15",
+    "sklearn": "1.9.0",
+    "threads": 3
+  },
+  "ext_corpus": {
+    "arrays": {
+      "X": {
+        "dtype": "float32",
+        "sha256": "c578eaf142dfd776fe2c9433420133ae6b2d304cdd546f2bdbbc50b397c4f5db",
+        "shape": [
+          61409,
+          1108
+        ]
+      },
+      "fam": {
+        "dtype": "int8",
+        "sha256": "21b066e7020c5a4ba247101e679ba31f23cbeae5500ab67e64f453b83e61f917",
+        "shape": [
+          61409
+        ]
+      },
+      "g": {
+        "dtype": "int32",
+        "sha256": "2f5b8a86cc0463c1376d1ceb379ffe710e709899f2db4e1a527d355d6fcfc8b9",
+        "shape": [
+          61409
+        ]
+      },
+      "y": {
+        "dtype": "int16",
+        "sha256": "edbf9b3a9aa810338807a4a397884b58b27a28bbf0d99826050403bdeeabdd46",
+        "shape": [
+          61409
+        ]
+      }
+    },
+    "chunk_id_max": 10700299,
+    "chunk_id_min": 10000000,
+    "chunk_ids_disjoint_from_builder": true,
+    "chunks_per_family": {
+      "c_src": 300,
+      "hexdump": 300,
+      "pe_bin": 288,
+      "py_src": 300,
+      "rfc_txt": 300,
+      "rst_doc": 300,
+      "sql": 299,
+      "xml": 300
+    },
+    "families": [
+      "c_src",
+      "hexdump",
+      "pe_bin",
+      "py_src",
+      "rfc_txt",
+      "rst_doc",
+      "sql",
+      "xml"
+    ],
+    "n_chunks": 2387,
+    "n_rows": 61409,
+    "npz": "data/pivot/ext_c4096.npz",
+    "rows_per_family": {
+      "c_src": 7800,
+      "hexdump": 7800,
+      "pe_bin": 7407,
+      "py_src": 7709,
+      "rfc_txt": 7761,
+      "rst_doc": 7775,
+      "sql": 7357,
+      "xml": 7800
+    }
+  },
+  "ext_correct": {
+    "incumbent": 4425,
+    "logistic_l3": 5095,
+    "model": 4703
+  },
+  "ext_correct_model": 4703,
+  "ext_label_histogram": [
+    2381,
+    2377,
+    2375,
+    2369,
+    2364,
+    2357,
+    2356,
+    2353,
+    2353,
+    2375,
+    2372,
+    2370,
+    2367,
+    2359,
+    2356,
+    2350,
+    2348,
+    2348,
+    2346,
+    2339,
+    2339,
+    2387,
+    2377,
+    2377,
+    2377,
+    2337
+  ],
+  "ext_majority_class_rate": 0.038871,
+  "ext_margin_model_over_incumbent_exact": 0.004527,
+  "ext_margin_model_over_logistic_l3_exact": -0.006383,
+  "ext_per_family": {
+    "incumbent": {
+      "c_src": 0.0601,
+      "hexdump": 0.0576,
+      "pe_bin": 0.071,
+      "py_src": 0.0573,
+      "rfc_txt": 0.0687,
+      "rst_doc": 0.0603,
+      "sql": 0.1033,
+      "xml": 0.0996
+    },
+    "logistic_l3": {
+      "c_src": 0.0627,
+      "hexdump": 0.0894,
+      "pe_bin": 0.0772,
+      "py_src": 0.0588,
+      "rfc_txt": 0.0771,
+      "rst_doc": 0.0827,
+      "sql": 0.112,
+      "xml": 0.105
+    },
+    "model": {
+      "c_src": 0.0579,
+      "hexdump": 0.0768,
+      "pe_bin": 0.0767,
+      "py_src": 0.0528,
+      "rfc_txt": 0.071,
+      "rst_doc": 0.0607,
+      "sql": 0.1116,
+      "xml": 0.1068
+    }
+  },
+  "ext_real_correct": {
+    "incumbent": 2439,
+    "logistic_l3": 2755,
+    "model": 2450
+  },
+  "ext_real_correct_model": 2450,
+  "ext_real_families": [
+    "c_src",
+    "pe_bin",
+    "py_src",
+    "rfc_txt",
+    "rst_doc"
+  ],
+  "ext_real_top1": {
+    "incumbent": 0.0634,
+    "logistic_l3": 0.0716,
+    "model": 0.0637
+  },
+  "ext_synthetic_families": [
+    "hexdump",
+    "sql",
+    "xml"
+  ],
+  "ext_top1": {
+    "incumbent": 0.0721,
+    "logistic_l3": 0.083,
+    "model": 0.0766
+  },
+  "ext_top1_model": 0.0766,
+  "first_launch_utc": "2026-09-10T02:25:51Z",
+  "fit_info_by_role": {
+    "incumbent": {
+      "n_iter": 33
+    },
+    "logistic_l3": {
+      "n_iter": 728
+    },
+    "model": {
+      "n_iter": 250
+    }
+  },
+  "fit_record_top1_is": "in each fit record: top1 is over the CONCATENATED scoring set (sealed evaluation rows then extension rows); top1_non_gutenberg is over the sealed non-gutenberg rows plus every extension row; per_family covers the sealed evaluation rows only. All three are informational; the reproduction and the extension readings are in `readings`, recomputed by the reader",
+  "fits": {
+    "incumbent": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "hgb",
+      "fingerprint": "5c7371f8a04b9f65",
+      "fit_info": {
+        "n_iter": 33
+      },
+      "fit_rows_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+      "fit_rows_sorted_sha256": "923cd266c3bf2a45683b2c479d36b046b311cc8f2e53426c962b6dd5ae836094",
+      "head": "incumbent",
+      "heartbeat_max_rss_gb": 10.15,
+      "id": "M1",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 800000,
+      "params": {
+        "learning_rate": 0.15,
+        "max_iter": 200,
+        "max_leaf_nodes": 63,
+        "n_iter_no_change": 10
+      },
+      "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+      "per_example_sha256": "e9c5284e499c3d9b798fd2cc8dc478dd3905529949f92785c459ef34cccf0da4",
+      "per_family": {
+        "base64": 0.1221,
+        "binary": 0.1049,
+        "code": 0.2944,
+        "csv": 0.3888,
+        "gutenberg": 0.1596,
+        "json": 0.3581,
+        "log": 0.3756,
+        "mixed": 0.1143
+      },
+      "rss_gb": 9.14,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 12.24,
+      "ru_maxrss_gb": 13.68,
+      "scaled": false,
+      "seconds": 1694.1,
+      "seed": 20260825,
+      "stage": "pool",
+      "status": "fit",
+      "top1": 0.2075,
+      "top1_non_gutenberg": 0.2129,
+      "utc": "2026-09-10T02:28:12Z",
+      "val": "frag"
+    },
+    "logistic_l3": {
+      "block_refills": [
+        {
+          "order": "canonical",
+          "probe_ok": true,
+          "utc": "2026-09-10T03:23:14Z"
+        }
+      ],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "logistic",
+      "fingerprint": "9ea2e67db9696c8f",
+      "fit_info": {
+        "n_iter": 728
+      },
+      "fit_rows_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+      "fit_rows_sorted_sha256": "923cd266c3bf2a45683b2c479d36b046b311cc8f2e53426c962b6dd5ae836094",
+      "head": "logistic_l3",
+      "heartbeat_max_rss_gb": 9.07,
+      "id": "L3",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 800000,
+      "params": {
+        "C": 1.0,
+        "max_iter": 1000
+      },
+      "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+      "per_example_sha256": "4e2c67f1c102b323c507ddca80295541e7a8e5816c87f65e0fcc849491725606",
+      "per_family": {
+        "base64": 0.0909,
+        "binary": 0.0852,
+        "code": 0.3127,
+        "csv": 0.3303,
+        "gutenberg": 0.1558,
+        "json": 0.3906,
+        "log": 0.3744,
+        "mixed": 0.115
+      },
+      "rss_gb": 8.91,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 13.66,
+      "ru_maxrss_gb": 13.68,
+      "scaled": true,
+      "seconds": 1567.4,
+      "seed": 20260825,
+      "stage": "pool",
+      "status": "fit",
+      "top1": 0.2033,
+      "top1_non_gutenberg": 0.2087,
+      "utc": "2026-09-10T02:56:52Z",
+      "val": null
+    },
+    "model": {
+      "block_refills": [
+        {
+          "order": "canonical",
+          "probe_ok": true,
+          "utc": "2026-09-10T03:23:14Z"
+        }
+      ],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "hgb",
+      "fingerprint": "f2a0aff918f518ed",
+      "fit_info": {
+        "n_iter": 250
+      },
+      "fit_rows_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+      "fit_rows_sorted_sha256": "923cd266c3bf2a45683b2c479d36b046b311cc8f2e53426c962b6dd5ae836094",
+      "head": "model",
+      "heartbeat_max_rss_gb": 10.7,
+      "id": "M4",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 800000,
+      "params": {
+        "l2_regularization": 1.0,
+        "learning_rate": 0.05,
+        "max_iter": 250,
+        "max_leaf_nodes": 127,
+        "n_iter_no_change": 20
+      },
+      "params_sha256": "9c19bb4d24ea1b96659e43a3e7ce8c71c2980a1bf4abe5066afe9761380a41a8",
+      "per_example_sha256": "44c935405a5d670a2bd5b21f29f02f27612d5cb82a7f4a04842ee992b27ce2a6",
+      "per_family": {
+        "base64": 0.1296,
+        "binary": 0.111,
+        "code": 0.3759,
+        "csv": 0.4505,
+        "gutenberg": 0.2065,
+        "json": 0.4541,
+        "log": 0.4656,
+        "mixed": 0.116
+      },
+      "rss_gb": 9.7,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 12.63,
+      "ru_maxrss_gb": 13.68,
+      "scaled": false,
+      "seconds": 18650.2,
+      "seed": 20260825,
+      "stage": "pool",
+      "status": "fit",
+      "top1": 0.2479,
+      "top1_non_gutenberg": 0.2527,
+      "utc": "2026-09-10T03:23:15Z",
+      "val": "frag"
+    },
+    "null": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "hgb",
+      "fingerprint": "b3e65a003c1b0b31",
+      "fit_info": {
+        "n_iter": 20
+      },
+      "fit_rows_sha256": "9fe0c88222fe81b58e5931e622a1ce660967e9f4300e64c2148e720df680fa34",
+      "fit_rows_sorted_sha256": "822b61020d276a04620440eb2d2e7e60376e1efba83e89607c33c09c39fa1425",
+      "head": "null",
+      "heartbeat_max_rss_gb": 2.47,
+      "id": "M4",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 20000,
+      "params": {
+        "l2_regularization": 1.0,
+        "learning_rate": 0.05,
+        "max_iter": 250,
+        "max_leaf_nodes": 127,
+        "n_iter_no_change": 20
+      },
+      "params_sha256": "9c19bb4d24ea1b96659e43a3e7ce8c71c2980a1bf4abe5066afe9761380a41a8",
+      "per_example_sha256": "cbf3c46e7e20a6efa63c391edaae84efd6333938e6691d8df63c22b08db6974a",
+      "per_family": {
+        "base64": 0.0399,
+        "binary": 0.0377,
+        "code": 0.0366,
+        "csv": 0.0416,
+        "gutenberg": 0.0373,
+        "json": 0.0368,
+        "log": 0.0386,
+        "mixed": 0.0376
+      },
+      "rss_gb": 2.04,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 7.72,
+      "ru_maxrss_gb": 8.15,
+      "scaled": false,
+      "seconds": 83.7,
+      "seed": 20260825,
+      "stage": "null",
+      "status": "fit",
+      "top1": 0.038,
+      "top1_non_gutenberg": 0.0381,
+      "utc": "2026-09-10T02:25:57Z",
+      "val": "frag"
+    }
+  },
+  "launch_environment": {
+    "env": {
+      "cgroup_memory_limit": "unlimited",
+      "cpu_cores": 4,
+      "disk_free_gb": 4.75,
+      "gpu": "none",
+      "mem_available_gb": 15.65,
+      "nice": 10,
+      "numpy": "2.4.6",
+      "python": "3.11.15",
+      "sklearn": "1.9.0",
+      "threads": 3
+    },
+    "loadavg_1_5_15": [
+      0.0,
+      0.3,
+      0.6
+    ],
+    "ok": true,
+    "problems": []
+  },
+  "launch_number": 1,
+  "ledger": [
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "b3e65a003c1b0b31",
+      "name": "null",
+      "pid": 15370,
+      "rss_gb": 1.79,
+      "utc": "2026-09-10T02:25:57Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "b3e65a003c1b0b31",
+      "name": "null",
+      "pid": 15370,
+      "rss_gb": 2.04,
+      "seconds": 83.7,
+      "utc": "2026-09-10T02:27:46Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "5c7371f8a04b9f65",
+      "name": "incumbent",
+      "pid": 15370,
+      "rss_gb": 8.79,
+      "utc": "2026-09-10T02:28:12Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "5c7371f8a04b9f65",
+      "name": "incumbent",
+      "pid": 15370,
+      "rss_gb": 9.14,
+      "seconds": 1694.1,
+      "utc": "2026-09-10T02:56:51Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "9ea2e67db9696c8f",
+      "name": "logistic_l3",
+      "pid": 15370,
+      "rss_gb": 8.81,
+      "utc": "2026-09-10T02:56:52Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "9ea2e67db9696c8f",
+      "name": "logistic_l3",
+      "pid": 15370,
+      "rss_gb": 8.91,
+      "seconds": 1567.4,
+      "utc": "2026-09-10T03:23:14Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "f2a0aff918f518ed",
+      "name": "model",
+      "pid": 15370,
+      "rss_gb": 8.91,
+      "utc": "2026-09-10T03:23:15Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "f2a0aff918f518ed",
+      "name": "model",
+      "pid": 15370,
+      "rss_gb": 9.7,
+      "seconds": 18650.2,
+      "utc": "2026-09-10T08:38:17Z"
+    }
+  ],
+  "missing_roles": [],
+  "n_classes": 26,
+  "n_eval_rows": 260000,
+  "n_ext_real_rows": 38452,
+  "n_ext_rows": 61409,
+  "null_control": {
+    "block_refills": [],
+    "environment": {
+      "nice": 10,
+      "numpy": "2.4.6",
+      "python": "3.11.15",
+      "sklearn": "1.9.0",
+      "standardiser_probe": {
+        "block_gb": 0.177,
+        "ncols": 1108,
+        "peak_extra_fraction_of_block": 0.1005,
+        "probe_rows_per_pass": 2000,
+        "production_rows_per_pass": 20000,
+        "production_transient_gb": 0.177,
+        "rows": 20000
+      },
+      "threads": 3
+    },
+    "family": "hgb",
+    "fingerprint": "b3e65a003c1b0b31",
+    "fit_info": {
+      "n_iter": 20
+    },
+    "fit_rows_sha256": "9fe0c88222fe81b58e5931e622a1ce660967e9f4300e64c2148e720df680fa34",
+    "fit_rows_sorted_sha256": "822b61020d276a04620440eb2d2e7e60376e1efba83e89607c33c09c39fa1425",
+    "head": "null",
+    "heartbeat_max_rss_gb": 2.47,
+    "id": "M4",
+    "interruptions_before_this_fit": 0,
+    "last_heartbeat_rss_gb_before_this_fit": null,
+    "n_fit_rows": 20000,
+    "params": {
+      "l2_regularization": 1.0,
+      "learning_rate": 0.05,
+      "max_iter": 250,
+      "max_leaf_nodes": 127,
+      "n_iter_no_change": 20
+    },
+    "params_sha256": "9c19bb4d24ea1b96659e43a3e7ce8c71c2980a1bf4abe5066afe9761380a41a8",
+    "per_example_sha256": "cbf3c46e7e20a6efa63c391edaae84efd6333938e6691d8df63c22b08db6974a",
+    "per_family": {
+      "base64": 0.0399,
+      "binary": 0.0377,
+      "code": 0.0366,
+      "csv": 0.0416,
+      "gutenberg": 0.0373,
+      "json": 0.0368,
+      "log": 0.0386,
+      "mixed": 0.0376
+    },
+    "rss_gb": 2.04,
+    "rss_gb_is": "anonymous (RssAnon)",
+    "rss_total_gb": 7.72,
+    "ru_maxrss_gb": 8.15,
+    "scaled": false,
+    "seconds": 83.7,
+    "seed": 20260825,
+    "stage": "null",
+    "status": "fit",
+    "top1": 0.038,
+    "top1_non_gutenberg": 0.0381,
+    "utc": "2026-09-10T02:25:57Z",
+    "val": "frag"
+  },
+  "null_rows": 20000,
+  "partition": {
+    "eval_chunks_shared_with_ext": 0,
+    "eval_frac": 0.2,
+    "eval_idx_sha256": "7da1099e0cf9d4c3903dad62f52c91f67b751113fc4bfc0a62c53f05dccf1efa",
+    "eval_rows_identical_to_an_ext_row": 0,
+    "eval_y_sha256": "92b95cf02a21945cea2a7bd756a1e1096b07ec351b478c39e795a8a2267400d1",
+    "families": [
+      "gutenberg",
+      "base64",
+      "binary",
+      "code",
+      "csv",
+      "json",
+      "log",
+      "mixed"
+    ],
+    "fit_rows": "all",
+    "n_eval_chunks": 10000,
+    "n_eval_non_gutenberg": 227006,
+    "n_eval_rows": 260000,
+    "n_pool_chunks": 40000,
+    "n_pool_rows": 800000,
+    "null_labels_permuted": true,
+    "null_labels_same_multiset": true,
+    "null_rows": 20000,
+    "null_sorted_sha256": "822b61020d276a04620440eb2d2e7e60376e1efba83e89607c33c09c39fa1425",
+    "null_y_shuffled_sha256": "6e9838cb60c68d2c5fe3ef7fcbe808159d66fbcbd28502bcbd47833df2cfa919",
+    "pool_chunks_shared_with_ext": 0,
+    "pool_idx_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+    "pool_rows_identical_to_an_ext_row": 0,
+    "pool_sorted_sha256": "923cd266c3bf2a45683b2c479d36b046b311cc8f2e53426c962b6dd5ae836094",
+    "pool_y_sha256": "d519612b4e46991f6ea1850fc92271e0de581e3cc378dd05fec59ff678dc72ea",
+    "row_identity_digest": "blake2b-128 of the contiguous float32 feature row",
+    "seed": 20260825,
+    "split_is_grouped_by_source": true,
+    "top_rung": 800000
+  },
+  "preregistration": "0018-oob-4096",
+  "protocol": {
+    "bar": {
+      "model_real_correct_over_n_real_minus_chance": 0.05
+    },
+    "cache_identity": {
+      "g_sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9",
+      "y_sha256": "2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093"
+    },
+    "caps": {
+      "memory_kill_gb": 13.0
+    },
+    "carve": 4096,
+    "chunk_offset": 0,
+    "chunk_size": 32768,
+    "environment": {
+      "numpy": "2.4.6",
+      "python": "3.11.15",
+      "sklearn": "1.9.0"
+    },
+    "eval_frac": 0.2,
+    "ext_corpus": {
+      "arrays": {
+        "X": {
+          "dtype": "float32",
+          "sha256": "c578eaf142dfd776fe2c9433420133ae6b2d304cdd546f2bdbbc50b397c4f5db",
+          "shape": [
+            61409,
+            1108
+          ]
+        },
+        "fam": {
+          "dtype": "int8",
+          "sha256": "21b066e7020c5a4ba247101e679ba31f23cbeae5500ab67e64f453b83e61f917",
+          "shape": [
+            61409
+          ]
+        },
+        "g": {
+          "dtype": "int32",
+          "sha256": "2f5b8a86cc0463c1376d1ceb379ffe710e709899f2db4e1a527d355d6fcfc8b9",
+          "shape": [
+            61409
+          ]
+        },
+        "y": {
+          "dtype": "int16",
+          "sha256": "edbf9b3a9aa810338807a4a397884b58b27a28bbf0d99826050403bdeeabdd46",
+          "shape": [
+            61409
+          ]
+        }
+      },
+      "ceiling_distinct_fragments": {
+        "c_src": 0.9751,
+        "hexdump": 0.9987,
+        "pe_bin": 0.8949,
+        "py_src": 0.9828,
+        "rfc_txt": 0.9768,
+        "rst_doc": 0.9538,
+        "sql": 0.8987,
+        "xml": 0.9512
+      },
+      "ceiling_distinct_streams": {
+        "c_src": 0.9818,
+        "hexdump": 1.0,
+        "pe_bin": 0.9499,
+        "py_src": 0.9959,
+        "rfc_txt": 0.9856,
+        "rst_doc": 0.966,
+        "sql": 0.9533,
+        "xml": 0.9524
+      },
+      "chunk_id_base": 10000000,
+      "chunk_id_max": 10700299,
+      "chunk_id_min": 10000000,
+      "chunks_built_per_family": {
+        "c_src": 300,
+        "hexdump": 300,
+        "pe_bin": 300,
+        "py_src": 300,
+        "rfc_txt": 300,
+        "rst_doc": 300,
+        "sql": 300,
+        "xml": 300
+      },
+      "chunks_per_family": {
+        "c_src": 300,
+        "hexdump": 300,
+        "pe_bin": 288,
+        "py_src": 300,
+        "rfc_txt": 300,
+        "rst_doc": 300,
+        "sql": 299,
+        "xml": 300
+      },
+      "chunks_without_rows": [
+        10200064,
+        10200093,
+        10200108,
+        10200122,
+        10200152,
+        10200156,
+        10200180,
+        10200199,
+        10200206,
+        10200207,
+        10200259,
+        10200263,
+        10600139
+      ],
+      "families": [
+        "c_src",
+        "hexdump",
+        "pe_bin",
+        "py_src",
+        "rfc_txt",
+        "rst_doc",
+        "sql",
+        "xml"
+      ],
+      "family_stride": 100000,
+      "label_histogram": [
+        2381,
+        2377,
+        2375,
+        2369,
+        2364,
+        2357,
+        2356,
+        2353,
+        2353,
+        2375,
+        2372,
+        2370,
+        2367,
+        2359,
+        2356,
+        2350,
+        2348,
+        2348,
+        2346,
+        2339,
+        2339,
+        2387,
+        2377,
+        2377,
+        2377,
+        2337
+      ],
+      "majority_class_rate": 0.038871,
+      "majority_class_rate_real": 0.038698,
+      "manifest": "artifacts/pivot/ext_corpus_manifest.json",
+      "n_chunks": 2387,
+      "n_chunks_built": 2400,
+      "n_per_family": 300,
+      "n_real_rows": 38452,
+      "n_rows": 61409,
+      "n_synthetic_rows": 22957,
+      "npz": "data/pivot/ext_c4096.npz",
+      "real_families": [
+        "c_src",
+        "pe_bin",
+        "py_src",
+        "rfc_txt",
+        "rst_doc"
+      ],
+      "rows_dropped_short_stream": 991,
+      "rows_per_family": {
+        "c_src": 7800,
+        "hexdump": 7800,
+        "pe_bin": 7407,
+        "py_src": 7709,
+        "rfc_txt": 7761,
+        "rst_doc": 7775,
+        "sql": 7357,
+        "xml": 7800
+      },
+      "seed": 20260909,
+      "source_pins_sha256_of_file": "2403ba48846503b6f92744558e1d34453124aa3e56d6058614a49da864e5f694",
+      "synthetic_families": [
+        "hexdump",
+        "sql",
+        "xml"
+      ]
+    },
+    "ext_families": [
+      "c_src",
+      "hexdump",
+      "pe_bin",
+      "py_src",
+      "rfc_txt",
+      "rst_doc",
+      "sql",
+      "xml"
+    ],
+    "families": [
+      "gutenberg",
+      "base64",
+      "binary",
+      "code",
+      "csv",
+      "json",
+      "log",
+      "mixed"
+    ],
+    "fit_rows": "all",
+    "launch": {
+      "max_load1": 2.0,
+      "min_disk_free_gb": 0.5,
+      "min_mem_available_gb": 14.5
+    },
+    "min_correct": 5433,
+    "min_correct_real": 3402,
+    "mixture_flag": {
+      "model_ext_correct_over_n_ext_minus_chance": 0.05
+    },
+    "n_ext_real_rows": 38452,
+    "nice": 10,
+    "null_rows": 20000,
+    "null_tolerance": 0.01,
+    "order": [
+      "null",
+      "incumbent",
+      "logistic_l3",
+      "model"
+    ],
+    "pool_idx_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+    "reference_source": "artifacts/pivot/recipe_search_4096.json: incumbent_refit.top1, final.logistic.top1, final.model.top1",
+    "reference_top1": {
+      "incumbent": 0.2395,
+      "logistic_l3": 0.2317,
+      "model": 0.2884
+    },
+    "reproduction_tolerance": 0.005,
+    "roles": [
+      "incumbent",
+      "logistic_l3",
+      "model"
+    ],
+    "seed": 20260825,
+    "subsets": {
+      "high_entropy": [
+        "hexdump",
+        "pe_bin"
+      ],
+      "real": [
+        "c_src",
+        "pe_bin",
+        "py_src",
+        "rfc_txt",
+        "rst_doc"
+      ],
+      "structured_text": [
+        "c_src",
+        "py_src",
+        "rfc_txt",
+        "rst_doc",
+        "sql",
+        "xml"
+      ],
+      "synthetic": [
+        "hexdump",
+        "sql",
+        "xml"
+      ]
+    },
+    "threads": 3,
+    "top_rung": 800000
+  },
+  "protocol_sha256": "1b05d86755f43b9393c011074f5bcce666c16109416b6da41b0bf6c8152271e6",
+  "readings": {
+    "incumbent": {
+      "ext_correct": 4425,
+      "ext_high_entropy_top1": 0.0641,
+      "ext_per_family": {
+        "c_src": 0.0601,
+        "hexdump": 0.0576,
+        "pe_bin": 0.071,
+        "py_src": 0.0573,
+        "rfc_txt": 0.0687,
+        "rst_doc": 0.0603,
+        "sql": 0.1033,
+        "xml": 0.0996
+      },
+      "ext_per_family_correct": {
+        "c_src": 469,
+        "hexdump": 449,
+        "pe_bin": 526,
+        "py_src": 442,
+        "rfc_txt": 533,
+        "rst_doc": 469,
+        "sql": 760,
+        "xml": 777
+      },
+      "ext_real_correct": 2439,
+      "ext_real_top1": 0.0634,
+      "ext_structured_text_top1": 0.0747,
+      "ext_synthetic_correct": 1986,
+      "ext_synthetic_top1": 0.0865,
+      "ext_top1": 0.0721,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409,
+      "reproduction_correct": 62259,
+      "reproduction_per_family": {
+        "base64": 0.1221,
+        "binary": 0.1049,
+        "code": 0.2944,
+        "csv": 0.3888,
+        "gutenberg": 0.1596,
+        "json": 0.3581,
+        "log": 0.3756,
+        "mixed": 0.1143
+      },
+      "reproduction_top1": 0.2395
+    },
+    "logistic_l3": {
+      "ext_correct": 5095,
+      "ext_high_entropy_top1": 0.0834,
+      "ext_per_family": {
+        "c_src": 0.0627,
+        "hexdump": 0.0894,
+        "pe_bin": 0.0772,
+        "py_src": 0.0588,
+        "rfc_txt": 0.0771,
+        "rst_doc": 0.0827,
+        "sql": 0.112,
+        "xml": 0.105
+      },
+      "ext_per_family_correct": {
+        "c_src": 489,
+        "hexdump": 697,
+        "pe_bin": 572,
+        "py_src": 453,
+        "rfc_txt": 598,
+        "rst_doc": 643,
+        "sql": 824,
+        "xml": 819
+      },
+      "ext_real_correct": 2755,
+      "ext_real_top1": 0.0716,
+      "ext_structured_text_top1": 0.0828,
+      "ext_synthetic_correct": 2340,
+      "ext_synthetic_top1": 0.1019,
+      "ext_top1": 0.083,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409,
+      "reproduction_correct": 60243,
+      "reproduction_per_family": {
+        "base64": 0.0909,
+        "binary": 0.0852,
+        "code": 0.3127,
+        "csv": 0.3303,
+        "gutenberg": 0.1558,
+        "json": 0.3906,
+        "log": 0.3744,
+        "mixed": 0.115
+      },
+      "reproduction_top1": 0.2317
+    },
+    "model": {
+      "ext_correct": 4703,
+      "ext_high_entropy_top1": 0.0767,
+      "ext_per_family": {
+        "c_src": 0.0579,
+        "hexdump": 0.0768,
+        "pe_bin": 0.0767,
+        "py_src": 0.0528,
+        "rfc_txt": 0.071,
+        "rst_doc": 0.0607,
+        "sql": 0.1116,
+        "xml": 0.1068
+      },
+      "ext_per_family_correct": {
+        "c_src": 452,
+        "hexdump": 599,
+        "pe_bin": 568,
+        "py_src": 407,
+        "rfc_txt": 551,
+        "rst_doc": 472,
+        "sql": 821,
+        "xml": 833
+      },
+      "ext_real_correct": 2450,
+      "ext_real_top1": 0.0637,
+      "ext_structured_text_top1": 0.0765,
+      "ext_synthetic_correct": 2253,
+      "ext_synthetic_top1": 0.0981,
+      "ext_top1": 0.0766,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409,
+      "reproduction_correct": 74989,
+      "reproduction_per_family": {
+        "base64": 0.1296,
+        "binary": 0.111,
+        "code": 0.3759,
+        "csv": 0.4505,
+        "gutenberg": 0.2065,
+        "json": 0.4541,
+        "log": 0.4656,
+        "mixed": 0.116
+      },
+      "reproduction_top1": 0.2884
+    },
+    "null": {
+      "ext_correct": 2279,
+      "ext_high_entropy_top1": 0.0349,
+      "ext_per_family": {
+        "c_src": 0.0385,
+        "hexdump": 0.0337,
+        "pe_bin": 0.036,
+        "py_src": 0.0423,
+        "rfc_txt": 0.0374,
+        "rst_doc": 0.0365,
+        "sql": 0.0389,
+        "xml": 0.0337
+      },
+      "ext_per_family_correct": {
+        "c_src": 300,
+        "hexdump": 263,
+        "pe_bin": 267,
+        "py_src": 326,
+        "rfc_txt": 290,
+        "rst_doc": 284,
+        "sql": 286,
+        "xml": 263
+      },
+      "ext_real_correct": 1467,
+      "ext_real_top1": 0.0382,
+      "ext_structured_text_top1": 0.0379,
+      "ext_synthetic_correct": 812,
+      "ext_synthetic_top1": 0.0354,
+      "ext_top1": 0.0371,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409,
+      "reproduction_correct": 9948,
+      "reproduction_per_family": {
+        "base64": 0.0399,
+        "binary": 0.0377,
+        "code": 0.0366,
+        "csv": 0.0416,
+        "gutenberg": 0.0373,
+        "json": 0.0368,
+        "log": 0.0386,
+        "mixed": 0.0376
+      },
+      "reproduction_top1": 0.0383
+    }
+  },
+  "recipes": {
+    "incumbent": {
+      "family": "hgb",
+      "id": "M1",
+      "params": {
+        "learning_rate": 0.15,
+        "max_iter": 200,
+        "max_leaf_nodes": 63,
+        "n_iter_no_change": 10
+      },
+      "val": "frag",
+      "why": "0003's incumbent verbatim (run_study.py make_model 'hgb', run_carve.py's explicit last-10% validation split); every other parameter at the sklearn 1.9.0 default"
+    },
+    "logistic_l3": {
+      "family": "logistic",
+      "id": "L3",
+      "params": {
+        "C": 1.0,
+        "max_iter": 1000
+      },
+      "scaled": true,
+      "why": "standardised inputs with C 1.0: the single most standard fix for an lbfgs logistic on 1108 unscaled hand-engineered columns"
+    },
+    "model": {
+      "family": "hgb",
+      "id": "M4",
+      "params": {
+        "l2_regularization": 1.0,
+        "learning_rate": 0.05,
+        "max_iter": 250,
+        "max_leaf_nodes": 127,
+        "n_iter_no_change": 20
+      },
+      "val": "frag",
+      "why": "capacity plus regularisation plus a lower rate together: 800000 rows x 26 classes supports bigger trees than 63 leaves, and the deep-tree baseline gained 0.1459 -> 0.1812 from depth 8 to 16 at 4096"
+    }
+  },
+  "recipes_sha256": "b821bc5b1cad78eee5883c6e2f47592cbb835c1535f9f95b0fc5ecd1f4ec5d35",
+  "reference_top1": {
+    "incumbent": 0.2395,
+    "logistic_l3": 0.2317,
+    "model": 0.2884
+  },
+  "reproduction_drift": {
+    "incumbent": 0.0,
+    "logistic_l3": 0.0,
+    "model": 0.0
+  },
+  "reproduction_top1": {
+    "incumbent": 0.2395,
+    "logistic_l3": 0.2317,
+    "model": 0.2884
+  },
+  "run_finished_utc": "2026-09-10T08:38:19Z",
+  "run_started_utc": "2026-09-10T02:25:51Z",
+  "schema": "raise-v1/oob_4096/1",
+  "schema_version": 1,
+  "shuffled_label_accuracy_eval": 0.0383,
+  "shuffled_label_accuracy_ext": 0.0371,
+  "smoke": false,
+  "stage": "run"
+}

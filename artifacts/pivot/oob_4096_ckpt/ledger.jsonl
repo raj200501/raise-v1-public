@@ -5,3 +5,4 @@
 {"name": "logistic_l3", "fingerprint": "9ea2e67db9696c8f", "event": "started", "utc": "2026-09-10T02:56:52Z", "rss_gb": 8.81, "pid": 15370, "attempt": 1}
 {"name": "logistic_l3", "fingerprint": "9ea2e67db9696c8f", "event": "completed", "utc": "2026-09-10T03:23:14Z", "rss_gb": 8.91, "pid": 15370, "seconds": 1567.4}
 {"name": "model", "fingerprint": "f2a0aff918f518ed", "event": "started", "utc": "2026-09-10T03:23:15Z", "rss_gb": 8.91, "pid": 15370, "attempt": 1}
+{"name": "model", "fingerprint": "f2a0aff918f518ed", "event": "completed", "utc": "2026-09-10T08:38:17Z", "rss_gb": 9.7, "pid": 15370, "seconds": 18650.2}
