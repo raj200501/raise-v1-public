@@ -1,0 +1,42 @@
+{
+  "artifact_identity_at_writing": {
+    "commit": "b51395a1a67df7ab3da96b35750d2a157927cb30",
+    "duplicate_chunks_artifact_sha256": "229e0070283f8d0ffe838da07dbf3c7f240e9fdd200799e85748d3abdd7b5fe1",
+    "prereg_sha256": "194c23b1f77c5dec8365753c51b07b8204b9f35cb2dbb7a45ce226685cbe2ce5",
+    "reader_sha256": "19a6f54ce96daddf3de4cf32c905588a1468c2c35655695a011974cc344cd23d"
+  },
+  "inherited_from_the_0020_review": "0021 carries all sixteen adopted findings of 0020's five-lens pre-freeze review without restating them; they are recorded in artifacts/pivot/engineering_log_0020.json under pre_freeze_review. The two that matter most here are that the sealed corpus blocks are produced by calling the runner's own corpus_block() rather than retyped, and that the mutation gate's control substitutes values into the runner's captured output rather than taking blocks from the reader's literals.",
+  "instrument": {
+    "fixture": "tests/fixtures/realfit_runner_shape.json, recaptured from an eleven-arm --smoke run against 0021's own smoke block",
+    "gate": "tests/mutation_test.py, gate `realfit4096`, repointed at the 0021 reader; 58 cases, 58 detected. New cases cover both directions of every sealed collision count, a missing expectations block, and the fit block's zero staying fatal.",
+    "pre_freeze_check": "tools/prereg_checks/prefreeze_0021.py, PASS, with the four collision counts recomputed from data/pivot/full_c4096.npz and data/pivot/realfit_c4096.npz",
+    "reader": "tools/readers/realfit4096_rerun_verdict.py, generated from the preregistration and the template; not yet frozen",
+    "runner": "tools/pivot/run_realfit.py (shared with 0020, which never ran)"
+  },
+  "pre_freeze_review": {
+    "status": "pending: two independent read-only lenses (the corrected condition and the corpus fact behind it; whether the frozen reader will read an honest run). Findings and what was adopted or declined are filled in here before the freeze."
+  },
+  "preregistration": "0021-realfit-4096-rerun",
+  "schema": "raise-v1/engineering_log/1",
+  "status": "drafted, gated, pre-freeze-checked; two independent reviewers reading before the freeze",
+  "what_changed_from_0020": {
+    "everything_else": "Unchanged: the eleven arms, the three recipes verbatim from 0014/0018, the four trivial-baseline floor arms, the two builder-matched arms, the seed, the corpora and their hashes, the floor-plus-margin clause, the per-family second clause, the scoring set, the reproduction and null controls, and every disclosure the 0020 review added.",
+    "measured_in_advance": "The four counts were measured after 0020's refusal and before 0021 was written, from the same data with the same digest, and are banked in artifacts/pivot/builder_duplicate_chunks.json. The pre-freeze check recomputes them from the data rather than comparing the preregistration against itself.",
+    "one_clause": "bar.nothing_scored_was_fitted kept only the counts that bear on the CLAUSE - the four fit-corpus counts, still a blanket zero and still fatal. A new clause, bar.builder_block_collisions_are_the_measured_ones, requires the three BUILDER blocks' counts to EQUAL sealed expectations rather than to be zero.",
+    "runner": "tools/pivot/run_realfit.py now measures the plaintext-matched block's collisions too (0020's scan predated that arm), refuses on the fit block separately from the three builder blocks, and banks the sealed expectations on EVERY path including --smoke - because the mutation gate's control is built from a captured smoke artifact, and a key the runner writes only sometimes is a key the control lacks. That is the same class of defect the 0020 pre-freeze review found in the ledger.",
+    "the_sealed_counts": {
+      "chunk_matched_block": 0,
+      "fit_block": 0,
+      "matched_block": 2,
+      "repro_block": 8
+    },
+    "why_equality_and_not_a_ceiling": "A ceiling would pass a run where the count grew, which is the case that means new content crossed the boundary. Equality refuses in both directions: larger means something crossed that this preregistration did not measure, smaller means the split, the cache or the blocks are not the sealed ones."
+  },
+  "why_this_exists": {
+    "one_line": "0020 sealed this identical design, froze as chain entry 20, and refused at launch. 0021 changes one validity clause and nothing else.",
+    "precedent": "0013 re-read 0012 under a corrected reader; 0019 re-read 0018 under a corrected literal. Neither edited the frozen file and neither is edited here. 0021 is a new preregistration with a new chain entry, a new reader and its own pre-freeze check.",
+    "the_cause": "The corpus builder emitted 9 pairs of source chunks whose carved feature rows collide - 64 identical row pairs out of 1300000 rows, 0.00492 percent. The grouped split keeps each CHUNK ID wholly on one side, but it cannot know that two different chunk ids carry the same content, so 32 of those row pairs straddle the evaluation/pool boundary, spread over 6 of the 9 chunk pairs. Only ONE pair (44496 on the evaluation side, 48016 on the pool side, 26 of 26 rows identical) lands inside the blocks 0020 fits on, and it produces every collision the runner refused on: 8 rows of the 100000-row reproduction block and 2 of the 26346-row builder-matched block. NONE of the 9 pairs involves the extension corpus, and 0020's real-content fit corpus has zero rows byte-identical to any scored row, so the clause's own disjointness is intact. What the refusal caught is a property of the BUILDER's corpus, inherited unmeasured by every preregistration that has fitted on this pool and scored on this evaluation set since 0003 - including the 0.1965 reproduction rung 0020 uses as its control.",
+    "the_defect_in_0020": "The frozen condition is right for the arm that carries the clause and too strict for the two builder control arms. 'Nothing scored was fitted' is a statement about the FIT corpus; applying it unchanged to the reproduction rung and the builder-matched block asks 0003's eight-year-old pool to have a property the corpus builder never gave it, and makes 0020 unable to run for a reason that cannot touch its own answer. The preregistration says the rival explanation is 'closed by construction'; for the fit corpus it is, and the construction proves it with a measured zero. For the builder blocks the construction refuses instead.",
+    "what_0020_did": "Exit 3 at 2026-09-16T08:37:20Z, 7 seconds after launch, before any checkpoint existed, on its own preregistered condition that no fit-block, repro-block or matched-block row may be byte-identical to a scored row. fit was 0; repro was 8 and matched was 2. Filed in artifacts/pivot/engineering_log_0020.json under `refusal`, with the run's stdout banked at artifacts/pivot/realfit_4096_refusal.log. No arm was fitted and nothing was scored."
+  }
+}
