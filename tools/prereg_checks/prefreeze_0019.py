@@ -18,6 +18,13 @@ def chk(cond, msg):
     print(('ok  ' if cond else 'BAD ')+msg)
     if not cond: bad+=1
 pr=json.load(open(f'{R}/prereg/0019-oob-4096-reread.json')); p18=json.load(open(f'{R}/prereg/0018-oob-4096.json'))
+if pr.get('frozen'):
+    # This is a PRE-freeze check: it asserts the preregistration is unfrozen, that the chain head is 0018 and that no
+    # re-read verdict exists yet. After the freeze every one of those is false by design, so re-running it would write a
+    # FAIL over the result it banked at freeze time. It refuses instead, and the banked result stands as the record.
+    print(f"PRE-FREEZE 0019: the preregistration is frozen (chain entry 19, {pr['frozen_utc']}); this check runs before a "
+          f"freeze only. The result it banked then is artifacts/verification/prefreeze_0019.json.", file=sys.stderr)
+    raise SystemExit(2)
 a=json.load(open(f'{R}/artifacts/pivot/oob_4096.json')); v18=json.load(open(f'{R}/artifacts/pivot/oob_4096_verdict.json'))
 src18=open(f'{R}/tools/readers/oob4096_verdict.py',encoding='utf-8').read(); src19=open(f'{R}/tools/readers/oob4096_reread_verdict.py',encoding='utf-8').read()
 wc=pr['scope']['what_changes_from_0018']
@@ -71,7 +78,8 @@ chk('FILL IN' not in json.dumps(pr), 'no FILL IN left')
 # 6
 fh=lambda p: hashlib.sha256(open(f'{R}/{p}','rb').read()).hexdigest()
 chk(all(fh(p)==h for p,h in pr['scope']['artifact_identity']['sha256'].items()), 'artifact file hashes == prereg artifact_identity')
-chk(subprocess.check_output(['git','rev-parse','HEAD'],cwd=R).decode().strip()==pr['scope']['artifact_identity']['commit'] or True, 'artifact_identity.commit noted: '+pr['scope']['artifact_identity']['commit'][:7])
+banked_at=subprocess.check_output(['git','log','-1','--format=%H','--','artifacts/pivot/oob_4096.json','artifacts/pivot/oob_4096_scores.json','artifacts/pivot/oob_4096_verdict.json'],cwd=R).decode().strip()
+chk(banked_at==pr['scope']['artifact_identity']['commit'], 'artifact_identity.commit is the commit that banked the artifact: '+banked_at[:7])
 # 7. the banked mutation report agrees with the coverage claim; the committed tool is tracked or staged
 mr=json.load(open(f'{R}/artifacts/verification/mutation_report.json')); cov=json.load(open(f'{R}/artifacts/verification/coverage.json'))
 claimed=next(c['value'] for c in cov['claims'] if c['id']=='mutations-detected')

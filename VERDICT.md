@@ -1141,8 +1141,9 @@ readings, reproduction, null-tolerance and transfer clauses were never reached, 
 partition and every other sealed-hash clause passed. The `VOID` is banked as
 emitted, the defect and the pre-freeze check and gate that missed it are filed at full size in `CORRECTIONS.md`
 (2026-09-10), and preregistration 0019 re-read the same artifact under a reader that is 0018's frozen file with
-exactly the seven substitutions declared in the preregistration (the one literal, the output path, the stamp, the
-schema name, the print prefix, the headline print line, a docstring prefix) — with every 0018 number quoted in the preregistration before its reader
+exactly the substitutions declared in the preregistration — eight entries covering seven kinds of change (the one
+literal, the output path, the stamp it carries, the schema name, the print prefix, the headline print line and a
+docstring prefix) — with every 0018 number quoted in the preregistration before its reader
 was hashed into the chain, the literal recomputed from the cache's row arrays with the runner's own split, and the
 outcome those numbers give, `OOB_TRANSFER_FAILS`, committed to in advance. The re-read revises nothing: 0018 stands `VOID` on its own
 reader.

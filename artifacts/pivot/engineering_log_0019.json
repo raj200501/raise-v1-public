@@ -25,10 +25,13 @@
       "scratch copy of the 0019 reader (output redirected to the scratchpad) reads OOB_TRANSFER_FAILS with no validity failure",
       "no re-read verdict file under artifacts/ before the freeze",
       "chain verifies, head 0018",
-      "artifact file hashes == the prereg's artifact_identity",
-      "the headline print line says it is a re-read (0013's convention); the docstring quotes the runner's null-block lines verbatim"
+      "artifact file hashes == the prereg's artifact_identity"
     ],
-    "result": "PASS at 2026-09-16T04:12:46Z on reader sha256 0ceef3ae73671f00e03becac6e8305617985eef4981e39e6d36a4ad0578b3668 and preregistration file sha256 7bbdb7f7f2c6fd095cf9c5b7717fb31078502d630e940c2f50788d61fe7b0d72 (mutation report 400, all detected)"
+    "result": "PASS at 2026-09-16T04:12:46Z on reader sha256 0ceef3ae73671f00e03becac6e8305617985eef4981e39e6d36a4ad0578b3668 and preregistration file sha256 7bbdb7f7f2c6fd095cf9c5b7717fb31078502d630e940c2f50788d61fe7b0d72 (mutation report 400, all detected)",
+    "checked_by_the_operator_not_the_script": [
+      "the headline print line says it is a re-read (0013's convention) and the docstring quotes the runner's null-block lines verbatim: read by the operator and by the pre-freeze review's reader-diff lens, not asserted by the script; what the script does assert is that the reader equals 0018's file plus the declared substitutions, which is what fixes both",
+      "the artifact_identity.commit line in the committed script was a no-op at freeze time (`x or True`); it was made a real comparison against the commit that banked the artifact after the freeze, so artifacts/verification/prefreeze_0019.json's PASS belongs to the version with that line inert. Nothing else in the script changed, and the freeze did not rest on it: the artifact is bound by the three file hashes checked above it and by the sealed hashes the reader checks. Re-running the script after a freeze would assert pre-freeze conditions that are false by design and overwrite the banked result, so it now refuses with exit 2 once the preregistration is frozen and leaves artifacts/verification/prefreeze_0019.json as banked"
+    ]
   },
   "expected_outcome": "OOB_TRANSFER_FAILS, committed to in the preregistration from the known numbers (2450 of 38452 against 3402); anything else is published as emitted with a further correction",
   "cost": "no fit, no scoring; the reader recounts 321409-entry vectors four times (seconds)",
@@ -166,6 +169,13 @@
       "severity": "medium",
       "status": "open, filed here; there is no in-flight paragraph in the record now (0019 has been read), so the guard has nothing to check until the next preregistration is frozen",
       "what_done_looks_like": "tools/prereg_checks/inflight_text.py, run by tools/gates.sh, with mutation cases that fail on a paragraph quoting a flag threshold instead of the clause"
+    },
+    {
+      "finding": "docs/OPERATING_RULES.md section 4 states without exception that a reader's mutation-gate control artifact is built from the runner's output shape, never from the reader's expectations. The oob4096 gate builds its control from a reader's sealed literals (as its own docstring says), and three sibling gates do the same; the 0018 null-block defect is exactly what that construction cannot see, which is why the gate now also ties both literals to the banked artifact and to 0014's, 0015's, 0016's and 0017's records and recomputes the block from the cache.",
+      "severity": "medium",
+      "status": "open, filed here; the rule and the four gates disagree and one of them must move",
+      "what_done_looks_like": "either the four gates build their controls from the runner (importing its partition and record code, or a smoke artifact), or section 4 is amended to say what is actually required — a control built from the runner where the runner can be imported, and otherwise every sealed literal in the control tied to a banked artifact or recomputed from data by a committed tool — with the 0018 defect named as the case that forced the wording"
     }
-  ]
+  ],
+  "commit_message_note": "Two commit messages on main state mutation-gate case counts that the banked report does not: 36b1849 says 'gate 87 cases' and b5ed4bf says 'oob4096 gate 80 cases', while artifacts/verification/mutation_report.json says 85 oob4096 cases at HEAD and 80 at b5ed4bf's suite run. The 87 was written from a case count in the editor before two cases were merged; the banked report, not a commit message, is the count the record uses, and commit messages are not rewritten here because the preregistration chain seals commit hashes."
 }

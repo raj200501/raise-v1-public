@@ -128,6 +128,30 @@ preregistration commits the chain entry in the same step as the freeze.
 
 ---
 
+**Third addendum, 2026-09-16, from the adversarial check of the published record.** Five smaller
+things, filed rather than edited in place. (1) The preregistration declares **eight** substitution
+entries covering seven kinds of change; the second addendum above says "seven", which counts the
+kinds, and `VERDICT.md` now says both. (2) `docs/OPERATING_RULES.md` §4 says without exception that a
+reader's mutation-gate control artifact is built from the runner's output shape; the `oob4096` gate
+builds its control from a reader's sealed literals, and three sibling gates do the same. That is the
+construction this entry's defect defeats, and the rule and the gates disagree: filed as an open
+follow-up in `artifacts/pivot/engineering_log_0019.json`, with the other three that check found (the
+coverage gate never resolves a claim's `json_path`; six wall-clock `-fit-seconds` claims sit in the
+strongest verification class; no repository tool guards an in-flight paragraph's clause). (3) The
+0019 engineering log credited the committed pre-freeze check with two checks it does not perform —
+that the reader's headline print line announces a re-read and that its docstring quotes the runner's
+lines verbatim. Both were read by the operator and by the review, not asserted by the script; the log
+now says so. (4) One line of that committed script could not fail (`x or True`); it is now a real
+comparison against the commit that banked the artifact, and the banked `PASS` in
+`artifacts/verification/prefreeze_0019.json` belongs to the version with that line inert. The script
+also refuses to run after the freeze rather than overwrite the result it banked. (5) Two commit
+messages state mutation-gate case counts the banked report does not (`36b1849` "gate 87 cases",
+`b5ed4bf` "oob4096 gate 80 cases", against 85 at HEAD and 80 at that commit's suite run); commit
+messages are not rewritten here because the preregistration chain seals commit hashes, and the banked
+report is the count the record uses.
+
+---
+
 ## 2026-09-10 — VERDICT.md's in-flight paragraph for 0018 described the clause the pre-freeze review had replaced
 
 **Claimed:** `VERDICT.md`, the in-flight paragraph for 0018, from the freeze commit (7e4207e,
