@@ -169,7 +169,7 @@
     "null_M4_20000_seconds": 71.6,
     "extension_build_seconds": 361.5,
     "scoring_set_rows": 321409,
-    "estimate": "18539 to 19192 s of fit (5.2 to 5.3 h: M4 15874.2 + M1 1428.4 + L3 1164.3 or 1817.5 + null 71.6) at 3 threads and nice 10 on an idle machine, plus four scorings of 321409 rows, the pool gather and a streamed row-identity scan (about 20 s); MemAvailable must be >= 14.5 GB, the 1-minute load <= 2.0 and no other tools/pivot runner alive at launch; the memory kill threshold is 13.0 GB",
+    "estimate": "18539 to 19192 s of fit (5.1 to 5.3 h: M4 15874.2 + M1 1428.4 + L3 1164.3 or 1817.5 + null 71.6) at 3 threads and nice 10 on an idle machine, plus four scorings of 321409 rows, the pool gather and a streamed row-identity scan (about 20 s); MemAvailable must be >= 14.5 GB, the 1-minute load <= 2.0 and no other tools/pivot runner alive at launch; the memory kill threshold is 13.0 GB",
     "deep_tree_confirm_peak_gb_0014": 12.19,
     "M4_confirmatory_heartbeat_peak_gb": 10.34
   },
@@ -221,7 +221,7 @@
           "xml": 0.0769
         }
       },
-      "what_it_checked": "the runner's refusals, the extension seal, the concatenated scoring, the readings split, checkpoints and the artifact/scores layout; the first reader-on-smoke exercise (reader_on_smoke_0018.py, first version) patched the wrong literals and voided on two scope mismatches before its readings ran, so it exercised nothing beyond the scope checks (the wording review found this); the reading and clause paths were exercised by the mutation gate (38 cases then, 71 now) and by the second exercise below",
+      "what_it_checked": "the runner's refusals, the extension seal, the concatenated scoring, the readings split, checkpoints and the artifact/scores layout; the first reader-on-smoke exercise (reader_on_smoke_0018.py, first version) patched the wrong literals and voided on two scope mismatches before its readings ran, so it exercised nothing beyond the scope checks (the wording review found this); the reading and clause paths were exercised by the mutation gate (38 cases then, 72 at the 0018 freeze, 85 now) and by the second exercise below",
       "note": "a 10000-row fit cannot reproduce the full-pool references and the reader voids it; the numbers above are from tiny fits and say nothing about the preregistered question",
       "machine_shared_with": "two runaway `rev` processes from an earlier operator shell (pids 27751, 27778, killed 23:13 UTC) and, for part of the run, the full extension build; the null fit's 376.1 s for 2000 rows (0014: 71.6 s for 20000) and the incumbent's 34.5 s are not anchors",
       "timings_are_not_anchors": true,
@@ -607,7 +607,7 @@
       "model": true
     },
     "against_the_estimate": {
-      "estimate": "18539 to 19192 s of fit (5.2 to 5.3 h) on an idle machine",
+      "estimate": "18539 to 19192 s of fit (5.1 to 5.3 h) on an idle machine",
       "banked": 21995.4,
       "note": "M4 took 18650.2 s against 0014's 15874.2 s on the same pool; both fits reached the 250-iteration cap (artifacts/pivot/recipe_search_4096.json final.model.fit_info.n_iter 250), so iterations do not explain the 2776 s difference; the incumbent 1694.1 s against 1428.4 s, L3 1567.4 s against 1164.3 s (0014) and 1817.5 s (0017); the operator's gate runs and pushes shared the machine during the first hour, the only banked difference"
     },
@@ -704,7 +704,7 @@
         "sql": 0.1033,
         "xml": 0.0996
       },
-      "note": "the runner's readings, recounted by both readers from the score vectors; not a verdict of 0018 (VOID) and quoted as a verdict only through 0019's reader"
+      "note": "the runner's readings, recounted from the score vectors by 0019's reader only (0018's reader stops recomputing after a fit clause fails, so it never reached them); not a verdict of 0018 (VOID) and quoted as a verdict only through 0019's reader"
     },
     "derived_arithmetic": {
       "derivation": "from artifacts/pivot/oob_4096.json readings; arithmetic, not a reader output",

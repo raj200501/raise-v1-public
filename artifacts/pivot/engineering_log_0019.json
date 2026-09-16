@@ -137,5 +137,35 @@
       "transfer: M4's correct real-family rows 2450 of 38452 (0.0637) is below 3402 (chance 0.038462 + 0.05 = 0.088462)"
     ],
     "reads_artifact_of": "0018-oob-4096"
-  }
+  },
+  "chronology": {
+    "note": "git's commit order puts the verdict before the chain entry; the freeze came first, and these are the times",
+    "freeze_utc": "2026-09-16T04:14:59Z",
+    "freeze_commit_sealed_by_the_chain": "36b18498 (prereg.py freeze stamps the HEAD at freeze time)",
+    "reader_run_utc": "2026-09-16T04:15:07Z",
+    "verdict_committed": "b7afe1a at 2026-09-16T04:15:17Z",
+    "chain_entry_and_frozen_flag_committed": "932a73b at 2026-09-16T04:27:45Z",
+    "why": "tools/prereg.py freeze writes prereg/chain.jsonl and sets frozen:true in the working tree after the pre-freeze commit; the operator ran the frozen reader next and committed its verdict, then committed the freeze files with the publication. The chain entry's frozen_utc (2026-09-16T04:14:59Z) and its beacon anchors, not the commit order, are what order the freeze against the reading; the reader's output could not have existed before the reader was hashed, because the verdict file names the preregistration and the chain seals the reader's sha256 0ceef3ae...",
+    "for_the_next_preregistration": "commit the chain entry and the frozen flag in the same step as the freeze, before the reader is run, so git's order matches the chain's"
+  },
+  "open_instrument_follow_ups": [
+    {
+      "finding": "tools/coverage.py stores and prints each claim's json_path but never resolves it: a claim pinned to the wrong field still passes if its value appears anywhere in the cited artifact. A strict resolution over the 234 current claims flags 7 rows, most of them path-syntax (quoted keys, keys containing dots and slashes) rather than wrong values.",
+      "severity": "medium",
+      "status": "open, filed here; not changed in this publication because a gate change needs its own mutation cases and a pass over every flagged row",
+      "what_done_looks_like": "coverage.py resolves the path, compares at the precision the claim is written (claimcheck's rule), keeps the present-anywhere scan only as a labelled fallback, and three new mutation cases fail without it"
+    },
+    {
+      "finding": "Six *-fit-seconds claims (0012, 0014, 0015, 0016, 0017, 0018) are filed primary-verifiable with the study's reader as the re-derive command. VERDICT.md describes that class as one whose command re-derives the number; a wall-clock fit time on one machine is not re-derivable, the reader only reads it back.",
+      "severity": "medium",
+      "status": "open, filed here; it is a record-wide class question, not an 0018/0019 defect, and changing one row would make the six inconsistent",
+      "what_done_looks_like": "either the six move to `neither` with a why_not_verifiable and a correction at full size, or the class definition says 'a named command reads it back from a banked artifact' and every primary-verifiable row is checked against that"
+    },
+    {
+      "finding": "The guard that keeps an in-flight paragraph's clause honest is a session script, not a repository tool: nothing in the repository asserts that an in-flight paragraph in VERDICT.md or README.md quotes the clause threshold and denominator from the sealed preregistration's bar.",
+      "severity": "medium",
+      "status": "open, filed here; there is no in-flight paragraph in the record now (0019 has been read), so the guard has nothing to check until the next preregistration is frozen",
+      "what_done_looks_like": "tools/prereg_checks/inflight_text.py, run by tools/gates.sh, with mutation cases that fail on a paragraph quoting a flag threshold instead of the clause"
+    }
+  ]
 }

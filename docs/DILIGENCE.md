@@ -91,7 +91,7 @@ that is a separate preregistration.
 **No, at the preregistered bar, for these five real families** (prereg 0018, expected outcome stated in advance as
 close to even after a discounted within-builder bracket of 0.097 to 0.118): an evaluation-only extension corpus of 61409 rows
 from eight families the builder never produced (five real, pinned by sha256: CPython source and documentation, the SQLite
-amalgamation, RFC texts, PE machine code; three from fresh synthetic generators), scored by 0014's searched model fitted on
+amalgamation, RFC texts, one Windows package's PE files; three from fresh synthetic generators), scored by 0014's searched model fitted on
 the builder's eight families: 0.0637 on the 38452 real-family rows against chance + 0.05 = 0.088462, 2450 rows against
 3402 needed, `OOB_TRANSFER_FAILS` (`artifacts/pivot/oob_4096_reread_verdict.json`); the eight-family mixture with the three synthetic families
 is 0.0766, a flag. The incumbent reads 0.0634 and the standardised logistic 0.0716 on the same rows; no real

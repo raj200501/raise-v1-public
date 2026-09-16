@@ -1823,8 +1823,8 @@
       "json_path": "$.bar_applied.n_real_rows",
       "value": 38452,
       "class": "primary-verifiable",
-      "reverify": "python3 tools/pivot/corpus_ext.py --check",
-      "claim": "The five real-file extension families carry 38452 of the corpus's 61409 rows; the three synthetic families carry the rest."
+      "reverify": "python3 tools/readers/oob4096_reread_verdict.py",
+      "claim": "The five real-file extension families carry 38452 of the corpus's 61409 rows; the three synthetic families carry the rest. The reader prints n_ext_real_rows and banks it at $.bar_applied.n_real_rows; the corpus itself is rebuilt identically by `python3 tools/pivot/corpus_ext.py --check`."
     },
     {
       "id": "oob4096-model-ext",
@@ -1914,7 +1914,7 @@
       "value": -0.006383,
       "class": "arithmetic-verifiable",
       "reverify": "python3 tools/readers/oob4096_reread_verdict.py",
-      "claim": "M4's correct count minus the logistic's over all 61409 extension rows is -0.006383; informational."
+      "claim": "M4's correct count over all 61409 extension rows minus the standardised logistic's is -392 rows, which the reader banks as the rate -0.006383; informational."
     },
     {
       "id": "oob4096-margin-over-incumbent",
@@ -1923,7 +1923,7 @@
       "value": 0.004527,
       "class": "arithmetic-verifiable",
       "reverify": "python3 tools/readers/oob4096_reread_verdict.py",
-      "claim": "M4's correct count minus the incumbent's over all 61409 extension rows is 0.004527; informational."
+      "claim": "M4's correct count over all 61409 extension rows minus the incumbent's is 278 rows, which the reader banks as the rate 0.004527; informational."
     },
     {
       "id": "oob4096-repro-model",
@@ -1995,7 +1995,7 @@
       "value": 0.0981,
       "class": "primary-verifiable",
       "reverify": "python3 tools/readers/oob4096_reread_verdict.py",
-      "claim": "Over the three synthetic extension families (hexdump, sql, xml) M4 reads 0.0981 (flag synthetic_reaches_bar: True against 2031 of 22957 rows)."
+      "claim": "Over the three synthetic extension families (hexdump, sql, xml) M4 reads 0.0981 (flag synthetic_reaches_bar: True \u2014 2253 of 22957 synthetic rows correct against a threshold of 2031)."
     },
     {
       "id": "oob4096-fit-seconds",

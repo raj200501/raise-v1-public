@@ -108,6 +108,26 @@ now standing text in `docs/OPERATING_RULES.md` §4 (added 2026-09-10).
 
 ---
 
+**Second addendum, 2026-09-16 (committed with the 0019 freeze), from the adversarial check of the
+published record; the entry and the first addendum above stand as committed.** Three things in what
+is above are wrong or stale. (1) The first addendum is dated 2026-09-10; it was drafted that day in
+the session that filed the entry, and the session then paused, so it was first committed on
+2026-09-16 in `36b1849`, six days after the date it carries. The same applies to the sealed-literal
+paragraph added to `docs/OPERATING_RULES.md` §4, which carries 2026-09-10 and was committed on
+2026-09-16. Both dates are the drafting date, not the publication date, and this addendum is the
+correction; the dates above are not edited, because this ledger is append-only. (2) The list of the
+re-read reader's declared substitutions in the Fix above names six; the preregistration declares
+**seven** — the missing one is the headline print line, which makes the re-read reader announce
+itself as a re-read. (3) The freeze order is not what git's commit order suggests: the chain entry
+and the `frozen: true` flag were committed in the publication commit `932a73b` (2026-09-16T04:27:45Z),
+after the commit that banked the verdict (`b7afe1a`, 04:15:17Z), while the freeze itself ran at
+2026-09-16T04:14:59Z and the reader at 04:15:07Z. The chain entry's `frozen_utc` and its beacon
+anchors order the freeze against the reading; the commit order does not.
+`artifacts/pivot/engineering_log_0019.json` (`chronology`) banks the times, and the next
+preregistration commits the chain entry in the same step as the freeze.
+
+---
+
 ## 2026-09-10 — VERDICT.md's in-flight paragraph for 0018 described the clause the pre-freeze review had replaced
 
 **Claimed:** `VERDICT.md`, the in-flight paragraph for 0018, from the freeze commit (7e4207e,
@@ -159,6 +179,30 @@ script's name, sha256 and its exact refusal strings are now banked in
 `artifacts/pivot/engineering_log_0019.json` (`publication`), and the 0019 pre-freeze check is
 committed as `tools/prereg_checks/prefreeze_0019.py` with its result banked in
 `artifacts/verification/prefreeze_0019.json`.
+
+---
+
+**Second addendum, 2026-09-16 (committed with the 0019 freeze), from the adversarial check of the
+published record; the entry and the first addendum above stand as committed.** Four corrections to
+what is above. (1) The wrong sentence's span is now known exactly: it was published from the 0018
+freeze commit `7e4207e` (2026-09-10T02:24:31Z) to the publication commit `932a73b`
+(2026-09-16T04:27:45Z) — six days and two hours, not the "about seven hours" the Size paragraph
+states, and the first addendum could not name the figure because the publication had not happened
+yet. The README's in-flight sentence, which framed the same clause over the eight families without
+a count, was published for the same span and replaced in the same commit. (2) Item (5) of the first
+addendum corrects a phrase, "recorded in the same log", that the committed entry never contained;
+it was written against a draft of the Fix. What the committed Fix actually says is that "the 0019
+publication script refuses to apply the documents if the replaced sentence survives anywhere in
+`VERDICT.md` or `README.md`" — that script is the session's `apply_0019_docs.py`, its sha256 and its
+refusal strings are banked in `artifacts/pivot/engineering_log_0019.json` (`publication`), and it is
+not a repository tool. (3) The same Fix's "durable guard" is therefore not yet in the repository:
+nothing here asserts that an in-flight paragraph quotes the clause from the sealed preregistration's
+`bar`. That gap is filed as an open follow-up in `artifacts/pivot/engineering_log_0019.json`
+(`open_instrument_follow_ups`), with two others the same check found: the coverage gate never
+resolves a claim's `json_path`, and six wall-clock `-fit-seconds` claims sit in the strongest
+verification class with a command that reads the number back rather than re-deriving it. (4) The
+addendum above is dated 2026-09-10 and was committed on 2026-09-16, as the companion entry's second
+addendum records.
 
 ---
 

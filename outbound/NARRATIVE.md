@@ -133,6 +133,8 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > Then we left the builder (0018): eight content families it never produced, five of them real files
 > pinned by hash and three from fresh generators, scored by the headline recipe fitted on the builder's
 > eight families and read on the five real ones. It does not clear the bar: 0.0637 against 0.088462, `OOB_TRANSFER_FAILS`
+> — and the plain standardised logistic reads 0.0716 on the same rows, 305 more correct rows than the headline recipe,
+> so the headline recipe is not even its own best transfer recipe on this content, which 0018 said in advance it would say
 > — the first reading in this record taken outside the builder, filed at full size, and read under 0019 after
 > 0018's own frozen reader voided the run on one wrong sealed literal, which is filed at full size too.
 > The boundary of our result is

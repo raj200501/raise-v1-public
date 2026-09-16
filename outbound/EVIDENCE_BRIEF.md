@@ -37,7 +37,7 @@ against the incumbent's **0.0859**: 2393 more correct rows of 260000 against a 5
 `L3_LEAD_BELOW_BAR`; the lead does not reach the record's 0.05 in-distribution margin.
 **Outside the builder, the headline recipe falls short.** On 61409 rows from eight content families the
 corpus builder never produced (preregistration 0018: CPython source and documentation, the SQLite amalgamation, RFC
-texts, PE machine code, plus xml, sql and hexdump from fresh generators), 0014's searched model fitted on the builder's
+texts, one Windows package's PE files, plus xml, sql and hexdump from fresh generators), 0014's searched model fitted on the builder's
 eight families reads **0.0637** on the 38452 real-family rows against chance + 0.05 (2450 rows against 3402 needed): `OOB_TRANSFER_FAILS`
 (read under preregistration 0019, which re-read the banked artifact after 0018's own frozen reader voided the run on a wrong
 sealed literal); the incumbent reads 0.0634 and the standardised logistic 0.0716; the eight-family mixture, three synthetic

@@ -59,13 +59,14 @@ Preregistration 0017 (chain entry 17) then asked whether 0014's standardised log
 incumbent on unseen families by 0.02: it does not, a stitched 0.0951 against 0015's 0.0859 (2393 more correct rows of 260000 against a
 5200-row bar), verdict `L3_LEAD_BELOW_BAR`; the lead does not reach the record's 0.05 margin, and every fold converged.
 Preregistration 0018 (chain entry 18) then asked whether the headline recipe identifies the encoder on eight content families the
-corpus builder never produced (61409 evaluation-only rows: real source code, documentation, RFC text and machine code, pinned by hash, plus
+corpus builder never produced (61409 evaluation-only rows: real source code, documentation, RFC text and one Windows package's PE files, pinned by hash, plus
 three synthetic generators as flags): it does not, 2450 of 38452 real-family rows correct (0.0637) against 3402 needed
 for chance + 0.05, verdict `OOB_TRANSFER_FAILS`; the incumbent reads 0.0634 and the standardised logistic 0.0716 on the same rows. 0018's
 own frozen reader emitted `VOID` on one wrong sealed literal (the null block's hash, restated from 0017), filed in `CORRECTIONS.md`; preregistration
 0019 (chain entry 19) re-read the same banked artifact with that literal corrected and every number disclosed in advance, as 0013 did for 0012.
-The curve and the searched margin stand as measured, and they are statements about these eight
-content families, not about DEFLATE streams in general.
+The curve and the searched margin stand as measured, and they are statements about the corpus builder's eight
+content families (gutenberg, base64, binary, code, csv, json, log, mixed), not about DEFLATE streams in general;
+the 0018 numbers are statements about the eight extension families, as pinned.
 Decomposed by content family, csv and log clear the bar at 2048 on both readings (+0.0554 and
 +0.0501 against the strongest baseline) and the structured four clear it as a set (+0.0549), but
 the mixture fails even with the three incompressible families removed (+0.0478); the verdict is

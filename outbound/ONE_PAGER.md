@@ -114,10 +114,13 @@ The linear rule does not lead under transfer by the preregistered margin: 0014's
 families against the incumbent's **0.0859**, 2393 more correct rows of 260000 against a 5200-row bar
 (preregistration 0017, `L3_LEAD_BELOW_BAR`).
 On real content outside the builder the headline recipe falls short: on 38452 rows from five pinned real-file
-families the builder never produced (preregistration 0018, read under 0019 after 0018's own reader voided the run on a wrong sealed
-literal), 0014's searched model reads **0.0637** against chance + 0.05 = 0.088462 (2450 rows against 3402 needed), `OOB_TRANSFER_FAILS`;
-the standardised logistic (0.0716) and the incumbent (0.0634) fall short too, and no real family sits at the bar. Every number on this page is a statement about
-these eight content families.
+families the builder never produced (preregistration 0018), 0014's searched model reads **0.0637** against chance + 0.05 =
+0.088462 (2450 rows against 3402 needed), `OOB_TRANSFER_FAILS`; the standardised logistic (0.0716) and the incumbent
+(0.0634) fall short too, and no real family sits at the bar. 0018's own frozen reader emitted `VOID` on one wrong sealed
+literal (the null block's hash), filed in `CORRECTIONS.md`; preregistration 0019 re-read the same banked artifact with
+that literal corrected and every number disclosed in advance, and its reader emitted the verdict above. Every number on
+this page other than the 0018 reading is a statement about the corpus builder's eight content families; the 0018 numbers
+are statements about the eight extension families, as pinned.
 The window boundary of
 this recipe lies in (2048, 4096]; every number above remains a 4096-byte-window number.
 
