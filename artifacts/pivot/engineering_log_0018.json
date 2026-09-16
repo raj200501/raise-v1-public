@@ -609,7 +609,7 @@
     "against_the_estimate": {
       "estimate": "18539 to 19192 s of fit (5.2 to 5.3 h) on an idle machine",
       "banked": 21995.4,
-      "note": "M4 took 18650.2 s against 0014's 15874.2 s on the same pool (the fit ran to its 250-iteration cap here; 0014's iteration count is in its artifact), the incumbent 1694.1 s against 1428.4 s, L3 1567.4 s against 1164.3 s (0014) and 1817.5 s (0017); the operator's gate runs and pushes shared the machine during the first hour and the fit's CPU time (63414 s user at exit against 21611 s elapsed, 2.93 cores) shows the runner was never suspended"
+      "note": "M4 took 18650.2 s against 0014's 15874.2 s on the same pool; both fits reached the 250-iteration cap (artifacts/pivot/recipe_search_4096.json final.model.fit_info.n_iter 250), so iterations do not explain the 2776 s difference; the incumbent 1694.1 s against 1428.4 s, L3 1567.4 s against 1164.3 s (0014) and 1817.5 s (0017); the operator's gate runs and pushes shared the machine during the first hour, the only banked difference"
     },
     "memory": {
       "ledger_rss_gb_at_completion_by_name": {
@@ -624,7 +624,8 @@
         "last_utc": "2026-09-10T08:37:15Z",
         "peak_anonymous_rss_gb": 10.7,
         "peak_total_rss_gb": 13.63,
-        "scope": "one-minute samples of the runner's heartbeat file taken by the operator from 07:04 UTC to the end of the M4 fit; before that the heartbeat was read only at the operator's polls (10.62 GB anonymous at 06:50 UTC noted in the session; 10.34 GB was 0014's banked peak for the same fit), so the M4 fit's peak between 03:23 and 07:04 UTC is COULD NOT VERIFY beyond those polled values"
+        "scope": "one-minute samples of the runner's heartbeat file taken by the operator from 07:04 UTC to the end of the M4 fit; before that the heartbeat was read only at the operator's polls (10.62 GB anonymous at 06:50 UTC noted in the session; 10.34 GB was 0014's banked peak for the same fit), so the M4 fit's peak between 03:23 and 07:04 UTC is COULD NOT VERIFY beyond those polled values",
+        "banked_as": "artifacts/pivot/oob_4096_ckpt/hb_samples.jsonl (94 one-minute samples of the runner's heartbeat file, copied from the session scratchpad)"
       },
       "kill_threshold_gb": 13.0,
       "rss_gb_is": "anonymous (RssAnon)"
@@ -659,7 +660,7 @@
         "fit: null's completion event does not carry the sealed fingerprint",
         "fit: null has no 'started' event with its fingerprint before its completion"
       ],
-      "diagnosis": "all five clauses are one sealed literal: prereg/0018 restated the null block hash for hash from 0017, whose null block (like 0015's) is the first 20000 training rows of the first leave-one-family-out fold (0653cc12...), while 0018's design, arms and runner use the first 20000 pool rows (822b6102..., the block 0014 fitted and 0016 sealed). Recomputed from the cache's y and g with the runner's split on 2026-09-10: pool block 822b6102..., first-fold block 0653cc12.... Filed in CORRECTIONS.md (2026-09-10); re-read under preregistration 0019 with every number disclosed",
+      "diagnosis": "all five clauses are one sealed literal: prereg/0018 restated the null block hash for hash from 0017, whose null block (like 0015's) is the first 20000 training rows of the first leave-one-family-out fold (0653cc12...), while 0018's design, arms and runner (nn = min(len(tr), int(P['null_rows'])); null_rows = tr[:nn]) use the first 20000 pool rows (822b6102..., the block 0014 fitted and 0016 sealed). Recomputed from the cache's y and g with the runner's split on 2026-09-10: pool block 822b6102..., first-fold block 0653cc12.... Filed in CORRECTIONS.md (2026-09-10); re-read under preregistration 0019 with every number disclosed; 0018's reader stops recomputing after a fit clause fails, so its readings, reproduction, null-tolerance and transfer clauses were never reached (its scope, corpus, extension-corpus, partition, environment, order and other sealed-hash clauses passed); the artifact carries the readings, and the re-read reader evaluates every clause",
       "scratch_reading_not_a_verdict": "a scratch copy of the reader with the one literal changed, output redirected to the session scratchpad, read OOB_TRANSFER_FAILS on the one clause (2450 of 38452 real-family rows, 0.0637, against 3402) with no validity clause failing; quoted to size the defect only"
     },
     "readings_banked_by_the_runner": {
@@ -742,7 +743,18 @@
       "reading": "below the stated bracket; retention share 0.101 against the bracket's 0.236 to 0.410 and below the 0.20 the paragraph said a fail would need"
     },
     "operating_note": "the session was kept active with bounded waits for the whole run, so it completed in one launch with no container restart; the poll script committed and pushed each checkpoint (never the in-progress artifact) and no GitHub Actions run was triggered (the workflow is manual-only)",
-    "status": "complete: one launch, run exit 0 at 2026-09-10T08:38:19Z; 0018's frozen reader: VOID on the sealed null-block literal (CORRECTIONS.md 2026-09-10); re-read under preregistration 0019"
+    "status": "complete: one launch, run exit 0 at 2026-09-10T08:38:19Z; 0018's frozen reader: VOID on the sealed null-block literal (CORRECTIONS.md 2026-09-10); re-read under preregistration 0019",
+    "operator_cpu_sample": {
+      "utc": "2026-09-10T08:25:23Z",
+      "command": "cat /proc/15370/stat (utime, stime, threads) and ps -o etimes=,pid=,rss= -p 15370",
+      "utime_s": 63414.7,
+      "stime_s": 294.1,
+      "threads": 8,
+      "etimes_s": 21611,
+      "rss_kb": 13627572,
+      "derived": "(63414.7 + 294.1) / 21611 = 2.95 cores averaged over the process's life through 08:25:23 UTC, 13 minutes before exit; consistent with a 3-thread fit that was never suspended up to that sample",
+      "scope": "one sample taken by the operator in the session; not a runner artifact"
+    }
   },
   "operator_procedure": "launch detached (setsid nohup) with the sealed invocation after the freeze; keep the session active for the whole run (an idle session suspends the runner and the container restarts on the next wake: 0016's finding); poll every 30 minutes: commit and push new checkpoints, relaunch the identical command if the runner is dead and the run is not finished; the reader runs once on the completed artifact; publication states the verdict at the same size either way.",
   "freeze": {

@@ -1,0 +1,15 @@
+{
+  "utc": "2026-09-16T04:12:46Z",
+  "reader_sha256_checked": "0ceef3ae73671f00e03becac6e8305617985eef4981e39e6d36a4ad0578b3668",
+  "prereg_sha256_checked": "7bbdb7f7f2c6fd095cf9c5b7717fb31078502d630e940c2f50788d61fe7b0d72",
+  "diff_line_counts": {
+    "removed_from_0018": 13,
+    "added": 47,
+    "method": "difflib.unified_diff over lines, n=0, headers excluded"
+  },
+  "result": "PASS",
+  "mutation_report_total": 400,
+  "schema": "raise-v1/prefreeze_check/1",
+  "preregistration": "0019-oob-4096-reread",
+  "checks_failed": 0
+}

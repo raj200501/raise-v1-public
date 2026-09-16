@@ -6,19 +6,22 @@ WHAT HAPPENED. 0018's frozen reader (tools/readers/oob4096_verdict.py, sealed in
 honest, complete run for a reason that lies in one sealed literal, not in the run: the preregistration's sealed_partition
 restated the null block hash for hash from 0017, and 0017's null block (like 0015's) is the first 20000 rows of the first
 leave-one-family-out fold's training set (0653cc12...), while 0018's design text, its arms and its runner
-(tools/pivot/run_oob.py: null_rows = tr[:20000]) use the first 20000 rows of the sealed pool in its sealed order
-(822b6102...), the block 0014 and 0016 sealed and fitted. The runner fitted the null control on the block the design
-names; the reader compared its hash, and the fingerprint derived from it, against the wrong literal. Five clauses failed,
-all of them that one hash; every other clause passed. The 0018 pre-freeze check compared the reader's literal to the
+(tools/pivot/run_oob.py: nn = min(len(tr), int(P["null_rows"])); null_rows = tr[:nn], with tr the sealed pool in its
+sealed order) use the first 20000 pool rows (822b6102...), the block 0014 fitted and 0016 sealed. The runner fitted the
+null control on the block the design names; the reader compared its hash, and the fingerprint derived from it, against
+the wrong literal. Five validity clauses failed, all of them that one hash. 0018's reader stops recomputing after a fit
+clause fails, so its readings, reproduction, null-tolerance and transfer clauses were never reached; its scope, corpus,
+extension-corpus, partition, environment, order and every other sealed-hash clause passed. This reader evaluates them all. The 0018 pre-freeze check compared the reader's literal to the
 preregistration's and never to the block the runner builds on the real pool; that is filed in CORRECTIONS.md
 (2026-09-10). A frozen reader is not edited after it has seen a number, so 0018 stands VOID on the record, and this
 reader re-reads the SAME banked artifact under the SAME clauses with that one literal changed.
 
-DISCLOSED IN FULL. Every 0018 number was known when this reader and its preregistration were written, because 0018's
-reader printed them beside its VOID: M4's correct real-family rows 2450 of 38452 (0.0637) against 3402 needed; the
-standardised logistic 2755 (0.0716) and the incumbent 2439 (0.0634) on the same rows; the eight-family mixture 4703 of
-61409 (0.0766); reproductions 0.2395, 0.2317 and 0.2884, each exactly 0014's value; the null control 0.0371 on the
-extension rows and 0.0383 on the sealed rows. Under the clauses below those numbers read OOB_TRANSFER_FAILS on the one
+DISCLOSED IN FULL. Every 0018 number was known when this reader and its preregistration were written: 0018's reader
+printed the model's counts and the artifact's readings beside its VOID, banked every reading in its verdict file
+(readings_banked), and the artifact carries them: M4's correct real-family rows 2450 of 38452 (0.0637)
+against 3402 needed; the standardised logistic 2755 (0.0716) and the incumbent 2439 (0.0634) on the same rows; the
+eight-family mixture 4703 of 61409 (0.0766); reproductions 0.2395, 0.2317 and 0.2884, each exactly 0014's value; the
+null control 0.0371 on the extension rows and 0.0383 on the sealed rows. Under the clauses below those numbers read OOB_TRANSFER_FAILS on the one
 clause, with every validity clause passing. This preregistration therefore commits, before the reader is hashed into
 the chain, to the outcome the known numbers give; its only freedom would have been to change a clause, and no clause
 is changed. It cannot revise 0018's VOID, 0003, 0014, 0015, 0016 or 0017, and it establishes no buyer.
@@ -26,7 +29,7 @@ is changed. It cannot revise 0018's VOID, 0003, 0014, 0015, 0016 or 0017, and it
 Everything after this paragraph is 0018's reader verbatim except the substitutions listed in
 prereg/0019-oob-4096-reread.json scope.what_changes_from_0018.declared_substitutions: the output path, the
 preregistration stamp the verdict carries (the artifact it reads is still required to be stamped 0018-oob-4096), the
-verdict schema name, the "READER 0019" print prefix, and the one literal.
+verdict schema name, the "READER 0019" print prefix, the headline print line, and the one literal.
 
 --- 0018 READER DOCSTRING, RETAINED ---
 Frozen reader for preregistration 0018 — out-of-builder transfer at 4096: does the headline recipe
@@ -772,7 +775,7 @@ def read(d) -> int:
     }
     _write(result)
 
-    print("READER 0019 — out-of-builder transfer at 4096")
+    print("READER 0019 — re-read of 0018's banked artifact (out-of-builder transfer at 4096)")
     for k, v in result["read"].items():
         print(f"  {k:<40} {v}")
     print(f"  ext_per_family (model)                   {json.dumps((reads.get('model') or {}).get('ext_per_family'))}")

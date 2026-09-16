@@ -51,6 +51,14 @@ that way. (Added 2026-09-03 after preregistration 0012's frozen reader voided an
 a record-order expectation its own gate had been built to satisfy; `CORRECTIONS.md`, entry of
 that date.)
 
+A sealed literal that a preregistration restates from a predecessor (a row-block hash, an index
+hash, a reference value) is named for what it is beside the hash (which block, which split, which
+run), and the pre-freeze check recomputes it from the data with the runner's own code rather than
+comparing the reader's copy to the preregistration's copy. Two copies of the same wrong literal
+agree with each other. (Added 2026-09-10 after preregistration 0018's frozen reader voided an
+honest run on a null-block hash restated from 0017, whose null block is not the one 0018's design
+and runner use; `CORRECTIONS.md`, entry of that date.)
+
 ## 4a. Measure the dumbest thing that could work, first
 
 Before any learned result is believed, the trivial baselines are run and banked:

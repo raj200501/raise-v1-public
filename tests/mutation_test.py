@@ -3507,11 +3507,14 @@ _OOB_RUNNER_NULL = "822b61020d276a04620440eb2d2e7e60376e1efba83e89607c33c09c39fa
 _OOB_0018_NULL = "0653cc12293ae078dd68b900c8778d93e701261ca93414be9eb7bb8e7ee686db"     # 0015/0017's fold block, sealed by 0018 in error
 
 
-def _reread_0019_expected_text():
-    """0018's frozen reader with exactly the substitutions declared (and sealed) in prereg/0019: what the re-read reader must be."""
-    pr = json.load(open(os.path.join(REPO, "prereg", "0019-oob-4096-reread.json")))
-    subs = pr["scope"]["what_changes_from_0018"]["declared_substitutions"]
-    text = open(os.path.join(REPO, "tools", "readers", "oob4096_verdict.py"), encoding="utf-8").read()
+def _reread_0019_expected_text(text=None, subs=None):
+    """0018's frozen reader with exactly the substitutions declared (and sealed) in prereg/0019: what the re-read reader must be.
+    text and subs are injectable so the builder's own refusals can be exercised; the defaults read the repository files."""
+    if subs is None:
+        pr = json.load(open(os.path.join(REPO, "prereg", "0019-oob-4096-reread.json")))
+        subs = pr["scope"]["what_changes_from_0018"]["declared_substitutions"]
+    if text is None:
+        text = open(os.path.join(REPO, "tools", "readers", "oob4096_verdict.py"), encoding="utf-8").read()
     for sub in subs:
         if text.count(sub["old"]) != sub["occurrences"]:
             return None, f"substitution {sub['old'][:40]!r}: {text.count(sub['old'])} occurrences, declared {sub['occurrences']}"
@@ -4261,7 +4264,7 @@ def _(root):
     def f(art, scores):
         art["preregistration"] = "0019-oob-4096-reread"; scores["preregistration"] = "0019-oob-4096-reread"
     rc19, out19 = _oob_void(root, f, expect_clause="preregistration", prereg="0019")
-    rc18, out18 = _oob_void(root, f, expect_clause="preregistration", prereg="0018", build_from="0019")
+    rc18, out18 = _oob_void(root, f, expect_clause="preregistration", prereg="0018")   # each reader on its own literals: the stamp is the sole cause
     if rc19 == 0 or rc18 == 0:
         return 0, f"0019: {out19[:120]} | 0018: {out18[:120]}"
     return 1, f"0019: {out19[:120]} | 0018: {out18[:120]}"
@@ -4278,6 +4281,84 @@ def _(root):
         d = [l for l in difflib.unified_diff(expected.splitlines(), actual.splitlines(), lineterm="", n=0) if l[:1] in "+-"][:6]
         return 1, "the re-read reader differs from 0018's reader plus the declared substitutions: " + " | ".join(d)
     return 0, "identical to 0018's frozen reader plus the declared substitutions"
+
+
+@case("oob4096", "the-re-read-literal-is-the-block-the-runner-fitted-and-0018s-is-0017s-fold-block", "pass")
+def _(root):
+    # ties both readers' literals to the world as banked: the runner's artifact, 0014's null control, 0016's sealed null (pool
+    # block) and 0015's, 0017's sealed nulls and lofo artifacts (fold block); with the cache present, recomputed from y and g
+    r18 = _oob_reader("oob4096_verdict.py"); r19 = _oob_reader("oob4096_reread_verdict.py")
+    A = lambda *p: json.load(open(os.path.join(REPO, *p)))  # noqa: E731
+    art = A("artifacts", "pivot", "oob_4096.json"); r14 = A("artifacts", "pivot", "recipe_search_4096.json")
+    p15 = A("prereg", "0015-lofo-4096.json"); p16 = A("prereg", "0016-fdc-4096.json"); p17 = A("prereg", "0017-lofo-l3-4096.json")
+    l15 = A("artifacts", "pivot", "lofo_4096.json"); l17 = A("artifacts", "pivot", "lofo_l3_4096.json")
+    pool = {r19.PARTITION["null_sorted_sha256"], _OOB_RUNNER_NULL, art["partition"]["null_sorted_sha256"],
+            art["fits"]["null"]["fit_rows_sorted_sha256"], r14["null_control"]["fit_rows_sorted_sha256"],
+            p16["scope"]["sealed_partition"]["null"]["sorted_sha256"]}
+    fold = {r18.PARTITION["null_sorted_sha256"], _OOB_0018_NULL, p15["scope"]["sealed_partition"]["null"]["null_sorted_sha256"],
+            p17["scope"]["sealed_partition"]["null"]["null_sorted_sha256"], l15["partition"]["null_sorted_sha256"],
+            l17["partition"]["null_sorted_sha256"]}
+    if len(pool) != 1 or len(fold) != 1 or pool == fold:
+        return 1, f"pool-block hashes {sorted(h[:8] for h in pool)} fold-block hashes {sorted(h[:8] for h in fold)}"
+    cache = os.path.join(REPO, "data", "pivot", "full_c4096.npz")
+    if os.path.exists(cache):
+        rc, out = run([PY, "tools/pivot/null_block_check.py", "--cache", cache, "--sealed", r19.PARTITION["null_sorted_sha256"],
+                       "--artifact", "artifacts/pivot/oob_4096.json"], REPO)
+        if rc != 0:
+            return 1, "null_block_check.py on the cache: " + out[-300:]
+        return 0, "one pool block, one fold block, and the cache recomputation agrees"
+    return 0, "one pool block, one fold block (cache absent: the recomputation from y and g was not run here)"
+
+
+def _tiny_cache(root):
+    """A small builder-shaped cache (y, g only) in the sandbox for exercising tools/pivot/null_block_check.py without the data."""
+    import numpy as np
+    n_chunks, rows = 400, 26
+    g = np.repeat(np.arange(n_chunks, dtype=np.int32), rows); y = np.tile(np.arange(rows, dtype=np.int16), n_chunks)
+    path = os.path.join(root, "tiny_c4096.npz"); np.savez(path, y=y, g=g)
+    sys.path.insert(0, os.path.join(REPO, "tools", "pivot"))
+    from run_carve import grouped_split  # noqa: E402
+    ev, tr, _ = grouped_split(y, g, 20260825, 0.2, 8000)
+    return path, hashlib.sha256(np.ascontiguousarray(np.sort(tr[:20000]).astype(np.int64)).tobytes()).hexdigest()
+
+
+@case("oob4096", "null-block-tool-passes-on-the-block-recomputed-from-y-and-g", "pass")
+def _(root):
+    path, pool = _tiny_cache(root)
+    return run([PY, "tools/pivot/null_block_check.py", "--cache", path, "--sealed", pool, "--cap", "8000"], REPO)
+
+
+@case("oob4096", "null-block-tool-fails-on-a-literal-that-is-not-the-recomputed-block", "fail")
+def _(root):
+    path, pool = _tiny_cache(root)
+    rc, out = run([PY, "tools/pivot/null_block_check.py", "--cache", path, "--sealed", "0" * 64, "--cap", "8000"], REPO)
+    if rc != 0 and "NULL BLOCK CHECK: FAIL" not in out:
+        return 0, out + " !! non-zero exit without the FAIL line"
+    return rc, out
+
+
+@case("oob4096", "an-artifact-whose-fits-block-is-a-list-is-VOID-under-the-re-read-reader-with-the-0019-stamp", "fail")
+def _(root):
+    def f(art, scores):
+        art["fits"] = [art["fits"][k] for k in art["fits"]]
+    rc, out = _oob(root, f, prereg="0019")
+    vf = os.path.join(root, "artifacts", "pivot", "oob_4096_reread_verdict.json")
+    if not os.path.exists(vf):
+        return 0, out + " !! no re-read verdict file written on the unexpected-shape path"
+    v = json.load(open(vf))
+    if v.get("verdict") != "VOID" or v.get("preregistration") != "0019-oob-4096-reread" or v.get("reads_artifact_of") != "0018-oob-4096" \
+            or v.get("schema") != "raise-v1/oob_4096_reread_verdict/1":
+        return 0, f"!! unexpected-shape verdict carries {v.get('verdict')}, {v.get('preregistration')}, {v.get('reads_artifact_of')}, {v.get('schema')}"
+    return rc, out
+
+
+@case("oob4096", "a-declared-occurrence-count-off-by-one-is-refused-by-the-rebuild", "fail")
+def _(root):
+    pr = json.load(open(os.path.join(REPO, "prereg", "0019-oob-4096-reread.json")))
+    subs = json.loads(json.dumps(pr["scope"]["what_changes_from_0018"]["declared_substitutions"]))
+    subs[0]["occurrences"] += 1
+    expected, problem = _reread_0019_expected_text(subs=subs)
+    return (1 if expected is None else 0), (problem or "!! an off-by-one occurrence count was accepted")
 
 
 @case("oob4096", "a-re-read-reader-with-any-other-line-changed-is-detected", "fail")

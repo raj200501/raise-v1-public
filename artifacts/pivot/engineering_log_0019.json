@@ -2,33 +2,112 @@
   "schema": "raise-v1/engineering_log/1",
   "preregistration": "0019-oob-4096-reread",
   "status": "written before the freeze; nothing here is a measurement",
-  "why": "0018's frozen reader emitted VOID on one wrong sealed literal (the null block hash restated from 0017's fold-based block instead of the pool block the design, the arms and the runner use); every other clause passed. 0013's precedent: re-read the same banked artifact under the same clauses with the one literal corrected, disclose every known number, commit to the outcome they give, and never edit a frozen file.",
+  "why": "0018's frozen reader emitted VOID on one wrong sealed literal (the null block hash restated from 0017's fold-based block instead of the pool block the design, the arms and the runner use): five validity clauses failed, all one hash; the reader stops recomputing after a fit clause fails, so its readings, reproduction, null-tolerance and transfer clauses were never reached, and every scope, corpus, extension-corpus, partition, environment and order clause it did evaluate passed; the artifact carries the readings, and 0019's reader evaluates every clause for the first time. 0013's precedent: re-read the same banked artifact under the same clauses with the one literal corrected, disclose every known number, commit to the outcome they give, and never edit a frozen file.",
   "known_numbers": "prereg/0019-oob-4096-reread.json scope.numbers_known_when_this_was_written, copied from artifacts/pivot/oob_4096.json readings by the preregistration writer and checked by the pre-freeze check",
   "reader_derivation": {
     "method": "tools/readers/oob4096_reread_verdict.py is generated from the frozen 0018 reader by the declared substitutions only (scope.what_changes_from_0018.declared_substitutions); the generator refuses if any substitution's occurrence count differs from the declared one",
     "diff_line_counts": {
       "removed_from_0018": 13,
-      "added": 44,
-      "note": "diff -u line counts; the added lines are the docstring prefix plus the substituted lines"
+      "added": 47,
+      "method": "difflib.unified_diff over lines, n=0, headers excluded"
     },
-    "gate": "oob4096 gate: control artifacts built from either reader's literals; 0018's reader must VOID the runner's block (the filed defect); the re-read reader must VOID 0018's literal, VOID a third hash, read OOB_TRANSFER_FAILS one row under the bar, VOID an artifact stamped 0019; the re-read reader must equal 0018's reader plus the declared substitutions and a tampered copy must be detected (8 cases added to 0018's 72)"
+    "gate": "oob4096 gate: control artifacts built from either reader's literals; 0018's reader must VOID the runner's block (the filed defect); the re-read reader must VOID 0018's literal, VOID a third hash, read OOB_TRANSFER_FAILS one row under the bar, VOID an artifact stamped 0019 (each reader on its own literals, so the stamp is the sole cause), write a VOID with the 0019 stamp on the unexpected-shape path; the re-read reader must equal 0018's reader plus the declared substitutions, a tampered copy must be detected and an off-by-one occurrence count refused; one case ties both literals to the world as banked (the artifact, 0014's null control, 0016's sealed null; 0015's and 0017's sealed nulls and lofo artifacts) and runs tools/pivot/null_block_check.py when the cache is present; two cases exercise that tool on a small cache so it is shown to pass and to fail (13 cases added to 0018's 72: oob4096 85/85; suite 400/400)"
   },
   "pre_freeze_check": {
-    "script": "session scratchpad prefreeze_check_0019.py",
+    "script": "tools/prereg_checks/prefreeze_0019.py (committed in the freeze commit); result banked in artifacts/verification/prefreeze_0019.json",
     "checks": [
       "0018 reader is the frozen file (sha256 47a3f654...)",
       "0019 reader == 0018 reader + declared substitutions",
-      "corrected literal == first 20000 pool rows recomputed from y and g with the runner's split == artifact partition == null fit rows == 0014's null control == 0016's sealed null",
+      "corrected literal == first 20000 pool rows recomputed from y and g with the runner's split (tools/pivot/null_block_check.py, committed in the freeze commit) == artifact partition == null fit rows == 0014's null control == 0016's sealed null",
       "old literal == recomputed first-fold block == 0018's and 0017's sealed null",
       "every known number == the artifact's readings",
       "clause quoted as 3402 of 38452, the mixture threshold not quoted as the clause",
       "scratch copy of the 0019 reader (output redirected to the scratchpad) reads OOB_TRANSFER_FAILS with no validity failure",
       "no re-read verdict file under artifacts/ before the freeze",
       "chain verifies, head 0018",
-      "artifact file hashes == the prereg's artifact_identity"
+      "artifact file hashes == the prereg's artifact_identity",
+      "the headline print line says it is a re-read (0013's convention); the docstring quotes the runner's null-block lines verbatim"
     ],
-    "result": "PASS on 2026-09-10 before the freeze"
+    "result": "PASS at 2026-09-16T04:12:46Z on reader sha256 0ceef3ae73671f00e03becac6e8305617985eef4981e39e6d36a4ad0578b3668 and preregistration file sha256 7bbdb7f7f2c6fd095cf9c5b7717fb31078502d630e940c2f50788d61fe7b0d72 (mutation report 400, all detected)"
   },
   "expected_outcome": "OOB_TRANSFER_FAILS, committed to in the preregistration from the known numbers (2450 of 38452 against 3402); anything else is published as emitted with a further correction",
-  "cost": "no fit, no scoring; the reader recounts 321409-entry vectors four times (seconds)"
+  "cost": "no fit, no scoring; the reader recounts 321409-entry vectors four times (seconds)",
+  "review_before_freeze": {
+    "method": "six independent read-only lenses (diagnosis, reader diff, preregistration text, gate, corrections and logs, skeptic) with one refuter per medium or high finding; workflow run wf_1483fa9d-684; synthesis by the operator before the freeze",
+    "findings_adopted": [
+      {
+        "severity": "medium",
+        "finding": "'every other clause passed' overstates what 0018's reader evaluated (it stops after a fit clause fails)",
+        "change": "reworded in the reader docstring, the preregistration, the ledger addendum, both logs and the drafts to what the reader reached"
+      },
+      {
+        "severity": "medium",
+        "finding": "nothing committed tied the corrected literal to the runner's block; the pre-freeze recomputation lived in the session",
+        "change": "tools/pivot/null_block_check.py committed and run by the pre-freeze check and by a gate case; the pre-freeze check committed as tools/prereg_checks/prefreeze_0019.py with its result banked"
+      },
+      {
+        "severity": "medium",
+        "finding": "the banked mutation report and six live claims disagreed with the coverage claim",
+        "change": "full suite re-run (400/400), live claims rewritten from the report before the freeze commit"
+      },
+      {
+        "severity": "medium",
+        "finding": "the in-flight correction's span, cause and 'recorded in the same log' were wrong or premature; README's in-flight sentence also mis-scoped the clause; 'right throughout' contradicted the entry above",
+        "change": "the committed entries stand; dated addenda appended (append-only ledger); the publication script's sha256 and refusal strings banked here"
+      },
+      {
+        "severity": "medium",
+        "finding": "the gate's stamped-0019 case was overdetermined under 0018's reader; the unexpected-shape and NOT RUN paths were not exercised under the re-read reader; the tamper case did not exercise the builder's refusals",
+        "change": "each reader on its own literals in the stamp case; unexpected-shape case with the 0019 stamp added; injectable rebuild with an off-by-one occurrence case added"
+      },
+      {
+        "severity": "medium",
+        "finding": "the log recorded a review with no findings and diff counts from an earlier reader",
+        "change": "this block; diff counts written by the pre-freeze check at freeze time"
+      },
+      {
+        "severity": "medium",
+        "finding": "an unbanked CPU-time figure labelled 'at exit'",
+        "change": "banked as an operator sample with its time (08:25:23 UTC) in engineering_log_0018 run_record.operator_cpu_sample"
+      },
+      {
+        "severity": "medium",
+        "finding": "'M4 stopped at its iteration cap' without saying 0014's fit of the same recipe did too",
+        "change": "said beside it in the preregistration, the 0018 log and the drafts"
+      },
+      {
+        "severity": "medium",
+        "finding": "the preregistration did not commit where and in what words 0018's VOID appears beside 0019's verdict",
+        "change": "stop rule extended with the venues and the sentence"
+      },
+      {
+        "severity": "low",
+        "finding": "docstring misquoted the runner's null-block lines; said 0018's reader 'printed' counts it banked; headline print line did not say re-read; stop rule 'emitted False unconditionally'; 'at their flag threshold'; artifact commit cited the draft commit; occurrence counts unexplained; why a re-read over a re-run unstated; heartbeat series unbanked; arm misquoted; standing rule unreferenced",
+        "change": "each fixed in the preregistration, the reader prefix, the logs or the ledger addenda; hb_samples.jsonl banked beside the ledger"
+      }
+    ],
+    "findings_declined": [
+      {
+        "severity": "medium",
+        "finding": "add live claims for the evidence page's tiles",
+        "reason": "the page is regenerated from the artifacts by tools/render/evidence_page.py at every publication and read by claimcheck; a registered pattern for a rendered page would be a second copy of the same derivation; noted as a follow-up, not adopted here"
+      },
+      {
+        "severity": "medium",
+        "finding": "commit the publication script into the repository",
+        "reason": "it applies session drafts at scratchpad anchors and is not reusable; its sha256 and refusal strings are banked here instead, and the durable guards (freshness, claimcheck, the gates) run on the published documents"
+      }
+    ]
+  },
+  "publication": {
+    "script": "the session's apply_0019_docs.py (scratchpad; not a repository file)",
+    "sha256_at_freeze": "34dbdada6fc5a3c4cf03185628d00739a74243e9e0b081a77f1007e5052ce037",
+    "refuses_to_finish_if_any_of_these_survives_in_VERDICT_md_or_README_md": [
+      "must reach 5433 of 61409",
+      "it is frozen and running",
+      "In flight — preregistration 0018"
+    ],
+    "also": "rewrites every registered live claim (docs/live_claims.json: mutation counts, chain length and head, preregistration counts) from the banked artifacts, the same derivation tools/freshness.py checks; the drafts it applies are written by draft_0019_docs.py from the banked verdict files only",
+    "drafts_sha256_at_freeze": "4359cfb225e90f4e8059be86102be9b9f74d3f3a3c869efe238743f95e4350c9"
+  }
 }

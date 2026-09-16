@@ -85,6 +85,27 @@ and the re-read reader must equal 0018's reader plus the declared substitutions,
 copy detected. Any later preregistration that restates a null block from a predecessor must say
 which block it is beside the hash, and its pre-freeze check must recompute it from data.
 
+**Addendum, 2026-09-10 (before the 0019 freeze), from the 0019 pre-freeze review; the entry above
+stands as committed at b5ed4bf.** Four sentences above are wrong or short, and this ledger is
+append-only, so they are corrected here rather than in place. (1) "Every other clause passed"
+overstates what 0018's reader evaluated: the reader stops recomputing after a fit clause fails,
+so its readings, reproduction, null-tolerance and transfer clauses were never reached; the scope,
+corpus, extension-corpus, partition, environment, order and every other sealed-hash clause it did
+evaluate passed, and the reproductions, null readings and overlaps quoted above are the
+artifact's own banked values, which 0019's reader evaluates for the first time. (2) The 0018
+pre-freeze check did more than compare two copies: it required the reader's partition block, null
+hash included, to equal 0017's reader's, and labelled that block 0003's split; the correct
+literal would have failed that check. (3) The quotation attributed to `scope.design` and the NULL
+arm is `scope.design`'s; the arm says "0003's pool's first 20000 rows with shuffled labels". (4)
+The Fix's gate sentence misdescribes the remedy: the gate's control artifacts are still built from
+a reader's literals (every sealed hash but one is the reader's own copy, as `docs/OPERATING_RULES.md`
+§4 warns); what closes the null-block hole is a case that requires 0019's literal to equal the
+banked artifact's partition and null-fit hashes, 0014's null control and 0016's sealed null, and
+0018's literal to equal 0015's and 0017's sealed nulls and lofo artifacts, plus the committed
+recomputation `tools/pivot/null_block_check.py` (run by that case when the cache is present, and
+exercised on a small cache in two further cases so it can be shown to fail). The closing rule is
+now standing text in `docs/OPERATING_RULES.md` §4 (added 2026-09-10).
+
 ---
 
 ## 2026-09-10 — VERDICT.md's in-flight paragraph for 0018 described the clause the pre-freeze review had replaced
@@ -115,6 +136,29 @@ verdict file. The 0019 pre-freeze check asserts that the 0019 preregistration qu
 3402 of 38452 and does not quote the mixture threshold as the clause; the 0019 publication script
 refuses to apply the documents if the replaced sentence survives anywhere in `VERDICT.md` or
 `README.md`.
+
+**Addendum, 2026-09-10 (before the 0019 freeze), from the 0019 pre-freeze review; the entry above
+stands as committed at b5ed4bf.** (1) The span is wrong: the sentence did not stop being published
+at that entry's commit; it stands in `VERDICT.md` until the publication commit that replaces the
+in-flight paragraph with the 0018/0019 section, after 0019 is frozen and read, so "about seven
+hours" is the span to the entry, not to the fix. (2) `README.md`'s in-flight sentence is the same
+defect without a count: "asks whether the headline recipe identifies the encoder on eight content
+families the corpus builder never produced (61409 evaluation-only rows: ...), at chance + 0.05; it
+is frozen and running" frames the bar over the eight families; it is replaced at the same
+publication commit. (3) "The preregistration, the reader, the 72-case gate and the verdict file
+were right throughout" should read "carried the clause as 3402 of 38452 throughout"; the
+preregistration's null-block literal is the entry above. (4) The Cause is wrong about the
+mechanism: the freeze-time script (the session's `freeze_docs_0018.py`) generated the sentence
+from the sealed preregistration, but read `scope.protocol.min_correct` (the mixture flag's
+threshold, 5433) and the corpus row count into a hard-coded "correct extension rows must reach"
+template instead of `bar.transfer`'s threshold and denominator (3402 of 38452); so "generated
+from the sealed preregistration" is the guard that failed, and the durable guard is that in-flight
+text quotes the clause from the `bar` fields and is checked against them before the freeze commit.
+(5) The Fix's "recorded in the same log" was written before the record existed; the publication
+script's name, sha256 and its exact refusal strings are now banked in
+`artifacts/pivot/engineering_log_0019.json` (`publication`), and the 0019 pre-freeze check is
+committed as `tools/prereg_checks/prefreeze_0019.py` with its result banked in
+`artifacts/verification/prefreeze_0019.json`.
 
 ---
 

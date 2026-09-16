@@ -64,6 +64,9 @@ l3v = json.load(open(_l3vp, encoding="utf-8")) if os.path.exists(_l3vp) else Non
 _oobp = A("pivot", "oob_4096.json"); _oobvp = A("pivot", "oob_4096_verdict.json")
 oob = json.load(open(_oobp, encoding="utf-8")) if os.path.exists(_oobp) else None
 oobv = json.load(open(_oobvp, encoding="utf-8")) if os.path.exists(_oobvp) else None
+# 0019 re-reads 0018's artifact under a reader with one sealed literal corrected (the null block hash); its verdict is the reading.
+_oobrp = A("pivot", "oob_4096_reread_verdict.json")
+oobr = json.load(open(_oobrp, encoding="utf-8")) if os.path.exists(_oobrp) else None
 
 git_head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO,
                           capture_output=True, text=True).stdout.strip()
@@ -207,7 +210,17 @@ chips = "".join([
             f'incumbent {oobv["ext_real_top1"]["incumbent"]}, standardised logistic {oobv["ext_real_top1"]["logistic_l3"]} on the same '
             f'rows; eight-family mixture {oobv["ext_top1_model"]} (a flag)')
            if oobv["verdict"] != "VOID" and oob and oob.get("complete")
-           else f'VOID: {"; ".join(oobv["validity_failed_clauses"])[:140]}')] if oobv else []))
+           else (f'VOID on a wrong sealed literal (the null block hash restated from 0017\'s fold-based block; the runner fitted the '
+                 f'first 20000 pool rows), filed in CORRECTIONS.md; the run itself completed cleanly and is re-read under 0019'
+                 if oobr else f'VOID: {"; ".join(oobv["validity_failed_clauses"])[:140]}'))] if oobv else [])
+ + ([chip(oobr["verdict"], {"OOB_TRANSFERS": "pass", "OOB_TRANSFER_FAILS": "fail", "VOID": "inc"}[oobr["verdict"]], "0019",
+           (f're-read of 0018\'s banked artifact with the reader\'s one sealed literal corrected: the headline recipe (0014\'s searched '
+            f'M4) fitted on the builder\'s eight families and scored on five pinned real-file families the builder never produced: '
+            f'{oobr["ext_real_correct_model"]} of {oobr["bar_applied"]["n_real_rows"]} real-family rows correct ({oobr["ext_real_top1_model"]}) '
+            f'against {oobr["bar_applied"]["min_correct_real"]} needed (chance + 0.05); incumbent {oobr["ext_real_top1"]["incumbent"]}, '
+            f'standardised logistic {oobr["ext_real_top1"]["logistic_l3"]} on the same rows; eight-family mixture {oobr["ext_top1_model"]} (a flag)')
+           if oobr["verdict"] != "VOID" and oob and oob.get("complete")
+           else f'VOID: {"; ".join(oobr["validity_failed_clauses"])[:140]}')] if oobr else []))
 
 fam2048_table = ""
 _pf2048 = A("pivot", "per_family_curves_2048.json")
@@ -345,7 +358,14 @@ if l3a and l3v and l3v["verdict"] != "VOID" and l3a.get("complete"):
                      f'<th>0015 raw logistic</th><th>lead over incumbent</th></tr></thead><tbody>{_rows}</tbody></table>')
 
 boundary_0018 = ""
-if oob and oobv and oobv["verdict"] != "VOID" and oob.get("complete"):
+_oobread = oobr if (oobr and oobr["verdict"] != "VOID") else (oobv if (oobv and oobv["verdict"] != "VOID") else None)
+if oob and _oobread and oob.get("complete"):
+    oobv = _oobread   # the reading: 0019's re-read when it exists and is not VOID, else 0018's own verdict
+    _who = ("preregistration 0019, chain entry 19, which re-reads 0018\'s banked artifact under a reader with one sealed literal "
+            "corrected after 0018\'s own frozen reader voided the run on it (the null block hash, restated from 0017\'s fold-based "
+            "block while the runner fitted the first 20000 pool rows; filed in the corrections ledger); the re-read reader recounts "
+            "every reading from the banked score vectors") if _oobread is oobr else \
+           "preregistration 0018, chain entry 18, read by its own frozen reader, which recounts every reading from the banked score vectors"
     _pf = oobv["ext_per_family"]; _ceil = oobv["ext_ceiling_distinct_fragments"]; _rpf = oobv["ext_rows_per_family"]
     _ba = oobv["bar_applied"]; _fl = _ba.get("flags") or {}; _real = set(oob.get("ext_real_families") or [])
     _rows = "".join(f'<tr><td class="mono">{f}{" (real)" if f in _real else " (synthetic)"}</td><td class="mono">{_rpf[f]}</td>'
@@ -355,14 +375,17 @@ if oob and oobv and oobv["verdict"] != "VOID" and oob.get("complete"):
     _word = "reaches" if oobv["verdict"] == "OOB_TRANSFERS" else "does not reach"
     _sub = oobv["ext_subsets"]["model"]
     boundary_0018 = (f'<p><strong>On real content the corpus builder never produced, the headline recipe {_word} the bar: '
-                     f'<span class="mono">{oobv["verdict"]}</span></strong> (preregistration 0018, chain entry 18, read by its own '
-                     f'frozen reader, which recounts every reading from the banked score vectors). 0014\'s searched model, fitted once on '
+                     f'<span class="mono">{oobv["verdict"]}</span></strong> ({_who}). 0014\'s searched model, fitted once on '
                      f'0003\'s sealed 800000-row pool (reproduction {oobv["reproduction_top1"]["model"]} against 0014\'s 0.2884), '
                      f'identifies the encoder on {oobv["ext_real_correct_model"]} of {_ba["n_real_rows"]} rows from five pinned real-file '
                      f'families ({oobv["ext_real_top1_model"]}) against {_ba["min_correct_real"]} needed for chance + {_ba["bar"]}; the '
                      f'incumbent reads {oobv["ext_real_top1"]["incumbent"]} and the standardised logistic {oobv["ext_real_top1"]["logistic_l3"]} '
                      f'on the same rows (flags at the same bar: {"yes" if _fl.get("incumbent_reaches_bar_real") else "no"} and '
-                     f'{"yes" if _fl.get("logistic_l3_reaches_bar_real") else "no"}). The eight-family mixture, three synthetic families '
+                     f'{"yes" if _fl.get("logistic_l3_reaches_bar_real") else "no"}'
+                     + (f'; the logistic\'s count exceeds M4\'s by {-_fl["model_leads_logistic_l3_real_rows"]} rows, so the headline recipe '
+                        f'is not its best transfer recipe on this content' if (_fl.get("model_leads_logistic_l3_real_rows") or 0) < 0 else '')
+                     + (f'; M4 stopped at its iteration cap, {(_fl.get("n_iter_by_role") or {}).get("model")}' if (_fl.get("at_iteration_cap") or {}).get("model") else '')
+                     + f'). The eight-family mixture, three synthetic families '
                      f'included, reads {oobv["ext_top1_model"]} (a flag; {"at" if _fl.get("mixture_reaches_bar") else "under"} its own bar), '
                      f'the three synthetic families {_sub["ext_synthetic_top1"]}; over the six structured-text families '
                      f'{_sub["ext_structured_text_top1"]}, over the two least-compressible families {_sub["ext_high_entropy_top1"]}. '

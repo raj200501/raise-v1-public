@@ -53,8 +53,8 @@
       "total": 29
     },
     "oob4096": {
-      "detected": 72,
-      "total": 72
+      "detected": 85,
+      "total": 85
     },
     "pivot-curve": {
       "detected": 11,
@@ -3568,10 +3568,127 @@
       "gate": "oob4096",
       "mutation": "the-mixture-flag-is-banked-but-does-not-decide-the-verdict",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"sealed set: partition.null_sorted_sha256='<hash>', preregistered '<hash>'\", 'fit: null was not fitted on the sealed rows with the preregistered seed'] tr",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "0018s-frozen-reader-VOIDs-the-runners-null-block-(the-filed-defect)",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OOB_TRANSFERS real=0.12 correct=4614 validity=[] transfer=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "oob4096",
+      "mutation": "control-passes-under-the-re-read-reader",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"sealed set: partition.null_sorted_sha256='<hash>', preregistered '<hash>'\", 'fit: null was not fitted on the sealed rows with the preregistered seed'] tr",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "0018s-sealed-null-literal-is-VOID-under-the-re-read-reader",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"sealed set: partition.null_sorted_sha256='<hash>', preregistered '<hash>'\", 'fit: null was not fitted on the sealed rows with the preregistered seed'] tr",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-null-block-that-is-neither-sealed-literal-is-VOID-under-the-re-read-reader",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=OOB_TRANSFER_FAILS real=0.0884 correct=3401 validity=[] transfer=[\"transfer: M4's correct real-family rows 3401 of 38452 (0.0884) is below 3402 (chance 0.038462 + 0.05 = 0.088462)\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "one-real-family-row-under-the-bar-is-OOB_TRANSFER_FAILS-under-the-re-read-reader",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "0019: verdict=VOID real=None correct=None validity=[\"scope: preregistration='0019-oob-4096-reread', this reader is frozen for  | 0018: verdict=VOID real=None correct=None validity=[\"scope: preregistra",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "an-artifact-stamped-0019-is-VOID-under-both-readers-(the-re-read-reads-0018s-artifact)",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "identical to 0018's frozen reader plus the declared substitutions",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "oob4096",
+      "mutation": "the-re-read-reader-is-0018s-frozen-reader-plus-exactly-the-declared-substitutions",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "one pool block, one fold block, and the cache recomputation agrees",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "oob4096",
+      "mutation": "the-re-read-literal-is-the-block-the-runner-fitted-and-0018s-is-0017s-fold-block",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "NULL BLOCK CHECK: PASS",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "oob4096",
+      "mutation": "null-block-tool-passes-on-the-block-recomputed-from-y-and-g",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "NULL BLOCK CHECK: FAIL",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "null-block-tool-fails-on-a-literal-that-is-not-the-recomputed-block",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: fits is not a mapping', \"fit: incumbent status None; must be 'fit'\"] transfer=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "an-artifact-whose-fits-block-is-a-list-is-VOID-under-the-re-read-reader-with-the-0019-stamp",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "substitution '\"\"\"Frozen reader for preregistration 001': 1 occurrences, declared 2",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-declared-occurrence-count-off-by-one-is-refused-by-the-rebuild",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "tampered copy differs from 0018 plus the declared substitutions",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-re-read-reader-with-any-other-line-changed-is-detected",
+      "observed": "fail"
     }
   ],
-  "detected": 387,
+  "detected": 400,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 387
+  "total_mutations": 400
 }
