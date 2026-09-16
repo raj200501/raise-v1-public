@@ -295,7 +295,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 
 | Result | Value | Class |
 |---|---|---|
-| Every gate can be shown to fail | 433 mutations, 433 detected, 0 survived | primary-verifiable |
+| Every gate can be shown to fail | 454 mutations, 454 detected, 0 survived | primary-verifiable |
 | A number that is real but STALE is caught, not just a fabricated one | `tools/freshness.py`, 9 mutations | primary-verifiable |
 | Preregistration chain verifies, reader unchanged since freeze | 19 entries, head `fe80fa9b…` | primary-verifiable |
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |
@@ -703,7 +703,7 @@ searched logistic gained more.
 
 The 0011 section above ends on the question the record named: is the 0.0025 shortfall a
 recipe artefact? Preregistration 0012 (chain seq 12, NIST Beacon pulse 1925147, drand round
-6433429) asked it the only fair way. Every head with a hyperparameter — the HGB model, the
+6454429) asked it the only fair way. Every head with a hyperparameter — the HGB model, the
 logistic, the depth-3 tree, the deep tree — got an enumerated roster of eight recipes with the
 0011 recipe first; every roster went through the same two-stage selection on a chunk-rule
 holdout (chunk id mod 5 equals 0, hashed into the reader before any fit) that shares no chunk

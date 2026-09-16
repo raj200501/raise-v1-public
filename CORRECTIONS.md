@@ -19,6 +19,87 @@ Format:
 
 ---
 
+## 2026-09-16 — Said the mutation gates' controls are never built from the reader's expectations; four of them are, and it hid ten VOID clauses in an unfrozen preregistration
+
+**Claimed.** `docs/OPERATING_RULES.md` §4 states the rule without exception: a reader's
+mutation-gate control artifact "is never built from the reader's expectations, because a control
+that shares an assumption with the reader cannot see the reader disagree with the world." The
+`realfit4096` gate carried a case literally named
+`the-control-artifact-is-built-from-the-runners-own-output-shape`, which passed, and
+`tests/fixtures/realfit_runner_shape.json` said in its own `why` field that it existed "so the
+realfit4096 mutation gate builds its control from the RUNNER's output shape rather than from the
+reader's expectations (docs/OPERATING_RULES.md section 4)". All of that was in the repository and
+none of it was true of the gate as written.
+
+**Actual.** `_good_realfit` in `tests/mutation_test.py` loaded the captured fixture and then
+replaced 51 of its 52 keys, taking `corpus`, `ext_corpus`, `fit_corpus`, `protocol` and
+`partition` wholesale from the frozen reader's own module constants — `dict(r20.FIT)`,
+`dict(r20.EXT)`, `dict(r20.CORPUS)`, `dict(r20.PARTITION)` — and injecting a `ledger` key the
+runner did not write at all. The only artifact value still inherited from the runner by provenance
+was `cluster_ci95_note`. The case that asserts §4 computed `set(shape) - set(art)`: one direction,
+one nesting level, against a static committed file. An invented key was therefore invisible, every
+nested divergence was invisible, and the fixture was itself already two `partition` keys stale
+(`repro_idx_sha256`, `matched_idx_sha256`) with nothing able to notice.
+
+The consequence was not hypothetical. Preregistration 0020's generated reader required a `ledger`
+block that `tools/pivot/run_realfit.py` never banked, and carried four `fit_corpus` literals taken
+from the corpus manifest's *built* counts where the runner measures the counts of chunks that
+carry rows — `n_chunks` 1035 against 1029, `chunks_per_family` pe_bin 207 against 203 and py_src
+674 against 672, `chunk_id_max` 20400000 (a hand-derived `chunk_id_base + 4 × family_stride`)
+against the measured 20400039 — plus a `ceiling_distinct_fragments` key the runner never writes.
+An honest, complete, valid run would have emitted **VOID on ten clauses** after about an hour of
+fitting, and an artifact that *misdescribed* the fit corpus would have passed while the truthful
+one voided. The gate was 33/33 green throughout. The pre-freeze check was green too: it compared
+`r20.FIT["arrays"] == P["fit_corpus"]["arrays"]`, two copies of the same literal, for precisely
+the fields that were wrong.
+
+Three of five independent pre-freeze reviewers found the `ledger` defect separately; two of them
+found the four literals. It was caught before the freeze and before any run, so no published
+number was ever affected — but the claim about how the gates are built was published, and it was
+false.
+
+**Size.** Four gates of twenty-two build their controls this way (`oob4096`, and three siblings
+whose docstrings say so, plus `realfit4096`). One preregistration's instrument, unfrozen, would
+have voided its own run on ten clauses; the cost had it not been caught is one full run of the
+six-arm design, banked as VOID, plus a re-read preregistration to recover it — which is exactly
+what 0018 and 0019 cost. Against the rule as written, the gap is total rather than partial: §4
+admits no exception and four gates take the exception.
+
+**Cause.** The rule was written after the 0012 defect and mechanised for one gate; later gates
+copied the *shape* of that mechanisation — load a fixture, then overwrite — without its substance,
+and the case asserting the rule was written to check that nothing was *lost* rather than that
+nothing was *invented*. A one-directional set difference reads as a completeness check and is not
+one. Filing it as an open follow-up in `artifacts/pivot/engineering_log_0019.json` rather than as
+a correction was the second mistake: it was already known, already written down as a gap, and
+still shipped into 0020's instrument, because a follow-up has no gate behind it and a correction
+demands a fix.
+
+**Fix.** Four changes, all made for `realfit4096`, and the class is now filed as a correction
+rather than a follow-up so the remaining three gates are owed the same.
+
+1. `tools/pivot/run_realfit.py` grows a module-level `corpus_block()`, which the runner, the
+   preregistration generator and the pre-freeze check all **call**. The sealed
+   `scope.protocol.fit_corpus` and `ext_corpus` are its output rather than a retyping of the
+   manifest; descriptive fields moved to `fit_corpus_described`, which nothing compares.
+2. `_rf_sub()` in `tests/mutation_test.py` substitutes sealed values *into* the runner's own
+   captured block key by key and raises on any key the two do not share, so a reader that expects
+   a field the runner does not write fails at control-construction time.
+3. The provenance case is symmetric (`set(shape) ^ set(art)`) and recurses into `corpus`,
+   `ext_corpus`, `fit_corpus`, `partition`, `readings` and every record, and additionally asserts
+   that every key the reader compares is a key the runner writes.
+4. The pre-freeze check rebuilds both corpus blocks by calling the runner, asserts every reader
+   expectation is a runner-written key, and asserts the captured fixture is current with the
+   runner in the tree. The fixture was recaptured from a smoke of the current runner — which
+   itself required fixing a runner whose sealed-hash refusals ran before its smoke guard, so the
+   documented smoke invocation could not execute against the committed preregistration and the
+   fixture's stated provenance was not reproducible.
+
+`realfit4096` goes from 33 cases to 54; the new ones include a case that deletes the `ledger`, a
+case for each wrong `fit_corpus` literal, and a case asserting that an artifact which misdescribes
+the corpus is VOID rather than a pass.
+
+---
+
 ## 2026-09-10 — Preregistration 0018 sealed the wrong null-block hash, and its frozen reader voided an honest run on it
 
 **Claimed:** `prereg/0018-oob-4096.json` `scope.sealed_partition.null.null_sorted_sha256` =

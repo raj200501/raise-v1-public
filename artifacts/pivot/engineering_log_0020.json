@@ -1,12 +1,15 @@
 {
-  "schema": "raise-v1/engineering_log/1",
-  "preregistration": "0020-realfit-4096",
-  "status": "written before the freeze; nothing here is a measurement of the task",
+  "cost_anchors": {
+    "M4_on_20000_rows_seconds_0018": 83.7,
+    "estimate": "six small fits (the largest is the 100000-row reproduction rung at about 204 s and M4 on 26346 rows at a few hundred) plus six scorings of 321409 rows and one row-identity scan over every scored row (about 260 s in the smoke); expected well under an hour at 3 threads and nice 10 on 4 cores, no GPU",
+    "launch_minimum": "8.0 GB MemAvailable (0018 needed 14.5 because it materialised an 800000-row pool block; the largest block here is 100000 rows), 0.5 GB disk, 1-minute load under 2.0, no other tools/pivot runner",
+    "rung_100000_seconds_0003": 203.6,
+    "rung_10000_seconds_0003": 40.3,
+    "scoring_set_gb_float32": 1.42,
+    "scoring_set_rows": 321409,
+    "source": "banked fits on the same machine: artifacts/pivot/deflate_curve.json rungs and artifacts/pivot/oob_4096.json"
+  },
   "design": {
-    "question": "Does the encoder signal exist in real files at all at a 4096-byte carve? 0018/0019 read OOB_TRANSFER_FAILS with a model that had never seen a real file, so that reading cannot separate a training-distribution failure from real content carrying little signal. 0020 changes exactly one thing - what the recipes are fitted on - and holds the scoring set, the recipes, the seed, the bar and the machinery fixed.",
-    "why_now": "VERDICT.md says in as many words, in the paragraph published with 0019, that the record 'says nothing about what a recipe fitted on real content would do'. This is the cheapest decisive answer available from data already pinned and audited: no new sources, no new licence work, six small fits.",
-    "what_it_is_and_is_not": "An IN-DISTRIBUTION reading on real content, not a transfer reading. The fit chunks and the scored chunks are cut from the same five pinned blobs and share no byte, no chunk index, no chunk id and no source-chunk hash, but they are the same files. Every verdict string the reader emits says so.",
-    "clause": "real_model's correct rows over the 38452 real-family rows of 0018's sealed evaluation corpus >= 3402 (chance 1/26 + 0.05), the same bar and the same rows 0018 applied, so the two readings are directly comparable.",
     "arms": [
       "repro",
       "null",
@@ -14,28 +17,15 @@
       "real_incumbent",
       "real_logistic",
       "builder_matched"
-    ]
+    ],
+    "clause": "real_model's correct rows over the 38452 real-family rows of 0018's sealed evaluation corpus >= 3402 (chance 1/26 + 0.05), the same bar and the same rows 0018 applied, so the two readings are directly comparable.",
+    "question": "Does the encoder signal exist in real files at all at a 4096-byte carve? 0018/0019 read OOB_TRANSFER_FAILS with a model that had never seen a real file, so that reading cannot separate a training-distribution failure from real content carrying little signal. 0020 changes exactly one thing - what the recipes are fitted on - and holds the scoring set, the recipes, the seed, the bar and the machinery fixed.",
+    "what_it_is_and_is_not": "An IN-DISTRIBUTION reading on real content, not a transfer reading. The fit chunks and the scored chunks are cut from the same five pinned blobs and share no byte, no chunk index, no chunk id and no source-chunk hash, but they are the same files. Every verdict string the reader emits says so.",
+    "why_now": "VERDICT.md says in as many words, in the paragraph published with 0019, that the record 'says nothing about what a recipe fitted on real content would do'. This is the cheapest decisive answer available from data already pinned and audited: no new sources, no new licence work, six small fits."
   },
   "fit_corpus": {
+    "build_seconds": 80.9,
     "built_by": "tools/pivot/corpus_realfit.py --build (label factory imported from tools/pivot/corpus_ext.py)",
-    "n_rows": 26346,
-    "n_chunks": 1035,
-    "n_chunks_with_rows": 1029,
-    "rows_per_family": {
-      "c_src": 624,
-      "pe_bin": 5145,
-      "py_src": 17197,
-      "rfc_txt": 2340,
-      "rst_doc": 1040
-    },
-    "chunks_per_family": {
-      "c_src": 24,
-      "pe_bin": 207,
-      "py_src": 674,
-      "rfc_txt": 90,
-      "rst_doc": 40
-    },
-    "selection": "every whole 32768-byte chunk of each pinned blob that 0018's sealed selection (n_per_family 300, seed 20260909, recomputed here from tools/pivot/corpus_ext.py) does not use, in blob order, minus every chunk whose bytes hash to a sealed chunk's or to an earlier fit chunk's; no seed of its own",
     "byte_identity_exclusion": {
       "dropped": {
         "c_src": 0,
@@ -44,9 +34,24 @@
         "rfc_txt": 0,
         "rst_doc": 0
       },
-      "why": "a first build (1037 chunks) shared one source-chunk sha256 with the sealed evaluation corpus: two whole 32768-byte chunks of the PE blob are byte-identical runs of padding at different offsets, so index disjointness was not enough and the chunk would have put evaluation rows into the fit block. The selection now drops any candidate whose bytes hash to a sealed chunk's or to an earlier fit chunk's; 2 pe_bin chunks went, both of which had produced no rows, so the row count did not change (26346 either way) and the array hashes are identical.",
-      "found_by": "tools/pivot/corpus_realfit.py --disjoint, written before the corpus was sealed"
+      "found_by": "tools/pivot/corpus_realfit.py --disjoint, written before the corpus was sealed",
+      "why": "a first build (1037 chunks) shared one source-chunk sha256 with the sealed evaluation corpus: two whole 32768-byte chunks of the PE blob are byte-identical runs of padding at different offsets, so index disjointness was not enough and the chunk would have put evaluation rows into the fit block. The selection now drops any candidate whose bytes hash to a sealed chunk's or to an earlier fit chunk's; 2 pe_bin chunks went, both of which had produced no rows, so the row count did not change (26346 either way) and the array hashes are identical."
     },
+    "ceilings": {
+      "c_src": 0.9712,
+      "pe_bin": 0.9069,
+      "py_src": 0.9765,
+      "rfc_txt": 0.9778,
+      "rst_doc": 0.9567
+    },
+    "chunks_per_family": {
+      "c_src": 24,
+      "pe_bin": 207,
+      "py_src": 674,
+      "rfc_txt": 90,
+      "rst_doc": 40
+    },
+    "determinism": "corpus_realfit.py --probe builds a 15-chunk slice twice in two task orders and requires identical arrays; --check re-hashes the npz against the banked manifest; both pass",
     "imbalance": {
       "note": "the fit corpus is what the pinned blobs leave over, so it is imbalanced by construction and that is sealed in the preregistration in advance, with the per-family readings banked beside the clause",
       "share_of_fit_rows": {
@@ -57,13 +62,6 @@
         "rst_doc": 0.0395
       }
     },
-    "ceilings": {
-      "c_src": 0.9712,
-      "pe_bin": 0.9069,
-      "py_src": 0.9765,
-      "rfc_txt": 0.9778,
-      "rst_doc": 0.9567
-    },
     "library_versions": {
       "isal": "1.8.0",
       "libdeflate": "0.9.0",
@@ -72,27 +70,148 @@
       "zlib": "1.3",
       "zopfli": "0.4.3"
     },
-    "build_seconds": 80.9,
-    "determinism": "corpus_realfit.py --probe builds a 15-chunk slice twice in two task orders and requires identical arrays; --check re-hashes the npz against the banked manifest; both pass"
+    "n_chunks": 1035,
+    "n_chunks_with_rows": 1029,
+    "n_rows": 26346,
+    "rows_per_family": {
+      "c_src": 624,
+      "pe_bin": 5145,
+      "py_src": 17197,
+      "rfc_txt": 2340,
+      "rst_doc": 1040
+    },
+    "selection": "every whole 32768-byte chunk of each pinned blob that 0018's sealed selection (n_per_family 300, seed 20260909, recomputed here from tools/pivot/corpus_ext.py) does not use, in blob order, minus every chunk whose bytes hash to a sealed chunk's or to an earlier fit chunk's; no seed of its own"
   },
-  "cost_anchors": {
-    "source": "banked fits on the same machine: artifacts/pivot/deflate_curve.json rungs and artifacts/pivot/oob_4096.json",
-    "rung_100000_seconds_0003": 203.6,
-    "rung_10000_seconds_0003": 40.3,
-    "M4_on_20000_rows_seconds_0018": 83.7,
-    "scoring_set_rows": 321409,
-    "scoring_set_gb_float32": 1.42,
-    "estimate": "six small fits (the largest is the 100000-row reproduction rung at about 204 s and M4 on 26346 rows at a few hundred) plus six scorings of 321409 rows and one row-identity scan over every scored row (about 260 s in the smoke); expected well under an hour at 3 threads and nice 10 on 4 cores, no GPU",
-    "launch_minimum": "8.0 GB MemAvailable (0018 needed 14.5 because it materialised an 800000-row pool block; the largest block here is 100000 rows), 0.5 GB disk, 1-minute load under 2.0, no other tools/pivot runner"
+  "instrument": {
+    "gate": "realfit4096 in tests/mutation_test.py, 33 cases, control built from the runner's own output shape (tests/fixtures/realfit_runner_shape.json, captured from the smoke run) rather than from the reader's expectations, which is what docs/OPERATING_RULES.md section 4 requires and what the 0019 review found the oob4096 gate did not do",
+    "pre_freeze_check": "tools/prereg_checks/prefreeze_0020.py, committed; recomputes the three fit blocks from the data with the runner's own split rather than comparing two copies of a literal (the 0018 null-block defect), and refuses to run after the freeze rather than overwrite its banked result",
+    "reader": "tools/readers/realfit4096_verdict.py (generated from the preregistration)",
+    "runner": "tools/pivot/run_realfit.py"
   },
+  "pre_freeze_review": {
+    "findings_adopted": [
+      {
+        "finding": "the runner banks no ledger; the reader requires one completion per arm",
+        "fix": "ledger=store.ledger() in assemble(), as every sibling runner does; a gate case that deletes the key",
+        "lens": "all three of reader, runner, gate",
+        "severity": "high"
+      },
+      {
+        "finding": "four fit_corpus literals sealed from the manifest's built counts, plus a key the runner never writes",
+        "fix": "corpus_block() factored out of run_realfit.py and CALLED by the preregistration generator and the pre-freeze check; scope.protocol.fit_corpus and ext_corpus are now the runner's own blocks; the descriptive fields moved to fit_corpus_described, which nothing compares",
+        "lens": "reader, runner, gate",
+        "severity": "high"
+      },
+      {
+        "finding": "the clause compared against chance + 0.05 = 0.088462, below the banked depth-3 tree on builder content (0.0969) and below the smallest banked in-distribution rung (0.0988), in a reading where OPERATING_RULES section 4a requires floor + margin and no trivial baseline was fitted anywhere",
+        "fix": "four trivial-baseline arms on the same sealed fit block, scored on the same rows; the clause is the best of them on the real-family rows plus 0.05; the chance-based count kept as the 0018-comparable flag",
+        "lens": "design and science",
+        "severity": "high"
+      },
+      {
+        "finding": "the mixture clause's family weights are close to the inverse of the fit corpus's, so a pass can be carried by py_src alone and a fail by the three thin families alone",
+        "fix": "clause_per_family added as a second named clause, recomputed by the reader and required in every document that states the verdict; the thesis rescoped from 'real content' to these five file kinds at this budget",
+        "lens": "design and science",
+        "severity": "high"
+      },
+      {
+        "finding": "builder_matched is matched on rows (26346) and mismatched 19-to-1 on distinct plaintexts (19413 against 1029), which is the axis 0003's banked curve moves on",
+        "fix": "builder_chunk_matched added - every pool row of the first 1029 pool chunks, 20817 rows; per-block source-chunk counts banked; the rival-explanation text rewritten to name both axes and quote both interpolations (0.165 against rows, 0.0997 against chunks)",
+        "lens": "design and science, corpus, runner",
+        "severity": "high"
+      },
+      {
+        "finding": "the control is built from the reader's expectations and the provenance case is one-directional and shallow; the committed fixture is stale against the runner",
+        "fix": "_rf_sub() substitutes sealed values INTO the runner's own captured block and raises on any unshared key; the provenance case is symmetric and recurses into corpus, ext_corpus, fit_corpus, partition, readings and every record, and asserts that each reader expectation is a key the runner writes; the fixture is recaptured from a smoke of the current runner",
+        "lens": "gate, reader",
+        "severity": "high"
+      },
+      {
+        "finding": "the sealed-hash refusals ran before the smoke guard, so the documented smoke invocation could not execute against the committed preregistration and the guard below it was unreachable code - which is why the committed fixture had a provenance nobody could reproduce",
+        "fix": "smoke.ext_corpus and smoke.fit_corpus sealed as 0018 did; under --smoke the runner checks those hashes; the smoke was then run end to end against the committed preregistration, eleven arms, and the fixture recaptured from it",
+        "lens": "runner, gate, text",
+        "severity": "high"
+      },
+      {
+        "finding": "eval_chunk_ids validated only by range, distinct count and family mix - all permutation-invariant - while fam_e and every builder-side per-family reading derive from that array position by position; a reviewer permuted it and the reader still emitted REAL_FIT_CLEARS",
+        "fix": "partition banks eval_g_sha256; the 260000-row array's run-length encoding is sealed as eval_chunk_layout beside the extension layout; the reader checks the expansion and the digest; a gate case permutes it",
+        "lens": "reader",
+        "severity": "medium"
+      },
+      {
+        "finding": "the preregistration said the runner REQUIRES the row-identity counts to be zero; it only measured them, so a leak would have cost the whole run instead of the ten seconds the scan takes. The four sealed fit_block_hashes were computed, banked and never checked. The null permutation flags were banked and not enforced.",
+        "fix": "all three folded into the runner's refusals",
+        "lens": "runner",
+        "severity": "medium"
+      },
+      {
+        "finding": "fits may carry arms beyond the sealed order (a reviewer added a seventh and got a verdict); top1_non_gutenberg required finite and never recomputed (0.9999 passed); the exception path wrote a different schema from every other path; OOB_PREREG was dead and the two comparison literals were 0019's re-read attributed to 0018",
+        "fix": "all four fixed; gate cases for the first two",
+        "lens": "reader",
+        "severity": "low-medium"
+      },
+      {
+        "finding": "near-duplicate content DOES cross the fit/scored boundary - up to 0.89 shingle containment, from sqlite3.h being embedded verbatim in sqlite3.c and from the CPython codepage tables - and nothing in the preregistration mentioned it. The reviewer then chased it to the fragment level and it dies there: 0.0038-0.0046 byte agreement against a 1/256 chance rate, median feature-space rank 5178 of 26346, 1-NN memorisation lift +0.004 on 500 rows.",
+        "fix": "the containment table and the fragment-level measurement written into scope.what_this_is_and_is_not",
+        "lens": "corpus and leakage",
+        "severity": "medium"
+      },
+      {
+        "finding": "the stated prior quoted only the row-matched anchor (0.165) and discounted it with 'a sixth the size in effective per-family depth', which traces to no artifact under any reading; the pre-freeze smoke's real-content readings were not disclosed though 0018 disclosed its own; the sealed-set disclosure omitted the smoke's scorings; the cost paragraph quoted 0003's 203.6 s rather than the in-environment 356.1 s refit of the identical block",
+        "fix": "the chunk anchor (0.0997) added beside the row anchor, the adjective replaced by the two real ratios (0.42 on rows per family, 0.107 on plaintexts per family), the smoke readings and its 11 sealed-set touches disclosed, 356.1 s quoted beside 203.6 s",
+        "lens": "design, text",
+        "severity": "medium"
+      },
+      {
+        "finding": "no flag covered the outcome 0018's own readings make modal - a sister recipe clearing while M4 fails (0018 read logistic 0.0716 > model 0.0637 > incumbent 0.0634 on these rows)",
+        "fix": "a_sister_recipe_clears_and_real_model_does_not added as a flag; the commitment written into flags_stated_in_advance; thesis.what_a_fail_would_mean rescoped",
+        "lens": "design",
+        "severity": "medium"
+      },
+      {
+        "finding": "the pre-freeze check's smoke guard evaluated None != <hash> on absent keys and could never fail; the ordinal guard CORRECTIONS promised after the 0018 entry was never carried forward; 23 named reader clauses had no gate case at all",
+        "fix": "the guard requires the keys to be present; the ordinal guard added; 21 gate cases added, taking realfit4096 from 33 to 54",
+        "lens": "gate, text",
+        "severity": "medium"
+      },
+      {
+        "finding": "per_family.n_chunks_available_in_blob was fit+sealed, silently excluding the two byte-identity drops, so pe_bin read 507 against 509 whole chunks in the blob",
+        "fix": "renamed to n_chunks_in_blob and measured from the blob, with n_chunks_fit_plus_sealed banked beside it; the corpus itself is unchanged, all four array hashes identical",
+        "lens": "corpus",
+        "severity": "low"
+      },
+      {
+        "finding": "the title was the one place without the in-distribution caveat; imbalance_stated_in_advance called the extension corpus 'the evaluation set' and gave 7400-7800 where the true range is 7357-7800; arms[5] attributed the incumbent's interpolation to an M4 arm; the byte-identity exclusion was headlined without saying it removed nothing that could carry a row; the short-stream drops (564 rows, 6 empty chunks) were undisclosed where 0018 disclosed its own",
+        "fix": "all corrected",
+        "lens": "text",
+        "severity": "low"
+      }
+    ],
+    "findings_declined": [
+      {
+        "finding": "replace the single mixture fit with five per-family in-distribution fits (design lens, recommendation 10)",
+        "why": "a different experiment, not a fix to this one. It would answer the existence question one family at a time and would be cheaper, but it drops the direct comparability with 0018's banked 2450 correct rows on the same 38452 rows under the same bar, which is the comparison 0020 exists to make. The per-family reading it wants is adopted instead as clause_per_family, published beside the verdict. The five-fit design is worth a later preregistration and is recorded here as one."
+      },
+      {
+        "finding": "seal the fit permutation as chunk-grouped, or switch the recipes' val from 'frag' to 'group', so the early-stopping validation split is not 100% chunk-contaminated (design lens)",
+        "why": "two of the three reviewers who raised the contamination argued against changing it, and they are right. The recipes are 0014's searched winners and 0018's roster entries verbatim; changing the fitting protocol would break the comparison. The direction of the bias is stated instead and it runs AGAINST the clause: a contaminated split lets early stopping run long, which overfits, which lowers the held-out reading on the chunk-disjoint scoring set. It cannot manufacture a pass. What it can do is widen the real_model versus builder_matched gap, and that is handled by builder_chunk_matched, which measured at the same 1.0 contamination as the fit block against builder_matched's 0.438 - so it matches on the plaintext budget AND on the character of the split. The three measured percentages are banked and iteration counts are flags."
+      },
+      {
+        "finding": "the banked pre-freeze result is FAIL and the mutation report is 400 over 21 gates (design lens finding 9, text lens finding 6)",
+        "why": "stale read. Both reviewers started before the suite was re-run; artifacts/verification/prefreeze_0020.json was already banked PASS with realfit4096 33/33 and mutation_report.json already carried 433 over 22 gates including the realfit4096 entry. Recorded as declined with the evidence rather than silently dropped."
+      }
+    ],
+    "how": "Five independent read-only reviewers, one lens each - design and science, the corpus and leakage, the frozen reader, the runner, the gate and the preregistration text - each told to try to break the instrument and to recompute rather than read off. None could write to the repository. They ran for 17 to 24 minutes each and returned 58 findings between them.",
+    "reviewer_touches_of_the_sealed_set": "One reviewer, testing whether near-duplicate content propagates, computed a 1-nearest-neighbour label transfer from the fit corpus onto 3591 extension rows (500 high-containment, 3091 controls), reading 0.0920 against 0.0880. It tuned nothing - the recipes, the seed, the bar and the row sets were all sealed and hash-pinned, and 1-NN is on no roster - but scope.sealed_set_disclosure counts every touch, so it is counted there and here.",
+    "status": "complete; findings applied before the freeze",
+    "the_finding_that_justified_the_review": "THREE REVIEWERS, SEPARATELY, FOUND THE SAME DEFECT: tools/pivot/run_realfit.py never banked a `ledger`, and the generated reader requires exactly one 'completed' ledger event per arm. An honest, complete, valid run would have emitted VOID on six clauses after about an hour of fitting. Two of them then found four more sealed literals in the reader's fit_corpus block taken from the corpus manifest's BUILT counts where the runner measures the with-rows counts - n_chunks 1035 against 1029, pe_bin 207 against 203, py_src 674 against 672, chunk_id_max 20400000 against 20400039 - plus a ceiling_distinct_fragments key the runner never writes. Ten VOID clauses in total on a correct run. One reviewer built a faithful artifact from the runner's own assemble() key set and confirmed it; another demonstrated the converse, that an artifact which MISDESCRIBED the fit corpus passed while the truthful one voided. This is 0018's failure mode exactly, caught before the freeze this time instead of after the run.",
+    "what_the_reviewers_checked_and_found_correct": "Stated so the report is not read as blanket doubt. All six arm fingerprints recomputed identically through the runner's path and the reader's; every PARTITION and CORPUS literal reproduced from grouped_split on the real cache; the whole ext block reproduced from the npz; the recipes byte-identical to 0018's; the clause arithmetic, the 38452 row count, the 0.165 interpolation and every banked citation reproduced at the precision written; the corpus rebuilt byte-identically from the pinned sources in 170 s with only build_seconds and generated_utc differing; fit and sealed selections disjoint by index, chunk id and source-chunk hash with zero overlap; the two dropped pe_bin chunks confirmed to be the all-zero padding chunks; the label factory imported rather than reimplemented and seeing nothing but the carved bytes; no family's ceiling within a factor of ten of the bar; resume-after-restart byte-identical across a full six-arm rehearsal run twice; scope stated before data; no claimed customer, user, partner or buyer anywhere; the sealed-set ordinal correct; the stated prior genuinely two-sided and discounting its own optimistic arithmetic against interest.",
+    "why_the_instruments_could_not_see_it": "The 33-case mutation gate was 33/33 green throughout, and the pre-freeze check passed. Both were circular at precisely the wrong values. The gate's control did `dict(r20.FIT)`, `dict(r20.EXT)`, `dict(r20.CORPUS)` and `dict(r20.PARTITION)` - it took the blocks from the READER's literals, which docs/OPERATING_RULES.md section 4 forbids in as many words: 'a control that shares an assumption with the reader cannot see the reader disagree with the world'. It also injected a `ledger` key outright. The one case that asserts that rule computed `set(shape) - set(art)` only - one direction, one level - so an invented key was invisible and so was every nested divergence; and it compared against a committed fixture that was itself already two partition keys stale. The pre-freeze check compared `r20.FIT['arrays'] == P['fit_corpus']['arrays']`, two copies of the same literal, for exactly the fields that were wrong."
+  },
+  "preregistration": "0020-realfit-4096",
+  "schema": "raise-v1/engineering_log/1",
   "smoke_runs": [
     {
-      "utc": "2026-09-16T06:25:15Z",
-      "where": "session scratchpad only, never under artifacts/",
-      "corpora": {
-        "ext": "4 chunks per family (832 rows)",
-        "fit": "3 chunks per family (390 rows)"
-      },
       "arms_exercised": [
         "builder_matched",
         "null",
@@ -101,7 +220,11 @@
         "real_model",
         "repro"
       ],
-      "what_it_checked": "the whole runner path end to end: three corpora loaded and hash-checked against the smoke block, the row-identity scan (fit 0, repro 0, matched 0), the sealed split, six fits, six scorings, the readings split, the checkpoint store and the artifact and scores files",
+      "corpora": {
+        "ext": "4 chunks per family (832 rows)",
+        "fit": "3 chunks per family (390 rows)"
+      },
+      "readings_are_not_measurements": "the smoke's accuracies come from tiny fits on a 390-row corpus and are not quoted anywhere; the reader voids a smoke artifact (smoke is True)",
       "seconds_by_name": {
         "builder_matched": 37.0,
         "null": 1.9,
@@ -110,18 +233,12 @@
         "real_model": 2.3,
         "repro": 10.8
       },
-      "wall_seconds": 368.5,
       "timings_are_not_anchors": "the smoke fits 390 and 2000 rows; its timings say nothing about the real run's cost",
-      "readings_are_not_measurements": "the smoke's accuracies come from tiny fits on a 390-row corpus and are not quoted anywhere; the reader voids a smoke artifact (smoke is True)"
+      "utc": "2026-09-16T06:25:15Z",
+      "wall_seconds": 368.5,
+      "what_it_checked": "the whole runner path end to end: three corpora loaded and hash-checked against the smoke block, the row-identity scan (fit 0, repro 0, matched 0), the sealed split, six fits, six scorings, the readings split, the checkpoint store and the artifact and scores files",
+      "where": "session scratchpad only, never under artifacts/"
     }
   ],
-  "instrument": {
-    "runner": "tools/pivot/run_realfit.py",
-    "reader": "tools/readers/realfit4096_verdict.py (generated from the preregistration)",
-    "gate": "realfit4096 in tests/mutation_test.py, 33 cases, control built from the runner's own output shape (tests/fixtures/realfit_runner_shape.json, captured from the smoke run) rather than from the reader's expectations, which is what docs/OPERATING_RULES.md section 4 requires and what the 0019 review found the oob4096 gate did not do",
-    "pre_freeze_check": "tools/prereg_checks/prefreeze_0020.py, committed; recomputes the three fit blocks from the data with the runner's own split rather than comparing two copies of a literal (the 0018 null-block defect), and refuses to run after the freeze rather than overwrite its banked result"
-  },
-  "pre_freeze_review": {
-    "status": "pending: five independent read-only lenses (design and science, corpus and leakage, the reader, the runner, the gate and the preregistration text); findings and what was adopted or declined are filled in here before the freeze"
-  }
+  "status": "written before the freeze; nothing here is a measurement of the task"
 }

@@ -65,8 +65,8 @@
       "total": 9
     },
     "realfit4096": {
-      "detected": 33,
-      "total": 33
+      "detected": 54,
+      "total": 54
     },
     "recipe2048": {
       "detected": 27,
@@ -3701,7 +3701,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=REAL_FIT_FAILS real=0.0884 correct=3401 validity=[] clause=[\"clause: real_model's correct real-family rows 3401 of 38452 (0.0884) is below 3402 (chance 0.038462 + 0.05 = 0.088462)\"]",
+      "evidence": "verdict=REAL_FIT_FAILS real=0.105 correct=4037 validity=[] clause=[\"clause: real_model's correct real-family rows 4037 of 38452 (0.105) is below 4038 (floor 0.055 from floor_tree3 + 0.05)\"]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "realfit4096",
@@ -3710,7 +3710,7 @@
     },
     {
       "detected": true,
-      "evidence": "at=verdict=REAL_FIT_CLEARS real=0.0885 correct=3402 validity=[] clause=[] | under=verdict=REAL_FIT_FAILS real=0.0884 correct=3401 validity=[] clause=[\"clause: real_model's correct real-family",
+      "evidence": "at 4038=verdict=REAL_FIT_CLEARS real=0.105 correct=4038 validity=[]  | under=verdict=REAL_FIT_FAILS real=0.105 correct=4037 validity=[] clause=[\"clause: real_model's correct rea",
       "exit_code": 1,
       "expected": "fail",
       "gate": "realfit4096",
@@ -3719,7 +3719,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=REAL_FIT_FAILS real=0.0833 correct=3202 validity=[] clause=[\"clause: real_model's correct real-family rows 3202 of 38452 (0.0833) is below 3402 (chance 0.038462 + 0.05 = 0.088462)\"]",
+      "evidence": "verdict=REAL_FIT_FAILS real=0.0998 correct=3838 validity=[] clause=[\"clause: real_model's correct real-family rows 3838 of 38452 (0.0998) is below 4038 (floor 0.055 from floor_tree3 + 0.05)\"]",
       "exit_code": 1,
       "expected": "fail",
       "gate": "realfit4096",
@@ -3800,7 +3800,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID real=None correct=None validity=[\"fit corpus: fit_corpus.arrays={'X': {'sha256': '<hash>', 'shape': [26346, 1108], 'dtype': 'float32'}, 'fam': {'sha256': '<hash>', 'shape': [26346], 'dtyp",
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit corpus: fit_corpus.arrays={'X': {'sha256': '<hash>', 'shape': [26346, 1108], 'dtype': 'float32'}, 'y': {'sha256': '<hash>', 'shape': [26346], 'dtype'",
       "exit_code": 1,
       "expected": "fail",
       "gate": "realfit4096",
@@ -3809,7 +3809,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID real=None correct=None validity=[\"evaluation corpus: ext_corpus.arrays={'X': {'dtype': 'float32', 'sha256': '<hash>', 'shape': [61409, 1108]}, 'fam': {'dtype': 'int8', 'sha256': '<hash>',",
+      "evidence": "verdict=VOID real=None correct=None validity=[\"evaluation corpus: ext_corpus.arrays={'X': {'sha256': '<hash>', 'shape': [61409, 1108], 'dtype': 'float32'}, 'y': {'sha256': '<hash>', 'shape': [61409], ",
       "exit_code": 1,
       "expected": "fail",
       "gate": "realfit4096",
@@ -3872,7 +3872,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: builder_matched status None; must be 'fit'\", \"fit: fit_info_by_name is not the records' fit_info\"] clause=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: the artifact banks arms outside the sealed order (extra [], missing ['builder_matched']) - 'scored exactly once, in the sealed order' is a property ",
       "exit_code": 1,
       "expected": "fail",
       "gate": "realfit4096",
@@ -3953,7 +3953,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID real=None correct=None validity=['fit: fits is not a mapping', \"fit: repro status None; must be 'fit'\"] clause=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: fits is not a mapping', \"fit: the artifact banks arms outside the sealed order (extra [], missing ['builder_chunk_matched', 'builder_matched', 'floo",
       "exit_code": 1,
       "expected": "fail",
       "gate": "realfit4096",
@@ -3980,7 +3980,196 @@
     },
     {
       "detected": true,
-      "evidence": "control carries all 52 artifact keys, 6 arms and 30 record fields of the runner's smoke output",
+      "evidence": "verdict=VOID real=None correct=None validity=['fit corpus: fit_corpus.n_chunks=1035, preregistered 1029'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-fit-corpus-chunk-count-that-is-not-the-measured-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit corpus: fit_corpus.chunk_id_max=20400000, preregistered 20400039'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-fit-corpus-chunk-id-max-that-is-not-the-measured-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit corpus: fit_corpus.chunks_per_family={'c_src': 24, 'pe_bin': 207, 'py_src': 672, 'rfc_txt': 90, 'rst_doc': 40}, preregistered {'c_src': 24, 'pe_bin':",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-fit-corpus-per-family-chunk-count-that-is-not-the-measured-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit corpus: fit_corpus.label_histogram=[1026, 1023, 1022, 1017, 1009, 1008, 1006, 1006, 1006, 1022, 1022, 1019, 1011, 1008, 1008, 1007, 1005, 1006, 1002,",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-fit-corpus-label-histogram-that-is-not-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: repro has 0 ledger completions, must be exactly 1', 'fit: null has 0 ledger completions, must be exactly 1'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "an-artifact-with-no-ledger-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"null control: the null labels are not banked as a permutation of the fit corpus's labels\"] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-null-control-whose-labels-are-not-a-permutation-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.repro_rows_identical_to_a_scored_row=1, must be the measured 0'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-repro-row-identical-to-a-scored-row-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.matched_rows_identical_to_a_scored_row=1, must be the measured 0'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-matched-row-identical-to-a-scored-row-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.pool_chunks_shared_with_ext=2, must be the measured 0'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-pool-chunk-shared-with-the-extension-corpus-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.eval_chunks_shared_with_ext=1, must be the measured 0'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "an-evaluation-chunk-shared-with-the-extension-corpus-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.fit_chunks_shared_with_builder=1, must be the measured 0'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-fit-chunk-shared-with-the-builder-cache-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scores: eval_chunk_ids are not the sealed evaluation chunk ids expanded by their sealed row counts, or do not hash to the sealed evaluation g array'] cla",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "permuted-evaluation-chunk-ids-are-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: real_model record top1_non_gutenberg 0.9999 is not its vector's non-gutenberg mean 0.1208\"] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-banked-top1_non_gutenberg-that-is-not-the-vectors-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: the artifact banks arms outside the sealed order (extra ['secret_arm'], missing []) - 'scored exactly once, in the sealed order' is a property of th",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "an-arm-outside-the-sealed-order-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"readings: real_model.builder_eval_top1=0.4242 is not the reader's recomputation 0.12\"] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-banked-builder-eval-reading-that-is-not-the-vectors-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scope: smoke=True; a smoke run is not the preregistered run', \"scores: the scores file is not this run's, or is a smoke run's, or names a different corpu",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-smoke-artifact-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"scope: stage='smoke'\"] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-stage-that-is-not-run-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: the artifact banks arms outside the sealed order (extra [], missing ['floor_tree3']) - 'scored exactly once, in the sealed order' is a property of t",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-floor-arm-missing-from-the-artifact-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: floor_tree3 was not fitted on the sealed rows with the preregistered seed'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-floor-arm-fitted-on-rows-that-are-not-the-fit-block-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_FIT_FAILS real=0.0989 correct=3802 validity=[] clause=[\"clause: real_model's correct real-family rows 3802 of 38452 (0.0989) is below 6153 (floor 0.11 from floor_tree3 + 0.05)\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-floor-that-rises-above-the-model-turns-a-pass-into-REAL_FIT_FAILS",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_FIT_FAILS real=0.1119 correct=4302 validity=[] clause=[\"clause: real_model's correct real-family rows 4302 of 38452 (0.1119) is below 5768 (floor 0.1 from floor_feat1 + 0.05)\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "the-floor-is-the-maximum-of-the-four-trivial-arms-not-the-first",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "control and fixture agree both ways on 54 artifact keys, 11 arms, 30 record fields and the corpus/partition/readings nesting; every reader expectation is a key the runner writes",
       "exit_code": 0,
       "expected": "pass",
       "gate": "realfit4096",
@@ -3988,8 +4177,8 @@
       "observed": "pass"
     }
   ],
-  "detected": 433,
+  "detected": 454,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 433
+  "total_mutations": 454
 }
