@@ -65,8 +65,8 @@
       "total": 9
     },
     "realfit4096": {
-      "detected": 54,
-      "total": 54
+      "detected": 63,
+      "total": 63
     },
     "recipe2048": {
       "detected": 27,
@@ -3764,7 +3764,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID real=None correct=None validity=[\"scope: preregistration='0018-oob-4096', this reader is frozen for 0020-realfit-4096\", \"scores: the scores file is not this run's, or is a smoke run's, or",
+      "evidence": "verdict=VOID real=None correct=None validity=[\"scope: preregistration='0018-oob-4096', this reader is frozen for 0021-realfit-4096-rerun\", \"scores: the scores file is not this run's, or is a smoke run",
       "exit_code": 1,
       "expected": "fail",
       "gate": "realfit4096",
@@ -3773,7 +3773,7 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.fit_rows_identical_to_a_scored_row=1, must be the measured 0'] clause=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.fit_rows_identical_to_a_scored_row=1, must be the measured 0', \"leakage: the fit_block's rows byte-identical to a scored row is 1, not",
       "exit_code": 1,
       "expected": "fail",
       "gate": "realfit4096",
@@ -3944,7 +3944,7 @@
     },
     {
       "detected": true,
-      "evidence": "READER 0020: NOT RUN \u2014 'the null control leaked' (stage run, filed 2026-09-16T05:00:00Z, 2 checkpoints). A NOT RUN is not a verdict.",
+      "evidence": "READER 0021: NOT RUN \u2014 'the null control leaked' (stage run, filed 2026-09-16T05:00:00Z, 2 checkpoints). A NOT RUN is not a verdict.",
       "exit_code": 2,
       "expected": "fail",
       "gate": "realfit4096",
@@ -4034,20 +4034,83 @@
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.repro_rows_identical_to_a_scored_row=1, must be the measured 0'] clause=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=[\"leakage: the repro_block's rows byte-identical to a scored row is 9, not the preregistered 8 measured from the builder's nine duplicate chunk pairs\"] cla",
       "exit_code": 1,
       "expected": "fail",
       "gate": "realfit4096",
-      "mutation": "a-repro-row-identical-to-a-scored-row-is-VOID",
+      "mutation": "a-repro-block-collision-count-that-is-not-the-sealed-one-is-VOID",
       "observed": "fail"
     },
     {
       "detected": true,
-      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.matched_rows_identical_to_a_scored_row=1, must be the measured 0'] clause=[]",
+      "evidence": "verdict=VOID real=None correct=None validity=[\"leakage: the repro_block's rows byte-identical to a scored row is 0, not the preregistered 8 measured from the builder's nine duplicate chunk pairs\"] cla",
       "exit_code": 1,
       "expected": "fail",
       "gate": "realfit4096",
-      "mutation": "a-matched-row-identical-to-a-scored-row-is-VOID",
+      "mutation": "a-repro-block-collision-count-of-zero-is-VOID-not-a-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"leakage: the matched_block's rows byte-identical to a scored row is 5, not the preregistered 2 measured from the builder's nine duplicate chunk pairs\"] c",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-matched-block-collision-count-that-is-not-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"leakage: the colliding rows of the repro_block hash to '<hash>', not the sealed '<hash>' - the count may match while the rows do not\"] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "the-right-number-of-colliding-rows-but-the-wrong-rows-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: 27 pool rows are byte-identical to a scored row, not the sealed 26'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-new-colliding-row-beyond-the-repro-block-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"scope: corpus.cache_X_sha256='<hash>', preregistered '<hash>'\"] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-builder-cache-feature-hash-that-is-not-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"leakage: the chunk_matched_block's rows byte-identical to a scored row is 1, not the preregistered 0 measured from the builder's nine duplicate chunk pai",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-chunk-matched-block-collision-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: the artifact does not carry the sealed expected collision counts'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "an-artifact-without-the-sealed-expected-collision-counts-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.fit_rows_identical_to_a_scored_row=1, must be the measured 0', \"leakage: the fit_block's rows byte-identical to a scored row is 1, not",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "one-fit-row-identical-to-a-scored-row-is-still-VOID",
       "observed": "fail"
     },
     {
@@ -4169,6 +4232,24 @@
     },
     {
       "detected": true,
+      "evidence": "the reader's per-record requirements hold against the runner's own banked values for all 11 arms across 4 estimator families (dummy, hgb, logistic, tree)",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realfit4096",
+      "mutation": "the-readers-record-requirements-hold-against-the-runners-own-banked-values",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: floor_tree3 has no integer depth and leaf count', \"fit: fit_info_by_name is not the records' fit_info\"] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-floor-arm-banking-an-iteration-count-it-cannot-have-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
       "evidence": "control and fixture agree both ways on 54 artifact keys, 11 arms, 30 record fields and the corpus/partition/readings nesting; every reader expectation is a key the runner writes",
       "exit_code": 0,
       "expected": "pass",
@@ -4177,8 +4258,8 @@
       "observed": "pass"
     }
   ],
-  "detected": 454,
+  "detected": 463,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 454
+  "total_mutations": 463
 }

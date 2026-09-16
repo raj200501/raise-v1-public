@@ -295,7 +295,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 
 | Result | Value | Class |
 |---|---|---|
-| Every gate can be shown to fail | 454 mutations, 454 detected, 0 survived | primary-verifiable |
+| Every gate can be shown to fail | 463 mutations, 463 detected, 0 survived | primary-verifiable |
 | A number that is real but STALE is caught, not just a fabricated one | `tools/freshness.py`, 9 mutations | primary-verifiable |
 | Preregistration chain verifies, reader unchanged since freeze | 20 entries, head `43c374d0…` | primary-verifiable |
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |
