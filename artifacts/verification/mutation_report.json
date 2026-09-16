@@ -64,6 +64,10 @@
       "detected": 9,
       "total": 9
     },
+    "realfit4096": {
+      "detected": 33,
+      "total": 33
+    },
     "recipe2048": {
       "detected": 27,
       "total": 27
@@ -3685,10 +3689,307 @@
       "gate": "oob4096",
       "mutation": "a-re-read-reader-with-any-other-line-changed-is-detected",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_FIT_CLEARS real=0.12 correct=4614 validity=[] clause=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realfit4096",
+      "mutation": "control-real-fit-clears-the-bar-on-the-real-families",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_FIT_FAILS real=0.0884 correct=3401 validity=[] clause=[\"clause: real_model's correct real-family rows 3401 of 38452 (0.0884) is below 3402 (chance 0.038462 + 0.05 = 0.088462)\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "one-real-family-row-under-the-bar-is-REAL_FIT_FAILS",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "at=verdict=REAL_FIT_CLEARS real=0.0885 correct=3402 validity=[] clause=[] | under=verdict=REAL_FIT_FAILS real=0.0884 correct=3401 validity=[] clause=[\"clause: real_model's correct real-family",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "exactly-min-correct-real-rows-clears-and-one-fewer-fails",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_FIT_FAILS real=0.0833 correct=3202 validity=[] clause=[\"clause: real_model's correct real-family rows 3202 of 38452 (0.0833) is below 3402 (chance 0.038462 + 0.05 = 0.088462)\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-pass-carried-by-the-builder-matched-arm-alone-is-still-REAL_FIT_FAILS",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"reproduction: the rung read 0.2025 against the banked 0.1965 (drift 0.006 > 0.005): the pool, the evaluation set or the machinery is not 0003's\"] clause=",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "the-reproduction-rung-off-by-0.006-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_FIT_CLEARS real=0.12 correct=4614 validity=[] clause=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realfit4096",
+      "mutation": "a-reproduction-drift-inside-the-tolerance-still-clears",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['null control: shuffled labels read 0.0505 on the extension rows and 0.0505 on the sealed evaluation rows against chance 0.038462 + 0.01 \u2014 the pipeline le",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-leaking-null-control-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scope: smoke=True; a smoke run is not the preregistered run', \"scores: the scores file is not this run's, or is a smoke run's, or names a different corpu",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-smoke-artifact-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"scope: preregistration='0018-oob-4096', this reader is frozen for 0020-realfit-4096\", \"scores: the scores file is not this run's, or is a smoke run's, or",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "an-artifact-stamped-with-another-preregistration-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.fit_rows_identical_to_a_scored_row=1, must be the measured 0'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-fit-row-byte-identical-to-a-scored-row-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.fit_chunks_shared_with_ext=1, must be the measured 0'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-fit-chunk-shared-with-the-evaluation-corpus-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.fit_source_chunks_shared_with_ext=1, must be the measured 0'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-shared-source-chunk-hash-between-fit-and-evaluation-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit corpus: fit_corpus.arrays={'X': {'sha256': '<hash>', 'shape': [26346, 1108], 'dtype': 'float32'}, 'fam': {'sha256': '<hash>', 'shape': [26346], 'dtyp",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-fit-corpus-array-hash-that-is-not-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"evaluation corpus: ext_corpus.arrays={'X': {'dtype': 'float32', 'sha256': '<hash>', 'shape': [61409, 1108]}, 'fam': {'dtype': 'int8', 'sha256': '<hash>',",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "an-evaluation-corpus-array-hash-that-is-not-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"readings: real_model.ext_real_correct=4615 is not the reader's recomputation 4614\"] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-banked-real-correct-count-off-by-one-row-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"readings: real_model.ext_per_family={'c_src': 0.1201, 'hexdump': 0.12, 'pe_bin': 0.12, 'py_src': 0.12, 'rfc_txt': 0.12, 'rst_doc': 0.12, 'sql': 0.12, 'xm",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-banked-per-family-reading-off-by-0.0001-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: real_model per_example_sha256 is not the hash of its banked vector'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-per-example-vector-whose-hash-is-not-the-records-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: real_model fingerprint '<hash>' is not the one recomputed from the sealed literals\"] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-fingerprint-that-is-not-the-recomputed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: builder_matched has no 'started' event with its fingerprint before its completion\", \"fit: the ledger's completions are not in the sealed order repro",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "completions-out-of-the-sealed-order-are-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: real_model has 2 ledger completions, must be exactly 1'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "an-arm-scored-twice-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: builder_matched status None; must be 'fit'\", \"fit: fit_info_by_name is not the records' fit_info\"] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-missing-arm-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: real_model is not the sealed M4 (id, params, params hash, family, scaled, val or head off-recipe)'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "an-arm-fitted-with-another-recipes-parameters-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: real_model was not fitted on the sealed rows with the preregistered seed'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "an-arm-fitted-on-rows-that-are-not-the-sealed-block-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['environment: real_incumbent threads=1, banked 3'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-record-fitted-at-another-thread-count-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scores: ext_fam does not hash to the sealed fam array'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "ext_fam-that-does-not-hash-to-the-sealed-fam-array-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scores: ext_chunk_ids do not hash to the sealed g array', 'scores: ext_chunk_ids are outside the sealed id range, not the sealed chunk count, or not in b",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "chunk-ids-that-are-not-the-sealed-expansion-are-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scores: the scores file is absent', 'scores: ext_fam missing, not N_EXT long, or not family indices'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "an-absent-scores-file-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "an-absent-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "READER 0020: NOT RUN \u2014 'the null control leaked' (stage run, filed 2026-09-16T05:00:00Z, 2 checkpoints). A NOT RUN is not a verdict.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "a-NOT-RUN-marker-beside-an-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: fits is not a mapping', \"fit: repro status None; must be 'fit'\"] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "an-artifact-whose-fits-block-is-a-list-is-VOID-not-a-traceback",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['complete: complete=False, run_finished_utc=None; missing []'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "an-incomplete-run-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['corpora: the banked family lists or fit row counts are not the sealed ones'] clause=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realfit4096",
+      "mutation": "the-fit-corpus-row-counts-per-family-must-be-the-sealed-ones",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "control carries all 52 artifact keys, 6 arms and 30 record fields of the runner's smoke output",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realfit4096",
+      "mutation": "the-control-artifact-is-built-from-the-runners-own-output-shape",
+      "observed": "pass"
     }
   ],
-  "detected": 400,
+  "detected": 433,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 400
+  "total_mutations": 433
 }

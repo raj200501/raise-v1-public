@@ -4375,6 +4375,457 @@ def _(root):
                                                  else "!! a tampered reader passed the structural check")
 
 
+# ---------------------------------------------------------------- realfit4096 gate (preregistration 0020)
+#
+# The control artifact is built from the RUNNER's output shape, not the reader's expectations
+# (docs/OPERATING_RULES.md section 4, and the finding the 0019 review filed against the oob4096 gate):
+# tests/fixtures/realfit_runner_shape.json is a smoke run of tools/pivot/run_realfit.py with its values
+# left in place, and the gate replaces the values with the sealed ones while keeping every key, nesting
+# and record field the runner wrote. Each mutation below must be shown to fail on its own.
+
+_RF_SHAPE = os.path.join(REPO, "tests", "fixtures", "realfit_runner_shape.json")
+
+
+def _rf_reader():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("r20", os.path.join(REPO, "tools", "readers", "realfit4096_verdict.py"))
+    m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+    return m
+
+
+def _rf_readings(r20, v, fam_x, fam_e):
+    """The runner's readings() over one per-example vector, recomputed here from the same rule."""
+    n_eval, n_ext = r20.PARTITION["n_eval_rows"], r20.N_EXT
+    rep, ex = v[:n_eval], v[n_eval:]
+    by = {f: [] for f in r20.EXT_FAMILIES}
+    for i in range(n_ext):
+        by[fam_x[i]].append(ex[i])
+    m4 = lambda xs: round(sum(xs) / len(xs), 4) if xs else None  # noqa: E731
+    real = [x for f in r20.REAL_FAMILIES for x in by[f]]; synth = [x for f in r20.SYNTH_FAMILIES for x in by[f]]
+    return {"builder_eval_top1": m4(rep), "builder_eval_correct": sum(rep), "ext_top1": m4(ex), "ext_correct": sum(ex),
+            "n_ext_rows": n_ext, "ext_per_family": {f: m4(by[f]) for f in r20.EXT_FAMILIES},
+            "ext_per_family_correct": {f: sum(by[f]) for f in r20.EXT_FAMILIES},
+            "ext_structured_text_top1": m4([x for f in r20.STRUCTURED_TEXT for x in by[f]]),
+            "ext_high_entropy_top1": m4([x for f in r20.HIGH_ENTROPY for x in by[f]]),
+            "ext_real_top1": m4(real), "ext_real_correct": sum(real), "n_ext_real_rows": len(real),
+            "ext_synthetic_correct": sum(synth), "ext_synthetic_top1": m4(synth),
+            "builder_eval_per_family": {f: m4([rep[i] for i in range(n_eval) if fam_e[i] == f]) for f in r20.FAMILIES}}
+
+
+def _good_realfit(real_correct=None, acc=None, repro=None, null_acc=None, matched_real_correct=None):
+    """A complete, valid 0020 artifact set. Shape from the runner's own smoke output; sealed values from the frozen
+    reader's literals, which are the preregistration's. real_correct sets real_model's correct real-family row count
+    exactly; matched_real_correct does the same for the builder-matched arm; acc/repro/null_acc set accuracies."""
+    r20 = _rf_reader()
+    shape = json.load(open(_RF_SHAPE, encoding="utf-8"))["artifact"]
+    part = dict(r20.PARTITION); n_eval = part["n_eval_rows"]; n_ext = r20.N_EXT
+    fams = list(r20.EXT_FAMILIES); rpf = r20.EXT["rows_per_family"]
+    fam_idx = []
+    for k, f in enumerate(fams):
+        fam_idx += [k] * rpf[f]
+    assert len(fam_idx) == n_ext
+    fam_x = [fams[i] for i in fam_idx]
+    ext_ids = [c for c, n in zip(r20.EXT_CHUNK_IDS, r20.EXT_ROWS_PER_CHUNK) for _ in range(n)]
+    assert len(ext_ids) == n_ext
+    n_gut = (n_eval - part["n_eval_non_gutenberg"]) // 26; n_chunks = part["n_eval_chunks"]
+    gut_ids = [8 * i for i in range(n_gut)]; other = [c for c in range(1, 49999) if c % 8 != 0][: n_chunks - n_gut]
+    eval_ids = [c for c in gut_ids + other for _ in range(26)]
+    fam_e = [r20.FAMILIES[c % 8] for c in eval_ids]
+    real = set(r20.REAL_FAMILIES)
+    base_acc = {"repro": r20.REPRO_REFERENCE, "null": 0.038, "real_model": 0.12, "real_incumbent": 0.10,
+                "real_logistic": 0.09, "builder_matched": 0.11}
+    base_acc.update(acc or {})
+    if repro is not None:
+        base_acc["repro"] = repro
+    if null_acc is not None:
+        base_acc["null"] = null_acc
+
+    def vec(name):
+        v = [0] * (n_eval + n_ext)
+        k = int(round(base_acc[name] * n_eval))
+        for i in range(k):
+            v[i] = 1
+        per = {f: int(round(base_acc[name] * rpf[f])) for f in fams}
+        target = {"real_model": real_correct, "builder_matched": matched_real_correct}.get(name)
+        if target is not None:
+            rf = [f for f in fams if f in real]; b, extra = divmod(int(target), len(rf))
+            for j, f in enumerate(rf):
+                per[f] = b + (1 if j < extra else 0)
+        pos = n_eval
+        for f in fams:
+            for i in range(pos, pos + per[f]):
+                v[i] = 1
+            pos += rpf[f]
+        return v
+
+    def fp(name):
+        return r20.fingerprint(prereg=r20.PREREG, seed=r20.SEED, role=name, cand=r20.RECIPES[r20.RECIPE_OF[name]],
+                               stage=r20.STAGE_OF[name], rows=part[r20.ROWS_OF[name][2]],
+                               eval=part["eval_idx_sha256"], ext=r20.EXT["arrays"]["X"]["sha256"],
+                               fit=r20.FIT["arrays"]["X"]["sha256"])
+
+    def record(name, v):
+        c = r20.RECIPES[r20.RECIPE_OF[name]]
+        n_key, idx_key, sorted_key = r20.ROWS_OF[name]
+        m4 = lambda xs: round(sum(xs) / len(xs), 4)  # noqa: E731
+        ng = [v[i] for i in range(n_eval) if fam_e[i] != "gutenberg"] + v[n_eval:]
+        rec = dict(shape["fits"][name])      # every field the runner writes, values replaced below
+        rec.update({"id": c["id"], "head": name, "family": c["family"], "params": c.get("params", {}),
+                    "scaled": bool(c.get("scaled", False)), "val": c.get("val"), "seed": r20.SEED,
+                    "params_sha256": r20.RECIPE_SHA256[r20.RECIPE_OF[name]], "stage": r20.STAGE_OF[name],
+                    "n_fit_rows": part[n_key], "fit_rows_sha256": part[idx_key], "fit_rows_sorted_sha256": part[sorted_key],
+                    "environment": dict(r20.ENV, threads=3, nice=10), "interruptions_before_this_fit": 0, "status": "fit",
+                    "top1": m4(v), "top1_non_gutenberg": m4(ng),
+                    "per_family": {f: m4([v[i] for i in range(n_eval) if fam_e[i] == f]) for f in r20.FAMILIES},
+                    "block_refills": [{"probe_ok": True}], "fit_info": {"n_iter": 100}, "fingerprint": fp(name),
+                    "per_example_sha256": hashlib.sha256(bytes(v)).hexdigest()})
+        return rec
+
+    per_example, reads, fits = {}, {}, {}
+    for name in r20.ORDER:
+        v = vec(name); per_example[name] = v
+        reads[name] = _rf_readings(r20, v, fam_x, fam_e)
+        fits[name] = record(name, v)
+    ledger = []
+    for i, nm in enumerate(r20.ORDER):
+        ledger += [{"name": nm, "fingerprint": fp(nm), "event": "started", "utc": f"2026-09-16T05:{i:02d}:00Z"},
+                   {"name": nm, "fingerprint": fp(nm), "event": "completed", "utc": f"2026-09-16T05:{i:02d}:30Z"}]
+    part.update({"pool_chunks_shared_with_ext": 0, "eval_chunks_shared_with_ext": 0, "fit_chunks_shared_with_ext": 0,
+                 "fit_chunks_shared_with_builder": 0, "fit_source_chunks_shared_with_ext": 0,
+                 "fit_rows_identical_to_a_scored_row": 0, "repro_rows_identical_to_a_scored_row": 0,
+                 "matched_rows_identical_to_a_scored_row": 0, "n_fit_source_chunks": r20.FIT["n_chunks"],
+                 "n_ext_source_chunks": r20.EXT["n_chunks"], "null_y_shuffled_sha256": "0" * 64,
+                 "null_labels_permuted": True, "null_labels_same_multiset": True,
+                 "row_identity_digest": "blake2b-128 of the contiguous float32 feature row, over every scored row"})
+    rm = reads["real_model"]
+    art = dict(shape)                        # the runner's own key set, values replaced
+    art.update({"schema_version": 1, "schema": "raise-v1/realfit_4096/1", "preregistration": r20.PREREG, "smoke": False,
+                "stage": "run", "protocol": r20.PROTOCOL, "protocol_sha256": r20.PROTOCOL_SHA256, "recipes": r20.RECIPES,
+                "recipes_sha256": r20.RECIPES_SHA256, "corpus": dict(r20.CORPUS), "ext_corpus": dict(r20.EXT),
+                "fit_corpus": dict(r20.FIT), "partition": part, "n_classes": 26, "class_names": [],
+                "chance_accuracy": r20.CHANCE, "environment": dict(r20.ENV, threads=3, nice=10),
+                "launch_environment": {"ok": True, "problems": [], "env": dict(r20.ENV, threads=3, nice=10),
+                                       "loadavg_1_5_15": [0.1, 0.1, 0.1]},
+                "launch_number": 1, "complete": True, "missing_roles": [], "fits": fits, "readings": reads,
+                "ext_real_top1": {n: reads[n]["ext_real_top1"] for n in r20.ORDER},
+                "ext_real_correct": {n: reads[n]["ext_real_correct"] for n in r20.ORDER},
+                "ext_top1": {n: reads[n]["ext_top1"] for n in r20.ORDER},
+                "ext_correct": {n: reads[n]["ext_correct"] for n in r20.ORDER},
+                "builder_eval_top1": {n: reads[n]["builder_eval_top1"] for n in r20.ORDER},
+                "ext_per_family": {n: reads[n]["ext_per_family"] for n in r20.ORDER},
+                "ext_real_top1_model": rm["ext_real_top1"], "ext_real_correct_model": rm["ext_real_correct"],
+                "ext_top1_model": rm["ext_top1"], "ext_correct_model": rm["ext_correct"],
+                "n_ext_real_rows": rm["n_ext_real_rows"], "n_ext_rows": n_ext, "n_eval_rows": n_eval,
+                "ext_real_families": list(r20.REAL_FAMILIES), "ext_synthetic_families": list(r20.SYNTH_FAMILIES),
+                "fit_families": list(r20.FIT_FAMILIES), "fit_rows_per_family": r20.FIT["rows_per_family"],
+                "reproduction_top1": reads["repro"]["builder_eval_top1"],
+                "reference_top1": {"repro": r20.REPRO_REFERENCE},
+                "shuffled_label_accuracy_ext": reads["null"]["ext_top1"],
+                "shuffled_label_accuracy_eval": reads["null"]["builder_eval_top1"],
+                "null_control": fits["null"],
+                "fit_info_by_name": {n: fits[n]["fit_info"] for n in r20.ORDER},
+                "cluster_ci95_informational": {}, "ledger": ledger, "cost": {},
+                "run_started_utc": "2026-09-16T05:00:00Z", "first_launch_utc": "2026-09-16T05:00:00Z",
+                "run_finished_utc": "2026-09-16T06:00:00Z"})
+    scores = {"schema": "raise-v1/realfit_4096_scores/1", "preregistration": r20.PREREG, "smoke": False,
+              "n_eval_rows": n_eval, "n_ext_rows": n_ext, "eval_idx_sha256": part["eval_idx_sha256"],
+              "eval_chunk_ids": eval_ids, "ext_chunk_ids": ext_ids, "ext_fam": fam_idx, "ext_families": fams,
+              "ext_arrays_sha256": {k: v["sha256"] for k, v in r20.EXT["arrays"].items()},
+              "fit_arrays_sha256": {k: v["sha256"] for k, v in r20.FIT["arrays"].items()},
+              "per_example": per_example}
+    return art, scores
+
+
+def _realfit(root, mutate=None, drop_artifact=False, drop_scores=False, not_run=None, **kw):
+    art, scores = _good_realfit(**kw)
+    if mutate:
+        r = mutate(art, scores)
+        if r is not None:
+            art = r
+    piv = os.path.join(root, "artifacts", "pivot"); os.makedirs(piv, exist_ok=True)
+    if not drop_scores:
+        json.dump(scores, open(os.path.join(piv, "realfit_4096_scores.json"), "w"))
+    if not drop_artifact:
+        json.dump(art, open(os.path.join(piv, "realfit_4096.json"), "w"))
+    if not_run is not None:
+        json.dump(not_run, open(os.path.join(piv, "realfit_4096_not_run.json"), "w"))
+    shutil.copy(os.path.join(REPO, "tools", "readers", "realfit4096_verdict.py"),
+                os.path.join(root, "tools", "readers", "realfit4096_verdict.py"))
+    rc, out = run([PY, "tools/readers/realfit4096_verdict.py"], root)
+    if rc != 0:
+        return rc, out
+    v = json.load(open(os.path.join(piv, "realfit_4096_verdict.json")))
+    ok = v["verdict"] == "REAL_FIT_CLEARS"
+    return (0 if ok else 1), (f"verdict={v['verdict']} real={v.get('ext_real_top1_model')} "
+                              f"correct={v.get('ext_real_correct_model')} validity={v['validity_failed_clauses'][:2]} "
+                              f"clause={v['clause_failed']}")
+
+
+def _realfit_void(root, mutate, expect_clause=None, **kw):
+    rc, out = _realfit(root, mutate, **kw)
+    if rc != 0 and "verdict=VOID" not in out and "No verdict emitted" not in out:
+        return 0, out + " !! detected but not as VOID"
+    if expect_clause and expect_clause not in out:
+        return 0, out + f" !! VOID for another reason than {expect_clause!r}"
+    return rc, out
+
+
+@case("realfit4096", "control-real-fit-clears-the-bar-on-the-real-families", "pass")
+def _(root):
+    return _realfit(root)
+
+
+@case("realfit4096", "one-real-family-row-under-the-bar-is-REAL_FIT_FAILS", "fail")
+def _(root):
+    r20 = _rf_reader()
+    rc, out = _realfit(root, real_correct=r20.MIN_CORRECT_REAL - 1)
+    if rc != 0 and "verdict=REAL_FIT_FAILS" not in out:
+        return 0, out + " !! detected but not as REAL_FIT_FAILS"
+    return rc, out
+
+
+@case("realfit4096", "exactly-min-correct-real-rows-clears-and-one-fewer-fails", "fail")
+def _(root):
+    r20 = _rf_reader()
+    rc_at, out_at = _realfit(root, real_correct=r20.MIN_CORRECT_REAL)
+    rc_un, out_un = _realfit(root, real_correct=r20.MIN_CORRECT_REAL - 1)
+    if rc_at != 0:
+        return 0, f"!! exactly {r20.MIN_CORRECT_REAL} did not clear: {out_at[:150]}"
+    return (1 if rc_un != 0 else 0), f"at={out_at[:70]} | under={out_un[:110]}"
+
+
+@case("realfit4096", "a-pass-carried-by-the-builder-matched-arm-alone-is-still-REAL_FIT_FAILS", "fail")
+def _(root):
+    r20 = _rf_reader()
+    rc, out = _realfit(root, real_correct=r20.MIN_CORRECT_REAL - 200, matched_real_correct=r20.MIN_CORRECT_REAL + 500)
+    if rc != 0 and "verdict=REAL_FIT_FAILS" not in out:
+        return 0, out + " !! a flag decided the verdict"
+    return rc, out
+
+
+@case("realfit4096", "the-reproduction-rung-off-by-0.006-is-VOID", "fail")
+def _(root):
+    r20 = _rf_reader()
+    return _realfit_void(root, None, expect_clause="reproduction", repro=round(r20.REPRO_REFERENCE + 0.006, 4))
+
+
+@case("realfit4096", "a-reproduction-drift-inside-the-tolerance-still-clears", "pass")
+def _(root):
+    r20 = _rf_reader()
+    return _realfit(root, repro=round(r20.REPRO_REFERENCE + r20.REPRO_TOLERANCE, 4))
+
+
+@case("realfit4096", "a-leaking-null-control-is-VOID", "fail")
+def _(root):
+    r20 = _rf_reader()
+    return _realfit_void(root, None, expect_clause="null control", null_acc=round(r20.CHANCE + r20.NULL_TOLERANCE + 0.002, 4))
+
+
+@case("realfit4096", "a-smoke-artifact-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["smoke"] = True; scores["smoke"] = True
+    return _realfit_void(root, f, expect_clause="smoke")
+
+
+@case("realfit4096", "an-artifact-stamped-with-another-preregistration-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["preregistration"] = "0018-oob-4096"; scores["preregistration"] = "0018-oob-4096"
+    return _realfit_void(root, f, expect_clause="preregistration")
+
+
+@case("realfit4096", "a-fit-row-byte-identical-to-a-scored-row-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["partition"]["fit_rows_identical_to_a_scored_row"] = 1
+    return _realfit_void(root, f, expect_clause="fit_rows_identical_to_a_scored_row")
+
+
+@case("realfit4096", "a-fit-chunk-shared-with-the-evaluation-corpus-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["partition"]["fit_chunks_shared_with_ext"] = 1
+    return _realfit_void(root, f, expect_clause="fit_chunks_shared_with_ext")
+
+
+@case("realfit4096", "a-shared-source-chunk-hash-between-fit-and-evaluation-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["partition"]["fit_source_chunks_shared_with_ext"] = 1
+    return _realfit_void(root, f, expect_clause="fit_source_chunks_shared_with_ext")
+
+
+@case("realfit4096", "a-fit-corpus-array-hash-that-is-not-the-sealed-one-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fit_corpus"] = dict(art["fit_corpus"])
+        art["fit_corpus"]["arrays"] = dict(art["fit_corpus"]["arrays"])
+        art["fit_corpus"]["arrays"]["X"] = dict(art["fit_corpus"]["arrays"]["X"], sha256="0" * 64)
+    return _realfit_void(root, f, expect_clause="fit corpus")
+
+
+@case("realfit4096", "an-evaluation-corpus-array-hash-that-is-not-the-sealed-one-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["ext_corpus"] = dict(art["ext_corpus"])
+        art["ext_corpus"]["arrays"] = dict(art["ext_corpus"]["arrays"])
+        art["ext_corpus"]["arrays"]["y"] = dict(art["ext_corpus"]["arrays"]["y"], sha256="0" * 64)
+    return _realfit_void(root, f, expect_clause="evaluation corpus")
+
+
+@case("realfit4096", "a-banked-real-correct-count-off-by-one-row-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["readings"]["real_model"]["ext_real_correct"] += 1
+    return _realfit_void(root, f, expect_clause="readings")
+
+
+@case("realfit4096", "a-banked-per-family-reading-off-by-0.0001-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        fam = _rf_reader().EXT_FAMILIES[0]
+        art["readings"]["real_model"]["ext_per_family"][fam] = round(
+            art["readings"]["real_model"]["ext_per_family"][fam] + 0.0001, 4)
+    return _realfit_void(root, f, expect_clause="readings")
+
+
+@case("realfit4096", "a-per-example-vector-whose-hash-is-not-the-records-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fits"]["real_model"]["per_example_sha256"] = "0" * 64
+    return _realfit_void(root, f, expect_clause="per_example_sha256")
+
+
+@case("realfit4096", "a-fingerprint-that-is-not-the-recomputed-one-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fits"]["real_model"]["fingerprint"] = "0" * 16
+    return _realfit_void(root, f, expect_clause="fingerprint")
+
+
+@case("realfit4096", "completions-out-of-the-sealed-order-are-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        led = art["ledger"]
+        i = next(k for k, e in enumerate(led) if e["name"] == "real_model" and e["event"] == "completed")
+        j = next(k for k, e in enumerate(led) if e["name"] == "builder_matched" and e["event"] == "completed")
+        led[i], led[j] = led[j], led[i]
+    return _realfit_void(root, f, expect_clause="sealed order")
+
+
+@case("realfit4096", "an-arm-scored-twice-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        e = next(x for x in art["ledger"] if x["name"] == "real_model" and x["event"] == "completed")
+        art["ledger"].append(dict(e))
+    return _realfit_void(root, f, expect_clause="ledger completions")
+
+
+@case("realfit4096", "a-missing-arm-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        del art["fits"]["builder_matched"]; del scores["per_example"]["builder_matched"]
+        del art["readings"]["builder_matched"]
+    return _realfit_void(root, f, expect_clause="builder_matched")
+
+
+@case("realfit4096", "an-arm-fitted-with-another-recipes-parameters-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fits"]["real_model"]["params"] = dict(art["fits"]["real_model"]["params"], max_iter=999)
+    return _realfit_void(root, f, expect_clause="sealed")
+
+
+@case("realfit4096", "an-arm-fitted-on-rows-that-are-not-the-sealed-block-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fits"]["real_model"]["fit_rows_sorted_sha256"] = "0" * 64
+    return _realfit_void(root, f, expect_clause="sealed rows")
+
+
+@case("realfit4096", "a-record-fitted-at-another-thread-count-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["fits"]["real_incumbent"]["environment"] = dict(art["fits"]["real_incumbent"]["environment"], threads=1)
+    return _realfit_void(root, f, expect_clause="environment")
+
+
+@case("realfit4096", "ext_fam-that-does-not-hash-to-the-sealed-fam-array-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        scores["ext_fam"] = list(reversed(scores["ext_fam"]))
+    return _realfit_void(root, f, expect_clause="ext_fam")
+
+
+@case("realfit4096", "chunk-ids-that-are-not-the-sealed-expansion-are-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        scores["ext_chunk_ids"] = list(reversed(scores["ext_chunk_ids"]))
+    return _realfit_void(root, f, expect_clause="ext_chunk_ids")
+
+
+@case("realfit4096", "an-absent-scores-file-is-VOID", "fail")
+def _(root):
+    return _realfit_void(root, None, expect_clause="scores", drop_scores=True)
+
+
+@case("realfit4096", "an-absent-artifact-emits-no-verdict", "fail")
+def _(root):
+    rc, out = _realfit(root, drop_artifact=True)
+    if rc != 0 and "No verdict emitted" not in out:
+        return 0, out + " !! detected but not as an absent artifact"
+    return rc, out
+
+
+@case("realfit4096", "a-NOT-RUN-marker-beside-an-artifact-emits-no-verdict", "fail")
+def _(root):
+    rc, out = _realfit(root, not_run={"schema": "raise-v1/realfit_4096_not_run/1", "preregistration": "0020-realfit-4096",
+                                      "stage": "run", "reason": "the null control leaked", "utc": "2026-09-16T05:00:00Z",
+                                      "n_checkpoints": 2})
+    if rc != 0 and "NOT RUN" not in out:
+        return 0, out + " !! detected but not as NOT RUN"
+    return rc, out
+
+
+@case("realfit4096", "an-artifact-whose-fits-block-is-a-list-is-VOID-not-a-traceback", "fail")
+def _(root):
+    def f(art, scores):
+        art["fits"] = [art["fits"][k] for k in art["fits"]]
+    return _realfit_void(root, f)
+
+
+@case("realfit4096", "an-incomplete-run-is-VOID", "fail")
+def _(root):
+    def f(art, scores):
+        art["complete"] = False; art["run_finished_utc"] = None
+    return _realfit_void(root, f, expect_clause="complete")
+
+
+@case("realfit4096", "the-fit-corpus-row-counts-per-family-must-be-the-sealed-ones", "fail")
+def _(root):
+    def f(art, scores):
+        fam = _rf_reader().FIT_FAMILIES[0]
+        art["fit_rows_per_family"] = dict(art["fit_rows_per_family"])
+        art["fit_rows_per_family"][fam] += 1
+    return _realfit_void(root, f, expect_clause="fit row counts")
+
+
+@case("realfit4096", "the-control-artifact-is-built-from-the-runners-own-output-shape", "pass")
+def _(root):
+    # docs/OPERATING_RULES.md section 4: the control must not be built from the reader's expectations. This case fails
+    # if the fixture stops being a runner output - if the runner grows or drops a key the control would not carry it.
+    shape = json.load(open(_RF_SHAPE, encoding="utf-8"))
+    art, _ = _good_realfit()
+    missing = sorted(set(shape["artifact"]) - set(art))
+    extra_records = sorted(set(shape["artifact"]["fits"]) ^ set(art["fits"]))
+    rec_missing = sorted(set(shape["artifact"]["fits"]["real_model"]) - set(art["fits"]["real_model"]))
+    if missing or extra_records or rec_missing:
+        return 1, f"control lost runner keys {missing}, arms {extra_records}, record fields {rec_missing}"
+    return 0, (f"control carries all {len(shape['artifact'])} artifact keys, {len(art['fits'])} arms and "
+               f"{len(art['fits']['real_model'])} record fields of the runner's smoke output")
+
+
 def main() -> int:
     # `python3 tests/mutation_test.py <gate> [<gate> ...]` runs only those gates' cases and writes NO report (a partial
     # report would make the banked count stale); the full suite, as CI runs it, takes no arguments.
