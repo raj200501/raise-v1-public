@@ -2,14 +2,14 @@
   "checks_failed": 0,
   "fit_corpus_X_sha256": "d969c7d75f5bc7743e9014908fe1d5e07a4220eacd82c166329bdcb381db8c98",
   "mutation_report_total": 454,
-  "prereg_sha256_checked": "194c23b1f77c5dec8365753c51b07b8204b9f35cb2dbb7a45ce226685cbe2ce5",
+  "prereg_sha256_checked": "adf85f761868db349e8320bdb1315c1381f99814a36011d8671fc13cb56bb75d",
   "preregistration": "0021-realfit-4096-rerun",
-  "reader_sha256_checked": "19a6f54ce96daddf3de4cf32c905588a1468c2c35655695a011974cc344cd23d",
+  "reader_sha256_checked": "b426b1d557cc08685a150dc03afd2b40e8229939fafa8c131e81af444a2ecfcb",
   "realfit4096_cases": {
     "detected": 54,
     "total": 54
   },
   "result": "PASS",
   "schema": "raise-v1/prefreeze_check/1",
-  "utc": "2026-09-16T09:00:11Z"
+  "utc": "2026-09-16T09:30:42Z"
 }

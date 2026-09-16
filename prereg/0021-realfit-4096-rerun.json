@@ -24858,7 +24858,14 @@
       "chunk_size": 32768,
       "cache_identity": {
         "y_sha256": "2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093",
-        "g_sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9"
+        "g_sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9",
+        "X_sha256": "a28a2d403d40c64405fe15747399f1317fd984155702797590c58fb0cef0f8ea",
+        "X_shape": [
+          1300000,
+          1108
+        ],
+        "X_dtype": "float32",
+        "X_note": "the builder cache's FEATURE array, hashed for the first time here. Every earlier preregistration sealed only y and g of this file, so no gate read a single feature byte of it: the split is a function of y, g and the seed, and every block hash is over row indices. 0021's collision rule is about that array, so the array is now sealed directly and the rule corroborates rather than carries it (0021 pre-freeze review, condition lens, finding H2). Costs about 8 seconds at launch."
       },
       "families": [
         "gutenberg",
@@ -25185,6 +25192,30 @@
         "matched_block": 2,
         "chunk_matched_block": 0
       },
+      "expected_collision_rows": {
+        "fit_block": [],
+        "repro_block": [
+          1248421,
+          1248425,
+          1248430,
+          1248431,
+          1248433,
+          1248437,
+          1248438,
+          1248440
+        ],
+        "matched_block": [
+          1248433,
+          1248438
+        ],
+        "chunk_matched_block": []
+      },
+      "expected_collision_row_sha256": {
+        "repro_block": "18a9cd445d34209786e55ae4813d7394b3937fe05f7f55f4ce74d18142f3b142",
+        "matched_block": "8d29b553f3ea69402080944614c384f7c425ceceaa92313ce6bce059d7b56b59",
+        "pool_block": "27f36314b2e6e1b109a544d0355a3dba9666ea470ab6f5c6ce200178db2e0ed8"
+      },
+      "pool_rows_identical_to_a_scored_row": 26,
       "expected_collisions_source": "artifacts/pivot/builder_duplicate_chunks.json, banked 2026-09-16 after 0020's refusal; the 9 duplicate chunk pairs and the 32 straddling row pairs are named there",
       "n_ext_real_rows": 38452,
       "min_correct_real": 3402,
@@ -25339,7 +25370,7 @@
       "early_stopping_split_disclosed": "The two HGB recipes take the LAST 10% of their block's rows as the explicit early-stopping validation split (`val: \"frag\"`, 0003's rule, inherited verbatim). Measured now, before the freeze, as the fraction of validation rows whose source chunk also appears in the training 90%: fit block 1.0, matched block 0.438, chunk-matched block 1.0, repro block 0.8977. The fit corpus carries about 25.6 rows per 32768-byte source chunk and the builder's row-matched block about 1.36, so the real arms' early stopping is validated almost entirely on siblings of its own training rows and the row-matched builder arm's is much less so. This is the second reason builder_chunk_matched exists and the sharper one: because it takes every row of a small number of chunks it sits at 1.0 contamination, the same as the fit block, so it matches the fit corpus on the plaintext budget AND on the character of the early-stopping split, and is therefore the arm the clause's reading should be compared against. builder_matched, at 0.438, matches on rows alone. The recipes are NOT changed to a grouped split: they are 0014's searched winners and 0018's roster entries verbatim, and changing the protocol would break the comparison this run exists to make. The direction of the resulting bias is stated instead, and it runs against the clause: a contaminated validation split lets early stopping run too long, which overfits, which LOWERS the held-out reading on the chunk-disjoint scoring set. It cannot manufacture a pass. It can widen the gap between real_model and builder_matched, so that comparison is read as a lower bound on real_model and not as a point estimate, and every arm's iteration count and whether it stopped at its cap are banked as flags."
     },
     "sealed_hashes": {
-      "protocol_sha256": "3434322a7446a9f03026cffa3bece2f39b2c02141555045c407101c96231d880",
+      "protocol_sha256": "39d7655b0ace68e5f35f3f0cccdac1d0d3af7b824d9f11c9bef132a5dbf99d03",
       "recipes_sha256": "715e8f116bf12921de12bb8a4c3d16a6c8930276beaa8c7ccac5ddd0e3a5f147",
       "recipe_sha256": {
         "incumbent": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
@@ -25355,7 +25386,7 @@
       "note": "canonical-JSON sha256 (sort_keys, separators (',', ':')) of scope.protocol, of scope.recipes and of each recipe; the reader carries the same literals and every banked record's params_sha256 must equal its recipe's, which equals 0014's banked params_sha256 for the same recipe"
     },
     "artifact_identity_at_writing": {
-      "commit": "f917fa54ffe207588ef603fcb1dd5634edcd5011",
+      "commit": "16846cf4cbf989d545742260f4423f96c1861584",
       "realfit_npz_arrays": {
         "X": {
           "sha256": "d969c7d75f5bc7743e9014908fe1d5e07a4220eacd82c166329bdcb381db8c98",
@@ -25410,12 +25441,12 @@
     "builder_block_collisions_are_the_measured_ones": {
       "direction": "equality",
       "threshold": 0,
-      "passes_if": "The three BUILDER blocks' counts equal the sealed expected values exactly: repro 8, matched 2, chunk-matched 0. These are not leaks and 0 is not the right answer for them: the corpus builder emitted 9 pairs of source chunks whose carved rows are identical, and one pair (44496 on the evaluation side, 48016 on the pool side, 26 of 26 rows) straddles 0003's grouped split, so 8 rows of the reproduction rung and 2 of the builder-matched block have a byte-identical twin among the scored rows. Equality rather than a ceiling: a larger count means content crossed that this preregistration did not measure, and a smaller one means the split, the cache or the blocks are not the sealed ones. Either is VOID."
+      "passes_if": "The collisions are THE MEASURED ONES, by identity and not merely by count: each builder block's rows that are byte-identical to a scored row, sorted as int64, hash to the sealed expected_collision_row_sha256 - repro 18a9cd445d34..., matched 8d29b553f3ea... - and the whole 800000-row pool's colliding rows hash to 27f36314b2e6... at exactly 26 rows. The pool-wide check exists because the block counts only see collisions inside the first 100000 pool rows: 18 of the 26 colliding pool rows sit beyond that and no block count would notice a new one there. The counts equal the sealed expected values exactly: repro 8, matched 2, chunk-matched 0. These are not leaks and 0 is not the right answer for them: the corpus builder emitted 9 pairs of source chunks whose carved rows are identical, and one pair (44496 on the evaluation side, 48016 on the pool side, 26 of 26 rows) straddles 0003's grouped split, so 8 rows of the reproduction rung and 2 of the builder-matched block have a byte-identical twin among the scored rows. Equality rather than a ceiling: a larger count means content crossed that this preregistration did not measure, and a smaller one means the split, the cache or the blocks are not the sealed ones. Either is VOID."
     },
     "complete_one_scoring_per_fit": {
       "direction": "equality",
       "threshold": 0,
-      "passes_if": "complete is True with run_finished_utc set; each of the six named records has status 'fit', the sealed recipe (id, family, params, params hash, scaled, val), the sealed seed and rows, an integer iteration count, a fingerprint the reader recomputes from the sealed literals, exactly one 'completed' ledger event carrying that fingerprint preceded by a 'started' event with it, completions in the sealed order, and a per-example vector of n_eval + n_ext entries in {0, 1} whose sha256 the record carries; each record's readings equal the reader's recomputation from the vector."
+      "passes_if": "complete is True with run_finished_utc set; each of the 11 named records has status 'fit', the sealed recipe (id, family, params, params hash, scaled, val), the sealed seed and rows, the fit_info its ESTIMATOR FAMILY produces - an integer iteration count for the HGB and logistic recipes, an integer depth and leaf count for the two tree baselines, and nothing for the two dummy baselines, because sklearn's DummyClassifier exposes neither n_iter_ nor get_depth and run_recipe_search.fit_info() banks {} for it - a fingerprint the reader recomputes from the sealed literals, exactly one 'completed' ledger event carrying that fingerprint preceded by a 'started' event with it, completions in the sealed order, and a per-example vector of n_eval + n_ext entries in {0, 1} whose sha256 the record carries; each record's readings equal the reader's recomputation from the vector."
     },
     "reproduces_the_rung": {
       "direction": "lower_is_better",
@@ -25462,61 +25493,61 @@
     {
       "name": "verdict",
       "unit": "enum{REAL_FIT_CLEARS,REAL_FIT_FAILS,VOID}",
-      "source_artifact": "artifacts/pivot/realfit_4096_verdict.json",
+      "source_artifact": "artifacts/pivot/realfit_4096_rerun_verdict.json",
       "json_path": "$.verdict"
     },
     {
       "name": "real_model_real_correct",
       "unit": "count of correct real-family rows",
-      "source_artifact": "artifacts/pivot/realfit_4096_verdict.json",
+      "source_artifact": "artifacts/pivot/realfit_4096_rerun_verdict.json",
       "json_path": "$.ext_real_correct_model"
     },
     {
       "name": "real_model_real_top1",
       "unit": "accuracy over the real-family rows, 4 decimals",
-      "source_artifact": "artifacts/pivot/realfit_4096_verdict.json",
+      "source_artifact": "artifacts/pivot/realfit_4096_rerun_verdict.json",
       "json_path": "$.ext_real_top1_model"
     },
     {
       "name": "ext_real_top1 by arm",
       "unit": "accuracy, 4 decimals",
-      "source_artifact": "artifacts/pivot/realfit_4096_verdict.json",
+      "source_artifact": "artifacts/pivot/realfit_4096_rerun_verdict.json",
       "json_path": "$.ext_real_top1"
     },
     {
       "name": "ext_per_family by arm",
       "unit": "accuracy, 4 decimals",
-      "source_artifact": "artifacts/pivot/realfit_4096_verdict.json",
+      "source_artifact": "artifacts/pivot/realfit_4096_rerun_verdict.json",
       "json_path": "$.ext_per_family"
     },
     {
       "name": "builder_eval_top1 by arm",
       "unit": "accuracy on the builder's sealed evaluation set, 4 decimals (the reverse reading)",
-      "source_artifact": "artifacts/pivot/realfit_4096_verdict.json",
+      "source_artifact": "artifacts/pivot/realfit_4096_rerun_verdict.json",
       "json_path": "$.builder_eval_top1"
     },
     {
       "name": "flags",
       "unit": "booleans and exact row counts (informational)",
-      "source_artifact": "artifacts/pivot/realfit_4096_verdict.json",
+      "source_artifact": "artifacts/pivot/realfit_4096_rerun_verdict.json",
       "json_path": "$.bar_applied.flags"
     },
     {
       "name": "reproduction",
       "unit": "accuracy on the sealed evaluation set, 4 decimals",
-      "source_artifact": "artifacts/pivot/realfit_4096_verdict.json",
+      "source_artifact": "artifacts/pivot/realfit_4096_rerun_verdict.json",
       "json_path": "$.reproduction_top1"
     },
     {
       "name": "shuffled_label_accuracy_ext",
       "unit": "accuracy",
-      "source_artifact": "artifacts/pivot/realfit_4096_verdict.json",
+      "source_artifact": "artifacts/pivot/realfit_4096_rerun_verdict.json",
       "json_path": "$.shuffled_label_accuracy_ext"
     },
     {
       "name": "validity_failed_clauses",
       "unit": "list; must be empty for a non-VOID verdict",
-      "source_artifact": "artifacts/pivot/realfit_4096_verdict.json",
+      "source_artifact": "artifacts/pivot/realfit_4096_rerun_verdict.json",
       "json_path": "$.validity_failed_clauses"
     },
     {

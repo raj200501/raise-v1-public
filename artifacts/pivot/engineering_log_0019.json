@@ -1,156 +1,37 @@
 {
-  "schema": "raise-v1/engineering_log/1",
-  "preregistration": "0019-oob-4096-reread",
-  "status": "frozen (chain seq 19) and read on 2026-09-16: OOB_TRANSFER_FAILS, as committed in advance; published",
-  "why": "0018's frozen reader emitted VOID on one wrong sealed literal (the null block hash restated from 0017's fold-based block instead of the pool block the design, the arms and the runner use): five validity clauses failed, all one hash; the reader stops recomputing after a fit clause fails, so its readings, reproduction, null-tolerance and transfer clauses were never reached, and every scope, corpus, extension-corpus, partition, environment and order clause it did evaluate passed; the artifact carries the readings, and 0019's reader evaluates every clause for the first time. 0013's precedent: re-read the same banked artifact under the same clauses with the one literal corrected, disclose every known number, commit to the outcome they give, and never edit a frozen file.",
-  "known_numbers": "prereg/0019-oob-4096-reread.json scope.numbers_known_when_this_was_written, copied from artifacts/pivot/oob_4096.json readings by the preregistration writer and checked by the pre-freeze check",
-  "reader_derivation": {
-    "method": "tools/readers/oob4096_reread_verdict.py is generated from the frozen 0018 reader by the declared substitutions only (scope.what_changes_from_0018.declared_substitutions); the generator refuses if any substitution's occurrence count differs from the declared one",
-    "diff_line_counts": {
-      "removed_from_0018": 13,
-      "added": 47,
-      "method": "difflib.unified_diff over lines, n=0, headers excluded"
-    },
-    "gate": "oob4096 gate: control artifacts built from either reader's literals; 0018's reader must VOID the runner's block (the filed defect); the re-read reader must VOID 0018's literal, VOID a third hash, read OOB_TRANSFER_FAILS one row under the bar, VOID an artifact stamped 0019 (each reader on its own literals, so the stamp is the sole cause), write a VOID with the 0019 stamp on the unexpected-shape path; the re-read reader must equal 0018's reader plus the declared substitutions, a tampered copy must be detected and an off-by-one occurrence count refused; one case ties both literals to the world as banked (the artifact, 0014's null control, 0016's sealed null; 0015's and 0017's sealed nulls and lofo artifacts) and runs tools/pivot/null_block_check.py when the cache is present; two cases exercise that tool on a small cache so it is shown to pass and to fail (13 cases added to 0018's 72: oob4096 85/85; suite 400/400)"
+  "chronology": {
+    "chain_entry_and_frozen_flag_committed": "932a73b at 2026-09-16T04:27:45Z",
+    "for_the_next_preregistration": "commit the chain entry and the frozen flag in the same step as the freeze, before the reader is run, so git's order matches the chain's",
+    "freeze_commit_sealed_by_the_chain": "36b18498 (prereg.py freeze stamps the HEAD at freeze time)",
+    "freeze_utc": "2026-09-16T04:14:59Z",
+    "note": "git's commit order puts the verdict before the chain entry; the freeze came first, and these are the times",
+    "reader_run_utc": "2026-09-16T04:15:07Z",
+    "verdict_committed": "b7afe1a at 2026-09-16T04:15:17Z",
+    "why": "tools/prereg.py freeze writes prereg/chain.jsonl and sets frozen:true in the working tree after the pre-freeze commit; the operator ran the frozen reader next and committed its verdict, then committed the freeze files with the publication. The chain entry's frozen_utc (2026-09-16T04:14:59Z) and its beacon anchors, not the commit order, are what order the freeze against the reading; the reader's output could not have existed before the reader was hashed, because the verdict file names the preregistration and the chain seals the reader's sha256 0ceef3ae..."
   },
-  "pre_freeze_check": {
-    "script": "tools/prereg_checks/prefreeze_0019.py (committed in the freeze commit); result banked in artifacts/verification/prefreeze_0019.json",
-    "checks": [
-      "0018 reader is the frozen file (sha256 47a3f654...)",
-      "0019 reader == 0018 reader + declared substitutions",
-      "corrected literal == first 20000 pool rows recomputed from y and g with the runner's split (tools/pivot/null_block_check.py, committed in the freeze commit) == artifact partition == null fit rows == 0014's null control == 0016's sealed null",
-      "old literal == recomputed first-fold block == 0018's and 0017's sealed null",
-      "every known number == the artifact's readings",
-      "clause quoted as 3402 of 38452, the mixture threshold not quoted as the clause",
-      "scratch copy of the 0019 reader (output redirected to the scratchpad) reads OOB_TRANSFER_FAILS with no validity failure",
-      "no re-read verdict file under artifacts/ before the freeze",
-      "chain verifies, head 0018",
-      "artifact file hashes == the prereg's artifact_identity"
-    ],
-    "result": "PASS at 2026-09-16T04:12:46Z on reader sha256 0ceef3ae73671f00e03becac6e8305617985eef4981e39e6d36a4ad0578b3668 and preregistration file sha256 7bbdb7f7f2c6fd095cf9c5b7717fb31078502d630e940c2f50788d61fe7b0d72 (mutation report 400, all detected)",
-    "checked_by_the_operator_not_the_script": [
-      "the headline print line says it is a re-read (0013's convention) and the docstring quotes the runner's null-block lines verbatim: read by the operator and by the pre-freeze review's reader-diff lens, not asserted by the script; what the script does assert is that the reader equals 0018's file plus the declared substitutions, which is what fixes both",
-      "the artifact_identity.commit line in the committed script was a no-op at freeze time (`x or True`); it was made a real comparison against the commit that banked the artifact after the freeze, so artifacts/verification/prefreeze_0019.json's PASS belongs to the version with that line inert. Nothing else in the script changed, and the freeze did not rest on it: the artifact is bound by the three file hashes checked above it and by the sealed hashes the reader checks. Re-running the script after a freeze would assert pre-freeze conditions that are false by design and overwrite the banked result, so it now refuses with exit 2 once the preregistration is frozen and leaves artifacts/verification/prefreeze_0019.json as banked"
-    ]
-  },
-  "expected_outcome": "OOB_TRANSFER_FAILS, committed to in the preregistration from the known numbers (2450 of 38452 against 3402); anything else is published as emitted with a further correction",
+  "commit_message_note": "Two commit messages on main state mutation-gate case counts that the banked report does not: 36b1849 says 'gate 87 cases' and b5ed4bf says 'oob4096 gate 80 cases', while artifacts/verification/mutation_report.json says 85 oob4096 cases at HEAD and 80 at b5ed4bf's suite run. The 87 was written from a case count in the editor before two cases were merged; the banked report, not a commit message, is the count the record uses, and commit messages are not rewritten here because the preregistration chain seals commit hashes.",
   "cost": "no fit, no scoring; the reader recounts 321409-entry vectors four times (seconds)",
-  "review_before_freeze": {
-    "method": "six independent read-only lenses (diagnosis, reader diff, preregistration text, gate, corrections and logs, skeptic) with one refuter per medium or high finding; workflow run wf_1483fa9d-684; synthesis by the operator before the freeze",
-    "findings_adopted": [
-      {
-        "severity": "medium",
-        "finding": "'every other clause passed' overstates what 0018's reader evaluated (it stops after a fit clause fails)",
-        "change": "reworded in the reader docstring, the preregistration, the ledger addendum, both logs and the drafts to what the reader reached"
-      },
-      {
-        "severity": "medium",
-        "finding": "nothing committed tied the corrected literal to the runner's block; the pre-freeze recomputation lived in the session",
-        "change": "tools/pivot/null_block_check.py committed and run by the pre-freeze check and by a gate case; the pre-freeze check committed as tools/prereg_checks/prefreeze_0019.py with its result banked"
-      },
-      {
-        "severity": "medium",
-        "finding": "the banked mutation report and six live claims disagreed with the coverage claim",
-        "change": "full suite re-run (400/400), live claims rewritten from the report before the freeze commit"
-      },
-      {
-        "severity": "medium",
-        "finding": "the in-flight correction's span, cause and 'recorded in the same log' were wrong or premature; README's in-flight sentence also mis-scoped the clause; 'right throughout' contradicted the entry above",
-        "change": "the committed entries stand; dated addenda appended (append-only ledger); the publication script's sha256 and refusal strings banked here"
-      },
-      {
-        "severity": "medium",
-        "finding": "the gate's stamped-0019 case was overdetermined under 0018's reader; the unexpected-shape and NOT RUN paths were not exercised under the re-read reader; the tamper case did not exercise the builder's refusals",
-        "change": "each reader on its own literals in the stamp case; unexpected-shape case with the 0019 stamp added; injectable rebuild with an off-by-one occurrence case added"
-      },
-      {
-        "severity": "medium",
-        "finding": "the log recorded a review with no findings and diff counts from an earlier reader",
-        "change": "this block; diff counts written by the pre-freeze check at freeze time"
-      },
-      {
-        "severity": "medium",
-        "finding": "an unbanked CPU-time figure labelled 'at exit'",
-        "change": "banked as an operator sample with its time (08:25:23 UTC) in engineering_log_0018 run_record.operator_cpu_sample"
-      },
-      {
-        "severity": "medium",
-        "finding": "'M4 stopped at its iteration cap' without saying 0014's fit of the same recipe did too",
-        "change": "said beside it in the preregistration, the 0018 log and the drafts"
-      },
-      {
-        "severity": "medium",
-        "finding": "the preregistration did not commit where and in what words 0018's VOID appears beside 0019's verdict",
-        "change": "stop rule extended with the venues and the sentence"
-      },
-      {
-        "severity": "low",
-        "finding": "docstring misquoted the runner's null-block lines; said 0018's reader 'printed' counts it banked; headline print line did not say re-read; stop rule 'emitted False unconditionally'; 'at their flag threshold'; artifact commit cited the draft commit; occurrence counts unexplained; why a re-read over a re-run unstated; heartbeat series unbanked; arm misquoted; standing rule unreferenced",
-        "change": "each fixed in the preregistration, the reader prefix, the logs or the ledger addenda; hb_samples.jsonl banked beside the ledger"
-      }
-    ],
-    "findings_declined": [
-      {
-        "severity": "medium",
-        "finding": "add live claims for the evidence page's tiles",
-        "reason": "the page is regenerated from the artifacts by tools/render/evidence_page.py at every publication and read by claimcheck; a registered pattern for a rendered page would be a second copy of the same derivation; noted as a follow-up, not adopted here"
-      },
-      {
-        "severity": "medium",
-        "finding": "commit the publication script into the repository",
-        "reason": "it applies session drafts at scratchpad anchors and is not reusable; its sha256 and refusal strings are banked here instead, and the durable guards (freshness, claimcheck, the gates) run on the published documents"
-      }
-    ]
-  },
-  "publication": {
-    "script": "the session's apply_0019_docs.py (scratchpad; not a repository file)",
-    "sha256_at_freeze": "34dbdada6fc5a3c4cf03185628d00739a74243e9e0b081a77f1007e5052ce037",
-    "refuses_to_finish_if_any_of_these_survives_in_VERDICT_md_or_README_md": [
-      "must reach 5433 of 61409",
-      "it is frozen and running",
-      "In flight — preregistration 0018"
-    ],
-    "also": "rewrites every registered live claim (docs/live_claims.json: mutation counts, chain length and head, preregistration counts) from the banked artifacts, the same derivation tools/freshness.py checks; the drafts it applies are written by draft_0019_docs.py from the banked verdict files only",
-    "drafts_sha256_at_freeze": "4359cfb225e90f4e8059be86102be9b9f74d3f3a3c869efe238743f95e4350c9"
-  },
+  "expected_outcome": "OOB_TRANSFER_FAILS, committed to in the preregistration from the known numbers (2450 of 38452 against 3402); anything else is published as emitted with a further correction",
   "freeze": {
+    "anchors": {
+      "drand": {
+        "randomness": "cb00726352bd38231bd67cdfb87184ed30e81e0072cb1bad4ab4abf087a44115",
+        "round": 6470035
+      },
+      "nist_beacon_v2": {
+        "chain": 2,
+        "output_value": "307178C62D82E35B6828616C4AD6C124B96AA2957331A400586E96F8984826FFF5FD8A077B14C16B0151F93DBE9EEB974379CF628E406A2F9995D88595B828BE",
+        "pulse": 1943408,
+        "time_stamp": "2026-09-16T04:14:00.000Z"
+      }
+    },
+    "chain_hash": "fe80fa9ba8a66bfd768453d39b94742596d7e0c83f368cfa15289b75982ea146",
     "chain_seq": 19,
     "frozen_utc": "2026-09-16T04:14:59Z",
     "git_commit": "36b1849851a45b74d28905d03e712f6410d3e29e",
-    "reader_sha256": "0ceef3ae73671f00e03becac6e8305617985eef4981e39e6d36a4ad0578b3668",
-    "chain_hash": "fe80fa9ba8a66bfd768453d39b94742596d7e0c83f368cfa15289b75982ea146",
-    "anchors": {
-      "nist_beacon_v2": {
-        "chain": 2,
-        "pulse": 1943408,
-        "time_stamp": "2026-09-16T04:14:00.000Z",
-        "output_value": "307178C62D82E35B6828616C4AD6C124B96AA2957331A400586E96F8984826FFF5FD8A077B14C16B0151F93DBE9EEB974379CF628E406A2F9995D88595B828BE"
-      },
-      "drand": {
-        "round": 6470035,
-        "randomness": "cb00726352bd38231bd67cdfb87184ed30e81e0072cb1bad4ab4abf087a44115"
-      }
-    }
+    "reader_sha256": "0ceef3ae73671f00e03becac6e8305617985eef4981e39e6d36a4ad0578b3668"
   },
-  "outcome": {
-    "verdict": "OOB_TRANSFER_FAILS",
-    "as_committed_in_advance": true,
-    "validity_failed_clauses": [],
-    "transfer_failed_clauses": [
-      "transfer: M4's correct real-family rows 2450 of 38452 (0.0637) is below 3402 (chance 0.038462 + 0.05 = 0.088462)"
-    ],
-    "reads_artifact_of": "0018-oob-4096"
-  },
-  "chronology": {
-    "note": "git's commit order puts the verdict before the chain entry; the freeze came first, and these are the times",
-    "freeze_utc": "2026-09-16T04:14:59Z",
-    "freeze_commit_sealed_by_the_chain": "36b18498 (prereg.py freeze stamps the HEAD at freeze time)",
-    "reader_run_utc": "2026-09-16T04:15:07Z",
-    "verdict_committed": "b7afe1a at 2026-09-16T04:15:17Z",
-    "chain_entry_and_frozen_flag_committed": "932a73b at 2026-09-16T04:27:45Z",
-    "why": "tools/prereg.py freeze writes prereg/chain.jsonl and sets frozen:true in the working tree after the pre-freeze commit; the operator ran the frozen reader next and committed its verdict, then committed the freeze files with the publication. The chain entry's frozen_utc (2026-09-16T04:14:59Z) and its beacon anchors, not the commit order, are what order the freeze against the reading; the reader's output could not have existed before the reader was hashed, because the verdict file names the preregistration and the chain seals the reader's sha256 0ceef3ae...",
-    "for_the_next_preregistration": "commit the chain entry and the frozen flag in the same step as the freeze, before the reader is run, so git's order matches the chain's"
-  },
+  "known_numbers": "prereg/0019-oob-4096-reread.json scope.numbers_known_when_this_was_written, copied from artifacts/pivot/oob_4096.json readings by the preregistration writer and checked by the pre-freeze check",
   "open_instrument_follow_ups": [
     {
       "finding": "tools/coverage.py stores and prints each claim's json_path but never resolves it: a claim pinned to the wrong field still passes if its value appears anywhere in the cited artifact. A strict resolution over the 234 current claims flags 7 rows, most of them path-syntax (quoted keys, keys containing dots and slashes) rather than wrong values.",
@@ -174,8 +55,133 @@
       "finding": "docs/OPERATING_RULES.md section 4 states without exception that a reader's mutation-gate control artifact is built from the runner's output shape, never from the reader's expectations. The oob4096 gate builds its control from a reader's sealed literals (as its own docstring says), and three sibling gates do the same; the 0018 null-block defect is exactly what that construction cannot see, which is why the gate now also ties both literals to the banked artifact and to 0014's, 0015's, 0016's and 0017's records and recomputes the block from the cache.",
       "severity": "medium",
       "status": "open, filed here; the rule and the four gates disagree and one of them must move",
-      "what_done_looks_like": "either the four gates build their controls from the runner (importing its partition and record code, or a smoke artifact), or section 4 is amended to say what is actually required — a control built from the runner where the runner can be imported, and otherwise every sealed literal in the control tied to a banked artifact or recomputed from data by a committed tool — with the 0018 defect named as the case that forced the wording"
+      "what_done_looks_like": "either the four gates build their controls from the runner (importing its partition and record code, or a smoke artifact), or section 4 is amended to say what is actually required \u2014 a control built from the runner where the runner can be imported, and otherwise every sealed literal in the control tied to a banked artifact or recomputed from data by a committed tool \u2014 with the 0018 defect named as the case that forced the wording"
+    },
+    {
+      "finding": "An artifact's top-level convenience tables (ext_per_family, ext_correct) are not bound to the per-example vectors. The verdict republishes its own recomputation and the reader voids if a banked PER-ARM reading disagrees with it, so a verdict cannot be corrupted this way - but the artifact is the banked evidence, and a fabricated top-level table sits beside a correct verdict undetected. Demonstrated by the 0021 pre-freeze review on a control artifact that passed with all eight families' real_model per-family readings set to 0.99.",
+      "found_by": "0021 pre-freeze review, instrument lens, finding L1",
+      "severity": "low",
+      "status": "open, filed here; adopted in substance (the per-arm readings ARE recomputed and compared) but not closed, because the fix touches the readings comparison that four frozen readers share and none of them can be edited. It belongs in the next reader generated after 0021."
     }
   ],
-  "commit_message_note": "Two commit messages on main state mutation-gate case counts that the banked report does not: 36b1849 says 'gate 87 cases' and b5ed4bf says 'oob4096 gate 80 cases', while artifacts/verification/mutation_report.json says 85 oob4096 cases at HEAD and 80 at b5ed4bf's suite run. The 87 was written from a case count in the editor before two cases were merged; the banked report, not a commit message, is the count the record uses, and commit messages are not rewritten here because the preregistration chain seals commit hashes."
+  "outcome": {
+    "as_committed_in_advance": true,
+    "reads_artifact_of": "0018-oob-4096",
+    "transfer_failed_clauses": [
+      "transfer: M4's correct real-family rows 2450 of 38452 (0.0637) is below 3402 (chance 0.038462 + 0.05 = 0.088462)"
+    ],
+    "validity_failed_clauses": [],
+    "verdict": "OOB_TRANSFER_FAILS"
+  },
+  "pre_freeze_check": {
+    "checked_by_the_operator_not_the_script": [
+      "the headline print line says it is a re-read (0013's convention) and the docstring quotes the runner's null-block lines verbatim: read by the operator and by the pre-freeze review's reader-diff lens, not asserted by the script; what the script does assert is that the reader equals 0018's file plus the declared substitutions, which is what fixes both",
+      "the artifact_identity.commit line in the committed script was a no-op at freeze time (`x or True`); it was made a real comparison against the commit that banked the artifact after the freeze, so artifacts/verification/prefreeze_0019.json's PASS belongs to the version with that line inert. Nothing else in the script changed, and the freeze did not rest on it: the artifact is bound by the three file hashes checked above it and by the sealed hashes the reader checks. Re-running the script after a freeze would assert pre-freeze conditions that are false by design and overwrite the banked result, so it now refuses with exit 2 once the preregistration is frozen and leaves artifacts/verification/prefreeze_0019.json as banked"
+    ],
+    "checks": [
+      "0018 reader is the frozen file (sha256 47a3f654...)",
+      "0019 reader == 0018 reader + declared substitutions",
+      "corrected literal == first 20000 pool rows recomputed from y and g with the runner's split (tools/pivot/null_block_check.py, committed in the freeze commit) == artifact partition == null fit rows == 0014's null control == 0016's sealed null",
+      "old literal == recomputed first-fold block == 0018's and 0017's sealed null",
+      "every known number == the artifact's readings",
+      "clause quoted as 3402 of 38452, the mixture threshold not quoted as the clause",
+      "scratch copy of the 0019 reader (output redirected to the scratchpad) reads OOB_TRANSFER_FAILS with no validity failure",
+      "no re-read verdict file under artifacts/ before the freeze",
+      "chain verifies, head 0018",
+      "artifact file hashes == the prereg's artifact_identity"
+    ],
+    "result": "PASS at 2026-09-16T04:12:46Z on reader sha256 0ceef3ae73671f00e03becac6e8305617985eef4981e39e6d36a4ad0578b3668 and preregistration file sha256 7bbdb7f7f2c6fd095cf9c5b7717fb31078502d630e940c2f50788d61fe7b0d72 (mutation report 400, all detected)",
+    "script": "tools/prereg_checks/prefreeze_0019.py (committed in the freeze commit); result banked in artifacts/verification/prefreeze_0019.json"
+  },
+  "preregistration": "0019-oob-4096-reread",
+  "publication": {
+    "also": "rewrites every registered live claim (docs/live_claims.json: mutation counts, chain length and head, preregistration counts) from the banked artifacts, the same derivation tools/freshness.py checks; the drafts it applies are written by draft_0019_docs.py from the banked verdict files only",
+    "drafts_sha256_at_freeze": "4359cfb225e90f4e8059be86102be9b9f74d3f3a3c869efe238743f95e4350c9",
+    "refuses_to_finish_if_any_of_these_survives_in_VERDICT_md_or_README_md": [
+      "must reach 5433 of 61409",
+      "it is frozen and running",
+      "In flight \u2014 preregistration 0018"
+    ],
+    "script": "the session's apply_0019_docs.py (scratchpad; not a repository file)",
+    "sha256_at_freeze": "34dbdada6fc5a3c4cf03185628d00739a74243e9e0b081a77f1007e5052ce037"
+  },
+  "reader_derivation": {
+    "diff_line_counts": {
+      "added": 47,
+      "method": "difflib.unified_diff over lines, n=0, headers excluded",
+      "removed_from_0018": 13
+    },
+    "gate": "oob4096 gate: control artifacts built from either reader's literals; 0018's reader must VOID the runner's block (the filed defect); the re-read reader must VOID 0018's literal, VOID a third hash, read OOB_TRANSFER_FAILS one row under the bar, VOID an artifact stamped 0019 (each reader on its own literals, so the stamp is the sole cause), write a VOID with the 0019 stamp on the unexpected-shape path; the re-read reader must equal 0018's reader plus the declared substitutions, a tampered copy must be detected and an off-by-one occurrence count refused; one case ties both literals to the world as banked (the artifact, 0014's null control, 0016's sealed null; 0015's and 0017's sealed nulls and lofo artifacts) and runs tools/pivot/null_block_check.py when the cache is present; two cases exercise that tool on a small cache so it is shown to pass and to fail (13 cases added to 0018's 72: oob4096 85/85; suite 400/400)",
+    "method": "tools/readers/oob4096_reread_verdict.py is generated from the frozen 0018 reader by the declared substitutions only (scope.what_changes_from_0018.declared_substitutions); the generator refuses if any substitution's occurrence count differs from the declared one"
+  },
+  "review_before_freeze": {
+    "findings_adopted": [
+      {
+        "change": "reworded in the reader docstring, the preregistration, the ledger addendum, both logs and the drafts to what the reader reached",
+        "finding": "'every other clause passed' overstates what 0018's reader evaluated (it stops after a fit clause fails)",
+        "severity": "medium"
+      },
+      {
+        "change": "tools/pivot/null_block_check.py committed and run by the pre-freeze check and by a gate case; the pre-freeze check committed as tools/prereg_checks/prefreeze_0019.py with its result banked",
+        "finding": "nothing committed tied the corrected literal to the runner's block; the pre-freeze recomputation lived in the session",
+        "severity": "medium"
+      },
+      {
+        "change": "full suite re-run (400/400), live claims rewritten from the report before the freeze commit",
+        "finding": "the banked mutation report and six live claims disagreed with the coverage claim",
+        "severity": "medium"
+      },
+      {
+        "change": "the committed entries stand; dated addenda appended (append-only ledger); the publication script's sha256 and refusal strings banked here",
+        "finding": "the in-flight correction's span, cause and 'recorded in the same log' were wrong or premature; README's in-flight sentence also mis-scoped the clause; 'right throughout' contradicted the entry above",
+        "severity": "medium"
+      },
+      {
+        "change": "each reader on its own literals in the stamp case; unexpected-shape case with the 0019 stamp added; injectable rebuild with an off-by-one occurrence case added",
+        "finding": "the gate's stamped-0019 case was overdetermined under 0018's reader; the unexpected-shape and NOT RUN paths were not exercised under the re-read reader; the tamper case did not exercise the builder's refusals",
+        "severity": "medium"
+      },
+      {
+        "change": "this block; diff counts written by the pre-freeze check at freeze time",
+        "finding": "the log recorded a review with no findings and diff counts from an earlier reader",
+        "severity": "medium"
+      },
+      {
+        "change": "banked as an operator sample with its time (08:25:23 UTC) in engineering_log_0018 run_record.operator_cpu_sample",
+        "finding": "an unbanked CPU-time figure labelled 'at exit'",
+        "severity": "medium"
+      },
+      {
+        "change": "said beside it in the preregistration, the 0018 log and the drafts",
+        "finding": "'M4 stopped at its iteration cap' without saying 0014's fit of the same recipe did too",
+        "severity": "medium"
+      },
+      {
+        "change": "stop rule extended with the venues and the sentence",
+        "finding": "the preregistration did not commit where and in what words 0018's VOID appears beside 0019's verdict",
+        "severity": "medium"
+      },
+      {
+        "change": "each fixed in the preregistration, the reader prefix, the logs or the ledger addenda; hb_samples.jsonl banked beside the ledger",
+        "finding": "docstring misquoted the runner's null-block lines; said 0018's reader 'printed' counts it banked; headline print line did not say re-read; stop rule 'emitted False unconditionally'; 'at their flag threshold'; artifact commit cited the draft commit; occurrence counts unexplained; why a re-read over a re-run unstated; heartbeat series unbanked; arm misquoted; standing rule unreferenced",
+        "severity": "low"
+      }
+    ],
+    "findings_declined": [
+      {
+        "finding": "add live claims for the evidence page's tiles",
+        "reason": "the page is regenerated from the artifacts by tools/render/evidence_page.py at every publication and read by claimcheck; a registered pattern for a rendered page would be a second copy of the same derivation; noted as a follow-up, not adopted here",
+        "severity": "medium"
+      },
+      {
+        "finding": "commit the publication script into the repository",
+        "reason": "it applies session drafts at scratchpad anchors and is not reusable; its sha256 and refusal strings are banked here instead, and the durable guards (freshness, claimcheck, the gates) run on the published documents",
+        "severity": "medium"
+      }
+    ],
+    "method": "six independent read-only lenses (diagnosis, reader diff, preregistration text, gate, corrections and logs, skeptic) with one refuter per medium or high finding; workflow run wf_1483fa9d-684; synthesis by the operator before the freeze"
+  },
+  "schema": "raise-v1/engineering_log/1",
+  "status": "frozen (chain seq 19) and read on 2026-09-16: OOB_TRANSFER_FAILS, as committed in advance; published",
+  "why": "0018's frozen reader emitted VOID on one wrong sealed literal (the null block hash restated from 0017's fold-based block instead of the pool block the design, the arms and the runner use): five validity clauses failed, all one hash; the reader stops recomputing after a fit clause fails, so its readings, reproduction, null-tolerance and transfer clauses were never reached, and every scope, corpus, extension-corpus, partition, environment and order clause it did evaluate passed; the artifact carries the readings, and 0019's reader evaluates every clause for the first time. 0013's precedent: re-read the same banked artifact under the same clauses with the one literal corrected, disclose every known number, commit to the outcome they give, and never edit a frozen file."
 }

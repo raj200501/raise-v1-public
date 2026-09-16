@@ -108,6 +108,26 @@ def main() -> int:
             f"every key the reader's {nm} compares is one the runner writes"
             + (f" (missing {sorted(set(sealed) - set(shape[blk]))})" if not set(sealed) <= set(shape[blk]) else ""))
     chk(set(r20.ORDER) == set(shape["fits"]), "the reader's arms are the arms the runner banks")
+    # ... and one level deeper, at the VALUES, not only the key sets. The reader demanded an integer fit_info.n_iter
+    # of all eleven arms; sklearn's DummyClassifier and DecisionTreeClassifier produce none, so an honest run voided
+    # on four clauses behind a green gate (0021 pre-freeze review, instrument lens, findings H1 and H3).
+    _int = lambda v: isinstance(v, int) and not isinstance(v, bool)  # noqa: E731
+    _bad = []
+    for _nm in r20.ORDER:
+        _rec = shape["fits"][_nm]; _fam = r20.RECIPES[r20.RECIPE_OF[_nm]]["family"]
+        _inf = _rec.get("fit_info")
+        if not isinstance(_inf, dict):
+            _bad.append(f"{_nm}: fit_info {_inf!r}")
+        elif _fam in ("hgb", "logistic") and not _int(_inf.get("n_iter")):
+            _bad.append(f"{_nm} ({_fam}): no integer n_iter, banked {_inf!r}")
+        elif _fam == "tree" and not (_int(_inf.get("depth")) and _int(_inf.get("n_leaves"))):
+            _bad.append(f"{_nm} ({_fam}): no integer depth/n_leaves, banked {_inf!r}")
+        elif _fam == "dummy" and _inf:
+            _bad.append(f"{_nm} (dummy): banked {_inf!r}, expected {{}}")
+        if not set(r20.ENV) <= set(_rec.get("environment") or {}):
+            _bad.append(f"{_nm}: record environment lacks {sorted(set(r20.ENV) - set(_rec.get('environment') or {}))}")
+    chk(not _bad, "the reader's per-record requirements hold against the runner's own banked values"
+                  + (f" ({'; '.join(_bad[:3])})" if _bad else ""))
     chk("ledger" in shape, "the runner banks a ledger, which the reader requires one completion per arm from")
 
     # (c) the fixture is CURRENT: captured from the runner in the tree, not an older one

@@ -69,7 +69,8 @@ _oobrp = A("pivot", "oob_4096_reread_verdict.json")
 oobr = json.load(open(_oobrp, encoding="utf-8")) if os.path.exists(_oobrp) else None
 # 0020 (real-content fit: the same recipes fitted on real files, read in distribution on held-out chunks of the same
 # files) is rendered only once its artifact and frozen verdict exist.
-_rfp = A("pivot", "realfit_4096.json"); _rfvp = A("pivot", "realfit_4096_verdict.json")
+# 0020 refused at launch and will never write these; 0021 carries the same design and writes the _rerun paths.
+_rfp = A("pivot", "realfit_4096_rerun.json"); _rfvp = A("pivot", "realfit_4096_rerun_verdict.json")
 rfa = json.load(open(_rfp, encoding="utf-8")) if os.path.exists(_rfp) else None
 rfv = json.load(open(_rfvp, encoding="utf-8")) if os.path.exists(_rfvp) else None
 

@@ -203,9 +203,25 @@ def main() -> int:
         cache_carve, cache_off, cache_cs = int(P["carve"]), int(P["chunk_offset"]), int(P["chunk_size"])
         carve_source = "sealed cache identity (sha256 of y and g); the cache carries no build metadata"
     X = npz_memmap(args.cache, "X"); ncols = X.shape[1]
+    # The builder cache's FEATURE array. Every preregistration before 0021 sealed only y and g of this file, so no gate
+    # read a feature byte of it: the split is a function of y, g and the seed, and every block hash is over row
+    # indices. 0021's collision rule is a statement about this array, so the array is hashed directly rather than
+    # guarded by three integers (0021 pre-freeze review, condition lens, finding H2). ~8 s.
+    cache_x_sha = None
+    if (P.get("cache_identity") or {}).get("X_sha256"):
+        cache_x_sha, x_shape, x_dtype = _array_sha(args.cache, "X")
+        if cache_x_sha != P["cache_identity"]["X_sha256"]:
+            print(f"REFUSING: the builder cache's X hashes to {cache_x_sha[:12]}..., not the sealed "
+                  f"{P['cache_identity']['X_sha256'][:12]}...", file=sys.stderr)
+            return 3
+        if list(x_shape) != list(P["cache_identity"].get("X_shape", x_shape)) or x_dtype != P["cache_identity"].get("X_dtype", x_dtype):
+            print(f"REFUSING: the builder cache's X is {x_shape} {x_dtype}, not the sealed shape or dtype", file=sys.stderr)
+            return 3
     corpus = {"carve_bytes": cache_carve, "carve_bytes_source": carve_source, "chunk_size": cache_cs, "chunk_offset": cache_off,
               "chunk_id_min": int(g.min()), "chunk_id_max": int(g.max()), "n_source_chunks": int(np.unique(g).size),
               "cache_y_sha256": cache_y_sha, "cache_g_sha256": cache_g_sha, "n_rows": int(len(y)), "n_features": int(ncols)}
+    if cache_x_sha:
+        corpus["cache_X_sha256"] = cache_x_sha
     print(f"[1] corpus A: {corpus}", flush=True)
 
     # [1b] the sealed extension corpus (0018's): scored, never fitted
@@ -349,6 +365,25 @@ def main() -> int:
     partition["repro_rows_identical_to_a_scored_row"] = _identical_rows_of(X, repro_rows)
     partition["matched_rows_identical_to_a_scored_row"] = _identical_rows_of(X, matched_rows)
     partition["chunk_matched_rows_identical_to_a_scored_row"] = _identical_rows_of(X, chunk_matched_rows)
+
+    def _identical_row_ids(arr, rows):
+        order = np.sort(np.asarray(rows)); out = []
+        for i in range(0, len(order), 20000):
+            blk = np.ascontiguousarray(arr[order[i:i + 20000], :ncols], dtype=np.float32)
+            for j in range(len(blk)):
+                if hashlib.blake2b(blk[j].tobytes(), digest_size=16).digest() in scored_digests:
+                    out.append(int(order[i + j]))
+        return out
+    # The whole pool, not only the blocks: 18 of the 26 colliding pool rows sit beyond the reproduction block's first
+    # 100000 rows, where no block count would see a new one (0021 pre-freeze review, condition lens, finding M3).
+    _pool_ids = _identical_row_ids(X, tr)
+    partition["pool_rows_identical_to_a_scored_row"] = len(_pool_ids)
+    partition["pool_collision_row_sha256"] = _sha(np.sort(np.asarray(_pool_ids, dtype=np.int64)))
+    _repro_set = set(np.asarray(repro_rows).tolist()); _matched_set = set(np.asarray(matched_rows).tolist())
+    partition["repro_collision_row_sha256"] = _sha(np.sort(np.asarray(
+        [r for r in _pool_ids if r in _repro_set], dtype=np.int64)))
+    partition["matched_collision_row_sha256"] = _sha(np.sort(np.asarray(
+        [r for r in _pool_ids if r in _matched_set], dtype=np.int64)))
     partition["row_identity_digest"] = "blake2b-128 of the contiguous float32 feature row, over every scored row"
     print(f"[2] row identity scan: fit {partition['fit_rows_identical_to_a_scored_row']}, repro "
           f"{partition['repro_rows_identical_to_a_scored_row']}, matched {partition['matched_rows_identical_to_a_scored_row']}, "
@@ -362,6 +397,13 @@ def main() -> int:
                            or partition["fit_chunks_shared_with_builder"]):
         print("REFUSING: the fit corpus shares a chunk id or a source chunk with a scored corpus", file=sys.stderr)
         return 3
+    # The four sealed block hashes: the runner must notice a divergent permutation now, not the reader an hour later
+    # (same review, finding 5).
+    if not args.smoke:
+        bad = [k for k, v in (P.get("fit_block_hashes") or {}).items() if partition.get(k) != v]
+        if bad:
+            print(f"REFUSING: the fit blocks {bad} do not hash to the sealed fit_block_hashes", file=sys.stderr)
+            return 3
     # The preregistration says the runner REQUIRES these counts, not merely that it measures them (0020 pre-freeze
     # review, runner lens, finding 4). A leak found here costs ten seconds; found by the reader it costs the whole run.
     #
@@ -382,7 +424,17 @@ def main() -> int:
                   f"scored row; the clause's own corpus must share nothing with anything scored", file=sys.stderr)
             return 3
         exp = _exp_seal
-        if exp is not None:
+        if exp is None:
+            # A preregistration that seals no expectations means 0020's semantics: all four counts must be zero.
+            # Without this branch the shared runner would silently stop enforcing the FROZEN 0020's condition, and
+            # the published statement that 0020 refused at launch would no longer be reproducible from this tree
+            # (0021 pre-freeze review, condition lens, finding H1).
+            if (partition["repro_rows_identical_to_a_scored_row"]
+                    or partition["matched_rows_identical_to_a_scored_row"]
+                    or partition["chunk_matched_rows_identical_to_a_scored_row"]):
+                print("REFUSING: a fit, repro or matched row is byte-identical to a scored row", file=sys.stderr)
+                return 3
+        else:
             got = {"fit_block": partition["fit_rows_identical_to_a_scored_row"],
                    "repro_block": partition["repro_rows_identical_to_a_scored_row"],
                    "matched_block": partition["matched_rows_identical_to_a_scored_row"],
@@ -392,13 +444,20 @@ def main() -> int:
                 print(f"REFUSING: block row-identity counts are not the sealed expectations {bad} "
                       f"(measured, expected)", file=sys.stderr)
                 return 3
-    # The four sealed block hashes: the runner must notice a divergent permutation now, not the reader an hour later
-    # (same review, finding 5).
-    if not args.smoke:
-        bad = [k for k, v in (P.get("fit_block_hashes") or {}).items() if partition.get(k) != v]
-        if bad:
-            print(f"REFUSING: the fit blocks {bad} do not hash to the sealed fit_block_hashes", file=sys.stderr)
-            return 3
+            # ... and by IDENTITY, not merely by count: a tally of 8 passes on any 8 rows.
+            want_sha = P.get("expected_collision_row_sha256") or {}
+            got_sha = {"repro_block": partition["repro_collision_row_sha256"],
+                       "matched_block": partition["matched_collision_row_sha256"],
+                       "pool_block": partition["pool_collision_row_sha256"]}
+            bad_sha = [k for k, v in want_sha.items() if got_sha.get(k) != v]
+            if bad_sha:
+                print(f"REFUSING: the colliding rows of {bad_sha} are not the sealed ones", file=sys.stderr)
+                return 3
+            want_pool = P.get("pool_rows_identical_to_a_scored_row")
+            if want_pool is not None and partition["pool_rows_identical_to_a_scored_row"] != want_pool:
+                print(f"REFUSING: {partition['pool_rows_identical_to_a_scored_row']} pool rows are byte-identical to "
+                      f"a scored row, not the sealed {want_pool}", file=sys.stderr)
+                return 3
     print(f"[2] partition: eval {partition['n_eval_rows']}/{partition['n_eval_chunks']} chunks, pool "
           f"{partition['n_pool_rows']}, repro {partition['repro_rows']}, matched {partition['matched_rows']}, fit "
           f"{partition['fit_rows']}", flush=True)

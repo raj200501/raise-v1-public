@@ -4497,17 +4497,21 @@ def _good_realfit(real_correct=None, acc=None, repro=None, null_acc=None, matche
         n_key, idx_key, sorted_key = r20.ROWS_OF[name]
         m4 = lambda xs: round(sum(xs) / len(xs), 4)  # noqa: E731
         ng = [v[i] for i in range(n_eval) if fam_e[i] != "gutenberg"] + v[n_eval:]
-        rec = dict(shape["fits"][name])      # every field the runner writes, values replaced below
-        rec.update({"id": c["id"], "head": name, "family": c["family"], "params": c.get("params", {}),
-                    "scaled": bool(c.get("scaled", False)), "val": c.get("val"), "seed": r20.SEED,
-                    "params_sha256": r20.RECIPE_SHA256[r20.RECIPE_OF[name]], "stage": r20.STAGE_OF[name],
-                    "n_fit_rows": part[n_key], "fit_rows_sha256": part[idx_key], "fit_rows_sorted_sha256": part[sorted_key],
-                    "environment": dict(r20.ENV, threads=3, nice=10), "interruptions_before_this_fit": 0, "status": "fit",
-                    "top1": m4(v), "top1_non_gutenberg": m4(ng),
-                    "per_family": {f: m4([v[i] for i in range(n_eval) if fam_e[i] == f]) for f in r20.FAMILIES},
-                    "block_refills": [{"probe_ok": True}], "fit_info": {"n_iter": 100}, "fingerprint": fp(name),
-                    "per_example_sha256": hashlib.sha256(bytes(v)).hexdigest()})
-        return rec
+        # fit_info, block_refills and environment are the RUNNER's, taken from the captured record and never
+        # overwritten. Overwriting fit_info with {"n_iter": 100} for all eleven arms handed the reader a value the
+        # runner never writes for the four trivial baselines - which is how a reader that voids an honest run on
+        # four clauses sat behind a green 58/58 gate (0021 pre-freeze review, instrument lens, finding H3). The key
+        # sets are checked both ways by _rf_sub; these three are checked by not being touched.
+        sealed = {"id": c["id"], "head": name, "family": c["family"], "params": c.get("params", {}),
+                  "scaled": bool(c.get("scaled", False)), "val": c.get("val"), "seed": r20.SEED,
+                  "params_sha256": r20.RECIPE_SHA256[r20.RECIPE_OF[name]], "stage": r20.STAGE_OF[name],
+                  "n_fit_rows": part[n_key], "fit_rows_sha256": part[idx_key], "fit_rows_sorted_sha256": part[sorted_key],
+                  "environment": dict(shape["fits"][name]["environment"], threads=3, nice=10),
+                  "interruptions_before_this_fit": 0, "status": "fit",
+                  "top1": m4(v), "top1_non_gutenberg": m4(ng),
+                  "per_family": {f: m4([v[i] for i in range(n_eval) if fam_e[i] == f]) for f in r20.FAMILIES},
+                  "fingerprint": fp(name), "per_example_sha256": hashlib.sha256(bytes(v)).hexdigest()}
+        return _rf_sub(shape["fits"][name], sealed, f"fits.{name}", sealed_may_be_subset=True)
 
     per_example, reads, fits = {}, {}, {}
     for name in r20.ORDER:
@@ -4525,6 +4529,10 @@ def _good_realfit(real_correct=None, acc=None, repro=None, null_acc=None, matche
                  "repro_rows_identical_to_a_scored_row": r20.EXPECTED_COLLISIONS["repro_block"],
                  "chunk_matched_rows_identical_to_a_scored_row": r20.EXPECTED_COLLISIONS["chunk_matched_block"],
                  "expected_rows_identical_to_a_scored_row": dict(r20.EXPECTED_COLLISIONS),
+                 "pool_rows_identical_to_a_scored_row": r20.POOL_ROWS_IDENTICAL,
+                 "pool_collision_row_sha256": r20.EXPECTED_COLLISION_ROW_SHA["pool_block"],
+                 "repro_collision_row_sha256": r20.EXPECTED_COLLISION_ROW_SHA["repro_block"],
+                 "matched_collision_row_sha256": r20.EXPECTED_COLLISION_ROW_SHA["matched_block"],
                  "n_fit_source_chunks": r20.FIT["n_chunks"],
                  "n_ext_source_chunks": r20.EXT["n_chunks"], "null_y_shuffled_sha256": "0" * 64,
                  "null_labels_permuted": True, "null_labels_same_multiset": True,
@@ -4934,6 +4942,34 @@ def _(root):
     return _realfit_void(root, m, expect_clause="matched_block")
 
 
+@case("realfit4096", "the-right-number-of-colliding-rows-but-the-wrong-rows-is-VOID", "fail")
+def _(root):
+    # The bar says "the collisions are the measured ones". A tally of 8 passes on any 8 rows; the sealed row-identity
+    # hash does not (0021 pre-freeze review, condition lens, finding M2).
+    def m(a, s):
+        a["partition"]["repro_collision_row_sha256"] = "0" * 64
+    return _realfit_void(root, m, expect_clause="colliding rows of the repro_block")
+
+
+@case("realfit4096", "a-new-colliding-row-beyond-the-repro-block-is-VOID", "fail")
+def _(root):
+    # 18 of the 26 colliding pool rows sit past the reproduction block's first 100000 rows, where no block count
+    # would see a new one. The pool-wide count and hash close that (finding M3).
+    r20 = _rf_reader()
+
+    def m(a, s):
+        a["partition"]["pool_rows_identical_to_a_scored_row"] = r20.POOL_ROWS_IDENTICAL + 1
+    return _realfit_void(root, m, expect_clause="pool rows are byte-identical")
+
+
+@case("realfit4096", "a-builder-cache-feature-hash-that-is-not-the-sealed-one-is-VOID", "fail")
+def _(root):
+    # The 5.76 GB array nothing hashed before 0021, and the array the collision rule is a statement about (finding H2).
+    def m(a, s):
+        a["corpus"]["cache_X_sha256"] = "f" * 64
+    return _realfit_void(root, m, expect_clause="cache_X_sha256")
+
+
 @case("realfit4096", "a-chunk-matched-block-collision-is-VOID", "fail")
 def _(root):
     def m(a, s):
@@ -5056,6 +5092,53 @@ def _(root):
     if rc != 0 and "verdict=REAL_FIT_FAILS" not in out:
         return 0, out + " !! the floor was not the maximum over the four trivial arms"
     return rc, out
+
+
+@case("realfit4096", "the-readers-record-requirements-hold-against-the-runners-own-banked-values", "pass")
+def _(root):
+    # Key sets are not enough. The reader demanded an integer fit_info.n_iter from all eleven arms; the runner banks
+    # {} for the two dummy baselines and {depth, n_leaves} for the two tree baselines, so an honest run voided on
+    # four clauses while the gate stayed green - because the control overwrote fit_info with {"n_iter": 100}. This
+    # case checks the reader's per-record requirements against the FIXTURE's own values (0021 pre-freeze review,
+    # instrument lens, finding H3).
+    r20 = _rf_reader()
+    shape = json.load(open(_RF_SHAPE, encoding="utf-8"))["artifact"]
+    problems = []
+    is_int = lambda v: isinstance(v, int) and not isinstance(v, bool)  # noqa: E731
+    for nm in r20.ORDER:
+        rec = shape["fits"].get(nm)
+        if not isinstance(rec, dict):
+            problems.append(f"{nm}: the runner banked no record"); continue
+        fam = r20.RECIPES[r20.RECIPE_OF[nm]]["family"]
+        info = rec.get("fit_info")
+        if not isinstance(info, dict):
+            problems.append(f"{nm}: fit_info is {info!r}")
+        elif fam in ("hgb", "logistic"):
+            if not is_int(info.get("n_iter")):
+                problems.append(f"{nm} ({fam}): the reader wants an integer n_iter, the runner banked {info!r}")
+        elif fam == "tree":
+            if not (is_int(info.get("depth")) and is_int(info.get("n_leaves"))):
+                problems.append(f"{nm} ({fam}): the reader wants integer depth and n_leaves, the runner banked {info!r}")
+        elif fam == "dummy" and info:
+            problems.append(f"{nm} (dummy): the runner banked {info!r}; sklearn's DummyClassifier exposes nothing")
+        if not isinstance(rec.get("block_refills"), list):
+            problems.append(f"{nm}: block_refills is {rec.get('block_refills')!r}")
+        missing = sorted({"threads", "nice", "sklearn", "numpy", "python"} - set(rec.get("environment") or {}))
+        if missing:
+            problems.append(f"{nm}: the runner's record environment lacks {missing}")
+    if problems:
+        return 1, "; ".join(problems[:4])
+    fams = sorted({r20.RECIPES[r20.RECIPE_OF[n]]["family"] for n in r20.ORDER})
+    return 0, (f"the reader's per-record requirements hold against the runner's own banked values for all "
+               f"{len(r20.ORDER)} arms across {len(fams)} estimator families ({', '.join(fams)})")
+
+
+@case("realfit4096", "a-floor-arm-banking-an-iteration-count-it-cannot-have-is-VOID", "fail")
+def _(root):
+    # The converse: a dummy baseline that reports an n_iter is not this run's estimator.
+    def m(a, s):
+        a["fits"]["floor_tree3"]["fit_info"] = {"n_iter": 100}
+    return _realfit_void(root, m, expect_clause="floor_tree3")
 
 
 @case("realfit4096", "the-control-artifact-is-built-from-the-runners-own-output-shape", "pass")

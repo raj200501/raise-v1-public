@@ -14,11 +14,90 @@
     "runner": "tools/pivot/run_realfit.py (shared with 0020, which never ran)"
   },
   "pre_freeze_review": {
-    "status": "pending: two independent read-only lenses (the corrected condition and the corpus fact behind it; whether the frozen reader will read an honest run). Findings and what was adopted or declined are filled in here before the freeze."
+    "findings_adopted": [
+      {
+        "finding": "the reader demands an integer n_iter from four arms whose estimators cannot produce one; four VOID clauses on an honest run",
+        "fix": "the requirement is now what the estimator FAMILY produces - n_iter for hgb and logistic, depth and n_leaves for tree, nothing for dummy - and the preregistration's bar says so in those words",
+        "lens": "instrument",
+        "severity": "high"
+      },
+      {
+        "finding": "at_iteration_cap computes None >= 0 for the same four arms, a TypeError that becomes VOID the moment the first defect is fixed",
+        "fix": "the dict is restricted to arms that have an iteration count; fit_info_by_family is banked beside it",
+        "lens": "instrument",
+        "severity": "high"
+      },
+      {
+        "finding": "the gate's control overwrites fit_info, block_refills and the record environment for all eleven arms, so the control agrees with the reader instead of with the runner",
+        "fix": "records are built with _rf_sub against the captured record and those three fields are never touched; a new case checks the reader's per-record requirements against the FIXTURE's own values across all four estimator families, and a second asserts a dummy baseline reporting an n_iter is VOID",
+        "lens": "instrument",
+        "severity": "high"
+      },
+      {
+        "finding": "the shared runner silently stopped enforcing the FROZEN 0020's condition: a preregistration sealing no expectations got no builder-block check at all, so the published statement that 0020 refused at launch was no longer reproducible from the tree",
+        "fix": "absence of the sealed key now means 0020's semantics; verified by re-running the frozen 0020, which refuses again at the same scan and creates nothing",
+        "lens": "condition",
+        "severity": "high"
+      },
+      {
+        "finding": "the builder cache's 5.76 GB feature array was never hashed by any preregistration - only y and g - and 0021's collision rule was the only thing guarding it, with three integers",
+        "fix": "cache_identity seals X_sha256 a28a2d40..., its shape and dtype; the runner hashes and checks it at launch (about 8 s) and banks it, the reader compares it, and a gate case mutates it",
+        "lens": "condition",
+        "severity": "high"
+      },
+      {
+        "finding": "the bar says 'the collisions are the measured ones' but sealed only how many; a tally of 8 passes on any 8 rows",
+        "fix": "the row indices are sealed by sha256 for the repro block, the matched block and the whole pool, and the reader checks all three",
+        "lens": "condition",
+        "severity": "medium"
+      },
+      {
+        "finding": "the three block counts see only the first 100000 pool rows; 18 of the 26 colliding pool rows sit beyond that and no count would notice a new one there",
+        "fix": "the runner scans the whole 800000-row pool and seals pool_rows_identical_to_a_scored_row = 26 with its row-index digest; two gate cases cover it",
+        "lens": "condition",
+        "severity": "medium"
+      },
+      {
+        "finding": "the sealed block-hash check ran AFTER the collision check, so a divergent permutation would report a confusing collision mismatch rather than naming the block",
+        "fix": "reordered",
+        "lens": "condition",
+        "severity": "medium"
+      },
+      {
+        "finding": "ten of the eleven preregistered readings named 0020's verdict path, which does not exist and never will; tools/render/evidence_page.py was gated on the same two 0020 paths, so an honest 0021 run would have published nothing",
+        "fix": "both repointed at the _rerun paths",
+        "lens": "instrument",
+        "severity": "medium"
+      },
+      {
+        "finding": "bar.complete_one_scoring_per_fit said 'six named records', a leftover from 0020's pre-floor design; there are eleven",
+        "fix": "the count is derived from the sealed order rather than typed",
+        "lens": "instrument",
+        "severity": "medium"
+      },
+      {
+        "finding": "the banked diagnosis artifact said the 32 straddling row pairs were 'spread over 6 of the 9 chunk pairs'; its own table has five nonzero entries. It also divided a PAIR count by a ROW denominator, and said 'the evaluation/pool boundary' where it meant the full non-eval side rather than the capped 800000-row pool",
+        "fix": "all three corrected in artifacts/pivot/builder_duplicate_chunks.json, with a corrections_to_this_artifact block recording what was wrong; the distinct-row count is now measured (125) rather than inferred, and the pool-wide count (26) is measured and banked with its row indices",
+        "lens": "condition",
+        "severity": "medium"
+      }
+    ],
+    "findings_declined": [
+      {
+        "finding": "bind the artifact's top-level ext_per_family and ext_correct tables to the per-example vectors (instrument lens, L1)",
+        "why": "adopted in substance but not by that mechanism: the verdict already republishes its own recomputation of every per-family reading from the vectors, and the reader voids if a banked per-arm reading disagrees with its recomputation. The uncovered case is a fabricated top-level convenience table in the artifact beside a correct verdict. It is worth closing and is filed as an open follow-up rather than done now, because it touches the readings comparison that four frozen readers share."
+      }
+    ],
+    "how": "Two independent read-only reviewers, one lens each - the corrected validity condition and the corpus fact behind it, and whether the frozen reader would read an honest run. Both recomputed from the data rather than reading numbers off artifacts. Neither could write to the repository.",
+    "status": "complete; findings applied before the freeze",
+    "the_finding_that_justified_the_review": "A THIRD distinct defect that would have voided an honest run, and a third distinct cause. The reader required an integer fit_info.n_iter from all eleven arms. sklearn's DummyClassifier exposes no n_iter_ and no get_depth, and DecisionTreeClassifier exposes get_depth/get_n_leaves but no n_iter_, so run_recipe_search.fit_info() banks {} for the two dummy baselines and {depth, n_leaves} for the two tree baselines - never an iteration count. Four VOID clauses, on the four arms the run's own floor clause depends on. The reviewer proved it by building a faithful real-run artifact from the RUNNER's code and running the frozen reader on it, and proved that fixing two lines was the entire distance between VOID and a verdict. With the n_iter clause alone removed the reader then crashed: at_iteration_cap computed None >= 0 for the same four arms.",
+    "the_reproduction_control_quantified": "Asked for a number rather than an argument: the 8 duplicated rows in the 100000-row reproduction block each have exactly one twin among the 260000 evaluation rows, so the largest possible memorisation effect on the banked 0.1965 is 8/260000 = 3.0769e-5, which is 0.62 percent of the 0.005 reproduction tolerance and cannot move the fourth decimal place. The clause's own 38452 rows have zero exposure: no extension row is byte-identical to any of the 1300000 builder rows.",
+    "what_the_reviewers_checked_and_found_correct": "Independently recomputed and confirmed: the 9 duplicate chunk pairs and their per-pair row counts summing to 64; the 44496/48016 pair at 26 of 26; all four expected collision counts (0, 8, 2, 0) against the blocks 0021 seals; the row counts 100000/26346/20817/26346 and chunk counts 37108/19413/1029/1029; all seven sealed index hashes and all eight corpus array hashes; the cache X hash; every reader literal - CORPUS, EXT, FIT, all 32 PARTITION keys, both chunk layouts expanding exactly to their arrays, PROTOCOL and RECIPES and all seven recipe hashes; all eleven fingerprints agreeing between the runner's call and the reader's recomputation; STAGE_OF and ROWS_OF against all four dispatch sites; that every top-level, scores-file and record key the reader reads is one the runner writes; that the collision clause voids in BOTH directions on all four blocks and on a deleted expectations block; that the floor is recomputed from the vectors and is the MAXIMUM over the four arms, that clause_per_family uses each family's own floor, and that a model beating chance + 0.05 but not floor + 0.05 reads REAL_FIT_FAILS; and that equality is not brittle, because nothing is recomputed between the disk and the digest - two passes at different thread counts gave identical hashes and counts.",
+    "why_the_gate_could_not_see_it": "The same failure as 0020, one nesting level lower. The 0020 review made the gate's control substitute values into the runner's captured blocks for corpus, ext_corpus, fit_corpus and partition - but the FIT RECORDS were still overwritten wholesale, and record() replaced fit_info with {'n_iter': 100} for every arm, handing the reader exactly the value it wanted and the runner never writes. block_refills and the record environment were overwritten the same way. The provenance case was symmetric and recursive over KEY SETS and never compared a value or descended into a record's fit_info, so 58/58 stayed green."
   },
   "preregistration": "0021-realfit-4096-rerun",
   "schema": "raise-v1/engineering_log/1",
-  "status": "drafted, gated, pre-freeze-checked; two independent reviewers reading before the freeze",
+  "status": "reviewed, gated at 63/63, pre-freeze-checked PASS; ready to freeze as chain entry 21",
   "what_changed_from_0020": {
     "everything_else": "Unchanged: the eleven arms, the three recipes verbatim from 0014/0018, the four trivial-baseline floor arms, the two builder-matched arms, the seed, the corpora and their hashes, the floor-plus-margin clause, the per-family second clause, the scoring set, the reproduction and null controls, and every disclosure the 0020 review added.",
     "measured_in_advance": "The four counts were measured after 0020's refusal and before 0021 was written, from the same data with the same digest, and are banked in artifacts/pivot/builder_duplicate_chunks.json. The pre-freeze check recomputes them from the data rather than comparing the preregistration against itself.",

@@ -1,6 +1,9 @@
 {
   "cache": "data/pivot/full_c4096.npz",
+  "cache_X_sha256": "a28a2d403d40c64405fe15747399f1317fd984155702797590c58fb0cef0f8ea",
+  "corrections_to_this_artifact": "Filed 2026-09-16 after the 0021 pre-freeze review. As first banked this file said '32 of those row pairs straddle the evaluation/pool boundary, spread over 6 of the 9 chunk pairs'. Its own table has FIVE nonzero straddle entries (2+1+2+1+26 = 32), not six; the six was miscounted by eye rather than from the table. It also said '64 identical row pairs out of 1300000 rows, 0.00492 percent', which divides a PAIR count by a ROW denominator; 125 distinct rows are involved, 0.00962 percent. And 'the evaluation/pool boundary' meant the full non-eval side, not the capped 800000-row pool the runner draws from: against the pool the operationally relevant count is 26, which is now measured and banked here with its row indices. The 9 pairs, the 64 matched pairs, the 26-of-26 pair and the 8/2 block counts were all correct and were reproduced independently by the reviewer.",
   "digest": "blake2b-128 of the contiguous float32 feature row",
+  "distinct_rows_in_a_cross_chunk_duplicate": 125,
   "duplicate_chunk_pairs": [
     {
       "a_side": "pool",
@@ -111,15 +114,46 @@
       "rows_in_chunk_b": 26
     }
   ],
-  "finding": "The corpus builder emitted 9 pairs of source chunks whose carved feature rows collide - 64 identical row pairs out of 1300000 rows, 0.00492 percent. The grouped split keeps each CHUNK ID wholly on one side, but it cannot know that two different chunk ids carry the same content, so 32 of those row pairs straddle the evaluation/pool boundary, spread over 6 of the 9 chunk pairs. Only ONE pair (44496 on the evaluation side, 48016 on the pool side, 26 of 26 rows identical) lands inside the blocks 0020 fits on, and it produces every collision the runner refused on: 8 rows of the 100000-row reproduction block and 2 of the 26346-row builder-matched block. NONE of the 9 pairs involves the extension corpus, and 0020's real-content fit corpus has zero rows byte-identical to any scored row, so the clause's own disjointness is intact. What the refusal caught is a property of the BUILDER's corpus, inherited unmeasured by every preregistration that has fitted on this pool and scored on this evaluation set since 0003 - including the 0.1965 reproduction rung 0020 uses as its control.",
+  "finding": "The corpus builder emitted 9 pairs of source chunks whose carved feature rows collide: 64 matched row pairs over 125 distinct rows, 0.00962 percent of the 1300000 rows. The grouped split keeps each CHUNK ID wholly on one side, but it cannot know that two different chunk ids carry the same content, so 32 of those row pairs straddle the evaluation/non-eval boundary, over 5 of the 9 chunk pairs. Against the CAPPED 800000-row pool the runner actually draws from, 26 pool rows are byte-identical to a scored row, from 5 source chunks (14000, 17376, 21328, 42688, 48016). Only the rows of chunk 48016 land inside the blocks 0020 fit on, giving 8 rows of the 100000-row reproduction block and 2 of the 26346-row builder-matched block; the other 18 sit beyond position 100000 in the pool order. NONE of the 9 pairs involves the extension corpus, and 0020's real-content fit corpus has zero rows byte-identical to any scored row - indeed zero identical to ANY of the 1300000 builder rows - so the clause's own disjointness is intact. What the refusal caught is a property of the BUILDER's corpus, inherited unmeasured by every preregistration that has fitted on this pool and scored on this evaluation set since 0003 - including the 0.1965 reproduction rung 0020 uses as its control.",
   "measured_seconds": 12.6,
+  "n_chunk_pairs_straddling_the_split": 5,
   "n_chunks": 50000,
   "n_duplicate_chunk_pairs": 9,
   "n_features": 1108,
   "n_rows": 1300000,
+  "pool_row_indices_identical_to_a_scored_row": [
+    364023,
+    451572,
+    554530,
+    1109700,
+    1248416,
+    1248417,
+    1248418,
+    1248419,
+    1248421,
+    1248422,
+    1248423,
+    1248424,
+    1248425,
+    1248426,
+    1248428,
+    1248430,
+    1248431,
+    1248432,
+    1248433,
+    1248434,
+    1248435,
+    1248436,
+    1248437,
+    1248438,
+    1248439,
+    1248440
+  ],
+  "pool_row_indices_sha256": "27f36314b2e6e1b109a544d0355a3dba9666ea470ab6f5c6ce200178db2e0ed8",
+  "pool_rows_identical_to_a_scored_row": 26,
   "schema": "raise-v1/builder_duplicate_chunks/1",
   "split": "tools/pivot/run_carve.py grouped_split(y, g, 20260825, 0.2, 800000), 0003's, which the record has used since",
   "total_duplicated_rows": 64,
-  "total_row_pairs_straddling_the_split": 32,
+  "total_row_pairs_straddling_the_split_full_non_eval_side": 32,
   "why": "Preregistration 0020's runner refused (exit 3) because its preregistered condition requires that no repro-block or matched-block row be byte-identical to a scored row, and 8 repro rows and 2 matched rows are. This artifact measures the cause across the whole builder cache, once, so the refusal can be read rather than guessed at."
 }

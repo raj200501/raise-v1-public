@@ -68,7 +68,8 @@ CORPUS = {'carve_bytes': 4096,
  'cache_y_sha256': '2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093',
  'cache_g_sha256': 'eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9',
  'n_rows': 1300000,
- 'n_features': 1108}
+ 'n_features': 1108,
+ 'cache_X_sha256': 'a28a2d403d40c64405fe15747399f1317fd984155702797590c58fb0cef0f8ea'}
 
 PROTOCOL = {'seed': 20260825,
  'eval_frac': 0.2,
@@ -79,7 +80,17 @@ PROTOCOL = {'seed': 20260825,
  'chunk_offset': 0,
  'chunk_size': 32768,
  'cache_identity': {'y_sha256': '2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093',
-                    'g_sha256': 'eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9'},
+                    'g_sha256': 'eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9',
+                    'X_sha256': 'a28a2d403d40c64405fe15747399f1317fd984155702797590c58fb0cef0f8ea',
+                    'X_shape': [1300000, 1108],
+                    'X_dtype': 'float32',
+                    'X_note': "the builder cache's FEATURE array, hashed for the first time here. Every "
+                              'earlier preregistration sealed only y and g of this file, so no gate read a '
+                              'single feature byte of it: the split is a function of y, g and the seed, and '
+                              "every block hash is over row indices. 0021's collision rule is about that "
+                              'array, so the array is now sealed directly and the rule corroborates rather '
+                              'than carries it (0021 pre-freeze review, condition lens, finding H2). Costs '
+                              'about 8 seconds at launch.'},
  'families': ['gutenberg', 'base64', 'binary', 'code', 'csv', 'json', 'log', 'mixed'],
  'ext_families': ['c_src', 'hexdump', 'pe_bin', 'py_src', 'rfc_txt', 'rst_doc', 'sql', 'xml'],
  'fit_families': ['c_src', 'pe_bin', 'py_src', 'rfc_txt', 'rst_doc'],
@@ -271,6 +282,21 @@ PROTOCOL = {'seed': 20260825,
                                              'repro_block': 8,
                                              'matched_block': 2,
                                              'chunk_matched_block': 0},
+ 'expected_collision_rows': {'fit_block': [],
+                             'repro_block': [1248421,
+                                             1248425,
+                                             1248430,
+                                             1248431,
+                                             1248433,
+                                             1248437,
+                                             1248438,
+                                             1248440],
+                             'matched_block': [1248433, 1248438],
+                             'chunk_matched_block': []},
+ 'expected_collision_row_sha256': {'repro_block': '18a9cd445d34209786e55ae4813d7394b3937fe05f7f55f4ce74d18142f3b142',
+                                   'matched_block': '8d29b553f3ea69402080944614c384f7c425ceceaa92313ce6bce059d7b56b59',
+                                   'pool_block': '27f36314b2e6e1b109a544d0355a3dba9666ea470ab6f5c6ce200178db2e0ed8'},
+ 'pool_rows_identical_to_a_scored_row': 26,
  'expected_collisions_source': "artifacts/pivot/builder_duplicate_chunks.json, banked 2026-09-16 after 0020's "
                                'refusal; the 9 duplicate chunk pairs and the 32 straddling row pairs are named '
                                'there',
@@ -282,7 +308,7 @@ PROTOCOL = {'seed': 20260825,
              'synthetic': ['hexdump', 'sql', 'xml'],
              'structured_text': ['c_src', 'py_src', 'rfc_txt', 'rst_doc', 'sql', 'xml'],
              'high_entropy': ['hexdump', 'pe_bin']}}
-PROTOCOL_SHA256 = "3434322a7446a9f03026cffa3bece2f39b2c02141555045c407101c96231d880"
+PROTOCOL_SHA256 = "39d7655b0ace68e5f35f3f0cccdac1d0d3af7b824d9f11c9bef132a5dbf99d03"
 
 RECIPES = {'incumbent': {'family': 'hgb',
                'id': 'M1',
@@ -515,6 +541,10 @@ RESULT_KEYS = ['bar_applied',
  'validity_failed_clauses',
  'verdict']
 EXPECTED_COLLISIONS = {'fit_block': 0, 'repro_block': 8, 'matched_block': 2, 'chunk_matched_block': 0}
+EXPECTED_COLLISION_ROW_SHA = {'repro_block': '18a9cd445d34209786e55ae4813d7394b3937fe05f7f55f4ce74d18142f3b142',
+ 'matched_block': '8d29b553f3ea69402080944614c384f7c425ceceaa92313ce6bce059d7b56b59',
+ 'pool_block': '27f36314b2e6e1b109a544d0355a3dba9666ea470ab6f5c6ce200178db2e0ed8'}
+POOL_ROWS_IDENTICAL = 26
 FLOOR_ROLES = ["floor_majority", "floor_stratified", "floor_feat1", "floor_tree3"]
 BLOCK_SOURCE_CHUNKS = {'repro_block': 37108, 'matched_block': 19413, 'chunk_matched_block': 1029, 'fit_block': 1029}
 VAL_CONTAM = {'fit_block': 1.0, 'matched_block': 0.438, 'chunk_matched_block': 1.0, 'repro_block': 0.8977}
@@ -688,6 +718,18 @@ def read(d) -> int:
                         f"preregistered {want} measured from the builder's nine duplicate chunk pairs")
     if part.get("expected_rows_identical_to_a_scored_row") != EXPECTED_COLLISIONS:
         void.append("leakage: the artifact does not carry the sealed expected collision counts")
+    # BY IDENTITY, not merely by count: a tally of 8 passes on any 8 rows, and the block counts see only the first
+    # 100000 pool rows, where 18 of the 26 colliding pool rows do not sit.
+    for _k, _want in EXPECTED_COLLISION_ROW_SHA.items():
+        _got = part.get({"repro_block": "repro_collision_row_sha256",
+                         "matched_block": "matched_collision_row_sha256",
+                         "pool_block": "pool_collision_row_sha256"}[_k])
+        if _got != _want:
+            void.append(f"leakage: the colliding rows of the {_k} hash to {_got!r}, not the sealed {_want!r} - the "
+                        f"count may match while the rows do not")
+    if part.get("pool_rows_identical_to_a_scored_row") != POOL_ROWS_IDENTICAL:
+        void.append(f"leakage: {part.get('pool_rows_identical_to_a_scored_row')!r} pool rows are byte-identical to a "
+                    f"scored row, not the sealed {POOL_ROWS_IDENTICAL}")
     if part.get("null_labels_permuted") is not True or part.get("null_labels_same_multiset") is not True \
             or not isinstance(part.get("null_y_shuffled_sha256"), str):
         void.append("null control: the null labels are not banked as a permutation of the fit corpus's labels")
@@ -802,9 +844,20 @@ def read(d) -> int:
             void.append(f"fit: {name} stage {rec.get('stage')!r} is not {STAGE_OF[name]!r}")
         if any(not rf.get("probe_ok") for rf in (rec.get("block_refills") or [])):
             void.append(f"fit: {name} banked a failed block probe check")
-        n_iter = (rec.get("fit_info") or {}).get("n_iter")
-        if not isinstance(n_iter, int) or isinstance(n_iter, bool):
-            void.append(f"fit: {name} has no integer iteration count")
+        # What run_recipe_search.fit_info() banks depends on the estimator family: HGB and logistic expose n_iter_,
+        # DecisionTreeClassifier exposes get_depth/get_n_leaves, and DummyClassifier exposes neither, so the four
+        # trivial-baseline arms bank {} or {depth, n_leaves} and NEVER an iteration count. Demanding n_iter of all
+        # eleven arms voided an honest run on four clauses (0021 pre-freeze review, instrument lens, finding H1).
+        info = rec.get("fit_info")
+        _int = lambda v: isinstance(v, int) and not isinstance(v, bool)  # noqa: E731
+        if not isinstance(info, dict):
+            void.append(f"fit: {name} banked no fit_info")
+        elif cand["family"] in ("hgb", "logistic"):
+            if not _int(info.get("n_iter")):
+                void.append(f"fit: {name} has no integer iteration count")
+        elif cand["family"] == "tree":
+            if not (_int(info.get("depth")) and _int(info.get("n_leaves"))):
+                void.append(f"fit: {name} has no integer depth and leaf count")
         renv = rec.get("environment") or {}
         for k, v in ENV_FULL.items():
             if renv.get(k) != v:
@@ -970,7 +1023,13 @@ def read(d) -> int:
                  "real_model_above_chance_on_builder_eval": rm["builder_eval_top1"] > CHANCE + NULL_TOLERANCE,
                  "reproduction_drift": round(rec_reads["repro"]["builder_eval_top1"] - REPRO_REFERENCE, 6),
                  "n_iter_by_name": {n: (fits[n].get("fit_info") or {}).get("n_iter") for n in ORDER},
-                 "at_iteration_cap": {n: (fits[n].get("fit_info") or {}).get("n_iter") >= MAX_ITER[RECIPE_OF[n]] for n in ORDER}}
+                 # only the arms that HAVE an iteration count; None >= 0 is a TypeError, and the four trivial
+                 # baselines have no iteration concept at all (same review, finding H2)
+                 "at_iteration_cap": {n: ((fits[n].get("fit_info") or {}).get("n_iter") >= MAX_ITER[RECIPE_OF[n]])
+                                      for n in ORDER
+                                      if isinstance((fits[n].get("fit_info") or {}).get("n_iter"), int)
+                                      and not isinstance((fits[n].get("fit_info") or {}).get("n_iter"), bool)},
+                 "fit_info_by_family": {n: RECIPES[RECIPE_OF[n]]["family"] for n in ORDER}}
 
     if void:
         verdict, meaning = "VOID", ("A validity or control clause fails, or the artifact is incomplete. This run says nothing "
