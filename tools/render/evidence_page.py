@@ -67,6 +67,11 @@ oobv = json.load(open(_oobvp, encoding="utf-8")) if os.path.exists(_oobvp) else 
 # 0019 re-reads 0018's artifact under a reader with one sealed literal corrected (the null block hash); its verdict is the reading.
 _oobrp = A("pivot", "oob_4096_reread_verdict.json")
 oobr = json.load(open(_oobrp, encoding="utf-8")) if os.path.exists(_oobrp) else None
+# 0020 (real-content fit: the same recipes fitted on real files, read in distribution on held-out chunks of the same
+# files) is rendered only once its artifact and frozen verdict exist.
+_rfp = A("pivot", "realfit_4096.json"); _rfvp = A("pivot", "realfit_4096_verdict.json")
+rfa = json.load(open(_rfp, encoding="utf-8")) if os.path.exists(_rfp) else None
+rfv = json.load(open(_rfvp, encoding="utf-8")) if os.path.exists(_rfvp) else None
 
 git_head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO,
                           capture_output=True, text=True).stdout.strip()
@@ -220,7 +225,17 @@ chips = "".join([
             f'against {oobr["bar_applied"]["min_correct_real"]} needed (chance + 0.05); incumbent {oobr["ext_real_top1"]["incumbent"]}, '
             f'standardised logistic {oobr["ext_real_top1"]["logistic_l3"]} on the same rows; eight-family mixture {oobr["ext_top1_model"]} (a flag)')
            if oobr["verdict"] != "VOID" and oob and oob.get("complete")
-           else f'VOID: {"; ".join(oobr["validity_failed_clauses"])[:140]}')] if oobr else []))
+           else f'VOID: {"; ".join(oobr["validity_failed_clauses"])[:140]}')] if oobr else [])
+ + ([chip(rfv["verdict"], {"REAL_FIT_CLEARS": "pass", "REAL_FIT_FAILS": "fail", "VOID": "inc"}[rfv["verdict"]], "0020",
+           (f'the same recipes fitted on {rfv["bar_applied"]["fit_rows"]} rows of REAL content - the chunks of 0018\'s five '
+            f'pinned real files its sealed evaluation corpus does not use - and read in distribution on those sealed rows: '
+            f'{rfv["ext_real_correct_model"]} of {rfv["bar_applied"]["n_real_rows"]} correct ({rfv["ext_real_top1_model"]}) '
+            f'against {rfv["bar_applied"]["min_correct_real"]} needed (chance + 0.05); the same recipe on the same number of '
+            f'the builder\'s rows reads {rfv["ext_real_top1"]["builder_matched"]}, and 0018\'s 800000-row builder fit read '
+            f'{rfv["bar_applied"]["flags"]["oob_0018_builder_fit_real_top1"]}. Not a transfer reading: the fit and scored '
+            f'chunks come from the same files')
+           if rfv["verdict"] != "VOID" and rfa and rfa.get("complete")
+           else f'VOID: {"; ".join(rfv["validity_failed_clauses"])[:140]}')] if rfv else []))
 
 fam2048_table = ""
 _pf2048 = A("pivot", "per_family_curves_2048.json")
@@ -395,6 +410,36 @@ if oob and _oobread and oob.get("complete"):
                      f'<table><thead><tr><th>extension family</th><th>rows</th><th>searched model</th><th>standardised logistic</th>'
                      f'<th>incumbent</th><th>ceiling (distinct fragments)</th></tr></thead><tbody>{_rows}</tbody></table>')
 
+boundary_0020 = ""
+if rfa and rfv and rfv["verdict"] != "VOID" and rfa.get("complete"):
+    _ba = rfv["bar_applied"]; _fl = _ba.get("flags") or {}; _pf = rfv["ext_per_family"]; _rt = rfv["ext_real_top1"]
+    _frows = rfv["fit_rows_per_family"]; _erows = rfv["ext_rows_per_family"]
+    _word = "does carry" if rfv["verdict"] == "REAL_FIT_CLEARS" else "does not carry, to this recipe at this budget,"
+    _rows = "".join(f'<tr><td class="mono">{f}</td><td class="mono">{_frows.get(f, 0)}</td><td class="mono">{_erows[f]}</td>'
+                    f'<td class="mono">{_pf["real_model"][f]}</td><td class="mono">{_pf["builder_matched"][f]}</td>'
+                    f'<td class="mono">{_pf["real_incumbent"][f]}</td><td class="mono">{_pf["real_logistic"][f]}</td></tr>'
+                    for f in sorted(_frows, key=lambda k: -_pf["real_model"][k]))
+    boundary_0020 = (f'<p><strong>Fitted on real files, the signal {_word} at a 4096-byte carve: '
+                     f'<span class="mono">{rfv["verdict"]}</span></strong> (preregistration 0020, chain entry 20, read by its '
+                     f'own frozen reader, which recounts every reading from the banked score vectors). The three recipes were '
+                     f'fitted on {_ba["fit_rows"]} rows of real content — the chunks of 0018\'s five pinned real files that its '
+                     f'sealed evaluation corpus does not use, disjoint by index, by chunk id and by source-chunk hash — and '
+                     f'scored once on 0018\'s scoring set. The headline recipe identifies the encoder on '
+                     f'{rfv["ext_real_correct_model"]} of {_ba["n_real_rows"]} real-family rows ({rfv["ext_real_top1_model"]}) '
+                     f'against {_ba["min_correct_real"]} needed for chance + {_ba["bar"]}; the same recipe fitted on the same '
+                     f'number of the builder\'s rows reads {_rt["builder_matched"]} on those rows, and 0018\'s builder fit at '
+                     f'800000 rows read {_fl["oob_0018_builder_fit_real_top1"]}. 0003\'s incumbent fitted on the real rows reads '
+                     f'{_rt["real_incumbent"]} and 0014\'s standardised logistic {_rt["real_logistic"]}. The reproduction rung '
+                     f'reads {rfv["reproduction_top1"]} against 0003\'s banked {rfv["reproduction_reference"]}, and the null '
+                     f'control {rfv["shuffled_label_accuracy_ext"]}. <strong>This is an in-distribution reading on real content, '
+                     f'not a transfer reading</strong>: the fit and the scored chunks are cut from the same five files and share '
+                     f'no byte, so it says whether the signal is reachable when the model has seen content of that kind — 0018 '
+                     f'asked whether it is reachable on content never seen, and that failed. Nothing here revises 0003, 0014, '
+                     f'0015, 0016, 0017, 0018 or 0019, and nothing here establishes a buyer.</p>'
+                     f'<table><thead><tr><th>family</th><th>fit rows</th><th>scored rows</th><th>real-fitted model</th>'
+                     f'<th>builder-fitted, same budget</th><th>real-fitted incumbent</th><th>real-fitted logistic</th></tr>'
+                     f'</thead><tbody>{_rows}</tbody></table>')
+
 # ---------------------------------------------------------------- seed panel
 if seeds:
     slopes = [curve["slope"]] + [d["slope"] for _, d in seeds]
@@ -546,7 +591,7 @@ protocol returns <span class="mono">CARVE_FAILS</span>: within-size top-1
 (margin below the 0.05 bar), and a 4096-trained model transfers at {carve["transfer_top1"]} —
 chance. The byte-identity ceiling barely moves across carve sizes, so this is a modelling failure
 and is reported as one. Two learned byte-sequence attempts (preregs 0009, 0010) did not rescue it.</p>
-{boundary_2048}{boundary_0012}{boundary_0014}{boundary_0015}{boundary_0016}{boundary_0017}{boundary_0018}{fam2048_table}
+{boundary_2048}{boundary_0012}{boundary_0014}{boundary_0015}{boundary_0016}{boundary_0017}{boundary_0018}{boundary_0020}{fam2048_table}
 </div>
 <div class="panel good">
 <p><strong>And the leak correction ran against us.</strong> When an adversarial audit found source
