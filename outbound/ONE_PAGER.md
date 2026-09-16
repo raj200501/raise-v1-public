@@ -112,7 +112,11 @@ doubling against a 0.005 bar (preregistration 0016, `DIVERSITY_HELPS`), while se
 more of a single family moves it by **-0.002**.
 The linear rule does not lead under transfer by the preregistered margin: 0014's standardised logistic on the same eight folds reaches **0.0951** on unseen
 families against the incumbent's **0.0859**, 2393 more correct rows of 260000 against a 5200-row bar
-(preregistration 0017, `L3_LEAD_BELOW_BAR`). Every number on this page is a statement about
+(preregistration 0017, `L3_LEAD_BELOW_BAR`).
+On real content outside the builder the headline recipe falls short: on 38452 rows from five pinned real-file
+families the builder never produced (preregistration 0018, read under 0019 after 0018's own reader voided the run on a wrong sealed
+literal), 0014's searched model reads **0.0637** against chance + 0.05 = 0.088462 (2450 rows against 3402 needed), `OOB_TRANSFER_FAILS`;
+the standardised logistic (0.0716) and the incumbent (0.0634) fall short too, and no real family sits at the bar. Every number on this page is a statement about
 these eight content families.
 The window boundary of
 this recipe lies in (2048, 4096]; every number above remains a 4096-byte-window number.
@@ -204,7 +208,7 @@ reported, and neither is quoted as the other.
 
 The verification-coverage map is machine-checked and prints its weakest class first, deliberately.
 
-**14 of 198 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
+**14 of 234 claims are in the weakest class** — they can be neither re-derived nor re-run by anyone,
 including us. Eight are measurements made by subagents inside scratch directories that no longer
 exist, and **that includes measurements the conclusions rest on.** The ninth is worse than
 unverified: it is a figure we published and then failed to reproduce ourselves.

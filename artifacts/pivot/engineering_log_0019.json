@@ -1,7 +1,7 @@
 {
   "schema": "raise-v1/engineering_log/1",
   "preregistration": "0019-oob-4096-reread",
-  "status": "written before the freeze; nothing here is a measurement",
+  "status": "frozen (chain seq 19) and read on 2026-09-16: OOB_TRANSFER_FAILS, as committed in advance; published",
   "why": "0018's frozen reader emitted VOID on one wrong sealed literal (the null block hash restated from 0017's fold-based block instead of the pool block the design, the arms and the runner use): five validity clauses failed, all one hash; the reader stops recomputing after a fit clause fails, so its readings, reproduction, null-tolerance and transfer clauses were never reached, and every scope, corpus, extension-corpus, partition, environment and order clause it did evaluate passed; the artifact carries the readings, and 0019's reader evaluates every clause for the first time. 0013's precedent: re-read the same banked artifact under the same clauses with the one literal corrected, disclose every known number, commit to the outcome they give, and never edit a frozen file.",
   "known_numbers": "prereg/0019-oob-4096-reread.json scope.numbers_known_when_this_was_written, copied from artifacts/pivot/oob_4096.json readings by the preregistration writer and checked by the pre-freeze check",
   "reader_derivation": {
@@ -109,5 +109,33 @@
     ],
     "also": "rewrites every registered live claim (docs/live_claims.json: mutation counts, chain length and head, preregistration counts) from the banked artifacts, the same derivation tools/freshness.py checks; the drafts it applies are written by draft_0019_docs.py from the banked verdict files only",
     "drafts_sha256_at_freeze": "4359cfb225e90f4e8059be86102be9b9f74d3f3a3c869efe238743f95e4350c9"
+  },
+  "freeze": {
+    "chain_seq": 19,
+    "frozen_utc": "2026-09-16T04:14:59Z",
+    "git_commit": "36b1849851a45b74d28905d03e712f6410d3e29e",
+    "reader_sha256": "0ceef3ae73671f00e03becac6e8305617985eef4981e39e6d36a4ad0578b3668",
+    "chain_hash": "fe80fa9ba8a66bfd768453d39b94742596d7e0c83f368cfa15289b75982ea146",
+    "anchors": {
+      "nist_beacon_v2": {
+        "chain": 2,
+        "pulse": 1943408,
+        "time_stamp": "2026-09-16T04:14:00.000Z",
+        "output_value": "307178C62D82E35B6828616C4AD6C124B96AA2957331A400586E96F8984826FFF5FD8A077B14C16B0151F93DBE9EEB974379CF628E406A2F9995D88595B828BE"
+      },
+      "drand": {
+        "round": 6470035,
+        "randomness": "cb00726352bd38231bd67cdfb87184ed30e81e0072cb1bad4ab4abf087a44115"
+      }
+    }
+  },
+  "outcome": {
+    "verdict": "OOB_TRANSFER_FAILS",
+    "as_committed_in_advance": true,
+    "validity_failed_clauses": [],
+    "transfer_failed_clauses": [
+      "transfer: M4's correct real-family rows 2450 of 38452 (0.0637) is below 3402 (chance 0.038462 + 0.05 = 0.088462)"
+    ],
+    "reads_artifact_of": "0018-oob-4096"
   }
 }

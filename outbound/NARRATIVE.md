@@ -49,7 +49,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 
 **The discipline came first.**
 
-> Before any measurement, we built the thing that would keep us honest. 18 preregistrations,
+> Before any measurement, we built the thing that would keep us honest. 19 preregistrations,
 > hash-chained so nothing can be silently inserted between two that already exist, each anchored
 > to public randomness beacons — NIST and drand — with the verdict-emitting readers frozen by
 > sha256 before their data existed. Then we proved the instrument itself can fail:
@@ -130,6 +130,11 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > Then we asked whether the linear rule that set the in-distribution bar leads our recipe on
 > unseen content by a margin we named in advance (0017): it does not, 0.0951 against 0.0859 on
 > the same eight folds, 2393 more correct rows against a bar of 5200, `L3_LEAD_BELOW_BAR` — a point lead that does not reach the bar, filed as such.
+> Then we left the builder (0018): eight content families it never produced, five of them real files
+> pinned by hash and three from fresh generators, scored by the headline recipe fitted on the builder's
+> eight families and read on the five real ones. It does not clear the bar: 0.0637 against 0.088462, `OOB_TRANSFER_FAILS`
+> — the first reading in this record taken outside the builder, filed at full size, and read under 0019 after
+> 0018's own frozen reader voided the run on one wrong sealed literal, which is filed at full size too.
 > The boundary of our result is
 > bracketed to (2048, 4096], and the near-miss on the slack reading is published beside the
 > clear miss on the strict one.
@@ -152,7 +157,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 
 > So here is the honest inventory. A validated instrument that reproduces on a cold clone. One
 > real curve with its boundaries measured by the same instrument. A corrections ledger that costs
-> us something to keep. A verification map that prints its weakest class first — 14 of 198 claims
+> us something to keep. A verification map that prints its weakest class first — 14 of 234 claims
 > we ourselves cannot currently re-derive, and it says so. And no buyer yet: G5, a named buyer
 > type, is the gate this work has not cleared, and no result in the repository could have cleared
 > it, because that work happens outside the repository. We are raising to do exactly that work,

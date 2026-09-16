@@ -1,7 +1,7 @@
 {
   "schema": "raise-v1/engineering_log/1",
   "preregistration": "0018-oob-4096",
-  "status": "complete: run exit 0 at 2026-09-10T08:38:19Z; frozen reader outcome VOID (a wrong sealed literal, filed at full size); re-read under 0019",
+  "status": "complete: run exit 0 at 2026-09-10T08:38:19Z; 0018's frozen reader VOID (wrong sealed literal, filed at full size); re-read under 0019: OOB_TRANSFER_FAILS; published",
   "design": {
     "question": "Does the headline recipe (0014's searched HGB M4, 0.2884 in distribution), fitted on the builder's eight families, identify the encoder at chance + 0.05 over the 38452 rows of five pinned real-file families the corpus builder never produced? 0003's incumbent M1 and 0014's standardised logistic L3 beside it as flags, with the eight-family mixture (three synthetic families from this record's own generators included) and the synthetic families as flags.",
     "why_now": "0015, 0016 and 0017 measured transfer only among the builder's own families (seven parametric generators sharing one syllable vocabulary, one Gutenberg family); the headline recipe M4 was never fitted under transfer; no model in the record has ever been read outside the builder under a preregistered clause. This is the strongest out-of-builder question the record can currently afford: five families of upstream files nobody wrote for this record, pinned by hash.",
@@ -754,6 +754,64 @@
       "rss_kb": 13627572,
       "derived": "(63414.7 + 294.1) / 21611 = 2.95 cores averaged over the process's life through 08:25:23 UTC, 13 minutes before exit; consistent with a 3-thread fit that was never suspended up to that sample",
       "scope": "one sample taken by the operator in the session; not a runner artifact"
+    },
+    "reread_0019": {
+      "verdict": "OOB_TRANSFER_FAILS",
+      "reader": "tools/readers/oob4096_reread_verdict.py",
+      "verdict_file": "artifacts/pivot/oob_4096_reread_verdict.json",
+      "chain_seq": 19,
+      "frozen_utc": "2026-09-16T04:14:59Z",
+      "clause": {
+        "model_real_correct": 2450,
+        "min_correct_real": 3402,
+        "n_real_rows": 38452,
+        "model_real_top1": 0.0637
+      },
+      "validity_failed_clauses": [],
+      "flags": {
+        "at_iteration_cap": {
+          "incumbent": false,
+          "logistic_l3": false,
+          "model": true
+        },
+        "families_where_model_reaches_bar": [
+          "sql",
+          "xml"
+        ],
+        "incumbent_reaches_bar_real": false,
+        "logistic_l3_reaches_bar_real": false,
+        "mixture_min_correct": 5433,
+        "mixture_reaches_bar": false,
+        "model_leads_incumbent_by_0.02": false,
+        "model_leads_incumbent_by_0.05": false,
+        "model_leads_incumbent_real_rows": 11,
+        "model_leads_logistic_l3_by_0.02": false,
+        "model_leads_logistic_l3_by_0.05": false,
+        "model_leads_logistic_l3_real_rows": -305,
+        "n_iter_by_role": {
+          "incumbent": 33,
+          "logistic_l3": 728,
+          "model": 250
+        },
+        "per_family_min_correct": {
+          "c_src": 690,
+          "hexdump": 690,
+          "pe_bin": 656,
+          "py_src": 682,
+          "rfc_txt": 687,
+          "rst_doc": 688,
+          "sql": 651,
+          "xml": 690
+        },
+        "reproduction_exact": {
+          "incumbent": true,
+          "logistic_l3": true,
+          "model": true
+        },
+        "synthetic_min_correct": 2031,
+        "synthetic_reaches_bar": true
+      },
+      "note": "0018's VOID stands on its own reader; this is 0019's reading of the same banked artifact"
     }
   },
   "operator_procedure": "launch detached (setsid nohup) with the sealed invocation after the freeze; keep the session active for the whole run (an idle session suspends the runner and the container restarts on the next wake: 0016's finding); poll every 30 minutes: commit and push new checkpoints, relaunch the identical command if the runner is dead and the run is not finished; the reader runs once on the completed artifact; publication states the verdict at the same size either way.",

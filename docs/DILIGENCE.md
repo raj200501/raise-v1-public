@@ -86,6 +86,20 @@ record's 0.05 margin. In distribution the boosted recipe leads the same linear r
 point ordering reverses (the linear rule ahead by 0.0092), but the preregistered margin does not certify it. 0014's searched model was not fitted under transfer;
 that is a separate preregistration.
 
+## "Does it work on content outside your own corpus builder?"
+
+**No, at the preregistered bar, for these five real families** (prereg 0018, expected outcome stated in advance as
+close to even after a discounted within-builder bracket of 0.097 to 0.118): an evaluation-only extension corpus of 61409 rows
+from eight families the builder never produced (five real, pinned by sha256: CPython source and documentation, the SQLite
+amalgamation, RFC texts, PE machine code; three from fresh synthetic generators), scored by 0014's searched model fitted on
+the builder's eight families: 0.0637 on the 38452 real-family rows against chance + 0.05 = 0.088462, 2450 rows against
+3402 needed, `OOB_TRANSFER_FAILS` (`artifacts/pivot/oob_4096_reread_verdict.json`); the eight-family mixture with the three synthetic families
+is 0.0766, a flag. The incumbent reads 0.0634 and the standardised logistic 0.0716 on the same rows; no real
+family sits at the bar and two synthetic ones do; per-family ceilings are banked. 0018's own frozen reader emitted `VOID` on one
+wrong sealed literal (the null block hash restated from 0017's fold-based block; `CORRECTIONS.md` 2026-09-10) and stands `VOID`;
+preregistration 0019 re-read the same banked artifact with the literal corrected and every number disclosed in advance. It is a
+statement about these families at 4096 bytes, as pinned, chosen before any fit touched them.
+
 ## "Who buys it?"
 
 Uncleared, and filed in the coverage map's **weakest class** rather than dressed as a finding. The

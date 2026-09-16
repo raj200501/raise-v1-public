@@ -395,10 +395,32 @@
       "reader_sha256": "47a3f6544f3d623c54c4c5ed8b23da5b182d37e864e9789e052ccb2b1ffd2598",
       "seq": 18,
       "slug": "oob-4096"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "cb00726352bd38231bd67cdfb87184ed30e81e0072cb1bad4ab4abf087a44115",
+          "round": 6470035
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "307178C62D82E35B6828616C4AD6C124B96AA2957331A400586E96F8984826FFF5FD8A077B14C16B0151F93DBE9EEB974379CF628E406A2F9995D88595B828BE",
+          "pulse": 1943408,
+          "time_stamp": "2026-09-16T04:14:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-09-16T04:14:59Z",
+      "hash": "fe80fa9ba8a66bfd768453d39b94742596d7e0c83f368cfa15289b75982ea146",
+      "id": "0019",
+      "prev_hash": "02210ad5ef909f10c4fe04fbc60da781b451aecf7f324125a436eaa8f8d34b78",
+      "reader": "tools/readers/oob4096_reread_verdict.py",
+      "reader_sha256": "0ceef3ae73671f00e03becac6e8305617985eef4981e39e6d36a4ad0578b3668",
+      "seq": 19,
+      "slug": "oob-4096-reread"
     }
   ],
-  "entries": 18,
-  "head": "02210ad5ef909f10c4fe04fbc60da781b451aecf7f324125a436eaa8f8d34b78",
+  "entries": 19,
+  "head": "fe80fa9ba8a66bfd768453d39b94742596d7e0c83f368cfa15289b75982ea146",
   "problems": 0,
   "schema": "raise-v1/prereg_status/1",
   "verified": true

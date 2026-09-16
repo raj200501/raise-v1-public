@@ -10,7 +10,7 @@
       "declared_substitutions": [
         {
           "old": "\"\"\"Frozen reader for preregistration 0018",
-          "new": "\"\"\"Frozen reader for preregistration 0019 — a RE-READ of 0018's banked artifact under 0018's own clauses with the\nreader's one wrong literal corrected: the sealed hash of the null control's row block.\n\nWHAT HAPPENED. 0018's frozen reader (tools/readers/oob4096_verdict.py, sealed in chain entry 18) emitted VOID on an\nhonest, complete run for a reason that lies in one sealed literal, not in the run: the preregistration's sealed_partition\nrestated the null block hash for hash from 0017, and 0017's null block (like 0015's) is the first 20000 rows of the first\nleave-one-family-out fold's training set (0653cc12...), while 0018's design text, its arms and its runner\n(tools/pivot/run_oob.py: nn = min(len(tr), int(P[\"null_rows\"])); null_rows = tr[:nn], with tr the sealed pool in its\nsealed order) use the first 20000 pool rows (822b6102...), the block 0014 fitted and 0016 sealed. The runner fitted the\nnull control on the block the design names; the reader compared its hash, and the fingerprint derived from it, against\nthe wrong literal. Five validity clauses failed, all of them that one hash. 0018's reader stops recomputing after a fit\nclause fails, so its readings, reproduction, null-tolerance and transfer clauses were never reached; its scope, corpus,\nextension-corpus, partition, environment, order and every other sealed-hash clause passed. This reader evaluates them all. The 0018 pre-freeze check compared the reader's literal to the\npreregistration's and never to the block the runner builds on the real pool; that is filed in CORRECTIONS.md\n(2026-09-10). A frozen reader is not edited after it has seen a number, so 0018 stands VOID on the record, and this\nreader re-reads the SAME banked artifact under the SAME clauses with that one literal changed.\n\nDISCLOSED IN FULL. Every 0018 number was known when this reader and its preregistration were written: 0018's reader\nprinted the model's counts and the artifact's readings beside its VOID, banked every reading in its verdict file\n(readings_banked), and the artifact carries them: M4's correct real-family rows 2450 of 38452 (0.0637)\nagainst 3402 needed; the standardised logistic 2755 (0.0716) and the incumbent 2439 (0.0634) on the same rows; the\neight-family mixture 4703 of 61409 (0.0766); reproductions 0.2395, 0.2317 and 0.2884, each exactly 0014's value; the\nnull control 0.0371 on the extension rows and 0.0383 on the sealed rows. Under the clauses below those numbers read OOB_TRANSFER_FAILS on the one\nclause, with every validity clause passing. This preregistration therefore commits, before the reader is hashed into\nthe chain, to the outcome the known numbers give; its only freedom would have been to change a clause, and no clause\nis changed. It cannot revise 0018's VOID, 0003, 0014, 0015, 0016 or 0017, and it establishes no buyer.\n\nEverything after this paragraph is 0018's reader verbatim except the substitutions listed in\nprereg/0019-oob-4096-reread.json scope.what_changes_from_0018.declared_substitutions: the output path, the\npreregistration stamp the verdict carries (the artifact it reads is still required to be stamped 0018-oob-4096), the\nverdict schema name, the \"READER 0019\" print prefix, the headline print line, and the one literal.\n\n--- 0018 READER DOCSTRING, RETAINED ---\nFrozen reader for preregistration 0018",
+          "new": "\"\"\"Frozen reader for preregistration 0019 \u2014 a RE-READ of 0018's banked artifact under 0018's own clauses with the\nreader's one wrong literal corrected: the sealed hash of the null control's row block.\n\nWHAT HAPPENED. 0018's frozen reader (tools/readers/oob4096_verdict.py, sealed in chain entry 18) emitted VOID on an\nhonest, complete run for a reason that lies in one sealed literal, not in the run: the preregistration's sealed_partition\nrestated the null block hash for hash from 0017, and 0017's null block (like 0015's) is the first 20000 rows of the first\nleave-one-family-out fold's training set (0653cc12...), while 0018's design text, its arms and its runner\n(tools/pivot/run_oob.py: nn = min(len(tr), int(P[\"null_rows\"])); null_rows = tr[:nn], with tr the sealed pool in its\nsealed order) use the first 20000 pool rows (822b6102...), the block 0014 fitted and 0016 sealed. The runner fitted the\nnull control on the block the design names; the reader compared its hash, and the fingerprint derived from it, against\nthe wrong literal. Five validity clauses failed, all of them that one hash. 0018's reader stops recomputing after a fit\nclause fails, so its readings, reproduction, null-tolerance and transfer clauses were never reached; its scope, corpus,\nextension-corpus, partition, environment, order and every other sealed-hash clause passed. This reader evaluates them all. The 0018 pre-freeze check compared the reader's literal to the\npreregistration's and never to the block the runner builds on the real pool; that is filed in CORRECTIONS.md\n(2026-09-10). A frozen reader is not edited after it has seen a number, so 0018 stands VOID on the record, and this\nreader re-reads the SAME banked artifact under the SAME clauses with that one literal changed.\n\nDISCLOSED IN FULL. Every 0018 number was known when this reader and its preregistration were written: 0018's reader\nprinted the model's counts and the artifact's readings beside its VOID, banked every reading in its verdict file\n(readings_banked), and the artifact carries them: M4's correct real-family rows 2450 of 38452 (0.0637)\nagainst 3402 needed; the standardised logistic 2755 (0.0716) and the incumbent 2439 (0.0634) on the same rows; the\neight-family mixture 4703 of 61409 (0.0766); reproductions 0.2395, 0.2317 and 0.2884, each exactly 0014's value; the\nnull control 0.0371 on the extension rows and 0.0383 on the sealed rows. Under the clauses below those numbers read OOB_TRANSFER_FAILS on the one\nclause, with every validity clause passing. This preregistration therefore commits, before the reader is hashed into\nthe chain, to the outcome the known numbers give; its only freedom would have been to change a clause, and no clause\nis changed. It cannot revise 0018's VOID, 0003, 0014, 0015, 0016 or 0017, and it establishes no buyer.\n\nEverything after this paragraph is 0018's reader verbatim except the substitutions listed in\nprereg/0019-oob-4096-reread.json scope.what_changes_from_0018.declared_substitutions: the output path, the\npreregistration stamp the verdict carries (the artifact it reads is still required to be stamped 0018-oob-4096), the\nverdict schema name, the \"READER 0019\" print prefix, the headline print line, and the one literal.\n\n--- 0018 READER DOCSTRING, RETAINED ---\nFrozen reader for preregistration 0018",
           "occurrences": 1
         },
         {
@@ -39,8 +39,8 @@
           "occurrences": 2
         },
         {
-          "old": "print(\"READER 0018 — out-of-builder transfer at 4096\")",
-          "new": "print(\"READER 0019 — re-read of 0018's banked artifact (out-of-builder transfer at 4096)\")",
+          "old": "print(\"READER 0018 \u2014 out-of-builder transfer at 4096\")",
+          "new": "print(\"READER 0019 \u2014 re-read of 0018's banked artifact (out-of-builder transfer at 4096)\")",
           "occurrences": 1
         },
         {
@@ -275,9 +275,27 @@
     "what_neither_outcome_means": "Neither names a buyer. Neither revises 0003, 0014, 0015, 0016 or 0017. OOB_TRANSFER_FAILS says that this recipe, fitted on this builder, does not carry chance + 0.05 to these five real families as pinned; not that no recipe or no training corpus could."
   },
   "reader": "tools/readers/oob4096_reread_verdict.py",
-  "frozen": false,
-  "invocation": "python3 tools/readers/oob4096_reread_verdict.py — no runner, no fit, no scoring; the reader reads artifacts/pivot/oob_4096.json and artifacts/pivot/oob_4096_scores.json as committed and writes artifacts/pivot/oob_4096_reread_verdict.json.",
+  "frozen": true,
+  "invocation": "python3 tools/readers/oob4096_reread_verdict.py \u2014 no runner, no fit, no scoring; the reader reads artifacts/pivot/oob_4096.json and artifacts/pivot/oob_4096_scores.json as committed and writes artifacts/pivot/oob_4096_reread_verdict.json.",
   "smoke": {
     "none": "nothing is fitted or scored; the reader is exercised by the oob4096 mutation gate (control artifacts built from each reader's literals; the filed defect kept visible) and by the scratch copy on the banked artifact disclosed above, whose output stayed in the session scratchpad."
-  }
+  },
+  "reader_sha256": "0ceef3ae73671f00e03becac6e8305617985eef4981e39e6d36a4ad0578b3668",
+  "frozen_utc": "2026-09-16T04:14:59Z",
+  "git_commit": "36b1849851a45b74d28905d03e712f6410d3e29e",
+  "git_dirty_at_freeze": false,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1943408,
+      "time_stamp": "2026-09-16T04:14:00.000Z",
+      "output_value": "307178C62D82E35B6828616C4AD6C124B96AA2957331A400586E96F8984826FFF5FD8A077B14C16B0151F93DBE9EEB974379CF628E406A2F9995D88595B828BE"
+    },
+    "drand": {
+      "round": 6470035,
+      "randomness": "cb00726352bd38231bd67cdfb87184ed30e81e0072cb1bad4ab4abf087a44115"
+    }
+  },
+  "chain_hash": "fe80fa9ba8a66bfd768453d39b94742596d7e0c83f368cfa15289b75982ea146",
+  "chain_prev_hash": "02210ad5ef909f10c4fe04fbc60da781b451aecf7f324125a436eaa8f8d34b78"
 }

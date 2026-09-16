@@ -297,7 +297,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 |---|---|---|
 | Every gate can be shown to fail | 400 mutations, 400 detected, 0 survived | primary-verifiable |
 | A number that is real but STALE is caught, not just a fabricated one | `tools/freshness.py`, 9 mutations | primary-verifiable |
-| Preregistration chain verifies, reader unchanged since freeze | 18 entries, head `02210ad5…` | primary-verifiable |
+| Preregistration chain verifies, reader unchanged since freeze | 19 entries, head `fe80fa9b…` | primary-verifiable |
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |
 | ACS PUMS record count reproduced | 392,318 records | primary-verifiable |
 | Instrument reproduces on a cold clone | preflight names cause and fix | primary-verifiable |
@@ -312,6 +312,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 
 | Result | What happened | Class |
 |---|---|---|
+| **Out-of-builder transfer at 4096 (0018, re-read under 0019)** | **`OOB_TRANSFER_FAILS`** — 0014's searched model, fitted on the builder's eight families, does not identify the encoder at chance + 0.05 on five pinned real-file families the builder never produced: 2450 of 38452 rows correct (0.0637) against 3402 needed; the standardised logistic reads 0.0716 and the incumbent 0.0634 on the same rows, neither at the bar; no real family at the bar, two synthetic ones; eight-family mixture 0.0766 (a flag). 0018's own frozen reader emitted `VOID` on a wrong sealed literal (the null block hash); 0019 re-read the banked artifact with it corrected. Chain entries 18 and 19. | primary-verifiable |
 | **Linear rule under transfer at 4096 (0017)** | **`L3_LEAD_BELOW_BAR`** — 0014's standardised logistic on 0015's eight sealed folds reaches a stitched 0.0951 on unseen families against 0015's incumbent 0.0859: 2393 more correct rows of 260000 (0.009204) against a 5200-row bar (0.02); under the record's 0.05 margin; every fold converged. Chain entry 17. | primary-verifiable |
 | **Leave-one-family-out transfer at 4096 (0015)** | **`TRANSFER_FAILS`** — with each content family withheld from training, 0003's recipe identifies the encoder on that family at a stitched 0.0859 against chance 0.0385, 0.0026 short of the chance + 0.05 bar; the raw logistic transfers better (0.0928); per family the model keeps 0.25 to 0.65 of its in-distribution accuracy. The headline is a statement about these eight content families | primary-verifiable |
 | **Phase 0 domain selection** | **Terminated with no domain. 99 candidates, 8 adversarial reviews, 0 SELECT.** | arithmetic-verifiable |
@@ -335,7 +336,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **14 of 198 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 234 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -364,8 +365,8 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 | Class | Count | Meaning |
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
-| `arithmetic-verifiable` | 30 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 154 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `arithmetic-verifiable` | 36 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
+| `primary-verifiable` | 184 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -1049,15 +1050,109 @@ searched recipe read against a fixed one, so the comparison is asymmetric by des
 nothing about 0014's searched model M4, which was not fitted here; that nothing here revises 0003,
 0014 or 0015; and that no buyer is established.
 
-**In flight — preregistration 0018 (chain seq 18, frozen 2026-09-10T02:08:10Z).** Out-of-builder transfer at 4096: 0003's incumbent, 0014's
-standardised logistic and 0014's searched model M4, each fitted once on 0003's sealed 800000-row pool, scored once on the sealed
-evaluation set (the reproduction, within 0.005 of 0.2395, 0.2317 and 0.2884) and on an evaluation-only extension corpus of
-61409 rows from eight content families the corpus builder never produced (five real, pinned by sha256: CPython source and
-documentation, the SQLite amalgamation, 79 RFC texts, the CPython embeddable package's PE files; three fresh synthetic
-generators: xml, sql, hexdump), sealed by array hash before any fit. One clause, read by `tools/readers/oob4096_verdict.py`
-on the recounted score vectors: M4's correct extension rows must reach 5433 of 61409 (chance + 0.05), `OOB_TRANSFERS` or
-`OOB_TRANSFER_FAILS`; the incumbent and the logistic at the same bar are flags. Nothing below this line changes until its
-frozen reader has read the completed run.
+### Does the headline recipe work on real content the builder never produced? — `OOB_TRANSFER_FAILS` at 4096 (preregistrations 0018 and 0019)
+
+Every transfer reading before this one (0015, 0016, 0017) stayed inside the corpus builder: seven parametric
+generators sharing one syllable vocabulary and one Gutenberg family. Preregistration 0018 (chain seq 18, NIST
+Beacon pulse 1934673, drand round 6452502) built an evaluation-only extension corpus from eight families the
+builder never produced, with the builder's own label factory (the same 26 configurations, 32768-byte chunks,
+mid-stream 4096-byte carve, the same features): five real families pinned by sha256 (CPython 3.11.9 source and
+documentation, the SQLite amalgamation, 79 RFC texts, the PE files of the CPython embeddable package) and three
+synthetic families from fresh generators with a vocabulary disjoint from the builder's (xml, sql, hexdump),
+61409 rows in all, sealed by array hash before any fit. 0003's incumbent, 0014's standardised logistic and
+0014's searched model M4 were fitted once each on 0003's sealed 800000-row pool, scored once on the sealed
+evaluation set (the reproduction) and once on the extension rows (the reading); the reader recounts every reading
+from the banked score vectors. One clause: M4's correct rows over the 38452 rows of the five real families
+against chance + 0.05 (3402 needed); the eight-family mixture (5433 of 61409), the three synthetic families
+and the other two recipes at the same bar are flags. The pre-freeze review re-scoped the clause from the mixture
+to the real families, because a mixture could be carried by the three families this record's own generators
+produced. The expected outcome, written before any fit, was a bracket of 0.097 to 0.118 on the real families
+from within-builder retention, discounted to a prior close to even. 0018's own frozen reader voided the completed
+run on one wrong sealed literal (Finding 3), and preregistration 0019 (chain seq 19, NIST Beacon pulse
+1943408, drand round 6470035) re-read the same banked artifact with that literal corrected.
+
+| | |
+|---|---|
+| **Verdict** | `OOB_TRANSFER_FAILS` — the headline recipe does not identify the encoder on five pinned real-file families the builder never produced at chance + 0.05: 2450 of 38452 real-family rows correct (0.0637) against 3402 needed |
+| **Emitted by** | `tools/readers/oob4096_reread_verdict.py` (preregistration 0019, chain seq 19) on 0018's banked artifact; 0018's own frozen reader `tools/readers/oob4096_verdict.py` emitted `VOID`, see Finding 3 |
+| **Artifact** | `artifacts/pivot/oob_4096.json` with `oob_4096_scores.json` and the checkpoints in `oob_4096_ckpt/`; verdicts in `oob_4096_verdict.json` (0018, `VOID`) and `oob_4096_reread_verdict.json` (0019); extension corpus manifest `ext_corpus_manifest.json` |
+| **Cost** | 21995.4 s of banked fit time (4 fits: M4 18650.2 s, incumbent 1694.1 s, logistic 1567.4 s, null 83.7 s) at 3 threads, nice 10, on 4 cores, no GPU; 1 launch, no interruption, 02:25 to 08:38 UTC on 2026-09-10; peak 10.7 GB anonymous resident in the operator's heartbeat samples from 07:04 UTC (earlier COULD NOT VERIFY beyond polled values); `artifacts/pivot/engineering_log_0018.json` |
+
+| Clause | Bar | Read | Result |
+|---|---|---|---|
+| Incumbent on the full pool reproduces 0014's refit | within 0.005 of 0.2395 | **0.2395** | pass |
+| Standardised logistic reproduces 0014 | within 0.005 of 0.2317 | **0.2317** | pass |
+| Searched model M4 reproduces 0014 | within 0.005 of 0.2884 | **0.2884** | pass |
+| Null control on the extension rows and on the sealed rows | ≤ chance + 0.01 | **0.0371** / 0.0383 | pass |
+| Extension arrays, chunk layout and pool hash to the sealed values; measured overlaps 0 | equality | **equal, 0** | pass |
+| Null block hashes to the sealed value | equality | 0018's literal: **fail** (5 clauses, `VOID`, the rows below not reached); 0019's corrected literal: **pass** | see Finding 3 |
+| M4's correct rows over the five real families | ≥ 3402 of 38452 (chance + 0.05) | **2450** (0.0637) | **fail** |
+
+**Finding 1 — the headline recipe falls short on real content outside the builder, and so do both baselines.**
+Fitted on the builder's eight families, M4 identifies the encoder on **2450** of the 38452 real-family
+rows (**0.0637**, chance 0.038462) against 3402 needed for chance + 0.05 (0.088462). The standardised
+logistic reads **0.0716** on the same rows (2755 rows) and the incumbent **0.0634**
+(2439); neither reaches the bar (flags). The logistic's count exceeds M4's by 305 rows, so, as
+0018 said in advance it would say in this case, the headline recipe is not its best transfer recipe on this content
+(0017 found the same within the builder for the incumbent); a comparison under a preregistered margin is a new
+preregistration, not a revision. M4 leads the incumbent by 11 rows; neither lead flag at 0.02 or 0.05 of the real
+rows is set. M4's excess over chance on the real families is 0.025238, which is 0.101 of its
+in-distribution excess (0.249938). The reading 0.0637 sits below the 0.097
+to 0.118 accuracy bracket the preregistration derived from within-builder retention, and that retention share sits below
+the 0.20 the same paragraph said a fail would need. Over all 61409 extension rows, the
+three synthetic families included, M4 reads 0.0766 (4703 rows; cluster interval [0.0747, 0.0785]), under the
+5433-row flag threshold; the three synthetic families alone read 0.0981, above their flag
+threshold (2253 rows against 2031). The null control fitted on shuffled labels reads 0.0371 on the extension rows and 0.0383 on the sealed
+rows. M4's reproduction on the sealed evaluation set is 0.2884 (drift 0.0 from 0014's 0.2884) at
+250 iterations, its cap, as 0014's confirmatory fit of the same recipe was (250); the record says so beside the verdict as
+the preregistration required.
+
+| Extension family | Rows | Searched model M4 | Standardised logistic | Incumbent | Ceiling (distinct fragments) |
+|---|---:|---:|---:|---:|---:|
+| sql (synthetic) | 7357 | **0.1116** | 0.112 | 0.1033 | 0.8987 |
+| xml (synthetic) | 7800 | **0.1068** | 0.105 | 0.0996 | 0.9512 |
+| hexdump (synthetic) | 7800 | **0.0768** | 0.0894 | 0.0576 | 0.9987 |
+| pe_bin (real) | 7407 | **0.0767** | 0.0772 | 0.071 | 0.8949 |
+| rfc_txt (real) | 7761 | **0.071** | 0.0771 | 0.0687 | 0.9768 |
+| rst_doc (real) | 7775 | **0.0607** | 0.0827 | 0.0603 | 0.9538 |
+| c_src (real) | 7800 | **0.0579** | 0.0627 | 0.0601 | 0.9751 |
+| py_src (real) | 7709 | **0.0528** | 0.0588 | 0.0573 | 0.9828 |
+
+**Finding 2 — the reading is carried by the synthetic families, not the real ones.** M4 reaches chance + 0.05 on
+0 of the five real families and on 2 of the three synthetic ones (sql, xml);
+the highest reading is sql at 0.1116 and the lowest py_src at 0.0528. Over the six
+structured-text families (source code, documentation, RFC text, xml, sql) M4 reads **0.0765**
+and over the two high-entropy families (machine code, hex text) **0.0767**; over the five real
+families **0.0637** and over the three synthetic **0.0981**. The two
+families that clear are structured records from generators written by the builder's method, which is why the
+pre-freeze review kept them out of the clause. The ceilings are the fraction of the 26 configurations whose carved
+fragments are distinct for a chunk, averaged over the family's chunks: they bound what any student could reach on
+that family, sit far above the bar on every family, and are banked with the corpus manifest.
+
+**Finding 3 — the frozen reader voided an honest run on one wrong sealed literal, and the record says so.**
+0018's preregistration restated the null control's row block "hash for hash from 0017", and 0017's null block (like
+0015's) is the first 20000 training rows of the first leave-one-family-out fold; 0018's design, its arms and its
+runner use the first 20000 rows of the sealed pool, the block 0014 fitted and 0016 sealed, and the run fitted the null
+control on it. The reader compared that block's hash and the fingerprint derived from it against the wrong literal
+and emitted `VOID` on 5 clauses, all of them that one hash; it stops recomputing after a fit clause fails, so its
+readings, reproduction, null-tolerance and transfer clauses were never reached, while its scope, corpus, extension-corpus,
+partition and every other sealed-hash clause passed. The `VOID` is banked as
+emitted, the defect and the pre-freeze check and gate that missed it are filed at full size in `CORRECTIONS.md`
+(2026-09-10), and preregistration 0019 re-read the same artifact under a reader that is 0018's frozen file with
+exactly the substitutions declared in the preregistration (the one literal, the output path, the stamp, the schema
+name, the print prefix, a docstring prefix) — with every 0018 number quoted in the preregistration before its reader
+was hashed into the chain, the literal recomputed from the cache's row arrays with the runner's own split, and the
+outcome those numbers give, `OOB_TRANSFER_FAILS`, committed to in advance. The re-read revises nothing: 0018 stands `VOID` on its own
+reader.
+
+**What it establishes, and what it does not.** That at 4096 bytes, fitted on the builder's eight families, 0014's
+searched model does not identify the encoder at chance + 0.05 over the 38452 rows of five real-file families
+outside the builder, and neither does the incumbent or the standardised logistic; that the eight-family mixture, the
+synthetic families, the per-family readings, the subsets and the two recipe flags are banked beside it as
+information; that the five real families are one CPython release, one SQLite release, 79 RFCs of our choosing and one
+Windows package, chosen by us before any fit touched them, not "code", "documentation" or "binaries" in general;
+that it says nothing about what a recipe fitted on real content would do; that nothing here revises 0003, 0014,
+0015, 0016 or 0017; and that no buyer is established.
 
 ### A learned representation over raw bytes does not rescue it either — `BYTE_MODEL_FAILS`
 

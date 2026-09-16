@@ -34,8 +34,15 @@ a single family at 700 to 4900 chunks moves it by **-0.002**.
 **The linear rule's lead under transfer stays under the bar.** 0014's standardised logistic, fitted on 0015's eight
 sealed folds (preregistration 0017), identifies the encoder on unseen families at a stitched **0.0951**
 against the incumbent's **0.0859**: 2393 more correct rows of 260000 against a 5200-row bar (0.02),
-`L3_LEAD_BELOW_BAR`; the lead does not reach the record's 0.05 in-distribution margin. Every number below is a statement
-about these eight content families.
+`L3_LEAD_BELOW_BAR`; the lead does not reach the record's 0.05 in-distribution margin.
+**Outside the builder, the headline recipe falls short.** On 61409 rows from eight content families the
+corpus builder never produced (preregistration 0018: CPython source and documentation, the SQLite amalgamation, RFC
+texts, PE machine code, plus xml, sql and hexdump from fresh generators), 0014's searched model fitted on the builder's
+eight families reads **0.0637** on the 38452 real-family rows against chance + 0.05 (2450 rows against 3402 needed): `OOB_TRANSFER_FAILS`
+(read under preregistration 0019, which re-read the banked artifact after 0018's own frozen reader voided the run on a wrong
+sealed literal); the incumbent reads 0.0634 and the standardised logistic 0.0716; the eight-family mixture, three synthetic
+families included, reads 0.0766 as a flag. Every number below is a statement
+about the corpus builder's eight content families and the eight extension families.
 
 ## The headline curve, with corrected statistics
 
@@ -135,6 +142,15 @@ reading available, fixed before the run; the looser reading would have given **+
   as a flag, L3's mixture clears the chance + 0.05 bar 0015 applied to 0003's recipe (0.0951 against
   0.0885), which 0015's clause did not; 0014's searched model was not fitted here, and 0015's
   `TRANSFER_FAILS` is not revised.
+- **Out-of-builder transfer at 4096: `OOB_TRANSFER_FAILS`, 0.0637 on five pinned real-file families against a 0.088462 bar
+  (2450 of 38452 rows against 3402 needed).** An evaluation-only extension corpus from eight families the builder never
+  produced, built by the builder's own label factory, sealed by array hash before any fit; three recipes fitted once
+  each on the sealed pool and reproduced in distribution exactly (0.2395, 0.2317, 0.2884);
+  the reader recounts every reading from the banked vectors. Structured text 0.0765, high-entropy
+  0.0767; real families 0.0637, synthetic 0.0981; the standardised
+  logistic's real-family count exceeds M4's, so the headline recipe is not its best transfer recipe on this content. 0018's
+  frozen reader voided the run on a wrong sealed literal (filed); 0019 re-read it with the literal corrected. Eight more
+  families, not "all content"; no buyer established.
 - **Leave-one-family-out transfer at 4096: `TRANSFER_FAILS`, stitched mixture 0.0859 against a
   0.0885 bar.** 0003's recipes fitted on seven families and scored on the eighth, eight times,
   every fold sealed by hash with zero withheld rows and zero shared chunks in training. Per
@@ -194,7 +210,7 @@ rerun would have said something different. It would not have.
 
 ## The instrument these numbers passed through
 
-**18** preregistrations, hash-chained (entry *N* carries entry *N−1*'s hash) and anchored to NIST
+**19** preregistrations, hash-chained (entry *N* carries entry *N−1*'s hash) and anchored to NIST
 Beacon 2.0 and drand; readers frozen by sha256 before their data existed.
 **400** deliberate mutations across **21** gates, **400** detected, **0** survived — every gate provably capable of
 failing. **18** corrections filed against this work at full size, including a **54-agent
