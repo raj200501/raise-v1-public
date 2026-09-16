@@ -1050,29 +1050,35 @@ searched recipe read against a fixed one, so the comparison is asymmetric by des
 nothing about 0014's searched model M4, which was not fitted here; that nothing here revises 0003,
 0014 or 0015; and that no buyer is established.
 
-**In flight — preregistration 0020 (chain seq 20, frozen 2026-09-16T08:35:44Z).** Real-content fit at 4096: 0003's incumbent
-M1, 0014's standardised logistic L3 and 0014's searched model M4, each fitted once on 26346 rows from 1029
-plaintexts of real content — the chunks of 0018's five pinned real files that its sealed evaluation corpus does not
-use, disjoint by index, by chunk id and by source-chunk hash (py_src 17197 rows, pe_bin
-5145, rfc_txt 2340, rst_doc 1040, c_src 624) — and
-scored once on 0018's scoring set, row for row. 11 arms in all: beside the three recipes, a reproduction rung that
-must reproduce 0003's banked 0.1965, a null control on permuted labels, **four trivial
-baselines fitted on the same rows** (majority class, the label prior, one thresholded feature, a depth-3 tree), and the
-headline recipe fitted twice on the builder's pool — once at the same row budget, once at the same plaintext budget,
-which differ by a factor of 19.
+**Preregistration 0020 (chain seq 20, frozen 2026-09-16T08:35:44Z) — REFUSED, and what it found.** Real-content fit
+at 4096: eleven arms, 26346 rows from 1029 plaintexts of real content, scored on 0018's scoring set, with the clause
+measured against a floor rather than chance (`docs/OPERATING_RULES.md` §4a). It never ran. `run_realfit.py` exited 3
+seven seconds after launch, before any checkpoint existed, on 0020's own preregistered condition that no fit-block,
+repro-block or matched-block row may be byte-identical to a scored row:
 
-One clause, read by `tools/readers/realfit4096_verdict.py` on the recounted score vectors, and it is measured against
-a **floor, not against chance** (`docs/OPERATING_RULES.md` §4a): M4's correct rows over the 38452 rows of the five
-real-file families must reach `ceil(38452 × (floor + 0.05))`, where the floor is the best of those four trivial
-baselines on those same rows. That threshold is therefore **not knowable before the run** — it is whatever the dumbest
-thing that could work reaches, plus 0.05 — and it is `REAL_FIT_CLEARS` or `REAL_FIT_FAILS`. A second named clause
-counts how many of the five real families clear their own floor plus 0.05, and it is published beside the verdict
-wherever the verdict appears, because the clause above is a mixture whose family weights are close to the inverse of
-the fit corpus's. The chance-based count — 3402 of 38452, the bar 0018 and 0015 used — is banked as an
-informational flag so this run stays comparable with 0018's 2450, and is **not** the clause.
+```
+[2] row identity scan: fit 0, repro 8, matched 2 rows are byte-identical to a scored row (5s)
+REFUSING: a fit, repro or matched row is byte-identical to a scored row
+```
 
-It is an in-distribution reading on real content, **not a transfer reading**: the fit and scored chunks come from the
-same five files. Nothing below this line changes until its frozen reader has read the completed run.
+**It is not leakage into the clause.** The fit count is 0: the real-content corpus the verdict would be read from
+shares nothing with anything scored, at chunk index, chunk id, source-chunk hash, source-chunk bytes or feature-row
+bytes. What the scan caught is a property of the *builder's* corpus that no preregistration in this record had
+measured, now banked in `artifacts/pivot/builder_duplicate_chunks.json`: the corpus builder emitted **9 pairs of
+source chunks whose carved feature rows are identical** — 64 identical row pairs in 1300000 rows, 0.00492 percent.
+0003's grouped split keeps each chunk *id* wholly on one side of the evaluation/pool boundary, which is exactly what
+it promises, but it cannot know that two different ids carry the same content, so 32 of those row pairs straddle it.
+One pair alone (44496 on the evaluation side, 48016 on the pool side, 26 of 26 rows identical) produces every
+collision: 8 rows of the 100000-row reproduction rung and 2 of the 26346-row builder-matched block. **Every
+preregistration since 0003 that fitted on this pool and scored on this evaluation set has carried those 8 rows
+unmeasured — including the banked 0.1965 rung 0020 uses as its own control.**
+
+0020's condition was right for the arm that carries the clause and too strict for the two builder control arms: it
+asked 0003's pool for a property its builder never gave it. The frozen file is not edited. **Preregistration 0021**
+carries the identical eleven-arm design with that one clause corrected — the fit block's zero stays fatal, and the
+three builder blocks must equal the counts measured in advance (8, 2, 0) exactly, so that a count which grows (new
+content crossed) and one which shrinks (not the sealed blocks) both fail. Nothing below this line changes until 0021's
+frozen reader has read its completed run.
 
 ### Does the headline recipe work on real content the builder never produced? — `OOB_TRANSFER_FAILS` at 4096 (preregistrations 0018 and 0019)
 

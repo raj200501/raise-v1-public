@@ -64,12 +64,13 @@ three synthetic generators as flags): it does not, 2450 of 38452 real-family row
 for chance + 0.05, verdict `OOB_TRANSFER_FAILS`; the incumbent reads 0.0634 and the standardised logistic 0.0716 on the same rows. 0018's
 own frozen reader emitted `VOID` on one wrong sealed literal (the null block's hash, restated from 0017), filed in `CORRECTIONS.md`; preregistration
 0019 (chain entry 19) re-read the same banked artifact with that literal corrected and every number disclosed in advance, as 0013 did for 0012.
-Preregistration 0020 (chain entry 20, frozen 2026-09-16) asks the question 0018 left open: does the encoder signal exist in real
-files at all? The same three recipes are fitted on 26346 rows from 1029 plaintexts of real content — the chunks of the same pinned
-files 0018's sealed evaluation corpus does not use — and scored on the same 38452 real-family rows. The bar is not chance: four trivial
-baselines are fitted on the same rows and the model must beat the best of them by 0.05, so the threshold is not knowable until the run
-has measured it. A second clause counts how many of the five real families clear their own floor. It is an in-distribution reading on real
-content, not a transfer reading; it is frozen and running.
+Preregistration 0020 (chain entry 20, frozen 2026-09-16) asked the question 0018 left open: does the encoder signal exist in real
+files at all? It **refused at launch** — seven seconds in, before any fit — on its own condition that no row it fits on may be
+byte-identical to a row it scores. The fit corpus was clean (0 rows); the builder's own pool was not (8 rows, 2 rows), because the
+corpus builder emitted nine pairs of source chunks whose carved rows are identical and one pair straddles 0003's grouped split.
+That is a fact about the record's foundation that twenty preregistrations had carried unmeasured, and it is banked in
+`artifacts/pivot/builder_duplicate_chunks.json`. 0020 is published as refused; **preregistration 0021** carries the same eleven-arm
+design with that one clause corrected.
 
 The curve and the searched margin stand as measured, and they are statements about the corpus builder's eight
 content families (gutenberg, base64, binary, code, csv, json, log, mixed), not about DEFLATE streams in general;
