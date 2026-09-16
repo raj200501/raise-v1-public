@@ -1,0 +1,3001 @@
+{
+  "builder_eval_top1": {
+    "builder_chunk_matched": 0.1862,
+    "builder_matched": 0.201,
+    "floor_feat1": 0.0571,
+    "floor_majority": 0.0385,
+    "floor_stratified": 0.0384,
+    "floor_tree3": 0.0854,
+    "null": 0.0388,
+    "real_incumbent": 0.0743,
+    "real_logistic": 0.0769,
+    "real_model": 0.0814,
+    "repro": 0.1965
+  },
+  "chance_accuracy": 0.038462,
+  "class_names": [
+    "zlib-1",
+    "zlib-2",
+    "zlib-3",
+    "zlib-4",
+    "zlib-5",
+    "zlib-6",
+    "zlib-7",
+    "zlib-8",
+    "zlib-9",
+    "libdeflate-1",
+    "libdeflate-2",
+    "libdeflate-3",
+    "libdeflate-4",
+    "libdeflate-5",
+    "libdeflate-6",
+    "libdeflate-7",
+    "libdeflate-8",
+    "libdeflate-9",
+    "libdeflate-10",
+    "libdeflate-11",
+    "libdeflate-12",
+    "isal-0",
+    "isal-1",
+    "isal-2",
+    "isal-3",
+    "zopfli"
+  ],
+  "cluster_ci95_informational": {
+    "builder_chunk_matched_builder_eval": [
+      0.1842,
+      0.1881
+    ],
+    "builder_chunk_matched_ext": [
+      0.0732,
+      0.0768
+    ],
+    "builder_chunk_matched_ext_c_src": [
+      0.0588,
+      0.069
+    ],
+    "builder_chunk_matched_ext_hexdump": [
+      0.0692,
+      0.0776
+    ],
+    "builder_chunk_matched_ext_pe_bin": [
+      0.0684,
+      0.0765
+    ],
+    "builder_chunk_matched_ext_py_src": [
+      0.0481,
+      0.0581
+    ],
+    "builder_chunk_matched_ext_real": [
+      0.0615,
+      0.066
+    ],
+    "builder_chunk_matched_ext_rfc_txt": [
+      0.0653,
+      0.0764
+    ],
+    "builder_chunk_matched_ext_rst_doc": [
+      0.0541,
+      0.0644
+    ],
+    "builder_chunk_matched_ext_sql": [
+      0.1026,
+      0.1134
+    ],
+    "builder_chunk_matched_ext_xml": [
+      0.0958,
+      0.1062
+    ],
+    "builder_matched_builder_eval": [
+      0.1988,
+      0.2033
+    ],
+    "builder_matched_ext": [
+      0.0755,
+      0.0792
+    ],
+    "builder_matched_ext_c_src": [
+      0.0609,
+      0.0712
+    ],
+    "builder_matched_ext_hexdump": [
+      0.0768,
+      0.0854
+    ],
+    "builder_matched_ext_pe_bin": [
+      0.0711,
+      0.08
+    ],
+    "builder_matched_ext_py_src": [
+      0.0515,
+      0.0609
+    ],
+    "builder_matched_ext_real": [
+      0.0647,
+      0.0695
+    ],
+    "builder_matched_ext_rfc_txt": [
+      0.0671,
+      0.0783
+    ],
+    "builder_matched_ext_rst_doc": [
+      0.0601,
+      0.0711
+    ],
+    "builder_matched_ext_sql": [
+      0.1019,
+      0.112
+    ],
+    "builder_matched_ext_xml": [
+      0.0914,
+      0.101
+    ],
+    "floor_feat1_builder_eval": [
+      0.0567,
+      0.0575
+    ],
+    "floor_feat1_ext": [
+      0.0535,
+      0.0551
+    ],
+    "floor_feat1_ext_c_src": [
+      0.0503,
+      0.0544
+    ],
+    "floor_feat1_ext_hexdump": [
+      0.0399,
+      0.0419
+    ],
+    "floor_feat1_ext_pe_bin": [
+      0.0688,
+      0.0723
+    ],
+    "floor_feat1_ext_py_src": [
+      0.0628,
+      0.0672
+    ],
+    "floor_feat1_ext_real": [
+      0.0539,
+      0.0559
+    ],
+    "floor_feat1_ext_rfc_txt": [
+      0.0427,
+      0.046
+    ],
+    "floor_feat1_ext_rst_doc": [
+      0.0417,
+      0.0445
+    ],
+    "floor_feat1_ext_sql": [
+      0.0507,
+      0.0552
+    ],
+    "floor_feat1_ext_xml": [
+      0.064,
+      0.0679
+    ],
+    "floor_majority_builder_eval": [
+      0.0385,
+      0.0385
+    ],
+    "floor_majority_ext": [
+      0.0387,
+      0.039
+    ],
+    "floor_majority_ext_c_src": [
+      0.0385,
+      0.0385
+    ],
+    "floor_majority_ext_hexdump": [
+      0.0385,
+      0.0385
+    ],
+    "floor_majority_ext_pe_bin": [
+      0.0385,
+      0.0393
+    ],
+    "floor_majority_ext_py_src": [
+      0.0386,
+      0.0393
+    ],
+    "floor_majority_ext_real": [
+      0.0386,
+      0.0388
+    ],
+    "floor_majority_ext_rfc_txt": [
+      0.0385,
+      0.039
+    ],
+    "floor_majority_ext_rst_doc": [
+      0.0385,
+      0.0388
+    ],
+    "floor_majority_ext_sql": [
+      0.0399,
+      0.0415
+    ],
+    "floor_majority_ext_xml": [
+      0.0385,
+      0.0385
+    ],
+    "floor_stratified_builder_eval": [
+      0.0376,
+      0.0392
+    ],
+    "floor_stratified_ext": [
+      0.0374,
+      0.0404
+    ],
+    "floor_stratified_ext_c_src": [
+      0.0341,
+      0.0424
+    ],
+    "floor_stratified_ext_hexdump": [
+      0.0351,
+      0.0438
+    ],
+    "floor_stratified_ext_pe_bin": [
+      0.0285,
+      0.0368
+    ],
+    "floor_stratified_ext_py_src": [
+      0.0363,
+      0.0444
+    ],
+    "floor_stratified_ext_real": [
+      0.0364,
+      0.0402
+    ],
+    "floor_stratified_ext_rfc_txt": [
+      0.0349,
+      0.0436
+    ],
+    "floor_stratified_ext_rst_doc": [
+      0.0363,
+      0.0446
+    ],
+    "floor_stratified_ext_sql": [
+      0.0359,
+      0.0445
+    ],
+    "floor_stratified_ext_xml": [
+      0.036,
+      0.045
+    ],
+    "floor_tree3_builder_eval": [
+      0.0848,
+      0.0859
+    ],
+    "floor_tree3_ext": [
+      0.0861,
+      0.0882
+    ],
+    "floor_tree3_ext_c_src": [
+      0.0995,
+      0.104
+    ],
+    "floor_tree3_ext_hexdump": [
+      0.0603,
+      0.0653
+    ],
+    "floor_tree3_ext_pe_bin": [
+      0.0781,
+      0.0832
+    ],
+    "floor_tree3_ext_py_src": [
+      0.0829,
+      0.0888
+    ],
+    "floor_tree3_ext_real": [
+      0.0917,
+      0.0942
+    ],
+    "floor_tree3_ext_rfc_txt": [
+      0.091,
+      0.0966
+    ],
+    "floor_tree3_ext_rst_doc": [
+      0.0991,
+      0.1037
+    ],
+    "floor_tree3_ext_sql": [
+      0.0706,
+      0.0778
+    ],
+    "floor_tree3_ext_xml": [
+      0.0926,
+      0.0979
+    ],
+    "null_builder_eval": [
+      0.0381,
+      0.0395
+    ],
+    "null_ext": [
+      0.0379,
+      0.0411
+    ],
+    "null_ext_c_src": [
+      0.0358,
+      0.0447
+    ],
+    "null_ext_hexdump": [
+      0.0346,
+      0.0436
+    ],
+    "null_ext_pe_bin": [
+      0.034,
+      0.043
+    ],
+    "null_ext_py_src": [
+      0.0368,
+      0.0457
+    ],
+    "null_ext_real": [
+      0.0389,
+      0.043
+    ],
+    "null_ext_rfc_txt": [
+      0.0354,
+      0.0446
+    ],
+    "null_ext_rst_doc": [
+      0.0404,
+      0.0491
+    ],
+    "null_ext_sql": [
+      0.027,
+      0.0351
+    ],
+    "null_ext_xml": [
+      0.036,
+      0.0451
+    ],
+    "real_incumbent_builder_eval": [
+      0.0735,
+      0.0751
+    ],
+    "real_incumbent_ext": [
+      0.0843,
+      0.0888
+    ],
+    "real_incumbent_ext_c_src": [
+      0.1006,
+      0.1117
+    ],
+    "real_incumbent_ext_hexdump": [
+      0.0385,
+      0.0473
+    ],
+    "real_incumbent_ext_pe_bin": [
+      0.0783,
+      0.0897
+    ],
+    "real_incumbent_ext_py_src": [
+      0.0992,
+      0.1115
+    ],
+    "real_incumbent_ext_real": [
+      0.0986,
+      0.1037
+    ],
+    "real_incumbent_ext_rfc_txt": [
+      0.1003,
+      0.1129
+    ],
+    "real_incumbent_ext_rst_doc": [
+      0.0979,
+      0.1087
+    ],
+    "real_incumbent_ext_sql": [
+      0.0556,
+      0.0661
+    ],
+    "real_incumbent_ext_xml": [
+      0.0777,
+      0.0877
+    ],
+    "real_logistic_builder_eval": [
+      0.0761,
+      0.0778
+    ],
+    "real_logistic_ext": [
+      0.1018,
+      0.1065
+    ],
+    "real_logistic_ext_c_src": [
+      0.1181,
+      0.1303
+    ],
+    "real_logistic_ext_hexdump": [
+      0.0449,
+      0.0538
+    ],
+    "real_logistic_ext_pe_bin": [
+      0.085,
+      0.0958
+    ],
+    "real_logistic_ext_py_src": [
+      0.1292,
+      0.1429
+    ],
+    "real_logistic_ext_real": [
+      0.1153,
+      0.1209
+    ],
+    "real_logistic_ext_rfc_txt": [
+      0.117,
+      0.129
+    ],
+    "real_logistic_ext_rst_doc": [
+      0.1097,
+      0.1212
+    ],
+    "real_logistic_ext_sql": [
+      0.0884,
+      0.0997
+    ],
+    "real_logistic_ext_xml": [
+      0.0956,
+      0.1058
+    ],
+    "real_model_builder_eval": [
+      0.0805,
+      0.0822
+    ],
+    "real_model_ext": [
+      0.0982,
+      0.1029
+    ],
+    "real_model_ext_c_src": [
+      0.1229,
+      0.1358
+    ],
+    "real_model_ext_hexdump": [
+      0.0368,
+      0.0453
+    ],
+    "real_model_ext_pe_bin": [
+      0.091,
+      0.102
+    ],
+    "real_model_ext_py_src": [
+      0.1256,
+      0.14
+    ],
+    "real_model_ext_real": [
+      0.1165,
+      0.1223
+    ],
+    "real_model_ext_rfc_txt": [
+      0.1167,
+      0.129
+    ],
+    "real_model_ext_rst_doc": [
+      0.1081,
+      0.1201
+    ],
+    "real_model_ext_sql": [
+      0.0707,
+      0.0829
+    ],
+    "real_model_ext_xml": [
+      0.0859,
+      0.0951
+    ],
+    "repro_builder_eval": [
+      0.1945,
+      0.1985
+    ],
+    "repro_ext": [
+      0.0694,
+      0.0732
+    ],
+    "repro_ext_c_src": [
+      0.0496,
+      0.0603
+    ],
+    "repro_ext_hexdump": [
+      0.0696,
+      0.0778
+    ],
+    "repro_ext_pe_bin": [
+      0.0663,
+      0.0754
+    ],
+    "repro_ext_py_src": [
+      0.0464,
+      0.0555
+    ],
+    "repro_ext_real": [
+      0.0574,
+      0.062
+    ],
+    "repro_ext_rfc_txt": [
+      0.059,
+      0.07
+    ],
+    "repro_ext_rst_doc": [
+      0.0527,
+      0.0632
+    ],
+    "repro_ext_sql": [
+      0.0977,
+      0.1091
+    ],
+    "repro_ext_xml": [
+      0.0914,
+      0.1014
+    ]
+  },
+  "cluster_ci95_note": "95% cluster-bootstrap intervals over source chunks (2000 resamples), informational",
+  "complete": true,
+  "corpus": {
+    "cache_X_sha256": "a28a2d403d40c64405fe15747399f1317fd984155702797590c58fb0cef0f8ea",
+    "cache_g_sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9",
+    "cache_y_sha256": "2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093",
+    "carve_bytes": 4096,
+    "carve_bytes_source": "sealed cache identity (sha256 of y and g); the cache carries no build metadata",
+    "chunk_id_max": 49999,
+    "chunk_id_min": 0,
+    "chunk_offset": 0,
+    "chunk_size": 32768,
+    "n_features": 1108,
+    "n_rows": 1300000,
+    "n_source_chunks": 50000
+  },
+  "cost": {
+    "banked_fit_seconds_total": 1255.1,
+    "checkpoints": "artifacts/pivot/realfit_4096_rerun_ckpt",
+    "interruptions_by_name": {
+      "builder_chunk_matched": 0,
+      "builder_matched": 0,
+      "floor_feat1": 0,
+      "floor_majority": 0,
+      "floor_stratified": 0,
+      "floor_tree3": 0,
+      "null": 0,
+      "real_incumbent": 0,
+      "real_logistic": 0,
+      "real_model": 0,
+      "repro": 0
+    },
+    "seconds_by_name": {
+      "builder_chunk_matched": 151.9,
+      "builder_matched": 411.8,
+      "floor_feat1": 1.1,
+      "floor_majority": 0.0,
+      "floor_stratified": 0.0,
+      "floor_tree3": 3.4,
+      "null": 84.3,
+      "real_incumbent": 25.3,
+      "real_logistic": 58.0,
+      "real_model": 280.1,
+      "repro": 239.2
+    },
+    "wall_seconds_this_invocation": 1556.5
+  },
+  "environment": {
+    "cgroup_memory_limit": "unlimited",
+    "cpu_cores": 4,
+    "disk_free_gb": 3.03,
+    "gpu": "none",
+    "mem_available_gb": 12.86,
+    "nice": 10,
+    "numpy": "2.4.6",
+    "python": "3.11.15",
+    "sklearn": "1.9.0",
+    "threads": 3
+  },
+  "ext_corpus": {
+    "arrays": {
+      "X": {
+        "dtype": "float32",
+        "sha256": "c578eaf142dfd776fe2c9433420133ae6b2d304cdd546f2bdbbc50b397c4f5db",
+        "shape": [
+          61409,
+          1108
+        ]
+      },
+      "fam": {
+        "dtype": "int8",
+        "sha256": "21b066e7020c5a4ba247101e679ba31f23cbeae5500ab67e64f453b83e61f917",
+        "shape": [
+          61409
+        ]
+      },
+      "g": {
+        "dtype": "int32",
+        "sha256": "2f5b8a86cc0463c1376d1ceb379ffe710e709899f2db4e1a527d355d6fcfc8b9",
+        "shape": [
+          61409
+        ]
+      },
+      "y": {
+        "dtype": "int16",
+        "sha256": "edbf9b3a9aa810338807a4a397884b58b27a28bbf0d99826050403bdeeabdd46",
+        "shape": [
+          61409
+        ]
+      }
+    },
+    "chunk_id_max": 10700299,
+    "chunk_id_min": 10000000,
+    "chunks_per_family": {
+      "c_src": 300,
+      "hexdump": 300,
+      "pe_bin": 288,
+      "py_src": 300,
+      "rfc_txt": 300,
+      "rst_doc": 300,
+      "sql": 299,
+      "xml": 300
+    },
+    "families": [
+      "c_src",
+      "hexdump",
+      "pe_bin",
+      "py_src",
+      "rfc_txt",
+      "rst_doc",
+      "sql",
+      "xml"
+    ],
+    "n_chunks": 2387,
+    "n_rows": 61409,
+    "npz": "data/pivot/ext_c4096.npz",
+    "rows_per_family": {
+      "c_src": 7800,
+      "hexdump": 7800,
+      "pe_bin": 7407,
+      "py_src": 7709,
+      "rfc_txt": 7761,
+      "rst_doc": 7775,
+      "sql": 7357,
+      "xml": 7800
+    }
+  },
+  "ext_correct": {
+    "builder_chunk_matched": 4606,
+    "builder_matched": 4751,
+    "floor_feat1": 3333,
+    "floor_majority": 2387,
+    "floor_stratified": 2387,
+    "floor_tree3": 5351,
+    "null": 2419,
+    "real_incumbent": 5319,
+    "real_logistic": 6396,
+    "real_model": 6178,
+    "repro": 4379
+  },
+  "ext_correct_model": 6178,
+  "ext_per_family": {
+    "builder_chunk_matched": {
+      "c_src": 0.0638,
+      "hexdump": 0.0733,
+      "pe_bin": 0.0725,
+      "py_src": 0.0531,
+      "rfc_txt": 0.0706,
+      "rst_doc": 0.0593,
+      "sql": 0.1079,
+      "xml": 0.1009
+    },
+    "builder_matched": {
+      "c_src": 0.066,
+      "hexdump": 0.0813,
+      "pe_bin": 0.0755,
+      "py_src": 0.0562,
+      "rfc_txt": 0.0727,
+      "rst_doc": 0.0655,
+      "sql": 0.107,
+      "xml": 0.0962
+    },
+    "floor_feat1": {
+      "c_src": 0.0523,
+      "hexdump": 0.0409,
+      "pe_bin": 0.0706,
+      "py_src": 0.065,
+      "rfc_txt": 0.0443,
+      "rst_doc": 0.043,
+      "sql": 0.0529,
+      "xml": 0.066
+    },
+    "floor_majority": {
+      "c_src": 0.0385,
+      "hexdump": 0.0385,
+      "pe_bin": 0.0389,
+      "py_src": 0.0389,
+      "rfc_txt": 0.0387,
+      "rst_doc": 0.0386,
+      "sql": 0.0406,
+      "xml": 0.0385
+    },
+    "floor_stratified": {
+      "c_src": 0.0385,
+      "hexdump": 0.0394,
+      "pe_bin": 0.0325,
+      "py_src": 0.0402,
+      "rfc_txt": 0.0392,
+      "rst_doc": 0.0405,
+      "sql": 0.0401,
+      "xml": 0.0404
+    },
+    "floor_tree3": {
+      "c_src": 0.1019,
+      "hexdump": 0.0628,
+      "pe_bin": 0.0806,
+      "py_src": 0.086,
+      "rfc_txt": 0.0938,
+      "rst_doc": 0.1015,
+      "sql": 0.0742,
+      "xml": 0.0953
+    },
+    "null": {
+      "c_src": 0.0401,
+      "hexdump": 0.039,
+      "pe_bin": 0.0385,
+      "py_src": 0.0411,
+      "rfc_txt": 0.0399,
+      "rst_doc": 0.0446,
+      "sql": 0.031,
+      "xml": 0.0404
+    },
+    "real_incumbent": {
+      "c_src": 0.1062,
+      "hexdump": 0.0428,
+      "pe_bin": 0.0838,
+      "py_src": 0.1053,
+      "rfc_txt": 0.1064,
+      "rst_doc": 0.1035,
+      "sql": 0.0609,
+      "xml": 0.0827
+    },
+    "real_logistic": {
+      "c_src": 0.1242,
+      "hexdump": 0.0491,
+      "pe_bin": 0.0902,
+      "py_src": 0.1358,
+      "rfc_txt": 0.1229,
+      "rst_doc": 0.1154,
+      "sql": 0.0939,
+      "xml": 0.1009
+    },
+    "real_model": {
+      "c_src": 0.1295,
+      "hexdump": 0.041,
+      "pe_bin": 0.0963,
+      "py_src": 0.1327,
+      "rfc_txt": 0.1228,
+      "rst_doc": 0.1142,
+      "sql": 0.0769,
+      "xml": 0.0904
+    },
+    "repro": {
+      "c_src": 0.0549,
+      "hexdump": 0.0735,
+      "pe_bin": 0.071,
+      "py_src": 0.051,
+      "rfc_txt": 0.0643,
+      "rst_doc": 0.0579,
+      "sql": 0.1032,
+      "xml": 0.0963
+    }
+  },
+  "ext_real_correct": {
+    "builder_chunk_matched": 2453,
+    "builder_matched": 2580,
+    "floor_feat1": 2110,
+    "floor_majority": 1488,
+    "floor_stratified": 1470,
+    "floor_tree3": 3572,
+    "null": 1572,
+    "real_incumbent": 3892,
+    "real_logistic": 4535,
+    "real_model": 4587,
+    "repro": 2296
+  },
+  "ext_real_correct_model": 4587,
+  "ext_real_families": [
+    "c_src",
+    "pe_bin",
+    "py_src",
+    "rfc_txt",
+    "rst_doc"
+  ],
+  "ext_real_top1": {
+    "builder_chunk_matched": 0.0638,
+    "builder_matched": 0.0671,
+    "floor_feat1": 0.0549,
+    "floor_majority": 0.0387,
+    "floor_stratified": 0.0382,
+    "floor_tree3": 0.0929,
+    "null": 0.0409,
+    "real_incumbent": 0.1012,
+    "real_logistic": 0.1179,
+    "real_model": 0.1193,
+    "repro": 0.0597
+  },
+  "ext_real_top1_model": 0.1193,
+  "ext_synthetic_families": [
+    "hexdump",
+    "sql",
+    "xml"
+  ],
+  "ext_top1": {
+    "builder_chunk_matched": 0.075,
+    "builder_matched": 0.0774,
+    "floor_feat1": 0.0543,
+    "floor_majority": 0.0389,
+    "floor_stratified": 0.0389,
+    "floor_tree3": 0.0871,
+    "null": 0.0394,
+    "real_incumbent": 0.0866,
+    "real_logistic": 0.1042,
+    "real_model": 0.1006,
+    "repro": 0.0713
+  },
+  "ext_top1_model": 0.1006,
+  "first_launch_utc": "2026-09-16T10:09:16Z",
+  "fit_corpus": {
+    "arrays": {
+      "X": {
+        "dtype": "float32",
+        "sha256": "d969c7d75f5bc7743e9014908fe1d5e07a4220eacd82c166329bdcb381db8c98",
+        "shape": [
+          26346,
+          1108
+        ]
+      },
+      "fam": {
+        "dtype": "int8",
+        "sha256": "8404e6764eb6a35e674a3c61b21fd1c8007a2448dec8203c80de2f0a71d07aca",
+        "shape": [
+          26346
+        ]
+      },
+      "g": {
+        "dtype": "int32",
+        "sha256": "3046de76635c235319eb7bf49e59cf78c27d3d4f7776107c148ca0a7352dc0c8",
+        "shape": [
+          26346
+        ]
+      },
+      "y": {
+        "dtype": "int16",
+        "sha256": "61f440bef345b3ec2f91f4accd56c1b23cf9d15376d3fa8ea76b01196488356a",
+        "shape": [
+          26346
+        ]
+      }
+    },
+    "chunk_id_max": 20400039,
+    "chunk_id_min": 20000000,
+    "chunks_per_family": {
+      "c_src": 24,
+      "pe_bin": 203,
+      "py_src": 672,
+      "rfc_txt": 90,
+      "rst_doc": 40
+    },
+    "families": [
+      "c_src",
+      "pe_bin",
+      "py_src",
+      "rfc_txt",
+      "rst_doc"
+    ],
+    "label_histogram": [
+      1025,
+      1023,
+      1022,
+      1017,
+      1009,
+      1008,
+      1006,
+      1006,
+      1006,
+      1022,
+      1022,
+      1019,
+      1011,
+      1008,
+      1008,
+      1007,
+      1005,
+      1006,
+      1002,
+      1002,
+      1002,
+      1029,
+      1028,
+      1028,
+      1025,
+      1000
+    ],
+    "majority_class_rate": 0.039057,
+    "n_chunks": 1029,
+    "n_rows": 26346,
+    "npz": "data/pivot/realfit_c4096.npz",
+    "rows_per_family": {
+      "c_src": 624,
+      "pe_bin": 5145,
+      "py_src": 17197,
+      "rfc_txt": 2340,
+      "rst_doc": 1040
+    }
+  },
+  "fit_families": [
+    "c_src",
+    "pe_bin",
+    "py_src",
+    "rfc_txt",
+    "rst_doc"
+  ],
+  "fit_info_by_name": {
+    "builder_chunk_matched": {
+      "n_iter": 43
+    },
+    "builder_matched": {
+      "n_iter": 94
+    },
+    "floor_feat1": {
+      "depth": 1,
+      "n_leaves": 2
+    },
+    "floor_majority": {},
+    "floor_stratified": {},
+    "floor_tree3": {
+      "depth": 3,
+      "n_leaves": 8
+    },
+    "null": {
+      "n_iter": 21
+    },
+    "real_incumbent": {
+      "n_iter": 12
+    },
+    "real_logistic": {
+      "n_iter": 392
+    },
+    "real_model": {
+      "n_iter": 62
+    },
+    "repro": {
+      "n_iter": 49
+    }
+  },
+  "fit_record_top1_is": "each fit record's top1 and top1_non_gutenberg are over the concatenated 260000 + 61409 scoring set; per_family is over the sealed evaluation rows only, because extension rows carry an 'ext:' family prefix",
+  "fit_rows_per_family": {
+    "c_src": 624,
+    "pe_bin": 5145,
+    "py_src": 17197,
+    "rfc_txt": 2340,
+    "rst_doc": 1040
+  },
+  "fits": {
+    "builder_chunk_matched": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "hgb",
+      "fingerprint": "78a3d67c9638adf1",
+      "fit_info": {
+        "n_iter": 43
+      },
+      "fit_rows_sha256": "6fa27a56443ec9f7e8b63cd24bac01fcb28b3065a8020a9375feaed26cea39a9",
+      "fit_rows_sorted_sha256": "735b257703ac2ca721514520ce75de478472c9c2122ec1ccd33dacc5b2efdcca",
+      "head": "builder_chunk_matched",
+      "heartbeat_max_rss_gb": 2.79,
+      "id": "M4",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 20817,
+      "params": {
+        "l2_regularization": 1.0,
+        "learning_rate": 0.05,
+        "max_iter": 250,
+        "max_leaf_nodes": 127,
+        "n_iter_no_change": 20
+      },
+      "params_sha256": "9c19bb4d24ea1b96659e43a3e7ce8c71c2980a1bf4abe5066afe9761380a41a8",
+      "per_example_sha256": "ec531184b32e7bb625743b5e0a06c0e29abe1607c2d8957a3c3a7469c961155e",
+      "per_family": {
+        "base64": 0.1134,
+        "binary": 0.0957,
+        "code": 0.1942,
+        "csv": 0.3253,
+        "gutenberg": 0.1313,
+        "json": 0.2511,
+        "log": 0.2653,
+        "mixed": 0.1156
+      },
+      "rss_gb": 2.79,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 8.47,
+      "ru_maxrss_gb": 9.25,
+      "scaled": false,
+      "seconds": 151.9,
+      "seed": 20260825,
+      "stage": "pool_chunk_matched",
+      "status": "fit",
+      "top1": 0.1649,
+      "top1_non_gutenberg": 0.1688,
+      "utc": "2026-09-16T10:31:30Z",
+      "val": "frag"
+    },
+    "builder_matched": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "hgb",
+      "fingerprint": "0fbe0c141fba1ebb",
+      "fit_info": {
+        "n_iter": 94
+      },
+      "fit_rows_sha256": "1c5289efa16555dc519ddc1100c1f6e1aff10007134ea424ebd1106f54e14659",
+      "fit_rows_sorted_sha256": "f08557aee0c9dbdedf90d0d670a73b0277d1572a5e9e3cb7f07e9128e852ec6b",
+      "head": "builder_matched",
+      "heartbeat_max_rss_gb": 2.79,
+      "id": "M4",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 26346,
+      "params": {
+        "l2_regularization": 1.0,
+        "learning_rate": 0.05,
+        "max_iter": 250,
+        "max_leaf_nodes": 127,
+        "n_iter_no_change": 20
+      },
+      "params_sha256": "9c19bb4d24ea1b96659e43a3e7ce8c71c2980a1bf4abe5066afe9761380a41a8",
+      "per_example_sha256": "35e6a5f1f6d0c774304646907af326074ab2884ecc5a9c17af0571bd483e0117",
+      "per_family": {
+        "base64": 0.1157,
+        "binary": 0.0968,
+        "code": 0.2222,
+        "csv": 0.3439,
+        "gutenberg": 0.1361,
+        "json": 0.2786,
+        "log": 0.3012,
+        "mixed": 0.1162
+      },
+      "rss_gb": 2.79,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 8.47,
+      "ru_maxrss_gb": 9.25,
+      "scaled": false,
+      "seconds": 411.8,
+      "seed": 20260825,
+      "stage": "pool_matched",
+      "status": "fit",
+      "top1": 0.1774,
+      "top1_non_gutenberg": 0.1821,
+      "utc": "2026-09-16T10:23:09Z",
+      "val": "frag"
+    },
+    "floor_feat1": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "tree",
+      "fingerprint": "5e0a2b617f0d9a2d",
+      "fit_info": {
+        "depth": 1,
+        "n_leaves": 2
+      },
+      "fit_rows_sha256": "2b5fbaf627f1073bdeb51499c213be18837185414607b314b19f0efb6f5f5469",
+      "fit_rows_sorted_sha256": "551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476",
+      "head": "floor_feat1",
+      "heartbeat_max_rss_gb": 2.27,
+      "id": "B-feat1",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 26346,
+      "params": {
+        "max_depth": 1
+      },
+      "params_sha256": "22bad8b51105e5c73094ccc9d154eba2ebe6276c03b34c3bf72b164c5b761339",
+      "per_example_sha256": "b625d20f1e414c1852cd4a8dbc99dcb6232ca5c775f6ff1fd4d8ddb57544ee99",
+      "per_family": {
+        "base64": 0.0769,
+        "binary": 0.0769,
+        "code": 0.0517,
+        "csv": 0.0399,
+        "gutenberg": 0.0384,
+        "json": 0.0573,
+        "log": 0.0389,
+        "mixed": 0.0769
+      },
+      "rss_gb": 2.27,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 7.96,
+      "ru_maxrss_gb": 9.25,
+      "scaled": false,
+      "seconds": 1.1,
+      "seed": 20260825,
+      "stage": "realfit_floor",
+      "status": "fit",
+      "top1": 0.0566,
+      "top1_non_gutenberg": 0.0586,
+      "utc": "2026-09-16T10:22:59Z",
+      "val": "frag"
+    },
+    "floor_majority": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "dummy",
+      "fingerprint": "e3c908f5d187ed17",
+      "fit_info": {},
+      "fit_rows_sha256": "2b5fbaf627f1073bdeb51499c213be18837185414607b314b19f0efb6f5f5469",
+      "fit_rows_sorted_sha256": "551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476",
+      "head": "floor_majority",
+      "heartbeat_max_rss_gb": 2.27,
+      "id": "B-majority",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 26346,
+      "params": {
+        "strategy": "most_frequent"
+      },
+      "params_sha256": "8476cde1058cff329232a522eac7bde3e32e844c3982b294fa4d309151489f82",
+      "per_example_sha256": "424cfe877a361e635e2fdc8bcdcbd073cd52553d896a88d68f4f34bb2347fd5c",
+      "per_family": {
+        "base64": 0.0385,
+        "binary": 0.0385,
+        "code": 0.0385,
+        "csv": 0.0385,
+        "gutenberg": 0.0385,
+        "json": 0.0385,
+        "log": 0.0385,
+        "mixed": 0.0385
+      },
+      "rss_gb": 2.27,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 7.95,
+      "ru_maxrss_gb": 9.25,
+      "scaled": false,
+      "seconds": 0.0,
+      "seed": 20260825,
+      "stage": "realfit_floor",
+      "status": "fit",
+      "top1": 0.0385,
+      "top1_non_gutenberg": 0.0385,
+      "utc": "2026-09-16T10:22:56Z",
+      "val": "frag"
+    },
+    "floor_stratified": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "dummy",
+      "fingerprint": "ecfc4aa299901e95",
+      "fit_info": {},
+      "fit_rows_sha256": "2b5fbaf627f1073bdeb51499c213be18837185414607b314b19f0efb6f5f5469",
+      "fit_rows_sorted_sha256": "551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476",
+      "head": "floor_stratified",
+      "heartbeat_max_rss_gb": 2.27,
+      "id": "B-stratified",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 26346,
+      "params": {
+        "strategy": "stratified"
+      },
+      "params_sha256": "c7ca7fa12989a757b958af3d0cedb9ed89487e6661870725827ca83dcb421596",
+      "per_example_sha256": "734a9af4cebfd28fb8cdd3fda000cf0f8f89edcd84f8563d8bc2f42f6d2ac57e",
+      "per_family": {
+        "base64": 0.0386,
+        "binary": 0.0385,
+        "code": 0.0379,
+        "csv": 0.0386,
+        "gutenberg": 0.0389,
+        "json": 0.0388,
+        "log": 0.038,
+        "mixed": 0.0377
+      },
+      "rss_gb": 2.27,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 7.96,
+      "ru_maxrss_gb": 9.25,
+      "scaled": false,
+      "seconds": 0.0,
+      "seed": 20260825,
+      "stage": "realfit_floor",
+      "status": "fit",
+      "top1": 0.0385,
+      "top1_non_gutenberg": 0.0384,
+      "utc": "2026-09-16T10:22:57Z",
+      "val": "frag"
+    },
+    "floor_tree3": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "tree",
+      "fingerprint": "09d824d6a5fff670",
+      "fit_info": {
+        "depth": 3,
+        "n_leaves": 8
+      },
+      "fit_rows_sha256": "2b5fbaf627f1073bdeb51499c213be18837185414607b314b19f0efb6f5f5469",
+      "fit_rows_sorted_sha256": "551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476",
+      "head": "floor_tree3",
+      "heartbeat_max_rss_gb": 2.27,
+      "id": "B-tree3",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 26346,
+      "params": {
+        "max_depth": 3
+      },
+      "params_sha256": "61971b09304412a6803846358a343ea594ee78cff4f671745703c15379cef159",
+      "per_example_sha256": "57b8096c1cdfa36b0776d1c37f36a9236c9f85fcebc250922d72295b2e8868e5",
+      "per_family": {
+        "base64": 0.068,
+        "binary": 0.0747,
+        "code": 0.0977,
+        "csv": 0.0618,
+        "gutenberg": 0.0797,
+        "json": 0.1139,
+        "log": 0.1102,
+        "mixed": 0.076
+      },
+      "rss_gb": 2.27,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 7.96,
+      "ru_maxrss_gb": 9.25,
+      "scaled": false,
+      "seconds": 3.4,
+      "seed": 20260825,
+      "stage": "realfit_floor",
+      "status": "fit",
+      "top1": 0.0857,
+      "top1_non_gutenberg": 0.0864,
+      "utc": "2026-09-16T10:23:03Z",
+      "val": "frag"
+    },
+    "null": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "hgb",
+      "fingerprint": "f2fad60efd30f60e",
+      "fit_info": {
+        "n_iter": 21
+      },
+      "fit_rows_sha256": "2b5fbaf627f1073bdeb51499c213be18837185414607b314b19f0efb6f5f5469",
+      "fit_rows_sorted_sha256": "551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476",
+      "head": "null",
+      "heartbeat_max_rss_gb": 2.81,
+      "id": "M4",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 26346,
+      "params": {
+        "l2_regularization": 1.0,
+        "learning_rate": 0.05,
+        "max_iter": 250,
+        "max_leaf_nodes": 127,
+        "n_iter_no_change": 20
+      },
+      "params_sha256": "9c19bb4d24ea1b96659e43a3e7ce8c71c2980a1bf4abe5066afe9761380a41a8",
+      "per_example_sha256": "0209fe160edbc035508e94c62b9596f48abeffdd6d1ebb8410653d9dad47c15a",
+      "per_family": {
+        "base64": 0.0382,
+        "binary": 0.0385,
+        "code": 0.0407,
+        "csv": 0.039,
+        "gutenberg": 0.0402,
+        "json": 0.0383,
+        "log": 0.0376,
+        "mixed": 0.0379
+      },
+      "rss_gb": 2.38,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 8.06,
+      "ru_maxrss_gb": 9.07,
+      "scaled": false,
+      "seconds": 84.3,
+      "seed": 20260825,
+      "stage": "fit_null",
+      "status": "fit",
+      "top1": 0.0389,
+      "top1_non_gutenberg": 0.0388,
+      "utc": "2026-09-16T10:13:54Z",
+      "val": "frag"
+    },
+    "real_incumbent": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "hgb",
+      "fingerprint": "cf9e3cb5ef8fb07c",
+      "fit_info": {
+        "n_iter": 12
+      },
+      "fit_rows_sha256": "2b5fbaf627f1073bdeb51499c213be18837185414607b314b19f0efb6f5f5469",
+      "fit_rows_sorted_sha256": "551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476",
+      "head": "real_incumbent",
+      "heartbeat_max_rss_gb": 2.51,
+      "id": "M1",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 26346,
+      "params": {
+        "learning_rate": 0.15,
+        "max_iter": 200,
+        "max_leaf_nodes": 63,
+        "n_iter_no_change": 10
+      },
+      "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+      "per_example_sha256": "912e428fb1d4dc11b764daa2ef76b2c9464365cc45c3656b3dfe4f4155b27bd9",
+      "per_family": {
+        "base64": 0.0704,
+        "binary": 0.0766,
+        "code": 0.0784,
+        "csv": 0.0474,
+        "gutenberg": 0.0805,
+        "json": 0.0791,
+        "log": 0.0827,
+        "mixed": 0.0783
+      },
+      "rss_gb": 2.15,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 7.83,
+      "ru_maxrss_gb": 9.07,
+      "scaled": false,
+      "seconds": 25.3,
+      "seed": 20260825,
+      "stage": "realfit",
+      "status": "fit",
+      "top1": 0.0766,
+      "top1_non_gutenberg": 0.0762,
+      "utc": "2026-09-16T10:21:18Z",
+      "val": "frag"
+    },
+    "real_logistic": {
+      "block_refills": [
+        {
+          "order": "canonical",
+          "probe_ok": true,
+          "utc": "2026-09-16T10:22:55Z"
+        }
+      ],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "logistic",
+      "fingerprint": "fb5268d7867b4556",
+      "fit_info": {
+        "n_iter": 392
+      },
+      "fit_rows_sha256": "2b5fbaf627f1073bdeb51499c213be18837185414607b314b19f0efb6f5f5469",
+      "fit_rows_sorted_sha256": "551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476",
+      "head": "real_logistic",
+      "heartbeat_max_rss_gb": 3.55,
+      "id": "L3",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 26346,
+      "params": {
+        "C": 1.0,
+        "max_iter": 1000
+      },
+      "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+      "per_example_sha256": "3eefa7a10ebc324a60cafd6cd81aeb265e986f9b4efcc124feef0cec62dd59d9",
+      "per_family": {
+        "base64": 0.069,
+        "binary": 0.0742,
+        "code": 0.0836,
+        "csv": 0.0682,
+        "gutenberg": 0.084,
+        "json": 0.0894,
+        "log": 0.0684,
+        "mixed": 0.0786
+      },
+      "rss_gb": 2.27,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 7.95,
+      "ru_maxrss_gb": 9.25,
+      "scaled": true,
+      "seconds": 58.0,
+      "seed": 20260825,
+      "stage": "realfit",
+      "status": "fit",
+      "top1": 0.0821,
+      "top1_non_gutenberg": 0.0819,
+      "utc": "2026-09-16T10:21:54Z",
+      "val": null
+    },
+    "real_model": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "hgb",
+      "fingerprint": "0acb7434297cd749",
+      "fit_info": {
+        "n_iter": 62
+      },
+      "fit_rows_sha256": "2b5fbaf627f1073bdeb51499c213be18837185414607b314b19f0efb6f5f5469",
+      "fit_rows_sorted_sha256": "551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476",
+      "head": "real_model",
+      "heartbeat_max_rss_gb": 2.68,
+      "id": "M4",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 26346,
+      "params": {
+        "l2_regularization": 1.0,
+        "learning_rate": 0.05,
+        "max_iter": 250,
+        "max_leaf_nodes": 127,
+        "n_iter_no_change": 20
+      },
+      "params_sha256": "9c19bb4d24ea1b96659e43a3e7ce8c71c2980a1bf4abe5066afe9761380a41a8",
+      "per_example_sha256": "a57d042f5027a2c8128e01f9c053dadf684639f45c4a6115e5fab7b35154a1f2",
+      "per_family": {
+        "base64": 0.0649,
+        "binary": 0.076,
+        "code": 0.084,
+        "csv": 0.0581,
+        "gutenberg": 0.0917,
+        "json": 0.1027,
+        "log": 0.0917,
+        "mixed": 0.0809
+      },
+      "rss_gb": 2.14,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 7.83,
+      "ru_maxrss_gb": 9.07,
+      "scaled": false,
+      "seconds": 280.1,
+      "seed": 20260825,
+      "stage": "realfit",
+      "status": "fit",
+      "top1": 0.085,
+      "top1_non_gutenberg": 0.0843,
+      "utc": "2026-09-16T10:15:40Z",
+      "val": "frag"
+    },
+    "repro": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "hgb",
+      "fingerprint": "5c1b2030217f2f3d",
+      "fit_info": {
+        "n_iter": 49
+      },
+      "fit_rows_sha256": "659169fcf818b742154948c86e7d60dda61f798a7b5f671c29a0b64827f34297",
+      "fit_rows_sorted_sha256": "38de80c9bf49f2ea8be8e52545632a0904de4b57dc00256c165123efeed7596a",
+      "head": "repro",
+      "heartbeat_max_rss_gb": 3.38,
+      "id": "M1",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 100000,
+      "params": {
+        "learning_rate": 0.15,
+        "max_iter": 200,
+        "max_leaf_nodes": 63,
+        "n_iter_no_change": 10
+      },
+      "params_sha256": "618e84840970bfe49e44fabdb0100895acd65ac4c042f0b402abe24c58386c9f",
+      "per_example_sha256": "49dd865b3fd40a0244efb27cafdbbb2fffd66d72afaa552ee60999833bd0e469",
+      "per_family": {
+        "base64": 0.1153,
+        "binary": 0.0947,
+        "code": 0.2248,
+        "csv": 0.3288,
+        "gutenberg": 0.1366,
+        "json": 0.2711,
+        "log": 0.2875,
+        "mixed": 0.1154
+      },
+      "rss_gb": 2.95,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 8.63,
+      "ru_maxrss_gb": 9.07,
+      "scaled": false,
+      "seconds": 239.2,
+      "seed": 20260825,
+      "stage": "pool_rung",
+      "status": "fit",
+      "top1": 0.1725,
+      "top1_non_gutenberg": 0.1767,
+      "utc": "2026-09-16T10:09:18Z",
+      "val": "frag"
+    }
+  },
+  "launch_environment": {
+    "env": {
+      "cgroup_memory_limit": "unlimited",
+      "cpu_cores": 4,
+      "disk_free_gb": 3.06,
+      "gpu": "none",
+      "mem_available_gb": 15.57,
+      "nice": 10,
+      "numpy": "2.4.6",
+      "python": "3.11.15",
+      "sklearn": "1.9.0",
+      "threads": 3
+    },
+    "loadavg_1_5_15": [
+      0.37,
+      0.58,
+      0.8
+    ],
+    "ok": true,
+    "problems": []
+  },
+  "launch_number": 1,
+  "ledger": [
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "5c1b2030217f2f3d",
+      "name": "repro",
+      "pid": 16905,
+      "rss_gb": 2.71,
+      "utc": "2026-09-16T10:09:18Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "5c1b2030217f2f3d",
+      "name": "repro",
+      "pid": 16905,
+      "rss_gb": 2.95,
+      "seconds": 239.2,
+      "utc": "2026-09-16T10:13:54Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "f2fad60efd30f60e",
+      "name": "null",
+      "pid": 16905,
+      "rss_gb": 2.1,
+      "utc": "2026-09-16T10:13:54Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "f2fad60efd30f60e",
+      "name": "null",
+      "pid": 16905,
+      "rss_gb": 2.38,
+      "seconds": 84.3,
+      "utc": "2026-09-16T10:15:39Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "0acb7434297cd749",
+      "name": "real_model",
+      "pid": 16905,
+      "rss_gb": 2.15,
+      "utc": "2026-09-16T10:15:40Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "0acb7434297cd749",
+      "name": "real_model",
+      "pid": 16905,
+      "rss_gb": 2.14,
+      "seconds": 280.1,
+      "utc": "2026-09-16T10:21:17Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "cf9e3cb5ef8fb07c",
+      "name": "real_incumbent",
+      "pid": 16905,
+      "rss_gb": 2.17,
+      "utc": "2026-09-16T10:21:18Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "cf9e3cb5ef8fb07c",
+      "name": "real_incumbent",
+      "pid": 16905,
+      "rss_gb": 2.15,
+      "seconds": 25.3,
+      "utc": "2026-09-16T10:21:53Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "fb5268d7867b4556",
+      "name": "real_logistic",
+      "pid": 16905,
+      "rss_gb": 2.17,
+      "utc": "2026-09-16T10:21:54Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "fb5268d7867b4556",
+      "name": "real_logistic",
+      "pid": 16905,
+      "rss_gb": 2.27,
+      "seconds": 58.0,
+      "utc": "2026-09-16T10:22:55Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "e3c908f5d187ed17",
+      "name": "floor_majority",
+      "pid": 16905,
+      "rss_gb": 2.27,
+      "utc": "2026-09-16T10:22:56Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "e3c908f5d187ed17",
+      "name": "floor_majority",
+      "pid": 16905,
+      "rss_gb": 2.27,
+      "seconds": 0.0,
+      "utc": "2026-09-16T10:22:57Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "ecfc4aa299901e95",
+      "name": "floor_stratified",
+      "pid": 16905,
+      "rss_gb": 2.27,
+      "utc": "2026-09-16T10:22:57Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "ecfc4aa299901e95",
+      "name": "floor_stratified",
+      "pid": 16905,
+      "rss_gb": 2.27,
+      "seconds": 0.0,
+      "utc": "2026-09-16T10:22:58Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "5e0a2b617f0d9a2d",
+      "name": "floor_feat1",
+      "pid": 16905,
+      "rss_gb": 2.27,
+      "utc": "2026-09-16T10:22:59Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "5e0a2b617f0d9a2d",
+      "name": "floor_feat1",
+      "pid": 16905,
+      "rss_gb": 2.27,
+      "seconds": 1.1,
+      "utc": "2026-09-16T10:23:02Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "09d824d6a5fff670",
+      "name": "floor_tree3",
+      "pid": 16905,
+      "rss_gb": 2.27,
+      "utc": "2026-09-16T10:23:03Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "09d824d6a5fff670",
+      "name": "floor_tree3",
+      "pid": 16905,
+      "rss_gb": 2.27,
+      "seconds": 3.4,
+      "utc": "2026-09-16T10:23:08Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "0fbe0c141fba1ebb",
+      "name": "builder_matched",
+      "pid": 16905,
+      "rss_gb": 2.27,
+      "utc": "2026-09-16T10:23:09Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "0fbe0c141fba1ebb",
+      "name": "builder_matched",
+      "pid": 16905,
+      "rss_gb": 2.79,
+      "seconds": 411.8,
+      "utc": "2026-09-16T10:31:29Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "78a3d67c9638adf1",
+      "name": "builder_chunk_matched",
+      "pid": 16905,
+      "rss_gb": 2.79,
+      "utc": "2026-09-16T10:31:30Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "78a3d67c9638adf1",
+      "name": "builder_chunk_matched",
+      "pid": 16905,
+      "rss_gb": 2.79,
+      "seconds": 151.9,
+      "utc": "2026-09-16T10:34:40Z"
+    }
+  ],
+  "missing_roles": [],
+  "n_classes": 26,
+  "n_eval_rows": 260000,
+  "n_ext_real_rows": 38452,
+  "n_ext_rows": 61409,
+  "null_control": {
+    "block_refills": [],
+    "environment": {
+      "nice": 10,
+      "numpy": "2.4.6",
+      "python": "3.11.15",
+      "sklearn": "1.9.0",
+      "standardiser_probe": {
+        "block_gb": 0.177,
+        "ncols": 1108,
+        "peak_extra_fraction_of_block": 0.1005,
+        "probe_rows_per_pass": 2000,
+        "production_rows_per_pass": 20000,
+        "production_transient_gb": 0.177,
+        "rows": 20000
+      },
+      "threads": 3
+    },
+    "family": "hgb",
+    "fingerprint": "f2fad60efd30f60e",
+    "fit_info": {
+      "n_iter": 21
+    },
+    "fit_rows_sha256": "2b5fbaf627f1073bdeb51499c213be18837185414607b314b19f0efb6f5f5469",
+    "fit_rows_sorted_sha256": "551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476",
+    "head": "null",
+    "heartbeat_max_rss_gb": 2.81,
+    "id": "M4",
+    "interruptions_before_this_fit": 0,
+    "last_heartbeat_rss_gb_before_this_fit": null,
+    "n_fit_rows": 26346,
+    "params": {
+      "l2_regularization": 1.0,
+      "learning_rate": 0.05,
+      "max_iter": 250,
+      "max_leaf_nodes": 127,
+      "n_iter_no_change": 20
+    },
+    "params_sha256": "9c19bb4d24ea1b96659e43a3e7ce8c71c2980a1bf4abe5066afe9761380a41a8",
+    "per_example_sha256": "0209fe160edbc035508e94c62b9596f48abeffdd6d1ebb8410653d9dad47c15a",
+    "per_family": {
+      "base64": 0.0382,
+      "binary": 0.0385,
+      "code": 0.0407,
+      "csv": 0.039,
+      "gutenberg": 0.0402,
+      "json": 0.0383,
+      "log": 0.0376,
+      "mixed": 0.0379
+    },
+    "rss_gb": 2.38,
+    "rss_gb_is": "anonymous (RssAnon)",
+    "rss_total_gb": 8.06,
+    "ru_maxrss_gb": 9.07,
+    "scaled": false,
+    "seconds": 84.3,
+    "seed": 20260825,
+    "stage": "fit_null",
+    "status": "fit",
+    "top1": 0.0389,
+    "top1_non_gutenberg": 0.0388,
+    "utc": "2026-09-16T10:13:54Z",
+    "val": "frag"
+  },
+  "partition": {
+    "chunk_matched_block_chunks": 1029,
+    "chunk_matched_idx_sha256": "6fa27a56443ec9f7e8b63cd24bac01fcb28b3065a8020a9375feaed26cea39a9",
+    "chunk_matched_rows": 20817,
+    "chunk_matched_rows_identical_to_a_scored_row": 0,
+    "chunk_matched_sorted_sha256": "735b257703ac2ca721514520ce75de478472c9c2122ec1ccd33dacc5b2efdcca",
+    "eval_chunks_shared_with_ext": 0,
+    "eval_frac": 0.2,
+    "eval_g_sha256": "882292fc223ba68d9facf12a74b0051dd87bd7deeb1dfb757f7d4692cce652dc",
+    "eval_idx_sha256": "7da1099e0cf9d4c3903dad62f52c91f67b751113fc4bfc0a62c53f05dccf1efa",
+    "eval_y_sha256": "92b95cf02a21945cea2a7bd756a1e1096b07ec351b478c39e795a8a2267400d1",
+    "expected_rows_identical_to_a_scored_row": {
+      "chunk_matched_block": 0,
+      "fit_block": 0,
+      "matched_block": 2,
+      "repro_block": 8
+    },
+    "families": [
+      "gutenberg",
+      "base64",
+      "binary",
+      "code",
+      "csv",
+      "json",
+      "log",
+      "mixed"
+    ],
+    "fit_block_chunks": 1029,
+    "fit_chunks_shared_with_builder": 0,
+    "fit_chunks_shared_with_ext": 0,
+    "fit_idx_sha256": "2b5fbaf627f1073bdeb51499c213be18837185414607b314b19f0efb6f5f5469",
+    "fit_order_rule": "np.random.default_rng(20260825).permutation of the fit corpus's rows, so the recipes' last-10% validation split is a random tenth rather than one family",
+    "fit_rows": 26346,
+    "fit_rows_identical_to_a_scored_row": 0,
+    "fit_sorted_sha256": "551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476",
+    "fit_source_chunks_shared_with_ext": 0,
+    "matched_block_chunks": 19413,
+    "matched_collision_row_sha256": "8d29b553f3ea69402080944614c384f7c425ceceaa92313ce6bce059d7b56b59",
+    "matched_idx_sha256": "1c5289efa16555dc519ddc1100c1f6e1aff10007134ea424ebd1106f54e14659",
+    "matched_rows": 26346,
+    "matched_rows_identical_to_a_scored_row": 2,
+    "matched_sorted_sha256": "f08557aee0c9dbdedf90d0d670a73b0277d1572a5e9e3cb7f07e9128e852ec6b",
+    "n_eval_chunks": 10000,
+    "n_eval_non_gutenberg": 227006,
+    "n_eval_rows": 260000,
+    "n_ext_source_chunks": 2399,
+    "n_fit_source_chunks": 1035,
+    "n_pool_chunks": 40000,
+    "n_pool_rows": 800000,
+    "null_labels_permuted": true,
+    "null_labels_same_multiset": true,
+    "null_y_shuffled_sha256": "23b5db271abb80fa2d16e1a007c9305380d3530de8b6a1f4e9773af71e1fc86e",
+    "pool_chunks_shared_with_ext": 0,
+    "pool_collision_row_sha256": "27f36314b2e6e1b109a544d0355a3dba9666ea470ab6f5c6ce200178db2e0ed8",
+    "pool_idx_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+    "pool_rows_identical_to_a_scored_row": 26,
+    "pool_sorted_sha256": "923cd266c3bf2a45683b2c479d36b046b311cc8f2e53426c962b6dd5ae836094",
+    "repro_block_chunks": 37108,
+    "repro_collision_row_sha256": "18a9cd445d34209786e55ae4813d7394b3937fe05f7f55f4ce74d18142f3b142",
+    "repro_idx_sha256": "659169fcf818b742154948c86e7d60dda61f798a7b5f671c29a0b64827f34297",
+    "repro_rows": 100000,
+    "repro_rows_identical_to_a_scored_row": 8,
+    "repro_sorted_sha256": "38de80c9bf49f2ea8be8e52545632a0904de4b57dc00256c165123efeed7596a",
+    "row_identity_digest": "blake2b-128 of the contiguous float32 feature row, over every scored row",
+    "seed": 20260825,
+    "split_is_grouped_by_source": true,
+    "top_rung": 800000
+  },
+  "preregistration": "0021-realfit-4096-rerun",
+  "protocol": {
+    "bar": {
+      "real_model_correct_over_n_real_minus_chance": 0.05
+    },
+    "block_source_chunks": {
+      "chunk_matched_block": 1029,
+      "fit_block": 1029,
+      "matched_block": 19413,
+      "repro_block": 37108
+    },
+    "cache_identity": {
+      "X_dtype": "float32",
+      "X_note": "the builder cache's FEATURE array, hashed for the first time here. Every earlier preregistration sealed only y and g of this file, so no gate read a single feature byte of it: the split is a function of y, g and the seed, and every block hash is over row indices. 0021's collision rule is about that array, so the array is now sealed directly and the rule corroborates rather than carries it (0021 pre-freeze review, condition lens, finding H2). Costs about 8 seconds at launch.",
+      "X_sha256": "a28a2d403d40c64405fe15747399f1317fd984155702797590c58fb0cef0f8ea",
+      "X_shape": [
+        1300000,
+        1108
+      ],
+      "g_sha256": "eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9",
+      "y_sha256": "2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093"
+    },
+    "caps": {
+      "memory_kill_gb": 13.0
+    },
+    "carve": 4096,
+    "chunk_matched_chunks": 1029,
+    "chunk_offset": 0,
+    "chunk_size": 32768,
+    "environment": {
+      "numpy": "2.4.6",
+      "python": "3.11.15",
+      "sklearn": "1.9.0"
+    },
+    "eval_frac": 0.2,
+    "expected_collision_row_sha256": {
+      "matched_block": "8d29b553f3ea69402080944614c384f7c425ceceaa92313ce6bce059d7b56b59",
+      "pool_block": "27f36314b2e6e1b109a544d0355a3dba9666ea470ab6f5c6ce200178db2e0ed8",
+      "repro_block": "18a9cd445d34209786e55ae4813d7394b3937fe05f7f55f4ce74d18142f3b142"
+    },
+    "expected_collision_rows": {
+      "chunk_matched_block": [],
+      "fit_block": [],
+      "matched_block": [
+        1248433,
+        1248438
+      ],
+      "repro_block": [
+        1248421,
+        1248425,
+        1248430,
+        1248431,
+        1248433,
+        1248437,
+        1248438,
+        1248440
+      ]
+    },
+    "expected_collisions_source": "artifacts/pivot/builder_duplicate_chunks.json, banked 2026-09-16 after 0020's refusal; the 9 duplicate chunk pairs and the 32 straddling row pairs are named there",
+    "expected_rows_identical_to_a_scored_row": {
+      "chunk_matched_block": 0,
+      "fit_block": 0,
+      "matched_block": 2,
+      "repro_block": 8
+    },
+    "ext_corpus": {
+      "arrays": {
+        "X": {
+          "dtype": "float32",
+          "sha256": "c578eaf142dfd776fe2c9433420133ae6b2d304cdd546f2bdbbc50b397c4f5db",
+          "shape": [
+            61409,
+            1108
+          ]
+        },
+        "fam": {
+          "dtype": "int8",
+          "sha256": "21b066e7020c5a4ba247101e679ba31f23cbeae5500ab67e64f453b83e61f917",
+          "shape": [
+            61409
+          ]
+        },
+        "g": {
+          "dtype": "int32",
+          "sha256": "2f5b8a86cc0463c1376d1ceb379ffe710e709899f2db4e1a527d355d6fcfc8b9",
+          "shape": [
+            61409
+          ]
+        },
+        "y": {
+          "dtype": "int16",
+          "sha256": "edbf9b3a9aa810338807a4a397884b58b27a28bbf0d99826050403bdeeabdd46",
+          "shape": [
+            61409
+          ]
+        }
+      },
+      "chunk_id_max": 10700299,
+      "chunk_id_min": 10000000,
+      "chunks_per_family": {
+        "c_src": 300,
+        "hexdump": 300,
+        "pe_bin": 288,
+        "py_src": 300,
+        "rfc_txt": 300,
+        "rst_doc": 300,
+        "sql": 299,
+        "xml": 300
+      },
+      "families": [
+        "c_src",
+        "hexdump",
+        "pe_bin",
+        "py_src",
+        "rfc_txt",
+        "rst_doc",
+        "sql",
+        "xml"
+      ],
+      "n_chunks": 2387,
+      "n_rows": 61409,
+      "npz": "data/pivot/ext_c4096.npz",
+      "rows_per_family": {
+        "c_src": 7800,
+        "hexdump": 7800,
+        "pe_bin": 7407,
+        "py_src": 7709,
+        "rfc_txt": 7761,
+        "rst_doc": 7775,
+        "sql": 7357,
+        "xml": 7800
+      }
+    },
+    "ext_families": [
+      "c_src",
+      "hexdump",
+      "pe_bin",
+      "py_src",
+      "rfc_txt",
+      "rst_doc",
+      "sql",
+      "xml"
+    ],
+    "families": [
+      "gutenberg",
+      "base64",
+      "binary",
+      "code",
+      "csv",
+      "json",
+      "log",
+      "mixed"
+    ],
+    "fit_block_hashes": {
+      "chunk_matched_idx_sha256": "6fa27a56443ec9f7e8b63cd24bac01fcb28b3065a8020a9375feaed26cea39a9",
+      "chunk_matched_sorted_sha256": "735b257703ac2ca721514520ce75de478472c9c2122ec1ccd33dacc5b2efdcca",
+      "fit_idx_sha256": "2b5fbaf627f1073bdeb51499c213be18837185414607b314b19f0efb6f5f5469",
+      "fit_sorted_sha256": "551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476",
+      "matched_sorted_sha256": "f08557aee0c9dbdedf90d0d670a73b0277d1572a5e9e3cb7f07e9128e852ec6b",
+      "repro_sorted_sha256": "38de80c9bf49f2ea8be8e52545632a0904de4b57dc00256c165123efeed7596a"
+    },
+    "fit_corpus": {
+      "arrays": {
+        "X": {
+          "dtype": "float32",
+          "sha256": "d969c7d75f5bc7743e9014908fe1d5e07a4220eacd82c166329bdcb381db8c98",
+          "shape": [
+            26346,
+            1108
+          ]
+        },
+        "fam": {
+          "dtype": "int8",
+          "sha256": "8404e6764eb6a35e674a3c61b21fd1c8007a2448dec8203c80de2f0a71d07aca",
+          "shape": [
+            26346
+          ]
+        },
+        "g": {
+          "dtype": "int32",
+          "sha256": "3046de76635c235319eb7bf49e59cf78c27d3d4f7776107c148ca0a7352dc0c8",
+          "shape": [
+            26346
+          ]
+        },
+        "y": {
+          "dtype": "int16",
+          "sha256": "61f440bef345b3ec2f91f4accd56c1b23cf9d15376d3fa8ea76b01196488356a",
+          "shape": [
+            26346
+          ]
+        }
+      },
+      "chunk_id_max": 20400039,
+      "chunk_id_min": 20000000,
+      "chunks_per_family": {
+        "c_src": 24,
+        "pe_bin": 203,
+        "py_src": 672,
+        "rfc_txt": 90,
+        "rst_doc": 40
+      },
+      "families": [
+        "c_src",
+        "pe_bin",
+        "py_src",
+        "rfc_txt",
+        "rst_doc"
+      ],
+      "label_histogram": [
+        1025,
+        1023,
+        1022,
+        1017,
+        1009,
+        1008,
+        1006,
+        1006,
+        1006,
+        1022,
+        1022,
+        1019,
+        1011,
+        1008,
+        1008,
+        1007,
+        1005,
+        1006,
+        1002,
+        1002,
+        1002,
+        1029,
+        1028,
+        1028,
+        1025,
+        1000
+      ],
+      "majority_class_rate": 0.039057,
+      "n_chunks": 1029,
+      "n_rows": 26346,
+      "npz": "data/pivot/realfit_c4096.npz",
+      "rows_per_family": {
+        "c_src": 624,
+        "pe_bin": 5145,
+        "py_src": 17197,
+        "rfc_txt": 2340,
+        "rst_doc": 1040
+      }
+    },
+    "fit_corpus_described": {
+      "ceiling_distinct_fragments": {
+        "c_src": 0.9712,
+        "pe_bin": 0.9069,
+        "py_src": 0.9765,
+        "rfc_txt": 0.9778,
+        "rst_doc": 0.9567
+      },
+      "chunk_id_base": 20000000,
+      "chunks_dropped_for_byte_identity": {
+        "c_src": 0,
+        "pe_bin": 2,
+        "py_src": 0,
+        "rfc_txt": 0,
+        "rst_doc": 0
+      },
+      "chunks_selected_per_family": {
+        "c_src": 24,
+        "pe_bin": 207,
+        "py_src": 674,
+        "rfc_txt": 90,
+        "rst_doc": 40
+      },
+      "chunks_without_rows": [
+        20100072,
+        20100076,
+        20100095,
+        20100200,
+        20200372,
+        20200489
+      ],
+      "convention": "n_chunks in fit_corpus is the number of source chunks that CARRY ROWS, which is what the runner measures (1029); 1035 chunks were selected and 6 of them produced no row because every one of their 26 streams fell below the 4096-byte carve floor. The sealed extension corpus uses the same convention (n_chunks 2387 with rows, 2400 built).",
+      "family_stride": 100000,
+      "library_versions": {
+        "isal": "1.8.0",
+        "libdeflate": "0.9.0",
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "zlib": "1.3",
+        "zopfli": "0.4.3"
+      },
+      "manifest": "artifacts/pivot/realfit_corpus_manifest.json",
+      "n_chunks_selected": 1035,
+      "n_chunks_with_rows": 1029,
+      "rows_dropped_short_stream": 564,
+      "selection_rule": "every whole 32768-byte chunk of each pinned blob that 0018's sealed selection (n_per_family 300, seed 20260909, recomputed here from tools/pivot/corpus_ext.py) does not use, in blob order, minus every chunk whose bytes hash to a sealed chunk's or to an earlier fit chunk's; no seed of its own",
+      "source_pins_sha256_of_file": "2403ba48846503b6f92744558e1d34453124aa3e56d6058614a49da864e5f694"
+    },
+    "fit_families": [
+      "c_src",
+      "pe_bin",
+      "py_src",
+      "rfc_txt",
+      "rst_doc"
+    ],
+    "floor_margin": 0.05,
+    "floor_roles": [
+      "floor_majority",
+      "floor_stratified",
+      "floor_feat1",
+      "floor_tree3"
+    ],
+    "launch": {
+      "max_load1": 2.0,
+      "min_disk_free_gb": 0.5,
+      "min_mem_available_gb": 8.0
+    },
+    "matched_rows": 26346,
+    "min_correct_real": 3402,
+    "n_ext_real_rows": 38452,
+    "nice": 10,
+    "null_tolerance": 0.01,
+    "order": [
+      "repro",
+      "null",
+      "real_model",
+      "real_incumbent",
+      "real_logistic",
+      "floor_majority",
+      "floor_stratified",
+      "floor_feat1",
+      "floor_tree3",
+      "builder_matched",
+      "builder_chunk_matched"
+    ],
+    "pool_idx_sha256": "17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5",
+    "pool_rows_identical_to_a_scored_row": 26,
+    "recipe_of": {
+      "builder_chunk_matched": "model",
+      "builder_matched": "model",
+      "floor_feat1": "floor_feat1",
+      "floor_majority": "floor_majority",
+      "floor_stratified": "floor_stratified",
+      "floor_tree3": "floor_tree3",
+      "null": "model",
+      "real_incumbent": "incumbent",
+      "real_logistic": "logistic_l3",
+      "real_model": "model",
+      "repro": "incumbent"
+    },
+    "reference_source": "artifacts/pivot/deflate_curve.json rungs[n_units=100000].accuracy, the rung preregistration 0016 reproduced in this environment (artifacts/pivot/fdc_4096.json incumbent_100k_refit_top1)",
+    "reference_top1": {
+      "repro": 0.1965
+    },
+    "repro_rows": 100000,
+    "reproduction_tolerance": 0.005,
+    "roles": [
+      "real_model",
+      "real_incumbent",
+      "real_logistic",
+      "floor_majority",
+      "floor_stratified",
+      "floor_feat1",
+      "floor_tree3",
+      "builder_matched",
+      "builder_chunk_matched"
+    ],
+    "seed": 20260825,
+    "subsets": {
+      "high_entropy": [
+        "hexdump",
+        "pe_bin"
+      ],
+      "real": [
+        "c_src",
+        "pe_bin",
+        "py_src",
+        "rfc_txt",
+        "rst_doc"
+      ],
+      "structured_text": [
+        "c_src",
+        "py_src",
+        "rfc_txt",
+        "rst_doc",
+        "sql",
+        "xml"
+      ],
+      "synthetic": [
+        "hexdump",
+        "sql",
+        "xml"
+      ]
+    },
+    "threads": 3,
+    "top_rung": 800000,
+    "validation_split_chunk_contamination": {
+      "chunk_matched_block": 1.0,
+      "fit_block": 1.0,
+      "matched_block": 0.438,
+      "repro_block": 0.8977
+    }
+  },
+  "protocol_sha256": "39d7655b0ace68e5f35f3f0cccdac1d0d3af7b824d9f11c9bef132a5dbf99d03",
+  "readings": {
+    "builder_chunk_matched": {
+      "builder_eval_correct": 48410,
+      "builder_eval_per_family": {
+        "base64": 0.1134,
+        "binary": 0.0957,
+        "code": 0.1942,
+        "csv": 0.3253,
+        "gutenberg": 0.1313,
+        "json": 0.2511,
+        "log": 0.2653,
+        "mixed": 0.1156
+      },
+      "builder_eval_top1": 0.1862,
+      "ext_correct": 4606,
+      "ext_high_entropy_top1": 0.0729,
+      "ext_per_family": {
+        "c_src": 0.0638,
+        "hexdump": 0.0733,
+        "pe_bin": 0.0725,
+        "py_src": 0.0531,
+        "rfc_txt": 0.0706,
+        "rst_doc": 0.0593,
+        "sql": 0.1079,
+        "xml": 0.1009
+      },
+      "ext_per_family_correct": {
+        "c_src": 498,
+        "hexdump": 572,
+        "pe_bin": 537,
+        "py_src": 409,
+        "rfc_txt": 548,
+        "rst_doc": 461,
+        "sql": 794,
+        "xml": 787
+      },
+      "ext_real_correct": 2453,
+      "ext_real_top1": 0.0638,
+      "ext_structured_text_top1": 0.0757,
+      "ext_synthetic_correct": 2153,
+      "ext_synthetic_top1": 0.0938,
+      "ext_top1": 0.075,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "builder_matched": {
+      "builder_eval_correct": 52271,
+      "builder_eval_per_family": {
+        "base64": 0.1157,
+        "binary": 0.0968,
+        "code": 0.2222,
+        "csv": 0.3439,
+        "gutenberg": 0.1361,
+        "json": 0.2786,
+        "log": 0.3012,
+        "mixed": 0.1162
+      },
+      "builder_eval_top1": 0.201,
+      "ext_correct": 4751,
+      "ext_high_entropy_top1": 0.0785,
+      "ext_per_family": {
+        "c_src": 0.066,
+        "hexdump": 0.0813,
+        "pe_bin": 0.0755,
+        "py_src": 0.0562,
+        "rfc_txt": 0.0727,
+        "rst_doc": 0.0655,
+        "sql": 0.107,
+        "xml": 0.0962
+      },
+      "ext_per_family_correct": {
+        "c_src": 515,
+        "hexdump": 634,
+        "pe_bin": 559,
+        "py_src": 433,
+        "rfc_txt": 564,
+        "rst_doc": 509,
+        "sql": 787,
+        "xml": 750
+      },
+      "ext_real_correct": 2580,
+      "ext_real_top1": 0.0671,
+      "ext_structured_text_top1": 0.077,
+      "ext_synthetic_correct": 2171,
+      "ext_synthetic_top1": 0.0946,
+      "ext_top1": 0.0774,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "floor_feat1": {
+      "builder_eval_correct": 14848,
+      "builder_eval_per_family": {
+        "base64": 0.0769,
+        "binary": 0.0769,
+        "code": 0.0517,
+        "csv": 0.0399,
+        "gutenberg": 0.0384,
+        "json": 0.0573,
+        "log": 0.0389,
+        "mixed": 0.0769
+      },
+      "builder_eval_top1": 0.0571,
+      "ext_correct": 3333,
+      "ext_high_entropy_top1": 0.0554,
+      "ext_per_family": {
+        "c_src": 0.0523,
+        "hexdump": 0.0409,
+        "pe_bin": 0.0706,
+        "py_src": 0.065,
+        "rfc_txt": 0.0443,
+        "rst_doc": 0.043,
+        "sql": 0.0529,
+        "xml": 0.066
+      },
+      "ext_per_family_correct": {
+        "c_src": 408,
+        "hexdump": 319,
+        "pe_bin": 523,
+        "py_src": 501,
+        "rfc_txt": 344,
+        "rst_doc": 334,
+        "sql": 389,
+        "xml": 515
+      },
+      "ext_real_correct": 2110,
+      "ext_real_top1": 0.0549,
+      "ext_structured_text_top1": 0.0539,
+      "ext_synthetic_correct": 1223,
+      "ext_synthetic_top1": 0.0533,
+      "ext_top1": 0.0543,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "floor_majority": {
+      "builder_eval_correct": 10000,
+      "builder_eval_per_family": {
+        "base64": 0.0385,
+        "binary": 0.0385,
+        "code": 0.0385,
+        "csv": 0.0385,
+        "gutenberg": 0.0385,
+        "json": 0.0385,
+        "log": 0.0385,
+        "mixed": 0.0385
+      },
+      "builder_eval_top1": 0.0385,
+      "ext_correct": 2387,
+      "ext_high_entropy_top1": 0.0387,
+      "ext_per_family": {
+        "c_src": 0.0385,
+        "hexdump": 0.0385,
+        "pe_bin": 0.0389,
+        "py_src": 0.0389,
+        "rfc_txt": 0.0387,
+        "rst_doc": 0.0386,
+        "sql": 0.0406,
+        "xml": 0.0385
+      },
+      "ext_per_family_correct": {
+        "c_src": 300,
+        "hexdump": 300,
+        "pe_bin": 288,
+        "py_src": 300,
+        "rfc_txt": 300,
+        "rst_doc": 300,
+        "sql": 299,
+        "xml": 300
+      },
+      "ext_real_correct": 1488,
+      "ext_real_top1": 0.0387,
+      "ext_structured_text_top1": 0.0389,
+      "ext_synthetic_correct": 899,
+      "ext_synthetic_top1": 0.0392,
+      "ext_top1": 0.0389,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "floor_stratified": {
+      "builder_eval_correct": 9977,
+      "builder_eval_per_family": {
+        "base64": 0.0386,
+        "binary": 0.0385,
+        "code": 0.0379,
+        "csv": 0.0386,
+        "gutenberg": 0.0389,
+        "json": 0.0388,
+        "log": 0.038,
+        "mixed": 0.0377
+      },
+      "builder_eval_top1": 0.0384,
+      "ext_correct": 2387,
+      "ext_high_entropy_top1": 0.036,
+      "ext_per_family": {
+        "c_src": 0.0385,
+        "hexdump": 0.0394,
+        "pe_bin": 0.0325,
+        "py_src": 0.0402,
+        "rfc_txt": 0.0392,
+        "rst_doc": 0.0405,
+        "sql": 0.0401,
+        "xml": 0.0404
+      },
+      "ext_per_family_correct": {
+        "c_src": 300,
+        "hexdump": 307,
+        "pe_bin": 241,
+        "py_src": 310,
+        "rfc_txt": 304,
+        "rst_doc": 315,
+        "sql": 295,
+        "xml": 315
+      },
+      "ext_real_correct": 1470,
+      "ext_real_top1": 0.0382,
+      "ext_structured_text_top1": 0.0398,
+      "ext_synthetic_correct": 917,
+      "ext_synthetic_top1": 0.0399,
+      "ext_top1": 0.0389,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "floor_tree3": {
+      "builder_eval_correct": 22193,
+      "builder_eval_per_family": {
+        "base64": 0.068,
+        "binary": 0.0747,
+        "code": 0.0977,
+        "csv": 0.0618,
+        "gutenberg": 0.0797,
+        "json": 0.1139,
+        "log": 0.1102,
+        "mixed": 0.076
+      },
+      "builder_eval_top1": 0.0854,
+      "ext_correct": 5351,
+      "ext_high_entropy_top1": 0.0715,
+      "ext_per_family": {
+        "c_src": 0.1019,
+        "hexdump": 0.0628,
+        "pe_bin": 0.0806,
+        "py_src": 0.086,
+        "rfc_txt": 0.0938,
+        "rst_doc": 0.1015,
+        "sql": 0.0742,
+        "xml": 0.0953
+      },
+      "ext_per_family_correct": {
+        "c_src": 795,
+        "hexdump": 490,
+        "pe_bin": 597,
+        "py_src": 663,
+        "rfc_txt": 728,
+        "rst_doc": 789,
+        "sql": 546,
+        "xml": 743
+      },
+      "ext_real_correct": 3572,
+      "ext_real_top1": 0.0929,
+      "ext_structured_text_top1": 0.0923,
+      "ext_synthetic_correct": 1779,
+      "ext_synthetic_top1": 0.0775,
+      "ext_top1": 0.0871,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "null": {
+      "builder_eval_correct": 10087,
+      "builder_eval_per_family": {
+        "base64": 0.0382,
+        "binary": 0.0385,
+        "code": 0.0407,
+        "csv": 0.039,
+        "gutenberg": 0.0402,
+        "json": 0.0383,
+        "log": 0.0376,
+        "mixed": 0.0379
+      },
+      "builder_eval_top1": 0.0388,
+      "ext_correct": 2419,
+      "ext_high_entropy_top1": 0.0387,
+      "ext_per_family": {
+        "c_src": 0.0401,
+        "hexdump": 0.039,
+        "pe_bin": 0.0385,
+        "py_src": 0.0411,
+        "rfc_txt": 0.0399,
+        "rst_doc": 0.0446,
+        "sql": 0.031,
+        "xml": 0.0404
+      },
+      "ext_per_family_correct": {
+        "c_src": 313,
+        "hexdump": 304,
+        "pe_bin": 285,
+        "py_src": 317,
+        "rfc_txt": 310,
+        "rst_doc": 347,
+        "sql": 228,
+        "xml": 315
+      },
+      "ext_real_correct": 1572,
+      "ext_real_top1": 0.0409,
+      "ext_structured_text_top1": 0.0396,
+      "ext_synthetic_correct": 847,
+      "ext_synthetic_top1": 0.0369,
+      "ext_top1": 0.0394,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "real_incumbent": {
+      "builder_eval_correct": 19313,
+      "builder_eval_per_family": {
+        "base64": 0.0704,
+        "binary": 0.0766,
+        "code": 0.0784,
+        "csv": 0.0474,
+        "gutenberg": 0.0805,
+        "json": 0.0791,
+        "log": 0.0827,
+        "mixed": 0.0783
+      },
+      "builder_eval_top1": 0.0743,
+      "ext_correct": 5319,
+      "ext_high_entropy_top1": 0.0628,
+      "ext_per_family": {
+        "c_src": 0.1062,
+        "hexdump": 0.0428,
+        "pe_bin": 0.0838,
+        "py_src": 0.1053,
+        "rfc_txt": 0.1064,
+        "rst_doc": 0.1035,
+        "sql": 0.0609,
+        "xml": 0.0827
+      },
+      "ext_per_family_correct": {
+        "c_src": 828,
+        "hexdump": 334,
+        "pe_bin": 621,
+        "py_src": 812,
+        "rfc_txt": 826,
+        "rst_doc": 805,
+        "sql": 448,
+        "xml": 645
+      },
+      "ext_real_correct": 3892,
+      "ext_real_top1": 0.1012,
+      "ext_structured_text_top1": 0.0945,
+      "ext_synthetic_correct": 1427,
+      "ext_synthetic_top1": 0.0622,
+      "ext_top1": 0.0866,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "real_logistic": {
+      "builder_eval_correct": 20000,
+      "builder_eval_per_family": {
+        "base64": 0.069,
+        "binary": 0.0742,
+        "code": 0.0836,
+        "csv": 0.0682,
+        "gutenberg": 0.084,
+        "json": 0.0894,
+        "log": 0.0684,
+        "mixed": 0.0786
+      },
+      "builder_eval_top1": 0.0769,
+      "ext_correct": 6396,
+      "ext_high_entropy_top1": 0.0691,
+      "ext_per_family": {
+        "c_src": 0.1242,
+        "hexdump": 0.0491,
+        "pe_bin": 0.0902,
+        "py_src": 0.1358,
+        "rfc_txt": 0.1229,
+        "rst_doc": 0.1154,
+        "sql": 0.0939,
+        "xml": 0.1009
+      },
+      "ext_per_family_correct": {
+        "c_src": 969,
+        "hexdump": 383,
+        "pe_bin": 668,
+        "py_src": 1047,
+        "rfc_txt": 954,
+        "rst_doc": 897,
+        "sql": 691,
+        "xml": 787
+      },
+      "ext_real_correct": 4535,
+      "ext_real_top1": 0.1179,
+      "ext_structured_text_top1": 0.1157,
+      "ext_synthetic_correct": 1861,
+      "ext_synthetic_top1": 0.0811,
+      "ext_top1": 0.1042,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "real_model": {
+      "builder_eval_correct": 21154,
+      "builder_eval_per_family": {
+        "base64": 0.0649,
+        "binary": 0.076,
+        "code": 0.084,
+        "csv": 0.0581,
+        "gutenberg": 0.0917,
+        "json": 0.1027,
+        "log": 0.0917,
+        "mixed": 0.0809
+      },
+      "builder_eval_top1": 0.0814,
+      "ext_correct": 6178,
+      "ext_high_entropy_top1": 0.0679,
+      "ext_per_family": {
+        "c_src": 0.1295,
+        "hexdump": 0.041,
+        "pe_bin": 0.0963,
+        "py_src": 0.1327,
+        "rfc_txt": 0.1228,
+        "rst_doc": 0.1142,
+        "sql": 0.0769,
+        "xml": 0.0904
+      },
+      "ext_per_family_correct": {
+        "c_src": 1010,
+        "hexdump": 320,
+        "pe_bin": 713,
+        "py_src": 1023,
+        "rfc_txt": 953,
+        "rst_doc": 888,
+        "sql": 566,
+        "xml": 705
+      },
+      "ext_real_correct": 4587,
+      "ext_real_top1": 0.1193,
+      "ext_structured_text_top1": 0.1114,
+      "ext_synthetic_correct": 1591,
+      "ext_synthetic_top1": 0.0693,
+      "ext_top1": 0.1006,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "repro": {
+      "builder_eval_correct": 51078,
+      "builder_eval_per_family": {
+        "base64": 0.1153,
+        "binary": 0.0947,
+        "code": 0.2248,
+        "csv": 0.3288,
+        "gutenberg": 0.1366,
+        "json": 0.2711,
+        "log": 0.2875,
+        "mixed": 0.1154
+      },
+      "builder_eval_top1": 0.1965,
+      "ext_correct": 4379,
+      "ext_high_entropy_top1": 0.0723,
+      "ext_per_family": {
+        "c_src": 0.0549,
+        "hexdump": 0.0735,
+        "pe_bin": 0.071,
+        "py_src": 0.051,
+        "rfc_txt": 0.0643,
+        "rst_doc": 0.0579,
+        "sql": 0.1032,
+        "xml": 0.0963
+      },
+      "ext_per_family_correct": {
+        "c_src": 428,
+        "hexdump": 573,
+        "pe_bin": 526,
+        "py_src": 393,
+        "rfc_txt": 499,
+        "rst_doc": 450,
+        "sql": 759,
+        "xml": 751
+      },
+      "ext_real_correct": 2296,
+      "ext_real_top1": 0.0597,
+      "ext_structured_text_top1": 0.071,
+      "ext_synthetic_correct": 2083,
+      "ext_synthetic_top1": 0.0907,
+      "ext_top1": 0.0713,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    }
+  },
+  "recipes": {
+    "floor_feat1": {
+      "family": "tree",
+      "id": "B-feat1",
+      "params": {
+        "max_depth": 1
+      },
+      "scaled": false,
+      "val": "frag",
+      "why": "the single most informative feature, thresholded by a depth-1 tree; `best_single_feat`"
+    },
+    "floor_majority": {
+      "family": "dummy",
+      "id": "B-majority",
+      "params": {
+        "strategy": "most_frequent"
+      },
+      "scaled": false,
+      "val": "frag",
+      "why": "always predict the most frequent label of the fit block; tools/trivial_baselines.py's `majority`"
+    },
+    "floor_stratified": {
+      "family": "dummy",
+      "id": "B-stratified",
+      "params": {
+        "strategy": "stratified"
+      },
+      "scaled": false,
+      "val": "frag",
+      "why": "sample from the fit block's label prior, ignoring the input entirely; `stratified`"
+    },
+    "floor_tree3": {
+      "family": "tree",
+      "id": "B-tree3",
+      "params": {
+        "max_depth": 3
+      },
+      "scaled": false,
+      "val": "frag",
+      "why": "a decision tree of depth 3 - a rule a person could write out by hand; `depth3_tree`"
+    },
+    "incumbent": {
+      "family": "hgb",
+      "id": "M1",
+      "params": {
+        "learning_rate": 0.15,
+        "max_iter": 200,
+        "max_leaf_nodes": 63,
+        "n_iter_no_change": 10
+      },
+      "val": "frag",
+      "why": "0003's incumbent verbatim (run_study.py make_model 'hgb', run_carve.py's explicit last-10% validation split); every other parameter at the sklearn 1.9.0 default"
+    },
+    "logistic_l3": {
+      "family": "logistic",
+      "id": "L3",
+      "params": {
+        "C": 1.0,
+        "max_iter": 1000
+      },
+      "scaled": true,
+      "why": "standardised inputs with C 1.0: the single most standard fix for an lbfgs logistic on 1108 unscaled hand-engineered columns"
+    },
+    "model": {
+      "family": "hgb",
+      "id": "M4",
+      "params": {
+        "l2_regularization": 1.0,
+        "learning_rate": 0.05,
+        "max_iter": 250,
+        "max_leaf_nodes": 127,
+        "n_iter_no_change": 20
+      },
+      "val": "frag",
+      "why": "capacity plus regularisation plus a lower rate together: 800000 rows x 26 classes supports bigger trees than 63 leaves, and the deep-tree baseline gained 0.1459 -> 0.1812 from depth 8 to 16 at 4096"
+    }
+  },
+  "recipes_sha256": "715e8f116bf12921de12bb8a4c3d16a6c8930276beaa8c7ccac5ddd0e3a5f147",
+  "reference_top1": {
+    "repro": 0.1965
+  },
+  "reproduction_top1": 0.1965,
+  "run_finished_utc": "2026-09-16T10:34:46Z",
+  "run_started_utc": "2026-09-16T10:09:16Z",
+  "schema": "raise-v1/realfit_4096_rerun/1",
+  "schema_version": 1,
+  "shuffled_label_accuracy_eval": 0.0388,
+  "shuffled_label_accuracy_ext": 0.0394,
+  "smoke": false,
+  "stage": "run"
+}

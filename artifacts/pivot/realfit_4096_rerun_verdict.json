@@ -1,0 +1,935 @@
+{
+  "bar_applied": {
+    "bar": 0.05,
+    "chance": 0.038462,
+    "families_clearing": 0,
+    "fit_rows": 26346,
+    "fit_source_chunks": 1029,
+    "flags": {
+      "a_sister_recipe_clears_and_real_model_does_not": false,
+      "at_iteration_cap": {
+        "builder_chunk_matched": false,
+        "builder_matched": false,
+        "null": false,
+        "real_incumbent": false,
+        "real_logistic": false,
+        "real_model": false,
+        "repro": false
+      },
+      "block_source_chunks": {
+        "chunk_matched_block": 1029,
+        "fit_block": 1029,
+        "matched_block": 19413,
+        "repro_block": 37108
+      },
+      "builder_chunk_matched_reaches_bar_real": false,
+      "builder_matched_reaches_bar_real": false,
+      "families_clearing": 0,
+      "families_clearing_names": [],
+      "families_where_real_model_reaches_chance_bar": [
+        "c_src",
+        "pe_bin",
+        "py_src",
+        "rfc_txt",
+        "rst_doc",
+        "xml"
+      ],
+      "fit_info_by_family": {
+        "builder_chunk_matched": "hgb",
+        "builder_matched": "hgb",
+        "floor_feat1": "tree",
+        "floor_majority": "dummy",
+        "floor_stratified": "dummy",
+        "floor_tree3": "tree",
+        "null": "hgb",
+        "real_incumbent": "hgb",
+        "real_logistic": "logistic",
+        "real_model": "hgb",
+        "repro": "hgb"
+      },
+      "fit_rows_per_family": {
+        "c_src": 624,
+        "pe_bin": 5145,
+        "py_src": 17197,
+        "rfc_txt": 2340,
+        "rst_doc": 1040
+      },
+      "floor_arm": "floor_tree3",
+      "floor_by_arm": {
+        "floor_feat1": 0.0549,
+        "floor_majority": 0.0387,
+        "floor_stratified": 0.0382,
+        "floor_tree3": 0.0929
+      },
+      "floor_by_family": {
+        "c_src": 0.1019,
+        "hexdump": 0.0628,
+        "pe_bin": 0.0806,
+        "py_src": 0.086,
+        "rfc_txt": 0.0938,
+        "rst_doc": 0.1015,
+        "sql": 0.0742,
+        "xml": 0.0953
+      },
+      "floor_real_top1": 0.0929,
+      "min_correct_real_chance_based_0018_comparable": 3402,
+      "n_iter_by_name": {
+        "builder_chunk_matched": 43,
+        "builder_matched": 94,
+        "floor_feat1": null,
+        "floor_majority": null,
+        "floor_stratified": null,
+        "floor_tree3": null,
+        "null": 21,
+        "real_incumbent": 12,
+        "real_logistic": 392,
+        "real_model": 62,
+        "repro": 49
+      },
+      "n_real_families": 5,
+      "n_real_rows": 38452,
+      "need_per_family_over_floor": {
+        "c_src": 1185,
+        "hexdump": 880,
+        "pe_bin": 968,
+        "py_src": 1049,
+        "rfc_txt": 1117,
+        "rst_doc": 1178,
+        "sql": 914,
+        "xml": 1134
+      },
+      "need_real_over_floor": 5495,
+      "oob_0018_run_read_by_0019_builder_fit_real_correct": 2450,
+      "oob_0018_run_read_by_0019_builder_fit_real_top1": 0.0637,
+      "oob_comparison_reader": "0019-oob-4096-reread",
+      "oob_comparison_run": "0018-oob-4096",
+      "per_family_min_correct_chance_based": {
+        "c_src": 690,
+        "hexdump": 690,
+        "pe_bin": 656,
+        "py_src": 682,
+        "rfc_txt": 687,
+        "rst_doc": 688,
+        "sql": 651,
+        "xml": 690
+      },
+      "real_incumbent_reaches_bar_real": false,
+      "real_logistic_reaches_bar_real": false,
+      "real_model_above_chance_on_builder_eval": true,
+      "real_model_builder_eval_top1": 0.0814,
+      "real_model_leads_0018_run_builder_fit_real_rows": 2137,
+      "real_model_leads_builder_chunk_matched_real_rows": 2134,
+      "real_model_leads_builder_matched_real_rows": 2007,
+      "real_model_reaches_0018_chance_bar": true,
+      "reproduction_drift": 0.0,
+      "synthetic_min_correct": 2031,
+      "synthetic_reaches_bar": false,
+      "validation_split_chunk_contamination": {
+        "chunk_matched_block": 1.0,
+        "fit_block": 1.0,
+        "matched_block": 0.438,
+        "repro_block": 0.8977
+      }
+    },
+    "floor_arm": "floor_tree3",
+    "floor_real_top1": 0.0929,
+    "min_correct_real_chance_based": 3402,
+    "min_correct_real_over_floor": 5495,
+    "must_reach_chance_based": 0.088462,
+    "n_ext_rows": 61409,
+    "n_real_rows": 38452
+  },
+  "builder_eval_top1": {
+    "builder_chunk_matched": 0.1862,
+    "builder_matched": 0.201,
+    "floor_feat1": 0.0571,
+    "floor_majority": 0.0385,
+    "floor_stratified": 0.0384,
+    "floor_tree3": 0.0854,
+    "null": 0.0388,
+    "real_incumbent": 0.0743,
+    "real_logistic": 0.0769,
+    "real_model": 0.0814,
+    "repro": 0.1965
+  },
+  "clause_failed": [
+    "clause: real_model's correct real-family rows 4587 of 38452 (0.1193) is below 5495 (floor 0.0929 from floor_tree3 + 0.05)"
+  ],
+  "establishes_a_buyer": false,
+  "ext_correct": {
+    "builder_chunk_matched": 4606,
+    "builder_matched": 4751,
+    "floor_feat1": 3333,
+    "floor_majority": 2387,
+    "floor_stratified": 2387,
+    "floor_tree3": 5351,
+    "null": 2419,
+    "real_incumbent": 5319,
+    "real_logistic": 6396,
+    "real_model": 6178,
+    "repro": 4379
+  },
+  "ext_per_family": {
+    "builder_chunk_matched": {
+      "c_src": 0.0638,
+      "hexdump": 0.0733,
+      "pe_bin": 0.0725,
+      "py_src": 0.0531,
+      "rfc_txt": 0.0706,
+      "rst_doc": 0.0593,
+      "sql": 0.1079,
+      "xml": 0.1009
+    },
+    "builder_matched": {
+      "c_src": 0.066,
+      "hexdump": 0.0813,
+      "pe_bin": 0.0755,
+      "py_src": 0.0562,
+      "rfc_txt": 0.0727,
+      "rst_doc": 0.0655,
+      "sql": 0.107,
+      "xml": 0.0962
+    },
+    "floor_feat1": {
+      "c_src": 0.0523,
+      "hexdump": 0.0409,
+      "pe_bin": 0.0706,
+      "py_src": 0.065,
+      "rfc_txt": 0.0443,
+      "rst_doc": 0.043,
+      "sql": 0.0529,
+      "xml": 0.066
+    },
+    "floor_majority": {
+      "c_src": 0.0385,
+      "hexdump": 0.0385,
+      "pe_bin": 0.0389,
+      "py_src": 0.0389,
+      "rfc_txt": 0.0387,
+      "rst_doc": 0.0386,
+      "sql": 0.0406,
+      "xml": 0.0385
+    },
+    "floor_stratified": {
+      "c_src": 0.0385,
+      "hexdump": 0.0394,
+      "pe_bin": 0.0325,
+      "py_src": 0.0402,
+      "rfc_txt": 0.0392,
+      "rst_doc": 0.0405,
+      "sql": 0.0401,
+      "xml": 0.0404
+    },
+    "floor_tree3": {
+      "c_src": 0.1019,
+      "hexdump": 0.0628,
+      "pe_bin": 0.0806,
+      "py_src": 0.086,
+      "rfc_txt": 0.0938,
+      "rst_doc": 0.1015,
+      "sql": 0.0742,
+      "xml": 0.0953
+    },
+    "null": {
+      "c_src": 0.0401,
+      "hexdump": 0.039,
+      "pe_bin": 0.0385,
+      "py_src": 0.0411,
+      "rfc_txt": 0.0399,
+      "rst_doc": 0.0446,
+      "sql": 0.031,
+      "xml": 0.0404
+    },
+    "real_incumbent": {
+      "c_src": 0.1062,
+      "hexdump": 0.0428,
+      "pe_bin": 0.0838,
+      "py_src": 0.1053,
+      "rfc_txt": 0.1064,
+      "rst_doc": 0.1035,
+      "sql": 0.0609,
+      "xml": 0.0827
+    },
+    "real_logistic": {
+      "c_src": 0.1242,
+      "hexdump": 0.0491,
+      "pe_bin": 0.0902,
+      "py_src": 0.1358,
+      "rfc_txt": 0.1229,
+      "rst_doc": 0.1154,
+      "sql": 0.0939,
+      "xml": 0.1009
+    },
+    "real_model": {
+      "c_src": 0.1295,
+      "hexdump": 0.041,
+      "pe_bin": 0.0963,
+      "py_src": 0.1327,
+      "rfc_txt": 0.1228,
+      "rst_doc": 0.1142,
+      "sql": 0.0769,
+      "xml": 0.0904
+    },
+    "repro": {
+      "c_src": 0.0549,
+      "hexdump": 0.0735,
+      "pe_bin": 0.071,
+      "py_src": 0.051,
+      "rfc_txt": 0.0643,
+      "rst_doc": 0.0579,
+      "sql": 0.1032,
+      "xml": 0.0963
+    }
+  },
+  "ext_real_correct": {
+    "builder_chunk_matched": 2453,
+    "builder_matched": 2580,
+    "floor_feat1": 2110,
+    "floor_majority": 1488,
+    "floor_stratified": 1470,
+    "floor_tree3": 3572,
+    "null": 1572,
+    "real_incumbent": 3892,
+    "real_logistic": 4535,
+    "real_model": 4587,
+    "repro": 2296
+  },
+  "ext_real_correct_model": 4587,
+  "ext_real_top1": {
+    "builder_chunk_matched": 0.0638,
+    "builder_matched": 0.0671,
+    "floor_feat1": 0.0549,
+    "floor_majority": 0.0387,
+    "floor_stratified": 0.0382,
+    "floor_tree3": 0.0929,
+    "null": 0.0409,
+    "real_incumbent": 0.1012,
+    "real_logistic": 0.1179,
+    "real_model": 0.1193,
+    "repro": 0.0597
+  },
+  "ext_real_top1_model": 0.1193,
+  "ext_rows_per_family": {
+    "c_src": 7800,
+    "hexdump": 7800,
+    "pe_bin": 7407,
+    "py_src": 7709,
+    "rfc_txt": 7761,
+    "rst_doc": 7775,
+    "sql": 7357,
+    "xml": 7800
+  },
+  "ext_subsets": {
+    "builder_chunk_matched": {
+      "ext_high_entropy_top1": 0.0729,
+      "ext_real_top1": 0.0638,
+      "ext_structured_text_top1": 0.0757,
+      "ext_synthetic_top1": 0.0938
+    },
+    "builder_matched": {
+      "ext_high_entropy_top1": 0.0785,
+      "ext_real_top1": 0.0671,
+      "ext_structured_text_top1": 0.077,
+      "ext_synthetic_top1": 0.0946
+    },
+    "floor_feat1": {
+      "ext_high_entropy_top1": 0.0554,
+      "ext_real_top1": 0.0549,
+      "ext_structured_text_top1": 0.0539,
+      "ext_synthetic_top1": 0.0533
+    },
+    "floor_majority": {
+      "ext_high_entropy_top1": 0.0387,
+      "ext_real_top1": 0.0387,
+      "ext_structured_text_top1": 0.0389,
+      "ext_synthetic_top1": 0.0392
+    },
+    "floor_stratified": {
+      "ext_high_entropy_top1": 0.036,
+      "ext_real_top1": 0.0382,
+      "ext_structured_text_top1": 0.0398,
+      "ext_synthetic_top1": 0.0399
+    },
+    "floor_tree3": {
+      "ext_high_entropy_top1": 0.0715,
+      "ext_real_top1": 0.0929,
+      "ext_structured_text_top1": 0.0923,
+      "ext_synthetic_top1": 0.0775
+    },
+    "null": {
+      "ext_high_entropy_top1": 0.0387,
+      "ext_real_top1": 0.0409,
+      "ext_structured_text_top1": 0.0396,
+      "ext_synthetic_top1": 0.0369
+    },
+    "real_incumbent": {
+      "ext_high_entropy_top1": 0.0628,
+      "ext_real_top1": 0.1012,
+      "ext_structured_text_top1": 0.0945,
+      "ext_synthetic_top1": 0.0622
+    },
+    "real_logistic": {
+      "ext_high_entropy_top1": 0.0691,
+      "ext_real_top1": 0.1179,
+      "ext_structured_text_top1": 0.1157,
+      "ext_synthetic_top1": 0.0811
+    },
+    "real_model": {
+      "ext_high_entropy_top1": 0.0679,
+      "ext_real_top1": 0.1193,
+      "ext_structured_text_top1": 0.1114,
+      "ext_synthetic_top1": 0.0693
+    },
+    "repro": {
+      "ext_high_entropy_top1": 0.0723,
+      "ext_real_top1": 0.0597,
+      "ext_structured_text_top1": 0.071,
+      "ext_synthetic_top1": 0.0907
+    }
+  },
+  "ext_top1": {
+    "builder_chunk_matched": 0.075,
+    "builder_matched": 0.0774,
+    "floor_feat1": 0.0543,
+    "floor_majority": 0.0389,
+    "floor_stratified": 0.0389,
+    "floor_tree3": 0.0871,
+    "null": 0.0394,
+    "real_incumbent": 0.0866,
+    "real_logistic": 0.1042,
+    "real_model": 0.1006,
+    "repro": 0.0713
+  },
+  "fit_ceiling_distinct_fragments": {
+    "c_src": 0.9712,
+    "pe_bin": 0.9069,
+    "py_src": 0.9765,
+    "rfc_txt": 0.9778,
+    "rst_doc": 0.9567
+  },
+  "fit_rows_per_family": {
+    "c_src": 624,
+    "pe_bin": 5145,
+    "py_src": 17197,
+    "rfc_txt": 2340,
+    "rst_doc": 1040
+  },
+  "informational_only": "the flags, the per-family and subset readings, the builder-matched arm, the reverse readings on the builder's evaluation set, the comparison with 0018's banked builder-fitted reading and the artifact's cluster intervals are informational: not a verdict, not quotable as a pass. The verdict is the `verdict` field, and it is an in-distribution reading on real content.",
+  "is_a_transfer_reading": false,
+  "meaning": "At 4096 bytes, 0014's searched model fitted on 26346 rows from 1029 plaintexts of real content does not beat the best trivial baseline on the same rows by 0.05 on held-out chunks of the same five pinned real files: 4587 of 38452 rows correct (0.1193) against 5495 needed, where the floor is 0.0929 measured by floor_tree3 fitted on the same fit block. 0 of 5 real families clear their own floor + 0.05 (none). A bound on this recipe at this budget on these five file kinds, read IN DISTRIBUTION \u2014 the fit and scored chunks come from the same files and share no byte, no chunk id and no source-chunk hash \u2014 and not a statement about real content in general. The two builder-matched arms (same row budget; same plaintext budget), the per-family readings and the two other recipes banked beside it say where the reading comes from. On 0018's chance-based bar the same count reads 4587 against 3402, which is how it compares with 0018's 2450. Nothing here revises 0003, 0014, 0015, 0016, 0017, 0018 or 0019, and nothing here establishes a buyer.",
+  "preregistration": "0021-realfit-4096-rerun",
+  "read": {
+    "chance_accuracy": 0.038462,
+    "complete": true,
+    "ext_correct_model": 6178,
+    "ext_real_correct_model": 4587,
+    "ext_real_top1_model": 0.1193,
+    "ext_top1_model": 0.1006,
+    "missing_roles": [],
+    "n_classes": 26,
+    "n_eval_rows": 260000,
+    "n_ext_real_rows": 38452,
+    "n_ext_rows": 61409,
+    "preregistration": "0021-realfit-4096-rerun",
+    "reproduction_top1": 0.1965,
+    "shuffled_label_accuracy_eval": 0.0388,
+    "shuffled_label_accuracy_ext": 0.0394,
+    "smoke": false,
+    "stage": "run"
+  },
+  "readings_banked": {
+    "builder_chunk_matched": {
+      "builder_eval_correct": 48410,
+      "builder_eval_per_family": {
+        "base64": 0.1134,
+        "binary": 0.0957,
+        "code": 0.1942,
+        "csv": 0.3253,
+        "gutenberg": 0.1313,
+        "json": 0.2511,
+        "log": 0.2653,
+        "mixed": 0.1156
+      },
+      "builder_eval_top1": 0.1862,
+      "ext_correct": 4606,
+      "ext_high_entropy_top1": 0.0729,
+      "ext_per_family": {
+        "c_src": 0.0638,
+        "hexdump": 0.0733,
+        "pe_bin": 0.0725,
+        "py_src": 0.0531,
+        "rfc_txt": 0.0706,
+        "rst_doc": 0.0593,
+        "sql": 0.1079,
+        "xml": 0.1009
+      },
+      "ext_per_family_correct": {
+        "c_src": 498,
+        "hexdump": 572,
+        "pe_bin": 537,
+        "py_src": 409,
+        "rfc_txt": 548,
+        "rst_doc": 461,
+        "sql": 794,
+        "xml": 787
+      },
+      "ext_real_correct": 2453,
+      "ext_real_top1": 0.0638,
+      "ext_structured_text_top1": 0.0757,
+      "ext_synthetic_correct": 2153,
+      "ext_synthetic_top1": 0.0938,
+      "ext_top1": 0.075,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "builder_matched": {
+      "builder_eval_correct": 52271,
+      "builder_eval_per_family": {
+        "base64": 0.1157,
+        "binary": 0.0968,
+        "code": 0.2222,
+        "csv": 0.3439,
+        "gutenberg": 0.1361,
+        "json": 0.2786,
+        "log": 0.3012,
+        "mixed": 0.1162
+      },
+      "builder_eval_top1": 0.201,
+      "ext_correct": 4751,
+      "ext_high_entropy_top1": 0.0785,
+      "ext_per_family": {
+        "c_src": 0.066,
+        "hexdump": 0.0813,
+        "pe_bin": 0.0755,
+        "py_src": 0.0562,
+        "rfc_txt": 0.0727,
+        "rst_doc": 0.0655,
+        "sql": 0.107,
+        "xml": 0.0962
+      },
+      "ext_per_family_correct": {
+        "c_src": 515,
+        "hexdump": 634,
+        "pe_bin": 559,
+        "py_src": 433,
+        "rfc_txt": 564,
+        "rst_doc": 509,
+        "sql": 787,
+        "xml": 750
+      },
+      "ext_real_correct": 2580,
+      "ext_real_top1": 0.0671,
+      "ext_structured_text_top1": 0.077,
+      "ext_synthetic_correct": 2171,
+      "ext_synthetic_top1": 0.0946,
+      "ext_top1": 0.0774,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "floor_feat1": {
+      "builder_eval_correct": 14848,
+      "builder_eval_per_family": {
+        "base64": 0.0769,
+        "binary": 0.0769,
+        "code": 0.0517,
+        "csv": 0.0399,
+        "gutenberg": 0.0384,
+        "json": 0.0573,
+        "log": 0.0389,
+        "mixed": 0.0769
+      },
+      "builder_eval_top1": 0.0571,
+      "ext_correct": 3333,
+      "ext_high_entropy_top1": 0.0554,
+      "ext_per_family": {
+        "c_src": 0.0523,
+        "hexdump": 0.0409,
+        "pe_bin": 0.0706,
+        "py_src": 0.065,
+        "rfc_txt": 0.0443,
+        "rst_doc": 0.043,
+        "sql": 0.0529,
+        "xml": 0.066
+      },
+      "ext_per_family_correct": {
+        "c_src": 408,
+        "hexdump": 319,
+        "pe_bin": 523,
+        "py_src": 501,
+        "rfc_txt": 344,
+        "rst_doc": 334,
+        "sql": 389,
+        "xml": 515
+      },
+      "ext_real_correct": 2110,
+      "ext_real_top1": 0.0549,
+      "ext_structured_text_top1": 0.0539,
+      "ext_synthetic_correct": 1223,
+      "ext_synthetic_top1": 0.0533,
+      "ext_top1": 0.0543,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "floor_majority": {
+      "builder_eval_correct": 10000,
+      "builder_eval_per_family": {
+        "base64": 0.0385,
+        "binary": 0.0385,
+        "code": 0.0385,
+        "csv": 0.0385,
+        "gutenberg": 0.0385,
+        "json": 0.0385,
+        "log": 0.0385,
+        "mixed": 0.0385
+      },
+      "builder_eval_top1": 0.0385,
+      "ext_correct": 2387,
+      "ext_high_entropy_top1": 0.0387,
+      "ext_per_family": {
+        "c_src": 0.0385,
+        "hexdump": 0.0385,
+        "pe_bin": 0.0389,
+        "py_src": 0.0389,
+        "rfc_txt": 0.0387,
+        "rst_doc": 0.0386,
+        "sql": 0.0406,
+        "xml": 0.0385
+      },
+      "ext_per_family_correct": {
+        "c_src": 300,
+        "hexdump": 300,
+        "pe_bin": 288,
+        "py_src": 300,
+        "rfc_txt": 300,
+        "rst_doc": 300,
+        "sql": 299,
+        "xml": 300
+      },
+      "ext_real_correct": 1488,
+      "ext_real_top1": 0.0387,
+      "ext_structured_text_top1": 0.0389,
+      "ext_synthetic_correct": 899,
+      "ext_synthetic_top1": 0.0392,
+      "ext_top1": 0.0389,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "floor_stratified": {
+      "builder_eval_correct": 9977,
+      "builder_eval_per_family": {
+        "base64": 0.0386,
+        "binary": 0.0385,
+        "code": 0.0379,
+        "csv": 0.0386,
+        "gutenberg": 0.0389,
+        "json": 0.0388,
+        "log": 0.038,
+        "mixed": 0.0377
+      },
+      "builder_eval_top1": 0.0384,
+      "ext_correct": 2387,
+      "ext_high_entropy_top1": 0.036,
+      "ext_per_family": {
+        "c_src": 0.0385,
+        "hexdump": 0.0394,
+        "pe_bin": 0.0325,
+        "py_src": 0.0402,
+        "rfc_txt": 0.0392,
+        "rst_doc": 0.0405,
+        "sql": 0.0401,
+        "xml": 0.0404
+      },
+      "ext_per_family_correct": {
+        "c_src": 300,
+        "hexdump": 307,
+        "pe_bin": 241,
+        "py_src": 310,
+        "rfc_txt": 304,
+        "rst_doc": 315,
+        "sql": 295,
+        "xml": 315
+      },
+      "ext_real_correct": 1470,
+      "ext_real_top1": 0.0382,
+      "ext_structured_text_top1": 0.0398,
+      "ext_synthetic_correct": 917,
+      "ext_synthetic_top1": 0.0399,
+      "ext_top1": 0.0389,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "floor_tree3": {
+      "builder_eval_correct": 22193,
+      "builder_eval_per_family": {
+        "base64": 0.068,
+        "binary": 0.0747,
+        "code": 0.0977,
+        "csv": 0.0618,
+        "gutenberg": 0.0797,
+        "json": 0.1139,
+        "log": 0.1102,
+        "mixed": 0.076
+      },
+      "builder_eval_top1": 0.0854,
+      "ext_correct": 5351,
+      "ext_high_entropy_top1": 0.0715,
+      "ext_per_family": {
+        "c_src": 0.1019,
+        "hexdump": 0.0628,
+        "pe_bin": 0.0806,
+        "py_src": 0.086,
+        "rfc_txt": 0.0938,
+        "rst_doc": 0.1015,
+        "sql": 0.0742,
+        "xml": 0.0953
+      },
+      "ext_per_family_correct": {
+        "c_src": 795,
+        "hexdump": 490,
+        "pe_bin": 597,
+        "py_src": 663,
+        "rfc_txt": 728,
+        "rst_doc": 789,
+        "sql": 546,
+        "xml": 743
+      },
+      "ext_real_correct": 3572,
+      "ext_real_top1": 0.0929,
+      "ext_structured_text_top1": 0.0923,
+      "ext_synthetic_correct": 1779,
+      "ext_synthetic_top1": 0.0775,
+      "ext_top1": 0.0871,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "null": {
+      "builder_eval_correct": 10087,
+      "builder_eval_per_family": {
+        "base64": 0.0382,
+        "binary": 0.0385,
+        "code": 0.0407,
+        "csv": 0.039,
+        "gutenberg": 0.0402,
+        "json": 0.0383,
+        "log": 0.0376,
+        "mixed": 0.0379
+      },
+      "builder_eval_top1": 0.0388,
+      "ext_correct": 2419,
+      "ext_high_entropy_top1": 0.0387,
+      "ext_per_family": {
+        "c_src": 0.0401,
+        "hexdump": 0.039,
+        "pe_bin": 0.0385,
+        "py_src": 0.0411,
+        "rfc_txt": 0.0399,
+        "rst_doc": 0.0446,
+        "sql": 0.031,
+        "xml": 0.0404
+      },
+      "ext_per_family_correct": {
+        "c_src": 313,
+        "hexdump": 304,
+        "pe_bin": 285,
+        "py_src": 317,
+        "rfc_txt": 310,
+        "rst_doc": 347,
+        "sql": 228,
+        "xml": 315
+      },
+      "ext_real_correct": 1572,
+      "ext_real_top1": 0.0409,
+      "ext_structured_text_top1": 0.0396,
+      "ext_synthetic_correct": 847,
+      "ext_synthetic_top1": 0.0369,
+      "ext_top1": 0.0394,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "real_incumbent": {
+      "builder_eval_correct": 19313,
+      "builder_eval_per_family": {
+        "base64": 0.0704,
+        "binary": 0.0766,
+        "code": 0.0784,
+        "csv": 0.0474,
+        "gutenberg": 0.0805,
+        "json": 0.0791,
+        "log": 0.0827,
+        "mixed": 0.0783
+      },
+      "builder_eval_top1": 0.0743,
+      "ext_correct": 5319,
+      "ext_high_entropy_top1": 0.0628,
+      "ext_per_family": {
+        "c_src": 0.1062,
+        "hexdump": 0.0428,
+        "pe_bin": 0.0838,
+        "py_src": 0.1053,
+        "rfc_txt": 0.1064,
+        "rst_doc": 0.1035,
+        "sql": 0.0609,
+        "xml": 0.0827
+      },
+      "ext_per_family_correct": {
+        "c_src": 828,
+        "hexdump": 334,
+        "pe_bin": 621,
+        "py_src": 812,
+        "rfc_txt": 826,
+        "rst_doc": 805,
+        "sql": 448,
+        "xml": 645
+      },
+      "ext_real_correct": 3892,
+      "ext_real_top1": 0.1012,
+      "ext_structured_text_top1": 0.0945,
+      "ext_synthetic_correct": 1427,
+      "ext_synthetic_top1": 0.0622,
+      "ext_top1": 0.0866,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "real_logistic": {
+      "builder_eval_correct": 20000,
+      "builder_eval_per_family": {
+        "base64": 0.069,
+        "binary": 0.0742,
+        "code": 0.0836,
+        "csv": 0.0682,
+        "gutenberg": 0.084,
+        "json": 0.0894,
+        "log": 0.0684,
+        "mixed": 0.0786
+      },
+      "builder_eval_top1": 0.0769,
+      "ext_correct": 6396,
+      "ext_high_entropy_top1": 0.0691,
+      "ext_per_family": {
+        "c_src": 0.1242,
+        "hexdump": 0.0491,
+        "pe_bin": 0.0902,
+        "py_src": 0.1358,
+        "rfc_txt": 0.1229,
+        "rst_doc": 0.1154,
+        "sql": 0.0939,
+        "xml": 0.1009
+      },
+      "ext_per_family_correct": {
+        "c_src": 969,
+        "hexdump": 383,
+        "pe_bin": 668,
+        "py_src": 1047,
+        "rfc_txt": 954,
+        "rst_doc": 897,
+        "sql": 691,
+        "xml": 787
+      },
+      "ext_real_correct": 4535,
+      "ext_real_top1": 0.1179,
+      "ext_structured_text_top1": 0.1157,
+      "ext_synthetic_correct": 1861,
+      "ext_synthetic_top1": 0.0811,
+      "ext_top1": 0.1042,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "real_model": {
+      "builder_eval_correct": 21154,
+      "builder_eval_per_family": {
+        "base64": 0.0649,
+        "binary": 0.076,
+        "code": 0.084,
+        "csv": 0.0581,
+        "gutenberg": 0.0917,
+        "json": 0.1027,
+        "log": 0.0917,
+        "mixed": 0.0809
+      },
+      "builder_eval_top1": 0.0814,
+      "ext_correct": 6178,
+      "ext_high_entropy_top1": 0.0679,
+      "ext_per_family": {
+        "c_src": 0.1295,
+        "hexdump": 0.041,
+        "pe_bin": 0.0963,
+        "py_src": 0.1327,
+        "rfc_txt": 0.1228,
+        "rst_doc": 0.1142,
+        "sql": 0.0769,
+        "xml": 0.0904
+      },
+      "ext_per_family_correct": {
+        "c_src": 1010,
+        "hexdump": 320,
+        "pe_bin": 713,
+        "py_src": 1023,
+        "rfc_txt": 953,
+        "rst_doc": 888,
+        "sql": 566,
+        "xml": 705
+      },
+      "ext_real_correct": 4587,
+      "ext_real_top1": 0.1193,
+      "ext_structured_text_top1": 0.1114,
+      "ext_synthetic_correct": 1591,
+      "ext_synthetic_top1": 0.0693,
+      "ext_top1": 0.1006,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "repro": {
+      "builder_eval_correct": 51078,
+      "builder_eval_per_family": {
+        "base64": 0.1153,
+        "binary": 0.0947,
+        "code": 0.2248,
+        "csv": 0.3288,
+        "gutenberg": 0.1366,
+        "json": 0.2711,
+        "log": 0.2875,
+        "mixed": 0.1154
+      },
+      "builder_eval_top1": 0.1965,
+      "ext_correct": 4379,
+      "ext_high_entropy_top1": 0.0723,
+      "ext_per_family": {
+        "c_src": 0.0549,
+        "hexdump": 0.0735,
+        "pe_bin": 0.071,
+        "py_src": 0.051,
+        "rfc_txt": 0.0643,
+        "rst_doc": 0.0579,
+        "sql": 0.1032,
+        "xml": 0.0963
+      },
+      "ext_per_family_correct": {
+        "c_src": 428,
+        "hexdump": 573,
+        "pe_bin": 526,
+        "py_src": 393,
+        "rfc_txt": 499,
+        "rst_doc": 450,
+        "sql": 759,
+        "xml": 751
+      },
+      "ext_real_correct": 2296,
+      "ext_real_top1": 0.0597,
+      "ext_structured_text_top1": 0.071,
+      "ext_synthetic_correct": 2083,
+      "ext_synthetic_top1": 0.0907,
+      "ext_top1": 0.0713,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    }
+  },
+  "reproduction_reference": 0.1965,
+  "reproduction_top1": 0.1965,
+  "revises_0003_0014_0015_0016_0017_0018_0019": false,
+  "schema": "raise-v1/realfit_4096_rerun_verdict/1",
+  "shuffled_label_accuracy_eval": 0.0388,
+  "shuffled_label_accuracy_ext": 0.0394,
+  "source_artifact": "artifacts/pivot/realfit_4096_rerun.json",
+  "validity_failed_clauses": [],
+  "verdict": "REAL_FIT_FAILS"
+}

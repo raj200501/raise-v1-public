@@ -96,8 +96,70 @@
     "why_the_gate_could_not_see_it": "The same failure as 0020, one nesting level lower. The 0020 review made the gate's control substitute values into the runner's captured blocks for corpus, ext_corpus, fit_corpus and partition - but the FIT RECORDS were still overwritten wholesale, and record() replaced fit_info with {'n_iter': 100} for every arm, handing the reader exactly the value it wanted and the runner never writes. block_refills and the record environment were overwritten the same way. The provenance case was symmetric and recursive over KEY SETS and never compared a value or descended into a record's fit_info, so 58/58 stayed green."
   },
   "preregistration": "0021-realfit-4096-rerun",
+  "run_record": {
+    "controls_all_passed": {
+      "chance": 0.038462,
+      "collision_counts_matched_the_sealed_ones": {
+        "chunk_matched_block": 0,
+        "fit_block": 0,
+        "matched_block": 2,
+        "repro_block": 8
+      },
+      "no_arm_at_its_iteration_cap": true,
+      "null_on_evaluation": 0.0388,
+      "null_on_extension": 0.0394,
+      "pool_rows_identical_to_a_scored_row": 26,
+      "reproduction": 0.1965,
+      "reproduction_drift": 0.0,
+      "reproduction_reference": 0.1965
+    },
+    "cost": "1556.5 s wall on one launch, 1255.1 s of it fitting; the two M4 builder arms and the reproduction rung dominate. No arm reached its iteration cap.",
+    "finished_utc": "2026-09-16T10:34:46Z",
+    "fit_seconds_total": 1255.1,
+    "invocation": "0021-realfit-4096-rerun",
+    "launches": 1,
+    "seconds_by_arm": {
+      "builder_chunk_matched": 151.9,
+      "builder_matched": 411.8,
+      "floor_feat1": 1.1,
+      "floor_majority": 0.0,
+      "floor_stratified": 0.0,
+      "floor_tree3": 3.4,
+      "null": 84.3,
+      "real_incumbent": 25.3,
+      "real_logistic": 58.0,
+      "real_model": 280.1,
+      "repro": 239.2
+    },
+    "started_utc": "2026-09-16T10:09:16Z",
+    "the_clause": {
+      "floor": 0.0929,
+      "floor_arm": "floor_tree3",
+      "margin_achieved": 0.0264,
+      "margin_required": 0.05,
+      "needed": 5495,
+      "of": 38452,
+      "real_model_correct_real_rows": 4587,
+      "real_model_real_top1": 0.1193,
+      "short_by_rows": 908
+    },
+    "validity_failed_clauses": [],
+    "verdict": "REAL_FIT_FAILS",
+    "wall_seconds": 1556.5,
+    "what_it_found": {
+      "but_a_hand_writable_rule_gets_most_of_it": "A depth-3 decision tree fitted on the same 26346 rows reads 0.0929 on those same held-out rows. The searched model's margin over it is 0.0264 against the preregistered 0.05. That is the clause, and it fails by 908 rows.",
+      "content_not_budget": "Both builder-matched arms read far below the real-fitted model on the real families: builder_matched 0.0671 at the same ROW budget over 19413 builder plaintexts, builder_chunk_matched 0.0638 at the same PLAINTEXT budget (1029). The rival explanation 'the fit corpus is too small to learn anything' is closed on both axes: what buys the lift is fitting on real content, not the size of the fit.",
+      "no_family_clears": "0 of 5 real families clear their own floor plus 0.05. py_src comes closest, short by 0.0033 (model 0.1327 against its floor 0.0860 + 0.05); rst_doc is furthest, short by 0.0373. Every family's model reading is ABOVE its own floor - by 0.0127 to 0.0467 - and none by the preregistered margin.",
+      "one_line": "Real content DOES carry the encoder signal, and a depth-3 tree gets most of it.",
+      "real_content_carries_signal": "0014's searched model fitted on real content reads 0.1193 on the held-out real-family rows - 3.1 times chance, and nearly double the 0.0637 the same recipe reached on the SAME rows in 0018, when it had been fitted on the builder's generated families (4587 correct rows against 0018's 2450, a lead of 2137). The question 0018 left open - whether real files carry the signal at all - is answered yes.",
+      "the_bar_is_what_made_this_honest": "Under the chance-based bar 0020 drafted, and which 0015 and 0018 used, 4587 correct rows against 3402 needed would have published as REAL_FIT_CLEARS. The 0020 pre-freeze review replaced it with OPERATING_RULES section 4a's floor plus a margin, arguing that a chance bar could publish a pass over a result beatable by a rule a person could write out by hand. That is exactly what the measurement turned out to be.",
+      "the_sister_recipes": "0014's standardised logistic L3 reads 0.1179 and 0003's incumbent M1 0.1012, against the searched model's 0.1193. Neither clears either. The searched model leads, narrowly - the opposite of 0018's ordering on these same rows, where the logistic led it.",
+      "the_transfer_failure_is_symmetric": "builder_matched reads 0.201 on the builder's own evaluation set and 0.0671 on the real families; real_model reads 0.1193 on the real families and 0.0814 on the builder's. Each does roughly twice as well inside its own distribution as outside it. The encoder signal is real in both kinds of content and does not travel well between them."
+    },
+    "what_this_does_not_say": "It does not say real content lacks the encoder signal; it says the opposite, at 3.1 times chance. It does not revise 0003, 0014, 0015, 0016, 0017, 0018 or 0019. It is an IN-DISTRIBUTION reading on real content, not a transfer reading: the fit and scored chunks are cut from the same five pinned files. It is a bound on this recipe at this budget on these five file kinds, and the per-family table says which. It establishes no buyer, customer, user or partner, and was never capable of doing so."
+  },
   "schema": "raise-v1/engineering_log/1",
-  "status": "reviewed, gated at 63/63, pre-freeze-checked PASS; ready to freeze as chain entry 21",
+  "status": "complete: REAL_FIT_FAILS",
   "what_changed_from_0020": {
     "everything_else": "Unchanged: the eleven arms, the three recipes verbatim from 0014/0018, the four trivial-baseline floor arms, the two builder-matched arms, the seed, the corpora and their hashes, the floor-plus-margin clause, the per-family second clause, the scoring set, the reproduction and null controls, and every disclosure the 0020 review added.",
     "measured_in_advance": "The four counts were measured after 0020's refusal and before 0021 was written, from the same data with the same digest, and are banked in artifacts/pivot/builder_duplicate_chunks.json. The pre-freeze check recomputes them from the data rather than comparing the preregistration against itself.",

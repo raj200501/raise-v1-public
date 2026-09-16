@@ -313,6 +313,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 | Result | What happened | Class |
 |---|---|---|
 | **Out-of-builder transfer at 4096 (0018, re-read under 0019)** | **`OOB_TRANSFER_FAILS`** — 0014's searched model, fitted on the builder's eight families, does not identify the encoder at chance + 0.05 on five pinned real-file families the builder never produced: 2450 of 38452 rows correct (0.0637) against 3402 needed; the standardised logistic reads 0.0716 and the incumbent 0.0634 on the same rows, neither at the bar; no real family at the bar, two synthetic ones; eight-family mixture 0.0766 (a flag). 0018's own frozen reader emitted `VOID` on a wrong sealed literal (the null block hash), filed in `CORRECTIONS.md`; 0019 re-read the banked artifact with it corrected. Chain entries 18 and 19. | primary-verifiable |
+| **Real-content fit at 4096 (0021; 0020 refused at launch)** | **`REAL_FIT_FAILS`** — and the finding is that real content DOES carry the signal. 0014's searched model, fitted on 26346 rows from 1029 plaintexts of real content and scored on held-out chunks of the same five pinned files, reads 0.1193 on the 38452 real-family rows — 3.1× chance and nearly double 0018's builder-fitted 0.0637 on the same rows. But a depth-3 tree on the same rows reads 0.0929, and the clause is floor + 0.05 (§4a), not chance + 0.05: 4587 correct against 5495 needed, a margin of 0.0264 over a rule a person could write by hand. Under the chance bar (3402) it would have passed. 0 of 5 families clear their own floor; all five are above it. Both builder-matched arms read far lower (0.0671 row-matched, 0.0638 plaintext-matched), so it is the content and not the budget. 0020 sealed the same design and refused at launch on a condition that required the builder's own pool to be free of duplicate chunks; chain entries 20 and 21. | primary-verifiable |
 | **Linear rule under transfer at 4096 (0017)** | **`L3_LEAD_BELOW_BAR`** — 0014's standardised logistic on 0015's eight sealed folds reaches a stitched 0.0951 on unseen families against 0015's incumbent 0.0859: 2393 more correct rows of 260000 (0.009204) against a 5200-row bar (0.02); under the record's 0.05 margin; every fold converged. Chain entry 17. | primary-verifiable |
 | **Leave-one-family-out transfer at 4096 (0015)** | **`TRANSFER_FAILS`** — with each content family withheld from training, 0003's recipe identifies the encoder on that family at a stitched 0.0859 against chance 0.0385, 0.0026 short of the chance + 0.05 bar; the raw logistic transfers better (0.0928); per family the model keeps 0.25 to 0.65 of its in-distribution accuracy. The headline is a statement about these eight content families | primary-verifiable |
 | **Phase 0 domain selection** | **Terminated with no domain. 99 candidates, 8 adversarial reviews, 0 SELECT.** | arithmetic-verifiable |
@@ -336,7 +337,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **14 of 234 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 242 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -366,7 +367,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
 | `arithmetic-verifiable` | 36 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 184 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `primary-verifiable` | 192 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -1050,13 +1051,40 @@ searched recipe read against a fixed one, so the comparison is asymmetric by des
 nothing about 0014's searched model M4, which was not fitted here; that nothing here revises 0003,
 0014 or 0015; and that no buyer is established.
 
-**In flight — preregistration 0021 (chain seq 21, frozen 2026-09-16T10:05:55Z).** 0020's design, rerun with the one clause that refused it corrected. Eleven arms: 0003's incumbent M1, 0014's standardised logistic L3 and 0014's searched model M4 fitted once each on 26346 rows from 1029 plaintexts of real content — the chunks of 0018's five pinned real files its sealed evaluation corpus does not use (py_src 17197 rows, pe_bin 5145, rfc_txt 2340, rst_doc 1040, c_src 624) — beside a reproduction rung that must reproduce 0003's banked 0.1965, a null control on permuted labels, **four trivial baselines fitted on the same rows**, and M4 on the builder's pool twice: once at the same row budget, once at the same plaintext budget, which differ by a factor of 19. Each is scored once on 0018's scoring set, row for row.
+**Preregistration 0021 (chain seq 21) — `REAL_FIT_FAILS`, and what it found.** Real content does carry the encoder
+signal. 0014's searched model M4, fitted on 26346 rows from 1029 plaintexts of real
+content and scored on held-out chunks of the same five pinned files, reads **0.1193** on the
+38452 real-family rows — 3.1× chance, and nearly double the
+0.0637 the same recipe reached on the same rows in 0018 when it had
+been fitted on the builder's generated families (4587 correct rows against 0018's
+2450). The question 0018 left open is answered: yes.
 
-One clause, read by `tools/readers/realfit4096_rerun_verdict.py` on the recounted score vectors, measured against a **floor, not against chance** (`docs/OPERATING_RULES.md` §4a): M4's correct rows over the 38452 rows of the five real-file families must reach `ceil(38452 × (floor + 0.05))`, where the floor is the best of those four trivial baselines on those same rows. **That threshold is not knowable before the run.** A second named clause counts how many of the five families clear their own floor plus 0.05, and is published beside the verdict wherever the verdict appears. The chance-based count — 3402 of 38452, the bar 0018 and 0015 used — is banked as an informational flag so this stays comparable with 0018's 2450, and is **not** the clause.
+**And a depth-3 decision tree gets most of it.** Fitted on the same rows, it reads
+0.0929. The clause is `floor + 0.05`, not `chance + 0.05`
+(`docs/OPERATING_RULES.md` §4a): M4 needed 5495 correct rows and got
+4587, a margin of 0.0264 over a rule a person
+could write out by hand, against the 0.05 required. It fails by
+908 rows. **0 of
+5 real families clear their own floor plus 0.05** — every one is above its own floor, by
+0.0127 to 0.0467, and none by the preregistered margin; py_src comes closest, short by 0.0033.
 
-What 0020 got wrong and this corrects: its validity clause required that no fit-block, repro-block or matched-block row be byte-identical to a scored row. The fit block's zero is the clause's own integrity and stays fatal. The builder blocks are a different matter — the corpus builder emitted nine pairs of source chunks whose carved rows are identical, one of which straddles 0003's grouped split — so their collisions are now sealed as the measured ones, by row identity and not merely by count: 8 rows of the reproduction rung, 2 of the builder-matched block, 0 of the plaintext-matched block, and 26 across the whole 800000-row pool, each bound by a sha256 of its row indices. A count that grows means content crossed that this preregistration did not measure; one that shrinks means these are not the sealed blocks. Either is VOID. The builder cache's feature array is also sealed by hash for the first time in this record.
+That bar is the whole point. Under the chance-based bar 0020 drafted — the one 0015 and 0018 used —
+4587 against 3402 would have published as
+`REAL_FIT_CLEARS`. 0020's pre-freeze review replaced it on the argument that a chance bar can publish a pass over a
+result a hand-written rule beats. That is exactly what the measurement turned out to be.
 
-It is an in-distribution reading on real content, **not a transfer reading**: the fit and scored chunks come from the same five files. Nothing below this line changes until its frozen reader has read the completed run.
+**Content, not budget.** Both builder-matched arms read far below: 0.0671 at the same row budget
+over 19413 builder plaintexts, 0.0638 at the same
+plaintext budget (1029). "The fit corpus is too small to learn
+anything" is closed on both axes. **The transfer failure is symmetric**: builder_matched reads
+0.201 inside the builder's distribution and 0.0671 outside it; real_model reads
+0.1193 inside real content and 0.0814 outside. Each does about twice as well at home.
+
+Controls: reproduction 0.1965 against the banked 0.1965 (drift
+0.0), null 0.0394 and 0.0388 against
+chance 0.038462, no arm at its iteration cap, no validity clause raised. An **in-distribution** reading on real
+content, not a transfer reading: the fit and scored chunks come from the same five files. Nothing here revises 0003,
+0014, 0015, 0016, 0017, 0018 or 0019, and nothing here establishes a buyer.
 
 **Preregistration 0020 (chain seq 20, frozen 2026-09-16T08:35:44Z) — REFUSED, and what it found.** Real-content fit
 at 4096: eleven arms, 26346 rows from 1029 plaintexts of real content, scored on 0018's scoring set, with the clause

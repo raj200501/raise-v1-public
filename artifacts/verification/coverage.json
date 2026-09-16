@@ -2086,8 +2086,81 @@
       "json_path": "$.ext_per_family.model.xml",
       "reverify": "python3 tools/readers/oob4096_reread_verdict.py",
       "value": 0.1068
+    },
+    {
+      "artifact": "artifacts/pivot/realfit_4096_rerun_verdict.json",
+      "claim": "Preregistration 0021: REAL_FIT_FAILS \u2014 0014's searched model fitted on real content does not beat the best trivial baseline on the same rows by 0.05.",
+      "class": "primary-verifiable",
+      "id": "realfit4096-verdict",
+      "json_path": "$.verdict",
+      "reverify": "python3 tools/readers/realfit4096_rerun_verdict.py",
+      "value": "REAL_FIT_FAILS"
+    },
+    {
+      "artifact": "artifacts/pivot/realfit_4096_rerun_verdict.json",
+      "claim": "The real-fitted model identifies the encoder on 4587 of 38452 real-family rows.",
+      "class": "primary-verifiable",
+      "id": "realfit4096-real-correct",
+      "json_path": "$.ext_real_correct_model",
+      "reverify": "python3 tools/readers/realfit4096_rerun_verdict.py",
+      "value": 4587
+    },
+    {
+      "artifact": "artifacts/pivot/realfit_4096_rerun_verdict.json",
+      "claim": "The real-fitted model reads 0.1193 on the real-family rows, 3.1 times chance.",
+      "class": "primary-verifiable",
+      "id": "realfit4096-real-top1",
+      "json_path": "$.ext_real_top1_model",
+      "reverify": "python3 tools/readers/realfit4096_rerun_verdict.py",
+      "value": 0.1193
+    },
+    {
+      "artifact": "artifacts/pivot/realfit_4096_rerun_verdict.json",
+      "claim": "The floor the clause is measured against is 0.0929, reached by a depth-3 decision tree fitted on the same rows.",
+      "class": "primary-verifiable",
+      "id": "realfit4096-floor",
+      "json_path": "$.bar_applied.floor_real_top1",
+      "reverify": "python3 tools/readers/realfit4096_rerun_verdict.py",
+      "value": 0.0929
+    },
+    {
+      "artifact": "artifacts/pivot/realfit_4096_rerun_verdict.json",
+      "claim": "5495 correct real-family rows were needed: ceil(38452 x (floor + 0.05)).",
+      "class": "primary-verifiable",
+      "id": "realfit4096-needed",
+      "json_path": "$.bar_applied.min_correct_real_over_floor",
+      "reverify": "python3 tools/readers/realfit4096_rerun_verdict.py",
+      "value": 5495
+    },
+    {
+      "artifact": "artifacts/pivot/realfit_4096_rerun_verdict.json",
+      "claim": "0 of 5 real families clear their own floor plus 0.05; all five read above their own floor.",
+      "class": "primary-verifiable",
+      "id": "realfit4096-families-clearing",
+      "json_path": "$.bar_applied.families_clearing",
+      "reverify": "python3 tools/readers/realfit4096_rerun_verdict.py",
+      "value": 0
+    },
+    {
+      "artifact": "artifacts/pivot/realfit_4096_rerun_verdict.json",
+      "claim": "The reproduction rung reads 0.1965, 0003's banked value exactly (drift 0.0).",
+      "class": "primary-verifiable",
+      "id": "realfit4096-reproduction",
+      "json_path": "$.reproduction_top1",
+      "reverify": "python3 tools/readers/realfit4096_rerun_verdict.py",
+      "value": 0.1965
+    },
+    {
+      "artifact": "artifacts/pivot/builder_duplicate_chunks.json",
+      "claim": "The corpus builder emitted 9 pairs of source chunks whose carved feature rows are identical, unmeasured by every preregistration before 0020's refusal.",
+      "class": "primary-verifiable",
+      "id": "builder-duplicate-chunk-pairs",
+      "json_path": "$.n_duplicate_chunk_pairs",
+      "reverify": "python3 tools/prereg_checks/prefreeze_0021.py",
+      "value": 9
     }
   ],
+  "n_claims": 242,
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",
   "schema": "raise-v1/coverage_map/1"
 }

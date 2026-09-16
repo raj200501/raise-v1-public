@@ -72,9 +72,11 @@ That is a fact about the record's foundation that twenty preregistrations had ca
 `artifacts/pivot/builder_duplicate_chunks.json`. 0020 is published as refused; **preregistration 0021** carries the same eleven-arm
 design with that one clause corrected.
 
-Preregistration 0021 (chain entry 21, frozen 2026-09-16) is 0020's design rerun with that clause corrected: the fit corpus's zero
-stays fatal, and the builder blocks' collisions are sealed as the measured ones by row identity (8, 2, 0 and 26 across the
-whole pool), so a count that grows and one that shrinks both fail. It is frozen and running.
+Preregistration 0021 (chain entry 21) answered it: **real content does carry the encoder signal** — the searched model, fitted on
+26346 rows of real content, reads 0.1193 on held-out chunks of the same files, 3.1x chance and nearly double what the
+builder-fitted model reached on those rows in 0018. **And a depth-3 tree fitted on the same rows reads 0.0929.** The clause is floor plus 0.05,
+not chance plus 0.05, so the verdict is `REAL_FIT_FAILS`: a margin of 0.0264 over a rule a person could write by hand, where
+0.05 was required. Under the chance bar it would have passed. That is what the bar is for.
 
 The curve and the searched margin stand as measured, and they are statements about the corpus builder's eight
 content families (gutenberg, base64, binary, code, csv, json, log, mixed), not about DEFLATE streams in general;
