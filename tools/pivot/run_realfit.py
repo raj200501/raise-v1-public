@@ -348,10 +348,12 @@ def main() -> int:
     partition["fit_rows_identical_to_a_scored_row"] = _identical_rows_of(Xr)
     partition["repro_rows_identical_to_a_scored_row"] = _identical_rows_of(X, repro_rows)
     partition["matched_rows_identical_to_a_scored_row"] = _identical_rows_of(X, matched_rows)
+    partition["chunk_matched_rows_identical_to_a_scored_row"] = _identical_rows_of(X, chunk_matched_rows)
     partition["row_identity_digest"] = "blake2b-128 of the contiguous float32 feature row, over every scored row"
     print(f"[2] row identity scan: fit {partition['fit_rows_identical_to_a_scored_row']}, repro "
-          f"{partition['repro_rows_identical_to_a_scored_row']}, matched {partition['matched_rows_identical_to_a_scored_row']} "
-          f"rows are byte-identical to a scored row ({time.perf_counter() - t_id:.0f}s)", flush=True)
+          f"{partition['repro_rows_identical_to_a_scored_row']}, matched {partition['matched_rows_identical_to_a_scored_row']}, "
+          f"chunk-matched {partition['chunk_matched_rows_identical_to_a_scored_row']} rows are byte-identical to a "
+          f"scored row ({time.perf_counter() - t_id:.0f}s)", flush=True)
     if not args.smoke and partition["pool_idx_sha256"] != P["pool_idx_sha256"]:
         print(f"REFUSING: the pool hashes to {partition['pool_idx_sha256'][:12]}..., not the sealed "
               f"{P['pool_idx_sha256'][:12]}...", file=sys.stderr)
@@ -360,14 +362,36 @@ def main() -> int:
                            or partition["fit_chunks_shared_with_builder"]):
         print("REFUSING: the fit corpus shares a chunk id or a source chunk with a scored corpus", file=sys.stderr)
         return 3
-    # The preregistration says the runner REQUIRES these counts to be zero, not merely that it measures them
-    # (0020 pre-freeze review, runner lens, finding 4). A leak found here costs ten seconds; found by the reader
-    # it costs the whole run.
-    if not args.smoke and (partition["fit_rows_identical_to_a_scored_row"]
-                           or partition["repro_rows_identical_to_a_scored_row"]
-                           or partition["matched_rows_identical_to_a_scored_row"]):
-        print("REFUSING: a fit, repro or matched row is byte-identical to a scored row", file=sys.stderr)
-        return 3
+    # The preregistration says the runner REQUIRES these counts, not merely that it measures them (0020 pre-freeze
+    # review, runner lens, finding 4). A leak found here costs ten seconds; found by the reader it costs the whole run.
+    #
+    # The FIT block's count is the clause's own integrity and must be zero. The three BUILDER blocks' counts must equal
+    # the sealed expectations exactly - zero is NOT the right answer for them. 0020 required zero of all four and
+    # refused on repro 8 and matched 2, which are not leaks: the corpus builder emitted nine pairs of source chunks
+    # that carve to identical feature rows, and one pair straddles 0003's grouped split (44496 evaluation / 48016 pool,
+    # 26 of 26 rows). See artifacts/pivot/builder_duplicate_chunks.json. Equality rather than a ceiling, so that a
+    # count which GROWS (new content crossed) and one which SHRINKS (not the sealed split, cache or blocks) both refuse.
+    _exp_seal = P.get("expected_rows_identical_to_a_scored_row")
+    if _exp_seal is not None:
+        # banked on every path, smoke included, because the frozen reader compares it and the mutation gate's control
+        # is built from a captured smoke artifact: a key the runner writes only sometimes is a key the control lacks
+        partition["expected_rows_identical_to_a_scored_row"] = dict(_exp_seal)
+    if not args.smoke:
+        if partition["fit_rows_identical_to_a_scored_row"]:
+            print(f"REFUSING: {partition['fit_rows_identical_to_a_scored_row']} fit rows are byte-identical to a "
+                  f"scored row; the clause's own corpus must share nothing with anything scored", file=sys.stderr)
+            return 3
+        exp = _exp_seal
+        if exp is not None:
+            got = {"fit_block": partition["fit_rows_identical_to_a_scored_row"],
+                   "repro_block": partition["repro_rows_identical_to_a_scored_row"],
+                   "matched_block": partition["matched_rows_identical_to_a_scored_row"],
+                   "chunk_matched_block": partition["chunk_matched_rows_identical_to_a_scored_row"]}
+            bad = {k: (got[k], exp[k]) for k in exp if got.get(k) != exp[k]}
+            if bad:
+                print(f"REFUSING: block row-identity counts are not the sealed expectations {bad} "
+                      f"(measured, expected)", file=sys.stderr)
+                return 3
     # The four sealed block hashes: the runner must notice a divergent permutation now, not the reader an hour later
     # (same review, finding 5).
     if not args.smoke:

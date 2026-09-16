@@ -4388,7 +4388,7 @@ _RF_SHAPE = os.path.join(REPO, "tests", "fixtures", "realfit_runner_shape.json")
 
 def _rf_reader():
     import importlib.util
-    spec = importlib.util.spec_from_file_location("r20", os.path.join(REPO, "tools", "readers", "realfit4096_verdict.py"))
+    spec = importlib.util.spec_from_file_location("r20", os.path.join(REPO, "tools", "readers", "realfit4096_rerun_verdict.py"))
     m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
     return m
 
@@ -4520,14 +4520,18 @@ def _good_realfit(real_correct=None, acc=None, repro=None, null_acc=None, matche
                    {"name": nm, "fingerprint": fp(nm), "event": "completed", "utc": f"2026-09-16T05:{i:02d}:30Z"}]
     part.update({"pool_chunks_shared_with_ext": 0, "eval_chunks_shared_with_ext": 0, "fit_chunks_shared_with_ext": 0,
                  "fit_chunks_shared_with_builder": 0, "fit_source_chunks_shared_with_ext": 0,
-                 "fit_rows_identical_to_a_scored_row": 0, "repro_rows_identical_to_a_scored_row": 0,
-                 "matched_rows_identical_to_a_scored_row": 0, "n_fit_source_chunks": r20.FIT["n_chunks"],
+                 "fit_rows_identical_to_a_scored_row": 0,
+                 "matched_rows_identical_to_a_scored_row": r20.EXPECTED_COLLISIONS["matched_block"],
+                 "repro_rows_identical_to_a_scored_row": r20.EXPECTED_COLLISIONS["repro_block"],
+                 "chunk_matched_rows_identical_to_a_scored_row": r20.EXPECTED_COLLISIONS["chunk_matched_block"],
+                 "expected_rows_identical_to_a_scored_row": dict(r20.EXPECTED_COLLISIONS),
+                 "n_fit_source_chunks": r20.FIT["n_chunks"],
                  "n_ext_source_chunks": r20.EXT["n_chunks"], "null_y_shuffled_sha256": "0" * 64,
                  "null_labels_permuted": True, "null_labels_same_multiset": True,
                  "row_identity_digest": "blake2b-128 of the contiguous float32 feature row, over every scored row"})
     rm = reads["real_model"]
     art = dict(shape)                        # the runner's own key set, values replaced
-    art.update({"schema_version": 1, "schema": "raise-v1/realfit_4096/1", "preregistration": r20.PREREG, "smoke": False,
+    art.update({"schema_version": 1, "schema": "raise-v1/realfit_4096_rerun/1", "preregistration": r20.PREREG, "smoke": False,
                 "stage": "run", "protocol": r20.PROTOCOL, "protocol_sha256": r20.PROTOCOL_SHA256, "recipes": r20.RECIPES,
                 "recipes_sha256": r20.RECIPES_SHA256,
                 "corpus": _rf_sub(shape["corpus"], dict(r20.CORPUS), "corpus", sealed_may_be_subset=True),
@@ -4559,7 +4563,7 @@ def _good_realfit(real_correct=None, acc=None, repro=None, null_acc=None, matche
                 "fit_record_top1_is": shape["fit_record_top1_is"],
                 "run_started_utc": "2026-09-16T05:00:00Z", "first_launch_utc": "2026-09-16T05:00:00Z",
                 "run_finished_utc": "2026-09-16T06:00:00Z"})
-    scores = {"schema": "raise-v1/realfit_4096_scores/1", "preregistration": r20.PREREG, "smoke": False,
+    scores = {"schema": "raise-v1/realfit_4096_rerun_scores/1", "preregistration": r20.PREREG, "smoke": False,
               "n_eval_rows": n_eval, "n_ext_rows": n_ext, "eval_idx_sha256": part["eval_idx_sha256"],
               "eval_chunk_ids": eval_ids, "ext_chunk_ids": ext_ids, "ext_fam": fam_idx, "ext_families": fams,
               "ext_arrays_sha256": {k: v["sha256"] for k, v in r20.EXT["arrays"].items()},
@@ -4576,17 +4580,17 @@ def _realfit(root, mutate=None, drop_artifact=False, drop_scores=False, not_run=
             art = r
     piv = os.path.join(root, "artifacts", "pivot"); os.makedirs(piv, exist_ok=True)
     if not drop_scores:
-        json.dump(scores, open(os.path.join(piv, "realfit_4096_scores.json"), "w"))
+        json.dump(scores, open(os.path.join(piv, "realfit_4096_rerun_scores.json"), "w"))
     if not drop_artifact:
-        json.dump(art, open(os.path.join(piv, "realfit_4096.json"), "w"))
+        json.dump(art, open(os.path.join(piv, "realfit_4096_rerun.json"), "w"))
     if not_run is not None:
-        json.dump(not_run, open(os.path.join(piv, "realfit_4096_not_run.json"), "w"))
-    shutil.copy(os.path.join(REPO, "tools", "readers", "realfit4096_verdict.py"),
-                os.path.join(root, "tools", "readers", "realfit4096_verdict.py"))
-    rc, out = run([PY, "tools/readers/realfit4096_verdict.py"], root)
+        json.dump(not_run, open(os.path.join(piv, "realfit_4096_rerun_not_run.json"), "w"))
+    shutil.copy(os.path.join(REPO, "tools", "readers", "realfit4096_rerun_verdict.py"),
+                os.path.join(root, "tools", "readers", "realfit4096_rerun_verdict.py"))
+    rc, out = run([PY, "tools/readers/realfit4096_rerun_verdict.py"], root)
     if rc != 0:
         return rc, out
-    v = json.load(open(os.path.join(piv, "realfit_4096_verdict.json")))
+    v = json.load(open(os.path.join(piv, "realfit_4096_rerun_verdict.json")))
     ok = v["verdict"] == "REAL_FIT_CLEARS"
     return (0 if ok else 1), (f"verdict={v['verdict']} real={v.get('ext_real_top1_model')} "
                               f"correct={v.get('ext_real_correct_model')} validity={v['validity_failed_clauses'][:2]} "
@@ -4823,7 +4827,7 @@ def _(root):
 
 @case("realfit4096", "a-NOT-RUN-marker-beside-an-artifact-emits-no-verdict", "fail")
 def _(root):
-    rc, out = _realfit(root, not_run={"schema": "raise-v1/realfit_4096_not_run/1", "preregistration": "0020-realfit-4096",
+    rc, out = _realfit(root, not_run={"schema": "raise-v1/realfit_4096_rerun_not_run/1", "preregistration": "0021-realfit-4096-rerun",
                                       "stage": "run", "reason": "the null control leaked", "utc": "2026-09-16T05:00:00Z",
                                       "n_checkpoints": 2})
     if rc != 0 and "NOT RUN" not in out:
@@ -4902,18 +4906,54 @@ def _(root):
     return _realfit_void(root, m, expect_clause="null")
 
 
-@case("realfit4096", "a-repro-row-identical-to-a-scored-row-is-VOID", "fail")
+@case("realfit4096", "a-repro-block-collision-count-that-is-not-the-sealed-one-is-VOID", "fail")
 def _(root):
+    # 0020 required zero here and refused at launch on the builder's own duplicate chunks. 0021 seals the measured
+    # count instead, so BOTH directions must void: more rows means new content crossed, fewer means these are not
+    # the sealed blocks.
+    r20 = _rf_reader()
+
     def m(a, s):
-        a["partition"]["repro_rows_identical_to_a_scored_row"] = 1
-    return _realfit_void(root, m, expect_clause="repro_rows_identical_to_a_scored_row")
+        a["partition"]["repro_rows_identical_to_a_scored_row"] = r20.EXPECTED_COLLISIONS["repro_block"] + 1
+    return _realfit_void(root, m, expect_clause="repro_block")
 
 
-@case("realfit4096", "a-matched-row-identical-to-a-scored-row-is-VOID", "fail")
+@case("realfit4096", "a-repro-block-collision-count-of-zero-is-VOID-not-a-pass", "fail")
 def _(root):
     def m(a, s):
-        a["partition"]["matched_rows_identical_to_a_scored_row"] = 1
-    return _realfit_void(root, m, expect_clause="matched_rows_identical_to_a_scored_row")
+        a["partition"]["repro_rows_identical_to_a_scored_row"] = 0
+    return _realfit_void(root, m, expect_clause="repro_block")
+
+
+@case("realfit4096", "a-matched-block-collision-count-that-is-not-the-sealed-one-is-VOID", "fail")
+def _(root):
+    r20 = _rf_reader()
+
+    def m(a, s):
+        a["partition"]["matched_rows_identical_to_a_scored_row"] = r20.EXPECTED_COLLISIONS["matched_block"] + 3
+    return _realfit_void(root, m, expect_clause="matched_block")
+
+
+@case("realfit4096", "a-chunk-matched-block-collision-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["chunk_matched_rows_identical_to_a_scored_row"] = 1
+    return _realfit_void(root, m, expect_clause="chunk_matched_block")
+
+
+@case("realfit4096", "an-artifact-without-the-sealed-expected-collision-counts-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        del a["partition"]["expected_rows_identical_to_a_scored_row"]
+    return _realfit_void(root, m, expect_clause="sealed expected collision counts")
+
+
+@case("realfit4096", "one-fit-row-identical-to-a-scored-row-is-still-VOID", "fail")
+def _(root):
+    # The clause's own corpus: this one stays a blanket zero, because it IS the verdict's integrity.
+    def m(a, s):
+        a["partition"]["fit_rows_identical_to_a_scored_row"] = 1
+    return _realfit_void(root, m, expect_clause="fit_rows_identical_to_a_scored_row")
 
 
 @case("realfit4096", "a-pool-chunk-shared-with-the-extension-corpus-is-VOID", "fail")
