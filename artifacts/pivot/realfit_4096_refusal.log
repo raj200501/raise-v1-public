@@ -1,0 +1,7 @@
+launch at 2026-09-16T08:37:13Z
+[1] corpus A: {'carve_bytes': 4096, 'carve_bytes_source': 'sealed cache identity (sha256 of y and g); the cache carries no build metadata', 'chunk_size': 32768, 'chunk_offset': 0, 'chunk_id_min': 0, 'chunk_id_max': 49999, 'n_source_chunks': 50000, 'cache_y_sha256': '2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093', 'cache_g_sha256': 'eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9', 'n_rows': 1300000, 'n_features': 1108}
+[1b] sealed evaluation corpus: 61409 rows, 2387 chunks
+[1c] real-content fit corpus: 26346 rows, 1029 chunks, {'c_src': 624, 'pe_bin': 5145, 'py_src': 17197, 'rfc_txt': 2340, 'rst_doc': 1040}
+[2] row identity scan: fit 0, repro 8, matched 2 rows are byte-identical to a scored row (5s)
+REFUSING: a fit, repro or matched row is byte-identical to a scored row
+run exit 3 at 2026-09-16T08:37:20Z
