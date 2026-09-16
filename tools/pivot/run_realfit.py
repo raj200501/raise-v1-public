@@ -54,9 +54,16 @@ from corpus_realfit import FAMILIES as FIT_FAMILIES  # noqa: E402
 
 STRUCTURED_TEXT = ["c_src", "py_src", "rfc_txt", "rst_doc", "sql", "xml"]
 HIGH_ENTROPY = ["hexdump", "pe_bin"]
-ROLES = ["real_model", "real_incumbent", "real_logistic", "builder_matched"]
+# The four trivial-baseline arms are OPERATING_RULES §4a: a learned score is compared against the floor the dumbest
+# thing that could work reaches on the same rows, plus a preregistered margin, never against chance. They are fitted
+# on the same sealed fit block as real_model and scored on the same scoring set, so the floor is measured on this
+# content at this budget rather than inherited from 0003's builder-content battery.
+FLOOR_ROLES = ["floor_majority", "floor_stratified", "floor_feat1", "floor_tree3"]
+ROLES = ["real_model", "real_incumbent", "real_logistic"] + FLOOR_ROLES + ["builder_matched", "builder_chunk_matched"]
 RECIPE_OF = {"real_model": "model", "real_incumbent": "incumbent", "real_logistic": "logistic_l3",
-             "builder_matched": "model", "repro": "incumbent", "null": "model"}
+             "builder_matched": "model", "builder_chunk_matched": "model", "repro": "incumbent", "null": "model",
+             "floor_majority": "floor_majority", "floor_stratified": "floor_stratified",
+             "floor_feat1": "floor_feat1", "floor_tree3": "floor_tree3"}
 
 
 def _array_sha(path, name):
@@ -124,8 +131,9 @@ def main() -> int:
     if list(P["ext_families"]) != EXT_FAMILIES or list(P["fit_families"]) != FIT_FAMILIES:
         print("REFUSING: a sealed family order is not the corpus module's order", file=sys.stderr)
         return 3
-    if list(P["order"]) != ["repro", "null"] + ROLES or set(recipes) != {"incumbent", "logistic_l3", "model"}:
-        print(f"REFUSING: the sealed order must be {['repro', 'null'] + ROLES} with 0018's three recipes", file=sys.stderr)
+    if list(P["order"]) != ["repro", "null"] + ROLES or set(recipes) != {"incumbent", "logistic_l3", "model"} | set(FLOOR_ROLES):
+        print(f"REFUSING: the sealed order must be {['repro', 'null'] + ROLES} with 0018's three recipes and the "
+              f"four trivial-baseline recipes", file=sys.stderr)
         return 3
     env = environment()
     load1, load5, load15 = os.getloadavg()
@@ -185,18 +193,24 @@ def main() -> int:
     for name in ("X", "y", "g", "fam"):
         h, shape, dtype = _array_sha(args.ext, name)
         ext_hashes[name] = {"sha256": h, "shape": shape, "dtype": dtype}
+    if args.smoke:
+        ext_sealed = dict((prereg.get("smoke") or {}).get("ext_corpus") or {})
     mism = [n for n in ext_hashes if ext_hashes[n]["sha256"] != (ext_sealed.get("arrays") or {}).get(n, {}).get("sha256")]
     if mism:
-        print(f"REFUSING: extension corpus arrays {mism} do not hash to the sealed ext_corpus.arrays", file=sys.stderr)
+        print(f"REFUSING: extension corpus arrays {mism} do not hash to the "
+              f"{'smoke' if args.smoke else 'sealed'} ext_corpus.arrays", file=sys.stderr)
         return 3
     # [1c] the real-content FIT corpus (0020's): fitted, never scored
     fit_sealed = dict(P["fit_corpus"]); fit_hashes = {}
     for name in ("X", "y", "g", "fam"):
         h, shape, dtype = _array_sha(args.realfit, name)
         fit_hashes[name] = {"sha256": h, "shape": shape, "dtype": dtype}
+    if args.smoke:
+        fit_sealed = dict((prereg.get("smoke") or {}).get("fit_corpus") or {})
     mism = [n for n in fit_hashes if fit_hashes[n]["sha256"] != (fit_sealed.get("arrays") or {}).get(n, {}).get("sha256")]
     if mism:
-        print(f"REFUSING: fit corpus arrays {mism} do not hash to the sealed fit_corpus.arrays", file=sys.stderr)
+        print(f"REFUSING: fit corpus arrays {mism} do not hash to the "
+              f"{'smoke' if args.smoke else 'sealed'} fit_corpus.arrays", file=sys.stderr)
         return 3
     if args.smoke:
         sealed_fit_x = (((prereg["scope"]["protocol"].get("fit_corpus") or {}).get("arrays") or {}).get("X") or {}).get("sha256")
@@ -249,12 +263,27 @@ def main() -> int:
     ev_chunks = np.unique(g[ev])
     repro_rows = tr[:int(P["repro_rows"])]
     matched_rows = tr[:int(P["matched_rows"])]
+    # The plaintext-matched builder block: every pool row of the first N pool chunks in pool order, where N is the
+    # number of source chunks the fit corpus actually contributes rows from. builder_matched matches the fit
+    # corpus's ROW budget (26346 rows over 19413 builder plaintexts); this arm matches its PLAINTEXT budget. The
+    # two together bracket the rival explanation "the fit corpus is too small to learn anything", which neither
+    # closes alone, because 0003's curve moves on plaintexts and not on rows.
+    _seen, _order = set(), []
+    for _v in g[tr]:
+        _v = int(_v)
+        if _v not in _seen:
+            _seen.add(_v); _order.append(_v)
+            if len(_order) >= int(P["chunk_matched_chunks"]):
+                break
+    _first_chunks = set(_order)
+    chunk_matched_rows = tr[np.fromiter((int(v) in _first_chunks for v in g[tr]), bool, len(tr))]
     fit_order = np.random.default_rng(seed).permutation(len(yr))   # the recipe's last-10% validation split is then a random 10%
     partition = {"seed": seed, "eval_frac": eval_frac, "top_rung": top_rung,
                  "split_is_grouped_by_source": bool(np.intersect1d(ev_chunks, np.unique(g[tr])).size == 0),
                  "n_eval_rows": int(len(ev)), "n_eval_chunks": int(ev_chunks.size),
                  "n_eval_non_gutenberg": int((fam_e != "gutenberg").sum()),
                  "eval_idx_sha256": _sha(ev), "eval_y_sha256": _sha(np.asarray(y[ev])),
+                 "eval_g_sha256": _sha(np.asarray(g[ev])),
                  "n_pool_rows": int(len(tr)), "n_pool_chunks": int(np.unique(g[tr]).size),
                  "pool_idx_sha256": _sha(tr), "pool_sorted_sha256": _sha(np.sort(tr).astype(np.int64)),
                  "families": families,
@@ -271,7 +300,17 @@ def main() -> int:
                  "fit_chunks_shared_with_ext": int(np.intersect1d(np.unique(gr), np.unique(gx)).size),
                  "fit_chunks_shared_with_builder": int(np.intersect1d(np.unique(gr), np.unique(g)).size),
                  "fit_source_chunks_shared_with_ext": int(len(fit_src & ext_src)),
-                 "n_fit_source_chunks": int(len(fit_src)), "n_ext_source_chunks": int(len(ext_src))}
+                 "n_fit_source_chunks": int(len(fit_src)), "n_ext_source_chunks": int(len(ext_src)),
+                 # Distinct source chunks (plaintexts) behind each fit block. The row budget and the plaintext
+                 # budget are different axes and 0003's curve moves on the second one, so both are banked and the
+                 # reader states them beside every reading (0020 pre-freeze review, three lenses).
+                 "repro_block_chunks": int(np.unique(g[repro_rows]).size),
+                 "matched_block_chunks": int(np.unique(g[matched_rows]).size),
+                 "chunk_matched_block_chunks": int(np.unique(g[chunk_matched_rows]).size),
+                 "chunk_matched_rows": int(len(chunk_matched_rows)),
+                 "chunk_matched_idx_sha256": _sha(chunk_matched_rows),
+                 "chunk_matched_sorted_sha256": _sha(np.sort(chunk_matched_rows).astype(np.int64)),
+                 "fit_block_chunks": int(np.unique(gr).size)}
     # Row identity, measured rather than assumed (0018's review): no scored row may sit in a fit block. Every scored
     # row is digested once; the fit corpus and the two builder fit blocks are then checked against those digests.
     t_id = time.perf_counter()
@@ -311,6 +350,21 @@ def main() -> int:
                            or partition["fit_chunks_shared_with_builder"]):
         print("REFUSING: the fit corpus shares a chunk id or a source chunk with a scored corpus", file=sys.stderr)
         return 3
+    # The preregistration says the runner REQUIRES these counts to be zero, not merely that it measures them
+    # (0020 pre-freeze review, runner lens, finding 4). A leak found here costs ten seconds; found by the reader
+    # it costs the whole run.
+    if not args.smoke and (partition["fit_rows_identical_to_a_scored_row"]
+                           or partition["repro_rows_identical_to_a_scored_row"]
+                           or partition["matched_rows_identical_to_a_scored_row"]):
+        print("REFUSING: a fit, repro or matched row is byte-identical to a scored row", file=sys.stderr)
+        return 3
+    # The four sealed block hashes: the runner must notice a divergent permutation now, not the reader an hour later
+    # (same review, finding 5).
+    if not args.smoke:
+        bad = [k for k, v in (P.get("fit_block_hashes") or {}).items() if partition.get(k) != v]
+        if bad:
+            print(f"REFUSING: the fit blocks {bad} do not hash to the sealed fit_block_hashes", file=sys.stderr)
+            return 3
     print(f"[2] partition: eval {partition['n_eval_rows']}/{partition['n_eval_chunks']} chunks, pool "
           f"{partition['n_pool_rows']}, repro {partition['repro_rows']}, matched {partition['matched_rows']}, fit "
           f"{partition['fit_rows']}", flush=True)
@@ -373,6 +427,10 @@ def main() -> int:
                    shuffled_label_accuracy_eval=(reads.get("null") or {}).get("builder_eval_top1"),
                    null_control=records.get("null"),
                    fit_info_by_name={n: (records.get(n) or {}).get("fit_info") for n in names_expected},
+                   ledger=store.ledger(),
+                   fit_record_top1_is="each fit record's top1 and top1_non_gutenberg are over the concatenated "
+                                      f"{n_eval} + {n_ext} scoring set; per_family is over the sealed evaluation "
+                                      "rows only, because extension rows carry an 'ext:' family prefix",
                    cluster_ci95_informational=ci or {},
                    cluster_ci95_note="95% cluster-bootstrap intervals over source chunks (2000 resamples), informational",
                    cost={"wall_seconds_this_invocation": round(time.perf_counter() - t_all, 1),
@@ -451,11 +509,18 @@ def main() -> int:
                 partition["null_y_shuffled_sha256"] = _sha(y_sh)
                 partition["null_labels_permuted"] = bool(not np.array_equal(y_sh, np.asarray(yr)))
                 partition["null_labels_same_multiset"] = bool(np.array_equal(np.sort(y_sh), np.sort(np.asarray(yr))))
+                if not args.smoke and not (partition["null_labels_permuted"] and partition["null_labels_same_multiset"]):
+                    raise NotRun("the null control's labels are not a permutation of the fit corpus's own labels")
                 fit_arm("null", Xr, fit_order, y_sh, gr, "fit_null", partition["fit_sorted_sha256"])
             elif step in ("real_model", "real_incumbent", "real_logistic"):
                 fit_arm(step, Xr, fit_order, yr, gr, "realfit", partition["fit_sorted_sha256"])
+            elif step in FLOOR_ROLES:
+                fit_arm(step, Xr, fit_order, yr, gr, "realfit_floor", partition["fit_sorted_sha256"])
             elif step == "builder_matched":
                 fit_arm(step, X, matched_rows, y, g, "pool_matched", partition["matched_sorted_sha256"])
+            elif step == "builder_chunk_matched":
+                fit_arm(step, X, chunk_matched_rows, y, g, "pool_chunk_matched",
+                        partition["chunk_matched_sorted_sha256"])
             else:
                 raise NotRun(f"unknown order step {step!r}")
         ci = {}

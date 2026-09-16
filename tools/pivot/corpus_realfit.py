@@ -152,7 +152,7 @@ def build(chunk_size, carve_len, procs, src_dir=ce.SRC_DIR, order_seed=None, cap
     return X, Y, G, F, meta_arr, sel, sealed, dropped, counts, round(time.perf_counter() - t0, 1)
 
 
-def manifest_of(X, Y, G, F, meta, sel, sealed, dropped, counts, chunk_size, carve_len, build_s, pins):
+def manifest_of(X, Y, G, F, meta, sel, sealed, dropped, counts, chunk_size, carve_len, build_s, pins, blobs):
     ids_with_rows, first_pos, rows_per_chunk = np.unique(G, return_index=True, return_counts=True)
     order = np.argsort(first_pos); ids_with_rows = ids_with_rows[order]; rows_per_chunk = rows_per_chunk[order]
     without = sorted(set(int(c) for c in meta["chunk_ids"]) - set(int(c) for c in ids_with_rows))
@@ -162,7 +162,11 @@ def manifest_of(X, Y, G, F, meta, sel, sealed, dropped, counts, chunk_size, carv
         per_family[f] = {"n_rows": int(m.sum()), "n_chunks": int(cm.sum()),
                          "n_chunks_with_rows": int(np.unique(G[m]).size),
                          "n_chunks_sealed_for_evaluation": len(sealed[f]),
-                         "n_chunks_available_in_blob": len(sel[f]) + len(sealed[f]),
+                         # The blob's whole-chunk count, measured from the blob. It is NOT fit+sealed: the two
+                         # byte-identity drops sit in neither set, which made pe_bin read 507 against 509 whole
+                         # chunks under the previous derivation (0020 pre-freeze review, corpus lens, finding 4).
+                         "n_chunks_in_blob": len(blobs[f]) // chunk_size,
+                         "n_chunks_fit_plus_sealed": len(sel[f]) + len(sealed[f]),
                          "share_of_fit_rows": round(float(m.sum() / max(len(Y), 1)), 4),
                          "rows_per_chunk_mean": round(float(m.sum() / max(cm.sum(), 1)), 4),
                          "ceiling_distinct_streams": round(float(meta["distinct_streams"][cm].mean() / N_CONFIGS), 4),
@@ -284,7 +288,8 @@ def main():
             print("REFUSING: pinned sources differ: " + "; ".join(problems[:5]), file=sys.stderr); return 2
         X, Y, G, F, meta, sel, sealed, dropped, counts, secs = build(a.chunk_size, a.carve, a.procs, a.src,
                                                                      cap_per_family=a.cap_per_family)
-        man = manifest_of(X, Y, G, F, meta, sel, sealed, dropped, counts, a.chunk_size, a.carve, secs, pins)
+        man = manifest_of(X, Y, G, F, meta, sel, sealed, dropped, counts, a.chunk_size, a.carve, secs, pins,
+                          ce.load_real_blobs(a.src))
         save_npz(a.out, X, Y, G, F, meta, a.chunk_size, a.carve)
         os.makedirs(os.path.dirname(a.manifest), exist_ok=True)
         with open(a.manifest, "w", encoding="utf-8") as fh:
