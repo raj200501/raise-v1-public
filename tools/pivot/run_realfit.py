@@ -66,6 +66,26 @@ RECIPE_OF = {"real_model": "model", "real_incumbent": "incumbent", "real_logisti
              "floor_feat1": "floor_feat1", "floor_tree3": "floor_tree3"}
 
 
+def corpus_block(npz_rel, arr_hashes, y, g, fam, names, labels):
+    """The corpus description the runner banks and the frozen reader compares against, key for key.
+
+    It lives here rather than inline in main() so that the preregistration generator, the pre-freeze check and the
+    mutation gate's control can all produce it by CALLING the runner instead of retyping its keys. 0020's pre-freeze
+    review found four values sealed from the corpus manifest's BUILT counts (chunks selected) where the runner
+    measures the counts of chunks that actually carry rows - 1035 against 1029 - each of which would have voided an
+    honest run. Two copies of one wrong literal agree with each other; one copy cannot.
+    """
+    block = {"npz": npz_rel, "arrays": arr_hashes, "n_rows": int(len(y)),
+             "n_chunks": int(np.unique(g).size), "families": list(names),
+             "rows_per_family": {f: int((fam == f).sum()) for f in names},
+             "chunks_per_family": {f: int(np.unique(g[fam == f]).size) for f in names},
+             "chunk_id_min": int(g.min()), "chunk_id_max": int(g.max())}
+    if labels:
+        block["label_histogram"] = np.bincount(np.asarray(y), minlength=N_CONFIGS).tolist()
+        block["majority_class_rate"] = round(float(np.bincount(np.asarray(y)).max() / max(len(y), 1)), 6)
+    return block
+
+
 def _array_sha(path, name):
     arr = npz_memmap(path, name)
     h = hashlib.sha256()
@@ -241,18 +261,8 @@ def main() -> int:
         print("REFUSING: a corpus feature width differs from the builder's", file=sys.stderr)
         return 3
     fam_x = np.array(ext_names)[famx]; fam_r = np.array(fit_names)[famr]
-    ext = {"npz": os.path.relpath(args.ext, REPO), "arrays": ext_hashes, "n_rows": int(len(yx)),
-           "n_chunks": int(np.unique(gx).size), "families": ext_names,
-           "rows_per_family": {f: int((fam_x == f).sum()) for f in ext_names},
-           "chunks_per_family": {f: int(np.unique(gx[fam_x == f]).size) for f in ext_names},
-           "chunk_id_min": int(gx.min()), "chunk_id_max": int(gx.max())}
-    fit = {"npz": os.path.relpath(args.realfit, REPO), "arrays": fit_hashes, "n_rows": int(len(yr)),
-           "n_chunks": int(np.unique(gr).size), "families": fit_names,
-           "rows_per_family": {f: int((fam_r == f).sum()) for f in fit_names},
-           "chunks_per_family": {f: int(np.unique(gr[fam_r == f]).size) for f in fit_names},
-           "chunk_id_min": int(gr.min()), "chunk_id_max": int(gr.max()),
-           "label_histogram": np.bincount(np.asarray(yr), minlength=N_CONFIGS).tolist(),
-           "majority_class_rate": round(float(np.bincount(np.asarray(yr)).max() / max(len(yr), 1)), 6)}
+    ext = corpus_block(os.path.relpath(args.ext, REPO), ext_hashes, yx, gx, fam_x, ext_names, labels=False)
+    fit = corpus_block(os.path.relpath(args.realfit, REPO), fit_hashes, yr, gr, fam_r, fit_names, labels=True)
     print(f"[1b] sealed evaluation corpus: {ext['n_rows']} rows, {ext['n_chunks']} chunks", flush=True)
     print(f"[1c] real-content fit corpus: {fit['n_rows']} rows, {fit['n_chunks']} chunks, {fit['rows_per_family']}", flush=True)
 

@@ -5,7 +5,7 @@ banked in artifacts/verification/prefreeze_0020.json). Exit 1 on any mismatch, 2
 What it checks, and why each one exists:
  1. The reader is exactly what the generator produces from the preregistration and the template - no hand edit.
  2. Every sealed literal in the reader equals the preregistration's (protocol hash, recipes, partition, corpora, clause).
- 3. The fit corpus on disk hashes to the sealed arrays, rebuilds identically, and is disjoint from the scored corpora
+ 3. The fit corpus on disk hashes to the sealed arrays, is disjoint from the scored corpora
     by index, by chunk id and by source-chunk hash.
  4. The three fit blocks are RECOMPUTED FROM THE DATA with the runner's own split and permutation, not copied from the
     preregistration - two copies of one wrong literal agree with each other (docs/OPERATING_RULES.md section 4, and the
@@ -22,6 +22,7 @@ import hashlib
 import io
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -82,13 +83,51 @@ def main() -> int:
     chk(r20.REPRO_REFERENCE == P["reference_top1"]["repro"] and r20.REPRO_TOLERANCE == P["reproduction_tolerance"]
         and r20.NULL_TOLERANCE == P["null_tolerance"], "the reader's control references and tolerances are the sealed ones")
     chk(r20.ORDER == P["order"] and r20.RECIPE_OF == P["recipe_of"], "the reader's arm order and recipe map are sealed")
-    chk(r20.FIT["arrays"] == P["fit_corpus"]["arrays"] and r20.EXT["arrays"] == P["ext_corpus"]["arrays"],
-        "the reader's corpus array hashes are the sealed ones")
+    # NOT just the array hashes. 0020's pre-freeze review found four fit_corpus values sealed from the manifest's
+    # BUILT counts where the runner measures the with-rows counts, and this check compared two copies of the same
+    # literal for exactly those fields. Both blocks are now rebuilt by CALLING the runner's own corpus_block().
+    from run_realfit import corpus_block, _array_sha
+
+    def _runner_block(rel, labels):
+        d = np.load(f"{REPO}/{rel}", allow_pickle=False)
+        names = [str(x) for x in d["families"]]; fam = np.array(names)[d["fam"]]
+        h = {n: dict(zip(("sha256", "shape", "dtype"), _array_sha(f"{REPO}/{rel}", n))) for n in ("X", "y", "g", "fam")}
+        return corpus_block(rel, h, d["y"], d["g"], fam, names, labels=labels)
+    rb_fit = _runner_block("data/pivot/realfit_c4096.npz", True)
+    rb_ext = _runner_block("data/pivot/ext_c4096.npz", False)
+    chk(r20.FIT == rb_fit, "the reader's FIT block is what the runner banks, key for key, from the npz on disk")
+    chk(r20.EXT == rb_ext, "the reader's EXT block is what the runner banks, key for key, from the npz on disk")
+    chk(P["fit_corpus"] == rb_fit and P["ext_corpus"] == rb_ext,
+        "the sealed corpus blocks are the runner's own, not the manifest's built counts")
+
+    # (b) every key the reader compares must be a key the runner actually writes, taken from the captured fixture
+    shape = json.load(open(f"{REPO}/tests/fixtures/realfit_runner_shape.json", encoding="utf-8"))["artifact"]
+    for nm, sealed, blk in (("FIT", r20.FIT, "fit_corpus"), ("EXT", r20.EXT, "ext_corpus"),
+                            ("PARTITION", r20.PARTITION, "partition"), ("CORPUS", r20.CORPUS, "corpus")):
+        chk(set(sealed) <= set(shape[blk]),
+            f"every key the reader's {nm} compares is one the runner writes"
+            + (f" (missing {sorted(set(sealed) - set(shape[blk]))})" if not set(sealed) <= set(shape[blk]) else ""))
+    chk(set(r20.ORDER) == set(shape["fits"]), "the reader's arms are the arms the runner banks")
+    chk("ledger" in shape, "the runner banks a ledger, which the reader requires one completion per arm from")
+
+    # (c) the fixture is CURRENT: captured from the runner in the tree, not an older one
+    import inspect as _inspect
+    import run_realfit as _rr
+    _src = _inspect.getsource(_rr)
+    _written = set(re.findall(r'partition\["([a-z0-9_]+)"\]', _src))
+    _blk = _src[_src.index("partition = {"):]
+    _written |= set(re.findall(r'"([a-z0-9_]+)":', _blk[:_blk.index("\n\n")]))
+    chk(_written <= set(shape["partition"]),
+        "the captured runner-shape fixture is current with the runner"
+        + (f" (runner writes {sorted(_written - set(shape['partition']))} which the fixture lacks)"
+           if not _written <= set(shape["partition"]) else ""))
     chk(r20.PARTITION["fit_idx_sha256"] == sp["fit_block"]["idx_sha256"]
         and r20.PARTITION["fit_sorted_sha256"] == sp["fit_block"]["sorted_sha256"]
         and r20.PARTITION["repro_sorted_sha256"] == sp["repro_block"]["sorted_sha256"]
-        and r20.PARTITION["matched_sorted_sha256"] == sp["matched_block"]["sorted_sha256"],
-        "the reader's three fit-block hashes are the sealed ones")
+        and r20.PARTITION["matched_sorted_sha256"] == sp["matched_block"]["sorted_sha256"]
+        and r20.PARTITION["chunk_matched_sorted_sha256"] == sp["chunk_matched_block"]["sorted_sha256"]
+        and r20.PARTITION["eval_g_sha256"] == sp["eval"]["eval_g_sha256"],
+        "the reader's four fit-block hashes and the evaluation g digest are the sealed ones")
     chk(r20.EXT_CHUNK_IDS == S["ext_chunk_layout"]["chunk_ids_with_rows"]
         and r20.EXT_ROWS_PER_CHUNK == S["ext_chunk_layout"]["rows_per_chunk"], "the reader carries the sealed chunk layout")
 
@@ -149,9 +188,23 @@ def main() -> int:
     chk(subprocess.run([sys.executable, "tools/prereg.py", "verify"], cwd=REPO, capture_output=True).returncode == 0,
         "the chain verifies")
     smoke = pr.get("smoke") or {}
-    chk((smoke.get("fit_corpus") or {}).get("arrays", {}).get("X", {}).get("sha256") != P["fit_corpus"]["arrays"]["X"]["sha256"]
-        and (smoke.get("ext_corpus") or {}).get("arrays", {}).get("X", {}).get("sha256")
-        != P["ext_corpus"]["arrays"]["X"]["sha256"], "the smoke block names scratchpad corpora, not the sealed ones")
+    # On absent keys the previous form evaluated None != <hash> -> True and could never fail, which is what
+    # OPERATING_RULES section 4 forbids; and with no smoke corpora at all the documented smoke invocation could not
+    # run against the committed preregistration.
+    _sfx = (smoke.get("fit_corpus") or {}).get("arrays", {}).get("X", {}).get("sha256")
+    _sex = (smoke.get("ext_corpus") or {}).get("arrays", {}).get("X", {}).get("sha256")
+    chk(bool(_sfx) and bool(_sex) and _sfx != P["fit_corpus"]["arrays"]["X"]["sha256"]
+        and _sex != P["ext_corpus"]["arrays"]["X"]["sha256"],
+        "the smoke block names scratchpad corpora - present, and not the sealed ones")
+
+    # the sealed-set ordinal equals one plus the number of predecessors it lists (CORRECTIONS, 2026-09-10)
+    _d = S["sealed_set_disclosure"]
+    _ord = {"first": 1, "second": 2, "third": 3, "fourth": 4, "fifth": 5, "sixth": 6, "seventh": 7, "eighth": 8,
+            "ninth": 9, "tenth": 10}
+    _said = next((v for k, v in _ord.items() if f"the {k} preregistration" in _d), None)
+    _listed = len(re.findall(r"00\d\d ", _d[_d.index("("):_d.index(")")])) if "(" in _d else 0
+    chk(_said is not None and _said == _listed + 1,
+        f"the sealed-set ordinal ({_said}) is one plus the {_listed} predecessors it lists")
     chk("FILL IN" not in json.dumps(pr), "no FILL IN left")
 
     # 7. the banked mutation report agrees with the coverage map

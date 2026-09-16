@@ -4412,13 +4412,34 @@ def _rf_readings(r20, v, fam_x, fam_e):
             "builder_eval_per_family": {f: m4([rep[i] for i in range(n_eval) if fam_e[i] == f]) for f in r20.FAMILIES}}
 
 
+def _rf_sub(fixture_block, sealed_block, label, sealed_may_be_subset=False):
+    """Substitute sealed values INTO the runner's own block, key by key, and refuse on any key the two do not share.
+
+    0020's pre-freeze review found the previous version doing `dict(r20.FIT)` - taking the whole block from the
+    READER's literals - which is exactly what OPERATING_RULES section 4 forbids: a control that shares an assumption
+    with the reader cannot see the reader disagree with the world. Four wrong values and one invented key sat behind
+    that and the 33-case gate was green throughout. Here the KEY SET is the runner's, from the captured fixture, and
+    only the values are the run's; a reader that expects a key the runner does not write, or stops expecting one it
+    does, fails the gate at construction time instead of an hour into the run.
+    """
+    fk, sk = set(fixture_block), set(sealed_block)
+    if sealed_may_be_subset:
+        if not sk <= fk:
+            raise AssertionError(f"{label}: the reader expects keys the runner does not write: {sorted(sk - fk)}")
+    elif fk != sk:
+        raise AssertionError(f"{label}: reader-only {sorted(sk - fk)}, runner-only {sorted(fk - sk)}")
+    return dict(fixture_block, **sealed_block)
+
+
 def _good_realfit(real_correct=None, acc=None, repro=None, null_acc=None, matched_real_correct=None):
-    """A complete, valid 0020 artifact set. Shape from the runner's own smoke output; sealed values from the frozen
-    reader's literals, which are the preregistration's. real_correct sets real_model's correct real-family row count
-    exactly; matched_real_correct does the same for the builder-matched arm; acc/repro/null_acc set accuracies."""
+    """A complete, valid 0020 artifact set. Shape AND key sets from the runner's own smoke output (tests/fixtures/
+    realfit_runner_shape.json); only the values are the sealed run's. real_correct sets real_model's correct
+    real-family row count exactly; matched_real_correct does the same for the builder-matched arm; acc/repro/null_acc
+    set accuracies."""
     r20 = _rf_reader()
     shape = json.load(open(_RF_SHAPE, encoding="utf-8"))["artifact"]
-    part = dict(r20.PARTITION); n_eval = part["n_eval_rows"]; n_ext = r20.N_EXT
+    part = _rf_sub(shape["partition"], dict(r20.PARTITION), "partition", sealed_may_be_subset=True)
+    n_eval = part["n_eval_rows"]; n_ext = r20.N_EXT
     fams = list(r20.EXT_FAMILIES); rpf = r20.EXT["rows_per_family"]
     fam_idx = []
     for k, f in enumerate(fams):
@@ -4427,13 +4448,20 @@ def _good_realfit(real_correct=None, acc=None, repro=None, null_acc=None, matche
     fam_x = [fams[i] for i in fam_idx]
     ext_ids = [c for c, n in zip(r20.EXT_CHUNK_IDS, r20.EXT_ROWS_PER_CHUNK) for _ in range(n)]
     assert len(ext_ids) == n_ext
-    n_gut = (n_eval - part["n_eval_non_gutenberg"]) // 26; n_chunks = part["n_eval_chunks"]
-    gut_ids = [8 * i for i in range(n_gut)]; other = [c for c in range(1, 49999) if c % 8 != 0][: n_chunks - n_gut]
-    eval_ids = [c for c in gut_ids + other for _ in range(26)]
+    # The real evaluation chunk ids, from the reader's sealed run-length encoding of the run's own g[ev] array.
+    # They were invented here before (a synthetic gutenberg/other mix that satisfied the range, distinct-count and
+    # family-mix checks but nothing else), which is why there was nothing for a digest to bind against.
+    eval_ids = [c for c, n in zip(r20.EVAL_CHUNK_IDS, r20.EVAL_ROWS_PER_CHUNK) for _ in range(n)]
+    assert len(eval_ids) == n_eval
     fam_e = [r20.FAMILIES[c % 8] for c in eval_ids]
     real = set(r20.REAL_FAMILIES)
     base_acc = {"repro": r20.REPRO_REFERENCE, "null": 0.038, "real_model": 0.12, "real_incumbent": 0.10,
-                "real_logistic": 0.09, "builder_matched": 0.11}
+                "real_logistic": 0.09, "builder_matched": 0.11, "builder_chunk_matched": 0.10,
+                # out-of-sample readings on the extension real rows, where a trivial rule fitted on real content
+                # sits near chance (the pre-freeze smoke read 0.0385/0.0445/0.0445/0.0457 there) - not 0003's
+                # in-distribution builder-content figures, which are a different corpus
+                "floor_majority": 0.0385, "floor_stratified": 0.0387, "floor_feat1": 0.045, "floor_tree3": 0.055}
+    assert set(base_acc) == set(r20.ORDER), sorted(set(r20.ORDER) ^ set(base_acc))
     base_acc.update(acc or {})
     if repro is not None:
         base_acc["repro"] = repro
@@ -4501,8 +4529,11 @@ def _good_realfit(real_correct=None, acc=None, repro=None, null_acc=None, matche
     art = dict(shape)                        # the runner's own key set, values replaced
     art.update({"schema_version": 1, "schema": "raise-v1/realfit_4096/1", "preregistration": r20.PREREG, "smoke": False,
                 "stage": "run", "protocol": r20.PROTOCOL, "protocol_sha256": r20.PROTOCOL_SHA256, "recipes": r20.RECIPES,
-                "recipes_sha256": r20.RECIPES_SHA256, "corpus": dict(r20.CORPUS), "ext_corpus": dict(r20.EXT),
-                "fit_corpus": dict(r20.FIT), "partition": part, "n_classes": 26, "class_names": [],
+                "recipes_sha256": r20.RECIPES_SHA256,
+                "corpus": _rf_sub(shape["corpus"], dict(r20.CORPUS), "corpus", sealed_may_be_subset=True),
+                "ext_corpus": _rf_sub(shape["ext_corpus"], dict(r20.EXT), "ext_corpus"),
+                "fit_corpus": _rf_sub(shape["fit_corpus"], dict(r20.FIT), "fit_corpus"),
+                "partition": part, "n_classes": 26, "class_names": [],
                 "chance_accuracy": r20.CHANCE, "environment": dict(r20.ENV, threads=3, nice=10),
                 "launch_environment": {"ok": True, "problems": [], "env": dict(r20.ENV, threads=3, nice=10),
                                        "loadavg_1_5_15": [0.1, 0.1, 0.1]},
@@ -4525,6 +4556,7 @@ def _good_realfit(real_correct=None, acc=None, repro=None, null_acc=None, matche
                 "null_control": fits["null"],
                 "fit_info_by_name": {n: fits[n]["fit_info"] for n in r20.ORDER},
                 "cluster_ci95_informational": {}, "ledger": ledger, "cost": {},
+                "fit_record_top1_is": shape["fit_record_top1_is"],
                 "run_started_utc": "2026-09-16T05:00:00Z", "first_launch_utc": "2026-09-16T05:00:00Z",
                 "run_finished_utc": "2026-09-16T06:00:00Z"})
     scores = {"schema": "raise-v1/realfit_4096_scores/1", "preregistration": r20.PREREG, "smoke": False,
@@ -4570,6 +4602,16 @@ def _realfit_void(root, mutate, expect_clause=None, **kw):
     return rc, out
 
 
+def _rf_need(**kw):
+    """The clause's row count for a given control: ceil(N_REAL * (measured floor + BAR)). The floor is what the four
+    trivial-baseline arms reach on the real-family rows OF THAT CONTROL, so a boundary case cannot be written against
+    a constant - which is the point of OPERATING_RULES section 4a."""
+    r20 = _rf_reader()
+    art, _ = _good_realfit(**kw)
+    floor = max(art["ext_real_top1"][n] for n in r20.FLOOR_ROLES)
+    return int(math.ceil(r20.N_REAL * (floor + r20.BAR) - 1e-9))
+
+
 @case("realfit4096", "control-real-fit-clears-the-bar-on-the-real-families", "pass")
 def _(root):
     return _realfit(root)
@@ -4578,7 +4620,7 @@ def _(root):
 @case("realfit4096", "one-real-family-row-under-the-bar-is-REAL_FIT_FAILS", "fail")
 def _(root):
     r20 = _rf_reader()
-    rc, out = _realfit(root, real_correct=r20.MIN_CORRECT_REAL - 1)
+    rc, out = _realfit(root, real_correct=_rf_need() - 1)
     if rc != 0 and "verdict=REAL_FIT_FAILS" not in out:
         return 0, out + " !! detected but not as REAL_FIT_FAILS"
     return rc, out
@@ -4586,18 +4628,19 @@ def _(root):
 
 @case("realfit4096", "exactly-min-correct-real-rows-clears-and-one-fewer-fails", "fail")
 def _(root):
-    r20 = _rf_reader()
-    rc_at, out_at = _realfit(root, real_correct=r20.MIN_CORRECT_REAL)
-    rc_un, out_un = _realfit(root, real_correct=r20.MIN_CORRECT_REAL - 1)
+    need = _rf_need()
+    rc_at, out_at = _realfit(root, real_correct=need)
+    rc_un, out_un = _realfit(root, real_correct=need - 1)
     if rc_at != 0:
-        return 0, f"!! exactly {r20.MIN_CORRECT_REAL} did not clear: {out_at[:150]}"
-    return (1 if rc_un != 0 else 0), f"at={out_at[:70]} | under={out_un[:110]}"
+        return 0, f"!! exactly {need} (measured floor + the margin) did not clear: {out_at[:150]}"
+    return (1 if rc_un != 0 else 0), f"at {need}={out_at[:60]} | under={out_un[:100]}"
 
 
 @case("realfit4096", "a-pass-carried-by-the-builder-matched-arm-alone-is-still-REAL_FIT_FAILS", "fail")
 def _(root):
     r20 = _rf_reader()
-    rc, out = _realfit(root, real_correct=r20.MIN_CORRECT_REAL - 200, matched_real_correct=r20.MIN_CORRECT_REAL + 500)
+    need = _rf_need()
+    rc, out = _realfit(root, real_correct=need - 200, matched_real_correct=need + 500)
     if rc != 0 and "verdict=REAL_FIT_FAILS" not in out:
         return 0, out + " !! a flag decided the verdict"
     return rc, out
@@ -4811,19 +4854,208 @@ def _(root):
     return _realfit_void(root, f, expect_clause="fit row counts")
 
 
+@case("realfit4096", "a-fit-corpus-chunk-count-that-is-not-the-measured-one-is-VOID", "fail")
+def _(root):
+    # The 0020 pre-freeze review's headline defect: the reader sealed the corpus manifest's SELECTED chunk count
+    # (1035) where the runner measures the chunks that carry rows (1029). No case covered any fit_corpus field
+    # except arrays, so 33/33 was green while the reader could not read the run.
+    def m(a, s):
+        a["fit_corpus"]["n_chunks"] = a["fit_corpus"]["n_chunks"] + 6
+    return _realfit_void(root, m, expect_clause="fit_corpus.n_chunks")
+
+
+@case("realfit4096", "a-fit-corpus-chunk-id-max-that-is-not-the-measured-one-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fit_corpus"]["chunk_id_max"] = 20400000     # base + 4*stride, the value the reader wrongly carried
+    return _realfit_void(root, m, expect_clause="fit_corpus.chunk_id_max")
+
+
+@case("realfit4096", "a-fit-corpus-per-family-chunk-count-that-is-not-the-measured-one-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fit_corpus"]["chunks_per_family"]["pe_bin"] += 4
+    return _realfit_void(root, m, expect_clause="fit_corpus.chunks_per_family")
+
+
+@case("realfit4096", "a-fit-corpus-label-histogram-that-is-not-the-sealed-one-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fit_corpus"]["label_histogram"] = list(a["fit_corpus"]["label_histogram"])
+        a["fit_corpus"]["label_histogram"][0] += 1
+    return _realfit_void(root, m, expect_clause="fit_corpus.label_histogram")
+
+
+@case("realfit4096", "an-artifact-with-no-ledger-is-VOID", "fail")
+def _(root):
+    # The runner did not bank one at all until the pre-freeze review; the reader requires exactly one completion
+    # per arm, so an honest run read VOID on eleven clauses. Nothing tested that the key was present.
+    def m(a, s):
+        del a["ledger"]
+    return _realfit_void(root, m, expect_clause="ledger completions")
+
+
+@case("realfit4096", "a-null-control-whose-labels-are-not-a-permutation-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["null_labels_same_multiset"] = False
+    return _realfit_void(root, m, expect_clause="null")
+
+
+@case("realfit4096", "a-repro-row-identical-to-a-scored-row-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["repro_rows_identical_to_a_scored_row"] = 1
+    return _realfit_void(root, m, expect_clause="repro_rows_identical_to_a_scored_row")
+
+
+@case("realfit4096", "a-matched-row-identical-to-a-scored-row-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["matched_rows_identical_to_a_scored_row"] = 1
+    return _realfit_void(root, m, expect_clause="matched_rows_identical_to_a_scored_row")
+
+
+@case("realfit4096", "a-pool-chunk-shared-with-the-extension-corpus-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["pool_chunks_shared_with_ext"] = 2
+    return _realfit_void(root, m, expect_clause="pool_chunks_shared_with_ext")
+
+
+@case("realfit4096", "an-evaluation-chunk-shared-with-the-extension-corpus-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["eval_chunks_shared_with_ext"] = 1
+    return _realfit_void(root, m, expect_clause="eval_chunks_shared_with_ext")
+
+
+@case("realfit4096", "a-fit-chunk-shared-with-the-builder-cache-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["fit_chunks_shared_with_builder"] = 1
+    return _realfit_void(root, m, expect_clause="fit_chunks_shared_with_builder")
+
+
+@case("realfit4096", "permuted-evaluation-chunk-ids-are-VOID", "fail")
+def _(root):
+    # Range, distinct count and family mix are permutation-invariant, and fam_e drives every builder-side
+    # per-family reading. Before the review this array was bound by none of them.
+    def m(a, s):
+        s["eval_chunk_ids"] = s["eval_chunk_ids"][26:] + s["eval_chunk_ids"][:26]
+    return _realfit_void(root, m, expect_clause="eval_chunk_ids")
+
+
+@case("realfit4096", "a-banked-top1_non_gutenberg-that-is-not-the-vectors-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"]["real_model"]["top1_non_gutenberg"] = 0.9999
+    return _realfit_void(root, m, expect_clause="top1_non_gutenberg")
+
+
+@case("realfit4096", "an-arm-outside-the-sealed-order-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"]["secret_arm"] = dict(a["fits"]["real_model"])
+    return _realfit_void(root, m, expect_clause="outside the sealed order")
+
+
+@case("realfit4096", "a-banked-builder-eval-reading-that-is-not-the-vectors-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["readings"]["real_model"]["builder_eval_top1"] = 0.4242
+    return _realfit_void(root, m, expect_clause="builder_eval_top1")
+
+
+@case("realfit4096", "a-smoke-artifact-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["smoke"] = True; s["smoke"] = True
+    return _realfit_void(root, m)
+
+
+@case("realfit4096", "a-stage-that-is-not-run-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["stage"] = "smoke"
+    return _realfit_void(root, m, expect_clause="stage")
+
+
+@case("realfit4096", "a-floor-arm-missing-from-the-artifact-is-VOID", "fail")
+def _(root):
+    # Without the floor arms there is no measured floor, so there is no clause: section 4a is not optional.
+    def m(a, s):
+        del a["fits"]["floor_tree3"]
+    return _realfit_void(root, m)
+
+
+@case("realfit4096", "a-floor-arm-fitted-on-rows-that-are-not-the-fit-block-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"]["floor_tree3"]["fit_rows_sha256"] = "0" * 64
+    return _realfit_void(root, m, expect_clause="floor_tree3")
+
+
+@case("realfit4096", "a-floor-that-rises-above-the-model-turns-a-pass-into-REAL_FIT_FAILS", "fail")
+def _(root):
+    # The whole point of 4a: a model that clears chance + the margin but NOT the trivial floor + the margin is a
+    # fail. Under the drafted chance-based clause this artifact would have been published as a pass.
+    r20 = _rf_reader()
+    rc, out = _realfit(root, real_correct=r20.MIN_CORRECT_REAL + 400,
+                       acc={"floor_tree3": 0.11, "floor_feat1": 0.09})
+    if rc != 0 and "verdict=REAL_FIT_FAILS" not in out:
+        return 0, out + " !! a model beaten by a depth-3 tree was not read as REAL_FIT_FAILS"
+    return rc, out
+
+
+@case("realfit4096", "the-floor-is-the-maximum-of-the-four-trivial-arms-not-the-first", "fail")
+def _(root):
+    # If the reader took any arm but the maximum, this control (where floor_feat1 leads) would clear.
+    r20 = _rf_reader()
+    rc, out = _realfit(root, real_correct=r20.MIN_CORRECT_REAL + 900, acc={"floor_feat1": 0.10})
+    if rc != 0 and "verdict=REAL_FIT_FAILS" not in out:
+        return 0, out + " !! the floor was not the maximum over the four trivial arms"
+    return rc, out
+
+
 @case("realfit4096", "the-control-artifact-is-built-from-the-runners-own-output-shape", "pass")
 def _(root):
     # docs/OPERATING_RULES.md section 4: the control must not be built from the reader's expectations. This case fails
     # if the fixture stops being a runner output - if the runner grows or drops a key the control would not carry it.
-    shape = json.load(open(_RF_SHAPE, encoding="utf-8"))
+    # SYMMETRIC and RECURSIVE. The previous version computed only `set(shape) - set(art)` at the top level, so an
+    # invented key (the control injected a `ledger` the runner never wrote) and a nested divergence (four fit_corpus
+    # values, plus a ceiling key) were both invisible, and the fixture was itself two partition keys stale. Both
+    # directions, at every level the reader compares, is the whole point of the rule.
+    shape = json.load(open(_RF_SHAPE, encoding="utf-8"))["artifact"]
     art, _ = _good_realfit()
-    missing = sorted(set(shape["artifact"]) - set(art))
-    extra_records = sorted(set(shape["artifact"]["fits"]) ^ set(art["fits"]))
-    rec_missing = sorted(set(shape["artifact"]["fits"]["real_model"]) - set(art["fits"]["real_model"]))
-    if missing or extra_records or rec_missing:
-        return 1, f"control lost runner keys {missing}, arms {extra_records}, record fields {rec_missing}"
-    return 0, (f"control carries all {len(shape['artifact'])} artifact keys, {len(art['fits'])} arms and "
-               f"{len(art['fits']['real_model'])} record fields of the runner's smoke output")
+    r20 = _rf_reader()
+    problems = []
+    sym = sorted(set(shape) ^ set(art))
+    if sym:
+        problems.append(f"top-level key sets differ: reader-side-only {sorted(set(art) - set(shape))}, "
+                        f"runner-only {sorted(set(shape) - set(art))}")
+    for blk in ("corpus", "ext_corpus", "fit_corpus", "partition", "readings"):
+        d = sorted(set(shape[blk]) ^ set(art[blk]))
+        if d:
+            problems.append(f"{blk}: key sets differ {d}")
+    # the reader's own expectations must be writable by the runner: every key it compares must be a key in the fixture
+    for name, sealed, blk in (("EXT", r20.EXT, "ext_corpus"), ("FIT", r20.FIT, "fit_corpus"),
+                              ("PARTITION", r20.PARTITION, "partition"), ("CORPUS", r20.CORPUS, "corpus")):
+        unwritten = sorted(set(sealed) - set(shape[blk]))
+        if unwritten:
+            problems.append(f"the reader's {name} expects keys the runner never writes: {unwritten}")
+    if sorted(set(shape["fits"]) ^ set(art["fits"])):
+        problems.append(f"arms differ: {sorted(set(shape['fits']) ^ set(art['fits']))}")
+    else:
+        for nm in sorted(art["fits"]):
+            d = sorted(set(shape["fits"][nm]) ^ set(art["fits"][nm]))
+            if d:
+                problems.append(f"record {nm}: field sets differ {d}")
+    if problems:
+        return 1, "; ".join(problems[:4])
+    return 0, (f"control and fixture agree both ways on {len(shape)} artifact keys, {len(art['fits'])} arms, "
+               f"{len(art['fits']['real_model'])} record fields and the corpus/partition/readings nesting; "
+               f"every reader expectation is a key the runner writes")
 
 
 def main() -> int:
