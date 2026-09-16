@@ -297,7 +297,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 |---|---|---|
 | Every gate can be shown to fail | 463 mutations, 463 detected, 0 survived | primary-verifiable |
 | A number that is real but STALE is caught, not just a fabricated one | `tools/freshness.py`, 9 mutations | primary-verifiable |
-| Preregistration chain verifies, reader unchanged since freeze | 20 entries, head `43c374d0…` | primary-verifiable |
+| Preregistration chain verifies, reader unchanged since freeze | 21 entries, head `fbb2cc70…` | primary-verifiable |
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |
 | ACS PUMS record count reproduced | 392,318 records | primary-verifiable |
 | Instrument reproduces on a cold clone | preflight names cause and fix | primary-verifiable |
@@ -1049,6 +1049,14 @@ does not beat 0003's boosted recipe on unseen families by 0.02 of the evaluation
 searched recipe read against a fixed one, so the comparison is asymmetric by design and says
 nothing about 0014's searched model M4, which was not fitted here; that nothing here revises 0003,
 0014 or 0015; and that no buyer is established.
+
+**In flight — preregistration 0021 (chain seq 21, frozen 2026-09-16T10:05:55Z).** 0020's design, rerun with the one clause that refused it corrected. Eleven arms: 0003's incumbent M1, 0014's standardised logistic L3 and 0014's searched model M4 fitted once each on 26346 rows from 1029 plaintexts of real content — the chunks of 0018's five pinned real files its sealed evaluation corpus does not use (py_src 17197 rows, pe_bin 5145, rfc_txt 2340, rst_doc 1040, c_src 624) — beside a reproduction rung that must reproduce 0003's banked 0.1965, a null control on permuted labels, **four trivial baselines fitted on the same rows**, and M4 on the builder's pool twice: once at the same row budget, once at the same plaintext budget, which differ by a factor of 19. Each is scored once on 0018's scoring set, row for row.
+
+One clause, read by `tools/readers/realfit4096_rerun_verdict.py` on the recounted score vectors, measured against a **floor, not against chance** (`docs/OPERATING_RULES.md` §4a): M4's correct rows over the 38452 rows of the five real-file families must reach `ceil(38452 × (floor + 0.05))`, where the floor is the best of those four trivial baselines on those same rows. **That threshold is not knowable before the run.** A second named clause counts how many of the five families clear their own floor plus 0.05, and is published beside the verdict wherever the verdict appears. The chance-based count — 3402 of 38452, the bar 0018 and 0015 used — is banked as an informational flag so this stays comparable with 0018's 2450, and is **not** the clause.
+
+What 0020 got wrong and this corrects: its validity clause required that no fit-block, repro-block or matched-block row be byte-identical to a scored row. The fit block's zero is the clause's own integrity and stays fatal. The builder blocks are a different matter — the corpus builder emitted nine pairs of source chunks whose carved rows are identical, one of which straddles 0003's grouped split — so their collisions are now sealed as the measured ones, by row identity and not merely by count: 8 rows of the reproduction rung, 2 of the builder-matched block, 0 of the plaintext-matched block, and 26 across the whole 800000-row pool, each bound by a sha256 of its row indices. A count that grows means content crossed that this preregistration did not measure; one that shrinks means these are not the sealed blocks. Either is VOID. The builder cache's feature array is also sealed by hash for the first time in this record.
+
+It is an in-distribution reading on real content, **not a transfer reading**: the fit and scored chunks come from the same five files. Nothing below this line changes until its frozen reader has read the completed run.
 
 **Preregistration 0020 (chain seq 20, frozen 2026-09-16T08:35:44Z) — REFUSED, and what it found.** Real-content fit
 at 4096: eleven arms, 26346 rows from 1029 plaintexts of real content, scored on 0018's scoring set, with the clause

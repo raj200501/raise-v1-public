@@ -72,6 +72,10 @@ That is a fact about the record's foundation that twenty preregistrations had ca
 `artifacts/pivot/builder_duplicate_chunks.json`. 0020 is published as refused; **preregistration 0021** carries the same eleven-arm
 design with that one clause corrected.
 
+Preregistration 0021 (chain entry 21, frozen 2026-09-16) is 0020's design rerun with that clause corrected: the fit corpus's zero
+stays fatal, and the builder blocks' collisions are sealed as the measured ones by row identity (8, 2, 0 and 26 across the
+whole pool), so a count that grows and one that shrinks both fail. It is frozen and running.
+
 The curve and the searched margin stand as measured, and they are statements about the corpus builder's eight
 content families (gutenberg, base64, binary, code, csv, json, log, mixed), not about DEFLATE streams in general;
 the 0018 numbers are statements about the eight extension families, as pinned.
