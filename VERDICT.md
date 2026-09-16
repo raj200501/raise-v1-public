@@ -1050,6 +1050,30 @@ searched recipe read against a fixed one, so the comparison is asymmetric by des
 nothing about 0014's searched model M4, which was not fitted here; that nothing here revises 0003,
 0014 or 0015; and that no buyer is established.
 
+**In flight — preregistration 0020 (chain seq 20, frozen 2026-09-16T08:35:44Z).** Real-content fit at 4096: 0003's incumbent
+M1, 0014's standardised logistic L3 and 0014's searched model M4, each fitted once on 26346 rows from 1029
+plaintexts of real content — the chunks of 0018's five pinned real files that its sealed evaluation corpus does not
+use, disjoint by index, by chunk id and by source-chunk hash (py_src 17197 rows, pe_bin
+5145, rfc_txt 2340, rst_doc 1040, c_src 624) — and
+scored once on 0018's scoring set, row for row. 11 arms in all: beside the three recipes, a reproduction rung that
+must reproduce 0003's banked 0.1965, a null control on permuted labels, **four trivial
+baselines fitted on the same rows** (majority class, the label prior, one thresholded feature, a depth-3 tree), and the
+headline recipe fitted twice on the builder's pool — once at the same row budget, once at the same plaintext budget,
+which differ by a factor of 19.
+
+One clause, read by `tools/readers/realfit4096_verdict.py` on the recounted score vectors, and it is measured against
+a **floor, not against chance** (`docs/OPERATING_RULES.md` §4a): M4's correct rows over the 38452 rows of the five
+real-file families must reach `ceil(38452 × (floor + 0.05))`, where the floor is the best of those four trivial
+baselines on those same rows. That threshold is therefore **not knowable before the run** — it is whatever the dumbest
+thing that could work reaches, plus 0.05 — and it is `REAL_FIT_CLEARS` or `REAL_FIT_FAILS`. A second named clause
+counts how many of the five real families clear their own floor plus 0.05, and it is published beside the verdict
+wherever the verdict appears, because the clause above is a mixture whose family weights are close to the inverse of
+the fit corpus's. The chance-based count — 3402 of 38452, the bar 0018 and 0015 used — is banked as an
+informational flag so this run stays comparable with 0018's 2450, and is **not** the clause.
+
+It is an in-distribution reading on real content, **not a transfer reading**: the fit and scored chunks come from the
+same five files. Nothing below this line changes until its frozen reader has read the completed run.
+
 ### Does the headline recipe work on real content the builder never produced? — `OOB_TRANSFER_FAILS` at 4096 (preregistrations 0018 and 0019)
 
 Every transfer reading before this one (0015, 0016, 0017) stayed inside the corpus builder: seven parametric

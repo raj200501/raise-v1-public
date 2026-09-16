@@ -64,6 +64,13 @@ three synthetic generators as flags): it does not, 2450 of 38452 real-family row
 for chance + 0.05, verdict `OOB_TRANSFER_FAILS`; the incumbent reads 0.0634 and the standardised logistic 0.0716 on the same rows. 0018's
 own frozen reader emitted `VOID` on one wrong sealed literal (the null block's hash, restated from 0017), filed in `CORRECTIONS.md`; preregistration
 0019 (chain entry 19) re-read the same banked artifact with that literal corrected and every number disclosed in advance, as 0013 did for 0012.
+Preregistration 0020 (chain entry 20, frozen 2026-09-16) asks the question 0018 left open: does the encoder signal exist in real
+files at all? The same three recipes are fitted on 26346 rows from 1029 plaintexts of real content — the chunks of the same pinned
+files 0018's sealed evaluation corpus does not use — and scored on the same 38452 real-family rows. The bar is not chance: four trivial
+baselines are fitted on the same rows and the model must beat the best of them by 0.05, so the threshold is not knowable until the run
+has measured it. A second clause counts how many of the five real families clear their own floor. It is an in-distribution reading on real
+content, not a transfer reading; it is frozen and running.
+
 The curve and the searched margin stand as measured, and they are statements about the corpus builder's eight
 content families (gutenberg, base64, binary, code, csv, json, log, mixed), not about DEFLATE streams in general;
 the 0018 numbers are statements about the eight extension families, as pinned.

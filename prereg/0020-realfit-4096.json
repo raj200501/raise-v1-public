@@ -25538,7 +25538,7 @@
     "what_neither_outcome_means": "Neither names a buyer, a customer, a user or a partner. Neither revises any earlier preregistration. Neither is a transfer reading, and neither is a statement about real content at another carve size."
   },
   "reader": "tools/readers/realfit4096_verdict.py",
-  "frozen": false,
+  "frozen": true,
   "invocation": "export OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3; nice -n 10 python3 tools/pivot/run_realfit.py --stage run --prereg-file prereg/0020-realfit-4096.json --cache data/pivot/full_c4096.npz --ext data/pivot/ext_c4096.npz --realfit data/pivot/realfit_c4096.npz --workdir artifacts/pivot/realfit_4096_ckpt --out artifacts/pivot/realfit_4096.json --scores-out artifacts/pivot/realfit_4096_scores.json",
   "smoke": {
     "ext_corpus": {
@@ -25706,5 +25706,23 @@
       "max_load1": 1000.0
     },
     "invocation": "The invocation above with --smoke added and --workdir, --out and --scores-out pointed under the session scratchpad, and --ext and --realfit pointed at the small scratchpad builds whose array hashes are sealed in smoke.ext_corpus and smoke.fit_corpus here. Under --smoke the runner checks the corpora against THOSE hashes, so the documented smoke invocation runs against this committed preregistration and the guard below it is reachable code rather than an unreachable paragraph; it still refuses --smoke with an output under artifacts/, with either SEALED corpus, or with more than 20000 rows in the repro or matched arms, and refuses a real run with any output outside artifacts/. The reader voids a smoke artifact."
-  }
+  },
+  "reader_sha256": "01922f2d865fa81340d06f8cc0747c2bd03d12e889a15015832b4a1f40a3a7cb",
+  "frozen_utc": "2026-09-16T08:35:44Z",
+  "git_commit": "818a901631ac728471be2abc7976343cf46bd893",
+  "git_dirty_at_freeze": false,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1943669,
+      "time_stamp": "2026-09-16T08:35:00.000Z",
+      "output_value": "9E8FAFDDAB1192BAD426896A75E02A48413F473CA65D9D5A1BF8C5249A4C0DAF6327B0E17DED1068B69F041C0E73068A1E13FF45CF57C6599DE84F3CA2C219EE"
+    },
+    "drand": {
+      "round": 6470557,
+      "randomness": "de91ff361f0fbf67ba34cda84c974472c58de6924e64841afe4774b0e5558a68"
+    }
+  },
+  "chain_hash": "43c374d0c3fd972390d5561f0a4132e8a1286fc15e6f2bb4693912eabc12a51a",
+  "chain_prev_hash": "fe80fa9ba8a66bfd768453d39b94742596d7e0c83f368cfa15289b75982ea146"
 }
