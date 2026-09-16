@@ -1,0 +1,406 @@
+{
+  "bar_applied": {
+    "bar": 0.05,
+    "chance": 0.038462,
+    "flags": {
+      "at_iteration_cap": {
+        "incumbent": false,
+        "logistic_l3": false,
+        "model": true
+      },
+      "families_where_model_reaches_bar": [
+        "sql",
+        "xml"
+      ],
+      "incumbent_reaches_bar_real": false,
+      "logistic_l3_reaches_bar_real": false,
+      "mixture_min_correct": 5433,
+      "mixture_reaches_bar": false,
+      "model_leads_incumbent_by_0.02": false,
+      "model_leads_incumbent_by_0.05": false,
+      "model_leads_incumbent_real_rows": 11,
+      "model_leads_logistic_l3_by_0.02": false,
+      "model_leads_logistic_l3_by_0.05": false,
+      "model_leads_logistic_l3_real_rows": -305,
+      "n_iter_by_role": {
+        "incumbent": 33,
+        "logistic_l3": 728,
+        "model": 250
+      },
+      "per_family_min_correct": {
+        "c_src": 690,
+        "hexdump": 690,
+        "pe_bin": 656,
+        "py_src": 682,
+        "rfc_txt": 687,
+        "rst_doc": 688,
+        "sql": 651,
+        "xml": 690
+      },
+      "reproduction_exact": {
+        "incumbent": true,
+        "logistic_l3": true,
+        "model": true
+      },
+      "synthetic_min_correct": 2031,
+      "synthetic_reaches_bar": true
+    },
+    "min_correct": 5433,
+    "min_correct_real": 3402,
+    "mixture_must_reach": 0.088462,
+    "n_ext_rows": 61409,
+    "n_real_rows": 38452
+  },
+  "establishes_a_buyer": false,
+  "ext_ceiling_distinct_fragments": {
+    "c_src": 0.9751,
+    "hexdump": 0.9987,
+    "pe_bin": 0.8949,
+    "py_src": 0.9828,
+    "rfc_txt": 0.9768,
+    "rst_doc": 0.9538,
+    "sql": 0.8987,
+    "xml": 0.9512
+  },
+  "ext_correct": {
+    "incumbent": 4425,
+    "logistic_l3": 5095,
+    "model": 4703
+  },
+  "ext_correct_model": 4703,
+  "ext_margin_model_over_incumbent_exact": 0.004527,
+  "ext_margin_model_over_logistic_l3_exact": -0.006383,
+  "ext_per_family": {
+    "incumbent": {
+      "c_src": 0.0601,
+      "hexdump": 0.0576,
+      "pe_bin": 0.071,
+      "py_src": 0.0573,
+      "rfc_txt": 0.0687,
+      "rst_doc": 0.0603,
+      "sql": 0.1033,
+      "xml": 0.0996
+    },
+    "logistic_l3": {
+      "c_src": 0.0627,
+      "hexdump": 0.0894,
+      "pe_bin": 0.0772,
+      "py_src": 0.0588,
+      "rfc_txt": 0.0771,
+      "rst_doc": 0.0827,
+      "sql": 0.112,
+      "xml": 0.105
+    },
+    "model": {
+      "c_src": 0.0579,
+      "hexdump": 0.0768,
+      "pe_bin": 0.0767,
+      "py_src": 0.0528,
+      "rfc_txt": 0.071,
+      "rst_doc": 0.0607,
+      "sql": 0.1116,
+      "xml": 0.1068
+    }
+  },
+  "ext_real_correct": {
+    "incumbent": 2439,
+    "logistic_l3": 2755,
+    "model": 2450
+  },
+  "ext_real_correct_model": 2450,
+  "ext_real_mixture_minus_chance_model": 0.025238,
+  "ext_real_top1": {
+    "incumbent": 0.0634,
+    "logistic_l3": 0.0716,
+    "model": 0.0637
+  },
+  "ext_real_top1_model": 0.0637,
+  "ext_rows_per_family": {
+    "c_src": 7800,
+    "hexdump": 7800,
+    "pe_bin": 7407,
+    "py_src": 7709,
+    "rfc_txt": 7761,
+    "rst_doc": 7775,
+    "sql": 7357,
+    "xml": 7800
+  },
+  "ext_subsets": {
+    "incumbent": {
+      "ext_high_entropy_top1": 0.0641,
+      "ext_real_top1": 0.0634,
+      "ext_structured_text_top1": 0.0747,
+      "ext_synthetic_top1": 0.0865
+    },
+    "logistic_l3": {
+      "ext_high_entropy_top1": 0.0834,
+      "ext_real_top1": 0.0716,
+      "ext_structured_text_top1": 0.0828,
+      "ext_synthetic_top1": 0.1019
+    },
+    "model": {
+      "ext_high_entropy_top1": 0.0767,
+      "ext_real_top1": 0.0637,
+      "ext_structured_text_top1": 0.0765,
+      "ext_synthetic_top1": 0.0981
+    }
+  },
+  "ext_top1": {
+    "incumbent": 0.0721,
+    "logistic_l3": 0.083,
+    "model": 0.0766
+  },
+  "ext_top1_model": 0.0766,
+  "fit_info_by_role": {
+    "incumbent": {
+      "n_iter": 33
+    },
+    "logistic_l3": {
+      "n_iter": 728
+    },
+    "model": {
+      "n_iter": 250
+    }
+  },
+  "informational_only": "the flags, the per-family and subset readings, the eight-family mixture, the margins, the reproduction drifts, the ceilings and the artifact's cluster intervals are informational: not a verdict, not quotable as a pass. The verdict is the `verdict` field.",
+  "meaning": "At 4096 bytes, 0014's searched model, fitted on the builder's eight families, does not identify the encoder at chance + 0.05 on the mixture over the five pinned real-file families the builder never produced: 2450 of 38452 real-family rows correct (0.0637) against 3402 needed. A bound on the headline recipe's reach outside the builder for these five families as pinned; the per-family readings, the synthetic flag and the ceilings banked beside it say where the reading comes from. Nothing here revises 0003, 0014, 0015, 0016 or 0017, and nothing here establishes a buyer.",
+  "preregistration": "0019-oob-4096-reread",
+  "read": {
+    "chance_accuracy": 0.038462,
+    "complete": true,
+    "ext_correct_model": 4703,
+    "ext_margin_model_over_incumbent_exact": 0.004527,
+    "ext_margin_model_over_logistic_l3_exact": -0.006383,
+    "ext_real_correct_model": 2450,
+    "ext_real_top1": {
+      "incumbent": 0.0634,
+      "logistic_l3": 0.0716,
+      "model": 0.0637
+    },
+    "ext_top1": {
+      "incumbent": 0.0721,
+      "logistic_l3": 0.083,
+      "model": 0.0766
+    },
+    "ext_top1_model": 0.0766,
+    "missing_roles": [],
+    "n_classes": 26,
+    "n_ext_real_rows": 38452,
+    "n_ext_rows": 61409,
+    "null_rows": 20000,
+    "preregistration": "0018-oob-4096",
+    "reproduction_top1": {
+      "incumbent": 0.2395,
+      "logistic_l3": 0.2317,
+      "model": 0.2884
+    },
+    "shuffled_label_accuracy_eval": 0.0383,
+    "shuffled_label_accuracy_ext": 0.0371,
+    "smoke": false,
+    "stage": "run"
+  },
+  "readings_banked": {
+    "incumbent": {
+      "ext_correct": 4425,
+      "ext_high_entropy_top1": 0.0641,
+      "ext_per_family": {
+        "c_src": 0.0601,
+        "hexdump": 0.0576,
+        "pe_bin": 0.071,
+        "py_src": 0.0573,
+        "rfc_txt": 0.0687,
+        "rst_doc": 0.0603,
+        "sql": 0.1033,
+        "xml": 0.0996
+      },
+      "ext_per_family_correct": {
+        "c_src": 469,
+        "hexdump": 449,
+        "pe_bin": 526,
+        "py_src": 442,
+        "rfc_txt": 533,
+        "rst_doc": 469,
+        "sql": 760,
+        "xml": 777
+      },
+      "ext_real_correct": 2439,
+      "ext_real_top1": 0.0634,
+      "ext_structured_text_top1": 0.0747,
+      "ext_synthetic_correct": 1986,
+      "ext_synthetic_top1": 0.0865,
+      "ext_top1": 0.0721,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409,
+      "reproduction_correct": 62259,
+      "reproduction_per_family": {
+        "base64": 0.1221,
+        "binary": 0.1049,
+        "code": 0.2944,
+        "csv": 0.3888,
+        "gutenberg": 0.1596,
+        "json": 0.3581,
+        "log": 0.3756,
+        "mixed": 0.1143
+      },
+      "reproduction_top1": 0.2395
+    },
+    "logistic_l3": {
+      "ext_correct": 5095,
+      "ext_high_entropy_top1": 0.0834,
+      "ext_per_family": {
+        "c_src": 0.0627,
+        "hexdump": 0.0894,
+        "pe_bin": 0.0772,
+        "py_src": 0.0588,
+        "rfc_txt": 0.0771,
+        "rst_doc": 0.0827,
+        "sql": 0.112,
+        "xml": 0.105
+      },
+      "ext_per_family_correct": {
+        "c_src": 489,
+        "hexdump": 697,
+        "pe_bin": 572,
+        "py_src": 453,
+        "rfc_txt": 598,
+        "rst_doc": 643,
+        "sql": 824,
+        "xml": 819
+      },
+      "ext_real_correct": 2755,
+      "ext_real_top1": 0.0716,
+      "ext_structured_text_top1": 0.0828,
+      "ext_synthetic_correct": 2340,
+      "ext_synthetic_top1": 0.1019,
+      "ext_top1": 0.083,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409,
+      "reproduction_correct": 60243,
+      "reproduction_per_family": {
+        "base64": 0.0909,
+        "binary": 0.0852,
+        "code": 0.3127,
+        "csv": 0.3303,
+        "gutenberg": 0.1558,
+        "json": 0.3906,
+        "log": 0.3744,
+        "mixed": 0.115
+      },
+      "reproduction_top1": 0.2317
+    },
+    "model": {
+      "ext_correct": 4703,
+      "ext_high_entropy_top1": 0.0767,
+      "ext_per_family": {
+        "c_src": 0.0579,
+        "hexdump": 0.0768,
+        "pe_bin": 0.0767,
+        "py_src": 0.0528,
+        "rfc_txt": 0.071,
+        "rst_doc": 0.0607,
+        "sql": 0.1116,
+        "xml": 0.1068
+      },
+      "ext_per_family_correct": {
+        "c_src": 452,
+        "hexdump": 599,
+        "pe_bin": 568,
+        "py_src": 407,
+        "rfc_txt": 551,
+        "rst_doc": 472,
+        "sql": 821,
+        "xml": 833
+      },
+      "ext_real_correct": 2450,
+      "ext_real_top1": 0.0637,
+      "ext_structured_text_top1": 0.0765,
+      "ext_synthetic_correct": 2253,
+      "ext_synthetic_top1": 0.0981,
+      "ext_top1": 0.0766,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409,
+      "reproduction_correct": 74989,
+      "reproduction_per_family": {
+        "base64": 0.1296,
+        "binary": 0.111,
+        "code": 0.3759,
+        "csv": 0.4505,
+        "gutenberg": 0.2065,
+        "json": 0.4541,
+        "log": 0.4656,
+        "mixed": 0.116
+      },
+      "reproduction_top1": 0.2884
+    },
+    "null": {
+      "ext_correct": 2279,
+      "ext_high_entropy_top1": 0.0349,
+      "ext_per_family": {
+        "c_src": 0.0385,
+        "hexdump": 0.0337,
+        "pe_bin": 0.036,
+        "py_src": 0.0423,
+        "rfc_txt": 0.0374,
+        "rst_doc": 0.0365,
+        "sql": 0.0389,
+        "xml": 0.0337
+      },
+      "ext_per_family_correct": {
+        "c_src": 300,
+        "hexdump": 263,
+        "pe_bin": 267,
+        "py_src": 326,
+        "rfc_txt": 290,
+        "rst_doc": 284,
+        "sql": 286,
+        "xml": 263
+      },
+      "ext_real_correct": 1467,
+      "ext_real_top1": 0.0382,
+      "ext_structured_text_top1": 0.0379,
+      "ext_synthetic_correct": 812,
+      "ext_synthetic_top1": 0.0354,
+      "ext_top1": 0.0371,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409,
+      "reproduction_correct": 9948,
+      "reproduction_per_family": {
+        "base64": 0.0399,
+        "binary": 0.0377,
+        "code": 0.0366,
+        "csv": 0.0416,
+        "gutenberg": 0.0373,
+        "json": 0.0368,
+        "log": 0.0386,
+        "mixed": 0.0376
+      },
+      "reproduction_top1": 0.0383
+    }
+  },
+  "reads_artifact_of": "0018-oob-4096",
+  "reference_top1": {
+    "incumbent": 0.2395,
+    "logistic_l3": 0.2317,
+    "model": 0.2884
+  },
+  "reproduction_drift": {
+    "incumbent": 0.0,
+    "logistic_l3": 0.0,
+    "model": 0.0
+  },
+  "reproduction_top1": {
+    "incumbent": 0.2395,
+    "logistic_l3": 0.2317,
+    "model": 0.2884
+  },
+  "revises_0003_0014_0015_0016_0017": false,
+  "schema": "raise-v1/oob_4096_reread_verdict/1",
+  "shuffled_label_accuracy_eval": 0.0383,
+  "shuffled_label_accuracy_ext": 0.0371,
+  "source_artifact": "artifacts/pivot/oob_4096.json",
+  "transfer_failed_clauses": [
+    "transfer: M4's correct real-family rows 2450 of 38452 (0.0637) is below 3402 (chance 0.038462 + 0.05 = 0.088462)"
+  ],
+  "validity_failed_clauses": [],
+  "verdict": "OOB_TRANSFER_FAILS"
+}
