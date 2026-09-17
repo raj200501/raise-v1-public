@@ -45,3 +45,12 @@
 {"name": "run_r5_logistic", "fingerprint": "e919232a6788ee7f", "event": "completed", "utc": "2026-09-17T21:04:20Z", "rss_gb": 4.09, "pid": 7943, "seconds": 104.5}
 {"name": "run_r5_model", "fingerprint": "c533b632e562d8e9", "event": "rung_bound", "utc": "2026-09-17T21:04:22Z", "rss_gb": 4.09, "pid": 7943, "rung": 5, "rung_sorted_sha256": "6365b440f0d9b55c14daec2d179ad336f288a590a16bc58c38ef075b3ebcb21e"}
 {"name": "run_r5_model", "fingerprint": "c533b632e562d8e9", "event": "started", "utc": "2026-09-17T21:04:22Z", "rss_gb": 4.09, "pid": 7943, "attempt": 1}
+{"name": "run_r5_model", "fingerprint": "c533b632e562d8e9", "event": "completed", "utc": "2026-09-17T21:13:02Z", "rss_gb": 4.09, "pid": 7943, "seconds": 478.1}
+{"name": "run_r6_depth3_tree", "fingerprint": "73726f847127b4d0", "event": "rung_bound", "utc": "2026-09-17T21:13:03Z", "rss_gb": 3.64, "pid": 7943, "rung": 6, "rung_sorted_sha256": "da1436cc295d3384df599faf7a42809fca1c7a60c87b7762abb8fc5ee8d02aad"}
+{"name": "run_r6_depth3_tree", "fingerprint": "73726f847127b4d0", "event": "started", "utc": "2026-09-17T21:13:05Z", "rss_gb": 4.55, "pid": 7943, "attempt": 1}
+{"name": "run_r6_depth3_tree", "fingerprint": "73726f847127b4d0", "event": "completed", "utc": "2026-09-17T21:13:23Z", "rss_gb": 4.55, "pid": 7943, "seconds": 16.6}
+{"name": "run_r6_logistic", "fingerprint": "797bd8ed7d4fd4b8", "event": "rung_bound", "utc": "2026-09-17T21:13:25Z", "rss_gb": 4.55, "pid": 7943, "rung": 6, "rung_sorted_sha256": "da1436cc295d3384df599faf7a42809fca1c7a60c87b7762abb8fc5ee8d02aad"}
+{"name": "run_r6_logistic", "fingerprint": "797bd8ed7d4fd4b8", "event": "started", "utc": "2026-09-17T21:13:25Z", "rss_gb": 4.55, "pid": 7943, "attempt": 1}
+{"name": "run_r6_logistic", "fingerprint": "797bd8ed7d4fd4b8", "event": "completed", "utc": "2026-09-17T21:16:29Z", "rss_gb": 4.55, "pid": 7943, "seconds": 175.5}
+{"name": "run_r6_model", "fingerprint": "2a646880d2a6f782", "event": "rung_bound", "utc": "2026-09-17T21:16:31Z", "rss_gb": 4.55, "pid": 7943, "rung": 6, "rung_sorted_sha256": "da1436cc295d3384df599faf7a42809fca1c7a60c87b7762abb8fc5ee8d02aad"}
+{"name": "run_r6_model", "fingerprint": "2a646880d2a6f782", "event": "started", "utc": "2026-09-17T21:16:31Z", "rss_gb": 4.55, "pid": 7943, "attempt": 1}
