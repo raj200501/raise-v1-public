@@ -2158,9 +2158,108 @@
       "json_path": "$.n_duplicate_chunk_pairs",
       "reverify": "python3 tools/prereg_checks/prefreeze_0021.py",
       "value": 9
+    },
+    {
+      "artifact": "artifacts/pivot/realsearch_4096_verdict.json",
+      "claim": "Preregistration 0022: REAL_RECIPE_FAILS \u2014 0014's roster searched on real content does not beat the best searched trivial baseline, floored at 0021's reading, by 0.05.",
+      "class": "primary-verifiable",
+      "id": "realsearch4096-verdict",
+      "json_path": "$.verdict",
+      "reverify": "python3 tools/readers/realsearch4096_verdict.py",
+      "value": "REAL_RECIPE_FAILS"
+    },
+    {
+      "artifact": "artifacts/pivot/realsearch_4096_verdict.json",
+      "claim": "The searched model (M3) identifies the encoder on 4573 of 38452 real-family rows.",
+      "class": "primary-verifiable",
+      "id": "realsearch4096-model-correct",
+      "json_path": "$.model_real_correct",
+      "reverify": "python3 tools/readers/realsearch4096_verdict.py",
+      "value": 4573
+    },
+    {
+      "artifact": "artifacts/pivot/realsearch_4096_verdict.json",
+      "claim": "The searched model reads 0.1189 on the real-family rows.",
+      "class": "primary-verifiable",
+      "id": "realsearch4096-model-top1",
+      "json_path": "$.model_real_top1",
+      "reverify": "python3 tools/readers/realsearch4096_verdict.py",
+      "value": 0.1189
+    },
+    {
+      "artifact": "artifacts/pivot/realsearch_4096_verdict.json",
+      "claim": "The frozen-set bar is 0.1182, reached by the searched logistic (L5) on the same rows.",
+      "class": "primary-verifiable",
+      "id": "realsearch4096-bar-frozen",
+      "json_path": "$.bars_applied.frozen",
+      "reverify": "python3 tools/readers/realsearch4096_verdict.py",
+      "value": 0.1182
+    },
+    {
+      "artifact": "artifacts/pivot/realsearch_4096_verdict.json",
+      "claim": "6468 correct real-family rows were needed: ceil(38452 x (bar + 0.05)).",
+      "class": "primary-verifiable",
+      "id": "realsearch4096-needed",
+      "json_path": "$.bars_applied.min_correct_real_frozen",
+      "reverify": "python3 tools/readers/realsearch4096_verdict.py",
+      "value": 6468
+    },
+    {
+      "artifact": "artifacts/pivot/realsearch_4096_verdict.json",
+      "claim": "The searched margin over the best searched baseline is 0.0007 on the frozen set.",
+      "class": "primary-verifiable",
+      "id": "realsearch4096-searched-margin",
+      "json_path": "$.flags.searched_margin_frozen",
+      "reverify": "python3 tools/readers/realsearch4096_verdict.py",
+      "value": 0.0007
+    },
+    {
+      "artifact": "artifacts/pivot/realsearch_4096_verdict.json",
+      "claim": "The search moved the model by -0.0004 over 0021's unsearched M4 on the same rows.",
+      "class": "primary-verifiable",
+      "id": "realsearch4096-gain-model",
+      "json_path": "$.flags.gain_from_search_by_head.model",
+      "reverify": "python3 tools/readers/realsearch4096_verdict.py",
+      "value": -0.0004
+    },
+    {
+      "artifact": "artifacts/pivot/realsearch_4096_verdict.json",
+      "claim": "The search moved the logistic by 0.0003 over 0021's unsearched L3 on the same rows.",
+      "class": "primary-verifiable",
+      "id": "realsearch4096-gain-logistic",
+      "json_path": "$.flags.gain_from_search_by_head.logistic",
+      "reverify": "python3 tools/readers/realsearch4096_verdict.py",
+      "value": 0.0003
+    },
+    {
+      "artifact": "artifacts/pivot/realsearch_4096_verdict.json",
+      "claim": "0 of 5 real families clear the best frozen head on their own rows by 0.05.",
+      "class": "primary-verifiable",
+      "id": "realsearch4096-families-clearing",
+      "json_path": "$.flags.families_clearing",
+      "reverify": "python3 tools/readers/realsearch4096_verdict.py",
+      "value": 0
+    },
+    {
+      "artifact": "artifacts/pivot/realsearch_4096_verdict.json",
+      "claim": "The M4 reproduction arm reads 0021's banked value exactly (drift 0.0); so do M1, L3 and D1.",
+      "class": "primary-verifiable",
+      "id": "realsearch4096-reproduction-drift",
+      "json_path": "$.reproduction_drift.repro_m4",
+      "reverify": "python3 tools/readers/realsearch4096_verdict.py",
+      "value": 0.0
+    },
+    {
+      "artifact": "artifacts/pivot/realsearch_4096_verdict.json",
+      "claim": "The model head selected M3 on the holdout, not 0021's M4.",
+      "class": "primary-verifiable",
+      "id": "realsearch4096-selected-model",
+      "json_path": "$.selected_model_id",
+      "reverify": "python3 tools/readers/realsearch4096_verdict.py",
+      "value": "M3"
     }
   ],
-  "n_claims": 242,
+  "n_claims": 253,
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",
   "schema": "raise-v1/coverage_map/1"
 }

@@ -1,13 +1,21 @@
 {
-  "schema": "raise-v1/engineering_log/1",
-  "preregistration": "0022-realsearch-4096",
-  "status": "frozen; not yet run",
-  "why_this_exists": "0021 read REAL_FIT_FAILS with 0014's model M4 at 0.1193 on the real-family rows, the depth-3 tree at 0.0929 and the standardised logistic L3 at 0.1179, all fitted UNSEARCHED on real content, and its scope deferred 'what a recipe searched on real content would do (the search is a different preregistration)'. This is that preregistration: 0014's roster and selection rule run inside 0021's real fit block, symmetric, with the bar floored at 0021's readings.",
+  "cost": {
+    "banked_0021_seconds_on_this_block": {
+      "floor_feat1": 1.1,
+      "floor_tree3": 3.4,
+      "null": 84.3,
+      "real_incumbent": 25.3,
+      "real_logistic": 58.0,
+      "real_model": 280.1
+    },
+    "estimate_stated_in_advance": "about one hour at three threads (selection about 40 min, confirmation about 20 min); COULD NOT VERIFY until run",
+    "smoke": "select 322 s wall (39 s of fits; the rest is the cold builder-cache memmap for the 260000-row identity scan), confirm 68 s"
+  },
   "design_decisions": [
     {
+      "consequence": "5291 holdout rows over 206 chunks, py_src-heavy ({'c_src': 130, 'pe_bin': 1014, 'py_src': 3471, 'rfc_txt': 468, 'rst_doc': 208}); selection ranks by the holdout mixture, disclosed in scope.holdout",
       "decision": "the holdout is a chunk-id rule (mod 5 == 0) on the fit block, not a draw",
-      "why": "0014's convention; a rule cannot be re-drawn",
-      "consequence": "5291 holdout rows over 206 chunks, py_src-heavy ({'c_src': 130, 'pe_bin': 1014, 'py_src': 3471, 'rfc_txt': 468, 'rst_doc': 208}); selection ranks by the holdout mixture, disclosed in scope.holdout"
+      "why": "0014's convention; a rule cannot be re-drawn"
     },
     {
       "decision": "one selection stage on the whole fit pool, keep 1",
@@ -22,9 +30,9 @@
       "why": "a searched baseline can raise the bar and never lower it below where 0021 measured it (0014's floors, moved to real content)"
     },
     {
+      "consequence_found_by_the_gate": "the first control selected M4 for the model head and read 0.20: the reader voided it on the aliased reproduction (drift 0.0807). A deterministic refit of M4 on the same rows reads what 0021 read, so a model head that selects M4 is pinned to 0.1193 and cannot clear - the search can only clear through a recipe other than M4. The control now selects M3; a case keeps the aliased path as a clean REAL_RECIPE_FAILS",
       "decision": "four reproduction arms (M1, M4, L3, D1 on the whole fit block) within 0.005 of 0021's banked readings, aliased to a head's own confirmatory fit when that head selected the reference recipe",
-      "why": "ties the run to 0021's machinery and to its numbers; no recipe is fitted twice on the same rows",
-      "consequence_found_by_the_gate": "the first control selected M4 for the model head and read 0.20: the reader voided it on the aliased reproduction (drift 0.0807). A deterministic refit of M4 on the same rows reads what 0021 read, so a model head that selects M4 is pinned to 0.1193 and cannot clear - the search can only clear through a recipe other than M4. The control now selects M3; a case keeps the aliased path as a clean REAL_RECIPE_FAILS"
+      "why": "ties the run to 0021's machinery and to its numbers; no recipe is fitted twice on the same rows"
     },
     {
       "decision": "the null control permutes the whole fit block's labels with the split's own generator at the same state 0021 used",
@@ -39,241 +47,486 @@
       "why": "run_recipe_search.score() names the builder's eight families, which the holdout does not contain; the runner replaces the scorer at import and the reader recomputes per_family over sorted(set(fam_s))"
     }
   ],
+  "freeze": {
+    "anchors": {
+      "drand": {
+        "randomness": "218a27eb2fd6c7bda2bc03cf7943ee2160673765105aa7d53838a7ff8ba97f78",
+        "round": 6473287
+      },
+      "nist_beacon_v2": {
+        "chain": 2,
+        "output_value": "52B0B2ECB10C5E1594E0E3A21DCFD18E95687BF9EF616F20CEB731483109388F031B51255C6B3DF7BCA47AD81E30FE5368D46A959BDCCC99ABA3E3C985DDB97A",
+        "pulse": 1945034,
+        "time_stamp": "2026-09-17T07:20:00.000Z"
+      }
+    },
+    "frozen_utc": "2026-09-17T07:20:35Z",
+    "git_commit_at_freeze": "6fb3856978500569333bfe5466d5fa1d91c42f4c",
+    "git_dirty_at_freeze": false,
+    "hash": "bc7b6475831c9f7c94bcd043162a06a73130025c4e4dfbd34cb3f5e9fec5a687",
+    "note": "git_dirty_at_freeze reflects the freeze itself rewriting the preregistration in the working tree; the pre-freeze commit 6fb3856 is the sealed content minus the freeze fields",
+    "pre_freeze_check": "artifacts/verification/prefreeze_0022.json, PASS, 66 checks, banked at the pre-freeze commit 6fb3856",
+    "prev_hash": "fbb2cc70afe2d9421f6d4b0dfa10f9725b8a8b2c1fe6afc4c34c3399239cc621",
+    "reader_sha256": "174d18b016992151217a28835d14fcaab90741d4b427419740beb21df3adc836",
+    "seq": 22
+  },
   "instrument": {
-    "runner": "tools/pivot/run_realsearch.py (fit_block_partition() module-level so the generator and the pre-freeze check call it)",
-    "reader": "tools/readers/realsearch4096_verdict.py, generated from the preregistration by a template; 30 result keys; exception path writes all of them",
     "gate": "tests/mutation_test.py realsearch4096: 75 cases, control built from tests/fixtures/realsearch_runner_shape.json (a smoke of the runner) with sealed values via _rf_sub/_shape_fill; provenance case symmetric at every level",
-    "pre_freeze_check": "tools/prereg_checks/prefreeze_0022.py: rebuilds the corpus blocks and the fit-block partition by calling the runner, asserts reader keys are runner keys, per-record requirements against the fixture, fixture currency, nothing exists yet, a real run refuses on an unfrozen file",
     "gate_evolution": [
       "v1: 3 cases, control selected M4 -> VOID on the aliased reproduction (design fact, not a defect)",
       "v2: 75 cases, 71 detected: a shared environment dict between records and the launch block, and selection-file mutations applied after the file was hashed into the ledger",
       "v3: per-record environment copies; sel_mutate applied before hashing: 74/75 (a record's params dict shared with the roster)",
       "v4: params copied per record, roster deep-copied: 75/75",
       "v5 (after the review): the control's roster takes its key set from the fixture in both files; five cases added (aliased L3 and D1 pass at their references, every head aliased is a clean REAL_RECIPE_FAILS, an aliased logistic outside tolerance is VOID, the provenance fail twin); the fixture recaptured under the sealed roster"
-    ]
-  },
-  "cost": {
-    "banked_0021_seconds_on_this_block": {
-      "real_model": 280.1,
-      "real_incumbent": 25.3,
-      "real_logistic": 58.0,
-      "floor_tree3": 3.4,
-      "floor_feat1": 1.1,
-      "null": 84.3
-    },
-    "estimate_stated_in_advance": "about one hour at three threads (selection about 40 min, confirmation about 20 min); COULD NOT VERIFY until run",
-    "smoke": "select 322 s wall (39 s of fits; the rest is the cold builder-cache memmap for the 260000-row identity scan), confirm 68 s"
+    ],
+    "pre_freeze_check": "tools/prereg_checks/prefreeze_0022.py: rebuilds the corpus blocks and the fit-block partition by calling the runner, asserts reader keys are runner keys, per-record requirements against the fixture, fixture currency, nothing exists yet, a real run refuses on an unfrozen file",
+    "reader": "tools/readers/realsearch4096_verdict.py, generated from the preregistration by a template; 30 result keys; exception path writes all of them",
+    "runner": "tools/pivot/run_realsearch.py (fit_block_partition() module-level so the generator and the pre-freeze check call it)"
   },
   "pre_freeze_review": {
-    "method": "four independent adversarial readings, one lens each, run in parallel before the freeze: instrument (reader against runner), condition (clause and design), runner (operations and resume), claims (every number and clause text against the banked artifacts). Nothing sealed was found wrong by any lens; the reader's arithmetic was replayed on the runner's own smoke output with zero discrepancies; the null-label hash and every fit-block hash were recomputed from the data with the runner's own code by three of the four lenses.",
     "adopted": [
       {
-        "lens": "claims",
-        "severity": "H",
         "finding": "the prose confirm order in design.stage_confirm and arms[1] was 0014's (majority, stratified, best_single_feat, depth3_tree, deep_tree, logistic), not the sealed confirm_order the reader enforces (frozen heads before the expanded ones)",
-        "fix": "both sentences rewritten to the sealed order"
+        "fix": "both sentences rewritten to the sealed order",
+        "lens": "claims",
+        "severity": "H"
       },
       {
-        "lens": "runner",
-        "severity": "H",
         "finding": "the launch rule 1-minute load <= 2.0 refuses an honest confirm launched right after select (the three fit threads' load decays for about a minute) and any launch while the gate suite runs",
-        "fix": "the sealed threshold is unchanged; the runner re-samples the load every 15 s for up to five minutes before refusing, banks the seconds waited, and the invocation says confirm is launched when the box is idle"
+        "fix": "the sealed threshold is unchanged; the runner re-samples the load every 15 s for up to five minutes before refusing, banks the seconds waited, and the invocation says confirm is launched when the box is idle",
+        "lens": "runner",
+        "severity": "H"
       },
       {
-        "lens": "runner",
-        "severity": "M",
         "finding": "relaunching a completed confirm is not refused and rewrites the banked artifact (launch_number, timestamps, duplicate selection_bound events)",
-        "fix": "the confirm stage refuses when the artifact on disk is complete"
+        "fix": "the confirm stage refuses when the artifact on disk is complete",
+        "lens": "runner",
+        "severity": "M"
       },
       {
-        "lens": "runner",
-        "severity": "M",
         "finding": "the selection file is written non-atomically; a kill mid-write leaves a truncated file that the next select refuses and the next confirm crashes on",
-        "fix": "written to .tmp then os.replace, as the artifact and scores are"
+        "fix": "written to .tmp then os.replace, as the artifact and scores are",
+        "lens": "runner",
+        "severity": "M"
       },
       {
-        "lens": "runner + condition",
-        "severity": "M",
         "finding": "the runner banks the null-label hash but does not compare it to the sealed 0021 value; a divergent permutation would be found by the reader after the model was fitted",
-        "fix": "NOT RUN before the null fit when the hash is not 0021's"
+        "fix": "NOT RUN before the null fit when the hash is not 0021's",
+        "lens": "runner + condition",
+        "severity": "M"
       },
       {
-        "lens": "runner",
-        "severity": "M",
         "finding": "an aliased reproduction arm on a baseline head is never drift-checked by the runner, so the same drift is NOT RUN under one selection outcome and VOID under another",
-        "fix": "after each baseline head's fit the runner applies the tolerance to any arm that head aliases; on the model head only the reader can, as VOID, and stop_rules say so"
+        "fix": "after each baseline head's fit the runner applies the tolerance to any arm that head aliases; on the model head only the reader can, as VOID, and stop_rules say so",
+        "lens": "runner",
+        "severity": "M"
       },
       {
-        "lens": "runner",
-        "severity": "M",
         "finding": "a completed confirmatory record deleted from disk is NOT RUN at any point (shared machinery: one scoring per role), which stop_rules did not list",
-        "fix": "listed"
+        "fix": "listed",
+        "lens": "runner",
+        "severity": "M"
       },
       {
-        "lens": "runner",
-        "severity": "M",
         "finding": "the pre-freeze check spawns a real-mode select expecting the unfrozen refusal; from a shell exporting the sealed thread count against a frozen file it could start a real selection",
-        "fix": "the probe forces one thread so it can never pass the launch check (and the check exits 2 on a frozen file before reaching it)"
-      },
-      {
-        "lens": "instrument + runner",
-        "severity": "M",
-        "finding": "the captured fixture predated the current preregistration (its roster carried a heads_source key since moved out of the sealed roster; its roster_sha256 was not the sealed one) and neither the gate nor the check could see roster-level drift",
-        "fix": "fixture recaptured from a smoke under the sealed roster; the check requires the fixture's roster to be exactly {protocol, heads} in both files and its banked roster_sha256 to be the sealed one; the control takes the roster's key set from the fixture in both files"
-      },
-      {
-        "lens": "instrument",
-        "severity": "M",
-        "finding": "gate coverage: no fail twin for the provenance case; only the M4 aliasing path exercised",
-        "fix": "five cases added (see gate_evolution v5)"
-      },
-      {
-        "lens": "instrument",
-        "severity": "L",
-        "finding": "RESULT_KEYS missed two keys written on one line with another (fit_rows_per_family, revises_...)",
-        "fix": "one key per line in the template; 30 keys"
-      },
-      {
-        "lens": "instrument",
-        "severity": "L",
-        "finding": "dead code in the reader",
-        "fix": "removed"
-      },
-      {
+        "fix": "the probe forces one thread so it can never pass the launch check (and the check exits 2 on a frozen file before reaching it)",
         "lens": "runner",
-        "severity": "L",
+        "severity": "M"
+      },
+      {
+        "finding": "the captured fixture predated the current preregistration (its roster carried a heads_source key since moved out of the sealed roster; its roster_sha256 was not the sealed one) and neither the gate nor the check could see roster-level drift",
+        "fix": "fixture recaptured from a smoke under the sealed roster; the check requires the fixture's roster to be exactly {protocol, heads} in both files and its banked roster_sha256 to be the sealed one; the control takes the roster's key set from the fixture in both files",
+        "lens": "instrument + runner",
+        "severity": "M"
+      },
+      {
+        "finding": "gate coverage: no fail twin for the provenance case; only the M4 aliasing path exercised",
+        "fix": "five cases added (see gate_evolution v5)",
+        "lens": "instrument",
+        "severity": "M"
+      },
+      {
+        "finding": "RESULT_KEYS missed two keys written on one line with another (fit_rows_per_family, revises_...)",
+        "fix": "one key per line in the template; 30 keys",
+        "lens": "instrument",
+        "severity": "L"
+      },
+      {
+        "finding": "dead code in the reader",
+        "fix": "removed",
+        "lens": "instrument",
+        "severity": "L"
+      },
+      {
         "finding": "first_launch_utc was the select stage's first launch and confirmatory_started_utc was reset on every resume",
-        "fix": "both are the confirm stage's first launch"
+        "fix": "both are the confirm stage's first launch",
+        "lens": "runner",
+        "severity": "L"
       },
       {
-        "lens": "condition",
-        "severity": "M",
         "finding": "the holdout disclosure borrowed 0014's authority for a mixture ranking, but 0014's holdout was family-balanced and this one is py_src-heavy; 'eight searches' should be five",
-        "fix": "reworded; two informational reader flags added from the banked selection records: selected_ids_under_macro_average and selection_gap_by_head; the macro-average rule is not adopted (c_src has five holdout chunks)"
+        "fix": "reworded; two informational reader flags added from the banked selection records: selected_ids_under_macro_average and selection_gap_by_head; the macro-average rule is not adopted (c_src has five holdout chunks)",
+        "lens": "condition",
+        "severity": "M"
       },
       {
-        "lens": "condition + instrument",
-        "severity": "M",
         "finding": "the structural consequence of aliasing was not stated in the preregistration: a model head that selects M4 or M1 is pinned to 0021's reading and cannot clear",
-        "fix": "stated in expected_outcome_stated_in_advance: a pass is reachable only through M2, M3, M5, M6, M7 or M8"
+        "fix": "stated in expected_outcome_stated_in_advance: a pass is reachable only through M2, M3, M5, M6, M7 or M8",
+        "lens": "condition + instrument",
+        "severity": "M"
       },
       {
-        "lens": "condition",
-        "severity": "M",
         "finding": "no sealed-set disclosure in 0021's form",
-        "fix": "scope.sealed_set_disclosure added, with the smoke's scorings counted"
-      },
-      {
-        "lens": "condition + claims",
-        "severity": "M",
-        "finding": "sealed_partition.early_stopping_split_disclosed was 0021's paragraph verbatim: builder arms this run does not cut, 'two HGB recipes', 'not changed to a grouped split' (M8 is the grouped-split probe)",
-        "fix": "0022's own paragraph, with the contamination of the last-tenth validation split MEASURED on the fit block and on the stage block by the generator, banked as early_stopping_split_measured"
-      },
-      {
-        "lens": "condition + claims + instrument",
-        "severity": "M",
-        "finding": "scope.corpus_fit carried the manifest's selected chunk counts (1035; pe_bin 207, py_src 674) beside sealed with-rows counts (1029; 203, 672) without naming the convention",
-        "fix": "both counts named and the convention stated; one_line says which the sealed blocks use"
-      },
-      {
-        "lens": "claims",
-        "severity": "M",
-        "finding": "'the record's recipe first' misdescribed the rosters (0003's recipes lead: M1, L1, D1, T1; the reference recipes are M1, M4, L3, D1)",
-        "fix": "title, one_line, arms[0] and the runner's docstring reworded"
-      },
-      {
-        "lens": "claims",
-        "severity": "M",
-        "finding": "stop_rules listed a failed launch precondition as NOT RUN; the runner refuses (exit 3) and files nothing",
-        "fix": "reworded to 0021's refusal sentence"
-      },
-      {
-        "lens": "claims",
-        "severity": "M",
-        "finding": "'closes its last open excuse' overclaimed: the budget question stays open by the document's own scope",
-        "fix": "reworded"
-      },
-      {
-        "lens": "claims",
-        "severity": "M",
-        "finding": "corpus_scored.already_scored_by named 0018 as the comparison; the comparison and the floors are 0021's",
-        "fix": "reworded"
-      },
-      {
-        "lens": "claims",
-        "severity": "L",
-        "finding": "readings omitted six keys the reader writes and the document promises (shuffled_label_accuracy_eval, ext_per_family, builder_eval_top1, aliased_reproductions, reproduction_top1, selected_model_id)",
-        "fix": "added"
-      },
-      {
-        "lens": "claims",
-        "severity": "L",
-        "finding": "clause texts: reproduces_0021 lacked the runner's NOT RUN; confirmatory clause imprecise on dummies' fit_info, on the fingerprint binding the selection hash, and on completions in the sealed order; margin_arithmetic did not disclose the one-row rounding effect of a 4-decimal bar",
-        "fix": "all three texts made exact"
-      },
-      {
-        "lens": "claims",
-        "severity": "L",
-        "finding": "seed text (trees and dummies random_state 0; M8 seed + 1), reference_source order, the logistic gain's base (0014's in-run L1 0.1352 versus 0003's 0.1392), 'selected by 0014's rule' (one stage), the cost minutes (6 not 8), 'strictest reading in the record', 'before the first confirmatory checkpoint that touches the model', 'in the same places' on the pass path",
-        "fix": "each reworded"
-      },
-      {
-        "lens": "condition + claims",
-        "severity": "L",
-        "finding": "'share no byte' overstated the measured disjointness levels",
-        "fix": "the three runner-measured levels and the blob-index level by corpus_realfit.py --disjoint named; overlap between distinct chunks stated as not excluded"
-      },
-      {
+        "fix": "scope.sealed_set_disclosure added, with the smoke's scorings counted",
         "lens": "condition",
-        "severity": "L",
+        "severity": "M"
+      },
+      {
+        "finding": "sealed_partition.early_stopping_split_disclosed was 0021's paragraph verbatim: builder arms this run does not cut, 'two HGB recipes', 'not changed to a grouped split' (M8 is the grouped-split probe)",
+        "fix": "0022's own paragraph, with the contamination of the last-tenth validation split MEASURED on the fit block and on the stage block by the generator, banked as early_stopping_split_measured",
+        "lens": "condition + claims",
+        "severity": "M"
+      },
+      {
+        "finding": "scope.corpus_fit carried the manifest's selected chunk counts (1035; pe_bin 207, py_src 674) beside sealed with-rows counts (1029; 203, 672) without naming the convention",
+        "fix": "both counts named and the convention stated; one_line says which the sealed blocks use",
+        "lens": "condition + claims + instrument",
+        "severity": "M"
+      },
+      {
+        "finding": "'the record's recipe first' misdescribed the rosters (0003's recipes lead: M1, L1, D1, T1; the reference recipes are M1, M4, L3, D1)",
+        "fix": "title, one_line, arms[0] and the runner's docstring reworded",
+        "lens": "claims",
+        "severity": "M"
+      },
+      {
+        "finding": "stop_rules listed a failed launch precondition as NOT RUN; the runner refuses (exit 3) and files nothing",
+        "fix": "reworded to 0021's refusal sentence",
+        "lens": "claims",
+        "severity": "M"
+      },
+      {
+        "finding": "'closes its last open excuse' overclaimed: the budget question stays open by the document's own scope",
+        "fix": "reworded",
+        "lens": "claims",
+        "severity": "M"
+      },
+      {
+        "finding": "corpus_scored.already_scored_by named 0018 as the comparison; the comparison and the floors are 0021's",
+        "fix": "reworded",
+        "lens": "claims",
+        "severity": "M"
+      },
+      {
+        "finding": "readings omitted six keys the reader writes and the document promises (shuffled_label_accuracy_eval, ext_per_family, builder_eval_top1, aliased_reproductions, reproduction_top1, selected_model_id)",
+        "fix": "added",
+        "lens": "claims",
+        "severity": "L"
+      },
+      {
+        "finding": "clause texts: reproduces_0021 lacked the runner's NOT RUN; confirmatory clause imprecise on dummies' fit_info, on the fingerprint binding the selection hash, and on completions in the sealed order; margin_arithmetic did not disclose the one-row rounding effect of a 4-decimal bar",
+        "fix": "all three texts made exact",
+        "lens": "claims",
+        "severity": "L"
+      },
+      {
+        "finding": "seed text (trees and dummies random_state 0; M8 seed + 1), reference_source order, the logistic gain's base (0014's in-run L1 0.1352 versus 0003's 0.1392), 'selected by 0014's rule' (one stage), the cost minutes (6 not 8), 'strictest reading in the record', 'before the first confirmatory checkpoint that touches the model', 'in the same places' on the pass path",
+        "fix": "each reworded",
+        "lens": "claims",
+        "severity": "L"
+      },
+      {
+        "finding": "'share no byte' overstated the measured disjointness levels",
+        "fix": "the three runner-measured levels and the blob-index level by corpus_realfit.py --disjoint named; overlap between distinct chunks stated as not excluded",
+        "lens": "condition + claims",
+        "severity": "L"
+      },
+      {
         "finding": "the invocation relied on argparse defaults and did not say checkpoints are committed as they land",
-        "fix": "explicit paths and the checkpoint convention added"
+        "fix": "explicit paths and the checkpoint convention added",
+        "lens": "condition",
+        "severity": "L"
       }
     ],
     "declined": [
       {
-        "lens": "condition",
         "finding": "a count-based bar (floors as 0021's correct counts, need = best count + 1923) would remove the one-row rounding effect",
+        "lens": "condition",
         "why_declined": "0021's fraction convention is kept for comparability with every real-content reading; the effect is disclosed in margin_arithmetic with the worked number (6457 against 6458)"
       },
       {
-        "lens": "condition",
         "finding": "a cluster-bootstrap interval per selection winner over the 206 holdout chunks",
+        "lens": "condition",
         "why_declined": "the selection gap flag answers the decisiveness question at zero cost; an interval would add runner work to a stage whose records are banked in full and can be bootstrapped afterwards by anyone"
       },
       {
-        "lens": "runner",
         "finding": "write the scores file once at the end instead of after every role (about a minute of the confirm wall)",
+        "lens": "runner",
         "why_declined": "0021's behaviour, kept: a partial scores file beside a partial artifact is what makes an abandoned confirm readable as VOID rather than as absence"
       },
       {
-        "lens": "runner",
         "finding": "the alive check sees only python processes whose argv names tools/pivot/run_; the memory kill threshold is dormant at the expected peak",
+        "lens": "runner",
         "why_declined": "true and harmless under the documented invocation; noted"
       }
-    ]
+    ],
+    "method": "four independent adversarial readings, one lens each, run in parallel before the freeze: instrument (reader against runner), condition (clause and design), runner (operations and resume), claims (every number and clause text against the banked artifacts). Nothing sealed was found wrong by any lens; the reader's arithmetic was replayed on the runner's own smoke output with zero discrepancies; the null-label hash and every fit-block hash were recomputed from the data with the runner's own code by three of the four lenses."
   },
-  "freeze": {
-    "seq": 22,
-    "hash": "bc7b6475831c9f7c94bcd043162a06a73130025c4e4dfbd34cb3f5e9fec5a687",
-    "prev_hash": "fbb2cc70afe2d9421f6d4b0dfa10f9725b8a8b2c1fe6afc4c34c3399239cc621",
-    "frozen_utc": "2026-09-17T07:20:35Z",
-    "git_commit_at_freeze": "6fb3856978500569333bfe5466d5fa1d91c42f4c",
-    "git_dirty_at_freeze": false,
-    "reader_sha256": "174d18b016992151217a28835d14fcaab90741d4b427419740beb21df3adc836",
-    "anchors": {
-      "nist_beacon_v2": {
-        "chain": 2,
-        "pulse": 1945034,
-        "time_stamp": "2026-09-17T07:20:00.000Z",
-        "output_value": "52B0B2ECB10C5E1594E0E3A21DCFD18E95687BF9EF616F20CEB731483109388F031B51255C6B3DF7BCA47AD81E30FE5368D46A959BDCCC99ABA3E3C985DDB97A"
+  "preregistration": "0022-realsearch-4096",
+  "run_record": {
+    "confirmatory_started_utc": "2026-09-17T08:12:12Z",
+    "controls_all_passed": {
+      "aliased_reproductions": {},
+      "chance": 0.038462,
+      "no_arm_at_its_iteration_cap": true,
+      "null_on_evaluation": 0.0388,
+      "null_on_extension": 0.0382,
+      "null_on_real_rows": 0.0392,
+      "reproduction_correct_rows": {
+        "repro_d1": 3572,
+        "repro_l3": 4535,
+        "repro_m1": 3892,
+        "repro_m4": 4587
       },
-      "drand": {
-        "round": 6473287,
-        "randomness": "218a27eb2fd6c7bda2bc03cf7943ee2160673765105aa7d53838a7ff8ba97f78"
+      "reproduction_drift": {
+        "repro_d1": 0.0,
+        "repro_l3": 0.0,
+        "repro_m1": 0.0,
+        "repro_m4": 0.0
+      },
+      "reproduction_reference": {
+        "repro_d1": 0.0929,
+        "repro_l3": 0.1179,
+        "repro_m1": 0.1012,
+        "repro_m4": 0.1193
+      },
+      "reproduction_top1": {
+        "repro_d1": 0.0929,
+        "repro_l3": 0.1179,
+        "repro_m1": 0.1012,
+        "repro_m4": 0.1193
+      },
+      "validity_failed_clauses": []
+    },
+    "cost": "selection 1655.5 s wall on one launch (1634.3 s of fits, 1018.7 s of them the model head's eight candidates and 476.0 s the logistic's); confirmation 996.8 s wall on one launch; 2435.9 s of confirmatory fits banked (the M4 reproduction 374.6 s, the searched model 237.8 s). 2652.3 s of wall time in all against the estimate stated in advance of about one hour at three threads. No arm reached its iteration cap; no interruption; load wait 0 s.",
+    "expected_outcome_stated_in_advance": "REAL_RECIPE_FAILS, more likely than not.",
+    "finished_utc": "2026-09-17T08:28:33Z",
+    "fit_seconds": {
+      "banked_total": 2435.9,
+      "confirmation_by_name": {
+        "best_single_feat": 1.2,
+        "deep_tree": 8.4,
+        "depth3_tree": 4.1,
+        "logistic": 20.6,
+        "majority": 0.0,
+        "model": 237.8,
+        "null": 51.2,
+        "repro_d1": 3.3,
+        "repro_l3": 65.0,
+        "repro_m1": 35.4,
+        "repro_m4": 374.6,
+        "stratified": 0.0
+      },
+      "selection_by_head": {
+        "best_single_feat": 0,
+        "deep_tree": 116.4,
+        "depth3_tree": 23.2,
+        "logistic": 476.0,
+        "majority": 0,
+        "model": 1018.7,
+        "stratified": 0
+      },
+      "selection_total": 1634.3
+    },
+    "gain_from_search_by_head": {
+      "deep_tree": null,
+      "depth3_tree": 0.0044,
+      "logistic": 0.0003,
+      "model": -0.0004
+    },
+    "invocation": {
+      "checkpoints": "artifacts/pivot/realsearch_4096_ckpt is committed and pushed as checkpoints land, as every run since 0014's; a container restart is recovered by relaunching the identical command",
+      "confirm": "the same command with --stage confirm, launched when the box is idle (no gate suite running; the runner waits up to five minutes for the 1-minute load to fall to 2.0)",
+      "reader": "python3 tools/readers/realsearch4096_verdict.py",
+      "select": "OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3 nice -n 10 python3 tools/pivot/run_realsearch.py --stage select --prereg-file prereg/0022-realsearch-4096.json --cache data/pivot/full_c4096.npz --ext data/pivot/ext_c4096.npz --realfit data/pivot/realfit_c4096.npz --workdir artifacts/pivot/realsearch_4096_ckpt --selection-out artifacts/pivot/realsearch_4096_selection.json --out artifacts/pivot/realsearch_4096.json --scores-out artifacts/pivot/realsearch_4096_scores.json",
+      "smoke": "python3 tools/pivot/run_realsearch.py --stage select --smoke --realfit <scratchpad>/smoke_realfit/fit_small.npz --ext <scratchpad>/smoke_realfit/ext_small.npz --workdir <scratchpad>/smoke_realsearch/ckpt --selection-out <scratchpad>/smoke_realsearch/selection.json --out <scratchpad>/smoke_realsearch/out.json --scores-out <scratchpad>/smoke_realsearch/scores.json; then --stage confirm with the same paths"
+    },
+    "launches": {
+      "confirm": 1,
+      "interruptions": 0,
+      "load_wait_seconds": 0,
+      "select": 1
+    },
+    "model_leads_0021_unsearched_model_rows": -14,
+    "per_family_real": {
+      "families_clearing": 0,
+      "logistic": {
+        "c_src": 0.1255,
+        "pe_bin": 0.0921,
+        "py_src": 0.1366,
+        "rfc_txt": 0.1188,
+        "rst_doc": 0.1168
+      },
+      "logistic_leads_on": [
+        "py_src",
+        "rst_doc"
+      ],
+      "model": {
+        "c_src": 0.129,
+        "pe_bin": 0.1013,
+        "py_src": 0.127,
+        "rfc_txt": 0.1221,
+        "rst_doc": 0.1145
+      },
+      "model_leads_on": [
+        "c_src",
+        "pe_bin",
+        "rfc_txt"
+      ]
+    },
+    "searched_readings_real_rows": {
+      "best_single_feat": {
+        "correct": 2110,
+        "top1": 0.0549
+      },
+      "deep_tree": {
+        "correct": 3994,
+        "top1": 0.1039
+      },
+      "depth3_tree": {
+        "correct": 3741,
+        "top1": 0.0973
+      },
+      "logistic": {
+        "correct": 4544,
+        "top1": 0.1182
+      },
+      "majority": {
+        "correct": 1488,
+        "top1": 0.0387
+      },
+      "model": {
+        "correct": 4573,
+        "top1": 0.1189
+      },
+      "null": {
+        "correct": 1508,
+        "top1": 0.0392
+      },
+      "stratified": {
+        "correct": 1470,
+        "top1": 0.0382
       }
     },
-    "pre_freeze_check": "artifacts/verification/prefreeze_0022.json, PASS, 66 checks, banked at the pre-freeze commit 6fb3856",
-    "note": "git_dirty_at_freeze reflects the freeze itself rewriting the preregistration in the working tree; the pre-freeze commit 6fb3856 is the sealed content minus the freeze fields"
-  }
+    "selection": {
+      "holdout_top1_by_candidate": {
+        "deep_tree": {
+          "T1": 0.1062,
+          "T2": 0.1009,
+          "T3": 0.0941,
+          "T4": 0.0917,
+          "T5": 0.0937,
+          "T6": 0.0866,
+          "T7": 0.0896,
+          "T8": 0.0934
+        },
+        "depth3_tree": {
+          "D1": 0.0868,
+          "D2": 0.0868,
+          "D3": 0.0868,
+          "D4": 0.0866,
+          "D5": 0.0975,
+          "D6": 0.0975,
+          "D7": 0.0975,
+          "D8": 0.0975
+        },
+        "logistic": {
+          "L1": 0.1051,
+          "L2": 0.1085,
+          "L3": 0.12,
+          "L4": 0.1208,
+          "L5": 0.1213,
+          "L6": 0.121,
+          "L7": 0.12,
+          "L8": 0.1208
+        },
+        "model": {
+          "M1": 0.103,
+          "M2": 0.1109,
+          "M3": 0.1223,
+          "M4": 0.12,
+          "M5": 0.1149,
+          "M6": 0.1098,
+          "M7": 0.1211,
+          "M8": 0.1043
+        }
+      },
+      "runner_up_by_head": {
+        "deep_tree": "T2",
+        "depth3_tree": "D6",
+        "logistic": "L6",
+        "model": "M7"
+      },
+      "scored_rows_gathered_in_selection": 0,
+      "selected_ids": {
+        "best_single_feat": "U3",
+        "deep_tree": "T1",
+        "depth3_tree": "D5",
+        "logistic": "L5",
+        "majority": "U1",
+        "model": "M3",
+        "stratified": "U2"
+      },
+      "selected_ids_under_macro_average": {
+        "deep_tree": "T1",
+        "depth3_tree": "D5",
+        "logistic": "L6",
+        "model": "M4"
+      },
+      "selection_gap_by_head": {
+        "deep_tree": 0.0053,
+        "depth3_tree": 0.0,
+        "logistic": 0.0003,
+        "model": 0.0012
+      },
+      "selection_sha256": "e2059690d781db55debca57280cec4d17dfd2ab2b78e12086b73a33aabc6d2eb"
+    },
+    "selection_finished_utc": "2026-09-17T08:11:54Z",
+    "selection_started_utc": "2026-09-17T07:44:35Z",
+    "the_clause": {
+      "bar_expanded": 0.1182,
+      "bar_expanded_head": "logistic",
+      "bar_frozen": 0.1182,
+      "bar_frozen_head": "logistic",
+      "margin_required": 0.05,
+      "model_correct_real_rows": 4573,
+      "model_real_top1": 0.1189,
+      "needed_expanded": 6468,
+      "needed_frozen": 6468,
+      "of": 38452,
+      "searched_margin_expanded": 0.0007,
+      "searched_margin_frozen": 0.0007,
+      "short_by_rows": 1895,
+      "short_by_rows_is": "needed_frozen - model_correct_real_rows",
+      "unsearched_bar_rows_before_the_run": 6457
+    },
+    "verdict": "REAL_RECIPE_FAILS",
+    "wall_seconds": {
+      "both_stages": 2652.3,
+      "confirm": 996.8,
+      "select": 1655.5
+    },
+    "what_it_found": {
+      "macro_average_flag": "Had the selection rule averaged the five per-family holdout readings instead of pooling the rows it would have selected M4 for the model and L6 for the logistic (a flag, not a verdict); M4 is pinned to 0021's reading by the reproduction clause and could not have cleared either.",
+      "not_a_transfer_reading": "An in-distribution reading on real content: the fit and scored chunks are cut from the same five pinned files and share no byte, no chunk id and no source-chunk hash. Nothing here revises 0003, 0014, 0015, 0016, 0017, 0018, 0019 or 0021, and nothing here establishes a buyer.",
+      "one_line": "On real content a searched boosted model and a searched linear rule are the same rule: a searched margin of 0.0007 where 0.05 was required, and the search moved neither.",
+      "per_family": "0 of 5 real families clear the best frozen head on their own rows by 0.05. The searched logistic leads the searched model outright on py_src (0.1366 against 0.127) and rst_doc (0.1168 against 0.1145); the model leads on c_src (0.129 against 0.1255), pe_bin (0.1013 against 0.0921) and rfc_txt (0.1221 against 0.1188). py_src is the largest family in the fit block (17197 of 26346 fit rows, 7709 scored rows).",
+      "the_contrast_with_the_builder_corpus": "On the builder's corpus the identical search (0014) moved the model by 0.0489 and the logistic head by 0.0965; on real content it moved them by -0.0004 and 0.0003. The sealed expectation gave the wrong reason for the right outcome: it expected the searched baseline to gain more than the model, as it did on the builder corpus; instead neither gained.",
+      "the_search_moved_nothing": "Gains from the search over 0021's unsearched readings, by head: model -0.0004, logistic 0.0003, depth-3 tree 0.0044. The searched model M3 reads 14 rows BELOW 0021's unsearched M4 on the same rows (4573 against 4587) while winning the holdout by 0.0012 over M7 (holdout 0.1223 against 0.1211; M4 read 0.12 there). The bar the search had to move rose from 6457 rows to 6468.",
+      "what_it_means_for_the_record": "0021's reading stands and gains a searched sibling: on real content, the best boosted recipe on 0014's roster does not beat the best searched linear rule or depth-3 tree by the record's margin. The manufactured-label curve (0003, 0014) is not revised; the real-content thread (0018-0022) closes the recipe excuse. The budget excuse - a scaling curve on real plaintexts - stays open, as what_this_does_not_cover says."
+    }
+  },
+  "schema": "raise-v1/engineering_log/1",
+  "status": "complete: REAL_RECIPE_FAILS",
+  "why_this_exists": "0021 read REAL_FIT_FAILS with 0014's model M4 at 0.1193 on the real-family rows, the depth-3 tree at 0.0929 and the standardised logistic L3 at 0.1179, all fitted UNSEARCHED on real content, and its scope deferred 'what a recipe searched on real content would do (the search is a different preregistration)'. This is that preregistration: 0014's roster and selection rule run inside 0021's real fit block, symmetric, with the bar floored at 0021's readings."
 }

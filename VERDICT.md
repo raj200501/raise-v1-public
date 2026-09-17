@@ -314,6 +314,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 |---|---|---|
 | **Out-of-builder transfer at 4096 (0018, re-read under 0019)** | **`OOB_TRANSFER_FAILS`** — 0014's searched model, fitted on the builder's eight families, does not identify the encoder at chance + 0.05 on five pinned real-file families the builder never produced: 2450 of 38452 rows correct (0.0637) against 3402 needed; the standardised logistic reads 0.0716 and the incumbent 0.0634 on the same rows, neither at the bar; no real family at the bar, two synthetic ones; eight-family mixture 0.0766 (a flag). 0018's own frozen reader emitted `VOID` on a wrong sealed literal (the null block hash), filed in `CORRECTIONS.md`; 0019 re-read the banked artifact with it corrected. Chain entries 18 and 19. | primary-verifiable |
 | **Real-content fit at 4096 (0021; 0020 refused at launch)** | **`REAL_FIT_FAILS`** — and the finding is that real content DOES carry the signal. 0014's searched model, fitted on 26346 rows from 1029 plaintexts of real content and scored on held-out chunks of the same five pinned files, reads 0.1193 on the 38452 real-family rows — 3.1× chance and nearly double 0018's builder-fitted 0.0637 on the same rows. But a depth-3 tree on the same rows reads 0.0929, and the clause is floor + 0.05 (§4a), not chance + 0.05: 4587 correct against 5495 needed, a margin of 0.0264 over a rule a person could write by hand. Under the chance bar (3402) it would have passed. 0 of 5 families clear their own floor; all five are above it. Both builder-matched arms read far lower (0.0671 row-matched, 0.0638 plaintext-matched), so it is the content and not the budget. 0020 sealed the same design and refused at launch on a condition that required the builder's own pool to be free of duplicate chunks; chain entries 20 and 21. | primary-verifiable |
+| **Real-content recipe search at 4096 (0022)** | **`REAL_RECIPE_FAILS`** — the question 0021 deferred, answered: 0014's roster (35 candidates, seven heads) searched inside 0021's 26346-row real fit block, symmetric, every baseline head floored at 0021's reading. The searched model (M3) reads 0.1189 on the 38452 real-family rows and the searched logistic (L5) 0.1182: a searched margin of 0.0007 against the 0.05 required, 4573 correct against 6468 needed. Gains from the search: model -0.0004, logistic 0.0003, depth-3 tree 0.0044; the searched model sits 14 rows below 0021's unsearched M4 while winning the holdout by 0.0012. 0 of 5 families clear; all four reproduction arms drift 0.0; null 0.0392. Chain entry 22. | primary-verifiable |
 | **Linear rule under transfer at 4096 (0017)** | **`L3_LEAD_BELOW_BAR`** — 0014's standardised logistic on 0015's eight sealed folds reaches a stitched 0.0951 on unseen families against 0015's incumbent 0.0859: 2393 more correct rows of 260000 (0.009204) against a 5200-row bar (0.02); under the record's 0.05 margin; every fold converged. Chain entry 17. | primary-verifiable |
 | **Leave-one-family-out transfer at 4096 (0015)** | **`TRANSFER_FAILS`** — with each content family withheld from training, 0003's recipe identifies the encoder on that family at a stitched 0.0859 against chance 0.0385, 0.0026 short of the chance + 0.05 bar; the raw logistic transfers better (0.0928); per family the model keeps 0.25 to 0.65 of its in-distribution accuracy. The headline is a statement about these eight content families | primary-verifiable |
 | **Phase 0 domain selection** | **Terminated with no domain. 99 candidates, 8 adversarial reviews, 0 SELECT.** | arithmetic-verifiable |
@@ -337,7 +338,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **14 of 242 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 253 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -367,7 +368,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
 | `arithmetic-verifiable` | 36 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 192 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `primary-verifiable` | 203 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -1051,11 +1052,51 @@ searched recipe read against a fixed one, so the comparison is asymmetric by des
 nothing about 0014's searched model M4, which was not fitted here; that nothing here revises 0003,
 0014 or 0015; and that no buyer is established.
 
-**In flight — preregistration 0022 (chain seq 22, frozen 2026-09-17T07:20:35Z).** The question 0021 deferred: what a recipe searched on real content would do. 0014's roster verbatim — 35 candidates over seven heads, eight enumerated recipes each for the model, the logistic, the depth-3 tree and the deep tree, 0003's recipe first in every list — searched INSIDE 0021's 26346-row real fit block (1029 plaintexts of 0018's five pinned real files): selection on a chunk-rule holdout (fit-block chunk_id % 5 == 0: 5291 rows, 206 chunks, py_src 3471 of them), one stage on the other 21055 rows, keep 1, ties to the lower roster index; each head's winner then fitted once on the whole fit block and scored once on 0018's scoring set, row for row. Four reproduction arms — M1, M4, L3 and D1 refit on the same block — must land within 0.005 of 0021's banked 0.1012, 0.1193, 0.1179 and 0.0929; a head that selects its reference recipe reproduces it with its own fit, so a model head that selects M4 is pinned to 0021's 0.1193 and cannot clear. The null control refits the selected model recipe on 0021's permuted labels, hash sealed.
+**Preregistration 0022 (chain seq 22) — `REAL_RECIPE_FAILS`, and what it found.** On real content, a searched
+boosted model and a searched linear rule are the same rule. 0014's roster verbatim — 35 candidates over seven
+heads, eight enumerated recipes each for the model, the logistic, the depth-3 tree and the deep tree — was
+searched inside 0021's 26346-row real fit block (1029 plaintexts of 0018's five pinned real files): each head
+selected on a chunk-rule holdout of 5291 rows (206 chunks), fitted its winner once on the whole block and was
+scored once on 0018's scoring set, row for row. The model head selected M3 (holdout 0.1223 against M7's 0.1211
+and M4's 0.12, a gap of 0.0012); the logistic head L5, the depth-3 head D5, the deep-tree head T1. Fitted on all
+26346 rows, the searched model reads **0.1189** on the 38452 real-family rows (4573 correct) and the searched
+logistic **0.1182** (4544 correct): a searched margin of **0.0007** on the frozen set and 0.0007 on the expanded
+set, against the 0.05 the clause requires. 6468 rows were needed and 4573 arrived; it fails by 1895 rows.
 
-Two clauses, read by `tools/readers/realsearch4096_verdict.py` on the recounted score vectors, measured against the **best searched trivial baseline, floored at 0021's reading, plus 0.05** (`docs/OPERATING_RULES.md` §4a; 0014's frozen and expanded head sets, 0021's floors and count arithmetic): the model's correct rows over the 38452 rows of the five real-file families must reach `ceil(38452 × (bar + 0.05))` where the bar is the best of a searched logistic (floor 0.1179), a searched depth-3 tree (0.0929), majority (0.0387) and the label prior (0.0382) — and, under the expanded set, also a depth-1 tree (0.0549) and a searched deep tree. **The thresholds are not knowable before the run**; under 0021's unsearched readings the frozen bar is already the logistic's 0.1179, so at least 6457 correct rows are needed before the search moves anything, against 0021's model at 4587. The expected outcome, stated in the sealed file: `REAL_RECIPE_FAILS`, more likely than not, with the searched margin itself — which may be negative — the number of interest.
+**The search moved nothing that matters.** Gains from the search over 0021's unsearched readings, by head: model
+-0.0004, logistic 0.0003, depth-3 tree 0.0044 (the deep tree had no unsearched reading to gain over; it reads
+0.1039). The searched model reads 14 rows BELOW 0021's unsearched M4 on the same rows (4573 against 4587) while
+winning the holdout: the holdout preferred M3 by 0.0012, the scored rows preferred M4 by 0.0004. The bar the
+search had to move rose from 6457 rows before the run to 6468 after it. Had the selection rule averaged the five
+per-family holdout readings instead of pooling the rows, it would have selected M4 for the model and L6 for the
+logistic (a flag, not a verdict) — and M4 is pinned to 0021's 0.1193 by the reproduction clause and could not
+have cleared either. **On the builder's corpus the identical search moved the model by 0.0489 and the logistic
+head by 0.0965 (0014); on real content it moved them by -0.0004 and 0.0003.** The sealed expectation gave the
+wrong reason for the right outcome: it expected the searched baseline to gain more than the model, as it did on
+the builder corpus. Neither gained.
 
-It is an in-distribution reading on real content, **not a transfer reading**: the fit and scored chunks come from the same five files. Nothing below this line changes until its frozen reader has read the completed run.
+**Per family.** 0 of 5 real families clear the best frozen head on their own rows by 0.05. The searched logistic
+leads the searched model outright on py_src (0.1366 against 0.127) and rst_doc (0.1168 against 0.1145), and
+py_src is the largest family in the fit block (17197 of 26346 fit rows); the model leads on c_src (0.129 against
+0.1255), pe_bin (0.1013 against 0.0921) and rfc_txt (0.1221 against 0.1188). Every searched head sits where 0021
+left it: the depth-3 tree 0.0973, the depth-1 tree 0.0549, majority 0.0387, the label prior 0.0382.
+
+Controls: four reproduction arms refit on the same block — M1 0.1012, M4 0.1193, L3 0.1179, D1 0.0929 against
+0021's banked 0.1012, 0.1193, 0.1179 and 0.0929, drift 0.0 on all four (3892, 4587, 4535 and 3572 rows); no head
+selected its reference recipe, so no reproduction was aliased. The null control on 0021's permuted labels reads
+0.0392 on the real rows, 0.0382 on the extension set and 0.0388 on the evaluation set against chance 0.038462;
+no arm at its iteration cap; no validity clause raised; the selection stage gathered 0 scored rows. Cost:
+selection 1655.5 s wall (1634.3 s of fits, 1018.7 s of them the model head's eight candidates), confirmation
+996.8 s wall, 2435.9 s of confirmatory fits banked; one launch per stage, 2652.3 s in all against the hour
+estimated in advance.
+
+**What it means.** 0021's reading stands and gains the searched sibling it anticipated: real content carries the
+encoder signal (0.1189 against chance 0.038462), and a rule a person could write by hand — now a searched linear
+one — gets essentially all of it. The recipe excuse is closed on 0014's roster at this budget. The budget
+excuse, a scaling curve on real plaintexts, stays open as the sealed file says. An **in-distribution** reading
+on real content, not a transfer reading: the fit and scored chunks come from the same five files and share no
+byte. Nothing here revises 0003, 0014, 0015, 0016, 0017, 0018, 0019 or 0021, and nothing here establishes a
+buyer.
 
 **Preregistration 0021 (chain seq 21) — `REAL_FIT_FAILS`, and what it found.** Real content does carry the encoder
 signal. 0014's searched model M4, fitted on 26346 rows from 1029 plaintexts of real

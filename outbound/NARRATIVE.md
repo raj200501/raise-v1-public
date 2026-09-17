@@ -145,6 +145,13 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > which is exactly what the measurement turned out to be. `REAL_FIT_FAILS`, a margin of 0.0264 where 0.05 was
 > required; under the chance bar it would have passed. That verdict exists because the bar was moved, and it is
 > the most useful number in this record: the signal is real, and most of it is cheap.
+> Then we searched on the real files themselves (0022): 0014's whole roster, 35 candidates over seven heads,
+> symmetric, inside 0021's 26346-row real fit block, with every baseline head floored at 0021's reading — so
+> the bar could only rise. The searched model reads 0.1189 and the searched logistic 0.1182 on the same 38452
+> rows: a searched margin of 0.0007 where 0.05 was required. `REAL_RECIPE_FAILS`. The search moved the model
+> by -0.0004 and the logistic by 0.0003, where the identical search on the builder's corpus had moved them by
+> 0.0489 and 0.0965. On real content the boosted model and the linear rule are the same rule, and we said in
+> advance the run would probably say so.
 > The boundary of our result is
 > bracketed to (2048, 4096], and the near-miss on the slack reading is published beside the
 > clear miss on the strict one.
@@ -167,7 +174,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 
 > So here is the honest inventory. A validated instrument that reproduces on a cold clone. One
 > real curve with its boundaries measured by the same instrument. A corrections ledger that costs
-> us something to keep. A verification map that prints its weakest class first — 14 of 242 claims
+> us something to keep. A verification map that prints its weakest class first — 14 of 253 claims
 > we ourselves cannot currently re-derive, and it says so. And no buyer yet: G5, a named buyer
 > type, is the gate this work has not cleared, and no result in the repository could have cleared
 > it, because that work happens outside the repository. We are raising to do exactly that work,

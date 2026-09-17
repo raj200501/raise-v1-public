@@ -78,10 +78,14 @@ builder-fitted model reached on those rows in 0018. **And a depth-3 tree fitted 
 not chance plus 0.05, so the verdict is `REAL_FIT_FAILS`: a margin of 0.0264 over a rule a person could write by hand, where
 0.05 was required. Under the chance bar it would have passed. That is what the bar is for.
 
-Preregistration 0022 (chain entry 22, frozen 2026-09-17) asks the question 0021 deferred: 0014's roster searched on the real
-fit block itself, symmetric, with every baseline head floored at 0021's reading and the logistic in the frozen set, so the model
-needs at least 6457 of 38452 rows before the search moves anything. Expected outcome stated in advance: fails, more likely
-than not. It is frozen and running.
+Preregistration 0022 (chain entry 22) answered the question 0021 deferred: 0014's roster searched on the real fit block itself,
+symmetric, every baseline head floored at 0021's reading and the logistic in the frozen set. **`REAL_RECIPE_FAILS`, and the
+search moved nothing**: the searched model reads 0.1189 on the 38452 real-family rows and the searched logistic 0.1182, a
+searched margin of 0.0007 where 0.05 was required (4573 correct against 6468 needed). Gains from the search over 0021's
+unsearched readings: model -0.0004, logistic 0.0003, depth-3 tree 0.0044; on the builder's corpus the same search had moved the
+model by 0.0489 and the logistic by 0.0965. On real content a searched boosted model and a searched linear rule are the same
+rule. The recipe excuse is closed at this budget; the budget excuse (a scaling curve on real plaintexts) is the next
+preregistration, not a claim.
 
 The curve and the searched margin stand as measured, and they are statements about the corpus builder's eight
 content families (gutenberg, base64, binary, code, csv, json, log, mixed), not about DEFLATE streams in general;

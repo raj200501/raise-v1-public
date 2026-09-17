@@ -73,6 +73,13 @@ oobr = json.load(open(_oobrp, encoding="utf-8")) if os.path.exists(_oobrp) else 
 _rfp = A("pivot", "realfit_4096_rerun.json"); _rfvp = A("pivot", "realfit_4096_rerun_verdict.json")
 rfa = json.load(open(_rfp, encoding="utf-8")) if os.path.exists(_rfp) else None
 rfv = json.load(open(_rfvp, encoding="utf-8")) if os.path.exists(_rfvp) else None
+# 0022: 0014's roster searched inside 0021's real fit block; verdict, run and selection artifacts, plus 0014's banked gains.
+_rsp = A("pivot", "realsearch_4096.json"); _rsvp = A("pivot", "realsearch_4096_verdict.json"); _rssp = A("pivot", "realsearch_4096_selection.json")
+rsa = json.load(open(_rsp, encoding="utf-8")) if os.path.exists(_rsp) else None
+rsv = json.load(open(_rsvp, encoding="utf-8")) if os.path.exists(_rsvp) else None
+rss = json.load(open(_rssp, encoding="utf-8")) if os.path.exists(_rssp) else None
+_e14p = A("pivot", "engineering_log_0014.json")
+e14 = json.load(open(_e14p, encoding="utf-8")) if os.path.exists(_e14p) else None
 
 git_head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO,
                           capture_output=True, text=True).stdout.strip()
@@ -241,7 +248,19 @@ chips = "".join([
             f'far lower ({rfv["ext_real_top1"]["builder_matched"]} row-matched, '
             f'{rfv["ext_real_top1"]["builder_chunk_matched"]} plaintext-matched), so it is the content and not the budget')
            if rfv["verdict"] != "VOID" and rfa and rfa.get("complete")
-           else f'VOID: {"; ".join(rfv["validity_failed_clauses"])[:140]}')] if rfv else []))
+           else f'VOID: {"; ".join(rfv["validity_failed_clauses"])[:140]}')] if rfv else [])
+ + ([chip(rsv["verdict"], {"REAL_RECIPE_CLEARS": "pass", "REAL_RECIPE_FAILS": "fail", "VOID": "inc"}[rsv["verdict"]], "0022",
+           (f'0014\'s roster searched INSIDE 0021\'s {rsv["bars_applied"]["fit_rows"]}-row real fit block, symmetric, every baseline '
+            f'head floored at 0021\'s reading: the searched model ({rsv["selected_model_id"]}) reads {rsv["model_real_top1"]} and the '
+            f'searched logistic ({rsv["selected_ids"]["logistic"]}) {rsv["ext_real_top1"]["logistic"]} on the same '
+            f'{rsv["bars_applied"]["n_real_rows"]} real-family rows, a searched margin of {rsv["flags"]["searched_margin_frozen"]} where '
+            f'{rsv["bars_applied"]["margin"]} was required ({rsv["model_real_correct"]} correct, '
+            f'{rsv["bars_applied"]["min_correct_real_frozen"]} needed). Gains from the search over 0021\'s unsearched readings: model '
+            f'{rsv["flags"]["gain_from_search_by_head"]["model"]}, logistic {rsv["flags"]["gain_from_search_by_head"]["logistic"]}, '
+            f'depth-3 tree {rsv["flags"]["gain_from_search_by_head"]["depth3_tree"]}; {rsv["flags"]["families_clearing"]} of 5 families '
+            f'clear; four reproduction arms drift 0.0')
+           if rsv["verdict"] != "VOID" and rsa and rsa.get("complete")
+           else f'VOID: {"; ".join(rsv["validity_failed_clauses"])[:140]}')] if rsv else []))
 
 fam2048_table = ""
 _pf2048 = A("pivot", "per_family_curves_2048.json")
@@ -458,6 +477,71 @@ if rfa and rfv and rfv["verdict"] != "VOID" and rfa.get("complete"):
                      f'<th>builder-fitted, same budget</th><th>real-fitted incumbent</th><th>real-fitted logistic</th></tr>'
                      f'</thead><tbody>{_rows}</tbody></table>')
 
+boundary_0022 = ""
+if rsa and rsv and rss and rsv["verdict"] != "VOID" and rsa.get("complete"):
+    _bs = rsv["bars_applied"]; _fs = rsv["flags"]; _rt = rsv["ext_real_top1"]; _rc = rsv["ext_real_correct"]; _sel = rsv["selected_ids"]
+    _gain = _fs["gain_from_search_by_head"]; _gap = _fs["selection_gap_by_head"]; _macro = _fs["selected_ids_under_macro_average"]
+    _ref = rsv["reproduction_reference"]; _fl = _bs["floors"]; _pf = rsv["ext_per_family"]
+    _frows = rsv["fit_rows_per_family"]; _erows = rsv["ext_rows_per_family"]
+    _hold = {h: {r["id"]: r["top1"] for r in b["stages"][0]["records"] if r["status"] == "fit"}
+             for h, b in rss["selection"].items() if b["stages"]}
+    _run = {h: rss["selection"][h]["stages"][0]["eligible_ranked_ids"][1] for h in _hold}
+    _prior = {"model": ("0021 M4", _ref["repro_m4"]), "logistic": ("0021 L3", _fl["logistic"]),
+              "depth3_tree": ("0021 D1", _fl["depth3_tree"]), "deep_tree": ("none", None)}
+    _short = _bs["min_correct_real_frozen"] - rsv["model_real_correct"]
+    _g14 = ((e14 or {}).get("run_record") or {}).get("derived_margins") or {}
+    _sc = rss["cost"]; _cc = rsa["cost"]; _both = round(_sc["wall_seconds_this_invocation"] + _cc["wall_seconds_this_invocation"], 1)
+    _fams = sorted(_frows); _ll = [f for f in _fams if _pf["logistic"][f] > _pf["model"][f]]
+    _head_rows = "".join(
+        f'<tr><td class="mono">{h}</td><td class="mono">{_sel[h]}</td><td class="mono">{_hold[h][_sel[h]]}</td>'
+        f'<td class="mono">{_run[h]} {_hold[h][_run[h]]}</td>'
+        f'<td class="mono">{_prior[h][0]}{"" if _prior[h][1] is None else " " + str(_prior[h][1])}</td>'
+        f'<td class="mono">{_rt[h]}</td><td class="mono">{_rc[h]}</td>'
+        f'<td class="mono">{"—" if _gain.get(h) is None else _gain[h]}</td></tr>'
+        for h in ("model", "logistic", "depth3_tree", "deep_tree"))
+    _fam_rows = "".join(
+        f'<tr><td class="mono">{f}</td><td class="mono">{_frows[f]}</td><td class="mono">{_erows[f]}</td>'
+        f'<td class="mono">{_pf["model"][f]}</td><td class="mono">{_pf["logistic"][f]}</td>'
+        f'<td class="mono">{_pf["depth3_tree"][f]}</td><td class="mono">{_pf["repro_m4"][f]}</td></tr>'
+        for f in sorted(_frows, key=lambda k: -_pf["model"][k]))
+    boundary_0022 = (f'<p><strong>Searched on real files, the boosted recipe and the linear rule are the same rule: '
+                     f'<span class="mono">{rsv["verdict"]}</span></strong> (preregistration 0022, chain entry 22, read by its '
+                     f'own frozen reader, which recounts every reading from the banked score vectors). The question 0021 deferred: '
+                     f'0014\'s roster verbatim — 35 candidates over seven heads — searched INSIDE 0021\'s {_bs["fit_rows"]}-row real '
+                     f'fit block ({_bs["fit_source_chunks"]} plaintexts of 0018\'s five pinned real files), each head selecting on a '
+                     f'chunk-rule holdout, fitting its winner once on the whole block and scoring once on the same '
+                     f'{_bs["n_real_rows"]} real-family rows, with every baseline head floored at 0021\'s reading so the search could '
+                     f'only raise the bar. The model head selected {_sel["model"]} (holdout {_hold["model"][_sel["model"]]} against '
+                     f'{_run["model"]}\'s {_hold["model"][_run["model"]]}, a gap of {_gap["model"]}); the logistic head '
+                     f'{_sel["logistic"]}, the depth-3 head {_sel["depth3_tree"]}, the deep-tree head {_sel["deep_tree"]}. '
+                     f'<strong>The searched model reads {rsv["model_real_top1"]} and the searched logistic {_rt["logistic"]}</strong> '
+                     f'on the same rows: a searched margin of {_fs["searched_margin_frozen"]} where {_bs["margin"]} was required, '
+                     f'{rsv["model_real_correct"]} correct against {_bs["min_correct_real_frozen"]} needed, short by {_short} rows. '
+                     f'<strong>The search moved nothing</strong>: over 0021\'s unsearched readings the model gained {_gain["model"]}, '
+                     f'the logistic {_gain["logistic"]}, the depth-3 tree {_gain["depth3_tree"]}; the searched model sits '
+                     f'{abs(_fs["model_leads_0021_unsearched_model_rows"])} rows below 0021\'s unsearched M4 on the scored rows while '
+                     f'winning the holdout. On the builder\'s corpus the identical search (0014) had moved the model by '
+                     f'{_g14.get("model_gain_over_incumbent")} and the logistic by {_g14.get("logistic_gain_over_0003_refit")}. '
+                     f'Under a macro-averaged selection rule the model head would have chosen {_macro["model"]} (a flag, not a '
+                     f'verdict), which the reproduction clause pins to 0021\'s {_ref["repro_m4"]}. {_fs["families_clearing"]} of 5 '
+                     f'families clear; the logistic leads the model outright on {" and ".join(_ll)}. Four reproduction arms refit on '
+                     f'the same block land on 0021\'s banked values with drift 0.0; the null control reads {_rt["null"]} on the real '
+                     f'rows against chance {rsa["chance_accuracy"]}; no arm at its cap; the selection stage gathered '
+                     f'{rss["scored_rows_gathered_in_selection"]} scored rows. Cost: selection {_sc["wall_seconds_this_invocation"]} s '
+                     f'wall, confirmation {_cc["wall_seconds_this_invocation"]} s, {_both} s in all on one launch per stage. The sealed '
+                     f'file expected this verdict, more likely than not, for a reason that turned out wrong: it expected the searched '
+                     f'baseline to gain more than the model, as it had on the builder corpus; neither gained. '
+                     f'<strong>An in-distribution reading on real content, not a transfer reading.</strong> The recipe excuse is '
+                     f'closed on this roster at this budget; the budget excuse — a scaling curve on real plaintexts — is the next '
+                     f'preregistration, not a claim. Nothing here revises 0003, 0014, 0015, 0016, 0017, 0018, 0019 or 0021, and '
+                     f'nothing here establishes a buyer.</p>'
+                     f'<table><thead><tr><th>head</th><th>selected</th><th>holdout top-1</th><th>runner-up</th>'
+                     f'<th>0021 unsearched</th><th>searched, real rows</th><th>correct rows</th><th>gain from search</th></tr>'
+                     f'</thead><tbody>{_head_rows}</tbody></table>'
+                     f'<table><thead><tr><th>family</th><th>fit rows</th><th>scored rows</th><th>searched model</th>'
+                     f'<th>searched logistic</th><th>searched depth-3 tree</th><th>0021 M4 refit</th></tr>'
+                     f'</thead><tbody>{_fam_rows}</tbody></table>')
+
 # ---------------------------------------------------------------- seed panel
 if seeds:
     slopes = [curve["slope"]] + [d["slope"] for _, d in seeds]
@@ -609,7 +693,7 @@ protocol returns <span class="mono">CARVE_FAILS</span>: within-size top-1
 (margin below the 0.05 bar), and a 4096-trained model transfers at {carve["transfer_top1"]} —
 chance. The byte-identity ceiling barely moves across carve sizes, so this is a modelling failure
 and is reported as one. Two learned byte-sequence attempts (preregs 0009, 0010) did not rescue it.</p>
-{boundary_2048}{boundary_0012}{boundary_0014}{boundary_0015}{boundary_0016}{boundary_0017}{boundary_0018}{boundary_0020}{fam2048_table}
+{boundary_2048}{boundary_0012}{boundary_0014}{boundary_0015}{boundary_0016}{boundary_0017}{boundary_0018}{boundary_0020}{boundary_0022}{fam2048_table}
 </div>
 <div class="panel good">
 <p><strong>And the leak correction ran against us.</strong> When an adversarial audit found source
