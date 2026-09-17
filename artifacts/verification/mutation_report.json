@@ -68,6 +68,10 @@
       "detected": 63,
       "total": 63
     },
+    "realsearch4096": {
+      "detected": 80,
+      "total": 80
+    },
     "recipe2048": {
       "detected": 29,
       "total": 29
@@ -4364,10 +4368,730 @@
       "gate": "oob4096",
       "mutation": "a-control-whose-partition-is-the-readers-own-literals-is-detected",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_RECIPE_CLEARS real=0.2 correct=7690 validity=[] margin=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realsearch4096",
+      "mutation": "control-searched-model-clears-both-bars-on-the-real-families",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_RECIPE_FAILS real=0.18 correct=6921 validity=[] margin=[\"margin F (frozen set): the model's correct real-family rows 6921 of 38452 (0.18) is below 6922 (bar 0.13 from logistic + 0.05)\", '",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "one-real-family-row-under-the-frozen-bar-is-REAL_RECIPE_FAILS",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_RECIPE_CLEARS real=0.18 correct=6922 validity=[] margin=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realsearch4096",
+      "mutation": "exactly-min-correct-real-rows-clears",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_RECIPE_FAILS real=0.2 correct=7690 validity=[] margin=['margin S (expanded set): 7690 of 38452 is below 8075 (bar 0.16 from deep_tree + 0.05)']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-model-clearing-the-frozen-bar-but-not-the-expanded-bar-is-REAL_RECIPE_FAILS",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_RECIPE_CLEARS real=0.2 correct=7690 validity=[] margin=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realsearch4096",
+      "mutation": "a-searched-baseline-below-its-0021-floor-cannot-lower-the-bar",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"bars: best_expanded_for_bar=0.1 is not the reader's recomputation 0.12\", \"bars: best_frozen_for_bar=0.1 is not the reader's recomputation 0.1179\"] margin",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-banked-bar-that-ignores-the-0021-floor-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"bars: best_frozen_for_bar=0.1299 is not the reader's recomputation 0.13\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-banked-bar-off-by-0.0001-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"bars: min_correct_real_frozen=6921 is not the reader's recomputation 6922\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-banked-min-correct-off-by-one-row-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_RECIPE_FAILS real=0.1193 correct=4589 validity=[] margin=[\"margin F (frozen set): the model's correct real-family rows 4589 of 38452 (0.1193) is below 6922 (bar 0.13 from logistic + 0.05)",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "the-model-head-selecting-0021s-recipe-reproduces-it-and-cannot-clear",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"reproduction: repro_m4 read 0.2 against 0021's banked 0.1193 (drift 0.0807 > 0.005): the fit block, the scoring set or the machinery is not 0021's\"] marg",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "the-model-head-selecting-0021s-recipe-and-reading-0.20-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"reproduction: aliased_reproductions={'repro_m4': 'model'}, the selected ids give {}\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "an-aliasing-map-that-disagrees-with-the-selected-ids-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"reproduction: repro_l3 read 0.1239 against 0021's banked 0.1179 (drift 0.006 > 0.005): the fit block, the scoring set or the machinery is not 0021's\"] ma",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-reproduction-arm-off-by-0.006-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_RECIPE_CLEARS real=0.2 correct=7690 validity=[] margin=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realsearch4096",
+      "mutation": "a-reproduction-drift-inside-the-tolerance-still-clears",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['null control: shuffled labels read 0.06 on the extension rows and 0.038 on the sealed evaluation rows against chance 0.038462 + 0.01 \u2014 the pipeline leaks",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-leaking-null-control-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['null control: shuffled labels read 0.0486 on the extension rows and 0.038 on the sealed evaluation rows against chance 0.038462 + 0.01 \u2014 the pipeline lea",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-null-control-at-0.0484-passes-and-0.0485-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"null control: the permuted label array hashes to '<hash>', not 0021's sealed '<hash>'\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "null-labels-that-are-not-0021s-permutation-are-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"null control: the null labels are not banked as a permutation of the fit corpus's labels\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "null-labels-not-a-permutation-are-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: null is not the roster's M3 (id, params, params hash, family, scaled, val or head off-recipe)\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-null-control-not-the-selected-model-recipe-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scope: smoke=True; a smoke run is not the preregistered run'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-smoke-artifact-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"scope: preregistration='0021-realfit-4096-rerun', this reader is frozen for 0022-realsearch-4096\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "an-artifact-stamped-with-another-preregistration-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"scope: stage='select', the verdict is read from the confirmatory artifact\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-select-stage-artifact-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.fit_rows_identical_to_a_scored_row=1, must be the measured 0', 'leakage: the embedded selection file differs from the file on disk'] m",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-fit-row-byte-identical-to-a-scored-row-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.fit_chunks_shared_with_ext=1, must be the measured 0', 'leakage: the embedded selection file differs from the file on disk'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-fit-chunk-shared-with-the-evaluation-corpus-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: partition.n_holdout_rows_in_fitpool=1, must be the measured 0', 'leakage: the embedded selection file differs from the file on disk'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-holdout-row-in-the-fit-pool-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"sealed set: partition.holdout_idx_sha256='<hash>', preregistered '<hash>'\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-holdout-that-is-not-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"sealed set: partition.stage_idx_sha256=['<hash>'], preregistered ['<hash>']\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-stage-block-that-is-not-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"sealed set: partition.fit_idx_sha256='<hash>', preregistered '<hash>'\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-fit-block-that-is-not-0021s-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit corpus: fit_corpus.arrays={'X': {'sha256': '<hash>', 'shape': [26346, 1108], 'dtype': 'float32'}, 'y': {'sha256': '<hash>', 'shape': [26346], 'dtype'",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-fit-corpus-array-hash-that-is-not-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"evaluation corpus: ext_corpus.arrays={'X': {'sha256': '<hash>', 'shape': [61409, 1108], 'dtype': 'float32'}, 'y': {'sha256': '<hash>', 'shape': [61409], ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "an-evaluation-corpus-array-hash-that-is-not-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"scope: corpus.cache_X_sha256='<hash>', preregistered '<hash>'\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-builder-cache-feature-hash-that-is-not-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit corpus: fit_corpus.label_histogram=[1026, 1023, 1022, 1017, 1009, 1008, 1006, 1006, 1006, 1022, 1022, 1019, 1011, 1008, 1008, 1007, 1005, 1006, 1002,",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-fit-corpus-label-histogram-that-is-not-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['readings: the banked model summary readings are not the recomputed values'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-banked-real-correct-count-off-by-one-row-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"readings: model.ext_per_family={'c_src': 0.2, 'hexdump': 0.2, 'pe_bin': 0.1999, 'py_src': 0.2001, 'rfc_txt': 0.2, 'rst_doc': 0.2, 'sql': 0.1999, 'xml': 0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-banked-per-family-reading-off-by-0.0001-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: model record top1 0.192 is not its vector's mean 0.1919\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-record-top1-not-its-vectors-mean-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: logistic record per_family is not its vector's per-family means over the sealed scoring set\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-record-per-family-not-its-vectors-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: model per_example_sha256 is not the hash of its banked vector'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-per-example-vector-whose-hash-is-not-the-records-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: model fingerprint '<hash>' is not the one recomputed from the sealed literals\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-fingerprint-that-is-not-the-recomputed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: the ledger's completions are not in the sealed order repro_m1, repro_m4, repro_l3, repro_d1, null, majority, stratified, depth3_tree, logistic, best",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-model-fit-that-was-not-the-last-completion-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: logistic has 2 ledger completions, must be exactly 1', \"order: the model's confirmatory fit was not the last completion (['confirm_logistic'])\"] mar",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "an-arm-scored-twice-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: the artifact banks roles outside the sealed order (extra [], missing ['deep_tree']) - 'scored exactly once, in the sealed order' is a property of th",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-missing-role-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: the artifact banks roles outside the sealed order (extra ['extra'], missing []) - 'scored exactly once, in the sealed order' is a property of the ru",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-role-outside-the-sealed-order-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: the artifact banks roles outside the sealed order (extra ['repro_m4'], missing []) - 'scored exactly once, in the sealed order' is a property of the",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-record-of-an-aliased-reproduction-arm-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"fit: model is not the roster's M3 (id, params, params hash, family, scaled, val or head off-recipe)\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "an-arm-fitted-with-another-recipes-parameters-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: logistic was not fitted on the sealed fit block with the preregistered seed'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "an-arm-fitted-on-rows-that-are-not-the-sealed-block-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['environment: model threads=4, banked 3'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-record-fitted-at-another-thread-count-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: depth3_tree has no integer depth and leaf count'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-tree-record-banking-an-iteration-count-instead-of-a-depth-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scores: ext_fam does not hash to the sealed fam array'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "ext_fam-that-does-not-hash-to-the-sealed-fam-array-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scores: eval_chunk_ids are not the sealed evaluation chunk ids expanded by their sealed row counts, or do not hash to the sealed evaluation g array'] mar",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "permuted-evaluation-chunk-ids-are-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scores: the scores file is absent', 'scores: ext_fam missing, not N_EXT long, or not family indices'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "an-absent-scores-file-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "an-absent-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "READER 0022: NOT RUN \u2014 'test' (stage confirm, filed x, 0 checkpoints). A NOT RUN is not a verdict.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-NOT-RUN-marker-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: fits is not a mapping', \"fit: the artifact banks roles outside the sealed order (extra [], missing ['best_single_feat', 'deep_tree', 'depth3_tree', ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "an-artifact-whose-fits-block-is-a-list-is-VOID-not-a-traceback",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"complete: complete=False, run_finished_utc='2026-09-18T03:00:00Z'; missing ['model']\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "an-incomplete-run-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['fit: repro_m1 has 0 ledger completions, must be exactly 1', 'fit: repro_m4 has 0 ledger completions, must be exactly 1'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "an-artifact-with-no-ledger-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: the selection file is absent from disk'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "an-absent-selection-file-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: selection_sha256 does not equal the sha256 of the selection file on disk'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-selection-file-whose-hash-is-not-the-banked-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: the embedded selection file differs from the file on disk'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "an-embedded-selection-that-differs-from-the-file-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: stage select did not bank two fit-corpus gathers with 0 scored rows each'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-selection-that-gathered-a-scored-row-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: selection did not finish before confirmation started'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-selection-that-finished-after-confirmation-started-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['leakage: confirmatory ledger entry confirm_model bound to a different selection file', \"fit: model has no 'selection_bound' event carrying the selection ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-confirmatory-entry-bound-to-another-selection-file-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['search: head model M3 params hash, params, head or stage is off-roster'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-selection-record-with-a-changed-parameter-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"search: head logistic banked ranking/advance differs from the rule's\", \"search: head logistic selected 'L3' in the selection file and 'L3' in the artifac",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-banked-winner-that-is-not-the-rules-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"search: baseline head logistic candidate L2 is 'infeasible_memory'; a symmetric search with a missing baseline arm is not symmetric\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-baseline-candidate-that-dropped-out-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_RECIPE_CLEARS real=0.2 correct=7690 validity=[] margin=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realsearch4096",
+      "mutation": "two-model-candidates-infeasible-with-evidence-still-clears",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['search: 3 model-side infeasible records, at most 2'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "three-model-candidates-infeasible-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['search: the incumbent is infeasible; the search cannot contain the recipe it was meant to improve on'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "an-infeasible-incumbent-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['search: knob-free head majority must select its single candidate with no stages'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-knob-free-head-with-a-selection-stage-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scope: the banked roster does not hash to the sealed ROSTER_SHA256', \"scope: the banked roster heads are not 0014's sealed heads verbatim\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-roster-with-one-candidate-changed-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scope: the banked roster does not hash to the sealed ROSTER_SHA256', \"scope: roster.protocol.bar={'margin': 0.02}, preregistered {'margin': 0.05}\"] margi",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-protocol-with-a-lower-margin-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['scope: the banked roster does not hash to the sealed ROSTER_SHA256', \"scope: roster.protocol.floors={'majority': 0.0387, 'stratified': 0.0382, 'depth3_tr",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-protocol-with-a-lower-floor-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"reproduction: the banked reference readings are not 0021's sealed ones\"] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-changed-reproduction-reference-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['search: selected_model_id disagrees with selected_ids for the model head'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-selected-model-id-that-disagrees-with-selected-ids-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=['environment: launch_environment is not ok with the sealed environment'] margin=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-launch-environment-with-a-problem-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_RECIPE_CLEARS real=0.2 correct=7690 validity=[] margin=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realsearch4096",
+      "mutation": "the-logistic-head-selecting-0021s-recipe-reproduces-it-and-the-run-still-clears",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_RECIPE_CLEARS real=0.2 correct=7690 validity=[] margin=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realsearch4096",
+      "mutation": "the-depth3-head-selecting-0021s-recipe-reproduces-it-and-the-run-still-clears",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_RECIPE_FAILS real=0.1012 correct=3891 validity=[] margin=[\"margin F (frozen set): the model's correct real-family rows 3891 of 38452 (0.1012) is below 6457 (bar 0.1179 from logistic + 0.0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "every-head-selecting-its-reference-recipe-is-a-clean-REAL_RECIPE_FAILS",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID real=None correct=None validity=[\"reproduction: repro_l3 read 0.1239 against 0021's banked 0.1179 (drift 0.006 > 0.005): the fit block, the scoring set or the machinery is not 0021's\"] ma",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "an-aliased-logistic-reproduction-off-by-0.006-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "partition: control-only [], runner-only ['eval_chunks_shared_with_ext', 'fit_chunks_shared_with_builder', 'fit_chunks_shared_with_ext', 'fit_rows_identical_to_a_scored_row', 'fit_source_chunks_shared_",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realsearch4096",
+      "mutation": "a-control-whose-partition-is-the-readers-own-literals-is-detected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "9 confirmatory and 32 selection records satisfy the reader's record requirements",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realsearch4096",
+      "mutation": "the-readers-record-requirements-hold-against-the-runners-own-banked-values",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "control and fixture agree both ways on 60 artifact keys, 25 selection keys, 12 confirmatory records, 32 selection records and every block; every reader expectation is a key the runner writes",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realsearch4096",
+      "mutation": "the-control-artifact-is-built-from-the-runners-own-output-shape",
+      "observed": "pass"
     }
   ],
-  "detected": 475,
+  "detected": 555,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 475
+  "total_mutations": 555
 }

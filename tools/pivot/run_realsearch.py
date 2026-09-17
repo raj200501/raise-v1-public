@@ -8,7 +8,7 @@ encoder on the 38452 sealed real-family rows at 0.1193 - and a depth-3 tree fitt
 the 0.05 the record demands. 0021's own scope deferred one question: "what a recipe searched on real
 content would do (the search is a different preregistration)". This is that preregistration. Every HEAD
 with a hyperparameter - the model, the logistic, the depth-3 tree, the deep tree - gets 0014's roster
-VERBATIM (eight enumerated recipes, the record's recipe first), selected by 0014's rule on a chunk-rule
+VERBATIM (eight enumerated recipes, 0003's recipe first in every list), selected by 0014's rule in one stage on a chunk-rule
 holdout cut INSIDE the real fit block, and each head's winner is fitted once on the whole fit block and
 scored once on 0018's scoring set, row for row. The bar is OPERATING_RULES 4a's: the best searched
 baseline on the real-family rows, each floored at what 0021 measured for it, plus 0.05.
@@ -234,8 +234,20 @@ def main() -> int:
     if (env["mem_available_gb"] or 0) < P["launch"]["min_mem_available_gb"]:
         launch_env["problems"].append(f"MemAvailable {env['mem_available_gb']} GB < {P['launch']['min_mem_available_gb']}")
     max_load = float(P["launch"].get("max_load1", 2.0))
+    launch_env["loadavg_waited_seconds"] = 0
     if not args.smoke and load1 > max_load:
-        launch_env["problems"].append(f"1-minute load {load1:.2f} > {max_load}: the machine is not idle")
+        # The sealed threshold is unchanged; the runner waits for the box to settle rather than refusing on the first sample.
+        # A confirm launched right after select sees the three fit threads' load decaying for about a minute (0022 pre-freeze
+        # review, runner lens, finding 1), and a refusal there stops an unattended chain for nothing.
+        for _ in range(20):
+            time.sleep(15); launch_env["loadavg_waited_seconds"] += 15
+            load1, load5, load15 = os.getloadavg()
+            if load1 <= max_load:
+                break
+        launch_env["loadavg_1_5_15"] = [round(load1, 2), round(load5, 2), round(load15, 2)]
+        if load1 > max_load:
+            launch_env["problems"].append(f"1-minute load {load1:.2f} > {max_load} after waiting {launch_env['loadavg_waited_seconds']} s: "
+                                          f"the machine is not idle")
     launch_env["ok"] = not launch_env["problems"]
     if launch_env["problems"]:
         print("REFUSING TO LAUNCH: " + "; ".join(launch_env["problems"]), file=sys.stderr)
@@ -473,13 +485,23 @@ def main() -> int:
                            "n_checkpoints": len([f for f in os.listdir(args.workdir) if f.endswith(".json")])}, fh, indent=2)
             return 4
         os.makedirs(os.path.dirname(args.selection_out), exist_ok=True)
-        with open(args.selection_out, "w", encoding="utf-8") as fh:
+        with open(args.selection_out + ".tmp", "w", encoding="utf-8") as fh:
             fh.write(_rrs.canon(out))
+        os.replace(args.selection_out + ".tmp", args.selection_out)
         print(f"[select] wrote {os.path.relpath(args.selection_out, REPO)} in {out['cost']['wall_seconds_this_invocation']}s; "
               f"selected {out['selected_ids']}", flush=True)
         return 0
 
     # =============================================================================== stage confirm
+    if not args.smoke and os.path.exists(args.out):
+        try:
+            _prev = json.load(open(args.out, encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            _prev = {}
+        if _prev.get("complete") is True:
+            print(f"REFUSING: {os.path.relpath(args.out, REPO)} is a complete confirmatory artifact; one confirmation per run "
+                  f"(a relaunch would rewrite launch_number, the timestamps and the ledger)", file=sys.stderr)
+            return 3
     if not os.path.exists(args.selection_out):
         print(f"REFUSING: {os.path.relpath(args.selection_out, REPO)} absent; run --stage select first", file=sys.stderr)
         return 3
@@ -512,7 +534,7 @@ def main() -> int:
             aliased[arm] = head_id
     print(f"[confirm] selected {selected}; reproduction arms aliased to a head's own fit: {aliased}", flush=True)
 
-    started = _utc()
+    started = None                                   # set to the confirm stage's first launch below
     ge = np.asarray(g[ev]); ye = np.asarray(y[ev]); n_eval = int(len(ev)); n_ext = int(len(yx))
     per_ex: dict[str, np.ndarray] = {}
     records: dict[str, dict] = {}
@@ -629,7 +651,9 @@ def main() -> int:
         any_conf = any(f.startswith("confirm_") and f.endswith(".json") for f in os.listdir(args.workdir))
         launch_no = store.launches("confirm", any_conf)
         with open(os.path.join(args.workdir, "launches.jsonl")) as fh:
-            first_launch = json.loads(fh.readline())["utc"]
+            _launches = [json.loads(l) for l in fh if l.strip()]
+        first_launch = next(e["utc"] for e in _launches if e.get("stage") == "confirm")   # this stage's first launch, on every launch
+        started = first_launch
         Xs = np.empty((n_eval + n_ext, ncols), np.float32)
         fill_f32(Xs[:n_eval], X, ev, ncols); Xs[n_eval:] = Xx
         del Xx
@@ -678,6 +702,12 @@ def main() -> int:
                 partition["null_labels_same_multiset"] = bool(np.array_equal(np.sort(y_sh), np.sort(yr_np)))
                 if not args.smoke and not (partition["null_labels_permuted"] and partition["null_labels_same_multiset"]):
                     raise NotRun("the null control's labels are not a permutation of the fit corpus's own labels")
+                # the permuted array must be 0021's, hash for hash: the runner notices a divergent permutation now, not the
+                # reader after the model has been fitted and the sealed set scored again (0022 pre-freeze review, condition lens)
+                want_null = P.get("null_y_shuffled_sha256_expected")
+                if not args.smoke and want_null and partition["null_y_shuffled_sha256"] != want_null:
+                    raise NotRun(f"the null control's permuted labels hash to {partition['null_y_shuffled_sha256'][:12]}..., not 0021's "
+                                 f"sealed {want_null[:12]}...: the generator state or the label array is not 0021's")
                 rd = confirm("null", "null", by_id[selected[mh]], y_sh, "null")
                 if rd and not args.smoke:
                     tol = float(P["null_tolerance"])
@@ -685,7 +715,17 @@ def main() -> int:
                         raise NotRun(f"null control read {rd['ext_top1']} on the extension rows and {rd['builder_eval_top1']} on "
                                      f"the sealed evaluation rows against chance {chance:.6f} + {tol}: the scoring path leaks")
             elif step == mh or step in EXPANDED_HEADS:
-                confirm(step, step, by_id[selected[step]], yr_np, "confirmatory")
+                rd = confirm(step, step, by_id[selected[step]], yr_np, "confirmatory")
+                # an aliased reproduction arm is this head's own fit; on a baseline head the runner applies the same tolerance
+                # it applies to a fitted arm, before the model is fitted; on the model head only the reader can (as VOID)
+                if rd and not args.smoke and step != mh:
+                    for arm, hid in aliased.items():
+                        if hid == step:
+                            drift = round(abs(rd["ext_real_top1"] - float(P["reference_top1"][arm])), 6)
+                            if drift > float(P["reproduction_tolerance"]):
+                                raise NotRun(f"{step} selected the reference recipe of {arm} and read {rd['ext_real_top1']} against "
+                                             f"0021's banked {P['reference_top1'][arm]} (drift {drift} > {P['reproduction_tolerance']}): "
+                                             f"the fit block, the scoring set or the machinery is not 0021's")
             else:
                 raise NotRun(f"unknown order step {step!r}")
         ci = {}

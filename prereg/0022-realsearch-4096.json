@@ -1,13 +1,13 @@
 {
   "id": "0022",
   "slug": "realsearch-4096",
-  "title": "Symmetric recipe search on REAL content at 4096: does a recipe searched on the five pinned real files clear the best searched trivial baseline on the same rows by 0.05? 0014's roster verbatim - eight enumerated recipes for the model, the logistic, the depth-3 tree and the deep tree, the record's recipe first - selected by 0014's rule on a chunk-rule holdout cut inside 0021's 26346-row real fit block, each head's winner fitted once on the whole fit block and scored once on 0018's scoring set. Clause: the model's correct rows over the 38452 real-family rows against the best searched baseline head, each floored at 0021's banked reading of it, plus 0.05 (OPERATING_RULES 4a; 0014's frozen and expanded bars). Four reproduction arms tie the run to 0021's banked numbers.",
+  "title": "Symmetric recipe search on REAL content at 4096: does a recipe searched on the five pinned real files clear the best searched trivial baseline on the same rows by 0.05? 0014's roster verbatim - eight enumerated recipes for the model, the logistic, the depth-3 tree and the deep tree, 0003's recipe first in every list as 0014 listed them - selected by 0014's rule in a single stage on a chunk-rule holdout cut inside 0021's 26346-row real fit block, each head's winner fitted once on the whole fit block and scored once on 0018's scoring set. Clause: the model's correct rows over the 38452 real-family rows against the best searched baseline head, each floored at 0021's banked reading of it, plus 0.05 (OPERATING_RULES 4a; 0014's frozen and expanded head sets, 0021's floors and count arithmetic). Four reproduction arms tie the run to 0021's banked numbers.",
   "scope": {
-    "one_line": "One fit corpus (0021's, sealed by array hash: 26346 rows, 1029 chunks of the chunks of 0018's five pinned real blobs that its sealed evaluation corpus does not use), one seed (20260825), one roster (0014's, 35 candidates over seven heads, verbatim), one holdout rule (fit-block chunk id mod 5 == 0: 5291 rows, 206 chunks), one selection stage on the other 21055 rows, one confirmatory fit per head on all 26346 rows, one scoring set (0018's and 0021's: the sealed 260000-row evaluation set plus the whole 61409-row extension corpus), one scoring per role.",
+    "one_line": "One fit corpus (0021's, sealed by array hash: 26346 rows; 1035 chunks selected of the chunks of 0018's five pinned real blobs that its sealed evaluation corpus does not use, 1029 of them carrying rows, which is the count every sealed block and reader literal uses), one seed (20260825), one roster (0014's, 35 candidates over seven heads, verbatim), one holdout rule (fit-block chunk id mod 5 == 0: 5291 rows, 206 chunks), one selection stage (0014's selection rule in a single stage) on the other 21055 rows, one confirmatory fit per head on all 26346 rows, one scoring set (0018's and 0021's: the sealed 260000-row evaluation set plus the whole 61409-row extension corpus), one scoring per role.",
     "why_this_preregistration_exists": "0021 read REAL_FIT_FAILS with the model at 0.1193 (4587 of 38452 real-family rows), the standardised logistic at 0.1179, the depth-3 tree at 0.0929 and the incumbent at 0.1012, every one of them 0014's or 0003's recipe fitted UNSEARCHED on real content. 0021's scope says what it does not measure: 'what a recipe searched on real content would do (the search is a different preregistration)'. The rival explanation for 0021's fail - 'the recipes were tuned on the builder's content and a recipe tuned on real content would clear' - is open, and this run closes it the way 0014 closed the same explanation on builder content: symmetrically, so that the baselines get the same search the model gets.",
     "why_the_search_is_symmetric": "A search that tunes the model and freezes the baselines privileges the model (0012's and 0014's reason, unchanged). Every head with a hyperparameter has the same roster size and the same selection rule on the same holdout; the knob-free heads (majority, stratified, a depth-1 tree) are fitted once at the confirmatory stage. A searched baseline can only RAISE the bar: each head's contribution is max(its searched confirmatory reading, 0021's banked reading of its reference recipe on the same rows), so the bar can never sit below where 0021 measured it.",
-    "what_this_is_and_is_not": "An IN-DISTRIBUTION reading on real content, as 0021 was: the fit block and the scored chunks are cut from the same five pinned blobs and share no byte, no chunk index, no chunk id and no source-chunk hash (0021's four disjointness levels, measured again by the runner, which digests every scored feature row and refuses if any fit row is byte-identical to one). The holdout is cut INSIDE the fit block, so selection never sees a scored row; the selection file banks that no gathered row is a scored row. A pass says a recipe searched on these files clears the best searched trivial baseline by the record's margin on held-out chunks of the same files; it says nothing about content the model has never seen (0015, 0018, 0019 read that). A fail says the search does not close 0021's gap at this budget on this content - a bound on the roster and the budget together.",
-    "the_bar_and_why_the_logistic_is_in_it": "0021's clause excluded the logistic from its floor (four trivial baselines) and banked L3 as a sister recipe; under that floor the model led by 0.0264 against 0.05 needed. 0014's bar - the one this run inherits - counts the searched logistic in the FROZEN set, and OPERATING_RULES 4a lists logistic regression among the trivial baselines. So this run's bar is the strictest reading in the record: the model must clear the best of a searched logistic, a searched depth-3 tree, majority and the label prior by 0.05 on the real-family rows, and under the EXPANDED set also a depth-1 tree and a searched deep tree. Under 0021's unsearched readings the frozen bar is already the logistic at 0.1179, so the model needs at least 6457 correct rows before the search moves anything, against 0021's 4587.",
+    "what_this_is_and_is_not": "An IN-DISTRIBUTION reading on real content, as 0021 was: the fit block and the scored chunks are cut from the same five pinned blobs and share no blob chunk index (by construction in tools/pivot/corpus_realfit.py, proved by `corpus_realfit.py --disjoint`), no chunk id, no source-chunk hash and no feature row (these three re-measured by the runner, which digests every scored feature row and refuses if any fit row is byte-identical to one). Overlapping content between distinct 32768-byte chunks is not excluded by those levels; 0021's near-duplicate measurement of exactly that stands and is not repeated here. The holdout is cut INSIDE the fit block, so selection never sees a scored row; the selection file banks that no gathered row is a scored row. A pass says a recipe searched on these files clears the best searched trivial baseline by the record's margin on held-out chunks of the same files; it says nothing about content the model has never seen (0015, 0018, 0019 read that). A fail says the search does not close 0021's gap at this budget on this content - a bound on the roster and the budget together.",
+    "the_bar_and_why_the_logistic_is_in_it": "0021's clause excluded the logistic from its floor (four trivial baselines) and banked L3 as a sister recipe; under that floor the model led by 0.0264 against 0.05 needed. 0014's bar - the one this run inherits - counts the searched logistic in the FROZEN set, and OPERATING_RULES 4a lists logistic regression among the trivial baselines. So this run's bar is the strictest bar the real-content thread has used: the model must clear the best of a searched logistic, a searched depth-3 tree, majority and the label prior by 0.05 on the real-family rows, and under the EXPANDED set also a depth-1 tree and a searched deep tree. Under 0021's unsearched readings the frozen bar is already the logistic at 0.1179, so the model needs at least 6457 correct rows before the search moves anything, against 0021's 4587.",
     "corpus_fit": {
       "built_by": "tools/pivot/corpus_realfit.py (imports the label factory from tools/pivot/corpus_ext.py, which imports it from tools/pivot/corpus.py: the same 26 configurations, the same 32768-byte chunks, the same mid-stream 4096-byte carve, the same 1108 features)",
       "n_rows": 26346,
@@ -34,7 +34,17 @@
         "rfc_txt": 0.9778,
         "rst_doc": 0.9567
       },
-      "reused_from": "0021 verbatim; the runner refuses any array that does not hash to the sealed block"
+      "n_chunks_selected": 1035,
+      "n_chunks_with_rows": 1029,
+      "chunks_with_rows_per_family": {
+        "c_src": 24,
+        "pe_bin": 203,
+        "py_src": 672,
+        "rfc_txt": 90,
+        "rst_doc": 40
+      },
+      "convention": "n_chunks and chunks_per_family above are the manifest's SELECTED counts (0021's corpus_fit verbatim); six selected pe_bin and py_src chunks carry no row, so the sealed fit_corpus block, the reader and every count in this document's clauses use the with-rows counts (n_chunks_with_rows, chunks_with_rows_per_family)",
+      "reused_from": "0021 verbatim plus the convention note; the runner refuses any array that does not hash to the sealed block"
     },
     "corpus_scored": {
       "what": "0018's scoring set, row for row: the sealed 260000-row evaluation set of the builder's eight families (the reverse reading) and the whole 61409-row extension corpus (the clause is over its five real families, 38452 rows; the three synthetic families are a flag)",
@@ -48,10 +58,10 @@
         "sql": 7357,
         "xml": 7800
       },
-      "already_scored_by": "0018, whose banked readings for the same rows under a builder-fitted M4 are the comparison",
-      "reused_from": "0021 verbatim"
+      "already_scored_by": "0018 and 0021; 0021's banked readings under the same recipes on the same fit block are the floors, the reproduction references and the comparison flags",
+      "reused_from": "0021 verbatim, except already_scored_by"
     },
-    "seed": "20260825 throughout: the grouped split, the fit block's row permutation (0021's), the recipes' own seed, the null-label permutation (0021's array, hash sealed). The holdout is a RULE on chunk ids, not a draw.",
+    "seed": "20260825 throughout: the grouped split, the fit block's row permutation (0021's), the recipes' own seed (HGB random_state = seed; trees and dummies random_state = 0, as 0014's roster states; M8's chunk-grouped validation split seed + 1), the null-label permutation (0021's array, hash sealed). The holdout is a RULE on chunk ids, not a draw.",
     "holdout": {
       "rule": "fit-block chunk_id % 5 == 0",
       "n_rows": 5291,
@@ -77,12 +87,25 @@
         "rfc_txt": 0.0885,
         "rst_doc": 0.0393
       },
-      "imbalance_stated_in_advance": "the holdout inherits the fit corpus's imbalance: py_src carries 0.656 of the holdout rows and c_src 0.0246 (5 chunks). Selection ranks by the holdout MIXTURE, as 0014 ranked by its mixture holdout, so a recipe is selected mostly on py_src and pe_bin rows and read on a near-balanced scoring set. That is the design, stated before the data: a per-family selection would be eight searches with eight winners, and the question is one recipe."
+      "imbalance_stated_in_advance": "the holdout inherits the fit corpus's imbalance: py_src carries 0.656 of the holdout rows and c_src 0.0246 (5 chunks). Selection ranks by the holdout MIXTURE. 0014 ranked by a mixture too, but 0014's holdout was family-balanced by construction; this one is not, and the ranking is dominated by py_src and pe_bin rows while the clause is a near-balanced mixture over five families. The rule is symmetric (every head is ranked on the same rows), so it is not unfair, and it is stated before the data. The alternative a reviewer would propose - ranking each head by the macro-average of its five per-family holdout top-1s - is not adopted: c_src has five holdout chunks, and a macro rule would hand 130 rows a fifth of the weight. The reader banks, as an informational flag from the selection records, each head's winner under that macro-average rule (selected_ids_under_macro_average) and the winner's lead over the runner-up on the holdout (selection_gap_by_head), so a reader can see whether the weighting decided anything.",
+      "early_stopping_split_on_the_stage_block": {
+        "n_validation_rows": 2106,
+        "n_validation_chunks": 768,
+        "validation_chunks_also_in_training": 768,
+        "contamination": 1.0,
+        "validation_rows_per_family": {
+          "c_src": 31,
+          "pe_bin": 395,
+          "py_src": 1424,
+          "rfc_txt": 185,
+          "rst_doc": 71
+        }
+      }
     },
     "selection_never_sees_a_scored_row": "stage select reads only the fit corpus; every gather is banked with its row count and index hash and with the row-identity scan's count of scored rows in the fit corpus (0), and the selection file's sha256 is written into every confirmatory ledger entry.",
     "design": {
-      "stage_select": "for each of the four searched heads, every candidate is fitted on the fit pool (21055 rows, 823 chunks) and scored on the holdout; ranked by holdout top-1 at 4 decimals, ties to the lower roster index; keep 1. Knob-free heads select their single candidate.",
-      "stage_confirm": "in the sealed confirm_order: the four reproduction arms (each skipped, and banked as aliased, when its head selected the reference recipe, so no recipe is fitted twice on the same rows), the null control (the SELECTED model recipe on the whole fit block with 0021's permuted labels), majority, stratified, best_single_feat, the depth3_tree winner, the deep_tree winner, the logistic winner, and the model winner LAST; each fitted once on all 26346 fit-block rows in 0021's order and scored once on the 321409-row scoring set.",
+      "stage_select": "0014's selection rule in a single stage: for each of the four searched heads, every candidate is fitted on the fit pool (21055 rows, 823 chunks) and scored on the holdout; ranked by holdout top-1 at 4 decimals, ties to the lower roster index; keep 1. Knob-free heads select their single candidate.",
+      "stage_confirm": "in the sealed confirm_order, which the reader enforces on the ledger: the four reproduction arms repro_m1, repro_m4, repro_l3, repro_d1 (each skipped, and banked as aliased, when its head selected the reference recipe, so no recipe is fitted twice on the same rows), the null control (the SELECTED model recipe on the whole fit block with 0021's permuted labels), majority, stratified, the depth3_tree winner, the logistic winner, best_single_feat, the deep_tree winner, and the model winner LAST; each fitted once on all 26346 fit-block rows in 0021's order and scored once on the 321409-row scoring set.",
       "readings": "0021's readings shape for every confirmatory role: the real-family count and top-1, per-family, subsets, the reverse reading on the builder's evaluation set; the bar arithmetic is banked by the runner and recomputed by the reader from the vectors."
     },
     "rival_explanations_run_as_arms": [
@@ -100,11 +123,11 @@
         "floor_feat1": 1.1,
         "null": 84.3
       },
-      "estimate_stated_in_advance": "selection: 8 model recipes at roughly 0.8 x 0021's 280 s (about 30 min), 8 logistic recipes at roughly 0.8 x 58 s (about 8 min), 16 tree recipes (about 3 min); confirmation: up to four reproduction arms, the null, six baseline heads and the model (about 20 min). About one hour on this machine at three threads; COULD NOT VERIFY until run - the banked seconds are the measurement.",
+      "estimate_stated_in_advance": "selection: 8 model recipes at roughly 0.8 x 0021's 280 s (about 30 min), 8 logistic recipes at roughly 0.8 x 58 s (about 6 min), 16 tree recipes (about 3 min); confirmation: up to four reproduction arms, the null, six baseline heads and the model (about 20 min). About one hour on this machine at three threads; COULD NOT VERIFY until run - the banked seconds are the measurement.",
       "checkpoints": "artifacts/pivot/realsearch_4096_ckpt; resume by relaunching the identical command"
     },
-    "expected_outcome_stated_in_advance": "REAL_RECIPE_FAILS, more likely than not. Under 0021's unsearched readings the frozen bar is the logistic at 0.1179 and the model sits 0.0014 above it against 0.05 needed. On the builder corpus 0014's search moved the model by 0.0489 (0.2395 to 0.2884) and the logistic head by 0.0965 (0.1352 to 0.2317): the searched baseline gained MORE than the model there. For a pass here the model head has to gain about 0.05 more from the search than the logistic head does, on 21055 rows. The number of interest is the searched margin itself, which may be negative - a searched linear rule ahead of a searched boosted model on real content would be a finding about the task, published at full size. A pass would say the record's recipe was the wrong recipe for real content, and would be published at the same size.",
-    "what_a_fail_would_mean_for_the_record": "0021's reading stands and gains a searched sibling: on real content, the best boosted recipe on 0014's roster does not beat the best searched linear rule or depth-3 tree by the record's margin. The manufactured-label curve (0003, 0014) is not revised; the real-content thread (0018-0022) closes its last open excuse.",
+    "expected_outcome_stated_in_advance": "REAL_RECIPE_FAILS, more likely than not. Under 0021's unsearched readings the frozen bar is the logistic at 0.1179 and the model sits 0.0014 above it against 0.05 needed. On the builder corpus 0014's search moved the model by 0.0489 (0.2395 to 0.2884) and the logistic head by 0.0965 (0.1352, 0014's in-run refit of L1, to 0.2317; 0.0925 against 0003's banked 0.1392, which was 0014's floor): the searched baseline gained MORE than the model there. For a pass here the model head has to gain about 0.05 more from the search than the logistic head does, on 21055 rows. One consequence of the reproduction clause is structural and stated here: if the model head selects M4 or M1, its confirmatory fit IS the reproduction arm and is pinned to 0021's 0.1193 or 0.1012 by the 0.005 tolerance, so the verdict is REAL_RECIPE_FAILS by construction - the correct reading of 'the search did not move the model'. A pass is reachable only through M2, M3, M5, M6, M7 or M8; the same holds for the logistic head and L3 and the depth-3 head and D1, which cannot RAISE their bars above 0021's floors when selected. The number of interest is the searched margin itself, which may be negative - a searched linear rule ahead of a searched boosted model on real content would be a finding about the task, published at full size. A pass would say the record's recipe was the wrong recipe for real content, and would be published at the same size in the same places.",
+    "what_a_fail_would_mean_for_the_record": "0021's reading stands and gains a searched sibling: on real content, the best boosted recipe on 0014's roster does not beat the best searched linear rule or depth-3 tree by the record's margin. The manufactured-label curve (0003, 0014) is not revised; the real-content thread (0018-0022) closes the recipe excuse. The budget excuse - a scaling curve on real plaintexts - stays open, as what_this_does_not_cover says.",
     "what_this_does_not_cover": "Any carve size other than 4096; any recipe off 0014's roster; transfer to content the model has never seen; a per-family recipe; a scaling curve on real plaintexts (a different preregistration); anything about a buyer.",
     "flags_stated_in_advance": [
       "frozen_reading_clears and expanded_reading_clears (each a clause; the verdict needs both)",
@@ -112,8 +135,11 @@
       "searched_margin_frozen and searched_margin_expanded: model minus bar, to 6 decimals, may be negative",
       "gain_from_search_by_head: each searched head's confirmatory reading minus 0021's reading of its reference recipe",
       "selected_ids; whether any reproduction arm was aliased; each reproduction drift",
+      "selection_gap_by_head: each searched head's winner minus its runner-up on the holdout, from the banked selection records",
+      "selected_ids_under_macro_average: each searched head's winner had the five per-family holdout top-1s been averaged (informational; the sealed rule is the mixture)",
       "the reverse reading on the builder's evaluation set for every role; the synthetic families; the subsets"
     ],
+    "sealed_set_disclosure": "This is the ninth preregistration scored on 0003's sealed evaluation set (0003 12 times, 0006 for top-k, 0014 10 plus 10 in a smoke, 0015 27 plus smokes, 0016 258 plus smokes, 0017 10 plus smokes, 0018 4, 0021 11 plus 6 in a smoke); 0022 adds up to 12 scorings of the sealed evaluation set and of the 61409-row extension corpus (fewer when a reproduction arm is aliased), all confirmatory, and uses the sealed evaluation set only as the reverse reading. Its pre-freeze smoke scored the whole sealed evaluation set 9 more times with tiny fits (the smoke's confirmatory roles), and 832 of the 61409 extension rows (520 of them clause rows, k = 0..3 of every family); the selection smoke scored only the smoke fit corpus's holdout. The readings are committed in tests/fixtures/realsearch_runner_shape.json and are used for nothing but the gate's control shape.",
     "roster": {
       "protocol": {
         "seed": 20260825,
@@ -236,7 +262,7 @@
           "repro_l3": 0.1179,
           "repro_d1": 0.0929
         },
-        "reference_source": "artifacts/pivot/realfit_4096_rerun.json ext_real_top1: real_incumbent (M1), real_model (M4), real_logistic (L3), floor_tree3 (D1), each fitted on this fit block in this order and scored on this scoring set; a searched head that selects its reference recipe reproduces it with its own confirmatory fit",
+        "reference_source": "artifacts/pivot/realfit_4096_rerun.json ext_real_top1: real_incumbent (M1), real_model (M4), real_logistic (L3), floor_tree3 (D1), each fitted on this fit block in 0021's sealed order and scored on this scoring set; a searched head that selects its reference recipe reproduces it with its own confirmatory fit",
         "reproduction_tolerance": 0.005,
         "null_tolerance": 0.01,
         "null_rows": "all",
@@ -880,9 +906,9 @@
             }
           ]
         }
-      ],
-      "heads_source": "prereg/0014-recipe-search-4096.json scope.roster.heads, verbatim (ids, families, params, scaled, val and each candidate's 'why' unchanged); 0014's protocol is replaced by this run's"
+      ]
     },
+    "roster_heads_source": "prereg/0014-recipe-search-4096.json scope.roster.heads, verbatim (ids, families, params, scaled, val and each candidate's 'why' unchanged); 0014's protocol is replaced by this run's",
     "recipes_reference": {
       "incumbent": {
         "id": "M1",
@@ -949,7 +975,13 @@
         "n_source_chunks": 1029,
         "rule": "every row of the fit corpus, in the np.random.default_rng(20260825) permutation of range(n_rows), so the recipes' last-10% validation split is a random tenth rather than one family",
         "idx_sha256": "2b5fbaf627f1073bdeb51499c213be18837185414607b314b19f0efb6f5f5469",
-        "sorted_sha256": "551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476"
+        "sorted_sha256": "551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476",
+        "order_rule": "np.random.default_rng(20260825).permutation of the fit corpus's rows, so the recipes' last-10% validation split is a random tenth rather than one family (0021's fit block)"
+      },
+      "source_chunks": {
+        "n_fit_source_chunks": 1035,
+        "n_ext_source_chunks": 2399,
+        "source": "distinct source-chunk sha256 values behind each corpus, as 0021's runner banked them"
       },
       "holdout": {
         "rule": "fit-block chunk_id % 5 == 0",
@@ -1004,7 +1036,35 @@
           "2f052b240f2b5cbe1a9dbae2d1a74926b1a67644735bef2bc210c294ca84389e"
         ]
       },
-      "early_stopping_split_disclosed": "The two HGB recipes take the LAST 10% of their block's rows as the explicit early-stopping validation split (`val: \"frag\"`, 0003's rule, inherited verbatim). Measured now, before the freeze, as the fraction of validation rows whose source chunk also appears in the training 90%: fit block 1.0, matched block 0.438, chunk-matched block 1.0, repro block 0.8977. The fit corpus carries about 25.6 rows per 32768-byte source chunk and the builder's row-matched block about 1.36, so the real arms' early stopping is validated almost entirely on siblings of its own training rows and the row-matched builder arm's is much less so. This is the second reason builder_chunk_matched exists and the sharper one: because it takes every row of a small number of chunks it sits at 1.0 contamination, the same as the fit block, so it matches the fit corpus on the plaintext budget AND on the character of the early-stopping split, and is therefore the arm the clause's reading should be compared against. builder_matched, at 0.438, matches on rows alone. The recipes are NOT changed to a grouped split: they are 0014's searched winners and 0018's roster entries verbatim, and changing the protocol would break the comparison this run exists to make. The direction of the resulting bias is stated instead, and it runs against the clause: a contaminated validation split lets early stopping run too long, which overfits, which LOWERS the held-out reading on the chunk-disjoint scoring set. It cannot manufacture a pass. It can widen the gap between real_model and builder_matched, so that comparison is read as a lower bound on real_model and not as a point estimate, and every arm's iteration count and whether it stopped at its cap are banked as flags.",
+      "early_stopping_split_disclosed": "The seven frag-validated HGB recipes on the model roster (M1-M7) take the LAST 10 percent of their block's rows, in block order, as the early-stopping validation split; M8 takes a chunk-grouped 10 percent (seed + 1) and is on the roster as the grouped-split probe. Measured here, not assumed: on the 26346-row fit block the last tenth is 2635 rows over 968 chunks, of which 968 also appear in the training nine tenths (contamination 1.0; 0021 measured the same 1.0 on the same block); on the 21055-row stage block it is 2106 rows over 768 chunks, 768 shared (contamination 1.0). A contaminated validation split lets early stopping run long; that lowers a held-out reading rather than raising it, so it cannot manufacture a pass, and the iteration counts and at_iteration_cap are banked flags. The 0014 recipes are not changed: the roster is 0014's verbatim, and the grouped-split question is on it as M8.",
+      "early_stopping_split_measured": {
+        "fit_block": {
+          "n_validation_rows": 2635,
+          "n_validation_chunks": 968,
+          "validation_chunks_also_in_training": 968,
+          "contamination": 1.0,
+          "validation_rows_per_family": {
+            "c_src": 41,
+            "pe_bin": 495,
+            "py_src": 1770,
+            "rfc_txt": 239,
+            "rst_doc": 90
+          }
+        },
+        "stage_block": {
+          "n_validation_rows": 2106,
+          "n_validation_chunks": 768,
+          "validation_chunks_also_in_training": 768,
+          "contamination": 1.0,
+          "validation_rows_per_family": {
+            "c_src": 31,
+            "pe_bin": 395,
+            "py_src": 1424,
+            "rfc_txt": 185,
+            "rst_doc": 71
+          }
+        }
+      },
       "restated_from": "eval, pool and fit_block are 0021's sealed_partition verbatim (the same grouped split, the same fit block row for row); holdout, fit_pool and stage are new and were computed by calling tools/pivot/run_realsearch.py fit_block_partition() on the fit corpus before the freeze"
     },
     "eval_chunk_layout": {
@@ -25799,8 +25859,8 @@
       "checked_against": "artifacts/pivot/ext_corpus_manifest.json and prereg/0018-oob-4096.json scope.ext_chunk_layout"
     },
     "sealed_hashes": {
-      "protocol_sha256": "955eaa6669e479fa02fe231419aab6c51fda7e03fc317f56fa510977c9774eac",
-      "roster_sha256": "0a0e67d2bc281e18ec957c9f3da45455628eaeb64a3fcd16d45dafe08da52d32",
+      "protocol_sha256": "2c512e84e0d39b472be82b427839c557e153c810a7e48a07d27dd25dd18c244b",
+      "roster_sha256": "726f8c9387a2ca08626e5c317bfac96fec347b1598c2d6b413279a58c80185fc",
       "fit_corpus_X_sha256": "d969c7d75f5bc7743e9014908fe1d5e07a4220eacd82c166329bdcb381db8c98",
       "ext_corpus_X_sha256": "c578eaf142dfd776fe2c9433420133ae6b2d304cdd546f2bdbbc50b397c4f5db",
       "note": "the reader carries these as literals; the runner banks roster_sha256 over the same object"
@@ -25902,12 +25962,12 @@
     "confirmatory_complete_one_scoring_per_role": {
       "direction": "equality",
       "threshold": 0,
-      "passes_if": "complete is True; every non-aliased role in confirm_order has a record with status 'fit', the selected (or reference) id, a params hash on the roster, the sealed fit-block hashes, seed 20260825, probe_ok on every refill, the sealed environment, a fit_info matching its estimator family (an iteration count for hgb and logistic, depth and leaf count for trees, nothing for dummies), a fingerprint recomputable from the sealed literals, exactly one 'completed' ledger event preceded by its 'started', and a per-example vector of 260000 + 61409 entries in {0, 1} whose sha256, mean, non-gutenberg mean and per-family means equal the record's; an aliased reproduction arm names the head whose selected id is its reference id and has no record of its own; the model's completion is the LAST confirmatory completion in the ledger. Otherwise VOID."
+      "passes_if": "complete is True; every non-aliased role in confirm_order has a record with status 'fit', the selected (or reference) id, a params hash on the roster, the sealed fit-block hashes, seed 20260825, probe_ok on every refill, the sealed environment, a fit_info matching its estimator family (an iteration count for hgb and logistic, depth and leaf count for trees, a dict - empty in practice - for dummies), a fingerprint recomputable from the sealed literals and the banked selection file's sha256, exactly one 'completed' ledger event preceded by its 'started' and its 'selection_bound', and a per-example vector of 260000 + 61409 entries in {0, 1} whose sha256, mean, non-gutenberg mean and per-family means equal the record's; an aliased reproduction arm names the head whose selected id is its reference id and has no record of its own; the completions are in the sealed order and the model's is the LAST confirmatory completion in the ledger. Otherwise VOID."
     },
     "reproduces_0021": {
       "direction": "lower_is_better",
       "threshold": 0.005,
-      "passes_if": "For each reproduction arm, its real-family top-1 (its own record's, or its aliased head's) is within 0.005 of 0021's banked value: repro_m1 0.1012, repro_m4 0.1193, repro_l3 0.1179, repro_d1 0.0929. Failure is VOID: the run is not fitting 0021's block through 0021's machinery, so any margin would be drift in disguise. The drifts are banked. The trees are deterministic and are expected to reproduce exactly."
+      "passes_if": "For each reproduction arm, its real-family top-1 (its own record's, or its aliased head's) is within 0.005 of 0021's banked value: repro_m1 0.1012, repro_m4 0.1193, repro_l3 0.1179, repro_d1 0.0929. Failure is VOID: the run is not fitting 0021's block through 0021's machinery, so any margin would be drift in disguise. For a non-aliased arm the runner files NOT RUN if it sees the drift first, before the roles that matter; an aliased arm is checked only by the reader, as VOID. The drifts are banked. The trees are deterministic and are expected to reproduce exactly."
     },
     "null_control": {
       "direction": "lower_is_better",
@@ -25942,7 +26002,7 @@
     "margin_arithmetic": {
       "direction": "equality",
       "threshold": 0.05,
-      "passes_if": "Both margin clauses compare integer counts against ceil(N x (bar + 0.05) - 1e-9) on bars banked to 4 decimals; a count equal to the ceiling passes and one row fewer fails; the binary-float representation of a difference decides nothing."
+      "passes_if": "Both margin clauses compare integer counts against ceil(N x (bar + 0.05) - 1e-9) on bars banked to 4 decimals (0021's convention); a count equal to the ceiling passes and one row fewer fails; the binary-float representation of a difference decides nothing. Stated in advance: because the bar is a 4-decimal fraction and the model is counted exactly, the rounding of the bar can move the needed count by one row in either direction relative to a count-based bar (at the logistic floor, 6457 against 4535 + 1923 = 6458); the sealed rule is the one above."
     },
     "clause_per_family_informational": {
       "direction": "informational",
@@ -26006,6 +26066,42 @@
       "json_path": "$.shuffled_label_accuracy_ext"
     },
     {
+      "name": "shuffled_label_accuracy_eval",
+      "unit": "the null control on the sealed evaluation rows",
+      "source_artifact": "artifacts/pivot/realsearch_4096_verdict.json",
+      "json_path": "$.shuffled_label_accuracy_eval"
+    },
+    {
+      "name": "ext_per_family by role",
+      "unit": "fraction correct per extension family per confirmatory role",
+      "source_artifact": "artifacts/pivot/realsearch_4096_verdict.json",
+      "json_path": "$.ext_per_family"
+    },
+    {
+      "name": "builder_eval_top1 by role",
+      "unit": "the reverse reading on the sealed evaluation set per confirmatory role",
+      "source_artifact": "artifacts/pivot/realsearch_4096_verdict.json",
+      "json_path": "$.builder_eval_top1"
+    },
+    {
+      "name": "aliased_reproductions",
+      "unit": "map of reproduction arm to the head whose own fit is its reproduction",
+      "source_artifact": "artifacts/pivot/realsearch_4096_verdict.json",
+      "json_path": "$.aliased_reproductions"
+    },
+    {
+      "name": "reproduction_top1",
+      "unit": "per reproduction arm, the real-family top-1 the reader recomputed",
+      "source_artifact": "artifacts/pivot/realsearch_4096_verdict.json",
+      "json_path": "$.reproduction_top1"
+    },
+    {
+      "name": "selected_model_id",
+      "unit": "roster id of the model head's selected recipe",
+      "source_artifact": "artifacts/pivot/realsearch_4096_verdict.json",
+      "json_path": "$.selected_model_id"
+    },
+    {
       "name": "validity_failed_clauses",
       "unit": "list of strings; non-empty is VOID",
       "source_artifact": "artifacts/pivot/realsearch_4096_verdict.json",
@@ -26019,8 +26115,8 @@
     }
   ],
   "arms": [
-    "SYMMETRIC SEARCH ON REAL CONTENT: four searched heads (model, logistic, depth3_tree, deep_tree) with 0014's eight enumerated recipes each and the record's recipe first; one stage fits all eight on the 21055-row fit pool and scores them on the 5291-row holdout; the winner (ties to the lower index) is the head's recipe. The three knob-free heads skip selection.",
-    "CONFIRMATORY, ONE SCORING PER ROLE, MODEL LAST: the four reproduction arms (M1, M4, L3, D1 on the whole fit block, each aliased to its head's own fit when that head selected it), the null control with the selected model recipe, majority, stratified, best_single_feat, the depth3_tree winner, the deep_tree winner, the logistic winner, and the model winner last - each fitted once on 0021's 26346-row fit block and scored once on 0018's scoring set.",
+    "SYMMETRIC SEARCH ON REAL CONTENT: four searched heads (model, logistic, depth3_tree, deep_tree) with 0014's eight enumerated recipes each, 0003's recipe first in every list (M1, L1, D1, T1) as 0014 listed them - the reference recipes this run reproduces are M1, M4, L3 and D1; one stage fits all eight on the 21055-row fit pool and scores them on the 5291-row holdout; the winner (ties to the lower index) is the head's recipe. The three knob-free heads skip selection.",
+    "CONFIRMATORY, ONE SCORING PER ROLE, MODEL LAST: the four reproduction arms (M1, M4, L3, D1 on the whole fit block, each aliased to its head's own fit when that head selected it), the null control with the selected model recipe, majority, stratified, the depth3_tree winner, the logistic winner, best_single_feat, the deep_tree winner, and the model winner last - each fitted once on 0021's 26346-row fit block and scored once on 0018's scoring set.",
     "THE BASELINES CAN ONLY RAISE THE BAR: each baseline head's contribution is max(its searched confirmatory real-family top-1, 0021's banked reading of its reference recipe); the model has no floor.",
     "SELECTION CANNOT SEE A SCORED ROW: the holdout is inside the fit block, the fit block is byte-disjoint from the scoring set by measurement, the selection file banks every gather, and its hash is in every confirmatory ledger entry.",
     "VALIDITY FIRST: a wrong corpus, set, roster or protocol, a leaking selection, a baseline that dropped out, a role scored twice, a reproduction outside 0.005, a leaking null control or a bar that does not recompute is VOID and brackets nothing.",
@@ -26030,7 +26126,7 @@
     "Any margin clause failing is REAL_RECIPE_FAILS, published at the same size as a pass would have been, in VERDICT.md, README.md, the outbound documents, DILIGENCE.md and the evidence page, with the searched margins, the gains from search by head and families_clearing beside it; a run in which only margin_frozen passes is REAL_RECIPE_FAILS.",
     "No sealed parameter, roster entry, corpus hash, row count, floor or bar changes after the freeze; a defect found afterwards is a new preregistration (0013's, 0019's and 0021's precedent), never an edit to a frozen file.",
     "A validity or control failure is VOID: the clause is named, nothing is counted in either direction; a VOID run may be resumed from its checkpoints under the identical invocation and is never re-parameterised.",
-    "NOT RUN is reachable only before the first confirmatory checkpoint that touches the model, and only by mechanical rules (a failed launch precondition; three consecutive launches of a stage with no new checkpoint; selection fit seconds above caps.selection_fit_seconds; a non-aliased reproduction arm outside 0.005; the null control above chance + 0.01); it is filed as artifacts/pivot/realsearch_4096_not_run.json, the reader prints it and exits 2, and nothing is re-scoped to fewer candidates, a smaller block or a lower bar.",
+    "NOT RUN is reachable only before the model role's confirmatory checkpoint, and only by mechanical rules (three consecutive launches of a stage with no new checkpoint; selection fit seconds above caps.selection_fit_seconds; a non-aliased reproduction arm outside 0.005, or an aliased arm on a baseline head outside 0.005 right after that head's fit; the null control's permuted labels not hashing to 0021's sealed array, or the null control above chance + 0.01); it is filed as artifacts/pivot/realsearch_4096_not_run.json, the reader prints it and exits 2, and nothing is re-scoped to fewer candidates, a smaller block or a lower bar. An aliased arm on the MODEL head is checked only by the reader, as VOID, because the model is fitted last. One further mechanical NOT RUN is reachable at any point, from the shared fit machinery: a confirmatory record whose ledger shows a completion but whose checkpoint is no longer on disk is never refitted (one scoring per role). A failed launch precondition is a refusal: it exits 3 before any checkpoint exists, files nothing, and is filed by the operator in the engineering log; the runner re-samples a 1-minute load above 2.0 for up to five minutes before refusing on it. A confirmatory artifact banked complete is never rewritten: a relaunch refuses.",
     "Neither outcome revises 0003, 0014, 0015, 0016, 0017, 0018, 0019 or 0021; establishes_a_buyer is emitted False on every path.",
     "No number from this run is quoted as a transfer reading: the fit and scored chunks are cut from the same five pinned blobs, and every document that states the verdict states that in the same breath."
   ],
@@ -26038,8 +26134,9 @@
   "reader": "tools/readers/realsearch4096_verdict.py",
   "frozen": false,
   "invocation": {
-    "select": "OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3 nice -n 10 python3 tools/pivot/run_realsearch.py --stage select",
-    "confirm": "OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3 nice -n 10 python3 tools/pivot/run_realsearch.py --stage confirm",
+    "select": "OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3 nice -n 10 python3 tools/pivot/run_realsearch.py --stage select --prereg-file prereg/0022-realsearch-4096.json --cache data/pivot/full_c4096.npz --ext data/pivot/ext_c4096.npz --realfit data/pivot/realfit_c4096.npz --workdir artifacts/pivot/realsearch_4096_ckpt --selection-out artifacts/pivot/realsearch_4096_selection.json --out artifacts/pivot/realsearch_4096.json --scores-out artifacts/pivot/realsearch_4096_scores.json",
+    "confirm": "the same command with --stage confirm, launched when the box is idle (no gate suite running; the runner waits up to five minutes for the 1-minute load to fall to 2.0)",
+    "checkpoints": "artifacts/pivot/realsearch_4096_ckpt is committed and pushed as checkpoints land, as every run since 0014's; a container restart is recovered by relaunching the identical command",
     "reader": "python3 tools/readers/realsearch4096_verdict.py",
     "smoke": "python3 tools/pivot/run_realsearch.py --stage select --smoke --realfit <scratchpad>/smoke_realfit/fit_small.npz --ext <scratchpad>/smoke_realfit/ext_small.npz --workdir <scratchpad>/smoke_realsearch/ckpt --selection-out <scratchpad>/smoke_realsearch/selection.json --out <scratchpad>/smoke_realsearch/out.json --scores-out <scratchpad>/smoke_realsearch/scores.json; then --stage confirm with the same paths"
   },

@@ -5412,6 +5412,915 @@ _register_provenance("lofol3", lambda: _good_lofol3()[0], lambda a: _prov_lofo_l
 _register_provenance("oob4096", lambda: _good_oob()[0], _prov_oob, lambda: _oob_reader().PARTITION)
 
 
+# ---------------------------------------------------------------- realsearch4096 gate (0022)
+#
+# The 0022 reader reads a symmetric recipe search run INSIDE 0021's real fit block: a selection file (one stage per
+# searched head on a chunk-rule holdout), a confirmatory artifact (reproduction arms, a null control, six baseline
+# heads and the model, each fitted once on the whole fit block and scored once on 0018's scoring set), and the scores
+# file. The control below takes its SHAPE - every key, nesting and record field - from tests/fixtures/
+# realsearch_runner_shape.json, a smoke run of tools/pivot/run_realsearch.py itself, and its VALUES from the reader's
+# sealed literals (docs/OPERATING_RULES.md section 4; CORRECTIONS.md 2026-09-16 and 2026-09-17). Every case then
+# breaks one thing and must be read as VOID or REAL_RECIPE_FAILS.
+
+_RS_SHAPE = os.path.join(REPO, "tests", "fixtures", "realsearch_runner_shape.json")
+
+
+def _rs_reader():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("r22", os.path.join(REPO, "tools", "readers", "realsearch4096_verdict.py"))
+    m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+    return m
+
+
+def _rs_readings(r22, v, fam_x, fam_e):
+    """The runner's readings() over one per-example vector, recomputed here from the same rule (0021's shape)."""
+    n_eval, n_ext = r22.PARTITION["n_eval_rows"], r22.N_EXT
+    rep, ex = v[:n_eval], v[n_eval:]
+    by = {f: [] for f in r22.EXT_FAMILIES}
+    for i in range(n_ext):
+        by[fam_x[i]].append(ex[i])
+    m4 = lambda xs: round(sum(xs) / len(xs), 4) if xs else None  # noqa: E731
+    real = [x for f in r22.REAL_FAMILIES for x in by[f]]; synth = [x for f in r22.SYNTH_FAMILIES for x in by[f]]
+    return {"builder_eval_top1": m4(rep), "builder_eval_correct": sum(rep), "ext_top1": m4(ex), "ext_correct": sum(ex),
+            "n_ext_rows": n_ext, "ext_per_family": {f: m4(by[f]) for f in r22.EXT_FAMILIES},
+            "ext_per_family_correct": {f: sum(by[f]) for f in r22.EXT_FAMILIES},
+            "ext_structured_text_top1": m4([x for f in r22.STRUCTURED_TEXT for x in by[f]]),
+            "ext_high_entropy_top1": m4([x for f in r22.HIGH_ENTROPY for x in by[f]]),
+            "ext_real_top1": m4(real), "ext_real_correct": sum(real), "n_ext_real_rows": len(real),
+            "ext_synthetic_correct": sum(synth), "ext_synthetic_top1": m4(synth),
+            "builder_eval_per_family": {f: m4([rep[i] for i in range(n_eval) if fam_e[i] == f]) for f in r22.FAMILIES}}
+
+
+# The selection scores that decide each head's winner in the control: M3, L4, D2 and T3, none of them a reference
+# recipe, so all four reproduction arms are fitted. A head that selects its REFERENCE recipe (M1 or M4, L3, D1) makes
+# that arm an alias of its own confirmatory fit, and a deterministic refit of the same recipe on the same rows reads
+# what 0021 read - so a model head that selects M4 is pinned to 0021's 0.1193 and cannot clear, which the reader
+# enforces through the reproduction clause (the first version of this control selected M4 and read 0.20: VOID, drift
+# 0.0807). Ties are avoided so the rule's winner is unambiguous.
+_RS_SEL_SCORES = {"model": {"M1": 0.12, "M2": 0.125, "M3": 0.14, "M4": 0.13, "M5": 0.11, "M6": 0.12, "M7": 0.115, "M8": 0.13},
+                  "logistic": {"L1": 0.10, "L2": 0.105, "L3": 0.125, "L4": 0.13, "L5": 0.09, "L6": 0.12, "L7": 0.126, "L8": 0.128},
+                  "depth3_tree": {"D1": 0.088, "D2": 0.09, "D3": 0.087, "D4": 0.086, "D5": 0.089, "D6": 0.0885, "D7": 0.088, "D8": 0.085},
+                  "deep_tree": {"T1": 0.10, "T2": 0.11, "T3": 0.118, "T4": 0.112, "T5": 0.115, "T6": 0.105, "T7": 0.108, "T8": 0.117}}
+
+
+def _good_realsearch(model_real_correct=None, head_real=None, repro=None, null_acc=None, sel_scores=None,
+                     sel_status=None, sel_mutate=None):
+    """A complete, valid 0022 artifact set (artifact, selection bytes, scores). Shape AND key sets from the runner's own
+    smoke output (tests/fixtures/realsearch_runner_shape.json); only the values are the sealed run's.
+
+    Defaults give REAL_RECIPE_CLEARS: the model head selects M3 and reads 0.20 on the real-family rows against a searched logistic at 0.13
+    (the binding bar on both readings; deep_tree 0.12, depth3 0.10, best_single_feat 0.06, majority and stratified at
+    their 0021 floors), and every reproduction arm reads exactly its 0021 reference. head_real overrides a head's
+    real-family accuracy; model_real_correct sets the model's correct real-family rows exactly; repro overrides a
+    reproduction arm's reading (an aliased arm's is its head's); null_acc the null's; sel_scores the selection stage's
+    holdout scores by head and candidate; sel_status a (head, candidate) -> status override; sel_mutate a function of the
+    selection document applied BEFORE the file is hashed, so the ledger and the fingerprints bind to the mutated file
+    exactly as a runner that read it would have."""
+    r22 = _rs_reader(); shape = json.load(open(_RS_SHAPE, encoding="utf-8"))
+    S_art, S_sel = shape["artifact"], shape["selection"]
+    zeros = {k: 0 for k in ("pool_chunks_shared_with_ext", "eval_chunks_shared_with_ext", "fit_chunks_shared_with_ext",
+                            "fit_chunks_shared_with_builder", "fit_source_chunks_shared_with_ext", "fit_rows_identical_to_a_scored_row",
+                            "n_chunks_holdout_and_fitpool", "n_holdout_rows_in_fitpool")}
+    nulls = {"null_y_shuffled_sha256": r22.NULL_SHA_EXPECTED, "null_labels_permuted": True, "null_labels_same_multiset": True}
+    part = _rf_sub(S_art["partition"], dict(r22.PARTITION, **zeros, **nulls), "partition", sealed_may_be_subset=True)
+    sel_part = {k: v for k, v in part.items() if k not in ("eval_y_sha256", *nulls)}
+    # the roster's key set is the runner's (strict, both ways, in both files); its values are the sealed ones, deep-copied
+    roster = _rf_sub(S_art["roster"], json.loads(json.dumps({"protocol": r22.PROTOCOL, "heads": r22.HEADS})), "roster")
+    _rf_sub(S_sel["roster"], roster, "selection.roster")
+    assert _sha12(roster) == r22.ROSTER_SHA256, "the reader's roster literals do not hash to its ROSTER_SHA256"
+    by_id = {c["id"]: c for h in r22.HEADS for c in h["candidates"]}
+    n_eval, n_ext, n_real = r22.PARTITION["n_eval_rows"], r22.N_EXT, r22.N_REAL
+    fams = list(r22.EXT_FAMILIES); rpf = r22.EXT["rows_per_family"]
+    fam_idx = []
+    for k, f in enumerate(fams):
+        fam_idx += [k] * rpf[f]
+    fam_x = [fams[i] for i in fam_idx]
+    ext_ids = [c for c, n in zip(r22.EXT_CHUNK_IDS, r22.EXT_ROWS_PER_CHUNK) for _ in range(n)]
+    eval_ids = [c for c, n in zip(r22.EVAL_CHUNK_IDS, r22.EVAL_ROWS_PER_CHUNK) for _ in range(n)]
+    fam_e = [r22.FAMILIES[c % 8] for c in eval_ids]
+    env = dict(shape["artifact"]["environment"], threads=3, nice=10)
+    real = set(r22.REAL_FAMILIES)
+    # ---- selection
+    scores_sel = {h: dict(v) for h, v in _RS_SEL_SCORES.items()}
+    for h, v in (sel_scores or {}).items():
+        scores_sel[h].update(v)
+    st_rows, st_idx, st_sorted = part["stage_rows"][0], part["stage_idx_sha256"][0], part["stage_sorted_sha256"][0]
+    tmpl_sel = S_sel["selection"]["model"]["stages"][0]["records"][0]      # the runner's selection record shape
+
+    def sel_record(hid, c):
+        sc = scores_sel[hid][c["id"]]
+        status = (sel_status or {}).get((hid, c["id"]), "fit")
+        sealed = {"id": c["id"], "head": hid, "family": c["family"], "params": dict(c.get("params", {})),
+                  "scaled": bool(c.get("scaled", False)), "val": c.get("val"), "seed": r22.SEED, "params_sha256": _sha12(c),
+                  "stage": "selection-1", "n_fit_rows": st_rows, "fit_rows_sha256": st_idx, "fit_rows_sorted_sha256": st_sorted,
+                  "environment": dict(env), "interruptions_before_this_fit": 0, "status": status, "seconds": 1.0,
+                  "top1": sc, "top1_non_gutenberg": sc, "per_family": {f: sc for f in r22.FIT_FAMILIES}}
+        rec = _rf_sub(tmpl_sel, sealed, f"selection record {hid}/{c['id']}", sealed_may_be_subset=True)
+        if status != "fit":
+            rec.update({"top1": None, "top1_non_gutenberg": None, "per_family": None, "seconds": None,
+                        "evidence": "killed with anonymous RSS 13.2 GB at the last heartbeat, at or above the preregistered 13.0 GB"})
+        return rec
+
+    selection, selected = {}, {}
+    for h in r22.HEADS:
+        hid = h["id"]
+        if len(h["candidates"]) == 1:
+            selection[hid] = {"side": h["side"], "stages": [], "selected_id": h["candidates"][0]["id"]}
+        else:
+            recs = [sel_record(hid, c) for c in h["candidates"]]
+            pool = [r for r in recs if r["status"] == "fit"]
+            ranked = []
+            while pool:
+                best = max(pool, key=lambda r: (r["top1"], -[x["id"] for x in recs].index(r["id"])))
+                ranked.append(best["id"]); pool = [r for r in pool if r is not best]
+            selection[hid] = {"side": h["side"], "selected_id": ranked[0] if ranked else None,
+                              "stages": [{"stage": 1, "n_fit_rows": st_rows, "fit_rows_sha256": st_idx, "records": recs,
+                                          "eligible_ranked_ids": ranked, "advanced_ids": ranked[:1]}]}
+        selected[hid] = selection[hid]["selected_id"]
+    sel_ledger = []
+    for h in r22.HEADS:
+        for c in h["candidates"] if len(h["candidates"]) > 1 else []:
+            nm = f"sel1_{h['id']}_{c['id']}"
+            sel_ledger += [{"name": nm, "fingerprint": nm, "event": "started", "utc": "2026-09-18T00:00:00Z", "rss_gb": 1.0, "pid": 1, "attempt": 1},
+                           {"name": nm, "fingerprint": nm, "event": "completed", "utc": "2026-09-18T00:00:30Z", "rss_gb": 1.0, "pid": 1, "seconds": 1.0}]
+    sel_secs = {hid: round(sum((r.get("seconds") or 0) for s in e["stages"] for r in s["records"]), 1) for hid, e in selection.items()}
+    sel_doc = _shape_fill(S_sel, {
+        "schema_version": 1, "schema": "raise-v1/realsearch_4096/1", "preregistration": r22.PREREG, "smoke": False,
+        "roster_sha256": r22.ROSTER_SHA256, "roster": roster, "corpus": dict(r22.CORPUS), "ext_corpus": dict(r22.EXT),
+        "fit_corpus": dict(r22.FIT), "partition": sel_part, "n_classes": 26, "class_names": [], "chance_accuracy": r22.CHANCE,
+        "stage": "select",
+        "gathers": [{"name": "holdout", "source": "fit_corpus", "n_rows": part["n_holdout_rows"], "idx_sha256": part["holdout_idx_sha256"],
+                     "n_rows_identical_to_a_scored_row": 0},
+                    {"name": "stage1", "source": "fit_corpus", "n_rows": st_rows, "idx_sha256": st_idx, "n_rows_identical_to_a_scored_row": 0}],
+        "scored_rows_gathered_in_selection": 0, "environment": dict(env),
+        "launch_environment": {"env": dict(env), "loadavg_1_5_15": [0.1, 0.1, 0.1], "problems": [], "ok": True}, "launch_number": 1,
+        "selection": selection, "selected_ids": selected, "ledger": sel_ledger,
+        "cost": {"selection_seconds_by_head": sel_secs, "selection_seconds_total": round(sum(sel_secs.values()), 1),
+                 "wall_seconds_this_invocation": 100.0, "interruptions_by_head": {hid: 0 for hid in selection}},
+        "selection_started_utc": "2026-09-18T00:00:00Z", "selection_finished_utc": "2026-09-18T01:00:00Z"}, "selection")
+    if sel_mutate:
+        sel_mutate(sel_doc)
+    sel_bytes = _canon12(sel_doc).encode("utf-8"); sel_sha = hashlib.sha256(sel_bytes).hexdigest()
+    # ---- confirmatory
+    aliased = {arm: hid for arm, (hid, ref) in r22.REPRO_ARMS.items() if selected.get(hid) == ref}
+    roles = [n for n in r22.CONFIRM_ORDER if n not in aliased]
+    acc_real = dict({"majority": r22.FLOORS["majority"], "stratified": r22.FLOORS["stratified"], "best_single_feat": 0.06,
+                     "depth3_tree": 0.10, "deep_tree": 0.12, "logistic": 0.13, "model": 0.20, "null": 0.037}, **(head_real or {}))
+    for arm in r22.REPRO_ARMS:
+        acc_real[arm] = r22.REFERENCE[arm]
+    acc_real.update(repro or {})
+    if null_acc is not None:
+        acc_real["null"] = null_acc
+    rep_acc = {n: (0.19 if n not in ("null", "majority", "stratified") else 0.038) for n in roles}
+
+    def vec(name):
+        v = [0] * (n_eval + n_ext)
+        for i in range(int(round(rep_acc[name] * n_eval))):
+            v[i] = 1
+        per = {f: int(round(acc_real[name] * rpf[f])) for f in fams}
+        if name == "model" and model_real_correct is not None:
+            rf = [f for f in fams if f in real]; base, extra = divmod(int(model_real_correct), len(rf))
+            for j, f in enumerate(rf):
+                per[f] = base + (1 if j < extra else 0)
+        pos = n_eval
+        for f in fams:
+            for i in range(pos, pos + per[f]):
+                v[i] = 1
+            pos += rpf[f]
+        return v
+
+    def cand_of(name):
+        if name in r22.REPRO_ARMS:
+            return by_id[r22.REPRO_ARMS[name][1]]
+        return by_id[selected["model"]] if name == "null" else by_id[selected[name]]
+
+    def stage_of(name):
+        return "reproduction" if name in r22.REPRO_ARMS else ("null" if name == "null" else "confirmatory")
+
+    def fp(name):
+        return r22.fingerprint(prereg=r22.PREREG, seed=r22.SEED, head=name, cand=cand_of(name), stage=stage_of(name),
+                               rows=part["fit_sorted_sha256"], eval=part["eval_idx_sha256"], ext=r22.EXT["arrays"]["X"]["sha256"],
+                               fit=r22.FIT["arrays"]["X"]["sha256"], selection=sel_sha)
+
+    tmpl_by_family = {"hgb": "repro_m4", "logistic": "logistic", "tree": "depth3_tree", "dummy": "majority"}
+
+    def record(name, v):
+        c = cand_of(name); m4 = lambda xs: round(sum(xs) / len(xs), 4)  # noqa: E731
+        fam_s = fam_e + ["ext:" + f for f in fam_x]
+        ng = [v[i] for i in range(n_eval) if fam_e[i] != "gutenberg"] + v[n_eval:]
+        # fit_info, block_refills and the memory fields are the RUNNER's, from the captured record of the same estimator
+        # family (a tree banks depth and leaves, an HGB an iteration count, a dummy nothing) and never overwritten.
+        tmpl = S_art["fits"][name] if name in S_art["fits"] else S_art["fits"][tmpl_by_family[c["family"]]]
+        sealed = {"id": c["id"], "head": name, "family": c["family"], "params": dict(c.get("params", {})),
+                  "scaled": bool(c.get("scaled", False)), "val": c.get("val"), "seed": r22.SEED, "params_sha256": _sha12(c),
+                  "stage": stage_of(name), "n_fit_rows": part["fit_rows"], "fit_rows_sha256": part["fit_idx_sha256"],
+                  "fit_rows_sorted_sha256": part["fit_sorted_sha256"], "environment": dict(env), "interruptions_before_this_fit": 0,
+                  "status": "fit", "top1": m4(v), "top1_non_gutenberg": m4(ng),
+                  "per_family": {f: m4([v[i] for i in range(len(v)) if fam_s[i] == f]) for f in sorted(set(fam_s))},
+                  "fingerprint": fp(name), "per_example_sha256": hashlib.sha256(bytes(v)).hexdigest()}
+        return _rf_sub(tmpl, sealed, f"fits.{name}", sealed_may_be_subset=True)
+
+    per_example, reads, fits = {}, {}, {}
+    for name in roles:
+        v = vec(name); per_example[name] = v
+        reads[name] = _rs_readings(r22, v, fam_x, fam_e)
+        fits[name] = record(name, v)
+    ledger = list(sel_ledger)
+    for i, nm in enumerate(roles):
+        ledger += [{"name": f"confirm_{nm}", "fingerprint": fp(nm), "event": "selection_bound", "utc": f"2026-09-18T02:{i:02d}:00Z",
+                    "rss_gb": 1.0, "pid": 1, "selection_sha256": sel_sha},
+                   {"name": f"confirm_{nm}", "fingerprint": fp(nm), "event": "started", "utc": f"2026-09-18T02:{i:02d}:01Z", "rss_gb": 1.0, "pid": 1, "attempt": 1},
+                   {"name": f"confirm_{nm}", "fingerprint": fp(nm), "event": "completed", "utc": f"2026-09-18T02:{i:02d}:30Z", "rss_gb": 1.0, "pid": 1, "seconds": 1.0}]
+    per_head_searched = {h: reads[h]["ext_real_top1"] for h in r22.EXPANDED_HEADS}
+    per_head = {h: max(per_head_searched[h], r22.FLOORS[h]) for h in r22.EXPANDED_HEADS}
+
+    def best(hs):
+        b = max(per_head[h] for h in hs); return b, sorted(h for h in hs if per_head[h] == b)[0]
+    bf, bfh = best(r22.FROZEN_HEADS); be, beh = best(r22.EXPANDED_HEADS)
+    need = lambda b: int(math.ceil(n_real * (b + r22.MARGIN) - 1e-9))  # noqa: E731
+    rm = reads["model"]
+    repro_top1 = {arm: reads[aliased.get(arm, arm)]["ext_real_top1"] for arm in r22.REPRO_ARMS}
+    art = _shape_fill(S_art, {
+        "schema_version": 1, "schema": "raise-v1/realsearch_4096/1", "preregistration": r22.PREREG, "smoke": False,
+        "roster_sha256": r22.ROSTER_SHA256, "roster": roster, "corpus": dict(r22.CORPUS), "ext_corpus": dict(r22.EXT),
+        "fit_corpus": dict(r22.FIT), "partition": part, "n_classes": 26, "class_names": [], "chance_accuracy": r22.CHANCE,
+        "stage": "confirm", "selection_sha256": sel_sha, "selection": sel_doc, "selected_ids": selected,
+        "selected_model_id": selected["model"], "aliased_reproductions": aliased, "environment": dict(env),
+        "launch_environment": {"env": dict(env), "loadavg_1_5_15": [0.1, 0.1, 0.1], "problems": [], "ok": True}, "launch_number": 1,
+        "complete": True, "missing_roles": [], "fits": fits, "readings": reads,
+        "ext_real_top1": {n: reads[n]["ext_real_top1"] for n in roles}, "ext_real_correct": {n: reads[n]["ext_real_correct"] for n in roles},
+        "ext_top1": {n: reads[n]["ext_top1"] for n in roles}, "ext_correct": {n: reads[n]["ext_correct"] for n in roles},
+        "builder_eval_top1": {n: reads[n]["builder_eval_top1"] for n in roles}, "ext_per_family": {n: reads[n]["ext_per_family"] for n in roles},
+        "bars": {"per_head": per_head, "per_head_searched": per_head_searched, "floors": dict(r22.FLOORS),
+                 "frozen_heads": list(r22.FROZEN_HEADS), "expanded_heads": list(r22.EXPANDED_HEADS),
+                 "best_frozen_for_bar": bf, "best_frozen_head": bfh, "best_frozen_searched": per_head_searched[bfh],
+                 "best_expanded_for_bar": be, "best_expanded_head": beh, "best_expanded_searched": per_head_searched[beh],
+                 "margin": r22.MARGIN, "n_real_rows": n_real, "min_correct_real_frozen": need(bf), "min_correct_real_expanded": need(be)},
+        "model_real_top1": rm["ext_real_top1"], "model_real_correct": rm["ext_real_correct"],
+        "model_ext_top1": rm["ext_top1"], "model_ext_correct": rm["ext_correct"],
+        "n_ext_real_rows": n_real, "n_ext_rows": n_ext, "n_eval_rows": n_eval,
+        "ext_real_families": list(r22.REAL_FAMILIES), "ext_synthetic_families": list(r22.SYNTH_FAMILIES),
+        "fit_families": list(r22.FIT_FAMILIES), "fit_rows_per_family": r22.FIT["rows_per_family"],
+        "reference_top1": dict(r22.REFERENCE), "reproduction_top1": repro_top1,
+        "reproduction_drift": {arm: round(repro_top1[arm] - r22.REFERENCE[arm], 6) for arm in r22.REPRO_ARMS},
+        "shuffled_label_accuracy_ext": reads["null"]["ext_top1"], "shuffled_label_accuracy_eval": reads["null"]["builder_eval_top1"],
+        "null_control": fits["null"], "null_rows": part["fit_rows"],
+        "fit_info_by_name": {n: fits[n]["fit_info"] for n in roles}, "ledger": ledger,
+        "cluster_ci95_informational": {}, "cost": {},
+        "confirmatory_started_utc": "2026-09-18T02:00:00Z", "first_launch_utc": "2026-09-18T00:00:00Z",
+        "run_finished_utc": "2026-09-18T03:00:00Z"}, "artifact")
+    scores = {"schema": "raise-v1/realsearch_4096_scores/1", "preregistration": r22.PREREG, "smoke": False,
+              "n_eval_rows": n_eval, "n_ext_rows": n_ext, "eval_idx_sha256": part["eval_idx_sha256"],
+              "eval_chunk_ids": eval_ids, "ext_chunk_ids": ext_ids, "ext_fam": fam_idx, "ext_families": fams,
+              "ext_arrays_sha256": {k: v["sha256"] for k, v in r22.EXT["arrays"].items()},
+              "fit_arrays_sha256": {k: v["sha256"] for k, v in r22.FIT["arrays"].items()},
+              "layout": "each per_example vector is [sealed evaluation rows (n_eval_rows)] + [extension rows (n_ext_rows)]",
+              "per_example": per_example}
+    return art, sel_bytes, scores
+
+
+def _realsearch(root, mutate=None, sel_bytes_override=None, drop_artifact=False, drop_scores=False, drop_selection=False,
+                not_run=None, **kw):
+    art, sel_bytes, scores = _good_realsearch(**kw)
+    if mutate:
+        r = mutate(art, scores)
+        if r is not None:
+            art = r
+    piv = os.path.join(root, "artifacts", "pivot"); os.makedirs(piv, exist_ok=True)
+    if not drop_selection:
+        with open(os.path.join(piv, "realsearch_4096_selection.json"), "wb") as fh:
+            fh.write(sel_bytes_override if sel_bytes_override is not None else sel_bytes)
+    if not drop_scores:
+        json.dump(scores, open(os.path.join(piv, "realsearch_4096_scores.json"), "w"))
+    if not drop_artifact:
+        json.dump(art, open(os.path.join(piv, "realsearch_4096.json"), "w"))
+    if not_run is not None:
+        json.dump(not_run, open(os.path.join(piv, "realsearch_4096_not_run.json"), "w"))
+    shutil.copy(os.path.join(REPO, "tools", "readers", "realsearch4096_verdict.py"),
+                os.path.join(root, "tools", "readers", "realsearch4096_verdict.py"))
+    rc, out = run([PY, "tools/readers/realsearch4096_verdict.py"], root)
+    if rc != 0:
+        return rc, out
+    v = json.load(open(os.path.join(piv, "realsearch_4096_verdict.json")))
+    ok = v["verdict"] == "REAL_RECIPE_CLEARS"
+    return (0 if ok else 1), (f"verdict={v['verdict']} real={v.get('model_real_top1')} correct={v.get('model_real_correct')} "
+                              f"validity={v['validity_failed_clauses'][:2]} margin={v['margin_failed_clauses']}")
+
+
+def _realsearch_void(root, mutate=None, expect_clause=None, **kw):
+    rc, out = _realsearch(root, mutate, **kw)
+    if rc != 0 and "verdict=VOID" not in out and "No verdict emitted" not in out:
+        return 0, out + " !! detected but not as VOID"
+    if expect_clause and expect_clause not in out:
+        return 0, out + f" !! VOID for another reason than {expect_clause!r}"
+    return rc, out
+
+
+def _rs_need(**kw):
+    """The frozen clause's row count for a given control: ceil(N_REAL x (best frozen bar + MARGIN))."""
+    art, _, _ = _good_realsearch(**kw)
+    return art["bars"]["min_correct_real_frozen"], art["bars"]["min_correct_real_expanded"]
+
+
+@case("realsearch4096", "control-searched-model-clears-both-bars-on-the-real-families", "pass")
+def _(root):
+    return _realsearch(root)
+
+
+@case("realsearch4096", "one-real-family-row-under-the-frozen-bar-is-REAL_RECIPE_FAILS", "fail")
+def _(root):
+    nf, ne = _rs_need()
+    rc, out = _realsearch(root, model_real_correct=nf - 1)
+    if rc != 0 and "verdict=REAL_RECIPE_FAILS" not in out:
+        return 0, out + " !! detected but not as REAL_RECIPE_FAILS"
+    return rc, out
+
+
+@case("realsearch4096", "exactly-min-correct-real-rows-clears", "pass")
+def _(root):
+    nf, ne = _rs_need()
+    return _realsearch(root, model_real_correct=max(nf, ne))
+
+
+@case("realsearch4096", "a-model-clearing-the-frozen-bar-but-not-the-expanded-bar-is-REAL_RECIPE_FAILS", "fail")
+def _(root):
+    # the searched deep tree rises to 0.16: the expanded bar is 0.16, the frozen bar stays the logistic's 0.13
+    rc, out = _realsearch(root, head_real={"deep_tree": 0.16})
+    if rc != 0 and ("verdict=REAL_RECIPE_FAILS" not in out or "margin S" not in out or "margin F" in out):
+        return 0, out + " !! expected only the expanded clause to fail"
+    return rc, out
+
+
+@case("realsearch4096", "a-searched-baseline-below-its-0021-floor-cannot-lower-the-bar", "pass")
+def _(root):
+    # the searched logistic reads 0.10, below 0021's 0.1179: the bar is the floor, and the model at 0.20 still clears
+    rc, out = _realsearch(root, head_real={"logistic": 0.10})
+    if rc == 0 and "correct=7690" not in out:
+        return 1, out
+    return rc, out
+
+
+@case("realsearch4096", "a-banked-bar-that-ignores-the-0021-floor-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["bars"]["per_head"]["logistic"] = 0.10; a["bars"]["best_frozen_for_bar"] = 0.10; a["bars"]["best_expanded_for_bar"] = 0.10
+        a["bars"]["min_correct_real_frozen"] = a["bars"]["min_correct_real_expanded"] = 5768
+    return _realsearch_void(root, m, expect_clause="bars:", head_real={"logistic": 0.10})
+
+
+@case("realsearch4096", "a-banked-bar-off-by-0.0001-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["bars"]["best_frozen_for_bar"] = round(a["bars"]["best_frozen_for_bar"] - 0.0001, 4)
+    return _realsearch_void(root, m, expect_clause="bars:")
+
+
+@case("realsearch4096", "a-banked-min-correct-off-by-one-row-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["bars"]["min_correct_real_frozen"] -= 1
+    return _realsearch_void(root, m, expect_clause="bars:")
+
+
+@case("realsearch4096", "the-model-head-selecting-0021s-recipe-reproduces-it-and-cannot-clear", "fail")
+def _(root):
+    # M4 wins the model head: repro_m4 is aliased to the model's own fit, the model reads 0021's 0.1193, the run is a clean
+    # REAL_RECIPE_FAILS (validity empty), not a VOID
+    rc, out = _realsearch(root, sel_scores={"model": {"M4": 0.15}}, head_real={"model": 0.1193})
+    if rc != 0 and ("verdict=REAL_RECIPE_FAILS" not in out or "validity=[]" not in out):
+        return 0, out + " !! expected a clean REAL_RECIPE_FAILS through the aliased reproduction"
+    return rc, out
+
+
+@case("realsearch4096", "the-model-head-selecting-0021s-recipe-and-reading-0.20-is-VOID", "fail")
+def _(root):
+    # a deterministic refit of M4 on the same rows cannot read 0.20 when 0021 read 0.1193: the aliased reproduction voids it
+    return _realsearch_void(root, expect_clause="reproduction: repro_m4", sel_scores={"model": {"M4": 0.15}})
+
+
+@case("realsearch4096", "an-aliasing-map-that-disagrees-with-the-selected-ids-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["aliased_reproductions"] = {"repro_m4": "model"}
+    return _realsearch_void(root, m, expect_clause="reproduction: aliased")
+
+
+@case("realsearch4096", "a-reproduction-arm-off-by-0.006-is-VOID", "fail")
+def _(root):
+    r22 = _rs_reader()
+    return _realsearch_void(root, expect_clause="reproduction: repro_l3", repro={"repro_l3": round(r22.REFERENCE["repro_l3"] + 0.006, 4)})
+
+
+@case("realsearch4096", "a-reproduction-drift-inside-the-tolerance-still-clears", "pass")
+def _(root):
+    r22 = _rs_reader()
+    return _realsearch(root, repro={"repro_d1": round(r22.REFERENCE["repro_d1"] - 0.004, 4)})
+
+
+@case("realsearch4096", "a-leaking-null-control-is-VOID", "fail")
+def _(root):
+    return _realsearch_void(root, expect_clause="null control", null_acc=0.06)
+
+
+@case("realsearch4096", "a-null-control-at-0.0484-passes-and-0.0485-is-VOID", "fail")
+def _(root):
+    rc1, out1 = _realsearch(root, null_acc=0.0484)
+    if rc1 != 0:
+        return 0, out1 + " !! 0.0484 (chance + 0.01, to 4 decimals) should pass"
+    return _realsearch_void(root, expect_clause="null control", null_acc=0.0486)
+
+
+@case("realsearch4096", "null-labels-that-are-not-0021s-permutation-are-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["null_y_shuffled_sha256"] = "0" * 64
+    return _realsearch_void(root, m, expect_clause="null control: the permuted")
+
+
+@case("realsearch4096", "null-labels-not-a-permutation-are-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["null_labels_same_multiset"] = False
+    return _realsearch_void(root, m, expect_clause="null control")
+
+
+@case("realsearch4096", "a-null-control-not-the-selected-model-recipe-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"]["null"]["id"] = "M1"
+    return _realsearch_void(root, m, expect_clause="fit: null")
+
+
+@case("realsearch4096", "a-smoke-artifact-is-VOID", "fail")
+def _(root):
+    return _realsearch_void(root, lambda a, s: a.update(smoke=True), expect_clause="scope: smoke")
+
+
+@case("realsearch4096", "an-artifact-stamped-with-another-preregistration-is-VOID", "fail")
+def _(root):
+    return _realsearch_void(root, lambda a, s: a.update(preregistration="0021-realfit-4096-rerun"), expect_clause="scope: prereg")
+
+
+@case("realsearch4096", "a-select-stage-artifact-is-VOID", "fail")
+def _(root):
+    return _realsearch_void(root, lambda a, s: a.update(stage="select"), expect_clause="scope: stage")
+
+
+@case("realsearch4096", "a-fit-row-byte-identical-to-a-scored-row-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["fit_rows_identical_to_a_scored_row"] = 1; a["selection"]["partition"]["fit_rows_identical_to_a_scored_row"] = 1
+    return _realsearch_void(root, m, expect_clause="leakage: partition.fit_rows_identical")
+
+
+@case("realsearch4096", "a-fit-chunk-shared-with-the-evaluation-corpus-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["fit_chunks_shared_with_ext"] = 1; a["selection"]["partition"]["fit_chunks_shared_with_ext"] = 1
+    return _realsearch_void(root, m, expect_clause="leakage: partition.fit_chunks_shared_with_ext")
+
+
+@case("realsearch4096", "a-holdout-row-in-the-fit-pool-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["n_holdout_rows_in_fitpool"] = 1; a["selection"]["partition"]["n_holdout_rows_in_fitpool"] = 1
+    return _realsearch_void(root, m, expect_clause="leakage: partition.n_holdout_rows_in_fitpool")
+
+
+@case("realsearch4096", "a-holdout-that-is-not-the-sealed-one-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["holdout_idx_sha256"] = "0" * 64
+    return _realsearch_void(root, m, expect_clause="sealed set: partition.holdout_idx_sha256")
+
+
+@case("realsearch4096", "a-stage-block-that-is-not-the-sealed-one-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["stage_idx_sha256"] = ["0" * 64]
+    return _realsearch_void(root, m, expect_clause="sealed set: partition.stage_idx_sha256")
+
+
+@case("realsearch4096", "a-fit-block-that-is-not-0021s-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["fit_idx_sha256"] = "0" * 64
+    return _realsearch_void(root, m, expect_clause="sealed set: partition.fit_idx_sha256")
+
+
+@case("realsearch4096", "a-fit-corpus-array-hash-that-is-not-the-sealed-one-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fit_corpus"]["arrays"]["X"]["sha256"] = "0" * 64
+    return _realsearch_void(root, m, expect_clause="fit corpus: fit_corpus.arrays")
+
+
+@case("realsearch4096", "an-evaluation-corpus-array-hash-that-is-not-the-sealed-one-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["ext_corpus"]["arrays"]["X"]["sha256"] = "0" * 64
+    return _realsearch_void(root, m, expect_clause="evaluation corpus: ext_corpus.arrays")
+
+
+@case("realsearch4096", "a-builder-cache-feature-hash-that-is-not-the-sealed-one-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["corpus"]["cache_X_sha256"] = "0" * 64
+    return _realsearch_void(root, m, expect_clause="scope: corpus.cache_X_sha256")
+
+
+@case("realsearch4096", "a-fit-corpus-label-histogram-that-is-not-the-sealed-one-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fit_corpus"]["label_histogram"][0] += 1
+    return _realsearch_void(root, m, expect_clause="fit corpus: fit_corpus.label_histogram")
+
+
+@case("realsearch4096", "a-banked-real-correct-count-off-by-one-row-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["model_real_correct"] += 1
+    return _realsearch_void(root, m, expect_clause="readings:")
+
+
+@case("realsearch4096", "a-banked-per-family-reading-off-by-0.0001-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["readings"]["model"]["ext_per_family"]["py_src"] = round(a["readings"]["model"]["ext_per_family"]["py_src"] + 0.0001, 4)
+    return _realsearch_void(root, m, expect_clause="readings: model.ext_per_family")
+
+
+@case("realsearch4096", "a-record-top1-not-its-vectors-mean-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"]["model"]["top1"] = round(a["fits"]["model"]["top1"] + 0.0001, 4)
+    return _realsearch_void(root, m, expect_clause="fit: model record top1")
+
+
+@case("realsearch4096", "a-record-per-family-not-its-vectors-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"]["logistic"]["per_family"]["ext:c_src"] = round(a["fits"]["logistic"]["per_family"]["ext:c_src"] + 0.0001, 4)
+    return _realsearch_void(root, m, expect_clause="fit: logistic record per_family")
+
+
+@case("realsearch4096", "a-per-example-vector-whose-hash-is-not-the-records-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        v = s["per_example"]["model"]; v[0] = 1 - v[0]
+    return _realsearch_void(root, m, expect_clause="fit: model per_example_sha256")
+
+
+@case("realsearch4096", "a-fingerprint-that-is-not-the-recomputed-one-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"]["model"]["fingerprint"] = "0" * 16
+    return _realsearch_void(root, m, expect_clause="fit: model fingerprint")
+
+
+@case("realsearch4096", "a-model-fit-that-was-not-the-last-completion-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        L = a["ledger"]; i = next(k for k, e in enumerate(L) if e["name"] == "confirm_model" and e["event"] == "completed")
+        L.append(L.pop(i - 2)); L.append(L.pop(i - 2)); L.append(L.pop(i - 2))   # move the model's three events before the logistic's
+        j = next(k for k, e in enumerate(L) if e["name"] == "confirm_logistic" and e["event"] == "selection_bound")
+        model = [e for e in L if e["name"] == "confirm_model"]; rest = [e for e in L if e["name"] != "confirm_model"]
+        a["ledger"] = rest[:j] + model + rest[j:]
+    return _realsearch_void(root, m, expect_clause="order: the model")
+
+
+@case("realsearch4096", "an-arm-scored-twice-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["ledger"].append(dict(next(e for e in a["ledger"] if e["name"] == "confirm_logistic" and e["event"] == "completed")))
+    return _realsearch_void(root, m, expect_clause="fit: logistic has 2 ledger completions")
+
+
+@case("realsearch4096", "a-missing-role-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        del a["fits"]["deep_tree"]
+    return _realsearch_void(root, m, expect_clause="fit: the artifact banks roles outside")
+
+
+@case("realsearch4096", "a-role-outside-the-sealed-order-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"]["extra"] = dict(a["fits"]["model"])
+    return _realsearch_void(root, m, expect_clause="fit: the artifact banks roles outside")
+
+
+@case("realsearch4096", "a-record-of-an-aliased-reproduction-arm-is-VOID", "fail")
+def _(root):
+    # M4 wins: repro_m4 must be aliased; an artifact that ALSO banks a repro_m4 record is scoring a recipe twice
+    def m(a, s):
+        a["fits"]["repro_m4"] = dict(a["fits"]["model"], head="repro_m4")
+    return _realsearch_void(root, m, expect_clause="fit: the artifact banks roles outside", sel_scores={"model": {"M4": 0.15}},
+                            head_real={"model": 0.1193})
+
+
+@case("realsearch4096", "an-arm-fitted-with-another-recipes-parameters-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"]["model"]["params"] = dict(a["fits"]["model"]["params"], max_iter=999)
+    return _realsearch_void(root, m, expect_clause="fit: model is not the roster's")
+
+
+@case("realsearch4096", "an-arm-fitted-on-rows-that-are-not-the-sealed-block-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"]["logistic"]["fit_rows_sha256"] = "0" * 64
+    return _realsearch_void(root, m, expect_clause="fit: logistic was not fitted on the sealed fit block")
+
+
+@case("realsearch4096", "a-record-fitted-at-another-thread-count-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"]["model"]["environment"]["threads"] = 4
+    return _realsearch_void(root, m, expect_clause="environment: model threads")
+
+
+@case("realsearch4096", "a-tree-record-banking-an-iteration-count-instead-of-a-depth-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"]["depth3_tree"]["fit_info"] = {"n_iter": 100}; a["fit_info_by_name"]["depth3_tree"] = {"n_iter": 100}
+    return _realsearch_void(root, m, expect_clause="fit: depth3_tree has no integer depth")
+
+
+@case("realsearch4096", "ext_fam-that-does-not-hash-to-the-sealed-fam-array-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        s["ext_fam"][0], s["ext_fam"][-1] = s["ext_fam"][-1], s["ext_fam"][0]
+    return _realsearch_void(root, m, expect_clause="scores: ext_fam")
+
+
+@case("realsearch4096", "permuted-evaluation-chunk-ids-are-VOID", "fail")
+def _(root):
+    def m(a, s):
+        s["eval_chunk_ids"] = s["eval_chunk_ids"][26:] + s["eval_chunk_ids"][:26]
+    return _realsearch_void(root, m, expect_clause="scores: eval_chunk_ids")
+
+
+@case("realsearch4096", "an-absent-scores-file-is-VOID", "fail")
+def _(root):
+    return _realsearch_void(root, drop_scores=True, expect_clause="scores: the scores file is absent")
+
+
+@case("realsearch4096", "an-absent-artifact-emits-no-verdict", "fail")
+def _(root):
+    rc, out = _realsearch(root, drop_artifact=True)
+    if rc != 2 or "No verdict emitted" not in out:
+        return 0, out + f" !! rc={rc}"
+    return rc, out
+
+
+@case("realsearch4096", "a-NOT-RUN-marker-emits-no-verdict", "fail")
+def _(root):
+    rc, out = _realsearch(root, not_run={"reason": "test", "stage": "confirm", "utc": "x", "n_checkpoints": 0})
+    if rc != 2 or "NOT RUN" not in out:
+        return 0, out + f" !! rc={rc}"
+    return rc, out
+
+
+@case("realsearch4096", "an-artifact-whose-fits-block-is-a-list-is-VOID-not-a-traceback", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"] = [a["fits"]["model"]]
+    rc, out = _realsearch(root, m)
+    if rc != 0 and "verdict=VOID" not in out:
+        return 0, out + " !! the reader crashed instead of emitting VOID"
+    return rc, out
+
+
+@case("realsearch4096", "an-incomplete-run-is-VOID", "fail")
+def _(root):
+    return _realsearch_void(root, lambda a, s: a.update(complete=False, missing_roles=["model"]), expect_clause="complete:")
+
+
+@case("realsearch4096", "an-artifact-with-no-ledger-is-VOID", "fail")
+def _(root):
+    return _realsearch_void(root, lambda a, s: a.update(ledger=[]), expect_clause="fit:")
+
+
+@case("realsearch4096", "an-absent-selection-file-is-VOID", "fail")
+def _(root):
+    return _realsearch_void(root, drop_selection=True, expect_clause="leakage: the selection file is absent")
+
+
+@case("realsearch4096", "a-selection-file-whose-hash-is-not-the-banked-one-is-VOID", "fail")
+def _(root):
+    art, sel_bytes, _ = _good_realsearch()
+    return _realsearch_void(root, sel_bytes_override=sel_bytes + b"\n", expect_clause="leakage: selection_sha256")
+
+
+@case("realsearch4096", "an-embedded-selection-that-differs-from-the-file-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["selection"]["cost"]["wall_seconds_this_invocation"] = 101.0
+    return _realsearch_void(root, m, expect_clause="leakage: the embedded selection")
+
+
+@case("realsearch4096", "a-selection-that-gathered-a-scored-row-is-VOID", "fail")
+def _(root):
+    def sm(sel):
+        sel["gathers"][0]["n_rows_identical_to_a_scored_row"] = 1
+    return _realsearch_void(root, expect_clause="leakage: stage select", sel_mutate=sm)
+
+
+@case("realsearch4096", "a-selection-that-finished-after-confirmation-started-is-VOID", "fail")
+def _(root):
+    def sm(sel):
+        sel["selection_finished_utc"] = "2026-09-18T02:30:00Z"
+    return _realsearch_void(root, expect_clause="leakage: selection did not finish", sel_mutate=sm)
+
+
+@case("realsearch4096", "a-confirmatory-entry-bound-to-another-selection-file-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        e = next(e for e in a["ledger"] if e["event"] == "selection_bound" and e["name"] == "confirm_model"); e["selection_sha256"] = "0" * 64
+    return _realsearch_void(root, m, expect_clause="leakage: confirmatory ledger entry")
+
+
+@case("realsearch4096", "a-selection-record-with-a-changed-parameter-is-VOID", "fail")
+def _(root):
+    def sm(sel):
+        sel["selection"]["model"]["stages"][0]["records"][2]["params"]["max_iter"] = 301
+    return _realsearch_void(root, expect_clause="search: head model M3", sel_mutate=sm)
+
+
+@case("realsearch4096", "a-banked-winner-that-is-not-the-rules-is-VOID", "fail")
+def _(root):
+    def sm(sel):
+        sel["selection"]["logistic"]["selected_id"] = "L3"; sel["selected_ids"]["logistic"] = "L3"
+        sel["selection"]["logistic"]["stages"][0]["advanced_ids"] = ["L3"]
+    return _realsearch_void(root, expect_clause="search: head logistic", sel_mutate=sm)
+
+
+@case("realsearch4096", "a-baseline-candidate-that-dropped-out-is-VOID", "fail")
+def _(root):
+    return _realsearch_void(root, expect_clause="search: baseline head logistic candidate L2", sel_status={("logistic", "L2"): "infeasible_memory"})
+
+
+@case("realsearch4096", "two-model-candidates-infeasible-with-evidence-still-clears", "pass")
+def _(root):
+    return _realsearch(root, sel_status={("model", "M5"): "infeasible_memory", ("model", "M6"): "infeasible_memory"})
+
+
+@case("realsearch4096", "three-model-candidates-infeasible-is-VOID", "fail")
+def _(root):
+    return _realsearch_void(root, expect_clause="search: 3 model-side infeasible",
+                            sel_status={("model", "M5"): "infeasible_memory", ("model", "M6"): "infeasible_memory", ("model", "M7"): "infeasible_memory"})
+
+
+@case("realsearch4096", "an-infeasible-incumbent-is-VOID", "fail")
+def _(root):
+    return _realsearch_void(root, expect_clause="search: the incumbent is infeasible", sel_status={("model", "M1"): "infeasible_memory"})
+
+
+@case("realsearch4096", "a-knob-free-head-with-a-selection-stage-is-VOID", "fail")
+def _(root):
+    def sm(sel):
+        sel["selection"]["majority"]["stages"] = [{"stage": 1, "records": []}]
+    return _realsearch_void(root, expect_clause="search: knob-free head majority", sel_mutate=sm)
+
+
+@case("realsearch4096", "a-roster-with-one-candidate-changed-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["roster"]["heads"][0]["candidates"][3]["params"]["max_iter"] = 251
+    return _realsearch_void(root, m, expect_clause="scope: the banked roster")
+
+
+@case("realsearch4096", "a-protocol-with-a-lower-margin-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["roster"]["protocol"]["bar"]["margin"] = 0.02
+    return _realsearch_void(root, m, expect_clause="scope: roster.protocol.bar")
+
+
+@case("realsearch4096", "a-protocol-with-a-lower-floor-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["roster"]["protocol"]["floors"]["logistic"] = 0.05
+    return _realsearch_void(root, m, expect_clause="scope: roster.protocol.floors")
+
+
+@case("realsearch4096", "a-changed-reproduction-reference-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["reference_top1"]["repro_m4"] = 0.20
+    return _realsearch_void(root, m, expect_clause="reproduction: the banked reference")
+
+
+@case("realsearch4096", "a-selected-model-id-that-disagrees-with-selected-ids-is-VOID", "fail")
+def _(root):
+    return _realsearch_void(root, lambda a, s: a.update(selected_model_id="M1"), expect_clause="search: selected_model_id")
+
+
+@case("realsearch4096", "a-launch-environment-with-a-problem-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["launch_environment"]["ok"] = False; a["launch_environment"]["problems"] = ["threads 4 != preregistered 3"]
+    return _realsearch_void(root, m, expect_clause="environment: launch_environment")
+
+
+@case("realsearch4096", "the-logistic-head-selecting-0021s-recipe-reproduces-it-and-the-run-still-clears", "pass")
+def _(root):
+    # L3 wins the logistic head: repro_l3 is aliased to the logistic's own fit at 0021's 0.1179, the bar stays at the floor
+    r22 = _rs_reader()
+    return _realsearch(root, sel_scores={"logistic": {"L3": 0.15}}, head_real={"logistic": r22.REFERENCE["repro_l3"]})
+
+
+@case("realsearch4096", "the-depth3-head-selecting-0021s-recipe-reproduces-it-and-the-run-still-clears", "pass")
+def _(root):
+    r22 = _rs_reader()
+    return _realsearch(root, sel_scores={"depth3_tree": {"D1": 0.15}}, head_real={"depth3_tree": r22.REFERENCE["repro_d1"]})
+
+
+@case("realsearch4096", "every-head-selecting-its-reference-recipe-is-a-clean-REAL_RECIPE_FAILS", "fail")
+def _(root):
+    r22 = _rs_reader()
+    rc, out = _realsearch(root, sel_scores={"model": {"M1": 0.15}, "logistic": {"L3": 0.15}, "depth3_tree": {"D1": 0.15}},
+                          head_real={"model": r22.REFERENCE["repro_m1"], "logistic": r22.REFERENCE["repro_l3"],
+                                     "depth3_tree": r22.REFERENCE["repro_d1"]})
+    if rc != 0 and ("verdict=REAL_RECIPE_FAILS" not in out or "validity=[]" not in out):
+        return 0, out + " !! expected a clean REAL_RECIPE_FAILS with three aliased arms"
+    return rc, out
+
+
+@case("realsearch4096", "an-aliased-logistic-reproduction-off-by-0.006-is-VOID", "fail")
+def _(root):
+    r22 = _rs_reader()
+    return _realsearch_void(root, expect_clause="reproduction: repro_l3", sel_scores={"logistic": {"L3": 0.15}},
+                            head_real={"logistic": round(r22.REFERENCE["repro_l3"] + 0.006, 4)})
+
+
+@case("realsearch4096", "a-control-whose-partition-is-the-readers-own-literals-is-detected", "fail")
+def _(root):
+    # the construction the six older gates used until 2026-09-17; the provenance case below must refuse it
+    shape = json.load(open(_RS_SHAPE, encoding="utf-8")); S_art = shape["artifact"]
+    art, sel_bytes, scores = _good_realsearch(); r22 = _rs_reader()
+    art["partition"] = dict(r22.PARTITION)
+    problems = _shape_problems(art, S_art, [("partition", art["partition"], S_art["partition"])], [], [])
+    if not problems:
+        return 0, "!! a partition taken from the reader's literals was not detected"
+    return 1, problems[0]
+
+
+@case("realsearch4096", "the-readers-record-requirements-hold-against-the-runners-own-banked-values", "pass")
+def _(root):
+    # the fixture's smoke records must satisfy every per-record requirement the reader makes that is NOT a sealed value:
+    # fit_info by estimator family, per_family over the families present, probe_ok, finite scores
+    shape = json.load(open(_RS_SHAPE, encoding="utf-8")); r22 = _rs_reader()
+    by_id = {c["id"]: c for h in r22.HEADS for c in h["candidates"]}
+    problems = []
+    for name, rec in shape["artifact"]["fits"].items():
+        fam = by_id[rec["id"]]["family"]; info = rec.get("fit_info")
+        if fam in ("hgb", "logistic") and not isinstance(info.get("n_iter"), int):
+            problems.append(f"{name}: {fam} without n_iter")
+        if fam == "tree" and not (isinstance(info.get("depth"), int) and isinstance(info.get("n_leaves"), int)):
+            problems.append(f"{name}: tree without depth/n_leaves")
+        if fam == "dummy" and info != {}:
+            problems.append(f"{name}: dummy with fit_info {info}")
+        if sorted(rec["per_family"]) != sorted(r22.FAMILIES + ["ext:" + f for f in r22.EXT_FAMILIES]):
+            problems.append(f"{name}: per_family keys {sorted(rec['per_family'])}")
+        if any(not rf.get("probe_ok") for rf in rec.get("block_refills") or []):
+            problems.append(f"{name}: a failed probe")
+    for hid, e in shape["selection"]["selection"].items():
+        for st in e["stages"]:
+            for rec in st["records"]:
+                if rec["status"] == "fit" and sorted(rec["per_family"]) != sorted(r22.FIT_FAMILIES):
+                    problems.append(f"selection {hid}/{rec['id']}: per_family keys {sorted(rec['per_family'])}")
+    if problems:
+        return 1, "; ".join(problems[:4])
+    return 0, f"{len(shape['artifact']['fits'])} confirmatory and {sum(len(st['records']) for e in shape['selection']['selection'].values() for st in e['stages'])} selection records satisfy the reader's record requirements"
+
+
+@case("realsearch4096", "the-control-artifact-is-built-from-the-runners-own-output-shape", "pass")
+def _(root):
+    # docs/OPERATING_RULES.md section 4: symmetric and recursive - top level, every block, every record, both files
+    shape = json.load(open(_RS_SHAPE, encoding="utf-8")); S_art, S_sel = shape["artifact"], shape["selection"]
+    art, sel_bytes, scores = _good_realsearch(); sel = json.loads(sel_bytes); r22 = _rs_reader()
+    blocks = [("partition", art["partition"], S_art["partition"]), ("corpus", art["corpus"], S_art["corpus"]),
+              ("ext_corpus", art["ext_corpus"], S_art["ext_corpus"]), ("fit_corpus", art["fit_corpus"], S_art["fit_corpus"]),
+              ("roster", art["roster"], S_art["roster"]), ("selection.roster", sel["roster"], S_sel["roster"]),
+              ("bars", art["bars"], S_art["bars"]), ("selection (file)", sel, S_sel), ("selection.partition", sel["partition"], S_sel["partition"]),
+              ("scores (file)", {k: v for k, v in scores.items()}, dict(shape["scores"], per_example=None, eval_chunk_ids=None, ext_chunk_ids=None, ext_fam=None))]
+    blocks += [(f"readings.{n}", art["readings"][n], S_art["readings"]["model"]) for n in art["readings"]]
+    records = [(f"fits.{n}", art["fits"][n], S_art["fits"][n] if n in S_art["fits"] else S_art["fits"]["repro_m4"]) for n in art["fits"]]
+    for hid, e in sel["selection"].items():
+        for st in e["stages"]:
+            records += [(f"selection.{hid}.{r['id']}", r, S_sel["selection"]["model"]["stages"][0]["records"][0]) for r in st["records"]]
+    problems = _shape_problems(art, S_art, blocks, records,
+                               [("PARTITION", r22.PARTITION, S_art["partition"]), ("CORPUS", r22.CORPUS, S_art["corpus"]),
+                                ("EXT", r22.EXT, S_art["ext_corpus"]), ("FIT", r22.FIT, S_art["fit_corpus"])])
+    if problems:
+        return 1, "; ".join(problems[:4])
+    return 0, (f"control and fixture agree both ways on {len(S_art)} artifact keys, {len(S_sel)} selection keys, {len(art['fits'])} "
+               f"confirmatory records, {sum(len(st['records']) for e in sel['selection'].values() for st in e['stages'])} selection "
+               f"records and every block; every reader expectation is a key the runner writes")
+
+
 def main() -> int:
     # `python3 tests/mutation_test.py <gate> [<gate> ...]` runs only those gates' cases and writes NO report (a partial
     # report would make the banked count stale); the full suite, as CI runs it, takes no arguments.

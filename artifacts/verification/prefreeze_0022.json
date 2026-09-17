@@ -1,0 +1,20 @@
+{
+  "holdout": {
+    "holdout_rows_per_family": {
+      "c_src": 130,
+      "pe_bin": 1014,
+      "py_src": 3471,
+      "rfc_txt": 468,
+      "rst_doc": 208
+    },
+    "n_holdout_chunks": 206,
+    "n_holdout_rows": 5291
+  },
+  "passed": true,
+  "prereg_sha256_at_check": "7d091b4cb413a6da9d2bfd2e85f0e977c91167aaa8c4318809c60d26ba7ededd",
+  "preregistration": "0022-realsearch-4096",
+  "problems": 0,
+  "reader_sha256_at_check": "174d18b016992151217a28835d14fcaab90741d4b427419740beb21df3adc836",
+  "schema": "raise-v1/prefreeze_0022/1",
+  "unsearched_frozen_bar_rows": 6457
+}
