@@ -7,3 +7,17 @@
 {"name": "sel1_model_M4", "fingerprint": "a3097bb26ee7e419", "event": "started", "utc": "2026-09-17T07:49:41Z", "rss_gb": 0.89, "pid": 32400, "attempt": 1}
 {"name": "sel1_model_M4", "fingerprint": "a3097bb26ee7e419", "event": "completed", "utc": "2026-09-17T07:54:53Z", "rss_gb": 1.09, "pid": 32400, "seconds": 310.8}
 {"name": "sel1_model_M5", "fingerprint": "b4a1508aa6201f26", "event": "started", "utc": "2026-09-17T07:54:53Z", "rss_gb": 1.09, "pid": 32400, "attempt": 1}
+{"name": "sel1_model_M5", "fingerprint": "b4a1508aa6201f26", "event": "completed", "utc": "2026-09-17T07:57:13Z", "rss_gb": 1.09, "pid": 32400, "seconds": 140.1}
+{"name": "sel1_model_M6", "fingerprint": "d41368a72a91b702", "event": "started", "utc": "2026-09-17T07:57:13Z", "rss_gb": 1.09, "pid": 32400, "attempt": 1}
+{"name": "sel1_model_M6", "fingerprint": "d41368a72a91b702", "event": "completed", "utc": "2026-09-17T07:59:18Z", "rss_gb": 1.13, "pid": 32400, "seconds": 124.3}
+{"name": "sel1_model_M7", "fingerprint": "7d4c81c5c518c91e", "event": "started", "utc": "2026-09-17T07:59:18Z", "rss_gb": 1.13, "pid": 32400, "attempt": 1}
+{"name": "sel1_model_M7", "fingerprint": "7d4c81c5c518c91e", "event": "completed", "utc": "2026-09-17T08:00:39Z", "rss_gb": 1.13, "pid": 32400, "seconds": 80.4}
+{"name": "sel1_model_M8", "fingerprint": "8a37050e23ef0dbf", "event": "started", "utc": "2026-09-17T08:00:39Z", "rss_gb": 1.13, "pid": 32400, "attempt": 1}
+{"name": "sel1_model_M8", "fingerprint": "8a37050e23ef0dbf", "event": "completed", "utc": "2026-09-17T08:01:38Z", "rss_gb": 1.13, "pid": 32400, "seconds": 58.3}
+{"name": "sel1_logistic_L1", "fingerprint": "1c89b16ec3f77e8c", "event": "started", "utc": "2026-09-17T08:01:38Z", "rss_gb": 1.13, "pid": 32400, "attempt": 1}
+{"name": "sel1_logistic_L1", "fingerprint": "1c89b16ec3f77e8c", "event": "completed", "utc": "2026-09-17T08:02:39Z", "rss_gb": 1.2, "pid": 32400, "seconds": 60.9}
+{"name": "sel1_logistic_L2", "fingerprint": "fe4965eb6861adcc", "event": "started", "utc": "2026-09-17T08:02:39Z", "rss_gb": 1.2, "pid": 32400, "attempt": 1}
+{"name": "sel1_logistic_L2", "fingerprint": "fe4965eb6861adcc", "event": "completed", "utc": "2026-09-17T08:04:10Z", "rss_gb": 1.2, "pid": 32400, "seconds": 90.9}
+{"name": "sel1_logistic_L3", "fingerprint": "06825f3df6868bfe", "event": "started", "utc": "2026-09-17T08:04:10Z", "rss_gb": 1.2, "pid": 32400, "attempt": 1}
+{"name": "sel1_logistic_L3", "fingerprint": "06825f3df6868bfe", "event": "completed", "utc": "2026-09-17T08:05:04Z", "rss_gb": 1.2, "pid": 32400, "seconds": 54.2}
+{"name": "sel1_logistic_L4", "fingerprint": "3c6f11b3d8818583", "event": "started", "utc": "2026-09-17T08:05:04Z", "rss_gb": 1.2, "pid": 32400, "attempt": 1}
