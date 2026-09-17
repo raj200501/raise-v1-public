@@ -212,6 +212,156 @@
       "note": "one of the 79 RFC texts of the rfc_txt extension family (every one pinned in tools/pivot/ext_source_pins.json); its Copyright Notice, which points at BCP 78 and the IETF Trust Legal Provisions, committed as sources/rfc9110_copyright_notice_as_served_2026-09-09.txt",
       "committed_file": "rfc9110_copyright_notice_as_served_2026-09-09.txt",
       "committed_sha256": "7c8bf9a5fafed0d809f8b406c8bf5f417fb5d1419fd6d1ebc2789dd66ff7c4d1"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/4c/d3/b0dae3b5e6412227ec4387cf39110be3432c53886d2927c78b5f6976f1cb/Django-5.0.6.tar.gz",
+      "sha256": "ff1b61005004e476e0aeea47c7f79b85864c70124030e95146315396f1e7951f",
+      "bytes": 10639679,
+      "note": "0024 source archive Django-5.0.6.tar.gz: BSD-3-Clause (LICENSE in the archive; LICENSE.python names the PSF-licensed parts); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/99/04/59971bfc2f192e3b52376ca8d1e134c78d04bc044ef7e04cf10c42d2ce17/SQLAlchemy-2.0.29.tar.gz",
+      "sha256": "bd9566b8e58cabd700bc367b60e90d9349cd16f0984973f98a9a09f9c64e86f0",
+      "bytes": 9543967,
+      "note": "0024 source archive SQLAlchemy-2.0.29.tar.gz: MIT (LICENSE); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/48/08/f205a24d75ad1f329586bb685b53574c5303c56acf80924166a6c8df8a09/astropy-6.0.1.tar.gz",
+      "sha256": "89a975de356d0608e74f1f493442fb3acbbb7a85b739e074460bb0340014b39c",
+      "bytes": 7074537,
+      "note": "0024 source archive astropy-6.0.1.tar.gz: BSD-3-Clause (LICENSE.rst); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://curl.se/download/curl-8.7.1.tar.gz",
+      "sha256": "f91249c87f68ea00cf27c44fdfa5a78423e41e71b7d408e5901a9896d905c495",
+      "bytes": 4462311,
+      "note": "0024 source archive curl-8.7.1.tar.gz: curl licence, MIT-style (COPYING); families c_src; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://dl.google.com/go/go1.22.2.windows-amd64.zip",
+      "sha256": "8e581cf330f49d3266e936521a2d8263679ef7e2fc2cbbceb85659122d883596",
+      "bytes": 76244044,
+      "note": "0024 source archive go1.22.2.windows-amd64.zip: BSD-3-Clause (LICENSE); families pe_bin; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://www.lua.org/ftp/lua-5.4.6.tar.gz",
+      "sha256": "7d5ea1b9cb6aa0b59ca3dde1c6adcb57ef83a1ba8e5432c0ecd06bf439b3ad88",
+      "bytes": 363329,
+      "note": "0024 source archive lua-5.4.6.tar.gz: MIT (the licence block at the end of src/lua.h; the tarball carries no LICENSE file); families c_src; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/38/4f/8487737a74d8be4ab5fbe6019b0fae305c1604cf7209500969b879b5f462/matplotlib-3.8.4.tar.gz",
+      "sha256": "8aac397d5e9ec158960e31c381c5ffc52ddd52bd9a47717e2a694038167dffea",
+      "bytes": 35934425,
+      "note": "0024 source archive matplotlib-3.8.4.tar.gz: Matplotlib licence, PSF-style (LICENSE/LICENSE); bundled fonts and data under the licences in LICENSE/; families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://musl.libc.org/releases/musl-1.2.5.tar.gz",
+      "sha256": "a9a118bbe84d8764da0ea0d28b3ab3fae8477fc7e4085d90102b8596fc7c75e4",
+      "bytes": 1080786,
+      "note": "0024 source archive musl-1.2.5.tar.gz: MIT (COPYRIGHT); families c_src; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/04/e6/b164f94c869d6b2c605b5128b7b0cfe912795a87fc90e78533920001f3ec/networkx-3.3.tar.gz",
+      "sha256": "0c127d8b2f4865f59ae9cb8aafcd60b5c70f3241ebd66f7defad7c4ab90126c9",
+      "bytes": 2126579,
+      "note": "0024 source archive networkx-3.3.tar.gz: BSD-3-Clause (LICENSE.txt); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://nginx.org/download/nginx-1.25.4.tar.gz",
+      "sha256": "760729901acbaa517996e681ee6ea259032985e37c2768beef80df3a877deed9",
+      "bytes": 1236273,
+      "note": "0024 source archive nginx-1.25.4.tar.gz: BSD-2-Clause (LICENSE); families c_src; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://nodejs.org/dist/v20.12.2/node-v20.12.2-win-x64.zip",
+      "sha256": "66dda1717cae30a13be6bb17ad96ee54b69f2c23c85acd9c3299b095fa26b452",
+      "bytes": 29516892,
+      "note": "0024 source archive node-v20.12.2-win-x64.zip: MIT (LICENSE), which also lists the licences of the components bundled into node.exe; families pe_bin; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/65/6e/09db70a523a96d25e115e71cc56a6f9031e7b8cd166c1ac8438307c14058/numpy-1.26.4.tar.gz",
+      "sha256": "2a02aba9ed12e4ac4eb3ea9421c420301a0c6460d9830d74a9df87efa4912010",
+      "bytes": 15786129,
+      "note": "0024 source archive numpy-1.26.4.tar.gz: BSD-3-Clause (LICENSE.txt); bundled components under the licences listed in LICENSES_bundled.txt; families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/88/d9/ecf715f34c73ccb1d8ceb82fc01cd1028a65a5f6dbc57bfa6ea155119058/pandas-2.2.2.tar.gz",
+      "sha256": "9e79019aba43cb4fda9e4d983f8e88ca0373adbb697ae9c6c43093218de28b54",
+      "bytes": 4398391,
+      "note": "0024 source archive pandas-2.2.2.tar.gz: BSD-3-Clause (LICENSE); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://ftp.postgresql.org/pub/source/v16.2/postgresql-16.2.tar.gz",
+      "sha256": "2b8201047ec81acd1bad29dba278d788e7891b9c3e8232eda16bb29dec8131c7",
+      "bytes": 32558575,
+      "note": "0024 source archive postgresql-16.2.tar.gz: PostgreSQL License (COPYRIGHT); families c_src; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://the.earth.li/~sgtatham/putty/0.81/w64/putty.zip",
+      "sha256": "7778a9457f089852d4f531554952739f126000cbd61a504f65f168904f5c50f2",
+      "bytes": 3959924,
+      "note": "0024 source archive putty-0.81-w64.zip: MIT (the project's licence page, fetched and hashed in docs/compliance/sources/MANIFEST.json; the zip carries no licence file); families pe_bin; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/55/59/8bccf4157baf25e4aa5a0bb7fa3ba8600907de105ebc22b0c78cfbf6f565/pygments-2.17.2.tar.gz",
+      "sha256": "da46cec9fd2de5be3a8a784f434e4c4ab670b4ff54d605c4c2717e9d49c4c367",
+      "bytes": 4827772,
+      "note": "0024 source archive pygments-2.17.2.tar.gz: BSD-2-Clause (LICENSE); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/ef/e5/c09d20723bfd91315f6f4ddc77912b0dcc09588b4ca7ad2ffa204607ad7f/scikit-learn-1.4.2.tar.gz",
+      "sha256": "daa1c471d95bad080c6e44b4946c9390a4842adc3082572c20e4f8884e39e959",
+      "bytes": 7763055,
+      "note": "0024 source archive scikit-learn-1.4.2.tar.gz: BSD-3-Clause (COPYING); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/fb/a3/328965862f41ba67d27ddd26205962007ec87d99eec6d364a29bf00ac093/scipy-1.13.0.tar.gz",
+      "sha256": "58569af537ea29d3f78e5abd18398459f195546bb3be23d16677fb26616cc11e",
+      "bytes": 57204550,
+      "note": "0024 source archive scipy-1.13.0.tar.gz: BSD-3-Clause (LICENSE.txt); bundled components under the licences listed in LICENSES_bundled.txt; families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/73/8e/6e51da4b26665b4b92b1944ea18b2d9c825e753e19180cc5bdc818d0ed3b/sphinx-7.2.6.tar.gz",
+      "sha256": "9a5160e1ea90688d5963ba09a2dcd8bdd526620edbb65c328728f1b2228d5ab5",
+      "bytes": 7015183,
+      "note": "0024 source archive sphinx-7.2.6.tar.gz: BSD-2-Clause (LICENSE); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/4b/80/c4e279a6a13468ae2f1f01af2a07ddb44f397ac4d7636af13c5b3b83dde1/statsmodels-0.14.1.tar.gz",
+      "sha256": "2260efdc1ef89f39c670a0bd8151b1d0843567781bcafec6cda0534eb47a94f6",
+      "bytes": 20309647,
+      "note": "0024 source archive statsmodels-0.14.1.tar.gz: BSD-3-Clause (LICENSE.txt); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/e5/57/3485a1a3dff51bfd691962768b14310dae452431754bfc091250be50dd29/sympy-1.12.tar.gz",
+      "sha256": "ebf595c8dac3e0fdc4152c51878b498396ec7f30e7a914d6071e674d49420fb8",
+      "bytes": 6722203,
+      "note": "0024 source archive sympy-1.12.tar.gz: BSD-3-Clause (LICENSE); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/fc/8d/9c09d75173984d3b0f0dcf65d885fe61a06de11db2c30b1196d85f631cfc/twisted-24.3.0.tar.gz",
+      "sha256": "6b38b6ece7296b5e122c9eb17da2eeab3d98a198f50ca9efd00fb03e5b4fd4ae",
+      "bytes": 3500456,
+      "note": "0024 source archive twisted-24.3.0.tar.gz: MIT (LICENSE); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://zlib.net/fossils/zlib-1.3.1.tar.gz",
+      "sha256": "9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23",
+      "bytes": 1512791,
+      "note": "0024 source archive zlib-1.3.1.tar.gz: zlib licence (LICENSE); families c_src; licence text committed in sources/ (see docs/compliance/EXT_SOURCES2.md)"
+    },
+    {
+      "url": "https://www.chiark.greenend.org.uk/~sgtatham/putty/licence.html",
+      "sha256": "643a9142655b672ef53f729dded917cff6e0f9dfa22d32629ff5ec137e15e3c5",
+      "bytes": 3988,
+      "note": "PuTTY licence page (MIT); text extracted into sources/putty-0.81_licence_page_as_served_2026-09-17.txt"
+    },
+    {
+      "url": "https://www.rfc-editor.org/rfc-index.txt",
+      "sha256": "f77ec69ad791023e9d1f50b136ed9912ebac3a7be70bfc1e08c5b5c37e4e9906",
+      "bytes": 2025376,
+      "note": "RFC Editor index as served 2026-09-17; the 0024 RFC sample (600 of the 8117 issued TXT-format RFCs not pinned by 0018) was drawn from it with random.Random(20260917).sample; the 600 files are pinned individually in tools/pivot/ext_source_pins2.json"
     }
   ],
   "unreachable": [
@@ -236,5 +386,6 @@
       "utc_date": "2026-09-09",
       "what": "extension corpus sources for preregistration 0018 (four entries above); fetched through the same egress proxy with the same user agent"
     }
-  ]
+  ],
+  "fetched_utc_date_0024": "2026-09-17"
 }

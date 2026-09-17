@@ -31,3 +31,7 @@ artifacts/pivot/realcurve_4096_ckpt/*.hb
 artifacts/pivot/realcurve_4096_ckpt/*.tmp
 artifacts/pivot/realcurve_4096.json.tmp
 artifacts/pivot/realcurve_4096_scores.json.tmp
+artifacts/pivot/realcurve2_4096_ckpt/*.hb
+artifacts/pivot/realcurve2_4096_ckpt/*.tmp
+artifacts/pivot/realcurve2_4096.json.tmp
+artifacts/pivot/realcurve2_4096_scores.json.tmp

@@ -1,0 +1,2122 @@
+#!/usr/bin/env python3
+"""Frozen reader for preregistration 0024 — the SECOND decade of real plaintexts at 4096.
+
+Written and committed BEFORE any fit was made under this preregistration. Every literal below was generated
+from prereg/0024-realcurve2-4096.json or read from a banked artifact; none was typed here.
+
+WHY THIS EXISTS. 0023 read REAL_CURVE_RISES over one decade of real plaintexts (130 -> 1029, every one a chunk of
+0018's five pinned files): the boosted model rose 0.007344 per doubling, the standardised logistic 0.009551, and
+the model's lead over the logistic shrank from 0.0063 to 0.0014 at the top rung - 0021's whole fit block, the last
+real plaintext the record had. Two questions were left open by construction: does the curve keep rising when the
+plaintexts come from OTHER files of the same families, and does the model keep its lead over a hand-writable
+linear rule, or does the linear rule overtake it? This run adds three doublings from new pinned files (0024's
+corpus: other Python projects, other C projects, other Windows programs, other RFCs), nested on 0021's block so that
+rung 4 + d holds exactly 2^d times rung 4's plaintexts of every family, fits 0021's three fixed recipes on every rung,
+scores each fit once on 0018's scoring set, and reads: the model's slope over the second decade (rungs 4..7) with a
+cluster bootstrap over scored chunks (the clauses), and the paired interval of model minus logistic at the top rung
+(the sealed lead rule). Rungs 1..4 are 0023's rungs row for row: their readings reproduce 0023's or the run is VOID,
+and every reproduction is fitted before any new plaintext. A shift arm - rung 5's new plaintexts alone, rung 4's
+plaintext count from other files only - is fitted last, informational: the direct reading of what other files of the
+same families buy for the original files.
+
+This reader takes the runner's artifact (tools/pivot/run_realcurve2.py) and checks, clause by clause: the sealed
+corpora (array hashes for the builder cache, the evaluation corpus, 0021's fit corpus and 0024's fit corpus); the
+sealed split, the sealed fit block and every sealed rung (hash for hash, nested, strictly increasing, exact
+doublings above 0021's block); that nothing scored was fitted and the two fit corpora share nothing (the runner's
+measured chunk, source-chunk and row-identity counts must all be 0); that every fit is the sealed recipe on the
+sealed rung with the sealed seed, scored exactly once, in the sealed order, with its fingerprint recomputed here;
+that each record's own scores equal what its per-example vector gives; that rung 4's three roles land within 0.005
+of 0021's banked values and rungs 1..4 within 0.005 of 0023's; that the null control on the top rung sits at chance
+on both row sets; that every banked reading, curve, slope, interval and lead equals what this reader recomputes from
+the vectors and the sealed chunk layout. Then two clauses on the reader's own numbers - the model's second-decade
+slope >= 0.005 per doubling of plaintexts, and the 2.5th percentile of that slope under the sealed cluster bootstrap
+> 0 - and the sealed lead rule at the top rung. SECOND_DECADE_RISES or SECOND_DECADE_FLAT, each suffixed
+MODEL_LEADS, LINEAR_LEADS or NO_SEPARATION, published at the same size; VOID on any validity failure.
+
+NOT A TRANSFER READING, AND NOT 0023's IN-DISTRIBUTION READING EITHER. Every rung holds the scored files' own
+unscored chunks (0021's block); the added plaintexts are other projects' files of the same five families. Nothing
+fitted shares a byte, a chunk index, a chunk id or a source-chunk hash with anything scored, and the runner measures
+that rather than assuming it. Every verdict string this reader emits says what the rise is measured against.
+
+WHAT THIS READER CANNOT SEE. The binding of a per-example vector to the fit that produced it is the runner's
+self-report (its fingerprint, its ledger, the vector's hash) plus the committed checkpoints, which this reader
+cross-checks whenever the checkpoint directory is present (fingerprint, vector, and the whole banked record); it also
+requires the twenty-five vectors to be pairwise distinct. No extrapolation beyond the top rung is banked. A role at its
+iteration cap at the top rung is named beside the lead reading, which is then not quoted as a recipe comparison.
+
+Digest convention: sha256 of np.ascontiguousarray(a).tobytes(); index arrays int64 in their order; sorted sets
+np.sort(...).astype(np.int64); corpus arrays as stored (float32 X, int16 y, int32 g little-endian, int8 fam);
+per-example vectors as int8 bytes.
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+import math
+import os
+import sys
+
+import numpy as np
+
+REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ARTIFACT = os.path.join(REPO, "artifacts", "pivot", "realcurve2_4096.json")
+SCORES = os.path.join(REPO, "artifacts", "pivot", "realcurve2_4096_scores.json")
+NOT_RUN = os.path.join(REPO, "artifacts", "pivot", "realcurve2_4096_not_run.json")
+OUT = os.path.join(REPO, "artifacts", "pivot", "realcurve2_4096_verdict.json")
+PREREG = "0024-realcurve2-4096"
+
+FAMILIES = ["gutenberg", "base64", "binary", "code", "csv", "json", "log", "mixed"]
+EXT_FAMILIES = ["c_src", "hexdump", "pe_bin", "py_src", "rfc_txt", "rst_doc", "sql", "xml"]
+REAL_FAMILIES = ["c_src", "pe_bin", "py_src", "rfc_txt", "rst_doc"]
+SYNTH_FAMILIES = ["hexdump", "sql", "xml"]
+FIT_FAMILIES = ["c_src", "pe_bin", "py_src", "rfc_txt", "rst_doc"]
+STRUCTURED_TEXT = ["c_src", "py_src", "rfc_txt", "rst_doc", "sql", "xml"]
+HIGH_ENTROPY = ["hexdump", "pe_bin"]
+
+# the builder cache block the runner banks (0021's values; X's hash from the sealed cache identity)
+CORPUS = {'carve_bytes': 4096,
+ 'carve_bytes_source': 'sealed cache identity (sha256 of y and g); the cache carries no build metadata',
+ 'chunk_size': 32768,
+ 'chunk_offset': 0,
+ 'chunk_id_min': 0,
+ 'chunk_id_max': 49999,
+ 'n_source_chunks': 50000,
+ 'cache_y_sha256': '2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093',
+ 'cache_g_sha256': 'eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9',
+ 'n_rows': 1300000,
+ 'n_features': 1108,
+ 'cache_X_sha256': 'a28a2d403d40c64405fe15747399f1317fd984155702797590c58fb0cef0f8ea'}
+# the sealed protocol, field by field, and its digest; the curve spec (protocol + recipes) and its digest
+PROTOCOL = {'seed': 20260825,
+ 'seed2': 20260917,
+ 'eval_frac': 0.2,
+ 'top_rung': 800000,
+ 'threads': 3,
+ 'nice': 10,
+ 'carve': 4096,
+ 'chunk_offset': 0,
+ 'chunk_size': 32768,
+ 'cache_identity': {'y_sha256': '2b70426881e569f303c400b8dc2b3cb69f30dbe2e36a93dff56df54df9acf093',
+                    'g_sha256': 'eda31b7cfa24640dff694c00e62849537490c9572966a5247d1f5127800e4df9',
+                    'X_sha256': 'a28a2d403d40c64405fe15747399f1317fd984155702797590c58fb0cef0f8ea',
+                    'X_shape': [1300000, 1108],
+                    'X_dtype': 'float32',
+                    'X_note': "restated from 0021's cache_identity verbatim (y, g, X hashes, shape, dtype); "
+                              'the feature array was first sealed and hashed there'},
+ 'families': ['gutenberg', 'base64', 'binary', 'code', 'csv', 'json', 'log', 'mixed'],
+ 'ext_families': ['c_src', 'hexdump', 'pe_bin', 'py_src', 'rfc_txt', 'rst_doc', 'sql', 'xml'],
+ 'fit_families': ['c_src', 'pe_bin', 'py_src', 'rfc_txt', 'rst_doc'],
+ 'denominators': [8, 4, 2, 1],
+ 'doublings': 3,
+ 'n_first_decade_rungs': 4,
+ 'rung_rule': 'stratified_nested_by_family_chunk: per family, np.random.default_rng([seed, family_index + 1]) '
+              'permutes its chunk ids with rows; rung d takes the first ceil(n_f / d); rows are the fit '
+              "block's rows of those chunks in fit-block order",
+ 'second_decade_rule': "lockstep_nested_on_0021_block: rung 4 + d is 0021's whole fit block plus, per family, "
+                       "the first n_f x (2^d - 1) chunks with rows of 0024's pool in pool order (chunk id "
+                       "ascending), n_f being the family's chunks with rows in 0021's block; every rung "
+                       'therefore holds exactly 2^d x n_f plaintexts of every family; rows are permuted by '
+                       'np.random.default_rng([seed2, 100 + rung])',
+ 'rung_stream_words': {'rows': 'np.random.default_rng([seed2, 100 + rung]) for rungs 5..7',
+                       'null': 'np.random.default_rng([seed2, 200])',
+                       'shift_arm_rows': 'np.random.default_rng([seed2, 150])',
+                       'corpus_pool': 'np.random.default_rng([seed2, family_index + 1]) in '
+                                      'tools/pivot/corpus_realfit2.py (family_index 0..4)',
+                       'why_distinct': 'SeedSequence pads short entropy with zeros, so [seed2, 0] would be '
+                                       "seed2's own stream; every use of seed2 here carries a distinct second "
+                                       'word'},
+ 'recipe_ids': {'depth3_tree': 'D1', 'logistic': 'L3', 'model': 'M4'},
+ 'roles': ['depth3_tree', 'logistic', 'model'],
+ 'order': ['null',
+           'r4_depth3_tree',
+           'r4_logistic',
+           'r4_model',
+           'r1_depth3_tree',
+           'r1_logistic',
+           'r1_model',
+           'r2_depth3_tree',
+           'r2_logistic',
+           'r2_model',
+           'r3_depth3_tree',
+           'r3_logistic',
+           'r3_model',
+           'r5_depth3_tree',
+           'r5_logistic',
+           'r5_model',
+           'r6_depth3_tree',
+           'r6_logistic',
+           'r6_model',
+           'r7_depth3_tree',
+           'r7_logistic',
+           'r7_model',
+           's4_depth3_tree',
+           's4_logistic',
+           's4_model'],
+ 'shift': 's4',
+ 'shift_arm_hashes': {'rung': 's4',
+                      'decade': 2,
+                      'n_chunks': 1029,
+                      'n_rows': 26420,
+                      'chunks_per_family': {'c_src': 24,
+                                            'pe_bin': 203,
+                                            'py_src': 672,
+                                            'rfc_txt': 90,
+                                            'rst_doc': 40},
+                      'rows_per_family': {'c_src': 599,
+                                          'pe_bin': 5201,
+                                          'py_src': 17241,
+                                          'rfc_txt': 2339,
+                                          'rst_doc': 1040},
+                      'log2_chunks': 10.007027,
+                      'idx_sha256': 'cfa130ee81f23a2d6ad7bb6085089d9206cb3d72cbc3bcd3a0e841a493933eea',
+                      'sorted_sha256': '016b97f622baebc2a2b1bb34eb8f564deecec1dac9b4674d1b97b4c9e3538f35',
+                      'chunks_sha256': 'e96399afd1b28d94d8e88d39363cea0aa1dddfad23480de7606b4ff90a4bfcd8',
+                      'same_chunks_as_rung_5s_new_chunks': True,
+                      'same_plaintext_count_as_rung_4': True,
+                      'rule': "rung 5's new plaintexts alone - per family the first n_f chunks with rows of "
+                              "0024's pool, none of 0021's block - with rows permuted by "
+                              'np.random.default_rng([20260917, 150]); informational: read beside rung 4 (the '
+                              "same plaintext count, the scored files' own chunks) as a direct reading of what "
+                              'other files of the same families buy for the original files'},
+ 'order_is': "null on the top rung; rung 4 (0021's block: the reproduction of 0021 and of 0023's top rung); "
+             "rungs 1, 2, 3 (the reproduction of 0023's curve) - every reproduction before any new plaintext "
+             'is fitted; rungs 5, 6, 7 ascending; then the shift arm; the model last within each rung',
+ 'caps': {'selection_fit_seconds': 20000, 'memory_kill_gb': 13.0},
+ 'caps_note': "0023's caps verbatim; selection_fit_seconds is dormant (every fit is confirmatory) and "
+              "memory_kill_gb is the live one; the top rung's float64 block is about 1.87 GB beside the "
+              'scoring set',
+ 'launch': {'min_disk_free_gb': 0.5, 'min_mem_available_gb': 8.0, 'max_load1': 2.0},
+ 'environment': {'sklearn': '1.9.0', 'numpy': '2.4.6', 'python': '3.11.15'},
+ 'reference_top1': {'model': 0.1193, 'logistic': 0.1179, 'depth3_tree': 0.0929},
+ 'reference_source': "0021's banked real-family readings (artifacts/pivot/realfit_4096_rerun.json "
+                     "ext_real_top1: real_model, real_logistic, floor_tree3), reproduced by 0022 and by 0023's "
+                     'top rung with drift 0.0; rung 4 IS that fit block row for row, so its three roles are '
+                     'the reproduction arms',
+ 'reference_first_decade': {'depth3_tree': [0.0834, 0.0901, 0.0915, 0.0929],
+                            'logistic': [0.0911, 0.0939, 0.1085, 0.1179],
+                            'model': [0.0974, 0.1065, 0.1139, 0.1193]},
+ 'reference_first_decade_source': "0023's banked rung readings per role "
+                                  '(artifacts/pivot/realcurve_4096_verdict.json '
+                                  "curves.<role>.rungs[].ext_real_top1); rungs 1..4 here are 0023's rungs row "
+                                  'for row (the same seed, the same partition function, the same hashes), so '
+                                  "their readings must reproduce 0023's within the tolerance",
+ 'reproduction_tolerance': 0.005,
+ 'null_tolerance': 0.01,
+ 'null_rows': 'top_rung',
+ 'null_y_shuffled_sha256_expected': '08eaa81faaf030cef670a0b1b2792fb017d290358669d4d2d89d00d6b55d217a',
+ 'null_note': "the null control permutes the TOP rung's labels (in rung order) with "
+              'np.random.default_rng([seed2, 200]) and fits M4 on that rung; the permuted array is computed '
+              'here from the sealed corpora and its hash sealed; it is the first role in the order so that no '
+              'other draw precedes it and so that the largest block is probed first',
+ 'pool_idx_sha256': '17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5',
+ 'fit_block_hashes': {'fit_idx_sha256': '2b5fbaf627f1073bdeb51499c213be18837185414607b314b19f0efb6f5f5469',
+                      'fit_sorted_sha256': '551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476'},
+ 'rung_hashes': [{'rung': 1,
+                  'denominator': 8,
+                  'n_chunks': 130,
+                  'n_rows': 3344,
+                  'chunks_per_family': {'c_src': 3, 'pe_bin': 26, 'py_src': 84, 'rfc_txt': 12, 'rst_doc': 5},
+                  'rows_per_family': {'c_src': 78,
+                                      'pe_bin': 655,
+                                      'py_src': 2169,
+                                      'rfc_txt': 312,
+                                      'rst_doc': 130},
+                  'log2_chunks': 7.022368,
+                  'idx_sha256': 'b497853234eabf651a6d4a952b706c3692af44a0317ed3322c0c88b3f8f3204d',
+                  'sorted_sha256': '2eb3ac15056acabc2ee1d2621d4554cf956876d86963f162e1dd18c22d89e47e',
+                  'chunks_sha256': '8ec77d6a0d79f1cd23b606235db6f0c5022cfcedb088134abb7b3faa941c4381',
+                  'decade': 1,
+                  'new_chunks_per_family': {'c_src': 0, 'pe_bin': 0, 'py_src': 0, 'rfc_txt': 0, 'rst_doc': 0},
+                  'n_new_chunks': 0,
+                  'n_new_rows': 0},
+                 {'rung': 2,
+                  'denominator': 4,
+                  'n_chunks': 258,
+                  'n_rows': 6635,
+                  'chunks_per_family': {'c_src': 6, 'pe_bin': 51, 'py_src': 168, 'rfc_txt': 23, 'rst_doc': 10},
+                  'rows_per_family': {'c_src': 156,
+                                      'pe_bin': 1283,
+                                      'py_src': 4338,
+                                      'rfc_txt': 598,
+                                      'rst_doc': 260},
+                  'log2_chunks': 8.011227,
+                  'idx_sha256': '7bbb523fbddd2cfc1566d220f19ec384f71323207c77c65d1a0a9755bafaf0f2',
+                  'sorted_sha256': '130bb1751bd05deeb8b8a5c4f8b910434c5ee04f5cc482926f09463f1d1faa44',
+                  'chunks_sha256': '489551c78af8339fe95b65bbf728ac96737b05b615552cd163d8a374c60ca28b',
+                  'decade': 1,
+                  'new_chunks_per_family': {'c_src': 0, 'pe_bin': 0, 'py_src': 0, 'rfc_txt': 0, 'rst_doc': 0},
+                  'n_new_chunks': 0,
+                  'n_new_rows': 0},
+                 {'rung': 3,
+                  'denominator': 2,
+                  'n_chunks': 515,
+                  'n_rows': 13207,
+                  'chunks_per_family': {'c_src': 12,
+                                        'pe_bin': 102,
+                                        'py_src': 336,
+                                        'rfc_txt': 45,
+                                        'rst_doc': 20},
+                  'rows_per_family': {'c_src': 312,
+                                      'pe_bin': 2563,
+                                      'py_src': 8642,
+                                      'rfc_txt': 1170,
+                                      'rst_doc': 520},
+                  'log2_chunks': 9.008429,
+                  'idx_sha256': 'fc7fc963bfb29afb32dcf739f31d5fce19a3b5aa40a7d9a0ab283285e9d51e4e',
+                  'sorted_sha256': '7cca655b4f622f7c1aa245214d4a5858ccfa8cac9e88faad6d4e1c693236e0fb',
+                  'chunks_sha256': 'b5c07018014470a97952b10bf139ce0f1eb753e811ea1b9dd452c544ac6fe99a',
+                  'decade': 1,
+                  'new_chunks_per_family': {'c_src': 0, 'pe_bin': 0, 'py_src': 0, 'rfc_txt': 0, 'rst_doc': 0},
+                  'n_new_chunks': 0,
+                  'n_new_rows': 0},
+                 {'rung': 4,
+                  'denominator': 1,
+                  'n_chunks': 1029,
+                  'n_rows': 26346,
+                  'chunks_per_family': {'c_src': 24,
+                                        'pe_bin': 203,
+                                        'py_src': 672,
+                                        'rfc_txt': 90,
+                                        'rst_doc': 40},
+                  'rows_per_family': {'c_src': 624,
+                                      'pe_bin': 5145,
+                                      'py_src': 17197,
+                                      'rfc_txt': 2340,
+                                      'rst_doc': 1040},
+                  'log2_chunks': 10.007027,
+                  'idx_sha256': '2b5fbaf627f1073bdeb51499c213be18837185414607b314b19f0efb6f5f5469',
+                  'sorted_sha256': '551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476',
+                  'chunks_sha256': 'd5abe23ccaad4ad09ff3a9f035c0450e0f43318ff42f24700ba21baee4c089c4',
+                  'decade': 1,
+                  'new_chunks_per_family': {'c_src': 0, 'pe_bin': 0, 'py_src': 0, 'rfc_txt': 0, 'rst_doc': 0},
+                  'n_new_chunks': 0,
+                  'n_new_rows': 0},
+                 {'rung': 5,
+                  'decade': 2,
+                  'doubling': 1,
+                  'denominator': None,
+                  'n_chunks': 2058,
+                  'n_rows': 52766,
+                  'chunks_per_family': {'c_src': 48,
+                                        'pe_bin': 406,
+                                        'py_src': 1344,
+                                        'rfc_txt': 180,
+                                        'rst_doc': 80},
+                  'new_chunks_per_family': {'c_src': 24,
+                                            'pe_bin': 203,
+                                            'py_src': 672,
+                                            'rfc_txt': 90,
+                                            'rst_doc': 40},
+                  'n_new_chunks': 1029,
+                  'n_new_rows': 26420,
+                  'rows_per_family': {'c_src': 1223,
+                                      'pe_bin': 10346,
+                                      'py_src': 34438,
+                                      'rfc_txt': 4679,
+                                      'rst_doc': 2080},
+                  'log2_chunks': 11.007027,
+                  'idx_sha256': '5822a73f6821d475642430bdaec6c7d4f9d3b8b40bc3917e20562ebec13f1635',
+                  'sorted_sha256': '6365b440f0d9b55c14daec2d179ad336f288a590a16bc58c38ef075b3ebcb21e',
+                  'chunks_sha256': '51def974ec1f85d25fe0727165fdf37991548b0e9192f3dbcb570f272867e177',
+                  'new_chunks_sha256': 'e96399afd1b28d94d8e88d39363cea0aa1dddfad23480de7606b4ff90a4bfcd8',
+                  'row_order_rule': "np.random.default_rng([20260917, 105]).permutation over [0021's fit block "
+                                    "in its order] + [26346 + 0024 rows of the rung's chunks in npz order]"},
+                 {'rung': 6,
+                  'decade': 2,
+                  'doubling': 2,
+                  'denominator': None,
+                  'n_chunks': 4116,
+                  'n_rows': 105214,
+                  'chunks_per_family': {'c_src': 96,
+                                        'pe_bin': 812,
+                                        'py_src': 2688,
+                                        'rfc_txt': 360,
+                                        'rst_doc': 160},
+                  'new_chunks_per_family': {'c_src': 72,
+                                            'pe_bin': 609,
+                                            'py_src': 2016,
+                                            'rfc_txt': 270,
+                                            'rst_doc': 120},
+                  'n_new_chunks': 3087,
+                  'n_new_rows': 78868,
+                  'rows_per_family': {'c_src': 2374,
+                                      'pe_bin': 20773,
+                                      'py_src': 68656,
+                                      'rfc_txt': 9251,
+                                      'rst_doc': 4160},
+                  'log2_chunks': 12.007027,
+                  'idx_sha256': '40dfba4058158ed1517b422e97ddc5cd54924d92112f0ae2f943390002dca35b',
+                  'sorted_sha256': 'da1436cc295d3384df599faf7a42809fca1c7a60c87b7762abb8fc5ee8d02aad',
+                  'chunks_sha256': '6366c2e9b41234d042b5d28250573b9e0a595417f051fbe891c04b553ac053d3',
+                  'new_chunks_sha256': '998b74d7d7042e6d4b00ef7754b63a05b7c3ddfa2f6f2b7def66fc73889b8455',
+                  'row_order_rule': "np.random.default_rng([20260917, 106]).permutation over [0021's fit block "
+                                    "in its order] + [26346 + 0024 rows of the rung's chunks in npz order]"},
+                 {'rung': 7,
+                  'decade': 2,
+                  'doubling': 3,
+                  'denominator': None,
+                  'n_chunks': 8232,
+                  'n_rows': 210751,
+                  'chunks_per_family': {'c_src': 192,
+                                        'pe_bin': 1624,
+                                        'py_src': 5376,
+                                        'rfc_txt': 720,
+                                        'rst_doc': 320},
+                  'new_chunks_per_family': {'c_src': 168,
+                                            'pe_bin': 1421,
+                                            'py_src': 4704,
+                                            'rfc_txt': 630,
+                                            'rst_doc': 280},
+                  'n_new_chunks': 7203,
+                  'n_new_rows': 184405,
+                  'rows_per_family': {'c_src': 4739,
+                                      'pe_bin': 41627,
+                                      'py_src': 137584,
+                                      'rfc_txt': 18481,
+                                      'rst_doc': 8320},
+                  'log2_chunks': 13.007027,
+                  'idx_sha256': '662e783c813b2685e85711c0c1f04539411556e740660b15191f6935a2ac5d35',
+                  'sorted_sha256': '748589dc08be26b98e7f8a2871ae7c07691ca408fb60c34cb9ffabbf7e8d7e8c',
+                  'chunks_sha256': 'b0906ab1066cb10a996e8dd3740606eb83f7849044d48e60bd21bae8001b7409',
+                  'new_chunks_sha256': 'd4e1fa22151512f5f4885689264223e849651af2d5924530bdadc79ea9f7f0f0',
+                  'row_order_rule': "np.random.default_rng([20260917, 107]).permutation over [0021's fit block "
+                                    "in its order] + [26346 + 0024 rows of the rung's chunks in npz order]"}],
+ 'pool_chunks_with_rows_per_family': {'c_src': 185,
+                                      'pe_bin': 1492,
+                                      'py_src': 4927,
+                                      'rfc_txt': 668,
+                                      'rst_doc': 302},
+ 'ext_corpus': {'npz': 'data/pivot/ext_c4096.npz',
+                'arrays': {'X': {'sha256': 'c578eaf142dfd776fe2c9433420133ae6b2d304cdd546f2bdbbc50b397c4f5db',
+                                 'shape': [61409, 1108],
+                                 'dtype': 'float32'},
+                           'y': {'sha256': 'edbf9b3a9aa810338807a4a397884b58b27a28bbf0d99826050403bdeeabdd46',
+                                 'shape': [61409],
+                                 'dtype': 'int16'},
+                           'g': {'sha256': '2f5b8a86cc0463c1376d1ceb379ffe710e709899f2db4e1a527d355d6fcfc8b9',
+                                 'shape': [61409],
+                                 'dtype': 'int32'},
+                           'fam': {'sha256': '21b066e7020c5a4ba247101e679ba31f23cbeae5500ab67e64f453b83e61f917',
+                                   'shape': [61409],
+                                   'dtype': 'int8'}},
+                'n_rows': 61409,
+                'n_chunks': 2387,
+                'families': ['c_src', 'hexdump', 'pe_bin', 'py_src', 'rfc_txt', 'rst_doc', 'sql', 'xml'],
+                'rows_per_family': {'c_src': 7800,
+                                    'hexdump': 7800,
+                                    'pe_bin': 7407,
+                                    'py_src': 7709,
+                                    'rfc_txt': 7761,
+                                    'rst_doc': 7775,
+                                    'sql': 7357,
+                                    'xml': 7800},
+                'chunks_per_family': {'c_src': 300,
+                                      'hexdump': 300,
+                                      'pe_bin': 288,
+                                      'py_src': 300,
+                                      'rfc_txt': 300,
+                                      'rst_doc': 300,
+                                      'sql': 299,
+                                      'xml': 300},
+                'chunk_id_min': 10000000,
+                'chunk_id_max': 10700299},
+ 'fit_corpus': {'npz': 'data/pivot/realfit_c4096.npz',
+                'arrays': {'X': {'sha256': 'd969c7d75f5bc7743e9014908fe1d5e07a4220eacd82c166329bdcb381db8c98',
+                                 'shape': [26346, 1108],
+                                 'dtype': 'float32'},
+                           'y': {'sha256': '61f440bef345b3ec2f91f4accd56c1b23cf9d15376d3fa8ea76b01196488356a',
+                                 'shape': [26346],
+                                 'dtype': 'int16'},
+                           'g': {'sha256': '3046de76635c235319eb7bf49e59cf78c27d3d4f7776107c148ca0a7352dc0c8',
+                                 'shape': [26346],
+                                 'dtype': 'int32'},
+                           'fam': {'sha256': '8404e6764eb6a35e674a3c61b21fd1c8007a2448dec8203c80de2f0a71d07aca',
+                                   'shape': [26346],
+                                   'dtype': 'int8'}},
+                'n_rows': 26346,
+                'n_chunks': 1029,
+                'families': ['c_src', 'pe_bin', 'py_src', 'rfc_txt', 'rst_doc'],
+                'rows_per_family': {'c_src': 624,
+                                    'pe_bin': 5145,
+                                    'py_src': 17197,
+                                    'rfc_txt': 2340,
+                                    'rst_doc': 1040},
+                'chunks_per_family': {'c_src': 24, 'pe_bin': 203, 'py_src': 672, 'rfc_txt': 90, 'rst_doc': 40},
+                'chunk_id_min': 20000000,
+                'chunk_id_max': 20400039,
+                'label_histogram': [1025,
+                                    1023,
+                                    1022,
+                                    1017,
+                                    1009,
+                                    1008,
+                                    1006,
+                                    1006,
+                                    1006,
+                                    1022,
+                                    1022,
+                                    1019,
+                                    1011,
+                                    1008,
+                                    1008,
+                                    1007,
+                                    1005,
+                                    1006,
+                                    1002,
+                                    1002,
+                                    1002,
+                                    1029,
+                                    1028,
+                                    1028,
+                                    1025,
+                                    1000],
+                'majority_class_rate': 0.039057},
+ 'fit2_corpus': {'npz': 'data/pivot/realfit2_c4096.npz',
+                 'arrays': {'X': {'sha256': 'd74bd30e71a5083f8af6f90ddc0c89b553e65025c5ff3d96f0005ab15612b541',
+                                  'shape': [193926, 1108],
+                                  'dtype': 'float32'},
+                            'y': {'sha256': '5dcfd302b4dedd91119d9ad728f0a0a7dffd796605d0a0d7e9f0e2837a937591',
+                                  'shape': [193926],
+                                  'dtype': 'int16'},
+                            'g': {'sha256': '84c9e74a1a7b4f9065f340769cd5791bc92f1c99d1527863a211fc881077e24a',
+                                  'shape': [193926],
+                                  'dtype': 'int32'},
+                            'fam': {'sha256': '73952be90fa7982e62ae13570fb880b45e491bfbe3d2b4befa994c11d7c3e908',
+                                    'shape': [193926],
+                                    'dtype': 'int8'}},
+                 'n_rows': 193926,
+                 'n_chunks': 7574,
+                 'families': ['c_src', 'pe_bin', 'py_src', 'rfc_txt', 'rst_doc'],
+                 'rows_per_family': {'c_src': 4528,
+                                     'pe_bin': 38328,
+                                     'py_src': 126104,
+                                     'rfc_txt': 17114,
+                                     'rst_doc': 7852},
+                 'chunks_per_family': {'c_src': 185,
+                                       'pe_bin': 1492,
+                                       'py_src': 4927,
+                                       'rfc_txt': 668,
+                                       'rst_doc': 302},
+                 'chunk_id_min': 30000000,
+                 'chunk_id_max': 30400301,
+                 'label_histogram': [7540,
+                                     7525,
+                                     7509,
+                                     7489,
+                                     7442,
+                                     7422,
+                                     7412,
+                                     7404,
+                                     7404,
+                                     7519,
+                                     7508,
+                                     7489,
+                                     7465,
+                                     7448,
+                                     7423,
+                                     7412,
+                                     7403,
+                                     7403,
+                                     7388,
+                                     7385,
+                                     7383,
+                                     7574,
+                                     7539,
+                                     7536,
+                                     7530,
+                                     7374],
+                 'majority_class_rate': 0.039056},
+ 'fit_corpus_described': {'manifest': 'artifacts/pivot/realfit_corpus_manifest.json',
+                          'n_chunks_selected': 1035,
+                          'n_chunks_with_rows': 1029,
+                          'chunks_selected_per_family': {'c_src': 24,
+                                                         'pe_bin': 207,
+                                                         'py_src': 674,
+                                                         'rfc_txt': 90,
+                                                         'rst_doc': 40},
+                          'chunks_without_rows': [20100072, 20100076, 20100095, 20100200, 20200372, 20200489],
+                          'rows_dropped_short_stream': 564,
+                          'chunk_id_base': 20000000,
+                          'family_stride': 100000,
+                          'ceiling_distinct_fragments': {'c_src': 0.9712,
+                                                         'pe_bin': 0.9069,
+                                                         'py_src': 0.9765,
+                                                         'rfc_txt': 0.9778,
+                                                         'rst_doc': 0.9567},
+                          'chunks_dropped_for_byte_identity': {'c_src': 0,
+                                                               'pe_bin': 2,
+                                                               'py_src': 0,
+                                                               'rfc_txt': 0,
+                                                               'rst_doc': 0},
+                          'selection_rule': "every whole 32768-byte chunk of each pinned blob that 0018's "
+                                            'sealed selection (n_per_family 300, seed 20260909, recomputed '
+                                            'here from tools/pivot/corpus_ext.py) does not use, in blob order, '
+                                            "minus every chunk whose bytes hash to a sealed chunk's or to an "
+                                            "earlier fit chunk's; no seed of its own",
+                          'library_versions': {'isal': '1.8.0',
+                                               'libdeflate': '0.9.0',
+                                               'numpy': '2.4.6',
+                                               'python': '3.11.15',
+                                               'zlib': '1.3',
+                                               'zopfli': '0.4.3'},
+                          'convention': 'n_chunks in fit_corpus is the number of source chunks that CARRY '
+                                        'ROWS, which is what the runner measures (1029); 1035 chunks were '
+                                        'selected and 6 of them produced no row because every one of their 26 '
+                                        'streams fell below the 4096-byte carve floor. The sealed extension '
+                                        'corpus uses the same convention (n_chunks 2387 with rows, 2400 '
+                                        'built).',
+                          'source_pins_sha256_of_file': '2403ba48846503b6f92744558e1d34453124aa3e56d6058614a49da864e5f694'},
+ 'fit2_corpus_described': {'built_by': 'tools/pivot/corpus_realfit2.py --build '
+                                       '(tools/pivot/ext_source_pins2.json, tools/pivot/fetch_ext_sources2.sh)',
+                           'manifest': 'artifacts/pivot/realfit2_corpus_manifest.json',
+                           'manifest_sha256': 'ebdd0ddfe8c54c61508a3d3d2a678a786a47fe098de72aa6c5e8ddcf4f0331f2',
+                           'n_rows': 193926,
+                           'n_chunks_built': 7606,
+                           'n_chunks_with_rows': 7574,
+                           'pool_sizes': {'c_src': 185,
+                                          'pe_bin': 1501,
+                                          'py_src': 4948,
+                                          'rfc_txt': 670,
+                                          'rst_doc': 302},
+                           'pool_rule': "per family, 0021's chunks-with-rows x (2^doublings - 1) x (1 + "
+                                        'pool_margin) + pool_extra candidate chunks are built, in the seeded '
+                                        'order; the margin covers chunks that yield no row, so that the '
+                                        'preregistration can cut exact doublings of plaintexts with rows',
+                           'selection_rule': 'per family: every whole chunk of the family blob (pinned '
+                                             'archives in sorted name order, matching members in sorted name '
+                                             'order) whose bytes hash to no whole chunk of any 0018 pinned '
+                                             'blob, share no run of 1024 bytes with any 0018 pinned blob at '
+                                             'any offset (exclusion.run_overlap), and hash to no earlier '
+                                             'candidate of any family, in blob order; '
+                                             'np.random.default_rng([seed, family_index + 1]) permutes those '
+                                             'candidates and the first pool_size are built, in that order',
+                           'candidates_per_family': {'c_src': 2313,
+                                                     'pe_bin': 5429,
+                                                     'py_src': 5781,
+                                                     'rfc_txt': 842,
+                                                     'rst_doc': 763},
+                           'whole_chunks_per_family': {'c_src': 2315,
+                                                       'pe_bin': 5578,
+                                                       'py_src': 5784,
+                                                       'rfc_txt': 1028,
+                                                       'rst_doc': 763},
+                           'dropped_byte_identical_to_0018': {'c_src': 0,
+                                                              'pe_bin': 0,
+                                                              'py_src': 0,
+                                                              'rfc_txt': 0,
+                                                              'rst_doc': 0},
+                           'dropped_sharing_a_run_with_0018': {'c_src': 2,
+                                                               'pe_bin': 149,
+                                                               'py_src': 3,
+                                                               'rfc_txt': 186,
+                                                               'rst_doc': 0},
+                           'dropped_duplicate': {'c_src': 0,
+                                                 'pe_bin': 0,
+                                                 'py_src': 0,
+                                                 'rfc_txt': 0,
+                                                 'rst_doc': 0},
+                           'exclusion': {'hashes_sha256': '3d5cf58a8aba9523af16054b42fa1eb5f7820574e17b4c74a488098565949c64',
+                                         'n_distinct_chunk_hashes_of_0018_pinned_blobs': 2534,
+                                         'n_whole_chunks_of_0018_pinned_blobs': 2537,
+                                         'run_overlap': {'hash': 'polynomial mod 2^64, base '
+                                                                 '0x9E3779B97F4A7C15|1, H(i) = sum_k b[i+k] * '
+                                                                 'base^k',
+                                                         'n_distinct_pinned_windows': 73451492,
+                                                         'rule': 'a candidate chunk is dropped if run_windows '
+                                                                 'consecutive window-byte windows aligned to '
+                                                                 'its own grid, none constant (all bytes '
+                                                                 'equal), each occur at ANY offset of ANY 0018 '
+                                                                 'pinned blob; run_windows x window = 1024 '
+                                                                 'shared bytes',
+                                                         'run_windows': 16,
+                                                         'window': 64}},
+                           'exclusion_is': 'n_distinct_chunk_hashes_of_0018_pinned_blobs is the size of the '
+                                           "whole-chunk hash set (two of the 0018 blobs' whole chunks repeat "
+                                           "another's bytes, so it is below "
+                                           'n_whole_chunks_of_0018_pinned_blobs); run_overlap is the second '
+                                           'rule, added after the pre-freeze review found node.exe carrying '
+                                           "the same OpenSSL build as 0018's libcrypto DLL: a candidate chunk "
+                                           'sharing 1024 bytes with any 0018 pinned blob at any offset is '
+                                           'dropped, counted per family above',
+                           'sources': {'c_src': {'bytes': 75862262,
+                                                 'n_files': 6126,
+                                                 'per_archive': {'curl-8.7.1.tar.gz': {'bytes': 8611558,
+                                                                                       'n_files': 868},
+                                                                 'lua-5.4.6.tar.gz': {'bytes': 870440,
+                                                                                      'n_files': 61},
+                                                                 'musl-1.2.5.tar.gz': {'bytes': 2935959,
+                                                                                       'n_files': 2299},
+                                                                 'nginx-1.25.4.tar.gz': {'bytes': 6043776,
+                                                                                         'n_files': 390},
+                                                                 'postgresql-16.2.tar.gz': {'bytes': 55662760,
+                                                                                            'n_files': 2439},
+                                                                 'zlib-1.3.1.tar.gz': {'bytes': 1737769,
+                                                                                       'n_files': 69}},
+                                                 'rule': {'archives': ['postgresql-16.2.tar.gz',
+                                                                       'curl-8.7.1.tar.gz',
+                                                                       'nginx-1.25.4.tar.gz',
+                                                                       'musl-1.2.5.tar.gz',
+                                                                       'lua-5.4.6.tar.gz',
+                                                                       'zlib-1.3.1.tar.gz'],
+                                                          'member_regex': '\\.(c|h)$'}},
+                                       'pe_bin': {'bytes': 182784320,
+                                                  'n_files': 26,
+                                                  'per_archive': {'go1.22.2.windows-amd64.zip': {'bytes': 106998272,
+                                                                                                 'n_files': 19},
+                                                                  'node-v20.12.2-win-x64.zip': {'bytes': 69252760,
+                                                                                                'n_files': 1},
+                                                                  'putty-0.81-w64.zip': {'bytes': 6533288,
+                                                                                         'n_files': 6}},
+                                                  'rule': {'archives': ['go1.22.2.windows-amd64.zip',
+                                                                        'node-v20.12.2-win-x64.zip',
+                                                                        'putty-0.81-w64.zip'],
+                                                           'ignore_case': True,
+                                                           'member_regex': '\\.(exe|dll)$',
+                                                           'note': 'the three pinned archives carry .exe '
+                                                                   "members only (Go's toolchain binaries, "
+                                                                   "node.exe, PuTTY's programs); no .dll "
+                                                                   'matches'}},
+                                       'py_src': {'bytes': 189552368,
+                                                  'n_files': 15055,
+                                                  'per_archive': {'Django-5.0.6.tar.gz': {'bytes': 17060221,
+                                                                                          'n_files': 2774},
+                                                                  'SQLAlchemy-2.0.29.tar.gz': {'bytes': 18606702,
+                                                                                               'n_files': 688},
+                                                                  'astropy-6.0.1.tar.gz': {'bytes': 13203150,
+                                                                                           'n_files': 919},
+                                                                  'matplotlib-3.8.4.tar.gz': {'bytes': 8678157,
+                                                                                              'n_files': 900},
+                                                                  'networkx-3.3.tar.gz': {'bytes': 6185846,
+                                                                                          'n_files': 650},
+                                                                  'numpy-1.26.4.tar.gz': {'bytes': 14075868,
+                                                                                          'n_files': 1093},
+                                                                  'pandas-2.2.2.tar.gz': {'bytes': 20372570,
+                                                                                          'n_files': 1413},
+                                                                  'pygments-2.17.2.tar.gz': {'bytes': 4525015,
+                                                                                             'n_files': 380},
+                                                                  'scikit-learn-1.4.2.tar.gz': {'bytes': 13251061,
+                                                                                                'n_files': 861},
+                                                                  'scipy-1.13.0.tar.gz': {'bytes': 17756505,
+                                                                                          'n_files': 1029},
+                                                                  'sphinx-7.2.6.tar.gz': {'bytes': 3983827,
+                                                                                          'n_files': 591},
+                                                                  'statsmodels-0.14.1.tar.gz': {'bytes': 15210246,
+                                                                                                'n_files': 1176},
+                                                                  'sympy-1.12.tar.gz': {'bytes': 23781837,
+                                                                                        'n_files': 1490},
+                                                                  'twisted-24.3.0.tar.gz': {'bytes': 12861363,
+                                                                                            'n_files': 1091}},
+                                                  'rule': {'archives': ['Django-5.0.6.tar.gz',
+                                                                        'numpy-1.26.4.tar.gz',
+                                                                        'pandas-2.2.2.tar.gz',
+                                                                        'scikit-learn-1.4.2.tar.gz',
+                                                                        'SQLAlchemy-2.0.29.tar.gz',
+                                                                        'sympy-1.12.tar.gz',
+                                                                        'scipy-1.13.0.tar.gz',
+                                                                        'sphinx-7.2.6.tar.gz',
+                                                                        'matplotlib-3.8.4.tar.gz',
+                                                                        'twisted-24.3.0.tar.gz',
+                                                                        'astropy-6.0.1.tar.gz',
+                                                                        'networkx-3.3.tar.gz',
+                                                                        'statsmodels-0.14.1.tar.gz',
+                                                                        'pygments-2.17.2.tar.gz'],
+                                                           'member_regex': '\\.py$'}},
+                                       'rfc_txt': {'bytes': 33698087, 'n_files': 600, 'rule': {'dir': 'rfc2'}},
+                                       'rst_doc': {'bytes': 25017499,
+                                                   'n_files': 2861,
+                                                   'per_archive': {'Django-5.0.6.tar.gz': {'bytes': 4435,
+                                                                                           'n_files': 4},
+                                                                   'SQLAlchemy-2.0.29.tar.gz': {'bytes': 5202054,
+                                                                                                'n_files': 191},
+                                                                   'astropy-6.0.1.tar.gz': {'bytes': 2965272,
+                                                                                            'n_files': 292},
+                                                                   'matplotlib-3.8.4.tar.gz': {'bytes': 2635710,
+                                                                                               'n_files': 340},
+                                                                   'networkx-3.3.tar.gz': {'bytes': 562490,
+                                                                                           'n_files': 168},
+                                                                   'numpy-1.26.4.tar.gz': {'bytes': 4325354,
+                                                                                           'n_files': 451},
+                                                                   'pandas-2.2.2.tar.gz': {'bytes': 0,
+                                                                                           'n_files': 0},
+                                                                   'pygments-2.17.2.tar.gz': {'bytes': 192319,
+                                                                                              'n_files': 34},
+                                                                   'scikit-learn-1.4.2.tar.gz': {'bytes': 2598339,
+                                                                                                 'n_files': 154},
+                                                                   'scipy-1.13.0.tar.gz': {'bytes': 2562767,
+                                                                                           'n_files': 350},
+                                                                   'sphinx-7.2.6.tar.gz': {'bytes': 873974,
+                                                                                           'n_files': 369},
+                                                                   'statsmodels-0.14.1.tar.gz': {'bytes': 663439,
+                                                                                                 'n_files': 86},
+                                                                   'sympy-1.12.tar.gz': {'bytes': 1228418,
+                                                                                         'n_files': 275},
+                                                                   'twisted-24.3.0.tar.gz': {'bytes': 1202928,
+                                                                                             'n_files': 147}},
+                                                   'rule': {'archives': ['Django-5.0.6.tar.gz',
+                                                                         'numpy-1.26.4.tar.gz',
+                                                                         'pandas-2.2.2.tar.gz',
+                                                                         'scikit-learn-1.4.2.tar.gz',
+                                                                         'SQLAlchemy-2.0.29.tar.gz',
+                                                                         'sympy-1.12.tar.gz',
+                                                                         'scipy-1.13.0.tar.gz',
+                                                                         'sphinx-7.2.6.tar.gz',
+                                                                         'matplotlib-3.8.4.tar.gz',
+                                                                         'twisted-24.3.0.tar.gz',
+                                                                         'astropy-6.0.1.tar.gz',
+                                                                         'networkx-3.3.tar.gz',
+                                                                         'statsmodels-0.14.1.tar.gz',
+                                                                         'pygments-2.17.2.tar.gz'],
+                                                            'member_regex': '\\.rst$'}}},
+                           'n_new_archives': 23,
+                           'n_new_rfc_files': 600,
+                           'licences': "docs/compliance/EXT_SOURCES2.md; every archive's licence text is "
+                                       'committed under docs/compliance/sources/',
+                           'disjointness': 'by bytes and at every offset: every candidate chunk is dropped if '
+                                           'it equals any whole chunk of any 0018 pinned blob or shares a run '
+                                           'of 1024 bytes with one at any alignment; `corpus_realfit2.py '
+                                           '--disjoint` proves the exclusion set covers every real source hash '
+                                           "of 0018's sealed corpus and of 0021's fit corpus, that this corpus "
+                                           'shares no chunk id and no source hash with either, and re-scans '
+                                           'every built chunk for the run rule; the runner re-measures chunk '
+                                           'ids, source hashes and byte-identical feature rows against '
+                                           "everything scored and against 0021's block. What is NOT excluded, "
+                                           'stated: runs shorter than 1024 bytes (boilerplate lines, short '
+                                           'code sequences) and text that revises a scored document without '
+                                           'copying a kilobyte of it verbatim; RFCs related to a 0018-pinned '
+                                           'RFC by an Obsoletes or Updates annotation were removed from the '
+                                           'sample for that reason',
+                           'what_the_new_plaintexts_are': "by bytes of the family blobs (the manifest's "
+                                                          "composition): pe_bin is 0.59 the Go toolchain's "
+                                                          'nineteen binaries, 0.38 the single file node.exe '
+                                                          "and 0.04 PuTTY's six programs - executables, where "
+                                                          "0018's pe_bin was mostly DLLs; c_src is 0.73 "
+                                                          'PostgreSQL by bytes against a scored SQLite '
+                                                          'amalgamation; py_src and rst_doc come from fourteen '
+                                                          'PyPI projects; rfc_txt from 600 RFCs across the '
+                                                          'whole series'},
+ 'subsets': {'real': ['c_src', 'pe_bin', 'py_src', 'rfc_txt', 'rst_doc'],
+             'synthetic': ['hexdump', 'sql', 'xml'],
+             'structured_text': ['c_src', 'py_src', 'rfc_txt', 'rst_doc', 'sql', 'xml'],
+             'high_entropy': ['hexdump', 'pe_bin']},
+ 'n_ext_real_rows': 38452,
+ 'bar': {'slope_per_doubling': 0.005,
+         'bootstrap_lower_bound_gt': 0.0,
+         'lead_rule': 'the 95 percent paired cluster-bootstrap interval of model minus logistic real-family '
+                      "top-1 at the top rung, over the scored real chunks with the slope bootstrap's own "
+                      'resamples: entirely above 0 is MODEL_LEADS, entirely below 0 is LINEAR_LEADS, otherwise '
+                      "NO_SEPARATION (never 'equal'); the verdict string carries it as a suffix. If the model "
+                      'or the logistic at the top rung is at its iteration cap, the suffix is still read by '
+                      "the rule, but every document that states it states '(the <role> at its iteration cap at "
+                      "the top rung)' in the same sentence and the lead is not quoted as a recipe comparison, "
+                      'exactly as the difference flag is not'},
+ 'bootstrap': {'n_boot': 2000,
+               'seed': 20260917,
+               'rule': 'cluster bootstrap over the SCORED real-family chunks: np.random.default_rng(seed) '
+                       "draws n chunks with replacement per resample; every second-decade rung's accuracy on "
+                       'the resample is rounded to 4 decimals and the OLS slope against log2(plaintexts) over '
+                       'rungs 4..7 refitted; one resample serves every rung and every role, so role '
+                       'differences are paired; the 2.5th and 97.5th percentiles are the interval. The lead at '
+                       'the top rung uses the same generator construction and draw order (the same resamples): '
+                       "the difference of the two roles' rounded accuracies per resample. The interval is over "
+                       'the scored chunks only: it says how far the slope or the lead moves if a different '
+                       'sample of held-out chunks of the same files is scored. It does not resample the fit '
+                       'side - which new plaintexts fell into which rung (one seed, one nesting), or where '
+                       'early stopping halted.'},
+ 'reference_slopes_informational': {'first_decade_slope_per_doubling_0023': {'depth3_tree': 0.003002,
+                                                                             'logistic': 0.009551,
+                                                                             'model': 0.007344},
+                                    'first_decade_ci95_0023': {'depth3_tree': [0.002448, 0.003574],
+                                                               'logistic': [0.008478, 0.010649],
+                                                               'model': [0.006199, 0.00846]},
+                                    'first_decade_model_minus_logistic_0023': -0.002207,
+                                    'first_decade_model_minus_logistic_ci95_paired_0023': [-0.003707,
+                                                                                           -0.000752],
+                                    'first_decade_model_lead_over_logistic_by_rung_0023': [0.0063,
+                                                                                           0.0126,
+                                                                                           0.0054,
+                                                                                           0.0014],
+                                    'top_rung_if_0023s_lines_continued': {'depth3_tree': 0.1019,
+                                                                          'logistic': 0.1466,
+                                                                          'model': 0.1413},
+                                    'top_rung_if_0023s_lines_continued_is': 'arithmetic on banked numbers, not '
+                                                                            'a prediction the record stands '
+                                                                            "behind: 0021's reading plus "
+                                                                            "0023's slope times 3.0 doublings, "
+                                                                            'per role; the added plaintexts '
+                                                                            "are other files, and 0023's slope "
+                                                                            "was measured on the scored files' "
+                                                                            'own chunks. Sealed here as '
+                                                                            'informational only: no document '
+                                                                            "quotes these numbers (0023's "
+                                                                            "closing sentence and this file's "
+                                                                            'stop rules forbid quoting an '
+                                                                            'extrapolation beyond a top rung)',
+                                    'builder_per_plaintext_slope_per_doubling': 0.010093,
+                                    'note': 'informational references for the prose and the flags; none is a '
+                                            'clause'}}
+PROTOCOL_SHA256 = "fc7582db4a365d2e9b638a428e43661d74da5500504e0f6ebb1601b814b0a9ac"
+CURVE_SHA256 = "9d18e9d470d4ec3edc73d261c544512d60c8eafb62659b62c2b73268aeada4d4"
+RECIPES = {'model': {'id': 'M4',
+           'family': 'hgb',
+           'val': 'frag',
+           'params': {'learning_rate': 0.05,
+                      'max_leaf_nodes': 127,
+                      'l2_regularization': 1.0,
+                      'max_iter': 250,
+                      'n_iter_no_change': 20},
+           'why': 'capacity plus regularisation plus a lower rate together: 800000 rows x 26 classes supports '
+                  'bigger trees than 63 leaves, and the deep-tree baseline gained 0.1459 -> 0.1812 from depth '
+                  '8 to 16 at 4096'},
+ 'logistic': {'id': 'L3',
+              'family': 'logistic',
+              'scaled': True,
+              'params': {'max_iter': 1000, 'C': 1.0},
+              'why': 'standardised inputs with C 1.0: the single most standard fix for an lbfgs logistic on '
+                     '1108 unscaled hand-engineered columns'},
+ 'depth3_tree': {'id': 'D1',
+                 'family': 'tree',
+                 'params': {'max_depth': 3},
+                 'why': "0003's depth3_tree verbatim (DecisionTreeClassifier(max_depth=3, random_state=0), "
+                        'gini, min_samples_leaf 1): 0.0969 banked'}}
+ROLES = ["depth3_tree", "logistic", "model"]
+ORDER = ["null", "r4_depth3_tree", "r4_logistic", "r4_model", "r1_depth3_tree", "r1_logistic", "r1_model", "r2_depth3_tree", "r2_logistic", "r2_model", "r3_depth3_tree", "r3_logistic", "r3_model", "r5_depth3_tree", "r5_logistic", "r5_model", "r6_depth3_tree", "r6_logistic", "r6_model", "r7_depth3_tree", "r7_logistic", "r7_model", "s4_depth3_tree", "s4_logistic", "s4_model"]
+DENOMINATORS = [8, 4, 2, 1]
+N_FIRST = 4                   # 0023's rungs 1..4; rung 4 is 0021's whole fit block
+DOUBLINGS = 3
+N_RUNGS = 7
+TOP = "r7_"
+R4 = "r4_"
+
+PARTITION = {'seed': 20260825,
+ 'eval_frac': 0.2,
+ 'top_rung': 800000,
+ 'split_is_grouped_by_source': True,
+ 'n_eval_rows': 260000,
+ 'n_eval_chunks': 10000,
+ 'n_eval_non_gutenberg': 227006,
+ 'eval_idx_sha256': '7da1099e0cf9d4c3903dad62f52c91f67b751113fc4bfc0a62c53f05dccf1efa',
+ 'eval_y_sha256': '92b95cf02a21945cea2a7bd756a1e1096b07ec351b478c39e795a8a2267400d1',
+ 'eval_g_sha256': '882292fc223ba68d9facf12a74b0051dd87bd7deeb1dfb757f7d4692cce652dc',
+ 'n_pool_rows': 800000,
+ 'n_pool_chunks': 40000,
+ 'pool_idx_sha256': '17b0dc0bd9f7b9db6a5f0967cd96cbdccf524da56ed1aac7a80c4b57eb8ee7e5',
+ 'pool_sorted_sha256': '923cd266c3bf2a45683b2c479d36b046b311cc8f2e53426c962b6dd5ae836094',
+ 'families': ['gutenberg', 'base64', 'binary', 'code', 'csv', 'json', 'log', 'mixed'],
+ 'fit_rows': 26346,
+ 'fit_idx_sha256': '2b5fbaf627f1073bdeb51499c213be18837185414607b314b19f0efb6f5f5469',
+ 'fit_sorted_sha256': '551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476',
+ 'fit_order_rule': "np.random.default_rng(20260825).permutation of the fit corpus's rows, so the recipes' "
+                   "last-10% validation split is a random tenth rather than one family (0021's fit block)",
+ 'fit_block_chunks': 1029,
+ 'fit_chunks_per_family': {'c_src': 24, 'pe_bin': 203, 'py_src': 672, 'rfc_txt': 90, 'rst_doc': 40},
+ 'rung_rule': 'stratified_nested_by_family_chunk: per family, np.random.default_rng([seed, family_index + 1]) '
+              'permutes its chunk ids with rows; rung d takes the first ceil(n_f / d); rows are the fit '
+              "block's rows of those chunks in fit-block order",
+ 'second_decade_rule': "lockstep_nested_on_0021_block: rung 4 + d is 0021's whole fit block plus, per family, "
+                       "the first n_f x (2^d - 1) chunks with rows of 0024's pool in pool order (chunk id "
+                       "ascending), n_f being the family's chunks with rows in 0021's block; every rung "
+                       'therefore holds exactly 2^d x n_f plaintexts of every family; rows are permuted by '
+                       'np.random.default_rng([seed2, 100 + rung])',
+ 'denominators': [8, 4, 2, 1],
+ 'doublings': 3,
+ 'seed2': 20260917,
+ 'n_first_decade_rungs': 4,
+ 'n_rungs': 7,
+ 'rungs': [{'rung': 1,
+            'denominator': 8,
+            'n_chunks': 130,
+            'n_rows': 3344,
+            'chunks_per_family': {'c_src': 3, 'pe_bin': 26, 'py_src': 84, 'rfc_txt': 12, 'rst_doc': 5},
+            'rows_per_family': {'c_src': 78, 'pe_bin': 655, 'py_src': 2169, 'rfc_txt': 312, 'rst_doc': 130},
+            'log2_chunks': 7.022368,
+            'idx_sha256': 'b497853234eabf651a6d4a952b706c3692af44a0317ed3322c0c88b3f8f3204d',
+            'sorted_sha256': '2eb3ac15056acabc2ee1d2621d4554cf956876d86963f162e1dd18c22d89e47e',
+            'chunks_sha256': '8ec77d6a0d79f1cd23b606235db6f0c5022cfcedb088134abb7b3faa941c4381',
+            'decade': 1,
+            'new_chunks_per_family': {'c_src': 0, 'pe_bin': 0, 'py_src': 0, 'rfc_txt': 0, 'rst_doc': 0},
+            'n_new_chunks': 0,
+            'n_new_rows': 0},
+           {'rung': 2,
+            'denominator': 4,
+            'n_chunks': 258,
+            'n_rows': 6635,
+            'chunks_per_family': {'c_src': 6, 'pe_bin': 51, 'py_src': 168, 'rfc_txt': 23, 'rst_doc': 10},
+            'rows_per_family': {'c_src': 156, 'pe_bin': 1283, 'py_src': 4338, 'rfc_txt': 598, 'rst_doc': 260},
+            'log2_chunks': 8.011227,
+            'idx_sha256': '7bbb523fbddd2cfc1566d220f19ec384f71323207c77c65d1a0a9755bafaf0f2',
+            'sorted_sha256': '130bb1751bd05deeb8b8a5c4f8b910434c5ee04f5cc482926f09463f1d1faa44',
+            'chunks_sha256': '489551c78af8339fe95b65bbf728ac96737b05b615552cd163d8a374c60ca28b',
+            'decade': 1,
+            'new_chunks_per_family': {'c_src': 0, 'pe_bin': 0, 'py_src': 0, 'rfc_txt': 0, 'rst_doc': 0},
+            'n_new_chunks': 0,
+            'n_new_rows': 0},
+           {'rung': 3,
+            'denominator': 2,
+            'n_chunks': 515,
+            'n_rows': 13207,
+            'chunks_per_family': {'c_src': 12, 'pe_bin': 102, 'py_src': 336, 'rfc_txt': 45, 'rst_doc': 20},
+            'rows_per_family': {'c_src': 312, 'pe_bin': 2563, 'py_src': 8642, 'rfc_txt': 1170, 'rst_doc': 520},
+            'log2_chunks': 9.008429,
+            'idx_sha256': 'fc7fc963bfb29afb32dcf739f31d5fce19a3b5aa40a7d9a0ab283285e9d51e4e',
+            'sorted_sha256': '7cca655b4f622f7c1aa245214d4a5858ccfa8cac9e88faad6d4e1c693236e0fb',
+            'chunks_sha256': 'b5c07018014470a97952b10bf139ce0f1eb753e811ea1b9dd452c544ac6fe99a',
+            'decade': 1,
+            'new_chunks_per_family': {'c_src': 0, 'pe_bin': 0, 'py_src': 0, 'rfc_txt': 0, 'rst_doc': 0},
+            'n_new_chunks': 0,
+            'n_new_rows': 0},
+           {'rung': 4,
+            'denominator': 1,
+            'n_chunks': 1029,
+            'n_rows': 26346,
+            'chunks_per_family': {'c_src': 24, 'pe_bin': 203, 'py_src': 672, 'rfc_txt': 90, 'rst_doc': 40},
+            'rows_per_family': {'c_src': 624,
+                                'pe_bin': 5145,
+                                'py_src': 17197,
+                                'rfc_txt': 2340,
+                                'rst_doc': 1040},
+            'log2_chunks': 10.007027,
+            'idx_sha256': '2b5fbaf627f1073bdeb51499c213be18837185414607b314b19f0efb6f5f5469',
+            'sorted_sha256': '551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476',
+            'chunks_sha256': 'd5abe23ccaad4ad09ff3a9f035c0450e0f43318ff42f24700ba21baee4c089c4',
+            'decade': 1,
+            'new_chunks_per_family': {'c_src': 0, 'pe_bin': 0, 'py_src': 0, 'rfc_txt': 0, 'rst_doc': 0},
+            'n_new_chunks': 0,
+            'n_new_rows': 0},
+           {'rung': 5,
+            'decade': 2,
+            'doubling': 1,
+            'denominator': None,
+            'n_chunks': 2058,
+            'n_rows': 52766,
+            'chunks_per_family': {'c_src': 48, 'pe_bin': 406, 'py_src': 1344, 'rfc_txt': 180, 'rst_doc': 80},
+            'new_chunks_per_family': {'c_src': 24, 'pe_bin': 203, 'py_src': 672, 'rfc_txt': 90, 'rst_doc': 40},
+            'n_new_chunks': 1029,
+            'n_new_rows': 26420,
+            'rows_per_family': {'c_src': 1223,
+                                'pe_bin': 10346,
+                                'py_src': 34438,
+                                'rfc_txt': 4679,
+                                'rst_doc': 2080},
+            'log2_chunks': 11.007027,
+            'idx_sha256': '5822a73f6821d475642430bdaec6c7d4f9d3b8b40bc3917e20562ebec13f1635',
+            'sorted_sha256': '6365b440f0d9b55c14daec2d179ad336f288a590a16bc58c38ef075b3ebcb21e',
+            'chunks_sha256': '51def974ec1f85d25fe0727165fdf37991548b0e9192f3dbcb570f272867e177',
+            'new_chunks_sha256': 'e96399afd1b28d94d8e88d39363cea0aa1dddfad23480de7606b4ff90a4bfcd8',
+            'row_order_rule': "np.random.default_rng([20260917, 105]).permutation over [0021's fit block in "
+                              "its order] + [26346 + 0024 rows of the rung's chunks in npz order]"},
+           {'rung': 6,
+            'decade': 2,
+            'doubling': 2,
+            'denominator': None,
+            'n_chunks': 4116,
+            'n_rows': 105214,
+            'chunks_per_family': {'c_src': 96, 'pe_bin': 812, 'py_src': 2688, 'rfc_txt': 360, 'rst_doc': 160},
+            'new_chunks_per_family': {'c_src': 72,
+                                      'pe_bin': 609,
+                                      'py_src': 2016,
+                                      'rfc_txt': 270,
+                                      'rst_doc': 120},
+            'n_new_chunks': 3087,
+            'n_new_rows': 78868,
+            'rows_per_family': {'c_src': 2374,
+                                'pe_bin': 20773,
+                                'py_src': 68656,
+                                'rfc_txt': 9251,
+                                'rst_doc': 4160},
+            'log2_chunks': 12.007027,
+            'idx_sha256': '40dfba4058158ed1517b422e97ddc5cd54924d92112f0ae2f943390002dca35b',
+            'sorted_sha256': 'da1436cc295d3384df599faf7a42809fca1c7a60c87b7762abb8fc5ee8d02aad',
+            'chunks_sha256': '6366c2e9b41234d042b5d28250573b9e0a595417f051fbe891c04b553ac053d3',
+            'new_chunks_sha256': '998b74d7d7042e6d4b00ef7754b63a05b7c3ddfa2f6f2b7def66fc73889b8455',
+            'row_order_rule': "np.random.default_rng([20260917, 106]).permutation over [0021's fit block in "
+                              "its order] + [26346 + 0024 rows of the rung's chunks in npz order]"},
+           {'rung': 7,
+            'decade': 2,
+            'doubling': 3,
+            'denominator': None,
+            'n_chunks': 8232,
+            'n_rows': 210751,
+            'chunks_per_family': {'c_src': 192, 'pe_bin': 1624, 'py_src': 5376, 'rfc_txt': 720, 'rst_doc': 320},
+            'new_chunks_per_family': {'c_src': 168,
+                                      'pe_bin': 1421,
+                                      'py_src': 4704,
+                                      'rfc_txt': 630,
+                                      'rst_doc': 280},
+            'n_new_chunks': 7203,
+            'n_new_rows': 184405,
+            'rows_per_family': {'c_src': 4739,
+                                'pe_bin': 41627,
+                                'py_src': 137584,
+                                'rfc_txt': 18481,
+                                'rst_doc': 8320},
+            'log2_chunks': 13.007027,
+            'idx_sha256': '662e783c813b2685e85711c0c1f04539411556e740660b15191f6935a2ac5d35',
+            'sorted_sha256': '748589dc08be26b98e7f8a2871ae7c07691ca408fb60c34cb9ffabbf7e8d7e8c',
+            'chunks_sha256': 'b0906ab1066cb10a996e8dd3740606eb83f7849044d48e60bd21bae8001b7409',
+            'new_chunks_sha256': 'd4e1fa22151512f5f4885689264223e849651af2d5924530bdadc79ea9f7f0f0',
+            'row_order_rule': "np.random.default_rng([20260917, 107]).permutation over [0021's fit block in "
+                              "its order] + [26346 + 0024 rows of the rung's chunks in npz order]"}],
+ 'pool_chunks_with_rows_per_family': {'c_src': 185,
+                                      'pe_bin': 1492,
+                                      'py_src': 4927,
+                                      'rfc_txt': 668,
+                                      'rst_doc': 302},
+ 'pool_short': {},
+ 'rungs_nested': True,
+ 'rung_chunks_strictly_increasing': True,
+ 'rung4_is_fit_block': True,
+ 'second_decade_exact_doublings': True,
+ 'doublings_spanned': 5.984659,
+ 'doublings_spanned_second_decade': 3.0,
+ 'n_fit_rows_total': 220272,
+ 'shift_arm': {'rung': 's4',
+               'decade': 2,
+               'n_chunks': 1029,
+               'n_rows': 26420,
+               'chunks_per_family': {'c_src': 24, 'pe_bin': 203, 'py_src': 672, 'rfc_txt': 90, 'rst_doc': 40},
+               'rows_per_family': {'c_src': 599,
+                                   'pe_bin': 5201,
+                                   'py_src': 17241,
+                                   'rfc_txt': 2339,
+                                   'rst_doc': 1040},
+               'log2_chunks': 10.007027,
+               'idx_sha256': 'cfa130ee81f23a2d6ad7bb6085089d9206cb3d72cbc3bcd3a0e841a493933eea',
+               'sorted_sha256': '016b97f622baebc2a2b1bb34eb8f564deecec1dac9b4674d1b97b4c9e3538f35',
+               'chunks_sha256': 'e96399afd1b28d94d8e88d39363cea0aa1dddfad23480de7606b4ff90a4bfcd8',
+               'same_chunks_as_rung_5s_new_chunks': True,
+               'same_plaintext_count_as_rung_4': True,
+               'rule': "rung 5's new plaintexts alone - per family the first n_f chunks with rows of 0024's "
+                       "pool, none of 0021's block - with rows permuted by np.random.default_rng([20260917, "
+                       "150]); informational: read beside rung 4 (the same plaintext count, the scored files' "
+                       'own chunks) as a direct reading of what other files of the same families buy for the '
+                       'original files'},
+ 'n_fit_source_chunks': 1035,
+ 'n_ext_source_chunks': 2399,
+ 'n_fit2_source_chunks': 7606}
+EXT = {'npz': 'data/pivot/ext_c4096.npz',
+ 'arrays': {'X': {'sha256': 'c578eaf142dfd776fe2c9433420133ae6b2d304cdd546f2bdbbc50b397c4f5db',
+                  'shape': [61409, 1108],
+                  'dtype': 'float32'},
+            'y': {'sha256': 'edbf9b3a9aa810338807a4a397884b58b27a28bbf0d99826050403bdeeabdd46',
+                  'shape': [61409],
+                  'dtype': 'int16'},
+            'g': {'sha256': '2f5b8a86cc0463c1376d1ceb379ffe710e709899f2db4e1a527d355d6fcfc8b9',
+                  'shape': [61409],
+                  'dtype': 'int32'},
+            'fam': {'sha256': '21b066e7020c5a4ba247101e679ba31f23cbeae5500ab67e64f453b83e61f917',
+                    'shape': [61409],
+                    'dtype': 'int8'}},
+ 'n_rows': 61409,
+ 'n_chunks': 2387,
+ 'families': ['c_src', 'hexdump', 'pe_bin', 'py_src', 'rfc_txt', 'rst_doc', 'sql', 'xml'],
+ 'rows_per_family': {'c_src': 7800,
+                     'hexdump': 7800,
+                     'pe_bin': 7407,
+                     'py_src': 7709,
+                     'rfc_txt': 7761,
+                     'rst_doc': 7775,
+                     'sql': 7357,
+                     'xml': 7800},
+ 'chunks_per_family': {'c_src': 300,
+                       'hexdump': 300,
+                       'pe_bin': 288,
+                       'py_src': 300,
+                       'rfc_txt': 300,
+                       'rst_doc': 300,
+                       'sql': 299,
+                       'xml': 300},
+ 'chunk_id_min': 10000000,
+ 'chunk_id_max': 10700299}
+FIT = {'npz': 'data/pivot/realfit_c4096.npz',
+ 'arrays': {'X': {'sha256': 'd969c7d75f5bc7743e9014908fe1d5e07a4220eacd82c166329bdcb381db8c98',
+                  'shape': [26346, 1108],
+                  'dtype': 'float32'},
+            'y': {'sha256': '61f440bef345b3ec2f91f4accd56c1b23cf9d15376d3fa8ea76b01196488356a',
+                  'shape': [26346],
+                  'dtype': 'int16'},
+            'g': {'sha256': '3046de76635c235319eb7bf49e59cf78c27d3d4f7776107c148ca0a7352dc0c8',
+                  'shape': [26346],
+                  'dtype': 'int32'},
+            'fam': {'sha256': '8404e6764eb6a35e674a3c61b21fd1c8007a2448dec8203c80de2f0a71d07aca',
+                    'shape': [26346],
+                    'dtype': 'int8'}},
+ 'n_rows': 26346,
+ 'n_chunks': 1029,
+ 'families': ['c_src', 'pe_bin', 'py_src', 'rfc_txt', 'rst_doc'],
+ 'rows_per_family': {'c_src': 624, 'pe_bin': 5145, 'py_src': 17197, 'rfc_txt': 2340, 'rst_doc': 1040},
+ 'chunks_per_family': {'c_src': 24, 'pe_bin': 203, 'py_src': 672, 'rfc_txt': 90, 'rst_doc': 40},
+ 'chunk_id_min': 20000000,
+ 'chunk_id_max': 20400039,
+ 'label_histogram': [1025,
+                     1023,
+                     1022,
+                     1017,
+                     1009,
+                     1008,
+                     1006,
+                     1006,
+                     1006,
+                     1022,
+                     1022,
+                     1019,
+                     1011,
+                     1008,
+                     1008,
+                     1007,
+                     1005,
+                     1006,
+                     1002,
+                     1002,
+                     1002,
+                     1029,
+                     1028,
+                     1028,
+                     1025,
+                     1000],
+ 'majority_class_rate': 0.039057}
+FIT2 = {'npz': 'data/pivot/realfit2_c4096.npz',
+ 'arrays': {'X': {'sha256': 'd74bd30e71a5083f8af6f90ddc0c89b553e65025c5ff3d96f0005ab15612b541',
+                  'shape': [193926, 1108],
+                  'dtype': 'float32'},
+            'y': {'sha256': '5dcfd302b4dedd91119d9ad728f0a0a7dffd796605d0a0d7e9f0e2837a937591',
+                  'shape': [193926],
+                  'dtype': 'int16'},
+            'g': {'sha256': '84c9e74a1a7b4f9065f340769cd5791bc92f1c99d1527863a211fc881077e24a',
+                  'shape': [193926],
+                  'dtype': 'int32'},
+            'fam': {'sha256': '73952be90fa7982e62ae13570fb880b45e491bfbe3d2b4befa994c11d7c3e908',
+                    'shape': [193926],
+                    'dtype': 'int8'}},
+ 'n_rows': 193926,
+ 'n_chunks': 7574,
+ 'families': ['c_src', 'pe_bin', 'py_src', 'rfc_txt', 'rst_doc'],
+ 'rows_per_family': {'c_src': 4528, 'pe_bin': 38328, 'py_src': 126104, 'rfc_txt': 17114, 'rst_doc': 7852},
+ 'chunks_per_family': {'c_src': 185, 'pe_bin': 1492, 'py_src': 4927, 'rfc_txt': 668, 'rst_doc': 302},
+ 'chunk_id_min': 30000000,
+ 'chunk_id_max': 30400301,
+ 'label_histogram': [7540,
+                     7525,
+                     7509,
+                     7489,
+                     7442,
+                     7422,
+                     7412,
+                     7404,
+                     7404,
+                     7519,
+                     7508,
+                     7489,
+                     7465,
+                     7448,
+                     7423,
+                     7412,
+                     7403,
+                     7403,
+                     7388,
+                     7385,
+                     7383,
+                     7574,
+                     7539,
+                     7536,
+                     7530,
+                     7374],
+ 'majority_class_rate': 0.039056}
+EXT_CHUNK_IDS = [10000000, 10000001, 10000002, 10000003, 10000004, 10000005, 10000006, 10000007, 10000008, 10000009, 10000010, 10000011, 10000012, 10000013, 10000014, 10000015, 10000016, 10000017, 10000018, 10000019, 10000020, 10000021, 10000022, 10000023, 10000024, 10000025, 10000026, 10000027, 10000028, 10000029, 10000030, 10000031, 10000032, 10000033, 10000034, 10000035, 10000036, 10000037, 10000038, 10000039, 10000040, 10000041, 10000042, 10000043, 10000044, 10000045, 10000046, 10000047, 10000048, 10000049, 10000050, 10000051, 10000052, 10000053, 10000054, 10000055, 10000056, 10000057, 10000058, 10000059, 10000060, 10000061, 10000062, 10000063, 10000064, 10000065, 10000066, 10000067, 10000068, 10000069, 10000070, 10000071, 10000072, 10000073, 10000074, 10000075, 10000076, 10000077, 10000078, 10000079, 10000080, 10000081, 10000082, 10000083, 10000084, 10000085, 10000086, 10000087, 10000088, 10000089, 10000090, 10000091, 10000092, 10000093, 10000094, 10000095, 10000096, 10000097, 10000098, 10000099, 10000100, 10000101, 10000102, 10000103, 10000104, 10000105, 10000106, 10000107, 10000108, 10000109, 10000110, 10000111, 10000112, 10000113, 10000114, 10000115, 10000116, 10000117, 10000118, 10000119, 10000120, 10000121, 10000122, 10000123, 10000124, 10000125, 10000126, 10000127, 10000128, 10000129, 10000130, 10000131, 10000132, 10000133, 10000134, 10000135, 10000136, 10000137, 10000138, 10000139, 10000140, 10000141, 10000142, 10000143, 10000144, 10000145, 10000146, 10000147, 10000148, 10000149, 10000150, 10000151, 10000152, 10000153, 10000154, 10000155, 10000156, 10000157, 10000158, 10000159, 10000160, 10000161, 10000162, 10000163, 10000164, 10000165, 10000166, 10000167, 10000168, 10000169, 10000170, 10000171, 10000172, 10000173, 10000174, 10000175, 10000176, 10000177, 10000178, 10000179, 10000180, 10000181, 10000182, 10000183, 10000184, 10000185, 10000186, 10000187, 10000188, 10000189, 10000190, 10000191, 10000192, 10000193, 10000194, 10000195, 10000196, 10000197, 10000198, 10000199, 10000200, 10000201, 10000202, 10000203, 10000204, 10000205, 10000206, 10000207, 10000208, 10000209, 10000210, 10000211, 10000212, 10000213, 10000214, 10000215, 10000216, 10000217, 10000218, 10000219, 10000220, 10000221, 10000222, 10000223, 10000224, 10000225, 10000226, 10000227, 10000228, 10000229, 10000230, 10000231, 10000232, 10000233, 10000234, 10000235, 10000236, 10000237, 10000238, 10000239, 10000240, 10000241, 10000242, 10000243, 10000244, 10000245, 10000246, 10000247, 10000248, 10000249, 10000250, 10000251, 10000252, 10000253, 10000254, 10000255, 10000256, 10000257, 10000258, 10000259, 10000260, 10000261, 10000262, 10000263, 10000264, 10000265, 10000266, 10000267, 10000268, 10000269, 10000270, 10000271, 10000272, 10000273, 10000274, 10000275, 10000276, 10000277, 10000278, 10000279, 10000280, 10000281, 10000282, 10000283, 10000284, 10000285, 10000286, 10000287, 10000288, 10000289, 10000290, 10000291, 10000292, 10000293, 10000294, 10000295, 10000296, 10000297, 10000298, 10000299, 10100000, 10100001, 10100002, 10100003, 10100004, 10100005, 10100006, 10100007, 10100008, 10100009, 10100010, 10100011, 10100012, 10100013, 10100014, 10100015, 10100016, 10100017, 10100018, 10100019, 10100020, 10100021, 10100022, 10100023, 10100024, 10100025, 10100026, 10100027, 10100028, 10100029, 10100030, 10100031, 10100032, 10100033, 10100034, 10100035, 10100036, 10100037, 10100038, 10100039, 10100040, 10100041, 10100042, 10100043, 10100044, 10100045, 10100046, 10100047, 10100048, 10100049, 10100050, 10100051, 10100052, 10100053, 10100054, 10100055, 10100056, 10100057, 10100058, 10100059, 10100060, 10100061, 10100062, 10100063, 10100064, 10100065, 10100066, 10100067, 10100068, 10100069, 10100070, 10100071, 10100072, 10100073, 10100074, 10100075, 10100076, 10100077, 10100078, 10100079, 10100080, 10100081, 10100082, 10100083, 10100084, 10100085, 10100086, 10100087, 10100088, 10100089, 10100090, 10100091, 10100092, 10100093, 10100094, 10100095, 10100096, 10100097, 10100098, 10100099, 10100100, 10100101, 10100102, 10100103, 10100104, 10100105, 10100106, 10100107, 10100108, 10100109, 10100110, 10100111, 10100112, 10100113, 10100114, 10100115, 10100116, 10100117, 10100118, 10100119, 10100120, 10100121, 10100122, 10100123, 10100124, 10100125, 10100126, 10100127, 10100128, 10100129, 10100130, 10100131, 10100132, 10100133, 10100134, 10100135, 10100136, 10100137, 10100138, 10100139, 10100140, 10100141, 10100142, 10100143, 10100144, 10100145, 10100146, 10100147, 10100148, 10100149, 10100150, 10100151, 10100152, 10100153, 10100154, 10100155, 10100156, 10100157, 10100158, 10100159, 10100160, 10100161, 10100162, 10100163, 10100164, 10100165, 10100166, 10100167, 10100168, 10100169, 10100170, 10100171, 10100172, 10100173, 10100174, 10100175, 10100176, 10100177, 10100178, 10100179, 10100180, 10100181, 10100182, 10100183, 10100184, 10100185, 10100186, 10100187, 10100188, 10100189, 10100190, 10100191, 10100192, 10100193, 10100194, 10100195, 10100196, 10100197, 10100198, 10100199, 10100200, 10100201, 10100202, 10100203, 10100204, 10100205, 10100206, 10100207, 10100208, 10100209, 10100210, 10100211, 10100212, 10100213, 10100214, 10100215, 10100216, 10100217, 10100218, 10100219, 10100220, 10100221, 10100222, 10100223, 10100224, 10100225, 10100226, 10100227, 10100228, 10100229, 10100230, 10100231, 10100232, 10100233, 10100234, 10100235, 10100236, 10100237, 10100238, 10100239, 10100240, 10100241, 10100242, 10100243, 10100244, 10100245, 10100246, 10100247, 10100248, 10100249, 10100250, 10100251, 10100252, 10100253, 10100254, 10100255, 10100256, 10100257, 10100258, 10100259, 10100260, 10100261, 10100262, 10100263, 10100264, 10100265, 10100266, 10100267, 10100268, 10100269, 10100270, 10100271, 10100272, 10100273, 10100274, 10100275, 10100276, 10100277, 10100278, 10100279, 10100280, 10100281, 10100282, 10100283, 10100284, 10100285, 10100286, 10100287, 10100288, 10100289, 10100290, 10100291, 10100292, 10100293, 10100294, 10100295, 10100296, 10100297, 10100298, 10100299, 10200000, 10200001, 10200002, 10200003, 10200004, 10200005, 10200006, 10200007, 10200008, 10200009, 10200010, 10200011, 10200012, 10200013, 10200014, 10200015, 10200016, 10200017, 10200018, 10200019, 10200020, 10200021, 10200022, 10200023, 10200024, 10200025, 10200026, 10200027, 10200028, 10200029, 10200030, 10200031, 10200032, 10200033, 10200034, 10200035, 10200036, 10200037, 10200038, 10200039, 10200040, 10200041, 10200042, 10200043, 10200044, 10200045, 10200046, 10200047, 10200048, 10200049, 10200050, 10200051, 10200052, 10200053, 10200054, 10200055, 10200056, 10200057, 10200058, 10200059, 10200060, 10200061, 10200062, 10200063, 10200065, 10200066, 10200067, 10200068, 10200069, 10200070, 10200071, 10200072, 10200073, 10200074, 10200075, 10200076, 10200077, 10200078, 10200079, 10200080, 10200081, 10200082, 10200083, 10200084, 10200085, 10200086, 10200087, 10200088, 10200089, 10200090, 10200091, 10200092, 10200094, 10200095, 10200096, 10200097, 10200098, 10200099, 10200100, 10200101, 10200102, 10200103, 10200104, 10200105, 10200106, 10200107, 10200109, 10200110, 10200111, 10200112, 10200113, 10200114, 10200115, 10200116, 10200117, 10200118, 10200119, 10200120, 10200121, 10200123, 10200124, 10200125, 10200126, 10200127, 10200128, 10200129, 10200130, 10200131, 10200132, 10200133, 10200134, 10200135, 10200136, 10200137, 10200138, 10200139, 10200140, 10200141, 10200142, 10200143, 10200144, 10200145, 10200146, 10200147, 10200148, 10200149, 10200150, 10200151, 10200153, 10200154, 10200155, 10200157, 10200158, 10200159, 10200160, 10200161, 10200162, 10200163, 10200164, 10200165, 10200166, 10200167, 10200168, 10200169, 10200170, 10200171, 10200172, 10200173, 10200174, 10200175, 10200176, 10200177, 10200178, 10200179, 10200181, 10200182, 10200183, 10200184, 10200185, 10200186, 10200187, 10200188, 10200189, 10200190, 10200191, 10200192, 10200193, 10200194, 10200195, 10200196, 10200197, 10200198, 10200200, 10200201, 10200202, 10200203, 10200204, 10200205, 10200208, 10200209, 10200210, 10200211, 10200212, 10200213, 10200214, 10200215, 10200216, 10200217, 10200218, 10200219, 10200220, 10200221, 10200222, 10200223, 10200224, 10200225, 10200226, 10200227, 10200228, 10200229, 10200230, 10200231, 10200232, 10200233, 10200234, 10200235, 10200236, 10200237, 10200238, 10200239, 10200240, 10200241, 10200242, 10200243, 10200244, 10200245, 10200246, 10200247, 10200248, 10200249, 10200250, 10200251, 10200252, 10200253, 10200254, 10200255, 10200256, 10200257, 10200258, 10200260, 10200261, 10200262, 10200264, 10200265, 10200266, 10200267, 10200268, 10200269, 10200270, 10200271, 10200272, 10200273, 10200274, 10200275, 10200276, 10200277, 10200278, 10200279, 10200280, 10200281, 10200282, 10200283, 10200284, 10200285, 10200286, 10200287, 10200288, 10200289, 10200290, 10200291, 10200292, 10200293, 10200294, 10200295, 10200296, 10200297, 10200298, 10200299, 10300000, 10300001, 10300002, 10300003, 10300004, 10300005, 10300006, 10300007, 10300008, 10300009, 10300010, 10300011, 10300012, 10300013, 10300014, 10300015, 10300016, 10300017, 10300018, 10300019, 10300020, 10300021, 10300022, 10300023, 10300024, 10300025, 10300026, 10300027, 10300028, 10300029, 10300030, 10300031, 10300032, 10300033, 10300034, 10300035, 10300036, 10300037, 10300038, 10300039, 10300040, 10300041, 10300042, 10300043, 10300044, 10300045, 10300046, 10300047, 10300048, 10300049, 10300050, 10300051, 10300052, 10300053, 10300054, 10300055, 10300056, 10300057, 10300058, 10300059, 10300060, 10300061, 10300062, 10300063, 10300064, 10300065, 10300066, 10300067, 10300068, 10300069, 10300070, 10300071, 10300072, 10300073, 10300074, 10300075, 10300076, 10300077, 10300078, 10300079, 10300080, 10300081, 10300082, 10300083, 10300084, 10300085, 10300086, 10300087, 10300088, 10300089, 10300090, 10300091, 10300092, 10300093, 10300094, 10300095, 10300096, 10300097, 10300098, 10300099, 10300100, 10300101, 10300102, 10300103, 10300104, 10300105, 10300106, 10300107, 10300108, 10300109, 10300110, 10300111, 10300112, 10300113, 10300114, 10300115, 10300116, 10300117, 10300118, 10300119, 10300120, 10300121, 10300122, 10300123, 10300124, 10300125, 10300126, 10300127, 10300128, 10300129, 10300130, 10300131, 10300132, 10300133, 10300134, 10300135, 10300136, 10300137, 10300138, 10300139, 10300140, 10300141, 10300142, 10300143, 10300144, 10300145, 10300146, 10300147, 10300148, 10300149, 10300150, 10300151, 10300152, 10300153, 10300154, 10300155, 10300156, 10300157, 10300158, 10300159, 10300160, 10300161, 10300162, 10300163, 10300164, 10300165, 10300166, 10300167, 10300168, 10300169, 10300170, 10300171, 10300172, 10300173, 10300174, 10300175, 10300176, 10300177, 10300178, 10300179, 10300180, 10300181, 10300182, 10300183, 10300184, 10300185, 10300186, 10300187, 10300188, 10300189, 10300190, 10300191, 10300192, 10300193, 10300194, 10300195, 10300196, 10300197, 10300198, 10300199, 10300200, 10300201, 10300202, 10300203, 10300204, 10300205, 10300206, 10300207, 10300208, 10300209, 10300210, 10300211, 10300212, 10300213, 10300214, 10300215, 10300216, 10300217, 10300218, 10300219, 10300220, 10300221, 10300222, 10300223, 10300224, 10300225, 10300226, 10300227, 10300228, 10300229, 10300230, 10300231, 10300232, 10300233, 10300234, 10300235, 10300236, 10300237, 10300238, 10300239, 10300240, 10300241, 10300242, 10300243, 10300244, 10300245, 10300246, 10300247, 10300248, 10300249, 10300250, 10300251, 10300252, 10300253, 10300254, 10300255, 10300256, 10300257, 10300258, 10300259, 10300260, 10300261, 10300262, 10300263, 10300264, 10300265, 10300266, 10300267, 10300268, 10300269, 10300270, 10300271, 10300272, 10300273, 10300274, 10300275, 10300276, 10300277, 10300278, 10300279, 10300280, 10300281, 10300282, 10300283, 10300284, 10300285, 10300286, 10300287, 10300288, 10300289, 10300290, 10300291, 10300292, 10300293, 10300294, 10300295, 10300296, 10300297, 10300298, 10300299, 10400000, 10400001, 10400002, 10400003, 10400004, 10400005, 10400006, 10400007, 10400008, 10400009, 10400010, 10400011, 10400012, 10400013, 10400014, 10400015, 10400016, 10400017, 10400018, 10400019, 10400020, 10400021, 10400022, 10400023, 10400024, 10400025, 10400026, 10400027, 10400028, 10400029, 10400030, 10400031, 10400032, 10400033, 10400034, 10400035, 10400036, 10400037, 10400038, 10400039, 10400040, 10400041, 10400042, 10400043, 10400044, 10400045, 10400046, 10400047, 10400048, 10400049, 10400050, 10400051, 10400052, 10400053, 10400054, 10400055, 10400056, 10400057, 10400058, 10400059, 10400060, 10400061, 10400062, 10400063, 10400064, 10400065, 10400066, 10400067, 10400068, 10400069, 10400070, 10400071, 10400072, 10400073, 10400074, 10400075, 10400076, 10400077, 10400078, 10400079, 10400080, 10400081, 10400082, 10400083, 10400084, 10400085, 10400086, 10400087, 10400088, 10400089, 10400090, 10400091, 10400092, 10400093, 10400094, 10400095, 10400096, 10400097, 10400098, 10400099, 10400100, 10400101, 10400102, 10400103, 10400104, 10400105, 10400106, 10400107, 10400108, 10400109, 10400110, 10400111, 10400112, 10400113, 10400114, 10400115, 10400116, 10400117, 10400118, 10400119, 10400120, 10400121, 10400122, 10400123, 10400124, 10400125, 10400126, 10400127, 10400128, 10400129, 10400130, 10400131, 10400132, 10400133, 10400134, 10400135, 10400136, 10400137, 10400138, 10400139, 10400140, 10400141, 10400142, 10400143, 10400144, 10400145, 10400146, 10400147, 10400148, 10400149, 10400150, 10400151, 10400152, 10400153, 10400154, 10400155, 10400156, 10400157, 10400158, 10400159, 10400160, 10400161, 10400162, 10400163, 10400164, 10400165, 10400166, 10400167, 10400168, 10400169, 10400170, 10400171, 10400172, 10400173, 10400174, 10400175, 10400176, 10400177, 10400178, 10400179, 10400180, 10400181, 10400182, 10400183, 10400184, 10400185, 10400186, 10400187, 10400188, 10400189, 10400190, 10400191, 10400192, 10400193, 10400194, 10400195, 10400196, 10400197, 10400198, 10400199, 10400200, 10400201, 10400202, 10400203, 10400204, 10400205, 10400206, 10400207, 10400208, 10400209, 10400210, 10400211, 10400212, 10400213, 10400214, 10400215, 10400216, 10400217, 10400218, 10400219, 10400220, 10400221, 10400222, 10400223, 10400224, 10400225, 10400226, 10400227, 10400228, 10400229, 10400230, 10400231, 10400232, 10400233, 10400234, 10400235, 10400236, 10400237, 10400238, 10400239, 10400240, 10400241, 10400242, 10400243, 10400244, 10400245, 10400246, 10400247, 10400248, 10400249, 10400250, 10400251, 10400252, 10400253, 10400254, 10400255, 10400256, 10400257, 10400258, 10400259, 10400260, 10400261, 10400262, 10400263, 10400264, 10400265, 10400266, 10400267, 10400268, 10400269, 10400270, 10400271, 10400272, 10400273, 10400274, 10400275, 10400276, 10400277, 10400278, 10400279, 10400280, 10400281, 10400282, 10400283, 10400284, 10400285, 10400286, 10400287, 10400288, 10400289, 10400290, 10400291, 10400292, 10400293, 10400294, 10400295, 10400296, 10400297, 10400298, 10400299, 10500000, 10500001, 10500002, 10500003, 10500004, 10500005, 10500006, 10500007, 10500008, 10500009, 10500010, 10500011, 10500012, 10500013, 10500014, 10500015, 10500016, 10500017, 10500018, 10500019, 10500020, 10500021, 10500022, 10500023, 10500024, 10500025, 10500026, 10500027, 10500028, 10500029, 10500030, 10500031, 10500032, 10500033, 10500034, 10500035, 10500036, 10500037, 10500038, 10500039, 10500040, 10500041, 10500042, 10500043, 10500044, 10500045, 10500046, 10500047, 10500048, 10500049, 10500050, 10500051, 10500052, 10500053, 10500054, 10500055, 10500056, 10500057, 10500058, 10500059, 10500060, 10500061, 10500062, 10500063, 10500064, 10500065, 10500066, 10500067, 10500068, 10500069, 10500070, 10500071, 10500072, 10500073, 10500074, 10500075, 10500076, 10500077, 10500078, 10500079, 10500080, 10500081, 10500082, 10500083, 10500084, 10500085, 10500086, 10500087, 10500088, 10500089, 10500090, 10500091, 10500092, 10500093, 10500094, 10500095, 10500096, 10500097, 10500098, 10500099, 10500100, 10500101, 10500102, 10500103, 10500104, 10500105, 10500106, 10500107, 10500108, 10500109, 10500110, 10500111, 10500112, 10500113, 10500114, 10500115, 10500116, 10500117, 10500118, 10500119, 10500120, 10500121, 10500122, 10500123, 10500124, 10500125, 10500126, 10500127, 10500128, 10500129, 10500130, 10500131, 10500132, 10500133, 10500134, 10500135, 10500136, 10500137, 10500138, 10500139, 10500140, 10500141, 10500142, 10500143, 10500144, 10500145, 10500146, 10500147, 10500148, 10500149, 10500150, 10500151, 10500152, 10500153, 10500154, 10500155, 10500156, 10500157, 10500158, 10500159, 10500160, 10500161, 10500162, 10500163, 10500164, 10500165, 10500166, 10500167, 10500168, 10500169, 10500170, 10500171, 10500172, 10500173, 10500174, 10500175, 10500176, 10500177, 10500178, 10500179, 10500180, 10500181, 10500182, 10500183, 10500184, 10500185, 10500186, 10500187, 10500188, 10500189, 10500190, 10500191, 10500192, 10500193, 10500194, 10500195, 10500196, 10500197, 10500198, 10500199, 10500200, 10500201, 10500202, 10500203, 10500204, 10500205, 10500206, 10500207, 10500208, 10500209, 10500210, 10500211, 10500212, 10500213, 10500214, 10500215, 10500216, 10500217, 10500218, 10500219, 10500220, 10500221, 10500222, 10500223, 10500224, 10500225, 10500226, 10500227, 10500228, 10500229, 10500230, 10500231, 10500232, 10500233, 10500234, 10500235, 10500236, 10500237, 10500238, 10500239, 10500240, 10500241, 10500242, 10500243, 10500244, 10500245, 10500246, 10500247, 10500248, 10500249, 10500250, 10500251, 10500252, 10500253, 10500254, 10500255, 10500256, 10500257, 10500258, 10500259, 10500260, 10500261, 10500262, 10500263, 10500264, 10500265, 10500266, 10500267, 10500268, 10500269, 10500270, 10500271, 10500272, 10500273, 10500274, 10500275, 10500276, 10500277, 10500278, 10500279, 10500280, 10500281, 10500282, 10500283, 10500284, 10500285, 10500286, 10500287, 10500288, 10500289, 10500290, 10500291, 10500292, 10500293, 10500294, 10500295, 10500296, 10500297, 10500298, 10500299, 10600000, 10600001, 10600002, 10600003, 10600004, 10600005, 10600006, 10600007, 10600008, 10600009, 10600010, 10600011, 10600012, 10600013, 10600014, 10600015, 10600016, 10600017, 10600018, 10600019, 10600020, 10600021, 10600022, 10600023, 10600024, 10600025, 10600026, 10600027, 10600028, 10600029, 10600030, 10600031, 10600032, 10600033, 10600034, 10600035, 10600036, 10600037, 10600038, 10600039, 10600040, 10600041, 10600042, 10600043, 10600044, 10600045, 10600046, 10600047, 10600048, 10600049, 10600050, 10600051, 10600052, 10600053, 10600054, 10600055, 10600056, 10600057, 10600058, 10600059, 10600060, 10600061, 10600062, 10600063, 10600064, 10600065, 10600066, 10600067, 10600068, 10600069, 10600070, 10600071, 10600072, 10600073, 10600074, 10600075, 10600076, 10600077, 10600078, 10600079, 10600080, 10600081, 10600082, 10600083, 10600084, 10600085, 10600086, 10600087, 10600088, 10600089, 10600090, 10600091, 10600092, 10600093, 10600094, 10600095, 10600096, 10600097, 10600098, 10600099, 10600100, 10600101, 10600102, 10600103, 10600104, 10600105, 10600106, 10600107, 10600108, 10600109, 10600110, 10600111, 10600112, 10600113, 10600114, 10600115, 10600116, 10600117, 10600118, 10600119, 10600120, 10600121, 10600122, 10600123, 10600124, 10600125, 10600126, 10600127, 10600128, 10600129, 10600130, 10600131, 10600132, 10600133, 10600134, 10600135, 10600136, 10600137, 10600138, 10600140, 10600141, 10600142, 10600143, 10600144, 10600145, 10600146, 10600147, 10600148, 10600149, 10600150, 10600151, 10600152, 10600153, 10600154, 10600155, 10600156, 10600157, 10600158, 10600159, 10600160, 10600161, 10600162, 10600163, 10600164, 10600165, 10600166, 10600167, 10600168, 10600169, 10600170, 10600171, 10600172, 10600173, 10600174, 10600175, 10600176, 10600177, 10600178, 10600179, 10600180, 10600181, 10600182, 10600183, 10600184, 10600185, 10600186, 10600187, 10600188, 10600189, 10600190, 10600191, 10600192, 10600193, 10600194, 10600195, 10600196, 10600197, 10600198, 10600199, 10600200, 10600201, 10600202, 10600203, 10600204, 10600205, 10600206, 10600207, 10600208, 10600209, 10600210, 10600211, 10600212, 10600213, 10600214, 10600215, 10600216, 10600217, 10600218, 10600219, 10600220, 10600221, 10600222, 10600223, 10600224, 10600225, 10600226, 10600227, 10600228, 10600229, 10600230, 10600231, 10600232, 10600233, 10600234, 10600235, 10600236, 10600237, 10600238, 10600239, 10600240, 10600241, 10600242, 10600243, 10600244, 10600245, 10600246, 10600247, 10600248, 10600249, 10600250, 10600251, 10600252, 10600253, 10600254, 10600255, 10600256, 10600257, 10600258, 10600259, 10600260, 10600261, 10600262, 10600263, 10600264, 10600265, 10600266, 10600267, 10600268, 10600269, 10600270, 10600271, 10600272, 10600273, 10600274, 10600275, 10600276, 10600277, 10600278, 10600279, 10600280, 10600281, 10600282, 10600283, 10600284, 10600285, 10600286, 10600287, 10600288, 10600289, 10600290, 10600291, 10600292, 10600293, 10600294, 10600295, 10600296, 10600297, 10600298, 10600299, 10700000, 10700001, 10700002, 10700003, 10700004, 10700005, 10700006, 10700007, 10700008, 10700009, 10700010, 10700011, 10700012, 10700013, 10700014, 10700015, 10700016, 10700017, 10700018, 10700019, 10700020, 10700021, 10700022, 10700023, 10700024, 10700025, 10700026, 10700027, 10700028, 10700029, 10700030, 10700031, 10700032, 10700033, 10700034, 10700035, 10700036, 10700037, 10700038, 10700039, 10700040, 10700041, 10700042, 10700043, 10700044, 10700045, 10700046, 10700047, 10700048, 10700049, 10700050, 10700051, 10700052, 10700053, 10700054, 10700055, 10700056, 10700057, 10700058, 10700059, 10700060, 10700061, 10700062, 10700063, 10700064, 10700065, 10700066, 10700067, 10700068, 10700069, 10700070, 10700071, 10700072, 10700073, 10700074, 10700075, 10700076, 10700077, 10700078, 10700079, 10700080, 10700081, 10700082, 10700083, 10700084, 10700085, 10700086, 10700087, 10700088, 10700089, 10700090, 10700091, 10700092, 10700093, 10700094, 10700095, 10700096, 10700097, 10700098, 10700099, 10700100, 10700101, 10700102, 10700103, 10700104, 10700105, 10700106, 10700107, 10700108, 10700109, 10700110, 10700111, 10700112, 10700113, 10700114, 10700115, 10700116, 10700117, 10700118, 10700119, 10700120, 10700121, 10700122, 10700123, 10700124, 10700125, 10700126, 10700127, 10700128, 10700129, 10700130, 10700131, 10700132, 10700133, 10700134, 10700135, 10700136, 10700137, 10700138, 10700139, 10700140, 10700141, 10700142, 10700143, 10700144, 10700145, 10700146, 10700147, 10700148, 10700149, 10700150, 10700151, 10700152, 10700153, 10700154, 10700155, 10700156, 10700157, 10700158, 10700159, 10700160, 10700161, 10700162, 10700163, 10700164, 10700165, 10700166, 10700167, 10700168, 10700169, 10700170, 10700171, 10700172, 10700173, 10700174, 10700175, 10700176, 10700177, 10700178, 10700179, 10700180, 10700181, 10700182, 10700183, 10700184, 10700185, 10700186, 10700187, 10700188, 10700189, 10700190, 10700191, 10700192, 10700193, 10700194, 10700195, 10700196, 10700197, 10700198, 10700199, 10700200, 10700201, 10700202, 10700203, 10700204, 10700205, 10700206, 10700207, 10700208, 10700209, 10700210, 10700211, 10700212, 10700213, 10700214, 10700215, 10700216, 10700217, 10700218, 10700219, 10700220, 10700221, 10700222, 10700223, 10700224, 10700225, 10700226, 10700227, 10700228, 10700229, 10700230, 10700231, 10700232, 10700233, 10700234, 10700235, 10700236, 10700237, 10700238, 10700239, 10700240, 10700241, 10700242, 10700243, 10700244, 10700245, 10700246, 10700247, 10700248, 10700249, 10700250, 10700251, 10700252, 10700253, 10700254, 10700255, 10700256, 10700257, 10700258, 10700259, 10700260, 10700261, 10700262, 10700263, 10700264, 10700265, 10700266, 10700267, 10700268, 10700269, 10700270, 10700271, 10700272, 10700273, 10700274, 10700275, 10700276, 10700277, 10700278, 10700279, 10700280, 10700281, 10700282, 10700283, 10700284, 10700285, 10700286, 10700287, 10700288, 10700289, 10700290, 10700291, 10700292, 10700293, 10700294, 10700295, 10700296, 10700297, 10700298, 10700299]
+EXT_ROWS_PER_CHUNK = [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 1, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 12, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 2, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 12, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 10, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 10, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 14, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 1, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 25, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 9, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 3, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 10, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 1, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 16, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 17, 2, 26, 26, 26, 6, 26, 22, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 23, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 23, 26, 26, 26, 26, 26, 26, 15, 26, 26, 26, 1, 26, 26, 17, 26, 26, 26, 26, 1, 26, 26, 20, 23, 26, 26, 26, 26, 26, 26, 26, 26, 26, 3, 26, 26, 26, 26, 26, 26, 26, 17, 26, 26, 26, 26, 26, 26, 26, 26, 12, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 19, 26, 26, 26, 26, 26, 2, 26, 26, 26, 7, 26, 15, 12, 4, 25, 26, 26, 26, 26, 26, 12, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 14, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 17, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 23, 26, 26, 26, 26, 26, 26, 26, 26, 26, 23, 26, 26, 26, 26, 26, 26, 13, 26, 26, 26, 26, 26, 26, 26, 23, 26, 26, 26, 26, 26, 26, 26, 26, 8, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 8, 26, 26, 16, 26, 26, 26, 26, 26, 13, 21, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26]
+EVAL_CHUNK_IDS = [1, 6, 21, 22, 24, 32, 44, 56, 61, 62, 49, 53, 55, 72, 73, 76, 64, 66, 71, 93, 94, 82, 83, 85, 86, 105, 109, 120, 124, 132, 135, 150, 139, 156, 176, 177, 178, 179, 181, 187, 188, 168, 170, 171, 193, 199, 211, 202, 220, 229, 230, 233, 234, 236, 237, 243, 244, 245, 246, 272, 276, 278, 279, 264, 280, 289, 292, 297, 307, 312, 314, 324, 336, 330, 331, 332, 335, 348, 355, 360, 362, 377, 385, 386, 388, 390, 400, 403, 399, 409, 422, 425, 426, 428, 429, 435, 443, 444, 445, 447, 451, 482, 483, 510, 511, 492, 493, 503, 516, 528, 521, 524, 537, 542, 543, 545, 555, 557, 558, 561, 566, 569, 572, 573, 577, 579, 603, 606, 591, 594, 598, 599, 609, 611, 612, 613, 624, 626, 629, 631, 618, 620, 621, 636, 642, 662, 649, 667, 688, 690, 696, 705, 714, 735, 737, 763, 765, 755, 758, 771, 775, 777, 789, 790, 791, 792, 797, 798, 828, 823, 841, 833, 838, 859, 860, 863, 850, 885, 886, 890, 892, 895, 898, 905, 915, 929, 930, 931, 937, 938, 949, 966, 967, 971, 959, 976, 977, 978, 985, 1003, 999, 1013, 1015, 1017, 1022, 1030, 1037, 1058, 1049, 1052, 1066, 1071, 1072, 1089, 1087, 1096, 1106, 1108, 1109, 1111, 1112, 1113, 1174, 1179, 1182, 1183, 1209, 1214, 1226, 1230, 1220, 1221, 1222, 1239, 1246, 1253, 1257, 1262, 1270, 1272, 1274, 1277, 1291, 1287, 1300, 1301, 1303, 1305, 1311, 1313, 1345, 1338, 1340, 1341, 1356, 1360, 1362, 1377, 1378, 1379, 1382, 1384, 1389, 1394, 1404, 1417, 1419, 1432, 1433, 1443, 1450, 1458, 1471, 1501, 1502, 1493, 1480, 1485, 1487, 1515, 1520, 1521, 1522, 1526, 1511, 1530, 1535, 1545, 1551, 1552, 1554, 1558, 1576, 1585, 1598, 1602, 1603, 1619, 1622, 1608, 1625, 1626, 1630, 1634, 1636, 1637, 1638, 1639, 1640, 1647, 1649, 1650, 1656, 1669, 1691, 1680, 1681, 1719, 1704, 1705, 1706, 1709, 1727, 1738, 1739, 1743, 1757, 1758, 1760, 1768, 1769, 1772, 1785, 1787, 1788, 1794, 1795, 1797, 1816, 1818, 1821, 1822, 1827, 1840, 1844, 1845, 1846, 1833, 1836, 1850, 1858, 1865, 1867, 1869, 1883, 1900, 1903, 1913, 1915, 1919, 1922, 1924, 1934, 1949, 1937, 1956, 1957, 1961, 1979, 1974, 1987, 1988, 1994, 1997, 1999, 2000, 2002, 2003, 2006, 2008, 2009, 2011, 2019, 2027, 2042, 2043, 2046, 2047, 2052, 2055, 2056, 2062, 2063, 2065, 2067, 2072, 2085, 2093, 2094, 2108, 2109, 2111, 2099, 2100, 2120, 2126, 2118, 2119, 2129, 2131, 2133, 2137, 2138, 2153, 2157, 2145, 2151, 2164, 2172, 2187, 2176, 2181, 2182, 2195, 2198, 2214, 2224, 2226, 2234, 2247, 2249, 2259, 2260, 2265, 2283, 2286, 2290, 2291, 2293, 2295, 2298, 2302, 2321, 2319, 2304, 2329, 2333, 2344, 2349, 2350, 2365, 2357, 2394, 2406, 2416, 2415, 2431, 2452, 2469, 2487, 2489, 2479, 2502, 2512, 2523, 2525, 2539, 2533, 2547, 2550, 2564, 2573, 2583, 2601, 2606, 2630, 2616, 2619, 2622, 2648, 2650, 2655, 2658, 2659, 2643, 2668, 2672, 2679, 2688, 2693, 2681, 2683, 2700, 2717, 2707, 2709, 2710, 2720, 2723, 2742, 2746, 2750, 2752, 2756, 2757, 2761, 2769, 2774, 2787, 2776, 2777, 2796, 2801, 2803, 2806, 2809, 2812, 2831, 2833, 2834, 2850, 2851, 2855, 2841, 2861, 2863, 2866, 2867, 2870, 2874, 2884, 2887, 2889, 2896, 2904, 2908, 2910, 2914, 2917, 2922, 2923, 2925, 2927, 2933, 2934, 2948, 2951, 2964, 2968, 2973, 2974, 2978, 2981, 2986, 2987, 2989, 2995, 2999, 3008, 3027, 3042, 3058, 3059, 3064, 3067, 3073, 3075, 3078, 3083, 3090, 3096, 3101, 3106, 3107, 3115, 3129, 3131, 3134, 3142, 3143, 3147, 3148, 3153, 3157, 3180, 3170, 3172, 3188, 3189, 3191, 3209, 3213, 3214, 3215, 3206, 3220, 3230, 3242, 3248, 3250, 3260, 3261, 3264, 3282, 3284, 3278, 3294, 3305, 3306, 3310, 3311, 3318, 3320, 3323, 3328, 3330, 3336, 3344, 3345, 3347, 3348, 3371, 3372, 3375, 3378, 3385, 3389, 3391, 3395, 3399, 3402, 3405, 3413, 3426, 3429, 3430, 3431, 3419, 3440, 3445, 3448, 3451, 3452, 3455, 3461, 3466, 3468, 3471, 3472, 3476, 3484, 3486, 3487, 3494, 3504, 3518, 3530, 3535, 3522, 3526, 3541, 3546, 3548, 3550, 3561, 3552, 3553, 3555, 3589, 3591, 3592, 3593, 3569, 3616, 3618, 3619, 3611, 3612, 3646, 3659, 3663, 3683, 3675, 3678, 3694, 3711, 3700, 3701, 3717, 3718, 3737, 3738, 3732, 3759, 3773, 3765, 3785, 3790, 3777, 3794, 3797, 3816, 3818, 3823, 3810, 3812, 3835, 3837, 3838, 3839, 3840, 3846, 3853, 3859, 3860, 3890, 3893, 3895, 3868, 3869, 3877, 3880, 3897, 3899, 3912, 3915, 3904, 3905, 3926, 3930, 3932, 3936, 3937, 3953, 3945, 3951, 3960, 3963, 3964, 3968, 3970, 3971, 3973, 3974, 3975, 3976, 3978, 3979, 3984, 3995, 3998, 4006, 4008, 4016, 4021, 4022, 4024, 4025, 4026, 4027, 4029, 4032, 4033, 4045, 4053, 4059, 4070, 4071, 4074, 4076, 4081, 4083, 4087, 4105, 4107, 4108, 4112, 4116, 4118, 4128, 4132, 4148, 4149, 4138, 4153, 4154, 4177, 4181, 4170, 4171, 4172, 4164, 4165, 4205, 4206, 4207, 4214, 4189, 4195, 4223, 4229, 4250, 4251, 4252, 4260, 4266, 4268, 4270, 4275, 4292, 4297, 4299, 4301, 4316, 4318, 4321, 4325, 4326, 4330, 4342, 4348, 4350, 4355, 4356, 4370, 4371, 4366, 4386, 4389, 4393, 4401, 4406, 4422, 4440, 4446, 4432, 4448, 4455, 4460, 4462, 4463, 4465, 4473, 4476, 4481, 4483, 4497, 4488, 4489, 4491, 4492, 4505, 4512, 4522, 4527, 4530, 4533, 4544, 4547, 4550, 4560, 4563, 4554, 4574, 4575, 4587, 4588, 4603, 4593, 4594, 4595, 4608, 4610, 4612, 4613, 4615, 4630, 4631, 4640, 4643, 4644, 4650, 4653, 4659, 4674, 4676, 4678, 4683, 4687, 4696, 4702, 4703, 4705, 4710, 4712, 4716, 4719, 4741, 4762, 4763, 4754, 4755, 4757, 4770, 4771, 4772, 4776, 4777, 4779, 4782, 4789, 4792, 4805, 4810, 4813, 4828, 4829, 4838, 4846, 4848, 4851, 4866, 4868, 4870, 4888, 4890, 4883, 4884, 4898, 4903, 4904, 4906, 4909, 4922, 4930, 4941, 4947, 4951, 4953, 4956, 4957, 4961, 4962, 4964, 4968, 4969, 4974, 4989, 4990, 4998, 5000, 5001, 5003, 5008, 5013, 5025, 5017, 5018, 5022, 5038, 5049, 5058, 5059, 5044, 5045, 5072, 5078, 5088, 5089, 5095, 5081, 5085, 5087, 5101, 5109, 5120, 5125, 5127, 5136, 5142, 5156, 5160, 5164, 5166, 5172, 5178, 5179, 5180, 5181, 5191, 5198, 5202, 5203, 5214, 5215, 5217, 5219, 5221, 5222, 5223, 5224, 5225, 5228, 5230, 5232, 5234, 5238, 5239, 5245, 5247, 5248, 5250, 5256, 5259, 5264, 5265, 5266, 5268, 5270, 5274, 5275, 5280, 5281, 5284, 5287, 5290, 5291, 5294, 5295, 5306, 5308, 5313, 5331, 5334, 5320, 5322, 5323, 5325, 5327, 5337, 5339, 5353, 5356, 5384, 5402, 5407, 5399, 5409, 5426, 5432, 5436, 5437, 5419, 5422, 5441, 5443, 5445, 5464, 5450, 5452, 5457, 5473, 5476, 5477, 5485, 5509, 5494, 5496, 5498, 5501, 5521, 5526, 5512, 5513, 5519, 5530, 5539, 5544, 5546, 5551, 5552, 5557, 5559, 5569, 5576, 5577, 5578, 5597, 5600, 5604, 5606, 5613, 5614, 5615, 5619, 5622, 5624, 5631, 5637, 5650, 5658, 5669, 5670, 5676, 5678, 5687, 5690, 5694, 5703, 5712, 5713, 5715, 5709, 5720, 5726, 5730, 5733, 5753, 5754, 5749, 5738, 5742, 5760, 5761, 5774, 5796, 5799, 5814, 5815, 5806, 5829, 5817, 5832, 5834, 5835, 5837, 5850, 5855, 5847, 5858, 5862, 5870, 5881, 5889, 5893, 5895, 5897, 5899, 5913, 5914, 5915, 5907, 5910, 5926, 5937, 5938, 5942, 5929, 5932, 5934, 5957, 5958, 5970, 5972, 5974, 5962, 5964, 5965, 5979, 5985, 5986, 5991, 6005, 5998, 6019, 6020, 6021, 6032, 6037, 6025, 6044, 6052, 6056, 6057, 6060, 6064, 6069, 6077, 6079, 6084, 6086, 6088, 6094, 6098, 6102, 6111, 6113, 6122, 6129, 6135, 6136, 6137, 6150, 6165, 6192, 6197, 6182, 6183, 6204, 6207, 6215, 6233, 6235, 6238, 6242, 6257, 6259, 6253, 6266, 6286, 6289, 6290, 6293, 6274, 6276, 6299, 6306, 6321, 6322, 6327, 6318, 6328, 6330, 6335, 6339, 6341, 6342, 6354, 6362, 6363, 6365, 6373, 6376, 6377, 6379, 6396, 6397, 6398, 6399, 6384, 6386, 6387, 6388, 6400, 6404, 6415, 6417, 6426, 6427, 6428, 6433, 6437, 6443, 6449, 6451, 6466, 6468, 6469, 6482, 6487, 6475, 6477, 6478, 6509, 6515, 6501, 6524, 6537, 6553, 6559, 6570, 6564, 6581, 6587, 6589, 6591, 6595, 6596, 6610, 6612, 6601, 6606, 6618, 6635, 6646, 6657, 6660, 6649, 6686, 6673, 6674, 6695, 6704, 6716, 6717, 6721, 6725, 6726, 6733, 6737, 6752, 6753, 6754, 6755, 6768, 6769, 6771, 6772, 6773, 6777, 6782, 6796, 6800, 6802, 6811, 6814, 6820, 6821, 6831, 6837, 6848, 6851, 6855, 6857, 6858, 6859, 6868, 6873, 6874, 6887, 6890, 6896, 6904, 6907, 6933, 6934, 6920, 6939, 6940, 6942, 6953, 6944, 6966, 6967, 6968, 6969, 6970, 6975, 6983, 6993, 6996, 7000, 7002, 7005, 7016, 7018, 7019, 7023, 7010, 7011, 7026, 7037, 7039, 7042, 7054, 7057, 7060, 7077, 7080, 7084, 7092, 7094, 7101, 7103, 7109, 7137, 7141, 7143, 7135, 7145, 7150, 7151, 7161, 7165, 7166, 7173, 7181, 7188, 7190, 7201, 7205, 7207, 7194, 7196, 7197, 7224, 7230, 7235, 7240, 7245, 7246, 7250, 7258, 7263, 7273, 7276, 7278, 7279, 7264, 7265, 7289, 7290, 7293, 7285, 7301, 7302, 7321, 7322, 7312, 7315, 7332, 7333, 7334, 7337, 7338, 7341, 7349, 7350, 7379, 7380, 7384, 7388, 7389, 7399, 7411, 7413, 7407, 7432, 7442, 7444, 7446, 7447, 7424, 7451, 7472, 7475, 7480, 7470, 7496, 7497, 7498, 7502, 7489, 7490, 7492, 7493, 7494, 7504, 7505, 7508, 7520, 7524, 7535, 7538, 7539, 7541, 7543, 7544, 7553, 7563, 7566, 7581, 7600, 7602, 7603, 7604, 7592, 7599, 7611, 7625, 7629, 7640, 7642, 7653, 7654, 7656, 7657, 7663, 7672, 7675, 7679, 7680, 7682, 7687, 7691, 7701, 7703, 7708, 7718, 7734, 7722, 7723, 7724, 7727, 7737, 7743, 7744, 7745, 7750, 7760, 7762, 7753, 7778, 7779, 7783, 7774, 7788, 7798, 7804, 7807, 7826, 7827, 7830, 7831, 7835, 7863, 7840, 7844, 7847, 7869, 7891, 7894, 7901, 7904, 7906, 7907, 7911, 7913, 7918, 7919, 7920, 7923, 7924, 7926, 7928, 7930, 7932, 7943, 7951, 7953, 7956, 7961, 7969, 7971, 7974, 7977, 7984, 7986, 7989, 7992, 8000, 8002, 8009, 8013, 8015, 8016, 8019, 8038, 8027, 8044, 8046, 8063, 8051, 8053, 8064, 8068, 8069, 8073, 8076, 8077, 8079, 8083, 8094, 8096, 8097, 8103, 8117, 8118, 8122, 8123, 8130, 8142, 8144, 8151, 8157, 8164, 8172, 8174, 8177, 8178, 8184, 8203, 8204, 8193, 8195, 8209, 8213, 8214, 8216, 8218, 8219, 8222, 8227, 8229, 8247, 8248, 8254, 8257, 8265, 8268, 8271, 8275, 8279, 8280, 8285, 8290, 8292, 8298, 8311, 8314, 8320, 8322, 8328, 8329, 8330, 8334, 8338, 8342, 8355, 8359, 8371, 8378, 8387, 8390, 8395, 8398, 8402, 8412, 8413, 8421, 8422, 8425, 8431, 8432, 8433, 8438, 8450, 8465, 8466, 8469, 8470, 8471, 8458, 8473, 8475, 8477, 8479, 8489, 8494, 8508, 8509, 8515, 8519, 8521, 8524, 8532, 8537, 8557, 8570, 8572, 8578, 8581, 8566, 8587, 8592, 8599, 8603, 8604, 8615, 8616, 8622, 8629, 8637, 8644, 8648, 8649, 8651, 8671, 8678, 8687, 8688, 8696, 8718, 8722, 8726, 8727, 8731, 8737, 8741, 8754, 8763, 8766, 8767, 8769, 8774, 8790, 8792, 8793, 8796, 8810, 8819, 8821, 8834, 8828, 8849, 8853, 8841, 8847, 8857, 8860, 8866, 8870, 8873, 8876, 8885, 8895, 8896, 8899, 8901, 8905, 8920, 8925, 8929, 8931, 8953, 8954, 8961, 8966, 8944, 8947, 8951, 8984, 8994, 8998, 8999, 8977, 8979, 8981, 8982, 9003, 9010, 9011, 9012, 9014, 9026, 9029, 9046, 9048, 9052, 9059, 9064, 9071, 9076, 9079, 9090, 9094, 9104, 9107, 9108, 9097, 9098, 9099, 9100, 9101, 9113, 9116, 9121, 9133, 9144, 9149, 9151, 9136, 9142, 9156, 9157, 9162, 9164, 9165, 9167, 9179, 9188, 9192, 9197, 9198, 9201, 9206, 9208, 9228, 9230, 9216, 9221, 9223, 9248, 9249, 9273, 9280, 9286, 9308, 9309, 9298, 9299, 9301, 9302, 9303, 9325, 9328, 9333, 9347, 9361, 9363, 9379, 9381, 9375, 9393, 9412, 9413, 9419, 9421, 9431, 9440, 9445, 9447, 9437, 9438, 9439, 9451, 9452, 9453, 9454, 9455, 9460, 9475, 9477, 9478, 9468, 9480, 9481, 9497, 9498, 9511, 9513, 9518, 9519, 9532, 9533, 9520, 9538, 9540, 9544, 9548, 9558, 9564, 9568, 9570, 9587, 9588, 9589, 9590, 9605, 9607, 9631, 9633, 9634, 9649, 9654, 9640, 9642, 9644, 9657, 9661, 9662, 9663, 9666, 9669, 9671, 9695, 9698, 9701, 9681, 9717, 9707, 9711, 9722, 9724, 9726, 9732, 9740, 9745, 9749, 9760, 9762, 9766, 9768, 9771, 9772, 9786, 9798, 9800, 9803, 9809, 9814, 9816, 9817, 9823, 9824, 9830, 9831, 9839, 9851, 9855, 9843, 9859, 9870, 9899, 9905, 9906, 9912, 9920, 9924, 9928, 9930, 9936, 9940, 9953, 9954, 9958, 9947, 9962, 9969, 9971, 9974, 9976, 9977, 9984, 9986, 9989, 9995, 10012, 10015, 10017, 10025, 10028, 10029, 10054, 10033, 10060, 10062, 10070, 10072, 10077, 10088, 10094, 10095, 10106, 10107, 10109, 10124, 10128, 10134, 10150, 10142, 10184, 10185, 10170, 10173, 10175, 10178, 10193, 10209, 10202, 10203, 10204, 10206, 10224, 10226, 10227, 10230, 10232, 10253, 10254, 10255, 10240, 10244, 10247, 10256, 10257, 10259, 10269, 10278, 10292, 10296, 10302, 10304, 10310, 10320, 10334, 10338, 10346, 10352, 10358, 10370, 10375, 10380, 10385, 10387, 10389, 10390, 10400, 10410, 10412, 10421, 10422, 10423, 10435, 10425, 10427, 10442, 10445, 10446, 10447, 10459, 10460, 10462, 10449, 10480, 10487, 10499, 10491, 10508, 10513, 10514, 10524, 10537, 10538, 10542, 10543, 10544, 10547, 10548, 10557, 10564, 10568, 10571, 10573, 10582, 10584, 10592, 10602, 10620, 10622, 10615, 10634, 10637, 10638, 10641, 10658, 10659, 10662, 10684, 10672, 10678, 10694, 10697, 10698, 10699, 10702, 10703, 10704, 10710, 10715, 10716, 10717, 10728, 10729, 10731, 10721, 10723, 10737, 10742, 10760, 10761, 10764, 10765, 10766, 10778, 10791, 10796, 10799, 10804, 10805, 10807, 10811, 10812, 10814, 10818, 10821, 10827, 10828, 10829, 10831, 10840, 10835, 10837, 10848, 10851, 10853, 10854, 10863, 10868, 10882, 10886, 10877, 10878, 10892, 10907, 10900, 10915, 10919, 10923, 10927, 10928, 10930, 10935, 10936, 10939, 10942, 10961, 10965, 10952, 10953, 10954, 10971, 10978, 10980, 10985, 10989, 10991, 11004, 11007, 11012, 10993, 11019, 11020, 11040, 11033, 11060, 11064, 11067, 11070, 11080, 11082, 11089, 11090, 11099, 11122, 11124, 11126, 11127, 11112, 11135, 11137, 11139, 11141, 11153, 11156, 11166, 11176, 11178, 11183, 11194, 11200, 11201, 11205, 11185, 11189, 11190, 11212, 11214, 11215, 11224, 11229, 11260, 11276, 11277, 11278, 11253, 11270, 11288, 11301, 11303, 11305, 11312, 11322, 11329, 11334, 11342, 11347, 11350, 11353, 11357, 11359, 11360, 11363, 11364, 11370, 11375, 11384, 11385, 11386, 11387, 11389, 11391, 11393, 11394, 11398, 11406, 11409, 11410, 11413, 11416, 11419, 11420, 11423, 11431, 11443, 11444, 11432, 11448, 11452, 11457, 11458, 11465, 11474, 11487, 11491, 11494, 11504, 11505, 11520, 11521, 11523, 11526, 11527, 11517, 11536, 11537, 11540, 11543, 11529, 11530, 11531, 11533, 11534, 11547, 11548, 11562, 11569, 11570, 11573, 11574, 11575, 11579, 11581, 11583, 11584, 11593, 11595, 11596, 11610, 11611, 11614, 11615, 11621, 11622, 11626, 11628, 11643, 11651, 11668, 11669, 11670, 11657, 11673, 11674, 11684, 11686, 11701, 11690, 11708, 11721, 11722, 11739, 11729, 11731, 11734, 11759, 11769, 11770, 11772, 11774, 11761, 11764, 11766, 11777, 11793, 11795, 11798, 11785, 11800, 11803, 11805, 11806, 11808, 11813, 11814, 11818, 11823, 11834, 11836, 11838, 11865, 11866, 11869, 11845, 11857, 11860, 11873, 11878, 11882, 11887, 11897, 11899, 11890, 11891, 11894, 11916, 11908, 11909, 11921, 11922, 11927, 11929, 11938, 11941, 11948, 11961, 11965, 11971, 11983, 11986, 11988, 11990, 11997, 12007, 12008, 12009, 12010, 12015, 12016, 12025, 12029, 12030, 12035, 12049, 12055, 12069, 12070, 12081, 12084, 12076, 12078, 12088, 12090, 12097, 12099, 12101, 12112, 12114, 12117, 12119, 12120, 12126, 12138, 12141, 12144, 12145, 12147, 12133, 12154, 12155, 12159, 12181, 12183, 12164, 12167, 12171, 12173, 12174, 12195, 12196, 12197, 12187, 12189, 12200, 12204, 12206, 12207, 12223, 12224, 12227, 12237, 12239, 12245, 12246, 12247, 12260, 12263, 12251, 12264, 12269, 12281, 12290, 12291, 12294, 12295, 12299, 12301, 12304, 12307, 12308, 12324, 12325, 12312, 12329, 12330, 12334, 12337, 12339, 12342, 12343, 12349, 12373, 12355, 12356, 12358, 12359, 12365, 12366, 12378, 12405, 12391, 12393, 12416, 12417, 12409, 12411, 12426, 12439, 12442, 12447, 12457, 12463, 12453, 12454, 12464, 12466, 12467, 12468, 12469, 12470, 12473, 12477, 12480, 12485, 12486, 12489, 12493, 12512, 12505, 12520, 12521, 12529, 12530, 12537, 12538, 12541, 12543, 12545, 12548, 12551, 12560, 12564, 12577, 12569, 12587, 12597, 12598, 12603, 12608, 12610, 12622, 12628, 12634, 12635, 12639, 12641, 12643, 12644, 12660, 12662, 12671, 12674, 12677, 12689, 12691, 12693, 12708, 12711, 12700, 12702, 12716, 12721, 12722, 12727, 12728, 12737, 12748, 12758, 12763, 12767, 12783, 12784, 12788, 12790, 12810, 12816, 12817, 12819, 12820, 12823, 12836, 12825, 12827, 12830, 12840, 12842, 12845, 12849, 12850, 12864, 12870, 12871, 12873, 12879, 12882, 12884, 12896, 12901, 12906, 12927, 12913, 12933, 12935, 12940, 12953, 12951, 12969, 12961, 12977, 12985, 12987, 12988, 12990, 12992, 12994, 13003, 13007, 13016, 13017, 13008, 13027, 13031, 13038, 13039, 13040, 13046, 13048, 13051, 13052, 13063, 13064, 13075, 13084, 13091, 13100, 13102, 13119, 13125, 13127, 13128, 13129, 13138, 13145, 13147, 13151, 13157, 13159, 13177, 13170, 13173, 13175, 13192, 13194, 13196, 13199, 13184, 13185, 13188, 13200, 13203, 13207, 13213, 13232, 13243, 13245, 13247, 13259, 13250, 13264, 13270, 13279, 13292, 13298, 13320, 13325, 13326, 13304, 13309, 13310, 13312, 13313, 13316, 13318, 13328, 13329, 13330, 13340, 13353, 13346, 13348, 13351, 13360, 13363, 13365, 13379, 13368, 13373, 13384, 13390, 13402, 13421, 13422, 13431, 13445, 13456, 13457, 13458, 13460, 13465, 13467, 13476, 13488, 13489, 13493, 13495, 13501, 13503, 13521, 13514, 13515, 13518, 13536, 13539, 13553, 13560, 13563, 13573, 13577, 13581, 13583, 13584, 13586, 13589, 13595, 13596, 13598, 13610, 13604, 13605, 13630, 13633, 13638, 13644, 13669, 13660, 13661, 13673, 13675, 13682, 13696, 13705, 13706, 13714, 13719, 13736, 13752, 13758, 13760, 13765, 13767, 13769, 13771, 13793, 13797, 13802, 13806, 13807, 13816, 13829, 13841, 13844, 13839, 13861, 13848, 13851, 13852, 13864, 13866, 13869, 13888, 13893, 13900, 13902, 13904, 13905, 13911, 13918, 13921, 13924, 13930, 13934, 13938, 13940, 13952, 13953, 13956, 13957, 13958, 13959, 13947, 13972, 13976, 13978, 13979, 13981, 13982, 13994, 14004, 14010, 14013, 14029, 14030, 14032, 14036, 14042, 14046, 14055, 14070, 14085, 14074, 14075, 14077, 14078, 14092, 14095, 14117, 14140, 14141, 14129, 14132, 14135, 14145, 14147, 14155, 14158, 14160, 14163, 14164, 14166, 14172, 14173, 14176, 14183, 14184, 14191, 14192, 14203, 14206, 14208, 14228, 14216, 14223, 14233, 14234, 14249, 14241, 14242, 14246, 14265, 14267, 14271, 14280, 14305, 14307, 14323, 14324, 14328, 14330, 14336, 14351, 14354, 14371, 14372, 14374, 14386, 14391, 14383, 14396, 14409, 14415, 14407, 14423, 14432, 14433, 14434, 14437, 14440, 14441, 14449, 14450, 14454, 14456, 14461, 14465, 14471, 14480, 14487, 14496, 14499, 14500, 14491, 14492, 14493, 14504, 14512, 14522, 14525, 14540, 14544, 14545, 14549, 14550, 14560, 14561, 14565, 14582, 14574, 14587, 14588, 14589, 14593, 14594, 14607, 14610, 14612, 14615, 14618, 14630, 14645, 14646, 14635, 14648, 14651, 14652, 14670, 14663, 14682, 14686, 14689, 14694, 14695, 14702, 14705, 14709, 14714, 14715, 14734, 14735, 14725, 14727, 14739, 14759, 14749, 14750, 14762, 14766, 14775, 14785, 14782, 14794, 14798, 14818, 14819, 14823, 14808, 14809, 14810, 14815, 14824, 14833, 14834, 14835, 14840, 14842, 14852, 14865, 14871, 14857, 14881, 14885, 14875, 14889, 14890, 14891, 14894, 14900, 14901, 14923, 14907, 14910, 14912, 14935, 14939, 14940, 14942, 14957, 14944, 14968, 14980, 14988, 14991, 14993, 14994, 14998, 15002, 15007, 15009, 15010, 15015, 15020, 15023, 15024, 15026, 15034, 15060, 15048, 15054, 15047, 15064, 15067, 15072, 15084, 15088, 15093, 15097, 15100, 15103, 15111, 15115, 15121, 15128, 15136, 15140, 15141, 15142, 15145, 15146, 15147, 15148, 15149, 15150, 15151, 15169, 15160, 15164, 15177, 15180, 15185, 15191, 15192, 15199, 15203, 15205, 15209, 15210, 15211, 15213, 15214, 15219, 15223, 15227, 15236, 15237, 15246, 15249, 15265, 15267, 15271, 15262, 15282, 15284, 15285, 15292, 15326, 15329, 15333, 15343, 15346, 15348, 15353, 15354, 15368, 15381, 15392, 15393, 15438, 15439, 15418, 15421, 15423, 15426, 15428, 15444, 15462, 15482, 15487, 15498, 15508, 15509, 15525, 15527, 15535, 15536, 15540, 15552, 15553, 15557, 15566, 15567, 15570, 15578, 15580, 15584, 15591, 15592, 15595, 15603, 15612, 15626, 15619, 15620, 15634, 15652, 15658, 15660, 15662, 15663, 15665, 15684, 15685, 15675, 15696, 15701, 15703, 15705, 15707, 15713, 15716, 15724, 15740, 15732, 15748, 15762, 15763, 15778, 15784, 15789, 15799, 15800, 15806, 15807, 15808, 15815, 15819, 15823, 15824, 15825, 15830, 15833, 15836, 15844, 15863, 15851, 15869, 15876, 15894, 15896, 15904, 15905, 15909, 15920, 15922, 15927, 15912, 15913, 15915, 15917, 15938, 15939, 15940, 15943, 15947, 15948, 15951, 15929, 15931, 15952, 15957, 15959, 15968, 15973, 15961, 15962, 15967, 15979, 15983, 15988, 15991, 16006, 15998, 15999, 16008, 16009, 16018, 16042, 16032, 16034, 16038, 16026, 16029, 16031, 16050, 16051, 16073, 16074, 16075, 16076, 16064, 16065, 16083, 16097, 16104, 16121, 16132, 16133, 16141, 16154, 16157, 16164, 16170, 16173, 16175, 16179, 16186, 16198, 16201, 16211, 16212, 16230, 16231, 16219, 16222, 16246, 16253, 16255, 16258, 16272, 16275, 16279, 16280, 16284, 16289, 16293, 16311, 16316, 16324, 16335, 16353, 16360, 16366, 16367, 16377, 16381, 16382, 16383, 16391, 16392, 16394, 16402, 16416, 16434, 16436, 16440, 16446, 16448, 16449, 16453, 16454, 16457, 16464, 16468, 16479, 16489, 16502, 16511, 16513, 16515, 16520, 16526, 16528, 16529, 16559, 16560, 16567, 16568, 16569, 16571, 16576, 16585, 16599, 16608, 16613, 16615, 16637, 16638, 16629, 16630, 16641, 16647, 16651, 16652, 16656, 16675, 16676, 16678, 16679, 16681, 16698, 16699, 16705, 16714, 16720, 16736, 16737, 16739, 16740, 16743, 16747, 16750, 16754, 16764, 16766, 16767, 16768, 16770, 16776, 16777, 16781, 16782, 16785, 16788, 16789, 16808, 16812, 16814, 16821, 16824, 16832, 16837, 16840, 16842, 16847, 16852, 16855, 16865, 16867, 16869, 16871, 16859, 16889, 16898, 16901, 16902, 16907, 16914, 16916, 16928, 16929, 16933, 16924, 16936, 16939, 16956, 16960, 16966, 16968, 16973, 16978, 16980, 16981, 16983, 16995, 16989, 17014, 17001, 17003, 17029, 17031, 17038, 17039, 17051, 17053, 17041, 17064, 17065, 17066, 17069, 17071, 17075, 17083, 17085, 17100, 17103, 17116, 17123, 17134, 17138, 17139, 17141, 17160, 17166, 17156, 17170, 17171, 17172, 17175, 17180, 17181, 17183, 17185, 17186, 17188, 17190, 17195, 17196, 17198, 17211, 17216, 17219, 17221, 17222, 17227, 17231, 17243, 17250, 17265, 17277, 17260, 17280, 17281, 17283, 17286, 17300, 17302, 17307, 17308, 17321, 17328, 17330, 17335, 17338, 17344, 17345, 17350, 17366, 17354, 17356, 17357, 17381, 17382, 17368, 17372, 17373, 17375, 17384, 17387, 17391, 17393, 17395, 17397, 17399, 17403, 17405, 17409, 17416, 17426, 17429, 17431, 17434, 17442, 17453, 17472, 17476, 17460, 17464, 17465, 17500, 17503, 17505, 17507, 17515, 17523, 17531, 17534, 17542, 17548, 17553, 17560, 17562, 17563, 17564, 17567, 17571, 17584, 17587, 17595, 17597, 17612, 17619, 17624, 17626, 17630, 17639, 17650, 17651, 17657, 17658, 17661, 17662, 17671, 17674, 17675, 17686, 17692, 17698, 17700, 17705, 17709, 17711, 17720, 17723, 17741, 17742, 17729, 17730, 17744, 17746, 17748, 17752, 17759, 17763, 17766, 17771, 17774, 17785, 17801, 17804, 17807, 17813, 17817, 17820, 17821, 17829, 17833, 17836, 17838, 17839, 17840, 17845, 17851, 17855, 17856, 17858, 17860, 17868, 17870, 17878, 17879, 17892, 17908, 17916, 17920, 17924, 17932, 17934, 17935, 17937, 17938, 17943, 17945, 17948, 17951, 17978, 17968, 17972, 17990, 17993, 18006, 18012, 18015, 18016, 18022, 18032, 18052, 18056, 18059, 18071, 18077, 18079, 18093, 18098, 18109, 18110, 18114, 18119, 18122, 18123, 18125, 18127, 18129, 18131, 18139, 18142, 18144, 18149, 18154, 18156, 18160, 18163, 18166, 18172, 18178, 18208, 18209, 18210, 18214, 18200, 18202, 18206, 18218, 18241, 18247, 18256, 18232, 18265, 18272, 18276, 18279, 18283, 18284, 18298, 18305, 18314, 18336, 18340, 18342, 18346, 18359, 18371, 18372, 18374, 18375, 18360, 18363, 18387, 18391, 18398, 18400, 18402, 18403, 18407, 18408, 18412, 18415, 18416, 18422, 18446, 18436, 18453, 18454, 18457, 18459, 18460, 18465, 18467, 18473, 18476, 18478, 18479, 18489, 18503, 18481, 18482, 18483, 18510, 18515, 18531, 18524, 18527, 18537, 18542, 18544, 18549, 18551, 18560, 18566, 18557, 18578, 18580, 18583, 18595, 18597, 18599, 18601, 18606, 18610, 18611, 18624, 18629, 18630, 18635, 18646, 18651, 18659, 18665, 18667, 18671, 18682, 18688, 18696, 18712, 18713, 18716, 18717, 18723, 18724, 18727, 18731, 18746, 18749, 18752, 18754, 18757, 18762, 18766, 18773, 18776, 18780, 18795, 18796, 18788, 18789, 18800, 18803, 18806, 18812, 18820, 18823, 18826, 18827, 18848, 18850, 18852, 18855, 18867, 18868, 18869, 18859, 18872, 18891, 18894, 18882, 18903, 18907, 18916, 18928, 18934, 18935, 18940, 18942, 18960, 18964, 18956, 18974, 18982, 18985, 18987, 18989, 18993, 18994, 19004, 19008, 19010, 19013, 19017, 19018, 19020, 19024, 19026, 19027, 19028, 19035, 19059, 19063, 19048, 19053, 19065, 19067, 19083, 19093, 19094, 19108, 19111, 19112, 19116, 19117, 19122, 19123, 19124, 19127, 19131, 19133, 19143, 19154, 19159, 19162, 19165, 19166, 19167, 19169, 19182, 19188, 19189, 19193, 19202, 19203, 19209, 19211, 19226, 19228, 19245, 19252, 19253, 19255, 19270, 19271, 19281, 19291, 19295, 19272, 19275, 19277, 19308, 19314, 19315, 19327, 19328, 19338, 19348, 19352, 19358, 19361, 19362, 19364, 19365, 19376, 19368, 19371, 19402, 19404, 19406, 19393, 19418, 19432, 19424, 19443, 19453, 19454, 19455, 19467, 19471, 19460, 19482, 19483, 19484, 19487, 19489, 19490, 19493, 19495, 19503, 19505, 19508, 19511, 19523, 19524, 19538, 19543, 19531, 19532, 19534, 19535, 19561, 19565, 19579, 19568, 19570, 19593, 19595, 19609, 19612, 19601, 19602, 19607, 19619, 19624, 19625, 19630, 19638, 19646, 19648, 19661, 19663, 19669, 19673, 19679, 19690, 19718, 19720, 19730, 19733, 19738, 19740, 19742, 19744, 19750, 19752, 19755, 19758, 19765, 19768, 19784, 19788, 19791, 19799, 19802, 19804, 19817, 19812, 19815, 19827, 19828, 19830, 19838, 19839, 19846, 19850, 19851, 19854, 19859, 19860, 19862, 19866, 19871, 19872, 19887, 19889, 19906, 19907, 19909, 19911, 19912, 19915, 19929, 19933, 19921, 19922, 19923, 19924, 19939, 19948, 19956, 19957, 19964, 19971, 19982, 19983, 19988, 19999, 20005, 20008, 20009, 20013, 20015, 20017, 20019, 20025, 20028, 20030, 20032, 20033, 20036, 20038, 20039, 20057, 20061, 20072, 20076, 20085, 20086, 20089, 20092, 20099, 20105, 20109, 20111, 20112, 20116, 20130, 20132, 20135, 20146, 20148, 20151, 20153, 20155, 20157, 20160, 20162, 20163, 20175, 20180, 20182, 20188, 20189, 20192, 20196, 20222, 20202, 20208, 20226, 20227, 20230, 20233, 20234, 20239, 20249, 20247, 20265, 20271, 20261, 20263, 20278, 20283, 20284, 20286, 20290, 20291, 20293, 20294, 20307, 20308, 20310, 20311, 20316, 20317, 20318, 20320, 20322, 20323, 20336, 20338, 20359, 20345, 20347, 20362, 20366, 20368, 20376, 20392, 20386, 20400, 20417, 20425, 20432, 20435, 20443, 20444, 20445, 20454, 20470, 20471, 20472, 20478, 20479, 20456, 20458, 20459, 20484, 20486, 20489, 20495, 20498, 20499, 20503, 20505, 20506, 20509, 20523, 20526, 20536, 20529, 20534, 20544, 20564, 20566, 20569, 20573, 20580, 20596, 20584, 20591, 20604, 20608, 20612, 20624, 20631, 20617, 20623, 20635, 20639, 20648, 20651, 20652, 20659, 20660, 20685, 20686, 20679, 20690, 20691, 20697, 20700, 20712, 20713, 20717, 20722, 20724, 20727, 20732, 20736, 20745, 20750, 20763, 20765, 20770, 20772, 20773, 20779, 20781, 20783, 20787, 20803, 20805, 20796, 20799, 20816, 20810, 20832, 20835, 20825, 20827, 20831, 20854, 20841, 20864, 20868, 20871, 20872, 20857, 20882, 20895, 20905, 20911, 20899, 20912, 20923, 20928, 20945, 20951, 20936, 20940, 20954, 20973, 20974, 20975, 20993, 20995, 20997, 21002, 21003, 21017, 21021, 21009, 21011, 21012, 21029, 21031, 21039, 21050, 21056, 21065, 21066, 21079, 21081, 21087, 21098, 21103, 21093, 21095, 21105, 21114, 21119, 21128, 21129, 21132, 21134, 21125, 21137, 21150, 21151, 21152, 21163, 21172, 21173, 21174, 21193, 21200, 21203, 21215, 21216, 21217, 21221, 21233, 21235, 21238, 21259, 21260, 21251, 21264, 21267, 21281, 21282, 21284, 21286, 21290, 21293, 21296, 21297, 21298, 21300, 21301, 21307, 21309, 21314, 21315, 21318, 21321, 21322, 21325, 21326, 21333, 21339, 21350, 21352, 21365, 21366, 21370, 21372, 21384, 21385, 21391, 21381, 21392, 21394, 21395, 21397, 21421, 21404, 21424, 21426, 21429, 21431, 21434, 21443, 21445, 21450, 21452, 21453, 21459, 21464, 21470, 21472, 21482, 21486, 21488, 21490, 21493, 21494, 21514, 21515, 21518, 21505, 21509, 21520, 21526, 21531, 21532, 21533, 21537, 21547, 21550, 21551, 21557, 21560, 21564, 21565, 21566, 21571, 21572, 21575, 21587, 21597, 21600, 21603, 21604, 21610, 21611, 21617, 21629, 21637, 21650, 21653, 21646, 21663, 21665, 21671, 21673, 21674, 21676, 21679, 21682, 21690, 21691, 21692, 21694, 21695, 21701, 21710, 21711, 21715, 21730, 21735, 21745, 21750, 21751, 21760, 21762, 21770, 21774, 21787, 21789, 21776, 21777, 21780, 21781, 21792, 21793, 21797, 21808, 21819, 21821, 21838, 21826, 21841, 21842, 21846, 21849, 21858, 21860, 21861, 21865, 21868, 21872, 21873, 21875, 21878, 21882, 21885, 21898, 21891, 21904, 21910, 21919, 21936, 21939, 21940, 21922, 21924, 21928, 21930, 21944, 21945, 21950, 21965, 21966, 21968, 21973, 21996, 22001, 22008, 22013, 22014, 22023, 22028, 22033, 22042, 22045, 22054, 22059, 22069, 22070, 22082, 22086, 22089, 22092, 22094, 22105, 22103, 22116, 22122, 22126, 22127, 22136, 22137, 22162, 22167, 22146, 22150, 22151, 22154, 22156, 22158, 22159, 22172, 22174, 22175, 22181, 22182, 22185, 22191, 22202, 22205, 22219, 22220, 22224, 22230, 22232, 22236, 22239, 22241, 22242, 22246, 22247, 22266, 22249, 22251, 22279, 22289, 22280, 22287, 22296, 22304, 22310, 22315, 22316, 22317, 22318, 22319, 22352, 22354, 22366, 22380, 22368, 22393, 22394, 22395, 22384, 22385, 22388, 22408, 22411, 22401, 22426, 22430, 22421, 22422, 22432, 22465, 22467, 22471, 22473, 22486, 22487, 22488, 22490, 22524, 22539, 22541, 22518, 22519, 22530, 22534, 22549, 22552, 22555, 22559, 22564, 22566, 22569, 22572, 22585, 22590, 22578, 22583, 22592, 22593, 22598, 22599, 22612, 22613, 22617, 22623, 22648, 22649, 22652, 22653, 22655, 22665, 22666, 22672, 22674, 22675, 22676, 22677, 22696, 22697, 22700, 22707, 22709, 22719, 22721, 22722, 22725, 22729, 22732, 22735, 22740, 22743, 22746, 22748, 22751, 22758, 22761, 22763, 22765, 22782, 22786, 22768, 22810, 22824, 22828, 22830, 22855, 22840, 22841, 22842, 22834, 22836, 22839, 22861, 22863, 22873, 22878, 22865, 22867, 22868, 22882, 22884, 22894, 22908, 22921, 22922, 22923, 22931, 22939, 22941, 22946, 22951, 22954, 22955, 22957, 22958, 22966, 22972, 22983, 22984, 22988, 22989, 22991, 22992, 23014, 23002, 23017, 23020, 23021, 23028, 23040, 23047, 23034, 23038, 23048, 23055, 23062, 23072, 23073, 23077, 23064, 23088, 23090, 23091, 23092, 23080, 23083, 23099, 23102, 23104, 23139, 23121, 23123, 23127, 23154, 23157, 23166, 23167, 23193, 23198, 23186, 23187, 23177, 23207, 23219, 23221, 23211, 23228, 23231, 23257, 23258, 23265, 23271, 23240, 23277, 23282, 23285, 23286, 23294, 23305, 23308, 23333, 23312, 23314, 23326, 23327, 23347, 23348, 23350, 23371, 23373, 23380, 23381, 23396, 23385, 23386, 23400, 23401, 23406, 23420, 23422, 23429, 23410, 23415, 23441, 23443, 23433, 23435, 23453, 23454, 23461, 23472, 23476, 23466, 23480, 23486, 23493, 23497, 23501, 23502, 23513, 23520, 23521, 23529, 23532, 23534, 23544, 23545, 23547, 23554, 23555, 23557, 23566, 23573, 23580, 23591, 23608, 23610, 23600, 23602, 23605, 23618, 23622, 23623, 23633, 23636, 23638, 23645, 23646, 23647, 23625, 23630, 23651, 23654, 23664, 23666, 23668, 23671, 23672, 23673, 23674, 23675, 23683, 23692, 23695, 23701, 23728, 23733, 23743, 23754, 23756, 23757, 23759, 23763, 23765, 23778, 23780, 23781, 23783, 23774, 23787, 23788, 23789, 23791, 23811, 23827, 23834, 23839, 23851, 23859, 23862, 23864, 23868, 23873, 23874, 23876, 23877, 23880, 23885, 23887, 23893, 23898, 23902, 23907, 23908, 23913, 23915, 23917, 23924, 23933, 23938, 23939, 23941, 23951, 23962, 23963, 23953, 23954, 23956, 23957, 23969, 23986, 23988, 23992, 23993, 23998, 24000, 24002, 24009, 24013, 24029, 24034, 24037, 24045, 24046, 24050, 24052, 24057, 24060, 24063, 24076, 24079, 24084, 24087, 24088, 24092, 24095, 24097, 24106, 24108, 24109, 24112, 24114, 24119, 24125, 24126, 24136, 24141, 24142, 24146, 24153, 24161, 24163, 24164, 24165, 24174, 24178, 24179, 24194, 24206, 24208, 24233, 24234, 24239, 24250, 24253, 24247, 24257, 24259, 24265, 24270, 24278, 24282, 24284, 24286, 24291, 24293, 24294, 24297, 24301, 24318, 24319, 24320, 24323, 24327, 24334, 24336, 24341, 24349, 24362, 24364, 24366, 24367, 24375, 24385, 24388, 24376, 24382, 24395, 24402, 24410, 24413, 24414, 24418, 24428, 24441, 24446, 24448, 24449, 24458, 24476, 24465, 24470, 24484, 24504, 24508, 24488, 24490, 24493, 24526, 24528, 24530, 24532, 24542, 24546, 24551, 24568, 24560, 24563, 24564, 24566, 24576, 24594, 24587, 24588, 24602, 24613, 24630, 24631, 24619, 24621, 24666, 24671, 24673, 24674, 24684, 24697, 24699, 24725, 24739, 24728, 24745, 24752, 24761, 24762, 24763, 24766, 24773, 24777, 24782, 24789, 24800, 24809, 24817, 24820, 24821, 24835, 24838, 24839, 24844, 24845, 24851, 24857, 24864, 24878, 24880, 24883, 24896, 24910, 24934, 24913, 24916, 24919, 24926, 24927, 24936, 24939, 24942, 24943, 24956, 24946, 24951, 24966, 24967, 24984, 24985, 24986, 24976, 24994, 24995, 25001, 25005, 25014, 25015, 25017, 25018, 25021, 25029, 25039, 25040, 25046, 25056, 25064, 25065, 25068, 25070, 25071, 25078, 25087, 25102, 25120, 25115, 25116, 25110, 25130, 25133, 25140, 25141, 25142, 25146, 25153, 25157, 25158, 25166, 25168, 25170, 25172, 25174, 25175, 25186, 25190, 25193, 25194, 25196, 25178, 25182, 25221, 25223, 25212, 25214, 25225, 25226, 25230, 25233, 25242, 25248, 25254, 25258, 25268, 25270, 25271, 25280, 25281, 25283, 25284, 25287, 25276, 25302, 25311, 25316, 25327, 25332, 25356, 25357, 25336, 25339, 25343, 25361, 25380, 25371, 25384, 25385, 25386, 25390, 25394, 25411, 25400, 25416, 25430, 25431, 25450, 25452, 25459, 25440, 25445, 25472, 25473, 25474, 25475, 25479, 25471, 25481, 25489, 25510, 25497, 25513, 25521, 25522, 25524, 25527, 25534, 25557, 25562, 25567, 25571, 25576, 25582, 25584, 25585, 25593, 25594, 25595, 25596, 25598, 25609, 25610, 25600, 25617, 25618, 25619, 25627, 25630, 25643, 25646, 25635, 25637, 25652, 25653, 25659, 25661, 25663, 25674, 25675, 25667, 25670, 25681, 25687, 25688, 25690, 25700, 25703, 25717, 25725, 25726, 25740, 25741, 25732, 25733, 25734, 25735, 25744, 25746, 25751, 25755, 25757, 25776, 25782, 25788, 25791, 25799, 25805, 25806, 25809, 25812, 25814, 25816, 25829, 25831, 25834, 25836, 25848, 25849, 25854, 25868, 25872, 25875, 25879, 25884, 25888, 25890, 25891, 25897, 25934, 25920, 25921, 25922, 25936, 25939, 25941, 25946, 25950, 25966, 25971, 25957, 25958, 25979, 25980, 25987, 25989, 25992, 25993, 26006, 26010, 26013, 26019, 26020, 26021, 26022, 26027, 26035, 26038, 26041, 26044, 26051, 26052, 26053, 26054, 26055, 26065, 26058, 26062, 26077, 26082, 26083, 26087, 26089, 26090, 26092, 26094, 26096, 26098, 26099, 26101, 26113, 26115, 26118, 26125, 26134, 26137, 26145, 26148, 26149, 26152, 26155, 26165, 26169, 26171, 26184, 26189, 26177, 26178, 26180, 26181, 26182, 26201, 26219, 26221, 26239, 26229, 26230, 26253, 26242, 26245, 26247, 26269, 26272, 26276, 26288, 26293, 26296, 26299, 26302, 26304, 26306, 26307, 26308, 26311, 26320, 26326, 26333, 26335, 26345, 26346, 26350, 26361, 26365, 26353, 26355, 26359, 26379, 26383, 26393, 26394, 26397, 26399, 26409, 26404, 26406, 26420, 26422, 26424, 26432, 26439, 26446, 26452, 26456, 26460, 26469, 26474, 26492, 26485, 26498, 26503, 26512, 26514, 26508, 26545, 26547, 26548, 26551, 26552, 26563, 26568, 26569, 26571, 26593, 26595, 26599, 26603, 26604, 26606, 26607, 26613, 26632, 26637, 26624, 26628, 26616, 26619, 26620, 26622, 26645, 26649, 26652, 26655, 26663, 26668, 26674, 26675, 26676, 26679, 26680, 26682, 26690, 26700, 26713, 26715, 26732, 26723, 26726, 26727, 26736, 26744, 26748, 26757, 26767, 26769, 26770, 26775, 26776, 26786, 26797, 26810, 26813, 26823, 26824, 26827, 26830, 26837, 26839, 26849, 26852, 26853, 26855, 26840, 26845, 26886, 26872, 26868, 26871, 26893, 26904, 26905, 26911, 26913, 26900, 26902, 26921, 26923, 26927, 26938, 26943, 26952, 26954, 26959, 26963, 26967, 26969, 26972, 26973, 26981, 26989, 26999, 27002, 27003, 27021, 27030, 27033, 27045, 27054, 27055, 27057, 27063, 27074, 27075, 27076, 27077, 27097, 27098, 27101, 27105, 27106, 27108, 27124, 27125, 27112, 27113, 27133, 27138, 27140, 27153, 27158, 27149, 27150, 27169, 27172, 27174, 27179, 27185, 27186, 27197, 27202, 27206, 27208, 27212, 27222, 27224, 27230, 27235, 27239, 27240, 27241, 27248, 27251, 27253, 27269, 27271, 27275, 27278, 27288, 27289, 27292, 27281, 27283, 27305, 27320, 27322, 27323, 27312, 27313, 27318, 27333, 27338, 27339, 27341, 27342, 27345, 27349, 27351, 27353, 27368, 27370, 27378, 27382, 27389, 27391, 27397, 27410, 27413, 27415, 27401, 27432, 27436, 27425, 27429, 27443, 27447, 27448, 27449, 27456, 27465, 27470, 27472, 27487, 27490, 27494, 27505, 27511, 27512, 27516, 27517, 27519, 27529, 27539, 27542, 27552, 27547, 27560, 27564, 27565, 27576, 27581, 27582, 27583, 27569, 27572, 27606, 27592, 27596, 27598, 27617, 27618, 27608, 27624, 27641, 27643, 27644, 27645, 27647, 27650, 27653, 27656, 27657, 27659, 27662, 27666, 27667, 27678, 27688, 27694, 27710, 27701, 27718, 27727, 27730, 27732, 27739, 27751, 27761, 27762, 27766, 27770, 27771, 27775, 27788, 27790, 27793, 27795, 27800, 27808, 27809, 27810, 27814, 27817, 27830, 27832, 27835, 27837, 27845, 27850, 27852, 27868, 27870, 27874, 27880, 27886, 27899, 27900, 27910, 27916, 27920, 27924, 27926, 27937, 27944, 27960, 27963, 27994, 27999, 27975, 27985, 27988, 28023, 28002, 28005, 28007, 28035, 28041, 28049, 28054, 28055, 28057, 28058, 28070, 28073, 28078, 28083, 28087, 28089, 28093, 28095, 28097, 28102, 28134, 28135, 28140, 28141, 28143, 28161, 28165, 28166, 28167, 28145, 28168, 28176, 28177, 28179, 28184, 28187, 28191, 28193, 28195, 28199, 28201, 28202, 28206, 28207, 28221, 28223, 28225, 28227, 28230, 28231, 28240, 28246, 28249, 28259, 28272, 28274, 28290, 28280, 28305, 28318, 28338, 28339, 28349, 28356, 28357, 28359, 28363, 28368, 28376, 28380, 28384, 28421, 28427, 28428, 28429, 28434, 28440, 28445, 28451, 28452, 28470, 28477, 28484, 28487, 28490, 28494, 28504, 28501, 28512, 28513, 28515, 28521, 28522, 28526, 28528, 28534, 28543, 28555, 28557, 28559, 28549, 28563, 28576, 28579, 28585, 28586, 28588, 28592, 28596, 28598, 28604, 28608, 28609, 28611, 28617, 28619, 28628, 28641, 28650, 28657, 28661, 28665, 28666, 28670, 28674, 28699, 28691, 28693, 28695, 28682, 28683, 28685, 28708, 28711, 28718, 28719, 28727, 28736, 28738, 28741, 28735, 28753, 28757, 28763, 28764, 28766, 28770, 28775, 28776, 28781, 28782, 28793, 28785, 28813, 28815, 28833, 28836, 28837, 28865, 28867, 28868, 28856, 28881, 28887, 28891, 28904, 28906, 28907, 28896, 28897, 28902, 28916, 28918, 28922, 28924, 28925, 28941, 28950, 28960, 28965, 28966, 28968, 28974, 28986, 28988, 28989, 28990, 28992, 28994, 28998, 28980, 28983, 29017, 29023, 29029, 29031, 29043, 29047, 29049, 29051, 29052, 29055, 29056, 29058, 29059, 29064, 29066, 29071, 29072, 29075, 29080, 29082, 29084, 29086, 29087, 29088, 29106, 29134, 29137, 29120, 29122, 29151, 29158, 29167, 29177, 29178, 29171, 29173, 29193, 29194, 29200, 29212, 29213, 29214, 29221, 29239, 29253, 29256, 29261, 29266, 29269, 29277, 29285, 29307, 29311, 29297, 29298, 29300, 29302, 29321, 29324, 29334, 29338, 29341, 29342, 29343, 29349, 29361, 29362, 29363, 29366, 29378, 29356, 29369, 29371, 29372, 29390, 29399, 29402, 29407, 29409, 29435, 29439, 29424, 29428, 29429, 29448, 29452, 29464, 29469, 29472, 29483, 29485, 29486, 29509, 29511, 29490, 29497, 29499, 29503, 29513, 29518, 29521, 29527, 29529, 29534, 29536, 29574, 29576, 29577, 29565, 29588, 29589, 29592, 29594, 29602, 29635, 29628, 29641, 29663, 29665, 29670, 29671, 29672, 29677, 29680, 29689, 29690, 29691, 29697, 29700, 29704, 29710, 29720, 29733, 29734, 29735, 29738, 29743, 29752, 29753, 29747, 29761, 29780, 29783, 29769, 29770, 29774, 29788, 29789, 29801, 29795, 29797, 29799, 29816, 29819, 29834, 29848, 29852, 29853, 29864, 29873, 29874, 29875, 29879, 29917, 29897, 29898, 29922, 29929, 29940, 29941, 29944, 29946, 29948, 29950, 29967, 29985, 29991, 29976, 29969, 29975, 29994, 29997, 29998, 30002, 30005, 30022, 30008, 30009, 30012, 30013, 30015, 30026, 30042, 30034, 30038, 30048, 30055, 30058, 30059, 30063, 30087, 30088, 30092, 30095, 30102, 30103, 30105, 30119, 30120, 30138, 30139, 30140, 30144, 30147, 30154, 30155, 30162, 30163, 30166, 30173, 30184, 30185, 30193, 30197, 30199, 30203, 30205, 30207, 30211, 30221, 30228, 30232, 30235, 30241, 30250, 30254, 30257, 30273, 30275, 30276, 30266, 30268, 30269, 30285, 30300, 30303, 30311, 30289, 30290, 30317, 30329, 30331, 30332, 30320, 30325, 30338, 30355, 30356, 30370, 30376, 30399, 30401, 30406, 30412, 30414, 30416, 30417, 30420, 30422, 30425, 30438, 30445, 30458, 30460, 30462, 30451, 30474, 30465, 30466, 30470, 30488, 30489, 30481, 30484, 30499, 30504, 30506, 30510, 30525, 30529, 30536, 30542, 30557, 30558, 30544, 30561, 30564, 30572, 30576, 30597, 30598, 30588, 30590, 30603, 30609, 30611, 30612, 30624, 30630, 30636, 30642, 30643, 30646, 30650, 30652, 30660, 30661, 30664, 30666, 30669, 30671, 30683, 30685, 30686, 30687, 30695, 30721, 30713, 30714, 30715, 30728, 30731, 30734, 30743, 30747, 30761, 30763, 30766, 30752, 30753, 30785, 30778, 30783, 30811, 30815, 30803, 30807, 30818, 30819, 30820, 30832, 30833, 30834, 30835, 30842, 30846, 30849, 30850, 30855, 30859, 30864, 30870, 30872, 30873, 30875, 30880, 30883, 30890, 30892, 30896, 30904, 30913, 30915, 30921, 30928, 30935, 30954, 30958, 30936, 30939, 30941, 30947, 30949, 30975, 30993, 30986, 30976, 31002, 31010, 31015, 31016, 31033, 31040, 31041, 31045, 31046, 31047, 31065, 31070, 31057, 31061, 31072, 31077, 31097, 31100, 31110, 31121, 31122, 31124, 31127, 31147, 31142, 31143, 31130, 31155, 31158, 31169, 31171, 31172, 31174, 31176, 31181, 31186, 31191, 31192, 31195, 31201, 31202, 31204, 31210, 31237, 31238, 31216, 31264, 31267, 31258, 31262, 31276, 31278, 31283, 31284, 31310, 31311, 31303, 31315, 31317, 31322, 31329, 31331, 31336, 31338, 31339, 31340, 31341, 31352, 31356, 31357, 31358, 31361, 31362, 31374, 31377, 31381, 31406, 31414, 31429, 31431, 31417, 31419, 31432, 31444, 31450, 31453, 31454, 31456, 31459, 31465, 31466, 31469, 31472, 31474, 31476, 31480, 31482, 31485, 31496, 31514, 31515, 31508, 31521, 31525, 31538, 31540, 31542, 31544, 31545, 31551, 31558, 31559, 31560, 31561, 31566, 31573, 31576, 31578, 31580, 31581, 31588, 31589, 31596, 31612, 31624, 31639, 31642, 31645, 31646, 31649, 31657, 31662, 31678, 31665, 31666, 31671, 31682, 31683, 31685, 31686, 31689, 31690, 31691, 31692, 31693, 31704, 31699, 31700, 31701, 31715, 31720, 31722, 31725, 31741, 31730, 31734, 31735, 31746, 31747, 31750, 31761, 31758, 31777, 31779, 31783, 31772, 31773, 31796, 31799, 31803, 31807, 31810, 31819, 31821, 31824, 31826, 31834, 31835, 31836, 31839, 31848, 31849, 31850, 31852, 31843, 31845, 31861, 31862, 31866, 31869, 31881, 31883, 31894, 31908, 31901, 31920, 31924, 31925, 31930, 31932, 31935, 31940, 31953, 31954, 31956, 31945, 31948, 31963, 31964, 31966, 31967, 31976, 31977, 31980, 31987, 31997, 32006, 32008, 32011, 32027, 32031, 32039, 32019, 32048, 32050, 32052, 32054, 32055, 32047, 32056, 32063, 32065, 32071, 32073, 32087, 32092, 32093, 32095, 32096, 32098, 32105, 32106, 32110, 32117, 32128, 32139, 32148, 32156, 32164, 32167, 32170, 32173, 32174, 32175, 32179, 32196, 32199, 32187, 32200, 32206, 32216, 32223, 32213, 32235, 32236, 32238, 32259, 32263, 32241, 32243, 32252, 32271, 32274, 32286, 32292, 32294, 32299, 32301, 32306, 32312, 32313, 32315, 32316, 32321, 32323, 32331, 32348, 32350, 32367, 32354, 32386, 32390, 32393, 32398, 32376, 32382, 32411, 32426, 32418, 32419, 32445, 32446, 32452, 32453, 32454, 32459, 32462, 32476, 32470, 32483, 32489, 32490, 32493, 32496, 32501, 32505, 32507, 32509, 32525, 32513, 32515, 32516, 32518, 32519, 32528, 32530, 32533, 32545, 32563, 32556, 32557, 32576, 32578, 32581, 32573, 32585, 32586, 32588, 32616, 32619, 32621, 32622, 32602, 32604, 32611, 32630, 32641, 32642, 32646, 32647, 32632, 32635, 32636, 32639, 32649, 32656, 32657, 32672, 32675, 32667, 32669, 32681, 32683, 32686, 32691, 32692, 32693, 32710, 32711, 32720, 32723, 32726, 32727, 32716, 32717, 32731, 32733, 32743, 32746, 32751, 32754, 32756, 32759, 32764, 32770, 32772, 32778, 32779, 32794, 32784, 32786, 32800, 32801, 32803, 32805, 32807, 32816, 32808, 32809, 32813, 32815, 32825, 32829, 32845, 32846, 32838, 32839, 32859, 32861, 32863, 32855, 32867, 32868, 32870, 32873, 32876, 32877, 32887, 32895, 32909, 32911, 32898, 32922, 32926, 32927, 32919, 32936, 32955, 32947, 32950, 32961, 32962, 32964, 32970, 32986, 32987, 32989, 32991, 32976, 32978, 32982, 32983, 33004, 33006, 33016, 33018, 33029, 33033, 33034, 33037, 33039, 33041, 33066, 33074, 33077, 33082, 33083, 33086, 33088, 33091, 33094, 33109, 33098, 33099, 33113, 33118, 33135, 33137, 33140, 33143, 33152, 33155, 33165, 33174, 33176, 33193, 33210, 33215, 33216, 33225, 33232, 33234, 33247, 33258, 33261, 33266, 33270, 33279, 33289, 33292, 33281, 33284, 33299, 33300, 33315, 33329, 33332, 33339, 33340, 33341, 33342, 33352, 33354, 33368, 33369, 33370, 33376, 33377, 33386, 33405, 33409, 33417, 33423, 33434, 33435, 33437, 33426, 33428, 33448, 33450, 33455, 33456, 33457, 33459, 33461, 33462, 33477, 33479, 33510, 33494, 33518, 33538, 33539, 33543, 33528, 33529, 33532, 33545, 33546, 33550, 33553, 33570, 33571, 33572, 33578, 33582, 33583, 33590, 33600, 33603, 33605, 33594, 33598, 33599, 33610, 33636, 33649, 33650, 33652, 33653, 33643, 33686, 33694, 33672, 33676, 33679, 33698, 33703, 33709, 33712, 33718, 33721, 33737, 33740, 33741, 33750, 33752, 33763, 33764, 33771, 33775, 33776, 33777, 33780, 33782, 33783, 33784, 33788, 33802, 33804, 33793, 33794, 33798, 33808, 33818, 33824, 33833, 33840, 33857, 33862, 33866, 33870, 33872, 33874, 33879, 33880, 33884, 33886, 33913, 33914, 33916, 33922, 33927, 33936, 33928, 33931, 33948, 33950, 33955, 33957, 33963, 33966, 33974, 33984, 33991, 34000, 34003, 33993, 33994, 33995, 33996, 34010, 34017, 34019, 34032, 34039, 34028, 34029, 34040, 34045, 34053, 34058, 34068, 34071, 34077, 34082, 34083, 34084, 34086, 34093, 34109, 34096, 34098, 34101, 34102, 34121, 34133, 34134, 34136, 34143, 34158, 34172, 34174, 34184, 34185, 34189, 34190, 34191, 34198, 34199, 34213, 34218, 34223, 34201, 34228, 34230, 34232, 34236, 34239, 34241, 34255, 34274, 34258, 34261, 34266, 34271, 34282, 34292, 34305, 34307, 34297, 34302, 34317, 34322, 34339, 34343, 34334, 34354, 34376, 34372, 34374, 34401, 34410, 34414, 34419, 34437, 34431, 34443, 34445, 34454, 34464, 34467, 34469, 34483, 34484, 34476, 34495, 34496, 34504, 34508, 34512, 34515, 34520, 34526, 34527, 34532, 34537, 34538, 34539, 34541, 34544, 34549, 34550, 34558, 34561, 34565, 34566, 34568, 34569, 34577, 34579, 34595, 34599, 34609, 34629, 34617, 34634, 34653, 34640, 34645, 34662, 34676, 34679, 34667, 34668, 34671, 34683, 34684, 34687, 34692, 34696, 34697, 34702, 34704, 34708, 34715, 34717, 34718, 34727, 34729, 34730, 34736, 34761, 34767, 34759, 34776, 34777, 34768, 34773, 34775, 34795, 34806, 34825, 34829, 34832, 34837, 34838, 34848, 34844, 34859, 34863, 34867, 34869, 34886, 34887, 34873, 34874, 34875, 34897, 34900, 34911, 34920, 34934, 34936, 34944, 34946, 34947, 34951, 34961, 34965, 34970, 34979, 34980, 34990, 34991, 34992, 34999, 35008, 35002, 35003, 35026, 35017, 35018, 35023, 35034, 35039, 35047, 35048, 35051, 35071, 35075, 35076, 35077, 35079, 35082, 35090, 35092, 35104, 35108, 35109, 35124, 35125, 35129, 35134, 35139, 35141, 35161, 35162, 35163, 35166, 35167, 35171, 35175, 35177, 35182, 35193, 35195, 35196, 35207, 35222, 35214, 35230, 35240, 35242, 35245, 35247, 35248, 35257, 35270, 35274, 35279, 35288, 35298, 35304, 35314, 35332, 35343, 35344, 35347, 35365, 35368, 35372, 35376, 35380, 35386, 35393, 35394, 35398, 35417, 35418, 35415, 35425, 35426, 35427, 35432, 35441, 35452, 35460, 35461, 35462, 35468, 35471, 35490, 35492, 35499, 35503, 35505, 35512, 35518, 35530, 35531, 35535, 35537, 35543, 35546, 35554, 35561, 35565, 35581, 35570, 35571, 35584, 35604, 35608, 35612, 35616, 35625, 35628, 35632, 35633, 35652, 35654, 35655, 35640, 35642, 35644, 35645, 35647, 35656, 35686, 35672, 35688, 35691, 35708, 35712, 35719, 35723, 35724, 35728, 35729, 35733, 35735, 35736, 35741, 35746, 35753, 35754, 35762, 35766, 35775, 35776, 35781, 35788, 35789, 35791, 35793, 35795, 35798, 35799, 35808, 35824, 35831, 35816, 35819, 35840, 35846, 35847, 35834, 35853, 35855, 35862, 35867, 35869, 35882, 35886, 35920, 35922, 35926, 35913, 35915, 35917, 35933, 35938, 35941, 35942, 35949, 35950, 35961, 35954, 35955, 35958, 35970, 35971, 35975, 35976, 35980, 35986, 35990, 35997, 36005, 36008, 36010, 36011, 36019, 36020, 36028, 36029, 36030, 36032, 36035, 36038, 36041, 36045, 36046, 36047, 36062, 36050, 36053, 36054, 36077, 36064, 36065, 36066, 36086, 36087, 36097, 36121, 36123, 36126, 36116, 36104, 36110, 36149, 36136, 36133, 36134, 36157, 36159, 36163, 36166, 36174, 36178, 36179, 36207, 36193, 36196, 36197, 36199, 36212, 36215, 36225, 36227, 36229, 36230, 36237, 36239, 36240, 36245, 36261, 36265, 36267, 36270, 36271, 36272, 36278, 36298, 36309, 36314, 36329, 36331, 36335, 36321, 36323, 36326, 36346, 36347, 36361, 36364, 36367, 36352, 36355, 36378, 36379, 36381, 36368, 36373, 36391, 36416, 36417, 36419, 36401, 36404, 36414, 36426, 36428, 36431, 36437, 36449, 36453, 36465, 36467, 36473, 36483, 36490, 36494, 36507, 36508, 36524, 36515, 36517, 36519, 36543, 36532, 36533, 36544, 36546, 36550, 36558, 36560, 36563, 36566, 36568, 36580, 36589, 36597, 36603, 36623, 36625, 36636, 36638, 36648, 36652, 36666, 36670, 36663, 36676, 36677, 36681, 36683, 36694, 36698, 36702, 36706, 36710, 36711, 36713, 36726, 36728, 36731, 36749, 36750, 36751, 36752, 36754, 36760, 36762, 36771, 36784, 36795, 36801, 36818, 36808, 36809, 36815, 36832, 36824, 36830, 36853, 36854, 36862, 36866, 36870, 36887, 36874, 36890, 36891, 36899, 36902, 36903, 36919, 36904, 36906, 36927, 36929, 36930, 36934, 36935, 36936, 36947, 36948, 36952, 36954, 36960, 36963, 36964, 36982, 36986, 36991, 37014, 37006, 36994, 37020, 37021, 37025, 37028, 37030, 37042, 37045, 37047, 37062, 37051, 37055, 37065, 37067, 37069, 37071, 37073, 37077, 37079, 37080, 37089, 37094, 37109, 37097, 37113, 37122, 37124, 37130, 37134, 37155, 37156, 37161, 37164, 37166, 37171, 37172, 37173, 37177, 37178, 37192, 37194, 37187, 37188, 37189, 37210, 37213, 37201, 37205, 37224, 37226, 37217, 37238, 37239, 37246, 37249, 37250, 37259, 37260, 37262, 37272, 37279, 37280, 37285, 37287, 37290, 37291, 37306, 37311, 37297, 37317, 37318, 37319, 37322, 37346, 37348, 37351, 37352, 37354, 37357, 37367, 37368, 37388, 37389, 37392, 37396, 37398, 37403, 37405, 37423, 37424, 37432, 37453, 37455, 37441, 37442, 37464, 37465, 37456, 37461, 37475, 37498, 37502, 37481, 37483, 37504, 37513, 37525, 37544, 37548, 37551, 37558, 37559, 37563, 37565, 37566, 37567, 37571, 37573, 37577, 37588, 37591, 37593, 37598, 37605, 37607, 37620, 37621, 37625, 37634, 37643, 37645, 37650, 37655, 37659, 37660, 37666, 37667, 37672, 37674, 37675, 37676, 37687, 37694, 37696, 37697, 37706, 37707, 37708, 37717, 37724, 37727, 37729, 37732, 37734, 37737, 37741, 37756, 37766, 37767, 37779, 37782, 37785, 37790, 37769, 37770, 37796, 37798, 37812, 37806, 37807, 37833, 37835, 37836, 37838, 37828, 37829, 37849, 37850, 37853, 37841, 37846, 37856, 37861, 37866, 37870, 37880, 37881, 37886, 37888, 37889, 37890, 37900, 37913, 37937, 37947, 37952, 37954, 37961, 37967, 37975, 37986, 37992, 37998, 38006, 38008, 38015, 38019, 38022, 38023, 38039, 38024, 38030, 38031, 38041, 38044, 38050, 38052, 38054, 38068, 38071, 38077, 38082, 38088, 38091, 38095, 38101, 38103, 38111, 38121, 38126, 38112, 38113, 38115, 38129, 38132, 38138, 38140, 38141, 38149, 38151, 38154, 38156, 38166, 38170, 38187, 38188, 38181, 38195, 38196, 38204, 38214, 38231, 38216, 38223, 38237, 38239, 38260, 38269, 38281, 38285, 38275, 38291, 38295, 38296, 38298, 38303, 38306, 38318, 38330, 38332, 38333, 38336, 38347, 38356, 38362, 38368, 38372, 38373, 38382, 38384, 38385, 38387, 38397, 38404, 38407, 38412, 38419, 38420, 38425, 38431, 38439, 38449, 38440, 38444, 38457, 38458, 38461, 38463, 38467, 38473, 38482, 38485, 38486, 38491, 38492, 38493, 38494, 38531, 38527, 38508, 38515, 38536, 38544, 38547, 38565, 38556, 38569, 38580, 38583, 38586, 38591, 38602, 38610, 38619, 38624, 38631, 38647, 38637, 38658, 38659, 38662, 38663, 38669, 38678, 38691, 38682, 38699, 38725, 38726, 38732, 38739, 38741, 38750, 38753, 38755, 38757, 38769, 38761, 38763, 38786, 38787, 38789, 38791, 38795, 38799, 38801, 38808, 38811, 38813, 38820, 38833, 38842, 38844, 38845, 38846, 38848, 38853, 38864, 38867, 38879, 38895, 38880, 38886, 38896, 38898, 38901, 38911, 38913, 38914, 38915, 38916, 38922, 38933, 38935, 38937, 38955, 38970, 38971, 38972, 38973, 38964, 38979, 38980, 38999, 39006, 39009, 39015, 39016, 39017, 39020, 39021, 39024, 39032, 39047, 39052, 39053, 39055, 39064, 39073, 39075, 39078, 39081, 39093, 39095, 39097, 39099, 39100, 39102, 39105, 39107, 39109, 39113, 39116, 39117, 39129, 39143, 39157, 39165, 39183, 39195, 39197, 39199, 39204, 39205, 39206, 39221, 39210, 39232, 39235, 39237, 39239, 39241, 39242, 39243, 39244, 39246, 39253, 39255, 39258, 39264, 39271, 39272, 39274, 39282, 39286, 39287, 39291, 39292, 39304, 39305, 39310, 39299, 39319, 39334, 39320, 39325, 39326, 39336, 39337, 39338, 39342, 39344, 39345, 39350, 39352, 39354, 39363, 39370, 39371, 39374, 39375, 39376, 39378, 39380, 39392, 39402, 39403, 39408, 39410, 39411, 39412, 39413, 39414, 39421, 39423, 39446, 39456, 39457, 39458, 39475, 39477, 39483, 39485, 39486, 39467, 39468, 39469, 39488, 39495, 39511, 39520, 39522, 39534, 39541, 39543, 39544, 39553, 39568, 39561, 39564, 39576, 39580, 39585, 39587, 39590, 39593, 39594, 39607, 39612, 39613, 39615, 39625, 39616, 39619, 39632, 39635, 39639, 39642, 39644, 39651, 39659, 39660, 39661, 39662, 39683, 39696, 39699, 39704, 39708, 39711, 39713, 39714, 39718, 39729, 39732, 39738, 39739, 39741, 39748, 39750, 39753, 39759, 39768, 39773, 39785, 39787, 39789, 39795, 39796, 39808, 39810, 39814, 39800, 39802, 39805, 39806, 39816, 39825, 39826, 39831, 39833, 39834, 39836, 39837, 39840, 39841, 39843, 39847, 39851, 39856, 39880, 39881, 39883, 39884, 39871, 39888, 39890, 39899, 39907, 39913, 39921, 39922, 39941, 39944, 39958, 39960, 39962, 39965, 39968, 39990, 39992, 39999, 40004, 40006, 40019, 40025, 40031, 40033, 40044, 40046, 40053, 40054, 40066, 40070, 40056, 40058, 40075, 40082, 40090, 40099, 40102, 40124, 40112, 40113, 40157, 40160, 40165, 40166, 40147, 40182, 40193, 40194, 40203, 40212, 40213, 40226, 40227, 40229, 40230, 40238, 40239, 40221, 40222, 40240, 40241, 40242, 40243, 40244, 40245, 40246, 40256, 40260, 40261, 40248, 40284, 40298, 40304, 40306, 40308, 40310, 40327, 40331, 40317, 40319, 40339, 40340, 40345, 40348, 40360, 40365, 40386, 40383, 40405, 40392, 40397, 40408, 40413, 40426, 40427, 40422, 40438, 40442, 40446, 40455, 40457, 40458, 40475, 40477, 40478, 40466, 40468, 40469, 40481, 40483, 40484, 40485, 40491, 40494, 40497, 40501, 40503, 40504, 40506, 40513, 40515, 40517, 40518, 40519, 40521, 40529, 40532, 40538, 40547, 40548, 40549, 40553, 40560, 40565, 40566, 40573, 40575, 40584, 40581, 40597, 40598, 40602, 40605, 40607, 40612, 40621, 40622, 40635, 40639, 40629, 40630, 40631, 40643, 40647, 40648, 40659, 40663, 40674, 40676, 40678, 40691, 40681, 40686, 40701, 40719, 40704, 40706, 40727, 40729, 40732, 40734, 40738, 40746, 40748, 40749, 40751, 40758, 40777, 40782, 40783, 40768, 40769, 40764, 40798, 40799, 40801, 40812, 40815, 40818, 40829, 40834, 40845, 40851, 40856, 40870, 40871, 40872, 40873, 40874, 40886, 40889, 40897, 40898, 40902, 40913, 40914, 40918, 40906, 40910, 40920, 40921, 40924, 40940, 40949, 40956, 40963, 40968, 40969, 40973, 40982, 40984, 40986, 40992, 40997, 41000, 41002, 41007, 41008, 41009, 41015, 41017, 41021, 41022, 41030, 41033, 41034, 41038, 41057, 41066, 41067, 41071, 41086, 41072, 41079, 41091, 41093, 41096, 41100, 41101, 41112, 41114, 41126, 41135, 41138, 41147, 41150, 41167, 41170, 41176, 41194, 41196, 41225, 41234, 41236, 41239, 41257, 41261, 41263, 41251, 41253, 41268, 41290, 41280, 41281, 41298, 41304, 41306, 41310, 41316, 41326, 41334, 41336, 41338, 41344, 41350, 41351, 41358, 41365, 41367, 41369, 41379, 41387, 41388, 41391, 41396, 41415, 41404, 41407, 41416, 41423, 41427, 41428, 41440, 41442, 41433, 41448, 41451, 41457, 41459, 41470, 41475, 41488, 41489, 41505, 41507, 41500, 41502, 41513, 41514, 41515, 41517, 41527, 41528, 41535, 41540, 41546, 41554, 41556, 41578, 41582, 41583, 41572, 41584, 41588, 41605, 41596, 41608, 41612, 41617, 41618, 41637, 41639, 41625, 41626, 41628, 41650, 41652, 41654, 41655, 41666, 41668, 41659, 41674, 41678, 41679, 41683, 41691, 41708, 41709, 41710, 41702, 41719, 41723, 41726, 41729, 41755, 41749, 41761, 41766, 41767, 41799, 41816, 41817, 41801, 41802, 41810, 41811, 41812, 41824, 41825, 41828, 41830, 41834, 41844, 41856, 41861, 41862, 41867, 41875, 41876, 41885, 41886, 41888, 41891, 41901, 41912, 41914, 41921, 41924, 41925, 41934, 41935, 41939, 41949, 41950, 41955, 41956, 41959, 41965, 41968, 41970, 41993, 41994, 41997, 41998, 41977, 42003, 42028, 42035, 42037, 42038, 42061, 42075, 42067, 42083, 42086, 42096, 42097, 42098, 42105, 42112, 42113, 42139, 42153, 42158, 42163, 42164, 42167, 42182, 42183, 42184, 42185, 42191, 42195, 42197, 42204, 42208, 42211, 42215, 42227, 42229, 42219, 42222, 42223, 42236, 42243, 42247, 42249, 42250, 42253, 42272, 42276, 42283, 42300, 42315, 42316, 42320, 42322, 42327, 42328, 42330, 42331, 42333, 42356, 42344, 42349, 42362, 42367, 42371, 42377, 42378, 42380, 42394, 42397, 42400, 42402, 42403, 42418, 42408, 42410, 42414, 42425, 42429, 42440, 42447, 42448, 42450, 42455, 42458, 42461, 42463, 42477, 42488, 42498, 42501, 42504, 42508, 42509, 42511, 42512, 42514, 42519, 42523, 42527, 42528, 42529, 42531, 42532, 42534, 42539, 42541, 42548, 42552, 42553, 42554, 42577, 42583, 42570, 42573, 42575, 42588, 42593, 42595, 42616, 42619, 42620, 42622, 42623, 42628, 42610, 42648, 42652, 42654, 42655, 42633, 42634, 42635, 42658, 42660, 42663, 42666, 42668, 42675, 42679, 42695, 42683, 42687, 42703, 42705, 42709, 42711, 42718, 42731, 42732, 42747, 42749, 42751, 42737, 42757, 42769, 42774, 42764, 42765, 42779, 42781, 42784, 42787, 42789, 42793, 42797, 42807, 42810, 42815, 42821, 42822, 42823, 42824, 42827, 42830, 42848, 42852, 42840, 42846, 42833, 42839, 42856, 42862, 42863, 42868, 42869, 42879, 42884, 42892, 42894, 42904, 42907, 42911, 42912, 42916, 42918, 42920, 42921, 42925, 42928, 42934, 42941, 42942, 42943, 42944, 42952, 42956, 42966, 42987, 42980, 43000, 43012, 43014, 43026, 43028, 43037, 43038, 43041, 43045, 43046, 43050, 43051, 43052, 43058, 43074, 43078, 43082, 43084, 43105, 43096, 43099, 43101, 43118, 43124, 43125, 43126, 43129, 43151, 43157, 43158, 43161, 43162, 43163, 43172, 43174, 43175, 43179, 43186, 43187, 43200, 43201, 43207, 43192, 43197, 43199, 43208, 43209, 43234, 43238, 43224, 43231, 43241, 43244, 43246, 43252, 43253, 43256, 43257, 43260, 43266, 43273, 43283, 43288, 43290, 43297, 43299, 43300, 43301, 43307, 43308, 43349, 43350, 43351, 43352, 43356, 43336, 43364, 43367, 43384, 43389, 43372, 43374, 43392, 43397, 43399, 43400, 43404, 43414, 43428, 43429, 43431, 43433, 43443, 43452, 43456, 43461, 43469, 43480, 43476, 43478, 43488, 43491, 43505, 43500, 43502, 43519, 43521, 43536, 43538, 43540, 43541, 43533, 43553, 43564, 43565, 43567, 43568, 43570, 43578, 43579, 43580, 43591, 43595, 43596, 43616, 43612, 43631, 43647, 43635, 43637, 43667, 43669, 43680, 43677, 43691, 43695, 43699, 43712, 43715, 43716, 43717, 43724, 43726, 43731, 43733, 43736, 43741, 43754, 43756, 43760, 43762, 43763, 43766, 43768, 43775, 43794, 43778, 43809, 43815, 43819, 43836, 43837, 43838, 43825, 43830, 43846, 43857, 43858, 43859, 43862, 43867, 43869, 43874, 43876, 43881, 43888, 43889, 43890, 43894, 43903, 43908, 43912, 43913, 43919, 43924, 43930, 43935, 43952, 43953, 43959, 43951, 43936, 43937, 43961, 43967, 43984, 43993, 44000, 44001, 44009, 44010, 44015, 44017, 44024, 44030, 44040, 44041, 44043, 44045, 44051, 44052, 44055, 44065, 44069, 44084, 44085, 44087, 44090, 44096, 44099, 44107, 44108, 44109, 44112, 44118, 44125, 44126, 44127, 44128, 44137, 44139, 44143, 44146, 44149, 44153, 44155, 44170, 44175, 44176, 44185, 44188, 44198, 44217, 44220, 44214, 44206, 44240, 44242, 44232, 44236, 44252, 44258, 44261, 44264, 44266, 44267, 44272, 44274, 44277, 44280, 44289, 44292, 44297, 44300, 44316, 44306, 44307, 44308, 44311, 44321, 44322, 44333, 44355, 44359, 44378, 44382, 44371, 44387, 44389, 44390, 44401, 44402, 44404, 44407, 44393, 44399, 44416, 44423, 44412, 44413, 44424, 44425, 44430, 44445, 44438, 44449, 44452, 44455, 44466, 44469, 44471, 44474, 44484, 44485, 44486, 44489, 44490, 44491, 44496, 44501, 44502, 44508, 44511, 44521, 44525, 44527, 44528, 44531, 44538, 44541, 44544, 44546, 44549, 44572, 44575, 44602, 44605, 44606, 44609, 44610, 44624, 44625, 44626, 44627, 44632, 44636, 44643, 44650, 44655, 44658, 44670, 44671, 44686, 44687, 44688, 44689, 44690, 44712, 44716, 44719, 44723, 44724, 44728, 44736, 44740, 44745, 44746, 44748, 44749, 44757, 44758, 44760, 44762, 44765, 44772, 44775, 44778, 44784, 44794, 44814, 44823, 44825, 44826, 44832, 44837, 44838, 44839, 44851, 44844, 44856, 44857, 44864, 44868, 44870, 44871, 44880, 44882, 44883, 44872, 44873, 44875, 44888, 44891, 44892, 44893, 44897, 44898, 44903, 44905, 44908, 44912, 44913, 44923, 44937, 44939, 44943, 44934, 44935, 44958, 44945, 44990, 44991, 44980, 44982, 44975, 45000, 45003, 44995, 44999, 45016, 45024, 45027, 45029, 45032, 45040, 45043, 45048, 45053, 45058, 45060, 45061, 45062, 45064, 45066, 45069, 45070, 45084, 45087, 45096, 45093, 45095, 45110, 45112, 45122, 45137, 45138, 45141, 45169, 45156, 45144, 45150, 45163, 45180, 45181, 45193, 45194, 45196, 45198, 45203, 45206, 45208, 45211, 45216, 45223, 45226, 45231, 45250, 45251, 45252, 45253, 45260, 45274, 45279, 45280, 45281, 45283, 45286, 45289, 45292, 45308, 45310, 45328, 45333, 45336, 45337, 45321, 45347, 45362, 45367, 45355, 45371, 45372, 45376, 45382, 45406, 45416, 45420, 45421, 45408, 45409, 45427, 45430, 45433, 45435, 45449, 45460, 45461, 45469, 45472, 45478, 45480, 45484, 45485, 45504, 45505, 45491, 45493, 45523, 45525, 45528, 45529, 45531, 45532, 45533, 45514, 45515, 45546, 45558, 45564, 45565, 45566, 45575, 45578, 45581, 45583, 45590, 45608, 45612, 45613, 45614, 45622, 45627, 45630, 45631, 45632, 45636, 45637, 45641, 45647, 45652, 45654, 45658, 45666, 45667, 45668, 45672, 45674, 45675, 45678, 45679, 45682, 45701, 45705, 45707, 45711, 45715, 45722, 45729, 45731, 45734, 45735, 45745, 45746, 45748, 45752, 45761, 45770, 45773, 45783, 45794, 45796, 45799, 45803, 45791, 45809, 45826, 45817, 45822, 45839, 45841, 45854, 45862, 45874, 45878, 45868, 45894, 45907, 45896, 45897, 45902, 45913, 45916, 45921, 45922, 45926, 45932, 45935, 45937, 45938, 45941, 45953, 45957, 45969, 45971, 45972, 45965, 45967, 45985, 45989, 45998, 45999, 46001, 46010, 46026, 46030, 46031, 46033, 46036, 46038, 46040, 46042, 46049, 46050, 46056, 46057, 46061, 46064, 46078, 46086, 46092, 46093, 46096, 46099, 46103, 46106, 46109, 46113, 46114, 46126, 46139, 46160, 46163, 46167, 46147, 46149, 46155, 46159, 46182, 46184, 46189, 46200, 46205, 46207, 46192, 46198, 46212, 46215, 46234, 46237, 46226, 46229, 46243, 46258, 46261, 46269, 46270, 46276, 46277, 46278, 46291, 46282, 46285, 46300, 46306, 46314, 46317, 46325, 46327, 46328, 46330, 46331, 46332, 46333, 46356, 46373, 46375, 46360, 46366, 46393, 46399, 46388, 46402, 46431, 46419, 46423, 46434, 46448, 46449, 46440, 46441, 46443, 46460, 46475, 46466, 46467, 46470, 46495, 46484, 46486, 46507, 46509, 46510, 46519, 46532, 46535, 46521, 46522, 46527, 46556, 46546, 46547, 46550, 46537, 46539, 46543, 46569, 46572, 46592, 46597, 46598, 46585, 46589, 46609, 46610, 46614, 46616, 46626, 46637, 46641, 46647, 46649, 46650, 46662, 46672, 46675, 46676, 46677, 46666, 46668, 46670, 46671, 46680, 46685, 46686, 46697, 46699, 46709, 46721, 46725, 46730, 46731, 46740, 46742, 46749, 46752, 46754, 46755, 46756, 46758, 46762, 46767, 46777, 46778, 46797, 46798, 46819, 46822, 46829, 46834, 46836, 46837, 46839, 46841, 46856, 46858, 46864, 46868, 46888, 46892, 46893, 46894, 46885, 46896, 46898, 46901, 46906, 46912, 46915, 46920, 46924, 46926, 46929, 46938, 46942, 46950, 46952, 46956, 46959, 46971, 46973, 46962, 46967, 46976, 46977, 46988, 46991, 46993, 46995, 46996, 47016, 47009, 47036, 47027, 47048, 47046, 47078, 47079, 47068, 47081, 47098, 47099, 47103, 47112, 47117, 47122, 47131, 47132, 47138, 47139, 47145, 47148, 47161, 47164, 47170, 47172, 47188, 47189, 47190, 47176, 47177, 47179, 47193, 47206, 47214, 47216, 47218, 47221, 47224, 47227, 47228, 47243, 47245, 47252, 47258, 47268, 47269, 47290, 47292, 47297, 47319, 47330, 47342, 47348, 47361, 47362, 47364, 47376, 47377, 47401, 47404, 47407, 47386, 47387, 47389, 47391, 47425, 47426, 47427, 47429, 47432, 47436, 47413, 47455, 47463, 47480, 47493, 47473, 47496, 47502, 47503, 47520, 47521, 47528, 47542, 47544, 47549, 47558, 47560, 47565, 47568, 47571, 47572, 47574, 47580, 47581, 47591, 47600, 47602, 47607, 47598, 47613, 47625, 47639, 47640, 47641, 47642, 47648, 47651, 47653, 47654, 47659, 47679, 47666, 47694, 47697, 47700, 47716, 47724, 47725, 47732, 47733, 47734, 47749, 47742, 47755, 47759, 47760, 47766, 47767, 47782, 47772, 47788, 47800, 47801, 47814, 47816, 47823, 47828, 47833, 47836, 47853, 47854, 47855, 47863, 47866, 47873, 47882, 47896, 47897, 47898, 47899, 47900, 47906, 47909, 47917, 47919, 47922, 47933, 47935, 47950, 47954, 47956, 47959, 47964, 47968, 47970, 47973, 47978, 47979, 47993, 47997, 48000, 48002, 48004, 48007, 48013, 48019, 48021, 48030, 48031, 48041, 48042, 48049, 48050, 48054, 48057, 48070, 48071, 48084, 48089, 48091, 48094, 48103, 48104, 48106, 48116, 48119, 48123, 48129, 48131, 48133, 48137, 48171, 48172, 48161, 48165, 48183, 48194, 48195, 48199, 48184, 48185, 48189, 48190, 48200, 48217, 48233, 48243, 48244, 48246, 48255, 48257, 48263, 48267, 48271, 48273, 48279, 48287, 48301, 48316, 48319, 48321, 48324, 48333, 48334, 48352, 48355, 48344, 48350, 48360, 48381, 48392, 48397, 48400, 48408, 48415, 48425, 48434, 48416, 48443, 48451, 48452, 48477, 48484, 48494, 48501, 48503, 48512, 48513, 48517, 48520, 48527, 48531, 48532, 48538, 48544, 48547, 48549, 48574, 48577, 48581, 48583, 48588, 48589, 48595, 48597, 48601, 48620, 48623, 48627, 48634, 48635, 48641, 48649, 48667, 48683, 48686, 48676, 48689, 48692, 48693, 48713, 48706, 48707, 48724, 48743, 48747, 48749, 48751, 48754, 48757, 48759, 48762, 48771, 48773, 48776, 48778, 48779, 48784, 48805, 48806, 48807, 48811, 48817, 48818, 48821, 48833, 48838, 48826, 48827, 48842, 48858, 48864, 48871, 48877, 48888, 48889, 48890, 48892, 48880, 48885, 48896, 48898, 48906, 48910, 48911, 48925, 48936, 48937, 48939, 48940, 48929, 48946, 48979, 48965, 48967, 48973, 48974, 48989, 48993, 48995, 48997, 49001, 49003, 49004, 49005, 49014, 49022, 49040, 49044, 49035, 49037, 49038, 49060, 49061, 49048, 49050, 49065, 49068, 49076, 49078, 49082, 49085, 49093, 49096, 49103, 49105, 49107, 49129, 49134, 49139, 49141, 49142, 49164, 49155, 49170, 49178, 49183, 49189, 49190, 49204, 49195, 49212, 49213, 49218, 49219, 49225, 49238, 49252, 49257, 49260, 49263, 49267, 49268, 49269, 49279, 49283, 49286, 49299, 49301, 49303, 49305, 49320, 49321, 49323, 49340, 49332, 49353, 49358, 49344, 49346, 49348, 49361, 49364, 49372, 49377, 49378, 49379, 49383, 49384, 49386, 49388, 49390, 49395, 49401, 49408, 49416, 49418, 49419, 49420, 49421, 49441, 49448, 49455, 49456, 49474, 49476, 49480, 49483, 49493, 49495, 49502, 49505, 49509, 49519, 49540, 49542, 49529, 49531, 49532, 49534, 49535, 49522, 49545, 49546, 49548, 49553, 49557, 49562, 49569, 49573, 49584, 49591, 49599, 49600, 49602, 49606, 49609, 49610, 49617, 49620, 49636, 49644, 49650, 49658, 49661, 49662, 49671, 49683, 49684, 49685, 49676, 49696, 49697, 49701, 49703, 49716, 49707, 49709, 49734, 49748, 49753, 49759, 49762, 49764, 49769, 49770, 49772, 49777, 49778, 49780, 49784, 49787, 49790, 49811, 49815, 49792, 49793, 49807, 49816, 49832, 49839, 49840, 49844, 49846, 49847, 49849, 49864, 49866, 49867, 49870, 49874, 49878, 49886, 49888, 49891, 49906, 49896, 49916, 49921, 49927, 49929, 49933, 49949, 49936, 49941, 49942, 49973, 49995, 49985, 49988, 49990, 49991]
+EVAL_ROWS_PER_CHUNK = [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26]
+SEED = 20260825
+SEED2 = 20260917
+CHANCE = 0.038462
+N_EXT = 61409
+N_REAL = 38452
+REFERENCE = {'model': 0.1193, 'logistic': 0.1179, 'depth3_tree': 0.0929}              # 0021's banked readings rung 4's three roles must reproduce
+REFERENCE_FIRST = {'depth3_tree': [0.0834, 0.0901, 0.0915, 0.0929],
+ 'logistic': [0.0911, 0.0939, 0.1085, 0.1179],
+ 'model': [0.0974, 0.1065, 0.1139, 0.1193]}  # 0023's banked readings per role over rungs 1..4, which rungs 1..4 must reproduce
+REPRO_TOLERANCE = 0.005
+NULL_TOLERANCE = 0.01
+NULL_SHA_EXPECTED = "08eaa81faaf030cef670a0b1b2792fb017d290358669d4d2d89d00d6b55d217a"     # the top rung's labels permuted by the sealed generator, hash for hash
+ENV = {'sklearn': '1.9.0', 'numpy': '2.4.6', 'python': '3.11.15'}
+ENV_FULL = dict(ENV, threads=3, nice=10)
+BAR_SLOPE = 0.005              # accuracy on the real-family rows per doubling of plaintexts, over the second decade
+BOOT_LB = 0.0                  # the 2.5th percentile of the model's second-decade slope must exceed this
+LEAD_RULE = "the 95 percent paired cluster-bootstrap interval of model minus logistic real-family top-1 at the top rung, over the scored real chunks with the slope bootstrap's own resamples: entirely above 0 is MODEL_LEADS, entirely below 0 is LINEAR_LEADS, otherwise NO_SEPARATION (never 'equal'); the verdict string carries it as a suffix. If the model or the logistic at the top rung is at its iteration cap, the suffix is still read by the rule, but every document that states it states '(the <role> at its iteration cap at the top rung)' in the same sentence and the lead is not quoted as a recipe comparison, exactly as the difference flag is not"
+N_BOOT = 2000
+BOOT_SEED = 20260917
+LOG2X = [7.022368, 8.011227, 9.008429, 10.007027, 11.007027, 12.007027, 13.007027]                      # log2(plaintexts) per rung, sealed
+LOG2X_SECOND = LOG2X[N_FIRST - 1:]
+LOG2X_FIRST = LOG2X[:N_FIRST]
+MAX_ITER = {'depth3_tree': 0, 'logistic': 1000, 'model': 250}                # by role: the iteration cap of the hgb and logistic recipes
+REF_FIRST_DECADE_SLOPE = 0.007344   # 0023's banked model slope per doubling, informational
+SHIFT = "s4"                    # the shift arm: rung 5's new plaintexts alone, fitted last; informational
+CKPT_DIR = os.path.join(REPO, "artifacts", "pivot", "realcurve2_4096_ckpt")
+RESULT_KEYS = ['bar_applied',
+ 'builder_eval_top1',
+ 'checkpoints_cross_checked',
+ 'curves',
+ 'depth3_tree_slope_per_doubling',
+ 'establishes_a_buyer',
+ 'ext_per_family',
+ 'ext_real_correct',
+ 'ext_real_top1',
+ 'ext_rows_per_family',
+ 'ext_subsets',
+ 'ext_top1',
+ 'fit2_rows_per_family',
+ 'fit_rows_per_family',
+ 'flags',
+ 'informational_only',
+ 'is_a_transfer_reading',
+ 'lead_at_top',
+ 'lead_reading',
+ 'logistic_slope_per_doubling',
+ 'meaning',
+ 'model_real_top1_by_rung',
+ 'model_real_top1_top_rung',
+ 'model_slope_ci95',
+ 'model_slope_per_doubling',
+ 'preregistration',
+ 'read',
+ 'readings_banked',
+ 'reproduction_drift',
+ 'reproduction_first_decade',
+ 'reproduction_first_decade_reference',
+ 'reproduction_reference',
+ 'reproduction_top1',
+ 'revises_0003_0014_0015_0016_0017_0018_0019_0021_0022_0023',
+ 'schema',
+ 'shift_arm',
+ 'shuffled_label_accuracy_eval',
+ 'shuffled_label_accuracy_ext',
+ 'shuffled_label_accuracy_real',
+ 'slope_bootstrap',
+ 'slope_failed_clauses',
+ 'slope_model_minus_depth3_tree',
+ 'slope_model_minus_logistic',
+ 'source_artifact',
+ 'validity_failed_clauses',
+ 'verdict',
+ 'verdict_components']
+
+
+def sha_obj(o) -> str:
+    return hashlib.sha256(json.dumps(o, sort_keys=True, separators=(",", ":"), ensure_ascii=False,
+                                     allow_nan=False).encode()).hexdigest()
+
+
+def fingerprint(**parts) -> str:
+    return sha_obj(parts)[:16]
+
+
+def ols_slope(xs, ys):
+    x = np.asarray(xs, np.float64); y = np.asarray(ys, np.float64); xm = x - x.mean()
+    return float((xm * (y - y.mean())).sum() / (xm * xm).sum())
+
+
+def slope_bootstrap(correct_by_role, log2x, chunk_ids, n_boot, seed):
+    """tools/pivot/run_realcurve.py slope_bootstrap, verbatim: one resample of chunks per draw serves every rung and
+    every role; rung accuracies inside a resample are rounded to 4 decimals, as the banked readings are."""
+    _, inv = np.unique(chunk_ids, return_inverse=True); counts = np.bincount(inv).astype(np.float64)
+    sums = {r: [np.bincount(inv, weights=np.asarray(c, np.float64), minlength=len(counts)) for c in vecs]
+            for r, vecs in correct_by_role.items()}
+    rng = np.random.default_rng(seed); n = len(counts)
+    x = np.asarray(log2x, np.float64); xm = x - x.mean(); den = float((xm * xm).sum())
+    out = {r: np.empty(n_boot) for r in correct_by_role}
+    for b in range(n_boot):
+        idx = rng.integers(0, n, n); tot = counts[idx].sum()
+        for r, s in sums.items():
+            accs = np.array([round(float(v[idx].sum() / tot), 4) for v in s])
+            out[r][b] = float((xm * (accs - accs.mean())) .sum() / den)
+    return out
+
+
+def paired_lead_bootstrap(vec_a, vec_b, chunk_ids, n_boot, seed):
+    """tools/pivot/run_realcurve2.py paired_lead_bootstrap, verbatim: the same generator construction and draw order as
+    slope_bootstrap, so the resamples are the slope bootstrap's; accuracies rounded to 4 decimals inside a resample."""
+    _, inv = np.unique(chunk_ids, return_inverse=True); counts = np.bincount(inv).astype(np.float64)
+    sa = np.bincount(inv, weights=np.asarray(vec_a, np.float64), minlength=len(counts))
+    sb = np.bincount(inv, weights=np.asarray(vec_b, np.float64), minlength=len(counts))
+    rng = np.random.default_rng(seed); n = len(counts); out = np.empty(n_boot)
+    for b in range(n_boot):
+        idx = rng.integers(0, n, n); tot = counts[idx].sum()
+        out[b] = round(float(sa[idx].sum() / tot), 4) - round(float(sb[idx].sum() / tot), 4)
+    return out
+
+
+def _write(result):
+    os.makedirs(os.path.dirname(OUT), exist_ok=True)
+    with open(OUT, "w", encoding="utf-8") as fh:
+        json.dump(result, fh, indent=2, sort_keys=True)
+        fh.write("\n")
+
+
+def main() -> int:
+    if os.path.exists(OUT):
+        os.remove(OUT)   # a stale verdict never survives a reader run that emits none
+    if os.path.exists(NOT_RUN):
+        try:
+            nr = json.load(open(NOT_RUN, encoding="utf-8"))
+            print(f"READER 0024: NOT RUN — {nr.get('reason')!r} (stage {nr.get('stage')}, filed {nr.get('utc')}, "
+                  f"{nr.get('n_checkpoints')} checkpoints). A NOT RUN is not a verdict.", file=sys.stderr)
+        except Exception:  # noqa: BLE001
+            print("READER 0024: NOT RUN file present but unreadable.", file=sys.stderr)
+        return 2
+    if not os.path.exists(ARTIFACT):
+        print(f"READER 0024: artifact absent: {os.path.relpath(ARTIFACT, REPO)}\n  Absence is not a pass. No verdict emitted.",
+              file=sys.stderr)
+        return 2
+    try:
+        d = json.load(open(ARTIFACT, encoding="utf-8"))
+    except Exception as e:  # noqa: BLE001
+        print(f"READER 0024: artifact malformed ({type(e).__name__}: {e}).", file=sys.stderr)
+        return 2
+    try:
+        return read(d)
+    except Exception as e:  # noqa: BLE001
+        result = dict({k: None for k in RESULT_KEYS},
+                      schema="raise-v1/realcurve2_4096_verdict/1", preregistration=PREREG,
+                      source_artifact=os.path.relpath(ARTIFACT, REPO), verdict="VOID",
+                      meaning="The artifact has an unexpected shape; nothing is counted in either direction.",
+                      validity_failed_clauses=[f"reader: artifact of unexpected shape ({type(e).__name__}: {e})"],
+                      slope_failed_clauses=[], establishes_a_buyer=False)
+        _write(result)
+        print(f"READER 0024 — VOID: artifact of unexpected shape ({type(e).__name__}: {e})\n  wrote {os.path.relpath(OUT, REPO)}")
+        return 0
+
+
+def read(d) -> int:
+    g = d.get
+    void: list[str] = []
+
+    def num(v):
+        if isinstance(v, bool) or not isinstance(v, (int, float)):
+            return None
+        return v if math.isfinite(v) else None
+
+    def expect_eq(where, got, want, label):
+        if got != want:
+            where.append(f"{label}={got!r}, preregistered {want!r}")
+
+    def _ints(v, n, values=None):
+        return isinstance(v, list) and len(v) == n and all(
+            isinstance(x, int) and not isinstance(x, bool) and (values is None or x in values) for x in v)
+
+    _int = lambda v: isinstance(v, int) and not isinstance(v, bool)  # noqa: E731
+    mean4 = lambda xs: round(sum(xs) / len(xs), 4) if xs else None  # noqa: E731
+    rungs_sealed = PARTITION["rungs"]
+
+    def rung_of(name):
+        if name == "null":
+            return N_RUNGS
+        head = name[:name.index("_")]
+        return SHIFT if head == SHIFT else int(head[1:])
+
+    def role_of(name):
+        return "null" if name == "null" else name[name.index("_") + 1:]
+
+    def cand_of(name):
+        return RECIPES["model"] if name == "null" else RECIPES[role_of(name)]
+
+    def rk_of(k):
+        return PARTITION["shift_arm"] if k == SHIFT else rungs_sealed[k - 1]
+
+    def stage_of(name):
+        if name == "null":
+            return "null"
+        k = rung_of(name)
+        return "shift" if k == SHIFT else ("curve" if k > N_FIRST else "reproduction")
+
+    # ---- scope
+    if g("preregistration") != PREREG:
+        void.append(f"scope: preregistration={g('preregistration')!r}, this reader is frozen for {PREREG}")
+    if g("smoke") is not False:
+        void.append(f"scope: smoke={g('smoke')!r}; a smoke run is not the preregistered run")
+    if g("stage") != "run":
+        void.append(f"scope: stage={g('stage')!r}, the verdict is read from the run artifact")
+    corpus = g("corpus") or {}
+    for k, v in CORPUS.items():
+        expect_eq(void, corpus.get(k), v, f"scope: corpus.{k}")
+    if g("n_classes") != 26 or num(g("chance_accuracy")) != CHANCE:
+        void.append(f"scope: n_classes={g('n_classes')!r}, chance_accuracy={g('chance_accuracy')!r}")
+    spec = g("curve_spec") or {}
+    if g("curve_sha256") != CURVE_SHA256 or sha_obj(spec) != CURVE_SHA256:
+        void.append("scope: the banked curve spec does not hash to the sealed CURVE_SHA256")
+    proto = spec.get("protocol") or {}
+    for k in sorted(set(PROTOCOL) | set(proto)):
+        if proto.get(k) != PROTOCOL.get(k):
+            void.append(f"scope: curve_spec.protocol.{k}={proto.get(k)!r}, preregistered {PROTOCOL.get(k)!r}")
+    if sha_obj(proto) != PROTOCOL_SHA256:
+        void.append("scope: the banked protocol does not hash to the sealed PROTOCOL_SHA256")
+    if spec.get("recipes") != RECIPES:
+        void.append("scope: the banked recipes are not the sealed three")
+    if g("roles") != ROLES or g("n_rungs") != N_RUNGS or g("n_first_decade_rungs") != N_FIRST or g("denominators") != DENOMINATORS \
+            or g("doublings") != DOUBLINGS or g("log2_chunks") != LOG2X or g("log2_chunks_second_decade") != LOG2X_SECOND:
+        void.append(f"scope: roles={g('roles')!r}, n_rungs={g('n_rungs')!r}, n_first_decade_rungs={g('n_first_decade_rungs')!r}, "
+                    f"denominators={g('denominators')!r}, doublings={g('doublings')!r}, log2_chunks={g('log2_chunks')!r} are not the sealed ones")
+    if g("bar") != {"slope_per_doubling": BAR_SLOPE, "bootstrap_lower_bound_gt": BOOT_LB, "n_boot": N_BOOT, "bootstrap_seed": BOOT_SEED,
+                    "lead_rule": LEAD_RULE}:
+        void.append(f"scope: bar={g('bar')!r} is not the sealed bar")
+
+    # ---- the scored corpus and the two fit corpora
+    ext = g("ext_corpus") or {}
+    for k, v in EXT.items():
+        expect_eq(void, ext.get(k), v, f"evaluation corpus: ext_corpus.{k}")
+    fit = g("fit_corpus") or {}
+    for k, v in FIT.items():
+        expect_eq(void, fit.get(k), v, f"fit corpus: fit_corpus.{k}")
+    fit2 = g("fit2_corpus") or {}
+    for k, v in FIT2.items():
+        expect_eq(void, fit2.get(k), v, f"second-decade corpus: fit2_corpus.{k}")
+    n_eval = PARTITION["n_eval_rows"]; n_all = n_eval + N_EXT
+    if g("n_ext_rows") != N_EXT or g("n_eval_rows") != n_eval or g("n_ext_real_rows") != N_REAL:
+        void.append(f"corpora: n_ext_rows={g('n_ext_rows')!r}, n_eval_rows={g('n_eval_rows')!r}, "
+                    f"n_ext_real_rows={g('n_ext_real_rows')!r}")
+    if g("ext_real_families") != REAL_FAMILIES or g("ext_synthetic_families") != SYNTH_FAMILIES \
+            or g("fit_families") != FIT_FAMILIES or g("fit_rows_per_family") != FIT["rows_per_family"] \
+            or g("fit2_rows_per_family") != FIT2["rows_per_family"]:
+        void.append("corpora: the banked family lists or fit row counts are not the sealed ones")
+
+    # ---- sealed sets, the rungs, and the measured proof that nothing scored was fitted
+    part = g("partition") or {}
+    for k, v in PARTITION.items():
+        expect_eq(void, part.get(k), v, f"sealed set: partition.{k}")
+    for k in ("pool_chunks_shared_with_ext", "eval_chunks_shared_with_ext", "fit_chunks_shared_with_ext",
+              "fit_chunks_shared_with_builder", "fit_source_chunks_shared_with_ext", "fit_rows_identical_to_a_scored_row",
+              "fit2_chunks_shared_with_ext", "fit2_chunks_shared_with_builder", "fit2_chunks_shared_with_fit",
+              "fit2_source_chunks_shared_with_ext", "fit2_source_chunks_shared_with_fit", "fit2_rows_identical_to_a_scored_row"):
+        if part.get(k) != 0:
+            void.append(f"leakage: partition.{k}={part.get(k)!r}, must be the measured 0")
+    for k in ("rungs_nested", "rung_chunks_strictly_increasing", "rung4_is_fit_block", "second_decade_exact_doublings",
+              "split_is_grouped_by_source"):
+        if part.get(k) is not True:
+            void.append(f"rungs: partition.{k}={part.get(k)!r}, must be True")
+    if part.get("pool_short") != {}:
+        void.append(f"rungs: partition.pool_short={part.get('pool_short')!r}, the pool must cover every doubling")
+    sa = part.get("shift_arm") or {}
+    if sa.get("same_chunks_as_rung_5s_new_chunks") is not True or sa.get("same_plaintext_count_as_rung_4") is not True:
+        void.append("shift arm: partition.shift_arm must be rung 5's new chunks and rung 4's plaintext count")
+    if part.get("null_labels_permuted") is not True or part.get("null_labels_same_multiset") is not True:
+        void.append("null control: the null labels are not banked as a permutation of the top rung's labels")
+    if part.get("null_y_shuffled_sha256") != NULL_SHA_EXPECTED:
+        void.append(f"null control: the permuted label array hashes to {part.get('null_y_shuffled_sha256')!r}, not the sealed "
+                    f"{NULL_SHA_EXPECTED!r}")
+    if not isinstance(part.get("null_rule"), str):
+        void.append("null control: the partition carries no null_rule")
+    if g("complete") is not True or not isinstance(g("run_finished_utc"), str):
+        void.append(f"complete: complete={g('complete')!r}, run_finished_utc={g('run_finished_utc')!r}; missing {g('missing_roles')!r}")
+    le = g("launch_environment") or {}
+    if le.get("ok") is not True or le.get("problems") != [] or any((le.get("env") or {}).get(k) != v for k, v in ENV_FULL.items()):
+        void.append("environment: launch_environment is not ok with the sealed environment")
+    env = g("environment") or {}
+    for k, v in ENV_FULL.items():
+        if env.get(k) != v:
+            void.append(f"environment: {k}={env.get(k)!r}, banked {v!r}")
+    ledger = g("ledger") or []
+
+    # ---- scores file: the vectors and the arrays that bind every reading to the sealed corpora
+    scores, ext_fam_idx, eci, eval_ids = {}, None, None, None
+    if os.path.exists(SCORES):
+        try:
+            sd = json.load(open(SCORES, encoding="utf-8")) or {}
+            scores = sd.get("per_example") or {}
+            ext_fam_idx = sd.get("ext_fam"); eci = sd.get("ext_chunk_ids"); eval_ids = sd.get("eval_chunk_ids")
+            if sd.get("eval_idx_sha256") != PARTITION["eval_idx_sha256"] or sd.get("smoke") is not False \
+                    or sd.get("preregistration") != PREREG or sd.get("n_eval_rows") != n_eval or sd.get("n_ext_rows") != N_EXT \
+                    or sd.get("ext_families") != EXT_FAMILIES \
+                    or sd.get("ext_arrays_sha256") != {k: v["sha256"] for k, v in EXT["arrays"].items()} \
+                    or sd.get("fit_arrays_sha256") != {k: v["sha256"] for k, v in FIT["arrays"].items()} \
+                    or sd.get("fit2_arrays_sha256") != {k: v["sha256"] for k, v in FIT2["arrays"].items()}:
+                void.append("scores: the scores file is not this run's, or is a smoke run's, or names a different corpus")
+        except Exception:  # noqa: BLE001
+            void.append("scores: the scores file is not JSON")
+    else:
+        void.append("scores: the scores file is absent")
+    if not _ints(ext_fam_idx, N_EXT, set(range(len(EXT_FAMILIES)))):
+        void.append("scores: ext_fam missing, not N_EXT long, or not family indices"); ext_fam_idx = None
+    elif hashlib.sha256(bytes(ext_fam_idx)).hexdigest() != EXT["arrays"]["fam"]["sha256"]:
+        void.append("scores: ext_fam does not hash to the sealed fam array"); ext_fam_idx = None
+    if not _ints(eci, N_EXT):
+        void.append("scores: ext_chunk_ids missing or not N_EXT long"); eci = None
+    else:
+        try:
+            gb = b"".join(int(x).to_bytes(4, "little", signed=True) for x in eci)
+        except OverflowError:
+            gb = b""
+        if hashlib.sha256(gb).hexdigest() != EXT["arrays"]["g"]["sha256"]:
+            void.append("scores: ext_chunk_ids do not hash to the sealed g array")
+        if eci != [c for c, n in zip(EXT_CHUNK_IDS, EXT_ROWS_PER_CHUNK) for _ in range(n)]:
+            void.append("scores: ext_chunk_ids are not the sealed chunk ids expanded by their sealed row counts")
+        if ext_fam_idx is not None:
+            per = {f: set() for f in EXT_FAMILIES}
+            for c, f in zip(eci, ext_fam_idx):
+                per[EXT_FAMILIES[f]].add(c)
+            if {f: len(s) for f, s in per.items()} != EXT["chunks_per_family"]:
+                void.append("scores: distinct chunk ids per family are not the sealed chunks_per_family")
+    if ext_fam_idx is not None:
+        counts = {f: 0 for f in EXT_FAMILIES}
+        for i in ext_fam_idx:
+            counts[EXT_FAMILIES[i]] += 1
+        if counts != EXT["rows_per_family"]:
+            void.append(f"scores: ext_fam row counts {counts} are not the sealed rows_per_family")
+    fam_e = None
+    if not _ints(eval_ids, n_eval, None) or min(eval_ids) < CORPUS["chunk_id_min"] or max(eval_ids) > CORPUS["chunk_id_max"] \
+            or len(set(eval_ids)) != PARTITION["n_eval_chunks"] \
+            or sum(1 for c in eval_ids if c % len(FAMILIES) != 0) != PARTITION["n_eval_non_gutenberg"]:
+        void.append("scores: eval_chunk_ids missing, not the sealed evaluation chunks, or not the sealed family mix")
+    else:
+        try:
+            _eb = b"".join(int(x).to_bytes(4, "little", signed=True) for x in eval_ids)
+        except OverflowError:
+            _eb = b""
+        _expected = [c for c, n in zip(EVAL_CHUNK_IDS, EVAL_ROWS_PER_CHUNK) for _ in range(n)]
+        if hashlib.sha256(_eb).hexdigest() != PARTITION["eval_g_sha256"] or list(eval_ids) != _expected:
+            void.append("scores: eval_chunk_ids are not the sealed evaluation chunk ids expanded by their sealed row counts, "
+                        "or do not hash to the sealed evaluation g array")
+        else:
+            fam_e = [FAMILIES[int(c) % len(FAMILIES)] for c in eval_ids]
+
+    # ---- the fits: one scoring per role, the sealed recipe on the sealed rung, the sealed order
+    fits = g("fits") or {}
+    if not isinstance(fits, dict):
+        void.append("fit: fits is not a mapping"); fits = {}
+
+    def expected_fp(name, cand):
+        k = rung_of(name); rk = rk_of(k)
+        return fingerprint(prereg=PREREG, seed=SEED, seed2=SEED2, head=("null" if name == "null" else role_of(name)), cand=cand,
+                           stage=stage_of(name), rung=k, rows=rk["sorted_sha256"],
+                           eval=PARTITION["eval_idx_sha256"], ext=EXT["arrays"]["X"]["sha256"], fit=FIT["arrays"]["X"]["sha256"],
+                           fit2=FIT2["arrays"]["X"]["sha256"])
+
+    completed_pos = {}
+
+    def check_record(name):
+        rec = fits.get(name); cand = cand_of(name); k = rung_of(name); rk = rk_of(k)
+        head = "null" if name == "null" else role_of(name); stage = stage_of(name)
+        if not isinstance(rec, dict) or rec.get("status") != "fit":
+            void.append(f"fit: {name} status {(rec.get('status') if isinstance(rec, dict) else type(rec).__name__)!r}; must be 'fit'"); return
+        if num(rec.get("top1")) is None or num(rec.get("top1_non_gutenberg")) is None or \
+                not isinstance(rec.get("per_family"), dict) or any(num(v) is None for v in rec["per_family"].values()):
+            void.append(f"fit: {name} scores are not all finite")
+        if rec.get("id") != cand["id"] or rec.get("params_sha256") != sha_obj(cand) or rec.get("params") != cand.get("params", {}) \
+                or rec.get("family") != cand["family"] or bool(rec.get("scaled")) != bool(cand.get("scaled", False)) \
+                or rec.get("val") != cand.get("val") or rec.get("head") != head:
+            void.append(f"fit: {name} is not the sealed {cand['id']} (id, params, params hash, family, scaled, val or head off-recipe)")
+        if rec.get("seed") != SEED or rec.get("n_fit_rows") != rk["n_rows"] or rec.get("fit_rows_sha256") != rk["idx_sha256"] \
+                or rec.get("fit_rows_sorted_sha256") != rk["sorted_sha256"] or rec.get("rung") != k or rec.get("role") != head \
+                or rec.get("n_rung_rows") != rk["n_rows"] or rec.get("n_rung_chunks") != rk["n_chunks"]:
+            void.append(f"fit: {name} was not fitted on sealed rung {k} with the preregistered seed")
+        if rec.get("stage") != stage:
+            void.append(f"fit: {name} stage {rec.get('stage')!r} is not {stage!r}")
+        if any(not (rf.get("probe_ok") if isinstance(rf, dict) else False) for rf in (rec.get("block_refills") or [])):
+            void.append(f"fit: {name} banked a failed block probe check")
+        info = rec.get("fit_info")
+        if not isinstance(info, dict):
+            void.append(f"fit: {name} banked no fit_info")
+        elif cand["family"] in ("hgb", "logistic"):
+            if not _int(info.get("n_iter")):
+                void.append(f"fit: {name} has no integer iteration count")
+        elif cand["family"] == "tree":
+            if not (_int(info.get("depth")) and _int(info.get("n_leaves"))):
+                void.append(f"fit: {name} has no integer depth and leaf count")
+        renv = rec.get("environment") or {}
+        for kk, v in ENV_FULL.items():
+            if renv.get(kk) != v:
+                void.append(f"environment: {name} {kk}={renv.get(kk)!r}, banked {v!r}")
+        fp = expected_fp(name, cand)
+        if rec.get("fingerprint") != fp:
+            void.append(f"fit: {name} fingerprint {rec.get('fingerprint')!r} is not the one recomputed from the sealed literals")
+        done = [i for i, e in enumerate(ledger) if isinstance(e, dict) and e.get("name") == f"run_{name}" and e.get("event") == "completed"]
+        if len(done) != 1:
+            void.append(f"fit: {name} has {len(done)} ledger completions, must be exactly 1")
+        else:
+            ce = ledger[done[0]]
+            if ce.get("fingerprint") != fp:
+                void.append(f"fit: {name}'s completion event does not carry the sealed fingerprint")
+            if not any(isinstance(e, dict) and e.get("name") == f"run_{name}" and e.get("event") == "started" and e.get("fingerprint") == fp
+                       for e in ledger[:done[0]]):
+                void.append(f"fit: {name} has no 'started' event with its fingerprint before its completion")
+            if not any(isinstance(e, dict) and e.get("name") == f"run_{name}" and e.get("event") == "rung_bound"
+                       and e.get("rung") == k and e.get("rung_sorted_sha256") == rk["sorted_sha256"] for e in ledger[:done[0]]):
+                void.append(f"fit: {name} has no 'rung_bound' event naming sealed rung {k} before its completion")
+            completed_pos[name] = done[0]
+        pe = scores.get(name)
+        if not _ints(pe, n_all, (0, 1)):
+            void.append(f"fit: {name} per-example vector missing, not {n_all} long, or not in {{0, 1}}"); return
+        if rec.get("per_example_sha256") != hashlib.sha256(bytes(pe)).hexdigest():
+            void.append(f"fit: {name} per_example_sha256 is not the hash of its banked vector")
+        if num(rec.get("top1")) != mean4(pe):
+            void.append(f"fit: {name} record top1 {rec.get('top1')!r} is not its vector's mean {mean4(pe)!r}")
+        if fam_e is not None and ext_fam_idx is not None:
+            fam_s = fam_e + ["ext:" + EXT_FAMILIES[i] for i in ext_fam_idx]
+            pf = {f: mean4([pe[i] for i in range(n_all) if fam_s[i] == f]) for f in sorted(set(fam_s))}
+            if rec.get("per_family") != pf:
+                void.append(f"fit: {name} record per_family is not its vector's per-family means over the sealed scoring set")
+            tng = mean4([pe[i] for i in range(n_eval) if fam_e[i] != "gutenberg"] + list(pe[n_eval:]))
+            if num(rec.get("top1_non_gutenberg")) != tng:
+                void.append(f"fit: {name} record top1_non_gutenberg {rec.get('top1_non_gutenberg')!r} is not its vector's "
+                            f"non-gutenberg mean {tng!r}")
+
+    if set(fits) != set(ORDER):
+        extra = sorted(set(fits) - set(ORDER)); absent = sorted(set(ORDER) - set(fits))
+        void.append(f"fit: the artifact banks roles outside the sealed order (extra {extra}, missing {absent}) - "
+                    f"'scored exactly once, in the sealed order' is a property of the run, not of {len(ORDER)} names")
+    for name in ORDER:
+        check_record(name)
+    shas = [fits[n].get("per_example_sha256") for n in ORDER if isinstance(fits.get(n), dict)]
+    dup = sorted({x for x in shas if x is not None and shas.count(x) > 1})
+    if dup:
+        same = [n for n in ORDER if isinstance(fits.get(n), dict) and fits[n].get("per_example_sha256") in dup]
+        void.append(f"fit: roles {same} bank the same per-example vector; distinct fits on distinct row sets do not score identically")
+    foreign = [e.get("name") for e in ledger if isinstance(e, dict) and e.get("event") == "completed"
+               and e.get("name") not in {f"run_{n}" for n in ORDER}]
+    if foreign:
+        void.append(f"order: the ledger carries completions under names outside the sealed order ({foreign[:3]!r})")
+    ckpt_checked = None
+    if os.path.isdir(CKPT_DIR):
+        ckpt_checked = 0
+        for name in ORDER:
+            rec = fits.get(name); cp = os.path.join(CKPT_DIR, f"run_{name}.json")
+            if not isinstance(rec, dict):
+                continue
+            if not os.path.exists(cp):
+                void.append(f"checkpoint: {name} has no checkpoint although the checkpoint directory is present"); continue
+            try:
+                ck = json.load(open(cp, encoding="utf-8"))
+            except Exception:  # noqa: BLE001
+                void.append(f"checkpoint: {name}'s checkpoint is not JSON"); continue
+            pe = ck.get("per_example") if isinstance(ck, dict) else None
+            added = ("fingerprint", "rung", "role", "n_rung_rows", "n_rung_chunks", "per_example_sha256")   # fit_role adds these after run_fit
+            ok_ = (isinstance(ck, dict) and ck.get("fingerprint") == expected_fp(name, cand_of(name)) and _ints(pe, n_all, (0, 1))
+                   and hashlib.sha256(bytes(pe)).hexdigest() == rec.get("per_example_sha256")
+                   and ck.get("record") == {k: v for k, v in rec.items() if k not in added})
+            if not ok_:
+                void.append(f"checkpoint: {name}'s committed checkpoint does not carry the sealed fingerprint, the banked vector and the banked record")
+            else:
+                ckpt_checked += 1
+    if g("null_control") != (fits.get("null") or {}):
+        void.append("null control: null_control is not the banked null record")
+    if g("null_rows") != rungs_sealed[-1]["n_rows"]:
+        void.append(f"null control: null_rows={g('null_rows')!r}, the null control is fitted on the whole top rung")
+    if len(completed_pos) == len(ORDER) and [completed_pos[n] for n in ORDER] != sorted(completed_pos[n] for n in ORDER):
+        void.append("fit: the ledger's completions are not in the sealed order " + ", ".join(ORDER))
+    completions = [e.get("name") for e in ledger if isinstance(e, dict) and e.get("event") == "completed"
+                   and str(e.get("name", "")).startswith("run_")]
+    if completions != [f"run_{n}" for n in ORDER]:
+        void.append(f"order: the ledger's run completions are not exactly the sealed order ({completions!r})")
+    if g("fit_info_by_name") != {n: (fits.get(n) or {}).get("fit_info") for n in ORDER}:
+        void.append("fit: fit_info_by_name is not the records' fit_info")
+
+    # ---- every reading re-derived from the per-example vectors and the sealed family arrays
+    reads = g("readings") or {}
+    rec_reads = {}
+    real_idx = None
+    if ext_fam_idx is not None and fam_e is not None and not any(m.startswith("fit:") or m.startswith("scores:") for m in void):
+        fam_x = [EXT_FAMILIES[i] for i in ext_fam_idx]
+        real_idx = [i for i in range(N_EXT) if fam_x[i] in REAL_FAMILIES]
+        for name in ORDER:
+            v = scores[name]; rep, ex = v[:n_eval], v[n_eval:]
+            by = {f: [] for f in EXT_FAMILIES}
+            for i in range(N_EXT):
+                by[fam_x[i]].append(ex[i])
+            real = [x for f in REAL_FAMILIES for x in by[f]]; synth = [x for f in SYNTH_FAMILIES for x in by[f]]
+            rr = {"builder_eval_top1": mean4(rep), "builder_eval_correct": sum(rep),
+                  "ext_top1": mean4(ex), "ext_correct": sum(ex), "n_ext_rows": N_EXT,
+                  "ext_per_family": {f: mean4(by[f]) for f in EXT_FAMILIES},
+                  "ext_per_family_correct": {f: sum(by[f]) for f in EXT_FAMILIES},
+                  "ext_structured_text_top1": mean4([x for f in STRUCTURED_TEXT for x in by[f]]),
+                  "ext_high_entropy_top1": mean4([x for f in HIGH_ENTROPY for x in by[f]]),
+                  "ext_real_top1": mean4(real), "ext_real_correct": sum(real), "n_ext_real_rows": len(real),
+                  "ext_synthetic_correct": sum(synth), "ext_synthetic_top1": mean4(synth),
+                  "builder_eval_per_family": {f: mean4([rep[i] for i in range(n_eval) if fam_e[i] == f]) for f in FAMILIES}}
+            if len(real) != N_REAL:
+                void.append(f"readings: the sealed family array gives {len(real)} real-family rows, not {N_REAL}")
+            rec_reads[name] = rr
+            banked = reads.get(name) or {}
+            for k, val in rr.items():
+                if banked.get(k) != val:
+                    void.append(f"readings: {name}.{k}={banked.get(k)!r} is not the reader's recomputation {val!r}")
+        if set(reads) != set(ORDER):
+            void.append(f"readings: banked readings for {sorted(reads)!r}, expected exactly {ORDER!r}")
+        for name in ORDER:
+            if num((g("ext_real_top1") or {}).get(name)) != rec_reads[name]["ext_real_top1"] \
+                    or (g("ext_real_correct") or {}).get(name) != rec_reads[name]["ext_real_correct"] \
+                    or num((g("ext_top1") or {}).get(name)) != rec_reads[name]["ext_top1"] \
+                    or num((g("builder_eval_top1") or {}).get(name)) != rec_reads[name]["builder_eval_top1"] \
+                    or (g("ext_per_family") or {}).get(name) != rec_reads[name]["ext_per_family"]:
+                void.append(f"readings: a banked summary reading for {name} is not the recomputed value")
+        repro_expect = {role: rec_reads[R4 + role]["ext_real_top1"] for role in ROLES}
+        if {k: num(v) for k, v in (g("reproduction_top1") or {}).items()} != repro_expect:
+            void.append("reproduction: reproduction_top1 is not rung 4's recomputed real-family reading per role")
+        if g("reference_top1") != REFERENCE:
+            void.append("reproduction: the banked reference readings are not 0021's sealed ones")
+        drift_expect = {role: round(repro_expect[role] - REFERENCE[role], 6) for role in ROLES}
+        if {k: num(v) for k, v in (g("reproduction_drift") or {}).items()} != drift_expect:
+            void.append("reproduction: reproduction_drift is not the recomputed drift per role")
+        first_expect = {role: [rec_reads[f"r{k}_{role}"]["ext_real_top1"] for k in range(1, N_FIRST + 1)] for role in ROLES}
+        if g("reproduction_first_decade") != first_expect or g("reference_first_decade") != REFERENCE_FIRST:
+            void.append("reproduction: reproduction_first_decade or reference_first_decade is not the recomputed or sealed value")
+        first_drift = {role: [round(a - b, 6) for a, b in zip(first_expect[role], REFERENCE_FIRST[role])] for role in ROLES}
+        if g("reproduction_first_decade_drift") != first_drift:
+            void.append("reproduction: reproduction_first_decade_drift is not the recomputed drift per rung and role")
+        if num(g("shuffled_label_accuracy_ext")) != rec_reads["null"]["ext_top1"] \
+                or num(g("shuffled_label_accuracy_eval")) != rec_reads["null"]["builder_eval_top1"] \
+                or num(g("shuffled_label_accuracy_real")) != rec_reads["null"]["ext_real_top1"]:
+            void.append("null control: a banked shuffled-label reading is not the recomputed value")
+    elif not void:
+        void.append("readings: the reader could not recompute the readings")
+
+    # ---- controls: rung 4 reproduces 0021 and rungs 1..4 reproduce 0023; the null sits at chance
+    if not void:
+        for role in ROLES:
+            got = rec_reads[R4 + role]["ext_real_top1"]; drift = round(got - REFERENCE[role], 6)
+            if abs(drift) > REPRO_TOLERANCE:
+                void.append(f"reproduction: {R4}{role} read {got} against 0021's banked {REFERENCE[role]} (drift {drift} > "
+                            f"{REPRO_TOLERANCE}): the fit block, the scoring set or the machinery is not 0021's")
+            for k in range(1, N_FIRST + 1):
+                got = rec_reads[f"r{k}_{role}"]["ext_real_top1"]; drift = round(got - REFERENCE_FIRST[role][k - 1], 6)
+                if abs(drift) > REPRO_TOLERANCE:
+                    void.append(f"reproduction: r{k}_{role} read {got} against 0023's banked {REFERENCE_FIRST[role][k - 1]} (drift {drift} > "
+                                f"{REPRO_TOLERANCE}): the rung, the scoring set or the machinery is not 0023's")
+        nx, ne = rec_reads["null"]["ext_top1"], rec_reads["null"]["builder_eval_top1"]
+        if nx > CHANCE + NULL_TOLERANCE or ne > CHANCE + NULL_TOLERANCE:
+            void.append(f"null control: shuffled labels read {nx} on the extension rows and {ne} on the sealed evaluation rows "
+                        f"against chance {CHANCE} + {NULL_TOLERANCE} — the pipeline leaks")
+
+    # ---- the curves, re-derived: rung readings, slopes of both decades, gains, per-family slopes, the bootstrap, the lead
+    curves_banked = g("curves") or {}
+    my_curves = {}; boot = None; lead = None; my_shift = None; reader_slope = None; reader_lb = None
+    if not void:
+        for role in ROLES:
+            pts = []
+            for k, rk in enumerate(rungs_sealed, start=1):
+                rr = rec_reads[f"r{k}_{role}"]
+                pts.append({"rung": k, "decade": rk["decade"], "n_chunks": rk["n_chunks"], "n_rows": rk["n_rows"],
+                            "log2_chunks": rk["log2_chunks"], "ext_real_top1": rr["ext_real_top1"], "ext_real_correct": rr["ext_real_correct"],
+                            "builder_eval_top1": rr["builder_eval_top1"],
+                            "ext_per_family": {f: rr["ext_per_family"][f] for f in REAL_FAMILIES}})
+            ys = [p["ext_real_top1"] for p in pts]; ys2 = ys[N_FIRST - 1:]; ys1 = ys[:N_FIRST]
+            c = {"rungs": pts, "complete": True,
+                 "slope_per_doubling_second_decade": round(ols_slope(LOG2X_SECOND, ys2), 6),
+                 "slope_per_doubling_first_decade": round(ols_slope(LOG2X_FIRST, ys1), 6),
+                 "slope_per_doubling_both_decades": round(ols_slope(LOG2X, ys), 6),
+                 "end_to_end_gain_second_decade": round(ys[-1] - ys[N_FIRST - 1], 4),
+                 "end_to_end_gain_both_decades": round(ys[-1] - ys[0], 4),
+                 "rung_to_rung_gains": [round(ys[i + 1] - ys[i], 4) for i in range(len(ys) - 1)],
+                 "slope_second_decade_with_rung4_at_reference": round(ols_slope(LOG2X_SECOND, [float(REFERENCE[role])] + ys2[1:]), 6),
+                 "per_family_slope_per_doubling_second_decade": {
+                     f: round(ols_slope(LOG2X_SECOND, [p["ext_per_family"][f] for p in pts[N_FIRST - 1:]]), 6) for f in REAL_FAMILIES},
+                 "builder_eval_slope_per_doubling_second_decade": round(ols_slope(LOG2X_SECOND, [p["builder_eval_top1"] for p in pts[N_FIRST - 1:]]), 6)}
+            my_curves[role] = c
+            bc = curves_banked.get(role) or {}
+            for kk in sorted(set(c) | set(bc)):
+                if bc.get(kk) != c.get(kk):
+                    void.append(f"curve: curves.{role}.{kk} is not the reader's recomputation")
+        ms = my_curves["model"]["slope_per_doubling_second_decade"]; ls = my_curves["logistic"]["slope_per_doubling_second_decade"]
+        ts = my_curves["depth3_tree"]["slope_per_doubling_second_decade"]
+        if num(g("model_slope_per_doubling")) != ms or num(g("logistic_slope_per_doubling")) != ls or num(g("depth3_tree_slope_per_doubling")) != ts:
+            void.append("curve: a banked top-level slope is not the recomputed second-decade role slope")
+        if num(g("slope_model_minus_logistic")) != round(ms - ls, 6) or num(g("slope_model_minus_depth3_tree")) != round(ms - ts, 6):
+            void.append("curve: a banked slope difference is not model minus the other role")
+        top = {role: rec_reads[TOP + role]["ext_real_top1"] for role in ROLES}
+        if g("top_rung_top1") != top or num(g("top_rung_model_minus_logistic")) != round(top["model"] - top["logistic"], 4) \
+                or num(g("top_rung_model_minus_depth3_tree")) != round(top["model"] - top["depth3_tree"], 4):
+            void.append("curve: the banked top-rung readings or differences are not the recomputed values")
+        reader_slope = ms
+        # the bootstrap, from the vectors and the sealed extension chunk layout, the sealed rule, seed and resample count
+        cid = np.asarray([eci[i] for i in real_idx], np.int64)
+        vec = {n: np.asarray([scores[n][n_eval + i] for i in real_idx], np.int8) for n in ORDER if n != "null"}
+        by_role = {role: [vec[f"r{k}_{role}"] for k in range(N_FIRST, N_RUNGS + 1)] for role in ROLES}
+        sl = slope_bootstrap(by_role, LOG2X_SECOND, cid, N_BOOT, BOOT_SEED)
+        boot = {role: {"ci95": [round(float(np.percentile(sl[role], 2.5)), 6), round(float(np.percentile(sl[role], 97.5)), 6)],
+                       "n_boot": N_BOOT, "seed": BOOT_SEED, "mean": round(float(sl[role].mean()), 6)} for role in ROLES}
+        for a, b_ in (("model", "logistic"), ("model", "depth3_tree")):
+            dd = sl[a] - sl[b_]
+            boot[f"{a}_minus_{b_}"] = {"ci95": [round(float(np.percentile(dd, 2.5)), 6), round(float(np.percentile(dd, 97.5)), 6)],
+                                       "paired": True, "share_of_resamples_with_model_ahead": round(float((dd > 0).mean()), 4)}
+        banked_boot = g("slope_bootstrap") or {}
+        for kk in list(boot):
+            if banked_boot.get(kk) != boot[kk]:
+                void.append(f"curve: slope_bootstrap.{kk}={banked_boot.get(kk)!r} is not the reader's recomputation {boot[kk]!r}")
+        if not isinstance(banked_boot.get("unit"), str):
+            void.append("curve: slope_bootstrap carries no unit")
+        reader_lb = boot["model"]["ci95"][0]
+        # the lead at the top rung and at rung 4, from the same resamples
+        lead = {}
+        for k in (N_RUNGS, N_FIRST):
+            for a, b_ in (("model", "logistic"), ("model", "depth3_tree")):
+                dv = paired_lead_bootstrap(vec[f"r{k}_{a}"], vec[f"r{k}_{b_}"], cid, N_BOOT, BOOT_SEED)
+                lo, hi = round(float(np.percentile(dv, 2.5)), 6), round(float(np.percentile(dv, 97.5)), 6)
+                lead[f"r{k}_{a}_minus_{b_}"] = {
+                    "point": round(rec_reads[f"r{k}_{a}"]["ext_real_top1"] - rec_reads[f"r{k}_{b_}"]["ext_real_top1"], 4),
+                    "ci95": [lo, hi], "n_boot": N_BOOT, "seed": BOOT_SEED,
+                    "share_of_resamples_with_model_ahead": round(float((dv > 0).mean()), 4),
+                    "reading": ("MODEL_LEADS" if lo > 0 else "LINEAR_LEADS" if hi < 0 else "NO_SEPARATION") if b_ == "logistic"
+                               else ("MODEL_LEADS" if lo > 0 else "TREE_LEADS" if hi < 0 else "NO_SEPARATION")}
+        banked_lead = g("lead_at_top") or {}
+        for kk in list(lead):
+            if banked_lead.get(kk) != lead[kk]:
+                void.append(f"lead: lead_at_top.{kk}={banked_lead.get(kk)!r} is not the reader's recomputation {lead[kk]!r}")
+        if not isinstance(banked_lead.get("unit"), str) or banked_lead.get("verdict_pair") != f"{TOP}model_minus_logistic":
+            void.append("lead: lead_at_top carries no unit or names a verdict pair other than the top rung's model minus logistic")
+        # the shift arm, re-derived: rung 5's new plaintexts alone, beside rung 4 and rung 5
+        my_shift = {"arm": PARTITION["shift_arm"], "readings": {}, "difference_from_rung_4": {}, "difference_from_rung_5": {}}
+        for role in ROLES:
+            rs_ = rec_reads[f"{SHIFT}_{role}"]
+            my_shift["readings"][role] = {"ext_real_top1": rs_["ext_real_top1"], "ext_real_correct": rs_["ext_real_correct"],
+                                          "builder_eval_top1": rs_["builder_eval_top1"],
+                                          "ext_per_family": {f: rs_["ext_per_family"][f] for f in REAL_FAMILIES}}
+            my_shift["difference_from_rung_4"][role] = round(rs_["ext_real_top1"] - rec_reads[f"{R4}{role}"]["ext_real_top1"], 4)
+            my_shift["difference_from_rung_5"][role] = round(rs_["ext_real_top1"] - rec_reads[f"r{N_FIRST + 1}_{role}"]["ext_real_top1"], 4)
+        sb = g("shift_arm") or {}
+        for kk in list(my_shift):
+            if sb.get(kk) != my_shift[kk]:
+                void.append(f"shift arm: shift_arm.{kk} is not the reader's recomputation")
+        if not isinstance(sb.get("note"), str):
+            void.append("shift arm: shift_arm carries no note")
+
+    fails: list[str] = []
+    if not void:
+        if reader_slope < BAR_SLOPE - 1e-9:
+            fails.append(f"slope: the model's real-family accuracy rises {reader_slope} per doubling of plaintexts over the second decade "
+                         f"({PARTITION['doublings_spanned_second_decade']} doublings, "
+                         f"{[p['ext_real_top1'] for p in my_curves['model']['rungs'][N_FIRST - 1:]]}), below the preregistered {BAR_SLOPE}")
+        if reader_lb <= BOOT_LB:
+            fails.append(f"slope_bootstrap: the 2.5th percentile of the model's second-decade slope under the cluster bootstrap is {reader_lb}, "
+                         f"not above {BOOT_LB} (interval {boot['model']['ci95']}); four points and a rise the scored chunks do not agree on is not a rise")
+    lead_read = lead[f"{TOP}model_minus_logistic"]["reading"] if lead is not None and not void else None
+
+    flags = None
+    if not void:
+        n_iter = {n: (fits[n].get("fit_info") or {}).get("n_iter") for n in ORDER}
+        cap = {n: MAX_ITER.get(role_of(n) if n != "null" else "model", 0) for n in ORDER}
+        rung_table = [{"rung": k, "decade": rk["decade"], "n_chunks": rk["n_chunks"], "n_rows": rk["n_rows"],
+                       **{role: rec_reads[f"r{k}_{role}"]["ext_real_top1"] for role in ROLES}}
+                      for k, rk in enumerate(rungs_sealed, start=1)]
+        lo, hi = boot["model_minus_logistic"]["ci95"]
+        if lo > 0:
+            diff_read = "the paired interval is entirely above 0: over the second decade the model buys more per doubling than the linear rule"
+        elif hi < 0:
+            diff_read = "the paired interval is entirely below 0: over the second decade the linear rule buys more per doubling than the model"
+        else:
+            diff_read = "the paired interval includes 0: not resolved at this size; never read as 'equal'"
+        capped = sorted(n for n in ORDER if _int(n_iter[n]) and cap[n] > 0 and n_iter[n] >= cap[n])
+        capped_top = sorted(n for n in capped if n.startswith(TOP))
+        tree_top = rec_reads[TOP + "depth3_tree"]["ext_real_top1"]; model_top = rec_reads[TOP + "model"]["ext_real_top1"]
+        log_top = rec_reads[TOP + "logistic"]["ext_real_top1"]
+        slope_hi = boot["model"]["ci95"][1]
+        if slope_hi < 0:
+            decade_read = ("the model's second-decade slope interval sits entirely below 0: adding files of the same kinds lowered the "
+                           "model's reading on the original files")
+        elif reader_slope < BAR_SLOPE - 1e-9:
+            decade_read = "below the record's rate; whether it is flat is not resolved here"
+        else:
+            decade_read = "at or above the record's rate"
+        flags = {"slope_clears": reader_slope >= BAR_SLOPE - 1e-9, "bootstrap_clears": reader_lb > BOOT_LB,
+                 "lead_at_top": lead_read,
+                 "roles_at_iteration_cap_at_the_top_rung": capped_top,
+                 "lead_at_top_is_a_recipe_comparison": not capped_top,
+                 "second_decade_reading": decade_read,
+                 "model_slope_per_doubling_second_decade": reader_slope, "model_slope_ci95": boot["model"]["ci95"],
+                 "logistic_slope_per_doubling_second_decade": my_curves["logistic"]["slope_per_doubling_second_decade"],
+                 "logistic_slope_ci95": boot["logistic"]["ci95"],
+                 "depth3_tree_slope_per_doubling_second_decade": my_curves["depth3_tree"]["slope_per_doubling_second_decade"],
+                 "depth3_tree_slope_ci95": boot["depth3_tree"]["ci95"],
+                 "first_decade_slope_per_doubling": {role: my_curves[role]["slope_per_doubling_first_decade"] for role in ROLES},
+                 "first_decade_model_slope_banked_by_0023": REF_FIRST_DECADE_SLOPE,
+                 "first_decade_model_slope_equals_0023s": my_curves["model"]["slope_per_doubling_first_decade"] == REF_FIRST_DECADE_SLOPE,
+                 "second_minus_first_decade_slope": {role: round(my_curves[role]["slope_per_doubling_second_decade"]
+                                                                 - my_curves[role]["slope_per_doubling_first_decade"], 6) for role in ROLES},
+                 "both_decades_slope_per_doubling": {role: my_curves[role]["slope_per_doubling_both_decades"] for role in ROLES},
+                 "slope_model_minus_logistic": round(reader_slope - my_curves["logistic"]["slope_per_doubling_second_decade"], 6),
+                 "slope_model_minus_logistic_ci95_paired": boot["model_minus_logistic"]["ci95"],
+                 "share_of_resamples_with_model_ahead_of_logistic": boot["model_minus_logistic"]["share_of_resamples_with_model_ahead"],
+                 "share_is": "a description of the resamples, not a probability that the model is better",
+                 "difference_reading": diff_read,
+                 "difference_reading_is_a_recipe_comparison": not capped,
+                 "roles_at_iteration_cap": capped,
+                 "slope_model_minus_depth3_tree": round(reader_slope - my_curves["depth3_tree"]["slope_per_doubling_second_decade"], 6),
+                 "slope_model_minus_depth3_tree_ci95_paired": boot["model_minus_depth3_tree"]["ci95"],
+                 "lead_model_minus_logistic_at_top": lead[f"{TOP}model_minus_logistic"],
+                 "lead_model_minus_logistic_at_rung4": lead[f"{R4}model_minus_logistic"],
+                 "lead_model_minus_depth3_tree_at_top": lead[f"{TOP}model_minus_depth3_tree"],
+                 "lead_model_minus_depth3_tree_at_rung4": lead[f"{R4}model_minus_depth3_tree"],
+                 "end_to_end_gain_second_decade": {role: my_curves[role]["end_to_end_gain_second_decade"] for role in ROLES},
+                 "end_to_end_gain_both_decades": {role: my_curves[role]["end_to_end_gain_both_decades"] for role in ROLES},
+                 "rung_to_rung_gains": {role: my_curves[role]["rung_to_rung_gains"] for role in ROLES},
+                 "per_family_slope_per_doubling_second_decade": {role: my_curves[role]["per_family_slope_per_doubling_second_decade"] for role in ROLES},
+                 "builder_eval_slope_per_doubling_second_decade": {role: my_curves[role]["builder_eval_slope_per_doubling_second_decade"] for role in ROLES},
+                 "rung_table": rung_table, "doublings_spanned": PARTITION["doublings_spanned"],
+                 "doublings_spanned_second_decade": PARTITION["doublings_spanned_second_decade"],
+                 "model_leads_logistic_at_every_rung": all(rec_reads[f"r{k}_model"]["ext_real_top1"] > rec_reads[f"r{k}_logistic"]["ext_real_top1"]
+                                                          for k in range(1, N_RUNGS + 1)),
+                 "logistic_leads_model_at_every_second_decade_rung": all(
+                     rec_reads[f"r{k}_logistic"]["ext_real_top1"] > rec_reads[f"r{k}_model"]["ext_real_top1"] for k in range(N_FIRST + 1, N_RUNGS + 1)),
+                 "top_rung_against_0021s_bar_with_the_tree_as_floor": {
+                     "model": model_top, "depth3_tree": tree_top, "needed": round(tree_top + 0.05, 4), "clears": model_top >= round(tree_top + 0.05, 4),
+                     "is": "informational: 0021's clause (best trivial baseline on the same rows plus 0.05) re-applied at the top rung with the "
+                           "depth-3 tree standing in for the best of 0021's four baselines; the other three read below the tree at 0021 and are "
+                           "not refitted here, so a floor above the tree's is possible and this flag can only be optimistic"},
+                 "top_rung_against_0021s_bar_with_the_higher_of_tree_and_logistic_as_floor": {
+                     "model": model_top, "floor": max(tree_top, log_top), "needed": round(max(tree_top, log_top) + 0.05, 4),
+                     "clears": model_top >= round(max(tree_top, log_top) + 0.05, 4),
+                     "is": "informational: the same clause with OPERATING_RULES 4a's list taken literally - logistic regression is among the trivial "
+                           "baselines it names, 0021's four did not include it, and the standardised logistic is fitted at every rung here"},
+                 "slope_second_decade_with_rung4_at_0021s_reading": {role: my_curves[role]["slope_second_decade_with_rung4_at_reference"] for role in ROLES},
+                 "shift_arm": {"readings_ext_real_top1": {role: my_shift["readings"][role]["ext_real_top1"] for role in ROLES},
+                               "difference_from_rung_4": my_shift["difference_from_rung_4"], "difference_from_rung_5": my_shift["difference_from_rung_5"],
+                               "n_chunks": PARTITION["shift_arm"]["n_chunks"], "n_rows": PARTITION["shift_arm"]["n_rows"],
+                               "note": "informational: rung 5's new plaintexts alone at rung 4's plaintext count; the difference from rung 4 reads "
+                                       "what other files of the same families buy for the original files at the same count; never a verdict"},
+                 "rung4_is_0021s_failing_reading": {"model": rec_reads[R4 + "model"]["ext_real_top1"],
+                                                    "needed_over_the_tree_at_0021": round(REFERENCE["depth3_tree"] + 0.05, 4),
+                                                    "margin_over_the_logistic_at_0021": round(REFERENCE["model"] - REFERENCE["logistic"], 4)},
+                 "checkpoints_cross_checked": ckpt_checked,
+                 "reproduction_drift": {role: round(rec_reads[R4 + role]["ext_real_top1"] - REFERENCE[role], 6) for role in ROLES},
+                 "reproduction_first_decade_drift": {role: [round(rec_reads[f"r{k}_{role}"]["ext_real_top1"] - REFERENCE_FIRST[role][k - 1], 6)
+                                                            for k in range(1, N_FIRST + 1)] for role in ROLES},
+                 "null_real_top1": rec_reads["null"]["ext_real_top1"],
+                 "n_iter_by_name": n_iter,
+                 "at_iteration_cap": {n: (n_iter[n] >= cap[n]) for n in ORDER if _int(n_iter[n]) and cap[n] > 0},
+                 "fit_info_by_family": {n: cand_of(n)["family"] for n in ORDER}}
+
+    top_read = rec_reads[TOP + "model"]["ext_real_top1"] if not void else None
+    by_rung = {role: [p["ext_real_top1"] for p in my_curves[role]["rungs"]] for role in ROLES} if not void else None
+    plaintexts = [r["n_chunks"] for r in rungs_sealed]
+    if void:
+        verdict, meaning = "VOID", ("A validity or control clause fails, or the artifact is incomplete. This run says nothing "
+                                    "about a second decade of real plaintexts in either direction.")
+    else:
+        curve_part = "SECOND_DECADE_FLAT" if fails else "SECOND_DECADE_RISES"
+        verdict = f"{curve_part}_{lead_read}"
+        lt = lead[f"{TOP}model_minus_logistic"]
+        cap_note = (f" (the {', '.join(n[len(TOP):] for n in flags['roles_at_iteration_cap_at_the_top_rung'])} at its iteration cap at the top rung: "
+                    f"not a recipe comparison)" if flags["roles_at_iteration_cap_at_the_top_rung"] else "")
+        lead_text = {"MODEL_LEADS": f"at the top rung the model leads the standardised logistic by {lt['point']} (paired interval {lt['ci95']}, entirely above 0)",
+                     "LINEAR_LEADS": f"at the top rung the standardised logistic leads the model by {round(-lt['point'], 4)} (paired interval of model minus logistic {lt['ci95']}, entirely below 0): a rule a person can write out has overtaken the boosted recipe",
+                     "NO_SEPARATION": f"at the top rung model minus logistic is {lt['point']} with a paired interval {lt['ci95']} that includes 0: the two are not separated at this size, never read as 'equal'"}[lead_read] + cap_note
+        common = (f"At 4096 bytes, on nested rungs of {plaintexts[0]} to {plaintexts[-1]} real plaintexts ({PARTITION['doublings_spanned']} doublings in all; "
+                  f"the 'second decade' is {PARTITION['doublings_spanned_second_decade']} doublings, {round(PARTITION['doublings_spanned_second_decade'] * math.log10(2), 4)} "
+                  f"of a decade, of other files above 0021's block; rungs 1..{N_FIRST} are 0023's chunks of the five 0018 pinned files, rungs "
+                  f"{N_FIRST + 1}..{N_RUNGS} add other projects' files of the same five families in exact doublings), 0021's three fixed recipes read, per "
+                  f"rung: the model {by_rung['model']}, the standardised "
+                  f"logistic {by_rung['logistic']}, the depth-3 tree {by_rung['depth3_tree']} on the {N_REAL} real-family rows. Second-decade slopes per "
+                  f"doubling of plaintexts: model {reader_slope} (bootstrap interval over the scored chunks {boot['model']['ci95']}), logistic "
+                  f"{flags['logistic_slope_per_doubling_second_decade']} ({boot['logistic']['ci95']}), depth-3 tree "
+                  f"{flags['depth3_tree_slope_per_doubling_second_decade']} ({boot['depth3_tree']['ci95']}); model minus logistic "
+                  f"{flags['slope_model_minus_logistic']}, paired interval {flags['slope_model_minus_logistic_ci95_paired']}: {flags['difference_reading']}. "
+                  f"First-decade slopes reproduce 0023 (model {flags['first_decade_slope_per_doubling']['model']}). The shift arm (rung 5's new "
+                  f"plaintexts alone, rung 4's count) reads {flags['shift_arm']['readings_ext_real_top1']}, against rung 4 by "
+                  f"{flags['shift_arm']['difference_from_rung_4']}. {lead_text}. Against 0021's bar with "
+                  f"the tree as the floor, the top rung reads {top_read} against {flags['top_rung_against_0021s_bar_with_the_tree_as_floor']['needed']} needed "
+                  f"({'clears' if flags['top_rung_against_0021s_bar_with_the_tree_as_floor']['clears'] else 'does not clear'}; informational, the floor is "
+                  f"the tree alone). Not a transfer reading: every rung holds the scored files' own unscored chunks; the added plaintexts are other files "
+                  f"of the same families; nothing fitted shares a byte, a chunk id or a source-chunk hash with anything scored; the intervals are over "
+                  f"the scored chunks only and do not resample the fit side. Nothing here revises 0003, 0014, 0015, 0016, 0017, 0018, 0019, 0021, 0022 "
+                  f"or 0023, and nothing here establishes a buyer.")
+        if fails:
+            which = ("both clauses" if len(fails) == 2 else ("the slope clause" if fails[0].startswith("slope:") else "the interval clause"))
+            meaning = (f"{verdict}: over the second decade the model's real-family accuracy does not rise with the plaintexts fitted at the "
+                       f"preregistered rate of {BAR_SLOPE} per doubling with a scored-chunk interval above {BOOT_LB} ({which}: "
+                       + ("the slope is below the bar" if which == "the slope clause" else
+                          ("the slope clears the bar but the scored chunks do not agree on the rise" if which == "the interval clause" else
+                           "the slope is below the bar and the scored chunks do not agree on the rise"))
+                       + f"; {flags['second_decade_reading']}). " + common + " More real files of the same families do not buy the model the "
+                       f"record's rate of {BAR_SLOPE} per doubling; the second-decade reading above says what the slope did instead.")
+        else:
+            meaning = (f"{verdict}: over the second decade the model's real-family accuracy rises with the plaintexts fitted at or above {BAR_SLOPE} per "
+                       f"doubling, with the scored-chunk interval above {BOOT_LB}. " + common + " A rise the logistic and the tree share is a rise of the "
+                       f"cheap signal, not of the recipe. Nothing beyond the top rung is banked.")
+
+    result = {
+        "schema": "raise-v1/realcurve2_4096_verdict/1",
+        "preregistration": PREREG,
+        "source_artifact": os.path.relpath(ARTIFACT, REPO),
+        "verdict": verdict,
+        "verdict_components": ({"curve": ("SECOND_DECADE_FLAT" if fails else "SECOND_DECADE_RISES"), "lead": lead_read} if not void else None),
+        "meaning": meaning,
+        "validity_failed_clauses": void,
+        "slope_failed_clauses": fails,
+        "bar_applied": {"slope_per_doubling": BAR_SLOPE, "bootstrap_lower_bound_gt": BOOT_LB, "n_boot": N_BOOT, "bootstrap_seed": BOOT_SEED,
+                        "lead_rule": LEAD_RULE, "doublings_spanned": PARTITION["doublings_spanned"],
+                        "doublings_spanned_second_decade": PARTITION["doublings_spanned_second_decade"], "log2_chunks": LOG2X,
+                        "rungs": [{k: r[k] for k in ("rung", "decade", "n_chunks", "n_rows")} for r in rungs_sealed],
+                        "n_real_rows": N_REAL, "fit_rows": FIT["n_rows"], "fit_source_chunks": FIT["n_chunks"],
+                        "fit2_rows": FIT2["n_rows"], "fit2_source_chunks": FIT2["n_chunks"]},
+        "model_slope_per_doubling": reader_slope if not void else None,
+        "model_slope_ci95": boot["model"]["ci95"] if (boot and not void) else None,
+        "logistic_slope_per_doubling": my_curves["logistic"]["slope_per_doubling_second_decade"] if not void else None,
+        "depth3_tree_slope_per_doubling": my_curves["depth3_tree"]["slope_per_doubling_second_decade"] if not void else None,
+        "slope_model_minus_logistic": (flags or {}).get("slope_model_minus_logistic"),
+        "slope_model_minus_depth3_tree": (flags or {}).get("slope_model_minus_depth3_tree"),
+        "curves": my_curves if not void else None,
+        "slope_bootstrap": boot if not void else None,
+        "lead_at_top": lead if not void else None,
+        "lead_reading": lead_read,
+        "shift_arm": my_shift if not void else None,
+        "flags": flags,
+        "model_real_top1_by_rung": by_rung["model"] if not void else None,
+        "model_real_top1_top_rung": top_read,
+        "ext_real_top1": {n: rec_reads[n]["ext_real_top1"] for n in ORDER} if not void else None,
+        "ext_real_correct": {n: rec_reads[n]["ext_real_correct"] for n in ORDER} if not void else None,
+        "ext_top1": {n: rec_reads[n]["ext_top1"] for n in ORDER} if not void else None,
+        "ext_per_family": {n: rec_reads[n]["ext_per_family"] for n in ORDER} if not void else None,
+        "ext_subsets": {n: {k: rec_reads[n][k] for k in ("ext_structured_text_top1", "ext_high_entropy_top1",
+                                                         "ext_real_top1", "ext_synthetic_top1")} for n in ORDER} if not void else None,
+        "builder_eval_top1": {n: rec_reads[n]["builder_eval_top1"] for n in ORDER} if not void else None,
+        "reproduction_top1": {role: rec_reads[R4 + role]["ext_real_top1"] for role in ROLES} if not void else None,
+        "reproduction_reference": REFERENCE,
+        "reproduction_drift": (flags or {}).get("reproduction_drift"),
+        "reproduction_first_decade": ({role: [rec_reads[f"r{k}_{role}"]["ext_real_top1"] for k in range(1, N_FIRST + 1)] for role in ROLES}
+                                      if not void else None),
+        "reproduction_first_decade_reference": REFERENCE_FIRST,
+        "shuffled_label_accuracy_ext": rec_reads["null"]["ext_top1"] if not void else None,
+        "shuffled_label_accuracy_eval": rec_reads["null"]["builder_eval_top1"] if not void else None,
+        "shuffled_label_accuracy_real": rec_reads["null"]["ext_real_top1"] if not void else None,
+        "checkpoints_cross_checked": ckpt_checked,
+        "ext_rows_per_family": EXT["rows_per_family"],
+        "fit_rows_per_family": FIT["rows_per_family"],
+        "fit2_rows_per_family": FIT2["rows_per_family"],
+        "informational_only": "the flags, the other roles' slopes and intervals, the first-decade and both-decade slopes, the per-family "
+                              "slopes, the sensitivity slopes, the shift arm, the leads at rung 4 and over the tree, the two 0021-bar flags, the reverse curves on the builder's "
+                              "evaluation set and the artifact's cluster intervals are informational: not a verdict, not quotable as a pass. "
+                              "The verdict is the `verdict` field: its curve part is read on the model's second-decade slope and its "
+                              "scored-chunk interval, its lead part on the sealed lead rule at the top rung.",
+        "is_a_transfer_reading": False,
+        "establishes_a_buyer": False,
+        "revises_0003_0014_0015_0016_0017_0018_0019_0021_0022_0023": False,
+        "read": {k: g(k) for k in (
+            "preregistration", "smoke", "stage", "complete", "missing_roles", "model_slope_per_doubling",
+            "logistic_slope_per_doubling", "depth3_tree_slope_per_doubling", "shuffled_label_accuracy_ext",
+            "shuffled_label_accuracy_eval", "chance_accuracy", "n_ext_rows", "n_ext_real_rows", "n_eval_rows", "n_classes",
+            "n_rungs", "doublings", "curve_sha256")},
+        "readings_banked": reads,
+    }
+    _write(result)
+
+    print("READER 0024 — the second decade of real plaintexts at 4096 (new files of the same five families, nested on 0021's block)")
+    for k, v in result["read"].items():
+        print(f"  {k:<40} {v}")
+    if not void:
+        print(f"  {'model top-1 by rung':<40} {result['model_real_top1_by_rung']} over plaintexts {[r['n_chunks'] for r in rungs_sealed]}")
+        print(f"  {'second-decade slopes (model/logistic/tree)':<40} {reader_slope} {boot['model']['ci95']} / "
+              f"{flags['logistic_slope_per_doubling_second_decade']} / {flags['depth3_tree_slope_per_doubling_second_decade']}; model minus logistic "
+              f"{flags['slope_model_minus_logistic']} {flags['slope_model_minus_logistic_ci95_paired']}")
+        print(f"  {'lead at the top rung':<40} {lead[f'{TOP}model_minus_logistic']}")
+        print(f"  {'shift arm minus rung 4':<40} {flags['shift_arm']['difference_from_rung_4']}")
+    if void:
+        print(f"\n  VALIDITY FAILED CLAUSES ({len(void)}):")
+        for m in void:
+            print(f"    · {m}")
+    if fails:
+        print(f"\n  SLOPE FAILED CLAUSES ({len(fails)}):")
+        for m in fails:
+            print(f"    · {m}")
+    print(f"\n  VERDICT: {verdict}\n  {meaning}")
+    print("  This does not establish a buyer, and was never capable of doing so.")
+    print(f"  wrote {os.path.relpath(OUT, REPO)}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

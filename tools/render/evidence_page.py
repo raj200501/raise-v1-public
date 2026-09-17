@@ -84,6 +84,14 @@ e14 = json.load(open(_e14p, encoding="utf-8")) if os.path.exists(_e14p) else Non
 _rcp = A("pivot", "realcurve_4096.json"); _rcvp = A("pivot", "realcurve_4096_verdict.json")
 rca = json.load(open(_rcp, encoding="utf-8")) if os.path.exists(_rcp) else None
 rcv = json.load(open(_rcvp, encoding="utf-8")) if os.path.exists(_rcvp) else None
+# 0024: the second decade of real plaintexts; verdict and run artifacts
+_rc2p = A("pivot", "realcurve2_4096.json"); _rc2vp = A("pivot", "realcurve2_4096_verdict.json")
+rc2a = json.load(open(_rc2p, encoding="utf-8")) if os.path.exists(_rc2p) else None
+rc2v = json.load(open(_rc2vp, encoding="utf-8")) if os.path.exists(_rc2vp) else None
+
+
+def _rc2_ok(v):
+    return "inc" if v == "VOID" else ("pass" if v.startswith("SECOND_DECADE_RISES") else "fail")
 
 git_head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO,
                           capture_output=True, text=True).stdout.strip()
@@ -276,7 +284,72 @@ chips = "".join([
             f'{rcv["flags"]["slope_model_minus_logistic_ci95_paired"]}); the depth-3 tree {rcv["depth3_tree_slope_per_doubling"]}. Reproduction drift 0.0; '
             f'null {rcv["shuffled_label_accuracy_real"]}; no extrapolation beyond the top rung')
            if rcv["verdict"] != "VOID" and rca and rca.get("complete")
-           else f'VOID: {"; ".join(rcv["validity_failed_clauses"])[:140]}')] if rcv else []))
+           else f'VOID: {"; ".join(rcv["validity_failed_clauses"])[:140]}')] if rcv else [])
+ + ([chip(rc2v["verdict"], _rc2_ok(rc2v["verdict"]), "0024",
+           (f'The second decade: three exact doublings of other files of the same five families, nested on 0021\'s block '
+            f'({", ".join(str(r["n_chunks"]) for r in rc2v["bar_applied"]["rungs"])} plaintexts; the last three from a new run-overlap-clean corpus). '
+            f'The model reads {rc2v["model_real_top1_by_rung"]}: a second-decade slope of {rc2v["model_slope_per_doubling"]} per doubling '
+            f'(scored-chunk interval {rc2v["model_slope_ci95"]}) against {rc2v["bar_applied"]["slope_per_doubling"]} required; the logistic '
+            f'{rc2v["logistic_slope_per_doubling"]}, the tree {rc2v["depth3_tree_slope_per_doubling"]}. At the top rung, model minus logistic '
+            f'{rc2v["lead_at_top"]["r7_model_minus_logistic"]["point"]} (paired interval {rc2v["lead_at_top"]["r7_model_minus_logistic"]["ci95"]}): '
+            f'{rc2v["lead_reading"]}. The shift arm (the new files alone at rung 4\'s count) reads {rc2v["flags"]["shift_arm"]["difference_from_rung_4"]["model"]} '
+            f'against rung 4 for the model. Rungs 1..4 reproduced 0023 with drift {rc2v["reproduction_drift"]["model"]}; null {rc2v["shuffled_label_accuracy_real"]}')
+           if rc2v["verdict"] != "VOID" and rc2a and rc2a.get("complete")
+           else f'VOID: {"; ".join(rc2v["validity_failed_clauses"])[:140]}')] if rc2v else []))
+
+boundary_0024 = ""
+if rc2a and rc2v and rc2v["verdict"] != "VOID" and rc2a.get("complete"):
+    _f2 = rc2v["flags"]; _b2 = rc2v["bar_applied"]; _cv2 = rc2v["curves"]; _boot2 = rc2v["slope_bootstrap"]; _ld = rc2v["lead_at_top"]; _sh = _f2["shift_arm"]
+    _roles2 = [("model", "0021\'s model (M4)"), ("logistic", "standardised logistic (L3)"), ("depth3_tree", "depth-3 tree (D1)")]
+    _rung_rows2 = "".join(
+        f'<tr><td class="mono">{r["rung"]}</td><td class="mono">{r["decade"]}</td><td class="mono">{r["n_chunks"]}</td><td class="mono">{r["n_rows"]}</td>'
+        + "".join(f'<td class="mono">{_cv2[role]["rungs"][i]["ext_real_top1"]}</td>' for role, _ in _roles2) + '</tr>'
+        for i, r in enumerate(_b2["rungs"]))
+    _slope_rows2 = "".join(
+        f'<tr><td>{label}</td><td class="mono">{_cv2[role]["slope_per_doubling_second_decade"]}</td><td class="mono">{_boot2[role]["ci95"]}</td>'
+        f'<td class="mono">{_cv2[role]["slope_per_doubling_first_decade"]}</td><td class="mono">{_cv2[role]["end_to_end_gain_second_decade"]}</td>'
+        f'<td class="mono">{_cv2[role]["rung_to_rung_gains"][3:]}</td><td class="mono">{_sh["difference_from_rung_4"][role]}</td></tr>'
+        for role, label in _roles2)
+    _lt = _ld["r7_model_minus_logistic"]; _l4 = _ld["r4_model_minus_logistic"]; _bar_t = _f2["top_rung_against_0021s_bar_with_the_tree_as_floor"]
+    _bar_l = _f2["top_rung_against_0021s_bar_with_the_higher_of_tree_and_logistic_as_floor"]
+    _lead_sentence = {"MODEL_LEADS": "the boosted model still leads the hand-writable linear rule",
+                      "LINEAR_LEADS": "the hand-writable linear rule leads the boosted model",
+                      "NO_SEPARATION": "the two are not separated at this size (never read as equal)"}[rc2v["lead_reading"]]
+    _cap = _f2["roles_at_iteration_cap_at_the_top_rung"]
+    boundary_0024 = (f'<p><strong>The second decade of real plaintexts: <span class="mono">{rc2v["verdict"]}</span></strong> '
+                     f'(preregistration 0024, chain entry 24, read by its own frozen reader, which recounts every reading, slope, interval and lead from '
+                     f'the banked score vectors and cross-checked the {rc2v["checkpoints_cross_checked"]} committed checkpoints). 0023\'s four rungs '
+                     f'of the scored files\' own chunks were refitted row for row and reproduced with drift {rc2v["reproduction_drift"]["model"]}, then three '
+                     f'exact per-family doublings of OTHER files of the same five families (fourteen PyPI projects, six C projects, the Go toolchain, '
+                     f'Node.js and PuTTY, 600 more RFCs; every chunk hashed against every whole chunk and every kilobyte run of the 0018 files) were '
+                     f'nested on 0021\'s block: {", ".join(str(r["n_chunks"]) for r in _b2["rungs"])} plaintexts, '
+                     f'{_b2["doublings_spanned_second_decade"]} doublings of other files above the block, {_b2["doublings_spanned"]} in all. The model reads '
+                     f'<strong>{rc2v["model_real_top1_by_rung"]}</strong>: a second-decade slope of <strong>{rc2v["model_slope_per_doubling"]}</strong> per '
+                     f'doubling of plaintexts (scored-chunk interval {rc2v["model_slope_ci95"]}) against {_b2["slope_per_doubling"]} required with the '
+                     f'interval\'s lower bound above {_b2["bootstrap_lower_bound_gt"]} — {_f2["second_decade_reading"]}; the first-decade slope '
+                     f'{_f2["first_decade_slope_per_doubling"]["model"]} reproduces 0023\'s. The logistic\'s second-decade slope is '
+                     f'{rc2v["logistic_slope_per_doubling"]}, the tree\'s {rc2v["depth3_tree_slope_per_doubling"]}; model minus logistic '
+                     f'{rc2v["slope_model_minus_logistic"]}, paired interval {_f2["slope_model_minus_logistic_ci95_paired"]}. <strong>At the top rung, '
+                     f'{_lead_sentence}</strong>: model minus logistic {_lt["point"]}, paired interval {_lt["ci95"]}, read by the rule sealed in advance as '
+                     f'<span class="mono">{rc2v["lead_reading"]}</span>'
+                     + (f' (the {", ".join(n[3:] for n in _cap)} at its iteration cap at the top rung: not a recipe comparison)' if _cap else '')
+                     + f'; at rung 4 the same reading is {_l4["point"]} with interval {_l4["ci95"]} ({_l4["reading"]}). <strong>The shift arm</strong> — '
+                     f'rung 5\'s new plaintexts alone at rung 4\'s count — reads {_sh["readings_ext_real_top1"]}, against rung 4 by '
+                     f'{_sh["difference_from_rung_4"]} and against rung 5 by {_sh["difference_from_rung_5"]}: the direct reading of what other files '
+                     f'of the same families buy for the original files. Against 0021\'s bar re-applied at the top rung, the model\'s {_bar_t["model"]} '
+                     f'{"clears" if _bar_t["clears"] else "does not clear"} {_bar_t["needed"]} over the tree and '
+                     f'{"clears" if _bar_l["clears"] else "does not clear"} {_bar_l["needed"]} over the higher of the tree and the logistic (informational). '
+                     f'The null control on the top rung reads {rc2v["shuffled_label_accuracy_real"]} on the real rows against chance {rc2a["chance_accuracy"]}; '
+                     f'{rc2a["cost"]["wall_seconds_this_invocation"]} s wall on the last launch, {rc2a["launch_number"]} launch(es). <strong>Not a transfer '
+                     f'reading, and not 0023\'s in-distribution reading either</strong>: every rung holds the scored files\' own unscored chunks, and the '
+                     f'added plaintexts are other files of the same kinds, so the second decade confounds more plaintexts with plaintexts from other files. '
+                     f'The "second decade" is {_b2["doublings_spanned_second_decade"]} doublings of other files, 0.9031 of a decade; both together span '
+                     f'1.8016 decades, short of 0003\'s two-decade scope rule. No extrapolation beyond the top rung is banked or quoted. Nothing here '
+                     f'revises the numbers of 0003, 0014, 0015, 0016, 0017, 0018, 0019, 0021, 0022 or 0023, and nothing here establishes a buyer.</p>'
+                     f'<table><thead><tr><th>rung</th><th>decade</th><th>plaintexts</th><th>rows</th><th>model</th><th>logistic</th><th>depth-3 tree</th></tr>'
+                     f'</thead><tbody>{_rung_rows2}</tbody></table>'
+                     f'<table><thead><tr><th>role</th><th>2nd-decade slope / doubling</th><th>scored-chunk 95%</th><th>1st-decade slope</th><th>2nd-decade end-to-end</th>'
+                     f'<th>rung-to-rung (4→7)</th><th>shift arm − rung 4</th></tr></thead><tbody>{_slope_rows2}</tbody></table>')
 
 fam2048_table = ""
 _pf2048 = A("pivot", "per_family_curves_2048.json")
@@ -756,7 +829,7 @@ protocol returns <span class="mono">CARVE_FAILS</span>: within-size top-1
 (margin below the 0.05 bar), and a 4096-trained model transfers at {carve["transfer_top1"]} —
 chance. The byte-identity ceiling barely moves across carve sizes, so this is a modelling failure
 and is reported as one. Two learned byte-sequence attempts (preregs 0009, 0010) did not rescue it.</p>
-{boundary_2048}{boundary_0012}{boundary_0014}{boundary_0015}{boundary_0016}{boundary_0017}{boundary_0018}{boundary_0020}{boundary_0022}{boundary_0023}{fam2048_table}
+{boundary_2048}{boundary_0012}{boundary_0014}{boundary_0015}{boundary_0016}{boundary_0017}{boundary_0018}{boundary_0020}{boundary_0022}{boundary_0023}{boundary_0024}{fam2048_table}
 </div>
 <div class="panel good">
 <p><strong>And the leak correction ran against us.</strong> When an adversarial audit found source

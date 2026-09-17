@@ -1,0 +1,54 @@
+{
+  "doublings_spanned": 5.984659,
+  "doublings_spanned_second_decade": 3.0,
+  "passed": true,
+  "prereg_sha256_at_check": "59bf162b6e6278a262bf2d08399caa11ebbf9a1f953ffc0e1bb657a284b47416",
+  "preregistration": "0024-realcurve2-4096",
+  "problems": 0,
+  "reader_sha256_at_check": "99fc413c16dcbd87965ca3e9aeb2f6930c8db50fcdcd91107b15b7dc749449e7",
+  "rungs": [
+    {
+      "decade": 1,
+      "n_chunks": 130,
+      "n_rows": 3344,
+      "rung": 1
+    },
+    {
+      "decade": 1,
+      "n_chunks": 258,
+      "n_rows": 6635,
+      "rung": 2
+    },
+    {
+      "decade": 1,
+      "n_chunks": 515,
+      "n_rows": 13207,
+      "rung": 3
+    },
+    {
+      "decade": 1,
+      "n_chunks": 1029,
+      "n_rows": 26346,
+      "rung": 4
+    },
+    {
+      "decade": 2,
+      "n_chunks": 2058,
+      "n_rows": 52766,
+      "rung": 5
+    },
+    {
+      "decade": 2,
+      "n_chunks": 4116,
+      "n_rows": 105214,
+      "rung": 6
+    },
+    {
+      "decade": 2,
+      "n_chunks": 8232,
+      "n_rows": 210751,
+      "rung": 7
+    }
+  ],
+  "schema": "raise-v1/prefreeze_0024/1"
+}

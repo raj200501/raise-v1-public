@@ -1,0 +1,418 @@
+{
+  "corpus": {
+    "build_seconds": 452.2,
+    "candidates_per_family": {
+      "c_src": 2313,
+      "pe_bin": 5429,
+      "py_src": 5781,
+      "rfc_txt": 842,
+      "rst_doc": 763
+    },
+    "chunks_with_rows_per_family": {
+      "c_src": 185,
+      "pe_bin": 1492,
+      "py_src": 4927,
+      "rfc_txt": 668,
+      "rst_doc": 302
+    },
+    "determinism": "corpus_realfit2.py --probe built a 15-chunk slice twice in two task orders and got identical arrays; --check and --disjoint pass on the built corpus",
+    "dropped_byte_identical_to_0018": {
+      "c_src": 0,
+      "pe_bin": 0,
+      "py_src": 0,
+      "rfc_txt": 0,
+      "rst_doc": 0
+    },
+    "exclusion": {
+      "hashes_sha256": "3d5cf58a8aba9523af16054b42fa1eb5f7820574e17b4c74a488098565949c64",
+      "n_distinct_chunk_hashes_of_0018_pinned_blobs": 2534,
+      "n_whole_chunks_of_0018_pinned_blobs": 2537,
+      "run_overlap": {
+        "hash": "polynomial mod 2^64, base 0x9E3779B97F4A7C15|1, H(i) = sum_k b[i+k] * base^k",
+        "n_distinct_pinned_windows": 73451492,
+        "rule": "a candidate chunk is dropped if run_windows consecutive window-byte windows aligned to its own grid, none constant (all bytes equal), each occur at ANY offset of ANY 0018 pinned blob; run_windows x window = 1024 shared bytes",
+        "run_windows": 16,
+        "window": 64
+      }
+    },
+    "n_rows": 193926,
+    "network": "PyPI, ftp.postgresql.org, curl.se, nginx.org, musl.libc.org, lua.org, zlib.net, dl.google.com, nodejs.org, the.earth.li and rfc-editor.org were reachable through the container's proxy; codeload.github.com answered 403 and get.videolan.org reset the tunnel, so no GitHub-hosted project and no VLC build is used; the first serial fetch stalled on one PyPI transfer and the fetch script was rewritten to run four transfers at a time with curl's stall detection",
+    "npz_bytes": 862902730,
+    "pool_rule": "per family, 0021's chunks-with-rows x (2^doublings - 1) x (1 + pool_margin) + pool_extra candidate chunks are built, in the seeded order; the margin covers chunks that yield no row, so that the preregistration can cut exact doublings of plaintexts with rows",
+    "pool_sizes": {
+      "c_src": 185,
+      "pe_bin": 1501,
+      "py_src": 4948,
+      "rfc_txt": 670,
+      "rst_doc": 302
+    },
+    "sources": {
+      "archives": 23,
+      "licences": "docs/compliance/EXT_SOURCES2.md",
+      "per_family": {
+        "c_src": {
+          "bytes": 75862262,
+          "n_files": 6126,
+          "per_archive": {
+            "curl-8.7.1.tar.gz": {
+              "bytes": 8611558,
+              "n_files": 868
+            },
+            "lua-5.4.6.tar.gz": {
+              "bytes": 870440,
+              "n_files": 61
+            },
+            "musl-1.2.5.tar.gz": {
+              "bytes": 2935959,
+              "n_files": 2299
+            },
+            "nginx-1.25.4.tar.gz": {
+              "bytes": 6043776,
+              "n_files": 390
+            },
+            "postgresql-16.2.tar.gz": {
+              "bytes": 55662760,
+              "n_files": 2439
+            },
+            "zlib-1.3.1.tar.gz": {
+              "bytes": 1737769,
+              "n_files": 69
+            }
+          },
+          "rule": {
+            "archives": [
+              "postgresql-16.2.tar.gz",
+              "curl-8.7.1.tar.gz",
+              "nginx-1.25.4.tar.gz",
+              "musl-1.2.5.tar.gz",
+              "lua-5.4.6.tar.gz",
+              "zlib-1.3.1.tar.gz"
+            ],
+            "member_regex": "\\.(c|h)$"
+          }
+        },
+        "pe_bin": {
+          "bytes": 182784320,
+          "n_files": 26,
+          "per_archive": {
+            "go1.22.2.windows-amd64.zip": {
+              "bytes": 106998272,
+              "n_files": 19
+            },
+            "node-v20.12.2-win-x64.zip": {
+              "bytes": 69252760,
+              "n_files": 1
+            },
+            "putty-0.81-w64.zip": {
+              "bytes": 6533288,
+              "n_files": 6
+            }
+          },
+          "rule": {
+            "archives": [
+              "go1.22.2.windows-amd64.zip",
+              "node-v20.12.2-win-x64.zip",
+              "putty-0.81-w64.zip"
+            ],
+            "ignore_case": true,
+            "member_regex": "\\.(exe|dll)$",
+            "note": "the three pinned archives carry .exe members only (Go's toolchain binaries, node.exe, PuTTY's programs); no .dll matches"
+          }
+        },
+        "py_src": {
+          "bytes": 189552368,
+          "n_files": 15055,
+          "per_archive": {
+            "Django-5.0.6.tar.gz": {
+              "bytes": 17060221,
+              "n_files": 2774
+            },
+            "SQLAlchemy-2.0.29.tar.gz": {
+              "bytes": 18606702,
+              "n_files": 688
+            },
+            "astropy-6.0.1.tar.gz": {
+              "bytes": 13203150,
+              "n_files": 919
+            },
+            "matplotlib-3.8.4.tar.gz": {
+              "bytes": 8678157,
+              "n_files": 900
+            },
+            "networkx-3.3.tar.gz": {
+              "bytes": 6185846,
+              "n_files": 650
+            },
+            "numpy-1.26.4.tar.gz": {
+              "bytes": 14075868,
+              "n_files": 1093
+            },
+            "pandas-2.2.2.tar.gz": {
+              "bytes": 20372570,
+              "n_files": 1413
+            },
+            "pygments-2.17.2.tar.gz": {
+              "bytes": 4525015,
+              "n_files": 380
+            },
+            "scikit-learn-1.4.2.tar.gz": {
+              "bytes": 13251061,
+              "n_files": 861
+            },
+            "scipy-1.13.0.tar.gz": {
+              "bytes": 17756505,
+              "n_files": 1029
+            },
+            "sphinx-7.2.6.tar.gz": {
+              "bytes": 3983827,
+              "n_files": 591
+            },
+            "statsmodels-0.14.1.tar.gz": {
+              "bytes": 15210246,
+              "n_files": 1176
+            },
+            "sympy-1.12.tar.gz": {
+              "bytes": 23781837,
+              "n_files": 1490
+            },
+            "twisted-24.3.0.tar.gz": {
+              "bytes": 12861363,
+              "n_files": 1091
+            }
+          },
+          "rule": {
+            "archives": [
+              "Django-5.0.6.tar.gz",
+              "numpy-1.26.4.tar.gz",
+              "pandas-2.2.2.tar.gz",
+              "scikit-learn-1.4.2.tar.gz",
+              "SQLAlchemy-2.0.29.tar.gz",
+              "sympy-1.12.tar.gz",
+              "scipy-1.13.0.tar.gz",
+              "sphinx-7.2.6.tar.gz",
+              "matplotlib-3.8.4.tar.gz",
+              "twisted-24.3.0.tar.gz",
+              "astropy-6.0.1.tar.gz",
+              "networkx-3.3.tar.gz",
+              "statsmodels-0.14.1.tar.gz",
+              "pygments-2.17.2.tar.gz"
+            ],
+            "member_regex": "\\.py$"
+          }
+        },
+        "rfc_txt": {
+          "bytes": 33698087,
+          "n_files": 600,
+          "rule": {
+            "dir": "rfc2"
+          }
+        },
+        "rst_doc": {
+          "bytes": 25017499,
+          "n_files": 2861,
+          "per_archive": {
+            "Django-5.0.6.tar.gz": {
+              "bytes": 4435,
+              "n_files": 4
+            },
+            "SQLAlchemy-2.0.29.tar.gz": {
+              "bytes": 5202054,
+              "n_files": 191
+            },
+            "astropy-6.0.1.tar.gz": {
+              "bytes": 2965272,
+              "n_files": 292
+            },
+            "matplotlib-3.8.4.tar.gz": {
+              "bytes": 2635710,
+              "n_files": 340
+            },
+            "networkx-3.3.tar.gz": {
+              "bytes": 562490,
+              "n_files": 168
+            },
+            "numpy-1.26.4.tar.gz": {
+              "bytes": 4325354,
+              "n_files": 451
+            },
+            "pandas-2.2.2.tar.gz": {
+              "bytes": 0,
+              "n_files": 0
+            },
+            "pygments-2.17.2.tar.gz": {
+              "bytes": 192319,
+              "n_files": 34
+            },
+            "scikit-learn-1.4.2.tar.gz": {
+              "bytes": 2598339,
+              "n_files": 154
+            },
+            "scipy-1.13.0.tar.gz": {
+              "bytes": 2562767,
+              "n_files": 350
+            },
+            "sphinx-7.2.6.tar.gz": {
+              "bytes": 873974,
+              "n_files": 369
+            },
+            "statsmodels-0.14.1.tar.gz": {
+              "bytes": 663439,
+              "n_files": 86
+            },
+            "sympy-1.12.tar.gz": {
+              "bytes": 1228418,
+              "n_files": 275
+            },
+            "twisted-24.3.0.tar.gz": {
+              "bytes": 1202928,
+              "n_files": 147
+            }
+          },
+          "rule": {
+            "archives": [
+              "Django-5.0.6.tar.gz",
+              "numpy-1.26.4.tar.gz",
+              "pandas-2.2.2.tar.gz",
+              "scikit-learn-1.4.2.tar.gz",
+              "SQLAlchemy-2.0.29.tar.gz",
+              "sympy-1.12.tar.gz",
+              "scipy-1.13.0.tar.gz",
+              "sphinx-7.2.6.tar.gz",
+              "matplotlib-3.8.4.tar.gz",
+              "twisted-24.3.0.tar.gz",
+              "astropy-6.0.1.tar.gz",
+              "networkx-3.3.tar.gz",
+              "statsmodels-0.14.1.tar.gz",
+              "pygments-2.17.2.tar.gz"
+            ],
+            "member_regex": "\\.rst$"
+          }
+        }
+      },
+      "rfc_files": 600,
+      "why_these": "the same five real families as 0018, from DIFFERENT projects: no file here is another edition of a 0018 pinned project (CPython, SQLite), no pinned RFC number is repeated, and no RFC that obsoletes, updates, is obsoleted by or is updated by a 0018-pinned RFC is drawn (the RFC Editor's index annotations, both directions). Python projects are PyPI source distributions (their .py feed py_src and their .rst feed rst_doc); C projects are upstream release tarballs (.c and .h); Windows programs are upstream release zips (.exe and .dll); RFCs are individual texts from the RFC Editor."
+    },
+    "v2_after_the_review": {
+      "exclusion_count": "the manifest's exclusion count was the size of the distinct-hash set (2534), not the whole-chunk count (2537); both are now banked under their own names",
+      "prototype_scan_on_the_v1_candidates": "at the 1 KiB rule: c_src 2 of 2315 whole chunks, pe_bin 149 of 5578 (55 with a 4 KiB run, one whole chunk identical at a shifted offset), py_src 3 of 5784, rfc_txt 186 of 1025 (RFC boilerplate paragraphs, none reaching 4 KiB), rst_doc 0 of 763; the first serial prototype exhausted memory beside the running gate and restarted the container, the slice-by-slice version runs in about five minutes",
+      "rfc_resample": "RFCs related to a 0018-pinned RFC by an Obsoletes, Obsoleted by, Updates or Updated by annotation in either direction (323 numbers) were removed from the candidate list and the 600 re-drawn with the same seed (34 numbers in common with the first draw); the index as served is hashed in the compliance manifest and the candidate list's sha256 in the pins",
+      "run_overlap_exclusion": "the corpus lens found node.exe carrying the same OpenSSL 3.0.13 build as 0018's libcrypto-3.dll (and shared runs with python311.dll and unicodedata.pyd): kilobyte runs identical at shifted offsets, invisible to whole-chunk hashing and to the runner's exact-row scan. The builder now drops any candidate chunk sharing a 1024-byte run with any 0018 pinned blob at any offset (64-bit polynomial rolling hash over every 64-byte window of the 0018 blobs, sixteen consecutive aligned non-constant windows of the candidate), uniformly across families; the drops per family are banked in the manifest and sealed"
+    },
+    "what": "a second real-content fit corpus from NEW pinned upstream files of 0018's five real families, built pre-freeze by tools/pivot/corpus_realfit2.py and sealed by array hash; nothing under data/pivot is committed",
+    "why_three_doublings": "Rung 4 + d holds 0021's whole block plus, per family, the first n_f x (2^d - 1) chunks with rows of 0024's seeded pool, n_f being the family's chunks with rows in 0021's block: every rung therefore holds exactly 2^d times rung 4's plaintexts of every family, the family mix of 0021's block is preserved to the chunk (py_src carries r1 0.6486, r2 0.6538, r3 0.6543, r4 0.6527, r5 0.6527, r6 0.6525, r7 0.6528 of the rows), a lower rung is a subset of the next, and the abscissa is exact. The pool order is the nesting order, so the rungs are one corpus growing rather than three draws. The rows of a new rung are permuted whole by a sealed stream so that M4's last-10 percent validation split is a random tenth of the rung; rungs 1..4 keep 0023's order (the reproduction). Three doublings, not more, because py_src - 0.6527 of 0021's rows - needed 4704 new plaintexts with rows and the fourteen pinned Python projects yield 5781 candidate chunks; a fourth doubling would need 10080."
+  },
+  "cost": {
+    "checkpoints": "artifacts/pivot/realcurve2_4096_ckpt; resume by relaunching the identical command",
+    "corpus_build_seconds_banked": 452.2,
+    "estimate_stated_in_advance": "a range, from banked numbers. Linear in rows from 0023's rung-4 seconds: model about r1 45 s, r2 90 s, r3 178 s, r4 356 s, r5 712 s, r6 1420 s, r7 2844 s; logistic about r1 8 s, r2 16 s, r3 33 s, r4 66 s, r5 131 s, r6 262 s, r7 524 s; trees seconds; the null on the top rung about 927 s; the shift arm about rung 4's; in all about 8097 s of fits (2.2 hours). The cap-bound: 0023 banked 5.734 s per iteration for the model and 0.167 s for the logistic at rung 4 (62 and 392 iterations), and the model's iteration count grew with rows over the first decade ([31, 36, 47, 62]); if the new rungs run to the sealed caps (250 and 1000) with per-iteration time scaling with rows, the new rungs cost r5 2871 s, r6 5725 s, r7 11467 s for the model and r5 334 s, r6 667 s, r7 1336 s for the logistic, 24604 s in all (6.8 hours). Between 2.2 and 6.8 hours of fits on this machine at three threads, plus the scoring-set materialisation, the row-identity scan over both fit corpora and twenty-five scorings; the top rung's model fit is one uncheckpointable stretch of up to that size. COULD NOT VERIFY until run - the banked seconds are the measurement.",
+    "fit_seconds_0023_banked_at_rung_4": {
+      "depth3_tree": 3.7,
+      "logistic": 65.5,
+      "model": 355.5,
+      "null": 115.9
+    },
+    "memory": "the top rung's float64 block is about 1.87 GB, the two fit corpora in float32 about 0.98 GB and the scoring set 1.42 GB; the sealed memory_kill_gb is 13.0 on a 15 GB machine",
+    "what_a_kill_between_scoring_and_banking_does": "run_recipe_search.run_fit scores a fit, refills the block if it was standardised, and only then writes the checkpoint and the 'completed' event; a kill inside that window leaves no trace, the relaunch refits and rescores the role, and the reader's 'exactly one completion' check cannot see the first scoring (inherited from 0023's runner; stated rather than fixed, because the shared runner is behind frozen readers).",
+    "what_the_smoke_touches": "the smoke fits on scratchpad corpora and writes to the scratchpad only, but it hashes the sealed builder cache and scores on 0003's sealed evaluation rows (as 0023's did); the disclosure counts it."
+  },
+  "design_decisions": {
+    "expected_outcome": "On the curve: SECOND_DECADE_RISES, more likely than not, but less likely than 0023's pass was. For: 0023's second half rose at 0.007344 per doubling with an interval [0.006199, 0.00846] well clear of the bar, and the new content is the same five kinds. Against: 0023's rise was measured on the scored files' own unscored chunks; every reading the record has of content the model did not see is flat (0018/0019, 0015), and the new files are other projects - the per-plaintext rate on other files could be anywhere between 0023's and 0. On the lead: LINEAR_LEADS or NO_SEPARATION, more likely than MODEL_LEADS. For: over the first decade the logistic bought 0.002207 more per doubling than the model with a paired interval entirely below 0, the model's lead shrank to 0.0014 at rung 4, and the straight lines cross before the first new doubling (arithmetic sealed under reference_slopes_informational). Against: the model's rung-to-rung gains fell over the first decade while the logistic's did not, which could as easily reverse on new files; and the paired interval of a difference of about 0.005 over 38452 rows in 1500 chunks may include 0. Either outcome on either question is published at the same size in the same places; the verdict string names both.",
+    "first_decade_reproduced_not_reused": "rungs 1..4 are refitted (0023's rungs row for row) rather than copied from 0023's artifact: a machinery that no longer reproduces the first decade is not allowed to measure the second, and the twelve readings must land within 0.005 of 0023's banked values (the runner files NOT RUN on the first drift it sees, at rung 4, before any new plaintext is fitted)",
+    "no_replicate": "a second nesting of the new rungs would double the pool and the fits; 0023's replicate read the fit-side variance at the smallest rung once; the sealed file names the second seed as what this does not cover",
+    "null_on_the_top_rung": "the null control permutes the TOP rung's labels (in rung order) with np.random.default_rng([seed2, 200]) and fits M4 on that rung; the permuted array is computed here from the sealed corpora and its hash sealed; it is the first role in the order so that no other draw precedes it and so that the largest block is probed first",
+    "recipes_are_fixed": "0021's M4, L3 and D1 verbatim, as 0023 sealed them; no search",
+    "reproduction_before_any_new_plaintext": "null on the top rung; rung 4 (0021's block: the reproduction of 0021 and of 0023's top rung); rungs 1, 2, 3 (the reproduction of 0023's curve) - every reproduction before any new plaintext is fitted; rungs 5, 6, 7 ascending; then the shift arm; the model last within each rung",
+    "rungs_nested_on_0021s_block_in_exact_doublings": "Rung 4 + d holds 0021's whole block plus, per family, the first n_f x (2^d - 1) chunks with rows of 0024's seeded pool, n_f being the family's chunks with rows in 0021's block: every rung therefore holds exactly 2^d times rung 4's plaintexts of every family, the family mix of 0021's block is preserved to the chunk (py_src carries r1 0.6486, r2 0.6538, r3 0.6543, r4 0.6527, r5 0.6527, r6 0.6525, r7 0.6528 of the rows), a lower rung is a subset of the next, and the abscissa is exact. The pool order is the nesting order, so the rungs are one corpus growing rather than three draws. The rows of a new rung are permuted whole by a sealed stream so that M4's last-10 percent validation split is a random tenth of the rung; rungs 1..4 keep 0023's order (the reproduction). Three doublings, not more, because py_src - 0.6527 of 0021's rows - needed 4704 new plaintexts with rows and the fourteen pinned Python projects yield 5781 candidate chunks; a fourth doubling would need 10080.",
+    "seed2_and_its_stream_words": {
+      "corpus_pool": "np.random.default_rng([seed2, family_index + 1]) in tools/pivot/corpus_realfit2.py (family_index 0..4)",
+      "null": "np.random.default_rng([seed2, 200])",
+      "rows": "np.random.default_rng([seed2, 100 + rung]) for rungs 5..7",
+      "shift_arm_rows": "np.random.default_rng([seed2, 150])",
+      "why_distinct": "SeedSequence pads short entropy with zeros, so [seed2, 0] would be seed2's own stream; every use of seed2 here carries a distinct second word"
+    },
+    "the_0021_bar_flag_uses_the_tree_alone": "0021's clause (best trivial baseline on the same rows plus 0.05) re-applied at the top rung, banked twice and labelled: against the depth-3 tree plus 0.05 (the tree stood in for the best of 0021's four baselines; the other three read below it at 0021 and are not refitted here, so that flag can only be optimistic), and against the higher of the tree and the standardised logistic plus 0.05 (OPERATING_RULES 4a names logistic regression among the trivial baselines; 0021's four did not include it, and L3 is fitted at every rung here). Neither is a verdict.",
+    "the_bootstrap_clause": "the 2.5th percentile of the model's second-decade slope under the sealed cluster bootstrap over the scored real chunks is > 0. The interval is over the scored chunks only and does not resample the fit side; a slope at or above the bar whose interval reaches 0 is SECOND_DECADE_FLAT: four points and a rise the scored chunks do not agree on is not a rise.",
+    "the_clause_is_the_second_decade": "the model's SECOND-decade slope, in real-family accuracy per doubling of plaintexts over rungs 4..7, >= 0.005. The bar is 0023's restated, a design choice made before any second-decade number exists: the rise the record agreed in 0016 and 0023 to call a rise, about two thirds of 0023's measured 0.007344 and about half the builder's per-plaintext rate. It is not the instrument's resolution: 0023's scored-chunk intervals were about 0.0011 per doubling wide either side. 'The record's rate' in this document always means 0.005 per doubling; the second-minus-first-decade slope is quoted in the same sentence as any pass. 0.005 over 3.0 doublings is an end-to-end rise of 0.015, 577 rows of 38452. A pass is 'keeps rising at the bar on other files of the same kinds', not 'rises like the first decade'.",
+    "the_lead_rule_is_in_the_verdict_string": "the 95 percent paired cluster-bootstrap interval of model minus logistic real-family top-1 at the top rung, over the scored real chunks with the slope bootstrap's own resamples: entirely above 0 is MODEL_LEADS, entirely below 0 is LINEAR_LEADS, otherwise NO_SEPARATION (never 'equal'); the verdict string carries it as a suffix. If the model or the logistic at the top rung is at its iteration cap, the suffix is still read by the rule, but every document that states it states '(the <role> at its iteration cap at the top rung)' in the same sentence and the lead is not quoted as a recipe comparison, exactly as the difference flag is not. This is not a pass/fail clause: each of the three readings is a legitimate outcome and the verdict string carries whichever the interval gives, beside the curve part. No document quotes the curve part without the lead part.",
+    "the_second_decade_reading": "the reader names what the second-decade slope did beside any FLAT: a slope whose scored-chunk interval sits entirely below 0 is published as 'adding files of the same kinds lowered the model's reading on the original files', beside the per-family second-decade slopes and the shift arm; a slope between 0 and the bar as 'below the record's rate; whether it is flat is not resolved here'.",
+    "the_shift_arm": "rung 5's new plaintexts alone - per family the first n_f chunks with rows of 0024's pool, none of 0021's block - with rows permuted by np.random.default_rng([20260917, 150]); informational: read beside rung 4 (the same plaintext count, the scored files' own chunks) as a direct reading of what other files of the same families buy for the original files. 1029 plaintexts, 26420 rows: exactly rung 5's new chunks, so no extra plaintext is drawn for it. Its readings, its difference from rung 4 (what other files buy for the original files at the same plaintext count) and its difference from rung 5 (what the original files' own chunks add on top of it) are banked as flags.",
+    "the_two_0021_bar_flags": "0021's clause (best trivial baseline on the same rows plus 0.05) re-applied at the top rung, banked twice and labelled: against the depth-3 tree plus 0.05 (the tree stood in for the best of 0021's four baselines; the other three read below it at 0021 and are not refitted here, so that flag can only be optimistic), and against the higher of the tree and the standardised logistic plus 0.05 (OPERATING_RULES 4a names logistic regression among the trivial baselines; 0021's four did not include it, and L3 is fitted at every rung here). Neither is a verdict.",
+    "why_the_lead_is_named_in_the_verdict": "0023's open question was whether the linear rule overtakes the model; a flag can be left unquoted, a verdict suffix cannot, so the verdict string carries MODEL_LEADS, LINEAR_LEADS or NO_SEPARATION beside RISES or FLAT and no document quotes one part without the other"
+  },
+  "gate_evolution": {
+    "v1": "122 cases against the first instrument; the gate-only run was interrupted when the review's first overlap-scan prototype exhausted memory beside it and the container restarted; no result banked",
+    "v2": "148 cases against the reviewed instrument (straddling-lead controls, the lead-versus-slope-difference control, FLAT with every lead suffix, the exception path exercised, the shift arm, the cap flag, the whole-record checkpoint comparison): 142 detected; the six holes were the control's own construction - the checkpoint helper wrote the banked record where the runner writes run_fit's (six fields fewer), the record-requirements case did not know the shift arm's name, and the just-above-the-bar control let the default logistic overtake the model at the top rung",
+    "v3": "148/148 on the six re-run in isolation, then the full suite (banked in artifacts/verification/mutation_report.json)"
+  },
+  "instrument": {
+    "corpus_builder": "tools/pivot/corpus_realfit2.py (pins in tools/pivot/ext_source_pins2.json, fetch by tools/pivot/fetch_ext_sources2.sh); imports corpus_ext.py's chunk_rows and never copies it; --verify-pins, --build, --check, --disjoint, --probe",
+    "fixture": "tests/fixtures/realcurve2_runner_shape.json, captured from the runner's smoke run",
+    "gate": "tests/mutation_test.py realcurve2_4096: the control is built from the fixture's key set with the reader's sealed values, vectors marked at chunk granularity with row precision (nested, or rotated per rung for the bootstrap case), the curves, slopes, bootstrap and leads computed with the runners' own functions; controls for every verdict string the reader can emit",
+    "pre_freeze_check": "tools/prereg_checks/prefreeze_0024.py",
+    "preregistration_generator": "make_prereg_0024.py (scratchpad): every sealed value read from 0021's and 0023's banked artifacts, the corpus manifest and the pins, or computed by calling the runner's own functions on the data",
+    "reader": "tools/readers/realcurve2_4096_verdict.py, generated from a template by a generator; every literal from the sealed file or a banked artifact; slope_bootstrap, ols_slope and paired_lead_bootstrap copied from the runners statement for statement (the pre-freeze check compares the ASTs)",
+    "runner": "tools/pivot/run_realcurve2.py (single stage; rung_partition2, sealed_order, paired_lead_bootstrap are module-level so the generator, the check and the gate call them; imports run_realcurve.py's rung_partition, ols_slope and slope_bootstrap); reuses run_recipe_search.py's Store/run_fit/Block/launch rules and run_realfit.py's corpus_block; refusal and NOT RUN paths as 0023's",
+    "smoke": {
+      "fits": 25,
+      "lead_at_top": "NO_SEPARATION",
+      "model_slope_per_doubling_second_decade": 0.00789,
+      "note": "scratchpad corpora only (0023's 16-per-family smoke fit corpus and a 126-pool-chunk-per-family smoke of the new corpus); voided by the reader by design",
+      "wall_seconds": 1074.8
+    }
+  },
+  "pre_freeze_review": {
+    "adopted": {
+      "corpus_lens": [
+        "run-overlap exclusion (1024-byte runs at any offset) added to the builder and sealed, corpus rebuilt",
+        "RFCs related to a pinned RFC by an Obsoletes/Updates annotation removed from the sample; the index hashed and the candidate list's sha256 banked",
+        "exclusion count named for what it is (distinct hashes 2534, whole chunks 2537), both banked",
+        "the count-versus-source confound stated in what_this_is_and_is_not and in the stop rules; a shift arm (rung 5's new plaintexts alone at rung 4's count, three informational fits) added; '.exe and .dll' corrected to '.exe'; the composition by bytes stated",
+        "EXT_SOURCES2.md notice counts recounted with the exact patterns and the correct range on the re-sampled files"
+      ],
+      "design_lens": [
+        "the extrapolated top-rung numbers removed from the prose and the in-flight paragraph; sealed as informational only and the prefreeze check now asserts they are NOT quoted",
+        "the lead rule carries the iteration-cap clause; the reader names a capped role beside the lead and flags lead_at_top_is_a_recipe_comparison",
+        "a falling second decade is named: the reader and the stop rules carry the sentence",
+        "the bar's wording: a design choice restated, not the instrument's resolution; 'the record's rate' means 0.005",
+        "the fit order: every reproduction before any new plaintext",
+        "the 0021-bar flag banked twice, with the tree and with the higher of the tree and the logistic as floor",
+        "the rung-4 lead reading stated against 0023's point sentence",
+        "'neither outcome revises' reworded: FLAT bounds 0023's 'holds on real files' sentence and it receives a forward pointer on publication",
+        "the decade statement in every document that states the verdict",
+        "the composition of the pool in the prose and 'a per-archive verdict' in what this does not cover",
+        "no replicate stated as a weakness and the sensitivity slope banked",
+        "'pinned and licensed' reworded to name the COULD NOT VERIFY entries",
+        "the lead by rung listed in full"
+      ],
+      "reader_and_gate_lens": [
+        "a control whose top-rung lead interval genuinely straddles 0 (the logistic's top-rung marking rotated), in both point-sign directions",
+        "a control where the lead at the top and the paired slope-difference interval disagree",
+        "the exception path exercised (partition as a string) and the fits-not-a-mapping case kept on the normal path",
+        "a harness error is never counted as a detection",
+        "FLAT controls with MODEL_LEADS and NO_SEPARATION suffixes",
+        "a null record fitted on rung 4's rows; the other missing cases (chunk count, second-decade abscissae, top-level doublings, fit2 row counts, lead unit, first-decade reproduction reading, lead point, rung_bound row hash, real row count); a pass case for a role at its iteration cap",
+        "the checkpoint cross-check compares the whole banked record",
+        "the gate's output line carries six validity clauses"
+      ],
+      "runner_lens": [
+        "the cost estimate restated as a range from banked per-iteration seconds and the sealed caps",
+        ".gitignore entries for the checkpoint directory's heartbeat and temp files",
+        "the scoring-to-banking window and the smoke's reads of the sealed cache documented in the sealed file",
+        "NOT RUN wording: 'before the first checkpoint exists'",
+        "a banked checkpoint no longer rebuilds its rung's block on resume"
+      ]
+    },
+    "declined": {
+      "a_per_archive_chunk_count_in_the_manifest": "chunks straddle archive boundaries inside a family blob; the byte shares per archive are banked and quoted instead",
+      "a_scored_ledger_event_in_run_fit": "the shared runner sits behind frozen readers whose fixtures enumerate the ledger's event kinds; the window is documented in the sealed file instead",
+      "a_smoke_cache_override": "the smoke's reads of the sealed builder cache are documented; a scratchpad cache would be a new build",
+      "reader_writes_a_VOID_verdict_file_mid_run": "an incomplete artifact reads as VOID, as every reader in the record reads one; the operator rule is that the reader is not run before the runner has finished, and the final read overwrites",
+      "requiring_the_checkpoint_directory": "kept optional as sealed (the reader cross-checks it whenever present); the comparison was strengthened"
+    },
+    "method": "four independent adversarial reviews of the unfrozen instrument, one lens each (the corpus and the partition; the runner; the reader and the gate; the design, the clauses and the prose), each read-only with its own numbers recomputed; every finding adopted or declined with a reason, the instrument rebuilt, the smoke and the gate re-run, before the freeze"
+  },
+  "preregistration": "0024-realcurve2-4096",
+  "schema": "raise-v1/engineering_log/1",
+  "status": "unfrozen; instrument complete; four-lens pre-freeze review adopted; full gate run pending",
+  "why_this_exists": "0023 read REAL_CURVE_RISES: over 130 to 1029 real plaintexts the model rose 0.007344 per doubling (interval [0.006199, 0.00846]), the standardised logistic 0.009551 ([0.008478, 0.010649]) and the depth-3 tree 0.003002; model minus logistic -0.002207 with a paired interval [-0.003707, -0.000752] entirely below 0, and the model's lead over the logistic by rung was [0.0063, 0.0126, 0.0054, 0.0014], 0.0014 at the top. The top rung was 0021's whole fit block - every chunk of the five pinned files that the sealed evaluation set does not use - so the record held no more real plaintexts, and 0023 named 'a second decade' and 'more real content than 0021's fit block (no such corpus exists in the record)' as what it did not cover. Two questions follow directly from its numbers. First, whether the rise continues when the added plaintexts are OTHER files of the same families, which is the only way real content can ever grow (0023's rise was measured on the scored files' own unscored chunks). Second, whether the linear rule, which bought more per doubling than the model over the first decade, overtakes it: if both of 0023's straight lines simply continued they would cross before the first new doubling (that arithmetic is sealed as informational under reference_slopes_informational and is not quoted in any document). This run builds the corpus that lets both be asked: 23 new archives and 600 new RFC texts, pinned, with licences filed and two COULD NOT VERIFY entries stated (docs/compliance/EXT_SOURCES2.md), cut into 7574 plaintexts with rows that share no whole chunk and no kilobyte run with anything 0018 pinned, and nested on 0021's block in exact doublings of every family."
+}
