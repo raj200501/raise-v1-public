@@ -27,7 +27,10 @@
     "r6_logistic": 0.0858,
     "r6_model": 0.0867,
     "r7_depth3_tree": 0.072,
-    "r7_logistic": 0.0873
+    "r7_logistic": 0.0873,
+    "r7_model": 0.0891,
+    "s4_depth3_tree": 0.0704,
+    "s4_logistic": 0.0842
   },
   "chance_accuracy": 0.038462,
   "class_names": [
@@ -76,7 +79,7 @@
     "n_source_chunks": 50000
   },
   "cost": {
-    "banked_fit_seconds_total": 3244.7,
+    "banked_fit_seconds_total": 5663.7,
     "checkpoints": "artifacts/pivot/realcurve2_4096_ckpt",
     "interruptions_by_name": {
       "null": 0,
@@ -99,7 +102,10 @@
       "r6_logistic": 0,
       "r6_model": 0,
       "r7_depth3_tree": 0,
-      "r7_logistic": 0
+      "r7_logistic": 0,
+      "r7_model": 0,
+      "s4_depth3_tree": 0,
+      "s4_logistic": 0
     },
     "seconds_by_name": {
       "null": 223.1,
@@ -122,9 +128,12 @@
       "r6_logistic": 175.5,
       "r6_model": 1141.1,
       "r7_depth3_tree": 35.2,
-      "r7_logistic": 371.6
+      "r7_logistic": 371.6,
+      "r7_model": 2352.6,
+      "s4_depth3_tree": 2.9,
+      "s4_logistic": 63.5
     },
-    "wall_seconds_this_invocation": 3611.3
+    "wall_seconds_this_invocation": 6121.4
   },
   "curve_sha256": "9d18e9d470d4ec3edc73d261c544512d60c8eafb62659b62c2b73268aeada4d4",
   "curve_spec": {
@@ -1575,7 +1584,25 @@
       "slope_second_decade_with_rung4_at_reference": 0.00638
     },
     "model": {
-      "complete": false,
+      "builder_eval_slope_per_doubling_second_decade": 0.00231,
+      "complete": true,
+      "end_to_end_gain_both_decades": 0.043,
+      "end_to_end_gain_second_decade": 0.0211,
+      "per_family_slope_per_doubling_second_decade": {
+        "c_src": 0.00607,
+        "pe_bin": 0.00424,
+        "py_src": 0.00723,
+        "rfc_txt": 0.00823,
+        "rst_doc": 0.00899
+      },
+      "rung_to_rung_gains": [
+        0.0091,
+        0.0074,
+        0.0054,
+        0.0043,
+        0.0064,
+        0.0104
+      ],
       "rungs": [
         {
           "builder_eval_top1": 0.0807,
@@ -1679,8 +1706,28 @@
           "n_rows": 105214,
           "rung": 6
         },
-        null
-      ]
+        {
+          "builder_eval_top1": 0.0891,
+          "decade": 2,
+          "ext_per_family": {
+            "c_src": 0.1476,
+            "pe_bin": 0.1092,
+            "py_src": 0.1553,
+            "rfc_txt": 0.1469,
+            "rst_doc": 0.1417
+          },
+          "ext_real_correct": 5399,
+          "ext_real_top1": 0.1404,
+          "log2_chunks": 13.007027,
+          "n_chunks": 8232,
+          "n_rows": 210751,
+          "rung": 7
+        }
+      ],
+      "slope_per_doubling_both_decades": 0.006645,
+      "slope_per_doubling_first_decade": 0.007344,
+      "slope_per_doubling_second_decade": 0.00697,
+      "slope_second_decade_with_rung4_at_reference": 0.00697
     }
   },
   "denominators": [
@@ -1694,9 +1741,9 @@
   "environment": {
     "cgroup_memory_limit": "unlimited",
     "cpu_cores": 4,
-    "disk_free_gb": 3.65,
+    "disk_free_gb": 3.64,
     "gpu": "none",
-    "mem_available_gb": 10.33,
+    "mem_available_gb": 11.89,
     "nice": 10,
     "numpy": "2.4.6",
     "python": "3.11.15",
@@ -1981,6 +2028,36 @@
       "rst_doc": 0.1406,
       "sql": 0.1038,
       "xml": 0.1132
+    },
+    "r7_model": {
+      "c_src": 0.1476,
+      "hexdump": 0.0803,
+      "pe_bin": 0.1092,
+      "py_src": 0.1553,
+      "rfc_txt": 0.1469,
+      "rst_doc": 0.1417,
+      "sql": 0.1087,
+      "xml": 0.1078
+    },
+    "s4_depth3_tree": {
+      "c_src": 0.0986,
+      "hexdump": 0.071,
+      "pe_bin": 0.0756,
+      "py_src": 0.0822,
+      "rfc_txt": 0.101,
+      "rst_doc": 0.103,
+      "sql": 0.0449,
+      "xml": 0.061
+    },
+    "s4_logistic": {
+      "c_src": 0.119,
+      "hexdump": 0.0931,
+      "pe_bin": 0.0926,
+      "py_src": 0.1343,
+      "rfc_txt": 0.1179,
+      "rst_doc": 0.125,
+      "sql": 0.0969,
+      "xml": 0.0999
     }
   },
   "ext_real_correct": {
@@ -2004,7 +2081,10 @@
     "r6_logistic": 5081,
     "r6_model": 4999,
     "r7_depth3_tree": 3532,
-    "r7_logistic": 5249
+    "r7_logistic": 5249,
+    "r7_model": 5399,
+    "s4_depth3_tree": 3548,
+    "s4_logistic": 4536
   },
   "ext_real_families": [
     "c_src",
@@ -2034,7 +2114,10 @@
     "r6_logistic": 0.1321,
     "r6_model": 0.13,
     "r7_depth3_tree": 0.0919,
-    "r7_logistic": 0.1365
+    "r7_logistic": 0.1365,
+    "r7_model": 0.1404,
+    "s4_depth3_tree": 0.0923,
+    "s4_logistic": 0.118
   },
   "ext_synthetic_families": [
     "hexdump",
@@ -2062,7 +2145,10 @@
     "r6_logistic": 0.12,
     "r6_model": 0.1173,
     "r7_depth3_tree": 0.0803,
-    "r7_logistic": 0.1224
+    "r7_logistic": 0.1224,
+    "r7_model": 0.1248,
+    "s4_depth3_tree": 0.0799,
+    "s4_logistic": 0.11
   },
   "first_launch_utc": "2026-09-17T20:43:53Z",
   "fit2_corpus": {
@@ -2326,9 +2412,16 @@
     "r7_logistic": {
       "n_iter": 664
     },
-    "r7_model": null,
-    "s4_depth3_tree": null,
-    "s4_logistic": null,
+    "r7_model": {
+      "n_iter": 153
+    },
+    "s4_depth3_tree": {
+      "depth": 3,
+      "n_leaves": 8
+    },
+    "s4_logistic": {
+      "n_iter": 471
+    },
     "s4_model": null
   },
   "fit_record_top1_is": "each record's top1 and top1_non_gutenberg are over the concatenated 260000 + 61409 scoring set; per_family is over every family present in it - the builder's eight on the evaluation rows and the eight 'ext:'-prefixed extension families",
@@ -3971,6 +4064,240 @@
       "top1_non_gutenberg": 0.0952,
       "utc": "2026-09-17T21:37:19Z",
       "val": null
+    },
+    "r7_model": {
+      "block_refills": [
+        {
+          "order": "canonical",
+          "probe_ok": true,
+          "utc": "2026-09-17T21:43:39Z"
+        }
+      ],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "hgb",
+      "fingerprint": "3ee252f7ca671ba0",
+      "fit_info": {
+        "n_iter": 153
+      },
+      "fit_rows_sha256": "662e783c813b2685e85711c0c1f04539411556e740660b15191f6935a2ac5d35",
+      "fit_rows_sorted_sha256": "748589dc08be26b98e7f8a2871ae7c07691ca408fb60c34cb9ffabbf7e8d7e8c",
+      "head": "model",
+      "heartbeat_max_rss_gb": 6.15,
+      "id": "M4",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 210751,
+      "n_rung_chunks": 8232,
+      "n_rung_rows": 210751,
+      "params": {
+        "l2_regularization": 1.0,
+        "learning_rate": 0.05,
+        "max_iter": 250,
+        "max_leaf_nodes": 127,
+        "n_iter_no_change": 20
+      },
+      "params_sha256": "9c19bb4d24ea1b96659e43a3e7ce8c71c2980a1bf4abe5066afe9761380a41a8",
+      "per_example_sha256": "3c905635e7248d8075ad6e8c408530e0750ba34ec677b7ee8f8cee0f0c3be874",
+      "per_family": {
+        "base64": 0.0726,
+        "binary": 0.0735,
+        "code": 0.0835,
+        "csv": 0.0924,
+        "ext:c_src": 0.1476,
+        "ext:hexdump": 0.0803,
+        "ext:pe_bin": 0.1092,
+        "ext:py_src": 0.1553,
+        "ext:rfc_txt": 0.1469,
+        "ext:rst_doc": 0.1417,
+        "ext:sql": 0.1087,
+        "ext:xml": 0.1078,
+        "gutenberg": 0.0964,
+        "json": 0.1065,
+        "log": 0.0976,
+        "mixed": 0.0903
+      },
+      "role": "model",
+      "rss_gb": 5.72,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 10.59,
+      "ru_maxrss_gb": 11.59,
+      "rung": 7,
+      "scaled": false,
+      "seconds": 2352.6,
+      "seed": 20260825,
+      "stage": "curve",
+      "status": "fit",
+      "top1": 0.096,
+      "top1_non_gutenberg": 0.0959,
+      "utc": "2026-09-17T21:43:41Z",
+      "val": "frag"
+    },
+    "s4_depth3_tree": {
+      "block_refills": [],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "tree",
+      "fingerprint": "0d0bdb7ef5d008ab",
+      "fit_info": {
+        "depth": 3,
+        "n_leaves": 8
+      },
+      "fit_rows_sha256": "cfa130ee81f23a2d6ad7bb6085089d9206cb3d72cbc3bcd3a0e841a493933eea",
+      "fit_rows_sorted_sha256": "016b97f622baebc2a2b1bb34eb8f564deecec1dac9b4674d1b97b4c9e3538f35",
+      "head": "depth3_tree",
+      "heartbeat_max_rss_gb": 3.89,
+      "id": "D1",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 26420,
+      "n_rung_chunks": 1029,
+      "n_rung_rows": 26420,
+      "params": {
+        "max_depth": 3
+      },
+      "params_sha256": "8ed9a81fabb134e82a4902e39c110f2291b84f7e3f8e188386d9114b9b45f979",
+      "per_example_sha256": "4fd105488a5e87e3ac1b1d7879dbf6971393e51896a61177b3b51234d429baa6",
+      "per_family": {
+        "base64": 0.0689,
+        "binary": 0.076,
+        "code": 0.0565,
+        "csv": 0.0399,
+        "ext:c_src": 0.0986,
+        "ext:hexdump": 0.071,
+        "ext:pe_bin": 0.0756,
+        "ext:py_src": 0.0822,
+        "ext:rfc_txt": 0.101,
+        "ext:rst_doc": 0.103,
+        "ext:sql": 0.0449,
+        "ext:xml": 0.061,
+        "gutenberg": 0.081,
+        "json": 0.0842,
+        "log": 0.0791,
+        "mixed": 0.0758
+      },
+      "role": "depth3_tree",
+      "rss_gb": 3.89,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 8.77,
+      "ru_maxrss_gb": 11.59,
+      "rung": "s4",
+      "scaled": false,
+      "seconds": 2.9,
+      "seed": 20260825,
+      "stage": "shift",
+      "status": "fit",
+      "top1": 0.0722,
+      "top1_non_gutenberg": 0.0712,
+      "utc": "2026-09-17T22:24:11Z",
+      "val": null
+    },
+    "s4_logistic": {
+      "block_refills": [
+        {
+          "order": "canonical",
+          "probe_ok": true,
+          "utc": "2026-09-17T22:25:29Z"
+        }
+      ],
+      "environment": {
+        "nice": 10,
+        "numpy": "2.4.6",
+        "python": "3.11.15",
+        "sklearn": "1.9.0",
+        "standardiser_probe": {
+          "block_gb": 0.177,
+          "ncols": 1108,
+          "peak_extra_fraction_of_block": 0.1005,
+          "probe_rows_per_pass": 2000,
+          "production_rows_per_pass": 20000,
+          "production_transient_gb": 0.177,
+          "rows": 20000
+        },
+        "threads": 3
+      },
+      "family": "logistic",
+      "fingerprint": "056775db3ee8b9c3",
+      "fit_info": {
+        "n_iter": 471
+      },
+      "fit_rows_sha256": "cfa130ee81f23a2d6ad7bb6085089d9206cb3d72cbc3bcd3a0e841a493933eea",
+      "fit_rows_sorted_sha256": "016b97f622baebc2a2b1bb34eb8f564deecec1dac9b4674d1b97b4c9e3538f35",
+      "head": "logistic",
+      "heartbeat_max_rss_gb": 3.89,
+      "id": "L3",
+      "interruptions_before_this_fit": 0,
+      "last_heartbeat_rss_gb_before_this_fit": null,
+      "n_fit_rows": 26420,
+      "n_rung_chunks": 1029,
+      "n_rung_rows": 26420,
+      "params": {
+        "C": 1.0,
+        "max_iter": 1000
+      },
+      "params_sha256": "6c963004952ef934d6609c0a9d1d384a87728591b1694515f43328ab05344dfe",
+      "per_example_sha256": "f1a65098a83192ac58a79418bea3f05b2114332e647ac16342b7b4285102cfb5",
+      "per_family": {
+        "base64": 0.0732,
+        "binary": 0.0734,
+        "code": 0.0829,
+        "csv": 0.0972,
+        "ext:c_src": 0.119,
+        "ext:hexdump": 0.0931,
+        "ext:pe_bin": 0.0926,
+        "ext:py_src": 0.1343,
+        "ext:rfc_txt": 0.1179,
+        "ext:rst_doc": 0.125,
+        "ext:sql": 0.0969,
+        "ext:xml": 0.0999,
+        "gutenberg": 0.0708,
+        "json": 0.0989,
+        "log": 0.0856,
+        "mixed": 0.0921
+      },
+      "role": "logistic",
+      "rss_gb": 3.89,
+      "rss_gb_is": "anonymous (RssAnon)",
+      "rss_total_gb": 8.77,
+      "ru_maxrss_gb": 11.59,
+      "rung": "s4",
+      "scaled": true,
+      "seconds": 63.5,
+      "seed": 20260825,
+      "stage": "shift",
+      "status": "fit",
+      "top1": 0.0891,
+      "top1_non_gutenberg": 0.0912,
+      "utc": "2026-09-17T22:24:18Z",
+      "val": null
     }
   },
   "launch_environment": {
@@ -4585,6 +4912,90 @@
       "rss_gb": 5.41,
       "seconds": 371.6,
       "utc": "2026-09-17T21:43:39Z"
+    },
+    {
+      "event": "rung_bound",
+      "fingerprint": "3ee252f7ca671ba0",
+      "name": "run_r7_model",
+      "pid": 7943,
+      "rss_gb": 5.41,
+      "rung": 7,
+      "rung_sorted_sha256": "748589dc08be26b98e7f8a2871ae7c07691ca408fb60c34cb9ffabbf7e8d7e8c",
+      "utc": "2026-09-17T21:43:41Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "3ee252f7ca671ba0",
+      "name": "run_r7_model",
+      "pid": 7943,
+      "rss_gb": 5.41,
+      "utc": "2026-09-17T21:43:41Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "3ee252f7ca671ba0",
+      "name": "run_r7_model",
+      "pid": 7943,
+      "rss_gb": 5.72,
+      "seconds": 2352.6,
+      "utc": "2026-09-17T22:24:09Z"
+    },
+    {
+      "event": "rung_bound",
+      "fingerprint": "0d0bdb7ef5d008ab",
+      "name": "run_s4_depth3_tree",
+      "pid": 7943,
+      "rss_gb": 3.89,
+      "rung": "s4",
+      "rung_sorted_sha256": "016b97f622baebc2a2b1bb34eb8f564deecec1dac9b4674d1b97b4c9e3538f35",
+      "utc": "2026-09-17T22:24:10Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "0d0bdb7ef5d008ab",
+      "name": "run_s4_depth3_tree",
+      "pid": 7943,
+      "rss_gb": 3.89,
+      "utc": "2026-09-17T22:24:11Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "0d0bdb7ef5d008ab",
+      "name": "run_s4_depth3_tree",
+      "pid": 7943,
+      "rss_gb": 3.89,
+      "seconds": 2.9,
+      "utc": "2026-09-17T22:24:16Z"
+    },
+    {
+      "event": "rung_bound",
+      "fingerprint": "056775db3ee8b9c3",
+      "name": "run_s4_logistic",
+      "pid": 7943,
+      "rss_gb": 3.89,
+      "rung": "s4",
+      "rung_sorted_sha256": "016b97f622baebc2a2b1bb34eb8f564deecec1dac9b4674d1b97b4c9e3538f35",
+      "utc": "2026-09-17T22:24:18Z"
+    },
+    {
+      "attempt": 1,
+      "event": "started",
+      "fingerprint": "056775db3ee8b9c3",
+      "name": "run_s4_logistic",
+      "pid": 7943,
+      "rss_gb": 3.89,
+      "utc": "2026-09-17T22:24:18Z"
+    },
+    {
+      "event": "completed",
+      "fingerprint": "056775db3ee8b9c3",
+      "name": "run_s4_logistic",
+      "pid": 7943,
+      "rss_gb": 3.89,
+      "seconds": 63.5,
+      "utc": "2026-09-17T22:25:29Z"
     }
   ],
   "log2_chunks": [
@@ -4604,12 +5015,9 @@
   ],
   "logistic_slope_per_doubling": 0.00638,
   "missing_roles": [
-    "r7_model",
-    "s4_depth3_tree",
-    "s4_logistic",
     "s4_model"
   ],
-  "model_slope_per_doubling": null,
+  "model_slope_per_doubling": 0.00697,
   "n_classes": 26,
   "n_eval_rows": 260000,
   "n_ext_real_rows": 38452,
@@ -5979,6 +6387,138 @@
       "ext_top1": 0.1224,
       "n_ext_real_rows": 38452,
       "n_ext_rows": 61409
+    },
+    "r7_model": {
+      "builder_eval_correct": 23176,
+      "builder_eval_per_family": {
+        "base64": 0.0726,
+        "binary": 0.0735,
+        "code": 0.0835,
+        "csv": 0.0924,
+        "gutenberg": 0.0964,
+        "json": 0.1065,
+        "log": 0.0976,
+        "mixed": 0.0903
+      },
+      "builder_eval_top1": 0.0891,
+      "ext_correct": 7666,
+      "ext_high_entropy_top1": 0.0944,
+      "ext_per_family": {
+        "c_src": 0.1476,
+        "hexdump": 0.0803,
+        "pe_bin": 0.1092,
+        "py_src": 0.1553,
+        "rfc_txt": 0.1469,
+        "rst_doc": 0.1417,
+        "sql": 0.1087,
+        "xml": 0.1078
+      },
+      "ext_per_family_correct": {
+        "c_src": 1151,
+        "hexdump": 626,
+        "pe_bin": 809,
+        "py_src": 1197,
+        "rfc_txt": 1140,
+        "rst_doc": 1102,
+        "sql": 800,
+        "xml": 841
+      },
+      "ext_real_correct": 5399,
+      "ext_real_top1": 0.1404,
+      "ext_structured_text_top1": 0.1349,
+      "ext_synthetic_correct": 2267,
+      "ext_synthetic_top1": 0.0987,
+      "ext_top1": 0.1248,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "s4_depth3_tree": {
+      "builder_eval_correct": 18294,
+      "builder_eval_per_family": {
+        "base64": 0.0689,
+        "binary": 0.076,
+        "code": 0.0565,
+        "csv": 0.0399,
+        "gutenberg": 0.081,
+        "json": 0.0842,
+        "log": 0.0791,
+        "mixed": 0.0758
+      },
+      "builder_eval_top1": 0.0704,
+      "ext_correct": 4908,
+      "ext_high_entropy_top1": 0.0733,
+      "ext_per_family": {
+        "c_src": 0.0986,
+        "hexdump": 0.071,
+        "pe_bin": 0.0756,
+        "py_src": 0.0822,
+        "rfc_txt": 0.101,
+        "rst_doc": 0.103,
+        "sql": 0.0449,
+        "xml": 0.061
+      },
+      "ext_per_family_correct": {
+        "c_src": 769,
+        "hexdump": 554,
+        "pe_bin": 560,
+        "py_src": 634,
+        "rfc_txt": 784,
+        "rst_doc": 801,
+        "sql": 330,
+        "xml": 476
+      },
+      "ext_real_correct": 3548,
+      "ext_real_top1": 0.0923,
+      "ext_structured_text_top1": 0.0821,
+      "ext_synthetic_correct": 1360,
+      "ext_synthetic_top1": 0.0592,
+      "ext_top1": 0.0799,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "s4_logistic": {
+      "builder_eval_correct": 21893,
+      "builder_eval_per_family": {
+        "base64": 0.0732,
+        "binary": 0.0734,
+        "code": 0.0829,
+        "csv": 0.0972,
+        "gutenberg": 0.0708,
+        "json": 0.0989,
+        "log": 0.0856,
+        "mixed": 0.0921
+      },
+      "builder_eval_top1": 0.0842,
+      "ext_correct": 6754,
+      "ext_high_entropy_top1": 0.0929,
+      "ext_per_family": {
+        "c_src": 0.119,
+        "hexdump": 0.0931,
+        "pe_bin": 0.0926,
+        "py_src": 0.1343,
+        "rfc_txt": 0.1179,
+        "rst_doc": 0.125,
+        "sql": 0.0969,
+        "xml": 0.0999
+      },
+      "ext_per_family_correct": {
+        "c_src": 928,
+        "hexdump": 726,
+        "pe_bin": 686,
+        "py_src": 1035,
+        "rfc_txt": 915,
+        "rst_doc": 972,
+        "sql": 713,
+        "xml": 779
+      },
+      "ext_real_correct": 4536,
+      "ext_real_top1": 0.118,
+      "ext_structured_text_top1": 0.1156,
+      "ext_synthetic_correct": 2218,
+      "ext_synthetic_top1": 0.0966,
+      "ext_top1": 0.11,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
     }
   },
   "reference_first_decade": {
@@ -6093,24 +6633,55 @@
       "same_plaintext_count_as_rung_4": true,
       "sorted_sha256": "016b97f622baebc2a2b1bb34eb8f564deecec1dac9b4674d1b97b4c9e3538f35"
     },
-    "difference_from_rung_4": {},
-    "difference_from_rung_5": {},
+    "difference_from_rung_4": {
+      "depth3_tree": -0.0006,
+      "logistic": 0.0001
+    },
+    "difference_from_rung_5": {
+      "depth3_tree": 0.0002,
+      "logistic": -0.0061
+    },
     "note": "informational: rung 5's new plaintexts alone (rung 4's plaintext count, other files only), fitted with the same three recipes and scored on the same rows; its difference from rung 4 reads what other files of the same families buy for the original files at the same plaintext count, and its difference from rung 5 what the original files' own chunks add on top of it; never a verdict",
-    "readings": {}
+    "readings": {
+      "depth3_tree": {
+        "builder_eval_top1": 0.0704,
+        "ext_per_family": {
+          "c_src": 0.0986,
+          "pe_bin": 0.0756,
+          "py_src": 0.0822,
+          "rfc_txt": 0.101,
+          "rst_doc": 0.103
+        },
+        "ext_real_correct": 3548,
+        "ext_real_top1": 0.0923
+      },
+      "logistic": {
+        "builder_eval_top1": 0.0842,
+        "ext_per_family": {
+          "c_src": 0.119,
+          "pe_bin": 0.0926,
+          "py_src": 0.1343,
+          "rfc_txt": 0.1179,
+          "rst_doc": 0.125
+        },
+        "ext_real_correct": 4536,
+        "ext_real_top1": 0.118
+      }
+    }
   },
   "shuffled_label_accuracy_eval": 0.0376,
   "shuffled_label_accuracy_ext": 0.0386,
   "shuffled_label_accuracy_real": 0.0372,
   "slope_bootstrap": {},
-  "slope_model_minus_depth3_tree": null,
-  "slope_model_minus_logistic": null,
+  "slope_model_minus_depth3_tree": 0.00727,
+  "slope_model_minus_logistic": 0.00059,
   "smoke": false,
   "stage": "run",
-  "top_rung_model_minus_depth3_tree": null,
-  "top_rung_model_minus_logistic": null,
+  "top_rung_model_minus_depth3_tree": 0.0485,
+  "top_rung_model_minus_logistic": 0.0039,
   "top_rung_top1": {
     "depth3_tree": 0.0919,
     "logistic": 0.1365,
-    "model": null
+    "model": 0.1404
   }
 }
