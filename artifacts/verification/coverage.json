@@ -2374,9 +2374,162 @@
       "json_path": "$.shuffled_label_accuracy_real",
       "reverify": "python3 tools/readers/realcurve4096_verdict.py",
       "value": 0.0409
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve2_4096_verdict.json",
+      "claim": "Preregistration 0024: SECOND_DECADE_RISES_MODEL_LEADS \u2014 the second decade of real plaintexts (other files of the same five families nested on 0021's block) rises, and the boosted model still leads the hand-writable linear rule at the top rung.",
+      "class": "primary-verifiable",
+      "id": "realcurve24096-verdict",
+      "json_path": "$.verdict",
+      "reverify": "python3 tools/readers/realcurve2_4096_verdict.py",
+      "value": "SECOND_DECADE_RISES_MODEL_LEADS"
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve2_4096_verdict.json",
+      "claim": "The curve part: the model's second-decade slope reaches 0.005 per doubling with the scored-chunk interval's lower bound above 0.0.",
+      "class": "primary-verifiable",
+      "id": "realcurve24096-curve-part",
+      "json_path": "$.verdict_components.curve",
+      "reverify": "python3 tools/readers/realcurve2_4096_verdict.py",
+      "value": "SECOND_DECADE_RISES"
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve2_4096_verdict.json",
+      "claim": "The lead part, read at the top rung by the sealed paired-interval rule: MODEL_LEADS.",
+      "class": "primary-verifiable",
+      "id": "realcurve24096-lead-part",
+      "json_path": "$.lead_reading",
+      "reverify": "python3 tools/readers/realcurve2_4096_verdict.py",
+      "value": "MODEL_LEADS"
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve2_4096_verdict.json",
+      "claim": "The model's second-decade slope is 0.00697 per doubling of real plaintexts over 3.0 doublings of other files.",
+      "class": "primary-verifiable",
+      "id": "realcurve24096-model-slope",
+      "json_path": "$.model_slope_per_doubling",
+      "reverify": "python3 tools/readers/realcurve2_4096_verdict.py",
+      "value": 0.00697
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve2_4096_verdict.json",
+      "claim": "The scored-chunk bootstrap 2.5th percentile of the model's second-decade slope is 0.00571.",
+      "class": "primary-verifiable",
+      "id": "realcurve24096-model-slope-ci-low",
+      "json_path": "$.model_slope_ci95[0]",
+      "reverify": "python3 tools/readers/realcurve2_4096_verdict.py",
+      "value": 0.00571
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve2_4096_verdict.json",
+      "claim": "The standardised logistic's second-decade slope is 0.00638 per doubling.",
+      "class": "primary-verifiable",
+      "id": "realcurve24096-logistic-slope",
+      "json_path": "$.logistic_slope_per_doubling",
+      "reverify": "python3 tools/readers/realcurve2_4096_verdict.py",
+      "value": 0.00638
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve2_4096_verdict.json",
+      "claim": "The depth-3 tree's second-decade slope is -0.0003 per doubling.",
+      "class": "primary-verifiable",
+      "id": "realcurve24096-tree-slope",
+      "json_path": "$.depth3_tree_slope_per_doubling",
+      "reverify": "python3 tools/readers/realcurve2_4096_verdict.py",
+      "value": -0.0003
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve2_4096_verdict.json",
+      "claim": "Model minus logistic over the second decade is 0.00059 per doubling; paired interval [-0.00102, 0.00231].",
+      "class": "primary-verifiable",
+      "id": "realcurve24096-model-minus-logistic",
+      "json_path": "$.slope_model_minus_logistic",
+      "reverify": "python3 tools/readers/realcurve2_4096_verdict.py",
+      "value": 0.00059
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve2_4096_verdict.json",
+      "claim": "At the top rung (8232 plaintexts) model minus logistic is 0.0039.",
+      "class": "primary-verifiable",
+      "id": "realcurve24096-lead-top-point",
+      "json_path": "$.flags.lead_model_minus_logistic_at_top.point",
+      "reverify": "python3 tools/readers/realcurve2_4096_verdict.py",
+      "value": 0.0039
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve2_4096_verdict.json",
+      "claim": "The paired interval of model minus logistic at the top rung has lower bound 0.0001.",
+      "class": "primary-verifiable",
+      "id": "realcurve24096-lead-top-ci-low",
+      "json_path": "$.flags.lead_model_minus_logistic_at_top.ci95[0]",
+      "reverify": "python3 tools/readers/realcurve2_4096_verdict.py",
+      "value": 0.0001
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve2_4096_verdict.json",
+      "claim": "The paired interval of model minus logistic at the top rung has upper bound 0.0077.",
+      "class": "primary-verifiable",
+      "id": "realcurve24096-lead-top-ci-high",
+      "json_path": "$.flags.lead_model_minus_logistic_at_top.ci95[1]",
+      "reverify": "python3 tools/readers/realcurve2_4096_verdict.py",
+      "value": 0.0077
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve2_4096_verdict.json",
+      "claim": "At 8232 plaintexts the model reads 0.1404 on the real-family rows.",
+      "class": "primary-verifiable",
+      "id": "realcurve24096-top-rung-model",
+      "json_path": "$.model_real_top1_top_rung",
+      "reverify": "python3 tools/readers/realcurve2_4096_verdict.py",
+      "value": 0.1404
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve2_4096_verdict.json",
+      "claim": "At rung 4 (1029 plaintexts, 0021's block) the model reads 0.1193: 0021's reading, drift 0.0.",
+      "class": "primary-verifiable",
+      "id": "realcurve24096-rung4-model",
+      "json_path": "$.model_real_top1_by_rung[3]",
+      "reverify": "python3 tools/readers/realcurve2_4096_verdict.py",
+      "value": 0.1193
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve2_4096_verdict.json",
+      "claim": "Rung 4 reproduces 0021's model reading with drift 0.0.",
+      "class": "primary-verifiable",
+      "id": "realcurve24096-reproduction-drift",
+      "json_path": "$.reproduction_drift.model",
+      "reverify": "python3 tools/readers/realcurve2_4096_verdict.py",
+      "value": 0.0
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve2_4096_verdict.json",
+      "claim": "The model's first-decade slope is 0.007344, equal to 0023's banked 0.007344.",
+      "class": "primary-verifiable",
+      "id": "realcurve24096-first-decade-model-slope",
+      "json_path": "$.flags.first_decade_slope_per_doubling.model",
+      "reverify": "python3 tools/readers/realcurve2_4096_verdict.py",
+      "value": 0.007344
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve2_4096_verdict.json",
+      "claim": "The shift arm (rung 5's new plaintexts alone at rung 4's count) reads 0.1184 for the model, -0.0009 against rung 4.",
+      "class": "primary-verifiable",
+      "id": "realcurve24096-shift-arm-model",
+      "json_path": "$.flags.shift_arm.readings_ext_real_top1.model",
+      "reverify": "python3 tools/readers/realcurve2_4096_verdict.py",
+      "value": 0.1184
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve2_4096_verdict.json",
+      "claim": "The null control on the top rung's permuted labels reads 0.0372 on the real-family rows.",
+      "class": "primary-verifiable",
+      "id": "realcurve24096-null",
+      "json_path": "$.shuffled_label_accuracy_real",
+      "reverify": "python3 tools/readers/realcurve2_4096_verdict.py",
+      "value": 0.0372
     }
   ],
-  "n_claims": 266,
+  "n_claims": 283,
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",
   "schema": "raise-v1/coverage_map/1"
 }

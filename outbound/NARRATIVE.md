@@ -160,6 +160,20 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > -0.000752], read by a rule we wrote down before the run as 'the linear rule buys more per doubling than the
 > model'. More real data helps, and it helps the cheap rule more. We do not extrapolate past the top rung: the
 > plaintexts it would count do not exist.
+> Then we bought the plaintexts that did not exist (0024): 23 more archives and 600 more RFCs of the same five
+> kinds, pinned, licensed and hashed against every chunk and every kilobyte run of the original files, nested
+> on 0021's block in three exact doublings — 1029 to 8232 plaintexts, 3.0 doublings (0.9031 of a decade) of
+> other files above the block; both decades together 1.8016 decades, short of our own two-decade scope rule.
+> The model's second-decade slope is 0.00697 per doubling against 0.005 required (interval [0.00571,
+> 0.00824]): `SECOND_DECADE_RISES`. And at the top rung, the model leads the standardised logistic by 0.0039
+> (paired interval [0.0001, 0.0077], entirely above 0): `MODEL_LEADS`, by a rule we wrote down before the run.
+> The shift arm — the new files alone at 0021's count — read 0.1184 for the model against 0021's 0.1193. Other
+> files of the same kinds keep buying the recipe the record's rate on the files it is scored on, through 8232
+> plaintexts (eight times 0021's), so the budget excuse is answered a second time on real content, this time
+> with other files; at eight times 0021's plaintexts the boosted recipe still leads a rule a person can write
+> out on the record's own real content, by 0.0039 — the recipe conclusion of 0021, 0022 and 0023 (that the
+> linear rule gets most of the signal) is bounded by the size of that lead, not reversed. We do not
+> extrapolate past the top rung.
 > The boundary of our result is
 > bracketed to (2048, 4096], and the near-miss on the slack reading is published beside the
 > clear miss on the strict one.
@@ -182,7 +196,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 
 > So here is the honest inventory. A validated instrument that reproduces on a cold clone. One
 > real curve with its boundaries measured by the same instrument. A corrections ledger that costs
-> us something to keep. A verification map that prints its weakest class first — 14 of 266 claims
+> us something to keep. A verification map that prints its weakest class first — 14 of 283 claims
 > we ourselves cannot currently re-derive, and it says so. And no buyer yet: G5, a named buyer
 > type, is the gate this work has not cleared, and no result in the repository could have cleared
 > it, because that work happens outside the repository. We are raising to do exactly that work,

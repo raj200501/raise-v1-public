@@ -469,7 +469,381 @@
     "method": "four independent adversarial reviews of the unfrozen instrument, one lens each (the corpus and the partition; the runner; the reader and the gate; the design, the clauses and the prose), each read-only with its own numbers recomputed; every finding adopted or declined with a reason, the instrument rebuilt, the smoke and the gate re-run, before the freeze"
   },
   "preregistration": "0024-realcurve2-4096",
+  "run_record": {
+    "bar_of_0021_re_applied_at_the_top_rung": {
+      "higher_of_tree_and_logistic_as_floor": {
+        "clears": false,
+        "floor": 0.1365,
+        "is": "informational: the same clause with OPERATING_RULES 4a's list taken literally - logistic regression is among the trivial baselines it names, 0021's four did not include it, and the standardised logistic is fitted at every rung here",
+        "model": 0.1404,
+        "needed": 0.1865
+      },
+      "tree_as_floor": {
+        "clears": false,
+        "depth3_tree": 0.0919,
+        "is": "informational: 0021's clause (best trivial baseline on the same rows plus 0.05) re-applied at the top rung with the depth-3 tree standing in for the best of 0021's four baselines; the other three read below the tree at 0021 and are not refitted here, so a floor above the tree's is possible and this flag can only be optimistic",
+        "model": 0.1404,
+        "needed": 0.1419
+      }
+    },
+    "controls_all_passed": {
+      "chance": 0.038462,
+      "checkpoints_cross_checked": 25,
+      "null_on_evaluation": 0.0376,
+      "null_on_extension": 0.0386,
+      "null_on_real_rows": 0.0372,
+      "reference_0021": {
+        "depth3_tree": 0.0929,
+        "logistic": 0.1179,
+        "model": 0.1193
+      },
+      "reproduction_drift_rung_4": {
+        "depth3_tree": 0.0,
+        "logistic": 0.0,
+        "model": 0.0
+      },
+      "reproduction_drift_rungs_1_to_4": {
+        "depth3_tree": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "logistic": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "model": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "roles_at_iteration_cap": []
+    },
+    "cost": "6456.7 s wall on the last of 1 launch(es), 5950.5 s of fits banked (r7_model 2352.6 s, null 223.1 s); load wait 0 s; the estimate stated in advance was 8097 s (2.2 hours) linear in rows to 24604 s (6.8 hours) cap-bound.",
+    "estimate_stated_in_advance_fit_seconds": {
+      "cap_bound": 24604,
+      "linear_in_rows": 8097
+    },
+    "finished_utc": "2026-09-17T22:31:05Z",
+    "fit_seconds_banked": 5950.5,
+    "gains": {
+      "end_to_end_both_decades": {
+        "depth3_tree": 0.0085,
+        "logistic": 0.0454,
+        "model": 0.043
+      },
+      "end_to_end_second_decade": {
+        "depth3_tree": -0.001,
+        "logistic": 0.0186,
+        "model": 0.0211
+      },
+      "rung_to_rung": {
+        "depth3_tree": [
+          0.0067,
+          0.0014,
+          0.0014,
+          -0.0008,
+          0.0,
+          -0.0002
+        ],
+        "logistic": [
+          0.0028,
+          0.0146,
+          0.0094,
+          0.0062,
+          0.008,
+          0.0044
+        ],
+        "model": [
+          0.0091,
+          0.0074,
+          0.0054,
+          0.0043,
+          0.0064,
+          0.0104
+        ]
+      }
+    },
+    "invocation": "OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3 nice -n 10 python3 tools/pivot/run_realcurve2.py --stage run ...",
+    "launches": 1,
+    "load_wait_seconds": 0,
+    "n_iter_by_name": {
+      "null": 20,
+      "r1_depth3_tree": null,
+      "r1_logistic": 83,
+      "r1_model": 31,
+      "r2_depth3_tree": null,
+      "r2_logistic": 224,
+      "r2_model": 36,
+      "r3_depth3_tree": null,
+      "r3_logistic": 314,
+      "r3_model": 47,
+      "r4_depth3_tree": null,
+      "r4_logistic": 392,
+      "r4_model": 62,
+      "r5_depth3_tree": null,
+      "r5_logistic": 479,
+      "r5_model": 72,
+      "r6_depth3_tree": null,
+      "r6_logistic": 541,
+      "r6_model": 117,
+      "r7_depth3_tree": null,
+      "r7_logistic": 664,
+      "r7_model": 153,
+      "s4_depth3_tree": null,
+      "s4_logistic": 471,
+      "s4_model": 62
+    },
+    "per_family_slopes_second_decade": {
+      "depth3_tree": {
+        "c_src": -0.00099,
+        "pe_bin": -0.00159,
+        "py_src": -0.00195,
+        "rfc_txt": 0.00222,
+        "rst_doc": 0.00069
+      },
+      "logistic": {
+        "c_src": 0.00738,
+        "pe_bin": 0.00385,
+        "py_src": 0.01029,
+        "rfc_txt": 0.00156,
+        "rst_doc": 0.00874
+      },
+      "model": {
+        "c_src": 0.00607,
+        "pe_bin": 0.00424,
+        "py_src": 0.00723,
+        "rfc_txt": 0.00823,
+        "rst_doc": 0.00899
+      }
+    },
+    "reverse_curve_on_the_builders_evaluation_set_second_decade": {
+      "depth3_tree": -0.00391,
+      "logistic": 0.00335,
+      "model": 0.00231
+    },
+    "run_started_utc": "2026-09-17T20:43:53Z",
+    "seconds_by_name": {
+      "null": 223.1,
+      "r1_depth3_tree": 0.4,
+      "r1_logistic": 3.3,
+      "r1_model": 25.9,
+      "r2_depth3_tree": 0.8,
+      "r2_logistic": 11.4,
+      "r2_model": 60.7,
+      "r3_depth3_tree": 1.5,
+      "r3_logistic": 36.5,
+      "r3_model": 156.7,
+      "r4_depth3_tree": 3.2,
+      "r4_logistic": 56.2,
+      "r4_model": 334.8,
+      "r5_depth3_tree": 7.6,
+      "r5_logistic": 104.5,
+      "r5_model": 478.1,
+      "r6_depth3_tree": 16.6,
+      "r6_logistic": 175.5,
+      "r6_model": 1141.1,
+      "r7_depth3_tree": 35.2,
+      "r7_logistic": 371.6,
+      "r7_model": 2352.6,
+      "s4_depth3_tree": 2.9,
+      "s4_logistic": 63.5,
+      "s4_model": 286.8
+    },
+    "sensitivity_slope_second_decade_with_rung4_at_0021s_reading": {
+      "depth3_tree": -0.0003,
+      "logistic": 0.00638,
+      "model": 0.00697
+    },
+    "shift_arm": {
+      "difference_from_rung_4": {
+        "depth3_tree": -0.0006,
+        "logistic": 0.0001,
+        "model": -0.0009
+      },
+      "difference_from_rung_5": {
+        "depth3_tree": 0.0002,
+        "logistic": -0.0061,
+        "model": -0.0052
+      },
+      "n_chunks": 1029,
+      "n_rows": 26420,
+      "note": "informational: rung 5's new plaintexts alone at rung 4's plaintext count; the difference from rung 4 reads what other files of the same families buy for the original files at the same count; never a verdict",
+      "readings_ext_real_top1": {
+        "depth3_tree": 0.0923,
+        "logistic": 0.118,
+        "model": 0.1184
+      }
+    },
+    "slope_failed_clauses": [],
+    "the_curve_clause": {
+      "bar_slope_per_doubling": 0.005,
+      "bootstrap_lower_bound_gt": 0.0,
+      "decades_spanned": 1.8016,
+      "decades_spanned_second_decade": 0.9031,
+      "doublings_spanned": 5.984659,
+      "doublings_spanned_second_decade": 3.0,
+      "first_decade_equals_0023s": true,
+      "first_decade_model_slope": 0.007344,
+      "first_decade_model_slope_banked_by_0023": 0.007344,
+      "model_real_top1_by_rung": [
+        0.0974,
+        0.1065,
+        0.1139,
+        0.1193,
+        0.1236,
+        0.13,
+        0.1404
+      ],
+      "model_slope_ci95": [
+        0.00571,
+        0.00824
+      ],
+      "model_slope_per_doubling_second_decade": 0.00697,
+      "plaintexts_per_rung": [
+        130,
+        258,
+        515,
+        1029,
+        2058,
+        4116,
+        8232
+      ],
+      "rows_per_rung": [
+        3344,
+        6635,
+        13207,
+        26346,
+        52766,
+        105214,
+        210751
+      ],
+      "second_decade_reading": "at or above the record's rate"
+    },
+    "the_lead_clause": {
+      "logistic_leads_model_at_every_second_decade_rung": false,
+      "model_leads_logistic_at_every_rung": false,
+      "model_minus_logistic_by_rung": [
+        0.0063,
+        0.0126,
+        0.0054,
+        0.0014,
+        -0.0005,
+        -0.0021,
+        0.0039
+      ],
+      "roles_at_iteration_cap_at_the_top_rung": [],
+      "rule": "the 95 percent paired cluster-bootstrap interval of model minus logistic real-family top-1 at the top rung, over the scored real chunks with the slope bootstrap's own resamples: entirely above 0 is MODEL_LEADS, entirely below 0 is LINEAR_LEADS, otherwise NO_SEPARATION (never 'equal'); the verdict string carries it as a suffix. If the model or the logistic at the top rung is at its iteration cap, the suffix is still read by the rule, but every document that states it states '(the <role> at its iteration cap at the top rung)' in the same sentence and the lead is not quoted as a recipe comparison, exactly as the difference flag is not",
+      "rung_4": {
+        "ci95": [
+          -0.002303,
+          0.0047
+        ],
+        "n_boot": 2000,
+        "point": 0.0014,
+        "reading": "NO_SEPARATION",
+        "seed": 20260917,
+        "share_of_resamples_with_model_ahead": 0.7585
+      },
+      "top_rung": {
+        "ci95": [
+          0.0001,
+          0.0077
+        ],
+        "n_boot": 2000,
+        "point": 0.0039,
+        "reading": "MODEL_LEADS",
+        "seed": 20260917,
+        "share_of_resamples_with_model_ahead": 0.976
+      },
+      "top_rung_over_the_tree": {
+        "ci95": [
+          0.0452,
+          0.052
+        ],
+        "n_boot": 2000,
+        "point": 0.0485,
+        "reading": "MODEL_LEADS",
+        "seed": 20260917,
+        "share_of_resamples_with_model_ahead": 1.0
+      }
+    },
+    "the_other_roles": {
+      "both_decade_slopes": {
+        "depth3_tree": 0.001075,
+        "logistic": 0.008166,
+        "model": 0.006645
+      },
+      "depth3_tree_by_rung": [
+        0.0834,
+        0.0901,
+        0.0915,
+        0.0929,
+        0.0921,
+        0.0921,
+        0.0919
+      ],
+      "depth3_tree_ci95": [
+        -0.00073,
+        0.00012
+      ],
+      "depth3_tree_slope_second_decade": -0.0003,
+      "first_decade_slopes": {
+        "depth3_tree": 0.003002,
+        "logistic": 0.009551,
+        "model": 0.007344
+      },
+      "logistic_by_rung": [
+        0.0911,
+        0.0939,
+        0.1085,
+        0.1179,
+        0.1241,
+        0.1321,
+        0.1365
+      ],
+      "logistic_ci95": [
+        0.0052,
+        0.00756
+      ],
+      "logistic_slope_second_decade": 0.00638
+    },
+    "the_slope_difference": {
+      "paired_ci95": [
+        -0.00102,
+        0.00231
+      ],
+      "paired_ci95_tree": [
+        0.00599,
+        0.00867
+      ],
+      "reading_by_the_sealed_rule": "the paired interval includes 0: not resolved at this size; never read as 'equal'",
+      "share_of_resamples_with_model_ahead": 0.756,
+      "slope_model_minus_depth3_tree": 0.00727,
+      "slope_model_minus_logistic": 0.00059
+    },
+    "validity_failed_clauses": [],
+    "verdict": "SECOND_DECADE_RISES_MODEL_LEADS",
+    "verdict_components": {
+      "curve": "SECOND_DECADE_RISES",
+      "lead": "MODEL_LEADS"
+    },
+    "wall_seconds_last_launch": 6456.7,
+    "what_it_found": {
+      "expected_outcome_vs_measured": "the sealed file expected SECOND_DECADE_RISES more likely than not (less likely than 0023's pass), and LINEAR_LEADS or NO_SEPARATION more likely than MODEL_LEADS; the run read SECOND_DECADE_RISES_MODEL_LEADS.",
+      "one_line": "The second decade of real plaintexts rises \u2014 and the boosted model still leads the hand-writable linear rule at the top rung: the model's second-decade slope is 0.00697 per doubling (interval [0.00571, 0.00824]) against 0.005; at the top rung model minus logistic is 0.0039 (paired interval [0.0001, 0.0077]), MODEL_LEADS by the sealed rule.",
+      "the_curve": "the model reads [0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404] over [130, 258, 515, 1029, 2058, 4116, 8232] plaintexts; second-decade slopes model 0.00697 ([0.00571, 0.00824]), logistic 0.00638 ([0.0052, 0.00756]), tree -0.0003 ([-0.00073, 0.00012]); both clauses pass: the model's second-decade slope is at or above 0.005 and the interval's lower bound above 0.0 \u2014 `SECOND_DECADE_RISES`. The logistic's second-decade slope (0.00638) clears the same bar and the tree's (-0.0003) does not: a rise the linear rule shares is a rise of the cheap signal, not of the recipe.",
+      "the_lead": "the model leads the standardised logistic by 0.0039 (paired interval [0.0001, 0.0077], entirely above 0); at rung 4 the same reading is 0.0014 ([-0.002303, 0.0047], NO_SEPARATION); model minus logistic by rung [0.0063, 0.0126, 0.0054, 0.0014, -0.0005, -0.0021, 0.0039]; over the second decade the slope difference is 0.00059 ([-0.00102, 0.00231]): the paired interval includes 0: not resolved at this size; never read as 'equal'.",
+      "the_shift_arm": "The shift arm \u2014 rung 5's new plaintexts alone (1029 plaintexts, 26420 rows: rung 4's count, none of 0021's block) \u2014 reads model 0.1184, logistic 0.118, tree 0.0923: against rung 4 by -0.0009, 0.0001 and -0.0006, against rung 5 by -0.0052, -0.0061 and 0.0002 \u2014 the direct reading of what other files of the same families buy for the original files at the same count, informational.",
+      "what_it_means_for_the_record": "other files of the same kinds keep buying the recipe the record's rate on the files it is scored on, through 8232 plaintexts (eight times 0021's), so the budget excuse is answered a second time on real content, this time with other files; at eight times 0021's plaintexts the boosted recipe still leads a rule a person can write out on the record's own real content, by 0.0039 \u2014 the recipe conclusion of 0021, 0022 and 0023 (that the linear rule gets most of the signal) is bounded by the size of that lead, not reversed. Not a transfer reading, and not 0023's in-distribution reading either: every rung holds the scored files' own unscored chunks, and the plaintexts added above rung 4 are other files of the same kinds, so the second decade confounds more plaintexts with plaintexts from other files, which the shift arm reads directly. No extrapolation beyond the top rung is banked or quoted. Nothing here revises 0003, 0014, 0015, 0016, 0017, 0018, 0019, 0021, 0022 or 0023, and nothing here establishes a buyer."
+    }
+  },
   "schema": "raise-v1/engineering_log/1",
-  "status": "frozen 2026-09-17; run pending",
+  "status": "complete: SECOND_DECADE_RISES_MODEL_LEADS",
   "why_this_exists": "0023 read REAL_CURVE_RISES: over 130 to 1029 real plaintexts the model rose 0.007344 per doubling (interval [0.006199, 0.00846]), the standardised logistic 0.009551 ([0.008478, 0.010649]) and the depth-3 tree 0.003002; model minus logistic -0.002207 with a paired interval [-0.003707, -0.000752] entirely below 0, and the model's lead over the logistic by rung was [0.0063, 0.0126, 0.0054, 0.0014], 0.0014 at the top. The top rung was 0021's whole fit block - every chunk of the five pinned files that the sealed evaluation set does not use - so the record held no more real plaintexts, and 0023 named 'a second decade' and 'more real content than 0021's fit block (no such corpus exists in the record)' as what it did not cover. Two questions follow directly from its numbers. First, whether the rise continues when the added plaintexts are OTHER files of the same families, which is the only way real content can ever grow (0023's rise was measured on the scored files' own unscored chunks). Second, whether the linear rule, which bought more per doubling than the model over the first decade, overtakes it: if both of 0023's straight lines simply continued they would cross before the first new doubling (that arithmetic is sealed as informational under reference_slopes_informational and is not quoted in any document). This run builds the corpus that lets both be asked: 23 new archives and 600 new RFC texts, pinned, with licences filed and two COULD NOT VERIFY entries stated (docs/compliance/EXT_SOURCES2.md), cut into 7574 plaintexts with rows that share no whole chunk and no kilobyte run with anything 0018 pinned, and nested on 0021's block in exact doublings of every family."
 }

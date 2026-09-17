@@ -308,6 +308,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 | **Family-diversity curve at 4096 (0016)** | **`DIVERSITY_HELPS`** — at a fixed budget of 4900 source chunks, the incumbent's accuracy on an unseen family rises 0.00596 per doubling of training families (bar 0.005): 0.0666 with one family, 0.0829 with seven; per-family depth moves it by -0.002; the linear rules' curves are steeper. Chain entry 16. |
 | **Symmetric recipe search at 4096 (0014)** | **`RECIPE_CLEARS`** — the searched model (M4) reaches 0.2884 against a searched-and-floored bar of 0.2317 set by the standardised logistic: +0.0567 frozen, +0.0567 expanded, +0.0576 with the leaked family excluded, all above 0.05; the headline survives a fair baseline at a smaller margin than fixed recipes gave | primary-verifiable |
 | **Real-plaintext scaling curve at 4096 (0023)** | **`REAL_CURVE_RISES`** — the budget question 0021 and 0022 left open, answered on the only real content the record has outside its sealed scoring set: 0021's fit block cut into four nested rungs of plaintexts (130, 258, 515, 1029), 0021's three fixed recipes fitted on each. The model rises 0.0974, 0.1065, 0.1139, 0.1193: 0.007344 per doubling of plaintexts (scored-chunk interval [0.006199, 0.00846]) against 0.005 required — a rise to 0021's failing reading (0.1193 against 0.1429 needed). The linear rule rises faster: 0.009551 per doubling, model minus logistic -0.002207 (paired interval [-0.003707, -0.000752]), read in advance as 'the linear rule buys more per doubling'. Reproduction drift 0.0; null 0.0409; the replicate of the smallest rung moved the model by 0.001. Chain entry 23. | primary-verifiable |
+| **Second decade of real plaintexts at 4096 (0024)** | **`SECOND_DECADE_RISES_MODEL_LEADS`** — the second decade of real plaintexts rises — and the boosted model still leads the hand-writable linear rule at the top rung: a second fit corpus of 7574 plaintexts from 23 newly pinned archives and 600 more RFC texts (other files of 0021's five families), nested on 0021's block in three exact doublings (130, 258, 515, 1029, 2058, 4116, 8232 plaintexts; the 'second decade' is 3.0 doublings (0.9031 of a decade) of other files above 0021's block; both together span 1.8016 decades, short of 0003's two-decade scope rule). The model reads 0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404: second-decade slope 0.00697 per doubling (scored-chunk interval [0.00571, 0.00824]) against 0.005 required; the logistic 0.00638, the tree -0.0003. At the top rung model minus logistic 0.0039 (paired interval [0.0001, 0.0077]), `MODEL_LEADS`. The shift arm (rung 5's new plaintexts alone at rung 4's count) reads 0.1184 for the model against rung 4's 0.1193. Rung 4 reproduced 0021 with drift 0.0; null 0.0372. Chain entry 24. | primary-verifiable |
 
 ### Failed, or did not reach a conclusion
 
@@ -339,7 +340,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **14 of 266 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 283 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -369,7 +370,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
 | `arithmetic-verifiable` | 36 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 216 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `primary-verifiable` | 233 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -1053,11 +1054,74 @@ searched recipe read against a fixed one, so the comparison is asymmetric by des
 nothing about 0014's searched model M4, which was not fitted here; that nothing here revises 0003,
 0014 or 0015; and that no buyer is established.
 
-**In flight — preregistration 0024 (chain seq 24, frozen 2026-09-17T20:38:28Z).** The second decade of real plaintexts, and the question 0023's numbers raised: when the plaintexts fitted come from OTHER files of the same five real families, does the encoder signal keep rising at the record's rate, and does the boosted model keep its lead over a hand-writable linear rule or does the linear rule overtake it? A second fit corpus was built before the freeze from 23 new pinned archives and 600 new RFC texts (other Python projects' .py and .rst, other C projects' .c and .h, other Windows programs' .exe and .dll, other RFCs; licences in `docs/compliance/EXT_SOURCES2.md`): 193926 rows, 7574 plaintexts with rows, every chunk hashed against every whole chunk of every 0018 pinned file and none identical. Seven nested rungs (130, 258, 515, 1029, 2058, 4116, 8232 plaintexts; 3344, 6635, 13207, 26346, 52766, 105214, 210751 rows; 5.984659 doublings, 1.8016 decades): 0023's four row for row, then three exact doublings of every family nested on 0021's block. 0021's three fixed recipes (M4, L3, D1) are fitted once per rung and scored once on the same 38452 real-family rows; a shift arm (rung 5's new plaintexts alone, 1029 plaintexts, rung 4's count) is fitted last, informational. The null control runs first on the top rung (labels permuted by a sealed stream, hash sealed); rung 4 is 0021's block row for row and its three roles must land within 0.005 of 0021's banked 0.1193, 0.1179 and 0.0929, and rungs 1..3 must reproduce 0023's readings within the same tolerance, all twelve before any new plaintext is fitted.
+**Preregistration 0024 (chain seq 24) — `SECOND_DECADE_RISES_MODEL_LEADS`, and what it found.** The second
+decade of real plaintexts rises — and the boosted model still leads the hand-writable linear rule at the top
+rung. The question 0023's numbers raised — when the plaintexts fitted come from OTHER files of the same five
+real families, does the encoder signal keep rising at the record's rate, and does the boosted model keep its
+lead over a hand-writable linear rule? — was put to a second fit corpus built and sealed before the freeze
+(other files of the same five families — 23 newly pinned archives and 600 more RFC texts: other Python projects'
+.py and .rst, other C projects' .c and .h, other Windows programs' .exe and .dll, other RFCs; 193926 rows, 7574
+plaintexts with rows, every chunk hashed against every whole chunk and every kilobyte run of the 0018 pinned
+files; licences in `docs/compliance/EXT_SOURCES2.md`), nested on 0021's block in three exact per-family
+doublings. Seven rungs of 130, 258, 515, 1029, 2058, 4116, 8232 plaintexts (3344, 6635, 13207, 26346, 52766,
+105214, 210751 rows; 5.984659 doublings in all): rungs 1..4 are 0023's cuts of 0021's block row for row, and the
+'second decade' is 3.0 doublings (0.9031 of a decade) of other files above 0021's block; both together span
+1.8016 decades, short of 0003's two-decade scope rule. 0021's three fixed recipes (M4, L3, D1) were fitted once
+per rung and scored once on the same 38452 real-family rows. The model reads **0.0974, 0.1065, 0.1139, 0.1193,
+0.1236, 0.13, 0.1404** over the seven rungs, the standardised logistic **0.0911, 0.0939, 0.1085, 0.1179, 0.1241,
+0.1321, 0.1365**, the depth-3 tree **0.0834, 0.0901, 0.0915, 0.0929, 0.0921, 0.0921, 0.0919**; rung 4 reproduced
+0021's three readings with drift 0.0, 0.0 and 0.0, and rungs 1..4 reproduced 0023's (the model's first-decade
+slope 0.007344 is 0023's banked 0.007344). Second-decade slopes per doubling of plaintexts (rungs 4..7): model
+**0.00697** (scored-chunk interval [0.00571, 0.00824]), logistic **0.00638** ([0.0052, 0.00756]), depth-3 tree
+-0.0003 ([-0.00073, 0.00012]). Both clauses pass: the model's second-decade slope is at or above 0.005 and the
+interval's lower bound above 0.0 — `SECOND_DECADE_RISES`. The logistic's second-decade slope (0.00638) clears
+the same bar and the tree's (-0.0003) does not: a rise the linear rule shares is a rise of the cheap signal, not
+of the recipe.
 
-Two clauses and one sealed reading rule, read by `tools/readers/realcurve2_4096_verdict.py` on the recounted score vectors: the model's ordinary-least-squares slope of real-family top-1 against log2(plaintexts) over the SECOND decade (rungs 4..7) must reach **0.005 per doubling of plaintexts** (0023's bar restated), and the 2.5th percentile of that slope under a sealed cluster bootstrap over the scored real chunks (2000 resamples, one resample serving every rung and every role; an interval over the scored chunks only, which does not resample the fit side) must sit above 0.0: `SECOND_DECADE_RISES` needs both, either failing is `SECOND_DECADE_FLAT`. The verdict string carries a second part from the sealed lead rule at the top rung — the paired interval of model minus logistic entirely above 0 is `MODEL_LEADS`, entirely below 0 `LINEAR_LEADS`, otherwise `NO_SEPARATION` — and no document quotes one part without the other; a role at its iteration cap at the top rung is named beside the lead. The expected outcome, stated in the sealed file: rises, more likely than not but less likely than 0023's pass was; `LINEAR_LEADS` or `NO_SEPARATION` more likely than `MODEL_LEADS`. No extrapolation beyond 0023's top rung is quoted.
+**The boosted model still leads the hand-writable linear rule at the top rung.** At 8232 plaintexts the model
+reads 0.1404 and the standardised logistic 0.1365: the model leads the standardised logistic by 0.0039 (paired
+interval [0.0001, 0.0077], entirely above 0), the model ahead in 0.976 of the resamples — `MODEL_LEADS` by the
+rule sealed in advance. At rung 4 (0021's block) the same reading is 0.0014 with a paired interval [-0.002303,
+0.0047] (NO_SEPARATION); model minus logistic by rung 0.0063, 0.0126, 0.0054, 0.0014, -0.0005, -0.0021, 0.0039.
+Over the second decade the slope difference, model minus logistic, is **0.00059** per doubling, paired interval
+[-0.00102, 0.00231], the model ahead in 0.756 of the resamples: the paired interval includes 0: not resolved at
+this size; never read as 'equal'. Against the depth-3 tree at the top rung the model's lead is 0.0485 ([0.0452,
+0.052], MODEL_LEADS); the slope difference over the tree 0.00727 ([0.00599, 0.00867]). Rung-to-rung gains: model
+0.0091, 0.0074, 0.0054, 0.0043, 0.0064, 0.0104, logistic 0.0028, 0.0146, 0.0094, 0.0062, 0.008, 0.0044, tree
+0.0067, 0.0014, 0.0014, -0.0008, 0.0, -0.0002; end-to-end over the second decade model 0.0211, logistic 0.0186,
+tree -0.001.
 
-Not a transfer reading, and not 0023's in-distribution reading either: every rung holds the scored files' own unscored chunks, and the plaintexts added above rung 4 are other files of the same kinds — so the second decade confounds more plaintexts with plaintexts from other files, which the shift arm reads directly. The 'second decade' is 3.0 doublings (0.9031 of a decade) of other files above 0021's block; both together span 1.8016 decades, short of 0003's two-decade scope rule. Nothing below this line changes until its frozen reader has read the completed run.
+**The shift arm, and 0021's bar re-applied.** The shift arm — rung 5's new plaintexts alone (1029 plaintexts,
+26420 rows: rung 4's count, none of 0021's block) — reads model 0.1184, logistic 0.118, tree 0.0923: against
+rung 4 by -0.0009, 0.0001 and -0.0006, against rung 5 by -0.0052, -0.0061 and 0.0002 — the direct reading of
+what other files of the same families buy for the original files at the same count, informational. 0021's clause
+re-applied at the top rung (informational; 0021's other three baselines are not refitted here, so the tree-floor
+flag can only be optimistic): the model's 0.1404 does not clear 0.1419 over the tree and does not clear 0.1865
+over the higher of the tree and the logistic. Sensitivity: with rung 4 at 0021's reading the second-decade
+slopes are model 0.00697, logistic 0.00638, tree -0.0003. Per family, second-decade model slopes: rst_doc
+0.00899, rfc_txt 0.00823, py_src 0.00723, c_src 0.00607, pe_bin 0.00424; the logistic's: py_src 0.01029, rst_doc
+0.00874, c_src 0.00738, pe_bin 0.00385, rfc_txt 0.00156. On the builder's own evaluation set the second-decade
+slopes read model 0.00231, logistic 0.00335, tree -0.00391.
+
+Controls: the null control on the top rung's permuted labels reads 0.0372 on the real rows, 0.0386 on the
+extension set and 0.0376 on the evaluation set against chance 0.038462; roles at their iteration cap: none; the
+25 committed checkpoints cross-checked by the reader, which recounts every reading, slope, interval and lead
+from the banked score vectors. Cost: 6456.7 s wall on the last of 1 launch(es), 5950.5 s of fits banked (the top
+rung's model fit 2352.6 s, the null 223.1 s), against the 8097 s (2.2 hours) to 24604 s (6.8 hours) of fits
+estimated in advance.
+
+**What it means.** Other files of the same kinds keep buying the recipe the record's rate on the files it is
+scored on, through 8232 plaintexts (eight times 0021's), so the budget excuse is answered a second time on real
+content, this time with other files; at eight times 0021's plaintexts the boosted recipe still leads a rule a
+person can write out on the record's own real content, by 0.0039 — the recipe conclusion of 0021, 0022 and 0023
+(that the linear rule gets most of the signal) is bounded by the size of that lead, not reversed. Not a transfer
+reading, and not 0023's in-distribution reading either: every rung holds the scored files' own unscored chunks,
+and the plaintexts added above rung 4 are other files of the same kinds, so the second decade confounds more
+plaintexts with plaintexts from other files, which the shift arm reads directly. The sealed file expected
+`SECOND_DECADE_RISES` more likely than not (less likely than 0023's pass) and `LINEAR_LEADS` or `NO_SEPARATION`
+more likely than `MODEL_LEADS`; the run read `SECOND_DECADE_RISES_MODEL_LEADS`. No extrapolation beyond the top
+rung is banked or quoted. Nothing here revises 0003, 0014, 0015, 0016, 0017, 0018, 0019, 0021, 0022 or 0023, and
+nothing here establishes a buyer.
 
 **Preregistration 0023 (chain seq 23) — `REAL_CURVE_RISES`, and what it found.** The encoder signal on real
 content rises with the real plaintexts fitted — and the hand-writable linear rule rises faster. 0021's 26346-row

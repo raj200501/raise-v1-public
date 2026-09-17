@@ -95,13 +95,22 @@ which the sealed reading rule calls 'the linear rule buys more per doubling than
 with real plaintexts at 0.7276 of the builder's per-plaintext rate, and what grows fastest is the hand-writable rule. No
 extrapolation beyond the top rung is banked or quoted.
 
-Preregistration 0024 (chain entry 24, frozen 2026-09-17) asks the second decade: a new fit corpus of 7574 real plaintexts
-from other files of the same five families (23 pinned archives, 600 RFC texts, licences filed), nested on
-0021's block in three exact doublings (130, 258, 515, 1029, 2058, 4116, 8232 plaintexts over seven rungs); the model's second-decade slope per doubling read
-against 0.005 with a cluster-bootstrap lower bound above 0.0, and the model's lead over the linear rule at the top rung read by a
-sealed paired-interval rule into the verdict string itself; a shift arm reads what the new files alone buy. Expected outcome
-stated in advance: rises, more likely than not; the linear rule ahead or not separated, more likely than the model ahead. It is
-frozen and running.
+Preregistration 0024 (chain entry 24) asked the second decade: a new fit corpus of 7574 real plaintexts from other files of the
+same five families (23 pinned archives, 600 RFC texts, licences filed; every chunk hashed against every whole chunk and every
+kilobyte run of the 0018 files), nested on 0021's block in three exact doublings (130, 258, 515, 1029, 2058, 4116, 8232
+plaintexts over seven rungs; the 'second decade' is 3.0 doublings (0.9031 of a decade) of other files above 0021's block; both
+together span 1.8016 decades, short of 0003's two-decade scope rule). **`SECOND_DECADE_RISES_MODEL_LEADS` — the second decade of
+real plaintexts rises — and the boosted model still leads the hand-writable linear rule at the top rung**: the model reads
+0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, a second-decade slope of 0.00697 per doubling of plaintexts (scored-chunk
+interval [0.00571, 0.00824]) against 0.005 required with the lower bound above 0.0; the standardised logistic 0.00638, the
+depth-3 tree -0.0003; model minus logistic 0.00059 (paired interval [-0.00102, 0.00231]). At the top rung, the model leads the
+standardised logistic by 0.0039 (paired interval [0.0001, 0.0077], entirely above 0) — `MODEL_LEADS` by the rule sealed in
+advance. The shift arm (rung 5's new plaintexts alone at rung 4's count) reads 0.1184 for the model against rung 4's 0.1193
+(-0.0009). Other files of the same kinds keep buying the recipe the record's rate on the files it is scored on, through 8232
+plaintexts (eight times 0021's), so the budget excuse is answered a second time on real content, this time with other files; at
+eight times 0021's plaintexts the boosted recipe still leads a rule a person can write out on the record's own real content, by
+0.0039 — the recipe conclusion of 0021, 0022 and 0023 (that the linear rule gets most of the signal) is bounded by the size of
+that lead, not reversed. No extrapolation beyond the top rung is banked or quoted.
 
 The curve and the searched margin stand as measured, and they are statements about the corpus builder's eight
 content families (gutenberg, base64, binary, code, csv, json, log, mixed), not about DEFLATE streams in general;
