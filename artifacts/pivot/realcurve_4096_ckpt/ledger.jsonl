@@ -45,3 +45,4 @@
 {"name": "run_rep1_logistic", "fingerprint": "69213f3f5fd816ab", "event": "completed", "utc": "2026-09-17T12:06:23Z", "rss_gb": 2.45, "pid": 27226, "seconds": 6.1}
 {"name": "run_rep1_model", "fingerprint": "bc9e66705b08dedd", "event": "rung_bound", "utc": "2026-09-17T12:06:25Z", "rss_gb": 2.45, "pid": 27226, "rung": "rep1", "rung_sorted_sha256": "80e3a896c44fa53446b53ae0c2c500c840dfc28bc66314004a38f5ca6aa7b23f"}
 {"name": "run_rep1_model", "fingerprint": "bc9e66705b08dedd", "event": "started", "utc": "2026-09-17T12:06:25Z", "rss_gb": 2.45, "pid": 27226, "attempt": 1}
+{"name": "run_rep1_model", "fingerprint": "bc9e66705b08dedd", "event": "completed", "utc": "2026-09-17T12:07:24Z", "rss_gb": 2.45, "pid": 27226, "seconds": 32.1}

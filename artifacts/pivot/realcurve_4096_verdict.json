@@ -1,0 +1,1767 @@
+{
+  "bar_applied": {
+    "bootstrap_lower_bound_gt": 0.0,
+    "bootstrap_seed": 20260825,
+    "doublings_spanned": 2.984659,
+    "fit_rows": 26346,
+    "fit_source_chunks": 1029,
+    "log2_chunks": [
+      7.022368,
+      8.011227,
+      9.008429,
+      10.007027
+    ],
+    "n_boot": 2000,
+    "n_real_rows": 38452,
+    "rungs": [
+      {
+        "denominator": 8,
+        "n_chunks": 130,
+        "n_rows": 3344,
+        "rung": 1
+      },
+      {
+        "denominator": 4,
+        "n_chunks": 258,
+        "n_rows": 6635,
+        "rung": 2
+      },
+      {
+        "denominator": 2,
+        "n_chunks": 515,
+        "n_rows": 13207,
+        "rung": 3
+      },
+      {
+        "denominator": 1,
+        "n_chunks": 1029,
+        "n_rows": 26346,
+        "rung": 4
+      }
+    ],
+    "slope_per_doubling": 0.005
+  },
+  "builder_eval_top1": {
+    "null": 0.0388,
+    "r1_depth3_tree": 0.057,
+    "r1_logistic": 0.0705,
+    "r1_model": 0.0807,
+    "r2_depth3_tree": 0.0713,
+    "r2_logistic": 0.0672,
+    "r2_model": 0.08,
+    "r3_depth3_tree": 0.0841,
+    "r3_logistic": 0.0749,
+    "r3_model": 0.0801,
+    "r4_depth3_tree": 0.0854,
+    "r4_logistic": 0.0769,
+    "r4_model": 0.0814,
+    "rep1_depth3_tree": 0.0868,
+    "rep1_logistic": 0.0649,
+    "rep1_model": 0.0812
+  },
+  "checkpoints_cross_checked": 16,
+  "curves": {
+    "depth3_tree": {
+      "builder_eval_slope_per_doubling": 0.009842,
+      "complete": true,
+      "end_to_end_gain": 0.0095,
+      "per_family_slope_per_doubling": {
+        "c_src": 0.0047,
+        "pe_bin": 0.000975,
+        "py_src": 0.000704,
+        "rfc_txt": 0.002845,
+        "rst_doc": 0.005664
+      },
+      "rung_to_rung_gains": [
+        0.0067,
+        0.0014,
+        0.0014
+      ],
+      "rungs": [
+        {
+          "builder_eval_top1": 0.057,
+          "denominator": 8,
+          "ext_per_family": {
+            "c_src": 0.0885,
+            "pe_bin": 0.0771,
+            "py_src": 0.0815,
+            "rfc_txt": 0.0836,
+            "rst_doc": 0.086
+          },
+          "ext_real_correct": 3207,
+          "ext_real_top1": 0.0834,
+          "log2_chunks": 7.022368,
+          "n_chunks": 130,
+          "n_rows": 3344,
+          "rung": 1
+        },
+        {
+          "builder_eval_top1": 0.0713,
+          "denominator": 4,
+          "ext_per_family": {
+            "c_src": 0.0956,
+            "pe_bin": 0.0787,
+            "py_src": 0.0848,
+            "rfc_txt": 0.0975,
+            "rst_doc": 0.0931
+          },
+          "ext_real_correct": 3464,
+          "ext_real_top1": 0.0901,
+          "log2_chunks": 8.011227,
+          "n_chunks": 258,
+          "n_rows": 6635,
+          "rung": 2
+        },
+        {
+          "builder_eval_top1": 0.0841,
+          "denominator": 2,
+          "ext_per_family": {
+            "c_src": 0.1022,
+            "pe_bin": 0.0779,
+            "py_src": 0.0783,
+            "rfc_txt": 0.0953,
+            "rst_doc": 0.103
+          },
+          "ext_real_correct": 3519,
+          "ext_real_top1": 0.0915,
+          "log2_chunks": 9.008429,
+          "n_chunks": 515,
+          "n_rows": 13207,
+          "rung": 3
+        },
+        {
+          "builder_eval_top1": 0.0854,
+          "denominator": 1,
+          "ext_per_family": {
+            "c_src": 0.1019,
+            "pe_bin": 0.0806,
+            "py_src": 0.086,
+            "rfc_txt": 0.0938,
+            "rst_doc": 0.1015
+          },
+          "ext_real_correct": 3572,
+          "ext_real_top1": 0.0929,
+          "log2_chunks": 10.007027,
+          "n_chunks": 1029,
+          "n_rows": 26346,
+          "rung": 4
+        }
+      ],
+      "slope_per_doubling": 0.003002,
+      "slope_with_top_rung_at_reference": 0.003002
+    },
+    "logistic": {
+      "builder_eval_slope_per_doubling": 0.002707,
+      "complete": true,
+      "end_to_end_gain": 0.0268,
+      "per_family_slope_per_doubling": {
+        "c_src": 0.0093,
+        "pe_bin": 0.005019,
+        "py_src": 0.012356,
+        "rfc_txt": 0.012034,
+        "rst_doc": 0.008975
+      },
+      "rung_to_rung_gains": [
+        0.0028,
+        0.0146,
+        0.0094
+      ],
+      "rungs": [
+        {
+          "builder_eval_top1": 0.0705,
+          "denominator": 8,
+          "ext_per_family": {
+            "c_src": 0.1,
+            "pe_bin": 0.0768,
+            "py_src": 0.1005,
+            "rfc_txt": 0.0871,
+            "rst_doc": 0.0904
+          },
+          "ext_real_correct": 3503,
+          "ext_real_top1": 0.0911,
+          "log2_chunks": 7.022368,
+          "n_chunks": 130,
+          "n_rows": 3344,
+          "rung": 1
+        },
+        {
+          "builder_eval_top1": 0.0672,
+          "denominator": 4,
+          "ext_per_family": {
+            "c_src": 0.0996,
+            "pe_bin": 0.0755,
+            "py_src": 0.1049,
+            "rfc_txt": 0.093,
+            "rst_doc": 0.0954
+          },
+          "ext_real_correct": 3609,
+          "ext_real_top1": 0.0939,
+          "log2_chunks": 8.011227,
+          "n_chunks": 258,
+          "n_rows": 6635,
+          "rung": 2
+        },
+        {
+          "builder_eval_top1": 0.0749,
+          "denominator": 2,
+          "ext_per_family": {
+            "c_src": 0.1195,
+            "pe_bin": 0.0852,
+            "py_src": 0.1219,
+            "rfc_txt": 0.1053,
+            "rst_doc": 0.1097
+          },
+          "ext_real_correct": 4173,
+          "ext_real_top1": 0.1085,
+          "log2_chunks": 9.008429,
+          "n_chunks": 515,
+          "n_rows": 13207,
+          "rung": 3
+        },
+        {
+          "builder_eval_top1": 0.0769,
+          "denominator": 1,
+          "ext_per_family": {
+            "c_src": 0.1242,
+            "pe_bin": 0.0902,
+            "py_src": 0.1358,
+            "rfc_txt": 0.1229,
+            "rst_doc": 0.1154
+          },
+          "ext_real_correct": 4535,
+          "ext_real_top1": 0.1179,
+          "log2_chunks": 10.007027,
+          "n_chunks": 1029,
+          "n_rows": 26346,
+          "rung": 4
+        }
+      ],
+      "slope_per_doubling": 0.009551,
+      "slope_with_top_rung_at_reference": 0.009551
+    },
+    "model": {
+      "builder_eval_slope_per_doubling": 0.000222,
+      "complete": true,
+      "end_to_end_gain": 0.0219,
+      "per_family_slope_per_doubling": {
+        "c_src": 0.008694,
+        "pe_bin": 0.005704,
+        "py_src": 0.010108,
+        "rfc_txt": 0.007443,
+        "rst_doc": 0.004711
+      },
+      "rung_to_rung_gains": [
+        0.0091,
+        0.0074,
+        0.0054
+      ],
+      "rungs": [
+        {
+          "builder_eval_top1": 0.0807,
+          "denominator": 8,
+          "ext_per_family": {
+            "c_src": 0.1035,
+            "pe_bin": 0.0798,
+            "py_src": 0.1026,
+            "rfc_txt": 0.1009,
+            "rst_doc": 0.0995
+          },
+          "ext_real_correct": 3746,
+          "ext_real_top1": 0.0974,
+          "log2_chunks": 7.022368,
+          "n_chunks": 130,
+          "n_rows": 3344,
+          "rung": 1
+        },
+        {
+          "builder_eval_top1": 0.08,
+          "denominator": 4,
+          "ext_per_family": {
+            "c_src": 0.1109,
+            "pe_bin": 0.0886,
+            "py_src": 0.114,
+            "rfc_txt": 0.1109,
+            "rst_doc": 0.1073
+          },
+          "ext_real_correct": 4095,
+          "ext_real_top1": 0.1065,
+          "log2_chunks": 8.011227,
+          "n_chunks": 258,
+          "n_rows": 6635,
+          "rung": 2
+        },
+        {
+          "builder_eval_top1": 0.0801,
+          "denominator": 2,
+          "ext_per_family": {
+            "c_src": 0.1194,
+            "pe_bin": 0.0959,
+            "py_src": 0.1243,
+            "rfc_txt": 0.1193,
+            "rst_doc": 0.1101
+          },
+          "ext_real_correct": 4381,
+          "ext_real_top1": 0.1139,
+          "log2_chunks": 9.008429,
+          "n_chunks": 515,
+          "n_rows": 13207,
+          "rung": 3
+        },
+        {
+          "builder_eval_top1": 0.0814,
+          "denominator": 1,
+          "ext_per_family": {
+            "c_src": 0.1295,
+            "pe_bin": 0.0963,
+            "py_src": 0.1327,
+            "rfc_txt": 0.1228,
+            "rst_doc": 0.1142
+          },
+          "ext_real_correct": 4587,
+          "ext_real_top1": 0.1193,
+          "log2_chunks": 10.007027,
+          "n_chunks": 1029,
+          "n_rows": 26346,
+          "rung": 4
+        }
+      ],
+      "slope_per_doubling": 0.007344,
+      "slope_with_top_rung_at_reference": 0.007344
+    }
+  },
+  "depth3_tree_slope_per_doubling": 0.003002,
+  "establishes_a_buyer": false,
+  "ext_per_family": {
+    "null": {
+      "c_src": 0.0401,
+      "hexdump": 0.039,
+      "pe_bin": 0.0385,
+      "py_src": 0.0411,
+      "rfc_txt": 0.0399,
+      "rst_doc": 0.0446,
+      "sql": 0.031,
+      "xml": 0.0404
+    },
+    "r1_depth3_tree": {
+      "c_src": 0.0885,
+      "hexdump": 0.0844,
+      "pe_bin": 0.0771,
+      "py_src": 0.0815,
+      "rfc_txt": 0.0836,
+      "rst_doc": 0.086,
+      "sql": 0.0591,
+      "xml": 0.0669
+    },
+    "r1_logistic": {
+      "c_src": 0.1,
+      "hexdump": 0.045,
+      "pe_bin": 0.0768,
+      "py_src": 0.1005,
+      "rfc_txt": 0.0871,
+      "rst_doc": 0.0904,
+      "sql": 0.0718,
+      "xml": 0.0799
+    },
+    "r1_model": {
+      "c_src": 0.1035,
+      "hexdump": 0.04,
+      "pe_bin": 0.0798,
+      "py_src": 0.1026,
+      "rfc_txt": 0.1009,
+      "rst_doc": 0.0995,
+      "sql": 0.0813,
+      "xml": 0.0858
+    },
+    "r2_depth3_tree": {
+      "c_src": 0.0956,
+      "hexdump": 0.0758,
+      "pe_bin": 0.0787,
+      "py_src": 0.0848,
+      "rfc_txt": 0.0975,
+      "rst_doc": 0.0931,
+      "sql": 0.0468,
+      "xml": 0.0464
+    },
+    "r2_logistic": {
+      "c_src": 0.0996,
+      "hexdump": 0.046,
+      "pe_bin": 0.0755,
+      "py_src": 0.1049,
+      "rfc_txt": 0.093,
+      "rst_doc": 0.0954,
+      "sql": 0.0727,
+      "xml": 0.079
+    },
+    "r2_model": {
+      "c_src": 0.1109,
+      "hexdump": 0.0473,
+      "pe_bin": 0.0886,
+      "py_src": 0.114,
+      "rfc_txt": 0.1109,
+      "rst_doc": 0.1073,
+      "sql": 0.0739,
+      "xml": 0.0924
+    },
+    "r3_depth3_tree": {
+      "c_src": 0.1022,
+      "hexdump": 0.0724,
+      "pe_bin": 0.0779,
+      "py_src": 0.0783,
+      "rfc_txt": 0.0953,
+      "rst_doc": 0.103,
+      "sql": 0.0609,
+      "xml": 0.0832
+    },
+    "r3_logistic": {
+      "c_src": 0.1195,
+      "hexdump": 0.0538,
+      "pe_bin": 0.0852,
+      "py_src": 0.1219,
+      "rfc_txt": 0.1053,
+      "rst_doc": 0.1097,
+      "sql": 0.0919,
+      "xml": 0.0951
+    },
+    "r3_model": {
+      "c_src": 0.1194,
+      "hexdump": 0.0388,
+      "pe_bin": 0.0959,
+      "py_src": 0.1243,
+      "rfc_txt": 0.1193,
+      "rst_doc": 0.1101,
+      "sql": 0.0794,
+      "xml": 0.0873
+    },
+    "r4_depth3_tree": {
+      "c_src": 0.1019,
+      "hexdump": 0.0628,
+      "pe_bin": 0.0806,
+      "py_src": 0.086,
+      "rfc_txt": 0.0938,
+      "rst_doc": 0.1015,
+      "sql": 0.0742,
+      "xml": 0.0953
+    },
+    "r4_logistic": {
+      "c_src": 0.1242,
+      "hexdump": 0.0491,
+      "pe_bin": 0.0902,
+      "py_src": 0.1358,
+      "rfc_txt": 0.1229,
+      "rst_doc": 0.1154,
+      "sql": 0.0939,
+      "xml": 0.1009
+    },
+    "r4_model": {
+      "c_src": 0.1295,
+      "hexdump": 0.041,
+      "pe_bin": 0.0963,
+      "py_src": 0.1327,
+      "rfc_txt": 0.1228,
+      "rst_doc": 0.1142,
+      "sql": 0.0769,
+      "xml": 0.0904
+    },
+    "rep1_depth3_tree": {
+      "c_src": 0.1018,
+      "hexdump": 0.0674,
+      "pe_bin": 0.0737,
+      "py_src": 0.0804,
+      "rfc_txt": 0.0978,
+      "rst_doc": 0.1042,
+      "sql": 0.0708,
+      "xml": 0.099
+    },
+    "rep1_logistic": {
+      "c_src": 0.0981,
+      "hexdump": 0.0355,
+      "pe_bin": 0.0763,
+      "py_src": 0.1012,
+      "rfc_txt": 0.0809,
+      "rst_doc": 0.092,
+      "sql": 0.057,
+      "xml": 0.0841
+    },
+    "rep1_model": {
+      "c_src": 0.1041,
+      "hexdump": 0.0522,
+      "pe_bin": 0.0813,
+      "py_src": 0.1013,
+      "rfc_txt": 0.1039,
+      "rst_doc": 0.1006,
+      "sql": 0.0871,
+      "xml": 0.0819
+    }
+  },
+  "ext_real_correct": {
+    "null": 1572,
+    "r1_depth3_tree": 3207,
+    "r1_logistic": 3503,
+    "r1_model": 3746,
+    "r2_depth3_tree": 3464,
+    "r2_logistic": 3609,
+    "r2_model": 4095,
+    "r3_depth3_tree": 3519,
+    "r3_logistic": 4173,
+    "r3_model": 4381,
+    "r4_depth3_tree": 3572,
+    "r4_logistic": 4535,
+    "r4_model": 4587,
+    "rep1_depth3_tree": 3529,
+    "rep1_logistic": 3453,
+    "rep1_model": 3783
+  },
+  "ext_real_top1": {
+    "null": 0.0409,
+    "r1_depth3_tree": 0.0834,
+    "r1_logistic": 0.0911,
+    "r1_model": 0.0974,
+    "r2_depth3_tree": 0.0901,
+    "r2_logistic": 0.0939,
+    "r2_model": 0.1065,
+    "r3_depth3_tree": 0.0915,
+    "r3_logistic": 0.1085,
+    "r3_model": 0.1139,
+    "r4_depth3_tree": 0.0929,
+    "r4_logistic": 0.1179,
+    "r4_model": 0.1193,
+    "rep1_depth3_tree": 0.0918,
+    "rep1_logistic": 0.0898,
+    "rep1_model": 0.0984
+  },
+  "ext_rows_per_family": {
+    "c_src": 7800,
+    "hexdump": 7800,
+    "pe_bin": 7407,
+    "py_src": 7709,
+    "rfc_txt": 7761,
+    "rst_doc": 7775,
+    "sql": 7357,
+    "xml": 7800
+  },
+  "ext_subsets": {
+    "null": {
+      "ext_high_entropy_top1": 0.0387,
+      "ext_real_top1": 0.0409,
+      "ext_structured_text_top1": 0.0396,
+      "ext_synthetic_top1": 0.0369
+    },
+    "r1_depth3_tree": {
+      "ext_high_entropy_top1": 0.0808,
+      "ext_real_top1": 0.0834,
+      "ext_structured_text_top1": 0.0778,
+      "ext_synthetic_top1": 0.0703
+    },
+    "r1_logistic": {
+      "ext_high_entropy_top1": 0.0605,
+      "ext_real_top1": 0.0911,
+      "ext_structured_text_top1": 0.0884,
+      "ext_synthetic_top1": 0.0654
+    },
+    "r1_model": {
+      "ext_high_entropy_top1": 0.0594,
+      "ext_real_top1": 0.0974,
+      "ext_structured_text_top1": 0.0957,
+      "ext_synthetic_top1": 0.0688
+    },
+    "r2_depth3_tree": {
+      "ext_high_entropy_top1": 0.0772,
+      "ext_real_top1": 0.0901,
+      "ext_structured_text_top1": 0.0776,
+      "ext_synthetic_top1": 0.0565
+    },
+    "r2_logistic": {
+      "ext_high_entropy_top1": 0.0604,
+      "ext_real_top1": 0.0939,
+      "ext_structured_text_top1": 0.0909,
+      "ext_synthetic_top1": 0.0658
+    },
+    "r2_model": {
+      "ext_high_entropy_top1": 0.0674,
+      "ext_real_top1": 0.1065,
+      "ext_structured_text_top1": 0.1018,
+      "ext_synthetic_top1": 0.0712
+    },
+    "r3_depth3_tree": {
+      "ext_high_entropy_top1": 0.0751,
+      "ext_real_top1": 0.0915,
+      "ext_structured_text_top1": 0.0874,
+      "ext_synthetic_top1": 0.0724
+    },
+    "r3_logistic": {
+      "ext_high_entropy_top1": 0.0691,
+      "ext_real_top1": 0.1085,
+      "ext_structured_text_top1": 0.1074,
+      "ext_synthetic_top1": 0.0801
+    },
+    "r3_model": {
+      "ext_high_entropy_top1": 0.0666,
+      "ext_real_top1": 0.1139,
+      "ext_structured_text_top1": 0.1068,
+      "ext_synthetic_top1": 0.0683
+    },
+    "r4_depth3_tree": {
+      "ext_high_entropy_top1": 0.0715,
+      "ext_real_top1": 0.0929,
+      "ext_structured_text_top1": 0.0923,
+      "ext_synthetic_top1": 0.0775
+    },
+    "r4_logistic": {
+      "ext_high_entropy_top1": 0.0691,
+      "ext_real_top1": 0.1179,
+      "ext_structured_text_top1": 0.1157,
+      "ext_synthetic_top1": 0.0811
+    },
+    "r4_model": {
+      "ext_high_entropy_top1": 0.0679,
+      "ext_real_top1": 0.1193,
+      "ext_structured_text_top1": 0.1114,
+      "ext_synthetic_top1": 0.0693
+    },
+    "rep1_depth3_tree": {
+      "ext_high_entropy_top1": 0.0705,
+      "ext_real_top1": 0.0918,
+      "ext_structured_text_top1": 0.0926,
+      "ext_synthetic_top1": 0.0792
+    },
+    "rep1_logistic": {
+      "ext_high_entropy_top1": 0.0554,
+      "ext_real_top1": 0.0898,
+      "ext_structured_text_top1": 0.0858,
+      "ext_synthetic_top1": 0.0589
+    },
+    "rep1_model": {
+      "ext_high_entropy_top1": 0.0664,
+      "ext_real_top1": 0.0984,
+      "ext_structured_text_top1": 0.0966,
+      "ext_synthetic_top1": 0.0735
+    }
+  },
+  "ext_top1": {
+    "null": 0.0394,
+    "r1_depth3_tree": 0.0785,
+    "r1_logistic": 0.0815,
+    "r1_model": 0.0867,
+    "r2_depth3_tree": 0.0775,
+    "r2_logistic": 0.0834,
+    "r2_model": 0.0933,
+    "r3_depth3_tree": 0.0844,
+    "r3_logistic": 0.0979,
+    "r3_model": 0.0969,
+    "r4_depth3_tree": 0.0871,
+    "r4_logistic": 0.1042,
+    "r4_model": 0.1006,
+    "rep1_depth3_tree": 0.0871,
+    "rep1_logistic": 0.0782,
+    "rep1_model": 0.0891
+  },
+  "fit_rows_per_family": {
+    "c_src": 624,
+    "pe_bin": 5145,
+    "py_src": 17197,
+    "rfc_txt": 2340,
+    "rst_doc": 1040
+  },
+  "flags": {
+    "at_iteration_cap": {
+      "null": false,
+      "r1_logistic": false,
+      "r1_model": false,
+      "r2_logistic": false,
+      "r2_model": false,
+      "r3_logistic": false,
+      "r3_model": false,
+      "r4_logistic": false,
+      "r4_model": false,
+      "rep1_logistic": false,
+      "rep1_model": false
+    },
+    "bootstrap_clears": true,
+    "builder_eval_slope_per_doubling": {
+      "depth3_tree": 0.009842,
+      "logistic": 0.002707,
+      "model": 0.000222
+    },
+    "builder_per_plaintext_slope_per_doubling_reference": 0.010093,
+    "checkpoints_cross_checked": 16,
+    "depth3_tree_slope_ci95": [
+      0.002448,
+      0.003574
+    ],
+    "depth3_tree_slope_per_doubling": 0.003002,
+    "difference_reading": "the paired interval is entirely below 0: on this content the linear rule buys more per doubling than the model",
+    "difference_reading_is_a_recipe_comparison": true,
+    "doublings_spanned": 2.984659,
+    "end_to_end_gain": {
+      "depth3_tree": 0.0095,
+      "logistic": 0.0268,
+      "model": 0.0219
+    },
+    "fit_info_by_family": {
+      "null": "hgb",
+      "r1_depth3_tree": "tree",
+      "r1_logistic": "logistic",
+      "r1_model": "hgb",
+      "r2_depth3_tree": "tree",
+      "r2_logistic": "logistic",
+      "r2_model": "hgb",
+      "r3_depth3_tree": "tree",
+      "r3_logistic": "logistic",
+      "r3_model": "hgb",
+      "r4_depth3_tree": "tree",
+      "r4_logistic": "logistic",
+      "r4_model": "hgb",
+      "rep1_depth3_tree": "tree",
+      "rep1_logistic": "logistic",
+      "rep1_model": "hgb"
+    },
+    "logistic_leads_model_at_every_rung": false,
+    "logistic_slope_ci95": [
+      0.008478,
+      0.010649
+    ],
+    "logistic_slope_per_doubling": 0.009551,
+    "model_leads_logistic_at_every_rung": true,
+    "model_slope_as_fraction_of_builder_per_plaintext_slope": 0.7276,
+    "model_slope_ci95": [
+      0.006199,
+      0.00846
+    ],
+    "model_slope_per_doubling": 0.007344,
+    "n_iter_by_name": {
+      "null": 21,
+      "r1_depth3_tree": null,
+      "r1_logistic": 83,
+      "r1_model": 31,
+      "r2_depth3_tree": null,
+      "r2_logistic": 224,
+      "r2_model": 36,
+      "r3_depth3_tree": null,
+      "r3_logistic": 314,
+      "r3_model": 47,
+      "r4_depth3_tree": null,
+      "r4_logistic": 392,
+      "r4_model": 62,
+      "rep1_depth3_tree": null,
+      "rep1_logistic": 165,
+      "rep1_model": 33
+    },
+    "null_real_top1": 0.0409,
+    "per_family_slope_per_doubling": {
+      "depth3_tree": {
+        "c_src": 0.0047,
+        "pe_bin": 0.000975,
+        "py_src": 0.000704,
+        "rfc_txt": 0.002845,
+        "rst_doc": 0.005664
+      },
+      "logistic": {
+        "c_src": 0.0093,
+        "pe_bin": 0.005019,
+        "py_src": 0.012356,
+        "rfc_txt": 0.012034,
+        "rst_doc": 0.008975
+      },
+      "model": {
+        "c_src": 0.008694,
+        "pe_bin": 0.005704,
+        "py_src": 0.010108,
+        "rfc_txt": 0.007443,
+        "rst_doc": 0.004711
+      }
+    },
+    "replicate_rung_1": {
+      "chunks_shared_with_rung_1": 16,
+      "difference_from_rung_1": {
+        "depth3_tree": 0.0084,
+        "logistic": -0.0013,
+        "model": 0.001
+      },
+      "note": "informational: one replicate reads the size of the fit-side variance at the smallest rung; it does not bound it",
+      "readings_ext_real_top1": {
+        "depth3_tree": 0.0918,
+        "logistic": 0.0898,
+        "model": 0.0984
+      },
+      "slope_with_replicate_at_rung_1": {
+        "depth3_tree": 0.000474,
+        "logistic": 0.009942,
+        "model": 0.007043
+      }
+    },
+    "reproduction_drift": {
+      "depth3_tree": 0.0,
+      "logistic": 0.0,
+      "model": 0.0
+    },
+    "roles_at_iteration_cap": [],
+    "rung_table": [
+      {
+        "denominator": 8,
+        "depth3_tree": 0.0834,
+        "logistic": 0.0911,
+        "model": 0.0974,
+        "n_chunks": 130,
+        "n_rows": 3344,
+        "rung": 1
+      },
+      {
+        "denominator": 4,
+        "depth3_tree": 0.0901,
+        "logistic": 0.0939,
+        "model": 0.1065,
+        "n_chunks": 258,
+        "n_rows": 6635,
+        "rung": 2
+      },
+      {
+        "denominator": 2,
+        "depth3_tree": 0.0915,
+        "logistic": 0.1085,
+        "model": 0.1139,
+        "n_chunks": 515,
+        "n_rows": 13207,
+        "rung": 3
+      },
+      {
+        "denominator": 1,
+        "depth3_tree": 0.0929,
+        "logistic": 0.1179,
+        "model": 0.1193,
+        "n_chunks": 1029,
+        "n_rows": 26346,
+        "rung": 4
+      }
+    ],
+    "rung_to_rung_gains": {
+      "depth3_tree": [
+        0.0067,
+        0.0014,
+        0.0014
+      ],
+      "logistic": [
+        0.0028,
+        0.0146,
+        0.0094
+      ],
+      "model": [
+        0.0091,
+        0.0074,
+        0.0054
+      ]
+    },
+    "share_is": "a description of the resamples, not a probability that the model is better",
+    "share_of_resamples_with_model_ahead_of_logistic": 0.002,
+    "slope_clears": true,
+    "slope_model_minus_depth3_tree": 0.004342,
+    "slope_model_minus_depth3_tree_ci95_paired": [
+      0.003036,
+      0.005609
+    ],
+    "slope_model_minus_logistic": -0.002207,
+    "slope_model_minus_logistic_ci95_paired": [
+      -0.003707,
+      -0.000752
+    ],
+    "slope_with_top_rung_at_0021s_reading": {
+      "depth3_tree": 0.003002,
+      "logistic": 0.009551,
+      "model": 0.007344
+    },
+    "top_rung_is_0021s_failing_reading": {
+      "margin_over_the_logistic_at_0021": 0.0014,
+      "model": 0.1193,
+      "needed_over_the_tree_at_0021": 0.1429
+    }
+  },
+  "informational_only": "the flags, the other roles' slopes and intervals, the per-family slopes, the replicate, the sensitivity slopes, the reverse curves on the builder's evaluation set and the artifact's cluster intervals are informational: not a verdict, not quotable as a pass. The verdict is the `verdict` field, read on the model's slope and its scored-chunk interval, and it is an in-distribution reading on real content whose top rung fails the record's margin.",
+  "is_a_transfer_reading": false,
+  "logistic_slope_per_doubling": 0.009551,
+  "meaning": "REAL_CURVE_RISES: the model's real-family accuracy rises with the plaintexts fitted at or above 0.005 per doubling, with the scored-chunk interval above 0.0 - a rise to 0021's failing reading, never 'more real data fixes the model'. At 4096 bytes, on nested rungs of 130 to 1029 real plaintexts of the five pinned real files (2.984659 doublings), 0021's three fixed recipes read, per rung: the model [0.0974, 0.1065, 0.1139, 0.1193], the standardised logistic [0.0911, 0.0939, 0.1085, 0.1179], the depth-3 tree [0.0834, 0.0901, 0.0915, 0.0929] on the 38452 real-family rows. Slopes per doubling of plaintexts: model 0.007344 (bootstrap interval over the scored chunks [0.006199, 0.00846]), logistic 0.009551 ([0.008478, 0.010649]), depth-3 tree 0.003002 ([0.002448, 0.003574]); model minus logistic -0.002207, paired interval [-0.003707, -0.000752]: the paired interval is entirely below 0: on this content the linear rule buys more per doubling than the model. The replicate of the smallest rung under a second nesting reads {'depth3_tree': 0.0918, 'logistic': 0.0898, 'model': 0.0984} (differences from rung 1 {'depth3_tree': 0.0084, 'logistic': -0.0013, 'model': 0.001}). The curve's top rung is 0021's reading, which fails the record's margin (0.1193 against 0.1429 needed over the depth-3 tree, 0.0014 over the logistic at 0021). An in-distribution reading on real content, not a transfer reading: the fit and scored chunks are cut from the same five pinned blobs and share no byte, no chunk id and no source-chunk hash; the interval is over the scored chunks only and does not resample the fit side. Nothing here revises 0003, 0014, 0015, 0016, 0017, 0018, 0019, 0021 or 0022, and nothing here establishes a buyer. A rise the logistic and the tree share is a rise of the cheap signal, not of the recipe. A curve of just under one decade on the only real content the record has outside its sealed scoring set; nothing beyond the top rung is banked.",
+  "model_real_top1_by_rung": [
+    0.0974,
+    0.1065,
+    0.1139,
+    0.1193
+  ],
+  "model_real_top1_top_rung": 0.1193,
+  "model_slope_ci95": [
+    0.006199,
+    0.00846
+  ],
+  "model_slope_per_doubling": 0.007344,
+  "preregistration": "0023-realcurve-4096",
+  "read": {
+    "chance_accuracy": 0.038462,
+    "complete": true,
+    "curve_sha256": "7300a288139d2726fef353b8ac0d021dd881a4bf28d999b061cd2eb15959a1e7",
+    "depth3_tree_slope_per_doubling": 0.003002,
+    "logistic_slope_per_doubling": 0.009551,
+    "missing_roles": [],
+    "model_slope_per_doubling": 0.007344,
+    "n_classes": 26,
+    "n_eval_rows": 260000,
+    "n_ext_real_rows": 38452,
+    "n_ext_rows": 61409,
+    "n_rungs": 4,
+    "preregistration": "0023-realcurve-4096",
+    "shuffled_label_accuracy_eval": 0.0388,
+    "shuffled_label_accuracy_ext": 0.0394,
+    "smoke": false,
+    "stage": "run"
+  },
+  "readings_banked": {
+    "null": {
+      "builder_eval_correct": 10087,
+      "builder_eval_per_family": {
+        "base64": 0.0382,
+        "binary": 0.0385,
+        "code": 0.0407,
+        "csv": 0.039,
+        "gutenberg": 0.0402,
+        "json": 0.0383,
+        "log": 0.0376,
+        "mixed": 0.0379
+      },
+      "builder_eval_top1": 0.0388,
+      "ext_correct": 2419,
+      "ext_high_entropy_top1": 0.0387,
+      "ext_per_family": {
+        "c_src": 0.0401,
+        "hexdump": 0.039,
+        "pe_bin": 0.0385,
+        "py_src": 0.0411,
+        "rfc_txt": 0.0399,
+        "rst_doc": 0.0446,
+        "sql": 0.031,
+        "xml": 0.0404
+      },
+      "ext_per_family_correct": {
+        "c_src": 313,
+        "hexdump": 304,
+        "pe_bin": 285,
+        "py_src": 317,
+        "rfc_txt": 310,
+        "rst_doc": 347,
+        "sql": 228,
+        "xml": 315
+      },
+      "ext_real_correct": 1572,
+      "ext_real_top1": 0.0409,
+      "ext_structured_text_top1": 0.0396,
+      "ext_synthetic_correct": 847,
+      "ext_synthetic_top1": 0.0369,
+      "ext_top1": 0.0394,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "r1_depth3_tree": {
+      "builder_eval_correct": 14827,
+      "builder_eval_per_family": {
+        "base64": 0.0662,
+        "binary": 0.0334,
+        "code": 0.0706,
+        "csv": 0.045,
+        "gutenberg": 0.0621,
+        "json": 0.0634,
+        "log": 0.0491,
+        "mixed": 0.0664
+      },
+      "builder_eval_top1": 0.057,
+      "ext_correct": 4822,
+      "ext_high_entropy_top1": 0.0808,
+      "ext_per_family": {
+        "c_src": 0.0885,
+        "hexdump": 0.0844,
+        "pe_bin": 0.0771,
+        "py_src": 0.0815,
+        "rfc_txt": 0.0836,
+        "rst_doc": 0.086,
+        "sql": 0.0591,
+        "xml": 0.0669
+      },
+      "ext_per_family_correct": {
+        "c_src": 690,
+        "hexdump": 658,
+        "pe_bin": 571,
+        "py_src": 628,
+        "rfc_txt": 649,
+        "rst_doc": 669,
+        "sql": 435,
+        "xml": 522
+      },
+      "ext_real_correct": 3207,
+      "ext_real_top1": 0.0834,
+      "ext_structured_text_top1": 0.0778,
+      "ext_synthetic_correct": 1615,
+      "ext_synthetic_top1": 0.0703,
+      "ext_top1": 0.0785,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "r1_logistic": {
+      "builder_eval_correct": 18325,
+      "builder_eval_per_family": {
+        "base64": 0.0735,
+        "binary": 0.0757,
+        "code": 0.0821,
+        "csv": 0.0579,
+        "gutenberg": 0.0632,
+        "json": 0.0777,
+        "log": 0.0566,
+        "mixed": 0.0774
+      },
+      "builder_eval_top1": 0.0705,
+      "ext_correct": 5005,
+      "ext_high_entropy_top1": 0.0605,
+      "ext_per_family": {
+        "c_src": 0.1,
+        "hexdump": 0.045,
+        "pe_bin": 0.0768,
+        "py_src": 0.1005,
+        "rfc_txt": 0.0871,
+        "rst_doc": 0.0904,
+        "sql": 0.0718,
+        "xml": 0.0799
+      },
+      "ext_per_family_correct": {
+        "c_src": 780,
+        "hexdump": 351,
+        "pe_bin": 569,
+        "py_src": 775,
+        "rfc_txt": 676,
+        "rst_doc": 703,
+        "sql": 528,
+        "xml": 623
+      },
+      "ext_real_correct": 3503,
+      "ext_real_top1": 0.0911,
+      "ext_structured_text_top1": 0.0884,
+      "ext_synthetic_correct": 1502,
+      "ext_synthetic_top1": 0.0654,
+      "ext_top1": 0.0815,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "r1_model": {
+      "builder_eval_correct": 20991,
+      "builder_eval_per_family": {
+        "base64": 0.0709,
+        "binary": 0.0741,
+        "code": 0.0781,
+        "csv": 0.0824,
+        "gutenberg": 0.0891,
+        "json": 0.0908,
+        "log": 0.083,
+        "mixed": 0.0773
+      },
+      "builder_eval_top1": 0.0807,
+      "ext_correct": 5325,
+      "ext_high_entropy_top1": 0.0594,
+      "ext_per_family": {
+        "c_src": 0.1035,
+        "hexdump": 0.04,
+        "pe_bin": 0.0798,
+        "py_src": 0.1026,
+        "rfc_txt": 0.1009,
+        "rst_doc": 0.0995,
+        "sql": 0.0813,
+        "xml": 0.0858
+      },
+      "ext_per_family_correct": {
+        "c_src": 807,
+        "hexdump": 312,
+        "pe_bin": 591,
+        "py_src": 791,
+        "rfc_txt": 783,
+        "rst_doc": 774,
+        "sql": 598,
+        "xml": 669
+      },
+      "ext_real_correct": 3746,
+      "ext_real_top1": 0.0974,
+      "ext_structured_text_top1": 0.0957,
+      "ext_synthetic_correct": 1579,
+      "ext_synthetic_top1": 0.0688,
+      "ext_top1": 0.0867,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "r2_depth3_tree": {
+      "builder_eval_correct": 18533,
+      "builder_eval_per_family": {
+        "base64": 0.0665,
+        "binary": 0.0733,
+        "code": 0.0731,
+        "csv": 0.0451,
+        "gutenberg": 0.08,
+        "json": 0.0821,
+        "log": 0.0743,
+        "mixed": 0.0749
+      },
+      "builder_eval_top1": 0.0713,
+      "ext_correct": 4761,
+      "ext_high_entropy_top1": 0.0772,
+      "ext_per_family": {
+        "c_src": 0.0956,
+        "hexdump": 0.0758,
+        "pe_bin": 0.0787,
+        "py_src": 0.0848,
+        "rfc_txt": 0.0975,
+        "rst_doc": 0.0931,
+        "sql": 0.0468,
+        "xml": 0.0464
+      },
+      "ext_per_family_correct": {
+        "c_src": 746,
+        "hexdump": 591,
+        "pe_bin": 583,
+        "py_src": 654,
+        "rfc_txt": 757,
+        "rst_doc": 724,
+        "sql": 344,
+        "xml": 362
+      },
+      "ext_real_correct": 3464,
+      "ext_real_top1": 0.0901,
+      "ext_structured_text_top1": 0.0776,
+      "ext_synthetic_correct": 1297,
+      "ext_synthetic_top1": 0.0565,
+      "ext_top1": 0.0775,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "r2_logistic": {
+      "builder_eval_correct": 17483,
+      "builder_eval_per_family": {
+        "base64": 0.0689,
+        "binary": 0.0747,
+        "code": 0.0823,
+        "csv": 0.0506,
+        "gutenberg": 0.0647,
+        "json": 0.0658,
+        "log": 0.0527,
+        "mixed": 0.0785
+      },
+      "builder_eval_top1": 0.0672,
+      "ext_correct": 5119,
+      "ext_high_entropy_top1": 0.0604,
+      "ext_per_family": {
+        "c_src": 0.0996,
+        "hexdump": 0.046,
+        "pe_bin": 0.0755,
+        "py_src": 0.1049,
+        "rfc_txt": 0.093,
+        "rst_doc": 0.0954,
+        "sql": 0.0727,
+        "xml": 0.079
+      },
+      "ext_per_family_correct": {
+        "c_src": 777,
+        "hexdump": 359,
+        "pe_bin": 559,
+        "py_src": 809,
+        "rfc_txt": 722,
+        "rst_doc": 742,
+        "sql": 535,
+        "xml": 616
+      },
+      "ext_real_correct": 3609,
+      "ext_real_top1": 0.0939,
+      "ext_structured_text_top1": 0.0909,
+      "ext_synthetic_correct": 1510,
+      "ext_synthetic_top1": 0.0658,
+      "ext_top1": 0.0834,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "r2_model": {
+      "builder_eval_correct": 20813,
+      "builder_eval_per_family": {
+        "base64": 0.071,
+        "binary": 0.076,
+        "code": 0.0768,
+        "csv": 0.0718,
+        "gutenberg": 0.0886,
+        "json": 0.0921,
+        "log": 0.0843,
+        "mixed": 0.0793
+      },
+      "builder_eval_top1": 0.08,
+      "ext_correct": 5729,
+      "ext_high_entropy_top1": 0.0674,
+      "ext_per_family": {
+        "c_src": 0.1109,
+        "hexdump": 0.0473,
+        "pe_bin": 0.0886,
+        "py_src": 0.114,
+        "rfc_txt": 0.1109,
+        "rst_doc": 0.1073,
+        "sql": 0.0739,
+        "xml": 0.0924
+      },
+      "ext_per_family_correct": {
+        "c_src": 865,
+        "hexdump": 369,
+        "pe_bin": 656,
+        "py_src": 879,
+        "rfc_txt": 861,
+        "rst_doc": 834,
+        "sql": 544,
+        "xml": 721
+      },
+      "ext_real_correct": 4095,
+      "ext_real_top1": 0.1065,
+      "ext_structured_text_top1": 0.1018,
+      "ext_synthetic_correct": 1634,
+      "ext_synthetic_top1": 0.0712,
+      "ext_top1": 0.0933,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "r3_depth3_tree": {
+      "builder_eval_correct": 21878,
+      "builder_eval_per_family": {
+        "base64": 0.0674,
+        "binary": 0.0742,
+        "code": 0.0909,
+        "csv": 0.0645,
+        "gutenberg": 0.0804,
+        "json": 0.1081,
+        "log": 0.1109,
+        "mixed": 0.0758
+      },
+      "builder_eval_top1": 0.0841,
+      "ext_correct": 5181,
+      "ext_high_entropy_top1": 0.0751,
+      "ext_per_family": {
+        "c_src": 0.1022,
+        "hexdump": 0.0724,
+        "pe_bin": 0.0779,
+        "py_src": 0.0783,
+        "rfc_txt": 0.0953,
+        "rst_doc": 0.103,
+        "sql": 0.0609,
+        "xml": 0.0832
+      },
+      "ext_per_family_correct": {
+        "c_src": 797,
+        "hexdump": 565,
+        "pe_bin": 577,
+        "py_src": 604,
+        "rfc_txt": 740,
+        "rst_doc": 801,
+        "sql": 448,
+        "xml": 649
+      },
+      "ext_real_correct": 3519,
+      "ext_real_top1": 0.0915,
+      "ext_structured_text_top1": 0.0874,
+      "ext_synthetic_correct": 1662,
+      "ext_synthetic_top1": 0.0724,
+      "ext_top1": 0.0844,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "r3_logistic": {
+      "builder_eval_correct": 19477,
+      "builder_eval_per_family": {
+        "base64": 0.069,
+        "binary": 0.0723,
+        "code": 0.087,
+        "csv": 0.0718,
+        "gutenberg": 0.0767,
+        "json": 0.0806,
+        "log": 0.0599,
+        "mixed": 0.0826
+      },
+      "builder_eval_top1": 0.0749,
+      "ext_correct": 6011,
+      "ext_high_entropy_top1": 0.0691,
+      "ext_per_family": {
+        "c_src": 0.1195,
+        "hexdump": 0.0538,
+        "pe_bin": 0.0852,
+        "py_src": 0.1219,
+        "rfc_txt": 0.1053,
+        "rst_doc": 0.1097,
+        "sql": 0.0919,
+        "xml": 0.0951
+      },
+      "ext_per_family_correct": {
+        "c_src": 932,
+        "hexdump": 420,
+        "pe_bin": 631,
+        "py_src": 940,
+        "rfc_txt": 817,
+        "rst_doc": 853,
+        "sql": 676,
+        "xml": 742
+      },
+      "ext_real_correct": 4173,
+      "ext_real_top1": 0.1085,
+      "ext_structured_text_top1": 0.1074,
+      "ext_synthetic_correct": 1838,
+      "ext_synthetic_top1": 0.0801,
+      "ext_top1": 0.0979,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "r3_model": {
+      "builder_eval_correct": 20814,
+      "builder_eval_per_family": {
+        "base64": 0.0664,
+        "binary": 0.077,
+        "code": 0.0799,
+        "csv": 0.0599,
+        "gutenberg": 0.0906,
+        "json": 0.0971,
+        "log": 0.0895,
+        "mixed": 0.0791
+      },
+      "builder_eval_top1": 0.0801,
+      "ext_correct": 5949,
+      "ext_high_entropy_top1": 0.0666,
+      "ext_per_family": {
+        "c_src": 0.1194,
+        "hexdump": 0.0388,
+        "pe_bin": 0.0959,
+        "py_src": 0.1243,
+        "rfc_txt": 0.1193,
+        "rst_doc": 0.1101,
+        "sql": 0.0794,
+        "xml": 0.0873
+      },
+      "ext_per_family_correct": {
+        "c_src": 931,
+        "hexdump": 303,
+        "pe_bin": 710,
+        "py_src": 958,
+        "rfc_txt": 926,
+        "rst_doc": 856,
+        "sql": 584,
+        "xml": 681
+      },
+      "ext_real_correct": 4381,
+      "ext_real_top1": 0.1139,
+      "ext_structured_text_top1": 0.1068,
+      "ext_synthetic_correct": 1568,
+      "ext_synthetic_top1": 0.0683,
+      "ext_top1": 0.0969,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "r4_depth3_tree": {
+      "builder_eval_correct": 22193,
+      "builder_eval_per_family": {
+        "base64": 0.068,
+        "binary": 0.0747,
+        "code": 0.0977,
+        "csv": 0.0618,
+        "gutenberg": 0.0797,
+        "json": 0.1139,
+        "log": 0.1102,
+        "mixed": 0.076
+      },
+      "builder_eval_top1": 0.0854,
+      "ext_correct": 5351,
+      "ext_high_entropy_top1": 0.0715,
+      "ext_per_family": {
+        "c_src": 0.1019,
+        "hexdump": 0.0628,
+        "pe_bin": 0.0806,
+        "py_src": 0.086,
+        "rfc_txt": 0.0938,
+        "rst_doc": 0.1015,
+        "sql": 0.0742,
+        "xml": 0.0953
+      },
+      "ext_per_family_correct": {
+        "c_src": 795,
+        "hexdump": 490,
+        "pe_bin": 597,
+        "py_src": 663,
+        "rfc_txt": 728,
+        "rst_doc": 789,
+        "sql": 546,
+        "xml": 743
+      },
+      "ext_real_correct": 3572,
+      "ext_real_top1": 0.0929,
+      "ext_structured_text_top1": 0.0923,
+      "ext_synthetic_correct": 1779,
+      "ext_synthetic_top1": 0.0775,
+      "ext_top1": 0.0871,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "r4_logistic": {
+      "builder_eval_correct": 20000,
+      "builder_eval_per_family": {
+        "base64": 0.069,
+        "binary": 0.0742,
+        "code": 0.0836,
+        "csv": 0.0682,
+        "gutenberg": 0.084,
+        "json": 0.0894,
+        "log": 0.0684,
+        "mixed": 0.0786
+      },
+      "builder_eval_top1": 0.0769,
+      "ext_correct": 6396,
+      "ext_high_entropy_top1": 0.0691,
+      "ext_per_family": {
+        "c_src": 0.1242,
+        "hexdump": 0.0491,
+        "pe_bin": 0.0902,
+        "py_src": 0.1358,
+        "rfc_txt": 0.1229,
+        "rst_doc": 0.1154,
+        "sql": 0.0939,
+        "xml": 0.1009
+      },
+      "ext_per_family_correct": {
+        "c_src": 969,
+        "hexdump": 383,
+        "pe_bin": 668,
+        "py_src": 1047,
+        "rfc_txt": 954,
+        "rst_doc": 897,
+        "sql": 691,
+        "xml": 787
+      },
+      "ext_real_correct": 4535,
+      "ext_real_top1": 0.1179,
+      "ext_structured_text_top1": 0.1157,
+      "ext_synthetic_correct": 1861,
+      "ext_synthetic_top1": 0.0811,
+      "ext_top1": 0.1042,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "r4_model": {
+      "builder_eval_correct": 21154,
+      "builder_eval_per_family": {
+        "base64": 0.0649,
+        "binary": 0.076,
+        "code": 0.084,
+        "csv": 0.0581,
+        "gutenberg": 0.0917,
+        "json": 0.1027,
+        "log": 0.0917,
+        "mixed": 0.0809
+      },
+      "builder_eval_top1": 0.0814,
+      "ext_correct": 6178,
+      "ext_high_entropy_top1": 0.0679,
+      "ext_per_family": {
+        "c_src": 0.1295,
+        "hexdump": 0.041,
+        "pe_bin": 0.0963,
+        "py_src": 0.1327,
+        "rfc_txt": 0.1228,
+        "rst_doc": 0.1142,
+        "sql": 0.0769,
+        "xml": 0.0904
+      },
+      "ext_per_family_correct": {
+        "c_src": 1010,
+        "hexdump": 320,
+        "pe_bin": 713,
+        "py_src": 1023,
+        "rfc_txt": 953,
+        "rst_doc": 888,
+        "sql": 566,
+        "xml": 705
+      },
+      "ext_real_correct": 4587,
+      "ext_real_top1": 0.1193,
+      "ext_structured_text_top1": 0.1114,
+      "ext_synthetic_correct": 1591,
+      "ext_synthetic_top1": 0.0693,
+      "ext_top1": 0.1006,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "rep1_depth3_tree": {
+      "builder_eval_correct": 22563,
+      "builder_eval_per_family": {
+        "base64": 0.0723,
+        "binary": 0.0687,
+        "code": 0.0963,
+        "csv": 0.0682,
+        "gutenberg": 0.0955,
+        "json": 0.1029,
+        "log": 0.1136,
+        "mixed": 0.0758
+      },
+      "builder_eval_top1": 0.0868,
+      "ext_correct": 5348,
+      "ext_high_entropy_top1": 0.0705,
+      "ext_per_family": {
+        "c_src": 0.1018,
+        "hexdump": 0.0674,
+        "pe_bin": 0.0737,
+        "py_src": 0.0804,
+        "rfc_txt": 0.0978,
+        "rst_doc": 0.1042,
+        "sql": 0.0708,
+        "xml": 0.099
+      },
+      "ext_per_family_correct": {
+        "c_src": 794,
+        "hexdump": 526,
+        "pe_bin": 546,
+        "py_src": 620,
+        "rfc_txt": 759,
+        "rst_doc": 810,
+        "sql": 521,
+        "xml": 772
+      },
+      "ext_real_correct": 3529,
+      "ext_real_top1": 0.0918,
+      "ext_structured_text_top1": 0.0926,
+      "ext_synthetic_correct": 1819,
+      "ext_synthetic_top1": 0.0792,
+      "ext_top1": 0.0871,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "rep1_logistic": {
+      "builder_eval_correct": 16884,
+      "builder_eval_per_family": {
+        "base64": 0.0749,
+        "binary": 0.0738,
+        "code": 0.0785,
+        "csv": 0.0444,
+        "gutenberg": 0.0481,
+        "json": 0.0717,
+        "log": 0.0466,
+        "mixed": 0.0819
+      },
+      "builder_eval_top1": 0.0649,
+      "ext_correct": 4805,
+      "ext_high_entropy_top1": 0.0554,
+      "ext_per_family": {
+        "c_src": 0.0981,
+        "hexdump": 0.0355,
+        "pe_bin": 0.0763,
+        "py_src": 0.1012,
+        "rfc_txt": 0.0809,
+        "rst_doc": 0.092,
+        "sql": 0.057,
+        "xml": 0.0841
+      },
+      "ext_per_family_correct": {
+        "c_src": 765,
+        "hexdump": 277,
+        "pe_bin": 565,
+        "py_src": 780,
+        "rfc_txt": 628,
+        "rst_doc": 715,
+        "sql": 419,
+        "xml": 656
+      },
+      "ext_real_correct": 3453,
+      "ext_real_top1": 0.0898,
+      "ext_structured_text_top1": 0.0858,
+      "ext_synthetic_correct": 1352,
+      "ext_synthetic_top1": 0.0589,
+      "ext_top1": 0.0782,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    },
+    "rep1_model": {
+      "builder_eval_correct": 21111,
+      "builder_eval_per_family": {
+        "base64": 0.0731,
+        "binary": 0.0758,
+        "code": 0.0792,
+        "csv": 0.0715,
+        "gutenberg": 0.0913,
+        "json": 0.0853,
+        "log": 0.0955,
+        "mixed": 0.0771
+      },
+      "builder_eval_top1": 0.0812,
+      "ext_correct": 5470,
+      "ext_high_entropy_top1": 0.0664,
+      "ext_per_family": {
+        "c_src": 0.1041,
+        "hexdump": 0.0522,
+        "pe_bin": 0.0813,
+        "py_src": 0.1013,
+        "rfc_txt": 0.1039,
+        "rst_doc": 0.1006,
+        "sql": 0.0871,
+        "xml": 0.0819
+      },
+      "ext_per_family_correct": {
+        "c_src": 812,
+        "hexdump": 407,
+        "pe_bin": 602,
+        "py_src": 781,
+        "rfc_txt": 806,
+        "rst_doc": 782,
+        "sql": 641,
+        "xml": 639
+      },
+      "ext_real_correct": 3783,
+      "ext_real_top1": 0.0984,
+      "ext_structured_text_top1": 0.0966,
+      "ext_synthetic_correct": 1687,
+      "ext_synthetic_top1": 0.0735,
+      "ext_top1": 0.0891,
+      "n_ext_real_rows": 38452,
+      "n_ext_rows": 61409
+    }
+  },
+  "replicate_rung_1": {
+    "difference_from_rung_1": {
+      "depth3_tree": 0.0084,
+      "logistic": -0.0013,
+      "model": 0.001
+    },
+    "readings": {
+      "depth3_tree": {
+        "builder_eval_top1": 0.0868,
+        "ext_per_family": {
+          "c_src": 0.1018,
+          "pe_bin": 0.0737,
+          "py_src": 0.0804,
+          "rfc_txt": 0.0978,
+          "rst_doc": 0.1042
+        },
+        "ext_real_correct": 3529,
+        "ext_real_top1": 0.0918
+      },
+      "logistic": {
+        "builder_eval_top1": 0.0649,
+        "ext_per_family": {
+          "c_src": 0.0981,
+          "pe_bin": 0.0763,
+          "py_src": 0.1012,
+          "rfc_txt": 0.0809,
+          "rst_doc": 0.092
+        },
+        "ext_real_correct": 3453,
+        "ext_real_top1": 0.0898
+      },
+      "model": {
+        "builder_eval_top1": 0.0812,
+        "ext_per_family": {
+          "c_src": 0.1041,
+          "pe_bin": 0.0813,
+          "py_src": 0.1013,
+          "rfc_txt": 0.1039,
+          "rst_doc": 0.1006
+        },
+        "ext_real_correct": 3783,
+        "ext_real_top1": 0.0984
+      }
+    },
+    "rung": {
+      "chunks_per_family": {
+        "c_src": 3,
+        "pe_bin": 26,
+        "py_src": 84,
+        "rfc_txt": 12,
+        "rst_doc": 5
+      },
+      "chunks_sha256": "26fb61d387e6692785eda5814dbdb51cf0a5f01728e2c12f3342102fa184e837",
+      "chunks_shared_with_rung_1": 16,
+      "denominator": 8,
+      "idx_sha256": "4ef765abd6cee596f4144939fe9acb33ce71ca15039d42bbdff8f149f3bba466",
+      "log2_chunks": 7.022368,
+      "n_chunks": 130,
+      "n_rows": 3345,
+      "replicates_rung": 1,
+      "rows_per_family": {
+        "c_src": 78,
+        "pe_bin": 655,
+        "py_src": 2170,
+        "rfc_txt": 312,
+        "rst_doc": 130
+      },
+      "rule": "the smallest rung's rule and denominator under np.random.default_rng([seed, family_index + 1, 1]); informational: a direct reading of how much the smallest rung moves under a second draw of plaintexts",
+      "rung": "rep1",
+      "sorted_sha256": "80e3a896c44fa53446b53ae0c2c500c840dfc28bc66314004a38f5ca6aa7b23f"
+    },
+    "slope_with_replicate_at_rung_1": {
+      "depth3_tree": 0.000474,
+      "logistic": 0.009942,
+      "model": 0.007043
+    }
+  },
+  "reproduction_drift": {
+    "depth3_tree": 0.0,
+    "logistic": 0.0,
+    "model": 0.0
+  },
+  "reproduction_reference": {
+    "depth3_tree": 0.0929,
+    "logistic": 0.1179,
+    "model": 0.1193
+  },
+  "reproduction_top1": {
+    "depth3_tree": 0.0929,
+    "logistic": 0.1179,
+    "model": 0.1193
+  },
+  "revises_0003_0014_0015_0016_0017_0018_0019_0021_0022": false,
+  "schema": "raise-v1/realcurve_4096_verdict/1",
+  "shuffled_label_accuracy_eval": 0.0388,
+  "shuffled_label_accuracy_ext": 0.0394,
+  "shuffled_label_accuracy_real": 0.0409,
+  "slope_bootstrap": {
+    "depth3_tree": {
+      "ci95": [
+        0.002448,
+        0.003574
+      ],
+      "mean": 0.003005,
+      "n_boot": 2000,
+      "seed": 20260825
+    },
+    "logistic": {
+      "ci95": [
+        0.008478,
+        0.010649
+      ],
+      "mean": 0.009582,
+      "n_boot": 2000,
+      "seed": 20260825
+    },
+    "model": {
+      "ci95": [
+        0.006199,
+        0.00846
+      ],
+      "mean": 0.007336,
+      "n_boot": 2000,
+      "seed": 20260825
+    },
+    "model_minus_depth3_tree": {
+      "ci95": [
+        0.003036,
+        0.005609
+      ],
+      "paired": true,
+      "share_of_resamples_with_model_ahead": 1.0
+    },
+    "model_minus_logistic": {
+      "ci95": [
+        -0.003707,
+        -0.000752
+      ],
+      "paired": true,
+      "share_of_resamples_with_model_ahead": 0.002
+    }
+  },
+  "slope_failed_clauses": [],
+  "slope_model_minus_depth3_tree": 0.004342,
+  "slope_model_minus_logistic": -0.002207,
+  "source_artifact": "artifacts/pivot/realcurve_4096.json",
+  "validity_failed_clauses": [],
+  "verdict": "REAL_CURVE_RISES"
+}
