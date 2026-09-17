@@ -64,6 +64,10 @@
       "detected": 9,
       "total": 9
     },
+    "realcurve4096": {
+      "detected": 98,
+      "total": 98
+    },
     "realfit4096": {
       "detected": 63,
       "total": 63
@@ -5088,10 +5092,892 @@
       "gate": "realsearch4096",
       "mutation": "the-control-artifact-is-built-from-the-runners-own-output-shape",
       "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_CURVE_RISES slope=0.009838 ci=[0.007114, 0.012854] rungs=[0.09, 0.1, 0.11, 0.1193] validity=[] slope_failed=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve4096",
+      "mutation": "control-rising-model-curve-is-REAL_CURVE_RISES",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_CURVE_RISES slope=0.009838 ci=[0.007114, 0.012854] rungs=[0.09, 0.1, 0.11, 0.1193] validity=[] slope_failed=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve4096",
+      "mutation": "control-logistic-rising-faster-than-the-model-is-still-a-pass-and-a-flag",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_CURVE_RISES slope=0.005366 ci=[0.003376, 0.007686] rungs=[0.1033, 0.1086, 0.114, 0.1193] validity=[] slope_failed=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve4096",
+      "mutation": "control-slope-just-above-the-bar-passes",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_CURVE_FLAT slope=0.004281 ci=[0.002491, 0.006204] rungs=[0.1065, 0.1108, 0.115, 0.1193] validity=[] slope_failed=[\"slope: the model's real-family accuracy rises 0.004281 per doubling of p",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-model-slope-just-below-the-bar-is-REAL_CURVE_FLAT",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_CURVE_FLAT slope=0.0 ci=[0.0, 0.0] rungs=[0.1193, 0.1193, 0.1193, 0.1193] validity=[] slope_failed=[\"slope: the model's real-family accuracy rises 0.0 per doubling of plaintexts over 2.98",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-flat-model-curve-is-REAL_CURVE_FLAT",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_CURVE_FLAT slope=-0.00674 ci=[-0.008983, -0.004422] rungs=[0.14, 0.13, 0.125, 0.1193] validity=[] slope_failed=[\"slope: the model's real-family accuracy rises -0.00674 per doubling of pla",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-falling-model-curve-is-REAL_CURVE_FLAT",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_CURVE_FLAT slope=0.005366 ci=[-0.002161, 0.013153] rungs=[0.1033, 0.1086, 0.114, 0.1193] validity=[] slope_failed=[\"slope_bootstrap: the 2.5th percentile of the model's slope under the cl",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-rise-the-scored-chunks-do-not-agree-on-fails-the-bootstrap-clause-alone",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"reproduction: r4_model read 0.1253 against 0021's banked 0.1193 (drift 0.006 > 0.005): the fit block, the scoring set or the machinery is not 0021",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-top-rung-model-reading-0.006-off-0021-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"reproduction: r4_logistic read 0.1239 against 0021's banked 0.1179 (drift 0.006 > 0.005): the fit block, the scoring set or the machinery is not 0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-top-rung-logistic-reading-0.006-off-0021-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"reproduction: r4_depth3_tree read 0.0869 against 0021's banked 0.0929 (drift -0.006 > 0.005): the fit block, the scoring set or the machinery is n",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-top-rung-tree-reading-0.006-off-0021-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_CURVE_RISES slope=0.011045 ci=[0.008062, 0.014254] rungs=[0.09, 0.1, 0.11, 0.1233] validity=[] slope_failed=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve4096",
+      "mutation": "a-top-rung-reading-within-tolerance-passes",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['null control: shuffled labels read 0.05 on the extension rows and 0.038 on the sealed evaluation rows against chance 0.038462 + 0.01 \u2014 the pipelin",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-null-control-above-chance-plus-tolerance-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"null control: the permuted label array hashes to '<hash>', not 0021's sealed '<hash>'\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-null-label-array-that-is-not-0021s-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"null control: the null labels are not banked as a permutation of the fit corpus's labels\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "null-labels-not-banked-as-a-permutation-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['scope: smoke=True; a smoke run is not the preregistered run'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-smoke-artifact-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"scope: preregistration='0022-realsearch-4096', this reader is frozen for 0023-realcurve-4096\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-wrong-preregistration-id-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['scope: the banked curve spec does not hash to the sealed CURVE_SHA256', 'scope: curve_spec.protocol.denominators=[16, 4, 2, 1], preregistered [8, ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-protocol-with-one-changed-denominator-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['scope: the banked curve spec does not hash to the sealed CURVE_SHA256', 'scope: the banked recipes are not the sealed three'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-recipe-off-the-sealed-three-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['fit: r2_model is not the sealed M4 (id, params, params hash, family, scaled, val or head off-recipe)'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-fit-record-on-an-off-recipe-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"scope: corpus.cache_X_sha256='<hash>', preregistered '<hash>'\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-builder-cache-x-hash-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['evaluation corpus: ext_corpus.n_rows=61410, preregistered 61409'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "an-extension-corpus-block-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"fit corpus: fit_corpus.arrays={'X': {'sha256': '<hash>', 'shape': [26346, 1108], 'dtype': 'float32'}, 'y': {'sha256': '<hash>', 'shape': [26346], ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-fit-corpus-array-hash-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"sealed set: partition.fit_idx_sha256='<hash>', preregistered '<hash>'\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-fit-block-index-hash-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"sealed set: partition.rungs=[{'rung': 1, 'denominator': 8, 'n_chunks': 130, 'n_rows': 3344, 'chunks_per_family': {'c_src': 3, 'pe_bin': 26, 'py_sr",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-rungs-row-count-off-by-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"sealed set: partition.rungs=[{'rung': 1, 'denominator': 8, 'n_chunks': 130, 'n_rows': 3344, 'chunks_per_family': {'c_src': 3, 'pe_bin': 26, 'py_sr",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-rungs-chunk-set-hash-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['sealed set: partition.rungs_nested=False, preregistered True', 'rungs: partition.rungs_nested=False, must be True'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "rungs-banked-as-not-nested-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['sealed set: partition.top_rung_is_fit_block=False, preregistered True', 'rungs: partition.top_rung_is_fit_block=False, must be True'] slope_failed",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-top-rung-that-is-not-the-fit-block-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['leakage: partition.fit_rows_identical_to_a_scored_row=1, must be the measured 0'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "one-fit-row-identical-to-a-scored-row-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['leakage: partition.fit_chunks_shared_with_builder=1, must be the measured 0'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-fit-chunk-shared-with-the-builder-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['fit: r1_model was not fitted on sealed rung 1 with the preregistered seed'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-record-fitted-on-the-wrong-rung-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"fit: the artifact banks roles outside the sealed order (extra [], missing ['r3_logistic']) - 'scored exactly once, in the sealed order' is a prope",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-missing-rung-role-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"fit: the artifact banks roles outside the sealed order (extra ['r5_model'], missing []) - 'scored exactly once, in the sealed order' is a property",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "an-extra-role-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"fit: r4_model fingerprint '<hash>' is not the one recomputed from the sealed literals\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-fingerprint-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['fit: r1_model has 2 ledger completions, must be exactly 1', \"order: the ledger's run completions are not exactly the sealed order (['run_null', 'r",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-role-completed-twice-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"fit: the ledger's completions are not in the sealed order null, r4_depth3_tree, r4_logistic, r4_model, r1_depth3_tree, r1_logistic, r1_model, r2_d",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "completions-out-of-the-sealed-order-are-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"fit: r2_logistic has no 'rung_bound' event naming sealed rung 2 before its completion\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-rung-bound-event-naming-the-wrong-rung-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['fit: r3_model per-example vector missing, not 321409 long, or not in {0, 1}'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-per-example-vector-one-row-short-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['fit: r3_model per_example_sha256 is not the hash of its banked vector'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-per-example-hash-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"fit: r2_depth3_tree record top1 0.1701 is not its vector's mean 0.17\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-record-top1-off-by-0.0001-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"readings: r1_model.ext_real_top1=0.0901 is not the reader's recomputation 0.09\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-banked-rung-reading-off-by-0.0001-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"curve: curves.model.rungs is not the reader's recomputation\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-banked-curve-point-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"curve: curves.model.slope_per_doubling is not the reader's recomputation\", 'curve: a banked top-level slope is not the recomputed role slope'] slo",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-banked-slope-off-by-0.00001-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['curve: a banked top-level slope is not the recomputed role slope'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-top-level-slope-that-is-not-the-curves-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['curve: a banked slope difference is not model minus the other role'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-slope-difference-that-is-not-model-minus-logistic-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"curve: slope_bootstrap.model={'ci95': [0.007113, 0.012854], 'n_boot': 2000, 'seed': 20260825, 'mean': 0.009802} is not the reader's recomputation ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-banked-bootstrap-interval-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"curve: slope_bootstrap.model_minus_logistic={'ci95': [0.002463, 0.005592], 'paired': True, 'share_of_resamples_with_model_ahead': 0.5} is not the ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-banked-paired-difference-interval-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"scope: bar={'slope_per_doubling': 0.001, 'bootstrap_lower_bound_gt': 0.0, 'n_boot': 2000, 'bootstrap_seed': 20260825} is not the sealed bar\"] slop",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-bar-banked-lower-than-sealed-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"scope: roles=['depth3_tree', 'logistic', 'model'], n_rungs=4, denominators=[8, 4, 2, 1], log2_chunks=[7.522368, 8.511227, 9.508429, 10.507027] are",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "log2-plaintexts-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['complete: complete=False, run_finished_utc=None; missing []'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "an-incomplete-artifact-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['environment: threads=4, banked 3'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-wrong-thread-count-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['environment: launch_environment is not ok with the sealed environment'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-launch-that-was-not-ok-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"scores: the scores file is not this run's, or is a smoke run's, or names a different corpus\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-scores-file-from-a-smoke-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['scores: the scores file is absent', 'scores: ext_fam missing, not N_EXT long, or not family indices'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "an-absent-scores-file-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "an-absent-artifact-is-pending-not-a-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "READER 0023: NOT RUN \u2014 \"r4_model read 0.13 against 0021's banked 0.1193\" (stage run, filed 2026-09-19T02:00:00Z, 4 checkpoints). A NOT RUN is not a verdict.",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-NOT-RUN-file-is-pending-not-a-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['fit: fits is not a mapping', \"fit: the artifact banks roles outside the sealed order (extra [], missing ['null', 'r1_depth3_tree', 'r1_logistic', ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "an-artifact-of-unexpected-shape-is-VOID-with-every-result-key",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "partition: control-only [], runner-only ['eval_chunks_shared_with_ext', 'fit_chunks_shared_with_builder', 'fit_chunks_shared_with_ext', 'fit_rows_identical_to_a_scored_row', 'fit_source_chunks_shared_",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-control-whose-partition-is-the-readers-own-literals-is-detected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "16 records satisfy the reader's per-record requirements on the runner's own values",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve4096",
+      "mutation": "the-readers-record-requirements-hold-against-the-runners-own-banked-values",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "control and fixture agree both ways on 63 artifact keys, 16 records, every curve and every block; every reader expectation is a key the runner writes",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve4096",
+      "mutation": "the-control-artifact-is-built-from-the-runners-own-output-shape",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"fit: roles ['r2_model', 'r3_model'] bank the same per-example vector; distinct fits on distinct row sets do not score identically\"] slope_failed=[",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "two-roles-banking-the-same-per-example-vector-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"order: the ledger carries completions under names outside the sealed order (['confirm_model'])\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-completion-under-a-foreign-name-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"curve: curves.logistic.end_to_end_gain is not the reader's recomputation\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-VOID-banks-no-slope-and-no-interval",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_CURVE_FLAT slope=0.005366 ci=[-0.002161, 0.013153] rungs=[0.1033, 0.1086, 0.114, 0.1193] validity=[] slope_failed=[\"slope_bootstrap: the 2.5th percentile of the model's slope under the cl",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-bootstrap-only-FLAT-names-the-interval-clause-in-its-meaning",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['sealed set: partition.replicate_rung_1={\\'rung\\': \\'rep1\\', \\'replicates_rung\\': 1, \\'denominator\\': 8, \\'n_chunks\\': 130, \\'n_rows\\': 3345, \\'chu",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-replicate-rung-hash-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"fit: the artifact banks roles outside the sealed order (extra [], missing ['rep1_model']) - 'scored exactly once, in the sealed order' is a proper",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-missing-replicate-role-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"replicate: replicate_rung_1.difference_from_rung_1 is not the reader's recomputation\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-banked-replicate-difference-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"fit: roles ['r1_model', 'rep1_model'] bank the same per-example vector; distinct fits on distinct row sets do not score identically\"] slope_failed",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-replicate-banking-rung-1s-vector-is-VOID-as-a-shared-vector",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"curve: curves.model.slope_with_top_rung_at_reference is not the reader's recomputation\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-banked-sensitivity-slope-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"curve: curves.depth3_tree.rung_to_rung_gains is not the reader's recomputation\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-banked-rung-to-rung-gain-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"curve: curves.model.per_family_slope_per_doubling is not the reader's recomputation\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-banked-per-family-slope-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['curve: slope_bootstrap carries no unit'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-bootstrap-block-without-its-unit-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"curve: slope_bootstrap.model_minus_logistic={'ci95': [0.002463, 0.005593], 'paired': True, 'share_of_resamples_with_model_ahead': 1.0} is not the ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-banked-paired-interval-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['scores: eval_chunk_ids are not the sealed evaluation chunk ids expanded by their sealed row counts, or do not hash to the sealed evaluation g arra",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "eval-chunk-ids-with-two-entries-swapped-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['scores: ext_chunk_ids do not hash to the sealed g array', 'scores: ext_chunk_ids are not the sealed chunk ids expanded by their sealed row counts'",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "ext-chunk-ids-with-two-entries-swapped-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['scores: ext_fam does not hash to the sealed fam array'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "ext-fam-with-two-entries-swapped-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"scores: the scores file is not this run's, or is a smoke run's, or names a different corpus\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-scores-file-naming-different-arrays-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"fit: fit_info_by_name is not the records' fit_info\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "fit-info-by-name-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"readings: banked readings for ['null', 'r1_depth3_tree', 'r1_logistic', 'r1_model', 'r2_depth3_tree', 'r2_logistic', 'r2_model', 'r3_depth3_tree',",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "an-extra-banked-reading-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"fit: r2_logistic record per_family is not its vector's per-family means over the sealed scoring set\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-record-per-family-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"fit: r3_model stage 'confirmatory' is not 'curve'\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-record-with-the-wrong-stage-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"fit: r3_model status 'infeasible_memory'; must be 'fit'\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-record-banked-infeasible-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"environment: r4_logistic sklearn='0.0.0', banked '1.9.0'\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-record-with-a-wrong-environment-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['fit: r2_model banked a failed block probe check'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-record-with-a-failed-block-probe-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['null control: null_control is not the banked null record'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-null-control-field-that-is-not-the-null-record-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['null control: null_rows=26345, the null control is fitted on the whole fit block'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "null-rows-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"reproduction: the banked reference readings are not 0021's sealed ones\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-banked-reference-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['reproduction: reproduction_drift is not the recomputed drift per role'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-banked-drift-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['null control: a banked shuffled-label reading is not the recomputed value'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-banked-shuffled-label-reading-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['readings: a banked summary reading for r2_model is not the recomputed value'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-banked-summary-reading-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"scope: stage='select', the verdict is read from the run artifact\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-select-stage-artifact-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"fit: r2_model's completion event does not carry the sealed fingerprint\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-completion-event-with-a-wrong-fingerprint-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"fit: r3_logistic has no 'started' event with its fingerprint before its completion\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-completion-without-its-start-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "READER 0023: artifact malformed (JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)).",
+      "exit_code": 2,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-malformed-artifact-file-is-pending-not-a-pass",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_CURVE_RISES slope=0.009838 ci=[0.007114, 0.012854] rungs=[0.09, 0.1, 0.11, 0.1193] validity=[] slope_failed=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve4096",
+      "mutation": "a-resumed-run-that-relogged-its-rung-bound-events-passes",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=REAL_CURVE_RISES slope=0.009838 ci=[0.007114, 0.012854] rungs=[0.09, 0.1, 0.11, 0.1193] validity=[] slope_failed=[]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve4096",
+      "mutation": "committed-checkpoints-that-agree-pass",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=[\"checkpoint: r2_model's committed checkpoint does not carry the sealed fingerprint, the banked vector and the record's top-1\"] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-committed-checkpoint-with-a-different-vector-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID slope=None ci=None rungs=None validity=['checkpoint: r1_logistic has no checkpoint although the checkpoint directory is present'] slope_failed=[]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve4096",
+      "mutation": "a-missing-committed-checkpoint-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "41 keys on both paths",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve4096",
+      "mutation": "the-exception-path-writes-the-normal-paths-key-set",
+      "observed": "pass"
     }
   ],
-  "detected": 555,
+  "detected": 653,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 555
+  "total_mutations": 653
 }

@@ -1,0 +1,40 @@
+{
+  "doublings_spanned": 2.984659,
+  "passed": true,
+  "prereg_sha256_at_check": "aeb86b42d10c44b10c63eb28fe6c5751bb2da42642381fabe0cd99d7352a3821",
+  "preregistration": "0023-realcurve-4096",
+  "problems": 0,
+  "reader_sha256_at_check": "6d721f2bffef1038b091d5653cc0ef43b8efb0c5cbe97da60ddbda81a9d251f8",
+  "replicate_rung_1": {
+    "chunks_shared_with_rung_1": 16,
+    "n_chunks": 130,
+    "n_rows": 3345
+  },
+  "rungs": [
+    {
+      "denominator": 8,
+      "n_chunks": 130,
+      "n_rows": 3344,
+      "rung": 1
+    },
+    {
+      "denominator": 4,
+      "n_chunks": 258,
+      "n_rows": 6635,
+      "rung": 2
+    },
+    {
+      "denominator": 2,
+      "n_chunks": 515,
+      "n_rows": 13207,
+      "rung": 3
+    },
+    {
+      "denominator": 1,
+      "n_chunks": 1029,
+      "n_rows": 26346,
+      "rung": 4
+    }
+  ],
+  "schema": "raise-v1/prefreeze_0023/1"
+}

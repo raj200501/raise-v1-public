@@ -27,3 +27,7 @@ artifacts/pivot/recipe_search_4096_ckpt/*.hb
 artifacts/pivot/recipe_search_4096_ckpt/*.tmp
 artifacts/pivot/lofo_4096_ckpt/*.hb
 artifacts/pivot/lofo_4096_ckpt/*.tmp
+artifacts/pivot/realcurve_4096_ckpt/*.hb
+artifacts/pivot/realcurve_4096_ckpt/*.tmp
+artifacts/pivot/realcurve_4096.json.tmp
+artifacts/pivot/realcurve_4096_scores.json.tmp

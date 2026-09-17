@@ -6321,6 +6321,1052 @@ def _(root):
                f"records and every block; every reader expectation is a key the runner writes")
 
 
+# ---------------------------------------------------------------- realcurve4096 gate (0023)
+# The 0023 reader reads a scaling curve on real plaintexts: 0021's three fixed recipes on four nested, family-stratified
+# rungs of the real fit block, a slope per doubling of plaintexts and a paired cluster bootstrap. The control takes its
+# SHAPE from tests/fixtures/realcurve_runner_shape.json, a smoke run of tools/pivot/run_realcurve.py itself, and its
+# VALUES from the reader's sealed literals; the curve, the slopes and the bootstrap are computed with the runner's own
+# functions on the control's vectors (docs/OPERATING_RULES.md section 4).
+_RC_SHAPE = os.path.join(REPO, "tests", "fixtures", "realcurve_runner_shape.json")
+
+
+def _rc_reader():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("r23", os.path.join(REPO, "tools", "readers", "realcurve4096_verdict.py"))
+    m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+    return m
+
+
+def _rc_runner():
+    import importlib.util
+    sys.path.insert(0, os.path.join(REPO, "tools", "pivot"))
+    spec = importlib.util.spec_from_file_location("run_realcurve", os.path.join(REPO, "tools", "pivot", "run_realcurve.py"))
+    m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+    return m
+
+
+def _rc_readings(r23, v, fam_x, fam_e):
+    """The runner's readings() over one per-example vector, recomputed here from the same rule (0021's shape)."""
+    n_eval, n_ext = r23.PARTITION["n_eval_rows"], r23.N_EXT
+    rep, ex = v[:n_eval], v[n_eval:]
+    by = {f: [] for f in r23.EXT_FAMILIES}
+    for i in range(n_ext):
+        by[fam_x[i]].append(ex[i])
+    m4 = lambda xs: round(sum(xs) / len(xs), 4) if xs else None  # noqa: E731
+    real = [x for f in r23.REAL_FAMILIES for x in by[f]]; synth = [x for f in r23.SYNTH_FAMILIES for x in by[f]]
+    return {"builder_eval_top1": m4(rep), "builder_eval_correct": sum(rep), "ext_top1": m4(ex), "ext_correct": sum(ex),
+            "n_ext_rows": n_ext, "ext_per_family": {f: m4(by[f]) for f in r23.EXT_FAMILIES},
+            "ext_per_family_correct": {f: sum(by[f]) for f in r23.EXT_FAMILIES},
+            "ext_structured_text_top1": m4([x for f in r23.STRUCTURED_TEXT for x in by[f]]),
+            "ext_high_entropy_top1": m4([x for f in r23.HIGH_ENTROPY for x in by[f]]),
+            "ext_real_top1": m4(real), "ext_real_correct": sum(real), "n_ext_real_rows": len(real),
+            "ext_synthetic_correct": sum(synth), "ext_synthetic_top1": m4(synth),
+            "builder_eval_per_family": {f: m4([rep[i] for i in range(n_eval) if fam_e[i] == f]) for f in r23.FAMILIES}}
+
+
+# Default rung accuracies on the real-family rows (top rung = 0021's reference exactly): a rising model curve that clears
+# the bar, a flatter logistic and tree beside it, the null at chance.
+_RC_ACC = {"model": [0.09, 0.10, 0.11, 0.1193], "logistic": [0.10, 0.105, 0.11, 0.1179], "depth3_tree": [0.08, 0.085, 0.09, 0.0929]}
+_RC_REP_ACC = {"model": 0.093, "logistic": 0.099, "depth3_tree": 0.082}     # the replicate of rung 1: near rung 1, never identical
+
+
+def _good_realcurve(acc=None, null_acc=None, mode="nested", rep_acc=None):
+    """A complete, valid 0023 artifact set (artifact, scores). Shape AND key sets from the runner's own smoke output
+    (tests/fixtures/realcurve_runner_shape.json); only the values are the sealed run's, and the curve, slopes and
+    bootstrap are computed with tools/pivot/run_realcurve.py's own functions on the control's vectors.
+
+    acc overrides a role's four rung accuracies on the real-family rows; null_acc the null's. Vectors are marked at
+    CHUNK granularity with row precision inside the last chunk: 'nested' marks each family's leading chunks, so a
+    higher rung's correct rows contain a lower rung's (one corpus growing) and every chunk resample agrees on the
+    direction; 'disjoint' rotates each rung's marked chunks to a different part of every family, so the rungs are
+    correct on different plaintexts and a chunk bootstrap sees the rise the chunks do NOT agree on."""
+    r23 = _rc_reader(); rr = _rc_runner(); shape = json.load(open(_RC_SHAPE, encoding="utf-8")); S_art = shape["artifact"]
+    zeros = {k: 0 for k in ("pool_chunks_shared_with_ext", "eval_chunks_shared_with_ext", "fit_chunks_shared_with_ext",
+                            "fit_chunks_shared_with_builder", "fit_source_chunks_shared_with_ext", "fit_rows_identical_to_a_scored_row")}
+    nulls = {"null_y_shuffled_sha256": r23.NULL_SHA_EXPECTED, "null_labels_permuted": True, "null_labels_same_multiset": True}
+    part = _rf_sub(S_art["partition"], dict(r23.PARTITION, **zeros, **nulls), "partition", sealed_may_be_subset=True)
+    spec = _rf_sub(S_art["curve_spec"], json.loads(json.dumps({"protocol": r23.PROTOCOL, "recipes": r23.RECIPES})), "curve_spec")
+    assert _sha12(spec) == r23.CURVE_SHA256, "the reader's curve literals do not hash to its CURVE_SHA256"
+    n_eval, n_ext, n_real = r23.PARTITION["n_eval_rows"], r23.N_EXT, r23.N_REAL
+    fams = list(r23.EXT_FAMILIES); rpf = r23.EXT["rows_per_family"]
+    fam_idx = []
+    for k, f in enumerate(fams):
+        fam_idx += [k] * rpf[f]
+    fam_x = [fams[i] for i in fam_idx]
+    ext_ids = [c for c, n in zip(r23.EXT_CHUNK_IDS, r23.EXT_ROWS_PER_CHUNK) for _ in range(n)]
+    eval_ids = [c for c, n in zip(r23.EVAL_CHUNK_IDS, r23.EVAL_ROWS_PER_CHUNK) for _ in range(n)]
+    fam_e = [r23.FAMILIES[c % 8] for c in eval_ids]
+    env = dict(S_art["environment"], threads=3, nice=10)
+    # each family's chunks as row ranges of the extension block, in row order
+    chunks_by_fam = {f: [] for f in fams}
+    pos = 0
+    for c, n in zip(r23.EXT_CHUNK_IDS, r23.EXT_ROWS_PER_CHUNK):
+        chunks_by_fam[fam_x[pos]].append((pos, pos + n)); pos += n
+    assert pos == n_ext
+    accs = {r: list(v) for r, v in _RC_ACC.items()}
+    for r, v in (acc or {}).items():
+        accs[r] = list(v)
+    raccs = dict(_RC_REP_ACC, **(rep_acc or {}))
+    n_rungs = r23.N_RUNGS; order = list(r23.ORDER); REP = r23.REPLICATE
+
+    def vec(role, k, a, idx=0):
+        """Real-family accuracy a at rung k: leading (nested) or rotated (disjoint) chunks per family, row-precise. The
+        builder-evaluation part carries idx extra correct rows so that no two fits bank an identical vector (the reader
+        requires the sixteen vectors to be pairwise distinct; two honest fits do not score identically)."""
+        v = [0] * (n_eval + n_ext)
+        rep = 0.19 if role != "null" else 0.038
+        for i in range(int(round(rep * n_eval)) + idx):
+            v[i] = 1
+        for f in fams:
+            want = int(round(a * rpf[f])); ch = chunks_by_fam[f]
+            start = 0 if (mode == "nested" or role == "null" or k == REP) else (k * len(ch) // (n_rungs + 1))
+            j = 0
+            while want > 0:
+                s, e = ch[(start + j) % len(ch)]; take = min(want, e - s)
+                for i in range(s, s + take):
+                    v[n_eval + i] = 1
+                want -= take; j += 1
+        return v
+
+    def name_parts(name):
+        if name == "null":
+            return n_rungs, "null"
+        head, role = name.split("_", 1)
+        return (REP if head == REP else int(head[1:])), role
+
+    def rk_of(k):
+        return part["replicate_rung_1"] if k == REP else part["rungs"][k - 1]
+
+    def stage_of(name):
+        return "null" if name == "null" else ("replicate" if name_parts(name)[0] == REP else "curve")
+
+    def cand_of(name):
+        return r23.RECIPES["model"] if name == "null" else r23.RECIPES[name_parts(name)[1]]
+
+    def fp(name):
+        k, role = name_parts(name); rk = rk_of(k)
+        return r23.fingerprint(prereg=r23.PREREG, seed=r23.SEED, head=role, cand=cand_of(name), stage=stage_of(name),
+                               rung=k, rows=rk["sorted_sha256"], eval=part["eval_idx_sha256"], ext=r23.EXT["arrays"]["X"]["sha256"],
+                               fit=r23.FIT["arrays"]["X"]["sha256"])
+
+    def record(name, v):
+        k, role = name_parts(name); c = cand_of(name); rk = rk_of(k); m4 = lambda xs: round(sum(xs) / len(xs), 4)  # noqa: E731
+        fam_s = fam_e + ["ext:" + f for f in fam_x]
+        ng = [v[i] for i in range(n_eval) if fam_e[i] != "gutenberg"] + v[n_eval:]
+        sealed = {"id": c["id"], "head": role, "role": role, "rung": k, "family": c["family"], "params": dict(c.get("params", {})),
+                  "scaled": bool(c.get("scaled", False)), "val": c.get("val"), "seed": r23.SEED, "params_sha256": _sha12(c),
+                  "stage": stage_of(name), "n_fit_rows": rk["n_rows"], "fit_rows_sha256": rk["idx_sha256"],
+                  "fit_rows_sorted_sha256": rk["sorted_sha256"], "n_rung_rows": rk["n_rows"], "n_rung_chunks": rk["n_chunks"],
+                  "environment": dict(env), "interruptions_before_this_fit": 0, "status": "fit", "top1": m4(v), "top1_non_gutenberg": m4(ng),
+                  "per_family": {f: m4([v[i] for i in range(len(v)) if fam_s[i] == f]) for f in sorted(set(fam_s))},
+                  "fingerprint": fp(name), "per_example_sha256": hashlib.sha256(bytes(v)).hexdigest()}
+        return _rf_sub(S_art["fits"][name], sealed, f"fits.{name}", sealed_may_be_subset=True)
+
+    per_example, reads, fits = {}, {}, {}
+    for idx, name in enumerate(order):
+        k, role = name_parts(name)
+        a = (null_acc if null_acc is not None else 0.037) if name == "null" else (raccs[role] if k == REP else accs[role][k - 1])
+        v = vec(role, k, a, idx); per_example[name] = v
+        reads[name] = _rc_readings(r23, v, fam_x, fam_e); fits[name] = record(name, v)
+    ledger = []
+    for i, nm in enumerate(order):
+        k, _ = name_parts(nm); rk = rk_of(k)
+        ledger += [{"name": f"run_{nm}", "fingerprint": fp(nm), "event": "rung_bound", "utc": f"2026-09-19T02:{i:02d}:00Z", "rss_gb": 1.0,
+                    "pid": 1, "rung": k, "rung_sorted_sha256": rk["sorted_sha256"]},
+                   {"name": f"run_{nm}", "fingerprint": fp(nm), "event": "started", "utc": f"2026-09-19T02:{i:02d}:01Z", "rss_gb": 1.0, "pid": 1, "attempt": 1},
+                   {"name": f"run_{nm}", "fingerprint": fp(nm), "event": "completed", "utc": f"2026-09-19T02:{i:02d}:30Z", "rss_gb": 1.0, "pid": 1, "seconds": 1.0}]
+    log2x = list(r23.LOG2X)
+
+    def role_curve(role):
+        pts = []
+        for rk in part["rungs"]:
+            rd = reads[f"r{rk['rung']}_{role}"]
+            pts.append({"rung": rk["rung"], "denominator": rk["denominator"], "n_chunks": rk["n_chunks"], "n_rows": rk["n_rows"],
+                        "log2_chunks": rk["log2_chunks"], "ext_real_top1": rd["ext_real_top1"], "ext_real_correct": rd["ext_real_correct"],
+                        "builder_eval_top1": rd["builder_eval_top1"], "ext_per_family": {f: rd["ext_per_family"][f] for f in r23.REAL_FAMILIES}})
+        ys = [p["ext_real_top1"] for p in pts]
+        return {"rungs": pts, "complete": True, "slope_per_doubling": round(rr.ols_slope(log2x, ys), 6),
+                "end_to_end_gain": round(ys[-1] - ys[0], 4),
+                "rung_to_rung_gains": [round(ys[i + 1] - ys[i], 4) for i in range(len(ys) - 1)],
+                "slope_with_top_rung_at_reference": round(rr.ols_slope(log2x, ys[:-1] + [float(r23.REFERENCE[role])]), 6),
+                "per_family_slope_per_doubling": {f: round(rr.ols_slope(log2x, [p["ext_per_family"][f] for p in pts]), 6) for f in r23.REAL_FAMILIES},
+                "builder_eval_slope_per_doubling": round(rr.ols_slope(log2x, [p["builder_eval_top1"] for p in pts]), 6)}
+    curves = {role: role_curve(role) for role in r23.ROLES}
+    rep_block = {"rung": part["replicate_rung_1"], "readings": {}, "difference_from_rung_1": {}, "slope_with_replicate_at_rung_1": {},
+                 "note": S_art["replicate_rung_1"]["note"]}
+    for role in r23.ROLES:
+        rr_ = reads[f"{REP}_{role}"]; r1 = reads[f"r1_{role}"]
+        rep_block["readings"][role] = {"ext_real_top1": rr_["ext_real_top1"], "ext_real_correct": rr_["ext_real_correct"],
+                                       "builder_eval_top1": rr_["builder_eval_top1"],
+                                       "ext_per_family": {f: rr_["ext_per_family"][f] for f in r23.REAL_FAMILIES}}
+        rep_block["difference_from_rung_1"][role] = round(rr_["ext_real_top1"] - r1["ext_real_top1"], 4)
+        ys = [p["ext_real_top1"] for p in curves[role]["rungs"]]
+        rep_block["slope_with_replicate_at_rung_1"][role] = round(rr.ols_slope(log2x, [rr_["ext_real_top1"]] + ys[1:]), 6)
+    ms, ls, ts = (curves[r]["slope_per_doubling"] for r in ("model", "logistic", "depth3_tree"))
+    import numpy as _np
+    real_idx = [i for i in range(n_ext) if fam_x[i] in r23.REAL_FAMILIES]
+    cid = _np.asarray([ext_ids[i] for i in real_idx], _np.int64)
+    by_role = {role: [_np.asarray([per_example[f"r{k}_{role}"][n_eval + i] for i in real_idx], _np.int8) for k in range(1, n_rungs + 1)]
+               for role in r23.ROLES}
+    sl = rr.slope_bootstrap(by_role, log2x, cid, r23.N_BOOT, r23.BOOT_SEED)
+    boot = {role: {"ci95": [round(float(_np.percentile(sl[role], 2.5)), 6), round(float(_np.percentile(sl[role], 97.5)), 6)],
+                   "n_boot": r23.N_BOOT, "seed": r23.BOOT_SEED, "mean": round(float(sl[role].mean()), 6)} for role in r23.ROLES}
+    for a_, b_ in (("model", "logistic"), ("model", "depth3_tree")):
+        d = sl[a_] - sl[b_]
+        boot[f"{a_}_minus_{b_}"] = {"ci95": [round(float(_np.percentile(d, 2.5)), 6), round(float(_np.percentile(d, 97.5)), 6)],
+                                    "paired": True, "share_of_resamples_with_model_ahead": round(float((d > 0).mean()), 4)}
+    boot["unit"] = S_art["slope_bootstrap"]["unit"]
+    top = f"r{n_rungs}_"
+    art = _shape_fill(S_art, {
+        "schema_version": 1, "schema": "raise-v1/realcurve_4096/1", "preregistration": r23.PREREG, "smoke": False,
+        "curve_sha256": r23.CURVE_SHA256, "curve_spec": spec, "corpus": dict(r23.CORPUS), "ext_corpus": dict(r23.EXT),
+        "fit_corpus": dict(r23.FIT), "partition": part, "n_classes": 26, "class_names": [], "chance_accuracy": r23.CHANCE,
+        "stage": "run", "environment": dict(env),
+        "launch_environment": {"env": dict(env), "loadavg_1_5_15": [0.1, 0.1, 0.1], "problems": [], "ok": True, "loadavg_waited_seconds": 0},
+        "launch_number": 1, "complete": True, "missing_roles": [], "fits": fits, "readings": reads,
+        "ext_real_top1": {n: reads[n]["ext_real_top1"] for n in order}, "ext_real_correct": {n: reads[n]["ext_real_correct"] for n in order},
+        "ext_top1": {n: reads[n]["ext_top1"] for n in order}, "builder_eval_top1": {n: reads[n]["builder_eval_top1"] for n in order},
+        "ext_per_family": {n: reads[n]["ext_per_family"] for n in order},
+        "curves": curves, "roles": list(r23.ROLES), "n_rungs": n_rungs, "denominators": list(r23.DENOMINATORS), "log2_chunks": log2x,
+        "model_slope_per_doubling": ms, "logistic_slope_per_doubling": ls, "depth3_tree_slope_per_doubling": ts,
+        "slope_model_minus_logistic": round(ms - ls, 6), "slope_model_minus_depth3_tree": round(ms - ts, 6),
+        "bar": {"slope_per_doubling": r23.BAR_SLOPE, "bootstrap_lower_bound_gt": r23.BOOT_LB, "n_boot": r23.N_BOOT, "bootstrap_seed": r23.BOOT_SEED},
+        "slope_bootstrap": boot, "replicate_rung_1": rep_block,
+        "n_ext_real_rows": n_real, "n_ext_rows": n_ext, "n_eval_rows": n_eval,
+        "ext_real_families": list(r23.REAL_FAMILIES), "ext_synthetic_families": list(r23.SYNTH_FAMILIES),
+        "fit_families": list(r23.FIT_FAMILIES), "fit_rows_per_family": r23.FIT["rows_per_family"],
+        "reference_top1": dict(r23.REFERENCE), "reproduction_top1": {role: reads[top + role]["ext_real_top1"] for role in r23.ROLES},
+        "reproduction_drift": {role: round(reads[top + role]["ext_real_top1"] - r23.REFERENCE[role], 6) for role in r23.ROLES},
+        "shuffled_label_accuracy_ext": reads["null"]["ext_top1"], "shuffled_label_accuracy_eval": reads["null"]["builder_eval_top1"],
+        "shuffled_label_accuracy_real": reads["null"]["ext_real_top1"],
+        "null_control": fits["null"], "null_rows": part["fit_rows"],
+        "fit_info_by_name": {n: fits[n]["fit_info"] for n in order}, "ledger": ledger,
+        "cluster_ci95_informational": {}, "cost": {},
+        "run_started_utc": "2026-09-19T02:00:00Z", "first_launch_utc": "2026-09-19T02:00:00Z", "run_finished_utc": "2026-09-19T03:00:00Z"}, "artifact")
+    scores = {"schema": "raise-v1/realcurve_4096_scores/1", "preregistration": r23.PREREG, "smoke": False,
+              "n_eval_rows": n_eval, "n_ext_rows": n_ext, "eval_idx_sha256": part["eval_idx_sha256"],
+              "eval_chunk_ids": eval_ids, "ext_chunk_ids": ext_ids, "ext_fam": fam_idx, "ext_families": fams,
+              "ext_arrays_sha256": {k: v["sha256"] for k, v in r23.EXT["arrays"].items()},
+              "fit_arrays_sha256": {k: v["sha256"] for k, v in r23.FIT["arrays"].items()},
+              "layout": "each per_example vector is [sealed evaluation rows (n_eval_rows)] + [extension rows (n_ext_rows)]",
+              "per_example": per_example}
+    return art, scores
+
+
+def _realcurve(root, mutate=None, drop_artifact=False, drop_scores=False, not_run=None, **kw):
+    art, scores = _good_realcurve(**kw)
+    if mutate:
+        r = mutate(art, scores)
+        if r is not None:
+            art = r
+    piv = os.path.join(root, "artifacts", "pivot"); os.makedirs(piv, exist_ok=True)
+    if not drop_scores:
+        json.dump(scores, open(os.path.join(piv, "realcurve_4096_scores.json"), "w"))
+    if not drop_artifact:
+        json.dump(art, open(os.path.join(piv, "realcurve_4096.json"), "w"))
+    if not_run is not None:
+        json.dump(not_run, open(os.path.join(piv, "realcurve_4096_not_run.json"), "w"))
+    shutil.copy(os.path.join(REPO, "tools", "readers", "realcurve4096_verdict.py"),
+                os.path.join(root, "tools", "readers", "realcurve4096_verdict.py"))
+    rc, out = run([PY, "tools/readers/realcurve4096_verdict.py"], root)
+    if rc != 0:
+        return rc, out
+    v = json.load(open(os.path.join(piv, "realcurve_4096_verdict.json")))
+    ok = v["verdict"] == "REAL_CURVE_RISES"
+    return (0 if ok else 1), (f"verdict={v['verdict']} slope={v.get('model_slope_per_doubling')} ci={v.get('model_slope_ci95')} "
+                              f"rungs={v.get('model_real_top1_by_rung')} validity={v['validity_failed_clauses'][:2]} "
+                              f"slope_failed={v['slope_failed_clauses']}")
+
+
+def _realcurve_void(root, mutate=None, expect_clause=None, **kw):
+    rc, out = _realcurve(root, mutate, **kw)
+    if rc != 0 and "verdict=VOID" not in out and "No verdict emitted" not in out:
+        return 0, out + " !! detected but not as VOID"
+    if expect_clause and expect_clause not in out:
+        return 0, out + f" !! VOID for another reason than {expect_clause!r}"
+    return rc, out
+
+
+def _realcurve_flat(root, expect_clause, **kw):
+    rc, out = _realcurve(root, **kw)
+    if rc != 0 and ("verdict=REAL_CURVE_FLAT" not in out or "validity=[]" not in out or expect_clause not in out):
+        return 0, out + f" !! expected a clean REAL_CURVE_FLAT on {expect_clause!r}"
+    return rc, out
+
+
+def _rc_mut(fn):
+    def m(art, scores):
+        fn(art, scores)
+    return m
+
+
+@case("realcurve4096", "control-rising-model-curve-is-REAL_CURVE_RISES", "pass")
+def _(root):
+    rc, out = _realcurve(root)
+    if rc == 0 and "validity=[]" not in out:
+        return 1, out
+    return rc, out
+
+
+@case("realcurve4096", "control-logistic-rising-faster-than-the-model-is-still-a-pass-and-a-flag", "pass")
+def _(root):
+    return _realcurve(root, acc={"logistic": [0.07, 0.09, 0.11, 0.1179]})
+
+
+@case("realcurve4096", "control-slope-just-above-the-bar-passes", "pass")
+def _(root):
+    art, _ = _good_realcurve(acc={"model": [0.1033, 0.1086, 0.114, 0.1193]})
+    if not (0.005 <= art["model_slope_per_doubling"] < 0.0062):
+        return 1, f"!! control slope {art['model_slope_per_doubling']} is not just above the bar"
+    return _realcurve(root, acc={"model": [0.1033, 0.1086, 0.114, 0.1193]})
+
+
+@case("realcurve4096", "a-model-slope-just-below-the-bar-is-REAL_CURVE_FLAT", "fail")
+def _(root):
+    art, _ = _good_realcurve(acc={"model": [0.1065, 0.1108, 0.115, 0.1193]})
+    if not (0.0035 < art["model_slope_per_doubling"] < 0.005):
+        return 0, f"!! control slope {art['model_slope_per_doubling']} is not just below the bar"
+    return _realcurve_flat(root, "slope:", acc={"model": [0.1065, 0.1108, 0.115, 0.1193]})
+
+
+@case("realcurve4096", "a-flat-model-curve-is-REAL_CURVE_FLAT", "fail")
+def _(root):
+    return _realcurve_flat(root, "slope:", acc={"model": [0.1193, 0.1193, 0.1193, 0.1193]})
+
+
+@case("realcurve4096", "a-falling-model-curve-is-REAL_CURVE_FLAT", "fail")
+def _(root):
+    return _realcurve_flat(root, "slope:", acc={"model": [0.14, 0.13, 0.125, 0.1193]})
+
+
+@case("realcurve4096", "a-rise-the-scored-chunks-do-not-agree-on-fails-the-bootstrap-clause-alone", "fail")
+def _(root):
+    # the same rung readings as a passing control, but each rung is correct on DIFFERENT plaintexts: the slope clears the bar
+    # and the chunk bootstrap's 2.5th percentile does not sit above 0
+    art, _ = _good_realcurve(mode="disjoint", acc={"model": [0.1033, 0.1086, 0.114, 0.1193]})
+    if art["model_slope_per_doubling"] < 0.005 or art["slope_bootstrap"]["model"]["ci95"][0] > 0:
+        return 0, f"!! control slope {art['model_slope_per_doubling']} ci {art['slope_bootstrap']['model']['ci95']} does not isolate the bootstrap clause"
+    rc, out = _realcurve_flat(root, "slope_bootstrap:", mode="disjoint", acc={"model": [0.1033, 0.1086, 0.114, 0.1193]})
+    if rc != 0 and "slope: the model" in out:
+        return 0, out + " !! the slope clause failed too"
+    return rc, out
+
+
+@case("realcurve4096", "a-top-rung-model-reading-0.006-off-0021-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, expect_clause="reproduction: r4_model", acc={"model": [0.09, 0.10, 0.11, 0.1253]})
+
+
+@case("realcurve4096", "a-top-rung-logistic-reading-0.006-off-0021-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, expect_clause="reproduction: r4_logistic", acc={"logistic": [0.10, 0.105, 0.11, 0.1239]})
+
+
+@case("realcurve4096", "a-top-rung-tree-reading-0.006-off-0021-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, expect_clause="reproduction: r4_depth3_tree", acc={"depth3_tree": [0.08, 0.085, 0.09, 0.0869]})
+
+
+@case("realcurve4096", "a-top-rung-reading-within-tolerance-passes", "pass")
+def _(root):
+    return _realcurve(root, acc={"model": [0.09, 0.10, 0.11, 0.1233]})
+
+
+@case("realcurve4096", "a-null-control-above-chance-plus-tolerance-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, expect_clause="null control: shuffled labels", null_acc=0.05)
+
+
+@case("realcurve4096", "a-null-label-array-that-is-not-0021s-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a["partition"].__setitem__("null_y_shuffled_sha256", "0" * 64)),
+                           expect_clause="null control: the permuted label array")
+
+
+@case("realcurve4096", "null-labels-not-banked-as-a-permutation-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a["partition"].__setitem__("null_labels_same_multiset", False)),
+                           expect_clause="null control: the null labels")
+
+
+@case("realcurve4096", "a-smoke-artifact-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a.__setitem__("smoke", True)), expect_clause="scope: smoke")
+
+
+@case("realcurve4096", "a-wrong-preregistration-id-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a.__setitem__("preregistration", "0022-realsearch-4096")), expect_clause="scope: preregistration")
+
+
+@case("realcurve4096", "a-protocol-with-one-changed-denominator-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["curve_spec"]["protocol"]["denominators"] = [16, 4, 2, 1]
+    return _realcurve_void(root, _rc_mut(m), expect_clause="scope:")
+
+
+@case("realcurve4096", "a-recipe-off-the-sealed-three-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["curve_spec"]["recipes"]["model"]["params"]["learning_rate"] = 0.31
+    return _realcurve_void(root, _rc_mut(m), expect_clause="scope:")
+
+
+@case("realcurve4096", "a-fit-record-on-an-off-recipe-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"]["r2_model"]["params"] = dict(a["fits"]["r2_model"]["params"], max_leaf_nodes=7)
+    return _realcurve_void(root, _rc_mut(m), expect_clause="fit: r2_model is not the sealed")
+
+
+@case("realcurve4096", "a-builder-cache-x-hash-off-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a["corpus"].__setitem__("cache_X_sha256", "f" * 64)), expect_clause="scope: corpus.cache_X_sha256")
+
+
+@case("realcurve4096", "an-extension-corpus-block-off-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a["ext_corpus"].__setitem__("n_rows", a["ext_corpus"]["n_rows"] + 1)),
+                           expect_clause="evaluation corpus: ext_corpus.n_rows")
+
+
+@case("realcurve4096", "a-fit-corpus-array-hash-off-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fit_corpus"]["arrays"]["X"]["sha256"] = "e" * 64
+    return _realcurve_void(root, _rc_mut(m), expect_clause="fit corpus: fit_corpus.arrays")
+
+
+@case("realcurve4096", "a-fit-block-index-hash-off-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a["partition"].__setitem__("fit_idx_sha256", "d" * 64)), expect_clause="sealed set: partition.fit_idx_sha256")
+
+
+@case("realcurve4096", "a-rungs-row-count-off-by-one-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["rungs"][1]["n_rows"] += 1
+    return _realcurve_void(root, _rc_mut(m), expect_clause="sealed set: partition.rungs")
+
+
+@case("realcurve4096", "a-rungs-chunk-set-hash-off-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["rungs"][0]["chunks_sha256"] = "c" * 64
+    return _realcurve_void(root, _rc_mut(m), expect_clause="sealed set: partition.rungs")
+
+
+@case("realcurve4096", "rungs-banked-as-not-nested-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a["partition"].__setitem__("rungs_nested", False)), expect_clause="partition.rungs_nested")
+
+
+@case("realcurve4096", "a-top-rung-that-is-not-the-fit-block-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a["partition"].__setitem__("top_rung_is_fit_block", False)), expect_clause="partition.top_rung_is_fit_block")
+
+
+@case("realcurve4096", "one-fit-row-identical-to-a-scored-row-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a["partition"].__setitem__("fit_rows_identical_to_a_scored_row", 1)),
+                           expect_clause="leakage: partition.fit_rows_identical_to_a_scored_row")
+
+
+@case("realcurve4096", "a-fit-chunk-shared-with-the-builder-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a["partition"].__setitem__("fit_chunks_shared_with_builder", 1)),
+                           expect_clause="leakage: partition.fit_chunks_shared_with_builder")
+
+
+@case("realcurve4096", "a-record-fitted-on-the-wrong-rung-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        r1, r2 = a["fits"]["r1_model"], a["fits"]["r2_model"]
+        r1["fit_rows_sha256"], r1["fit_rows_sorted_sha256"], r1["n_fit_rows"] = r2["fit_rows_sha256"], r2["fit_rows_sorted_sha256"], r2["n_fit_rows"]
+    return _realcurve_void(root, _rc_mut(m), expect_clause="fit: r1_model was not fitted on sealed rung 1")
+
+
+@case("realcurve4096", "a-missing-rung-role-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        del a["fits"]["r3_logistic"]
+    return _realcurve_void(root, _rc_mut(m), expect_clause="fit: the artifact banks roles outside the sealed order")
+
+
+@case("realcurve4096", "an-extra-role-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"]["r5_model"] = dict(a["fits"]["r4_model"])
+    return _realcurve_void(root, _rc_mut(m), expect_clause="fit: the artifact banks roles outside the sealed order")
+
+
+@case("realcurve4096", "a-fingerprint-off-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a["fits"]["r4_model"].__setitem__("fingerprint", "0123456789abcdef")),
+                           expect_clause="fit: r4_model fingerprint")
+
+
+@case("realcurve4096", "a-role-completed-twice-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        done = [e for e in a["ledger"] if e["name"] == "run_r1_model" and e["event"] == "completed"][0]
+        a["ledger"].append(dict(done))
+    return _realcurve_void(root, _rc_mut(m), expect_clause="fit: r1_model has 2 ledger completions")
+
+
+@case("realcurve4096", "completions-out-of-the-sealed-order-are-VOID", "fail")
+def _(root):
+    def m(a, s):
+        # the whole of r4_model's three events (rung_bound, started, completed) move after r1_depth3_tree's: every role's own
+        # start still precedes its completion, and only the sealed order is broken
+        L = a["ledger"]; mine = [e for e in L if e["name"] == "run_r4_model"]; rest = [e for e in L if e["name"] != "run_r4_model"]
+        j = max(i for i, e in enumerate(rest) if e["name"] == "run_r1_depth3_tree") + 1
+        a["ledger"] = rest[:j] + mine + rest[j:]
+    return _realcurve_void(root, _rc_mut(m), expect_clause="order")
+
+
+@case("realcurve4096", "a-rung-bound-event-naming-the-wrong-rung-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        e = [e for e in a["ledger"] if e["name"] == "run_r2_logistic" and e["event"] == "rung_bound"][0]; e["rung"] = 3
+    return _realcurve_void(root, _rc_mut(m), expect_clause="fit: r2_logistic has no 'rung_bound' event")
+
+
+@case("realcurve4096", "a-per-example-vector-one-row-short-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        s["per_example"]["r3_model"] = s["per_example"]["r3_model"][:-1]
+    return _realcurve_void(root, _rc_mut(m), expect_clause="fit: r3_model per-example vector")
+
+
+@case("realcurve4096", "a-per-example-hash-off-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a["fits"]["r3_model"].__setitem__("per_example_sha256", "a" * 64)),
+                           expect_clause="fit: r3_model per_example_sha256")
+
+
+@case("realcurve4096", "a-record-top1-off-by-0.0001-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a["fits"]["r2_depth3_tree"].__setitem__("top1", round(a["fits"]["r2_depth3_tree"]["top1"] + 0.0001, 4))),
+                           expect_clause="fit: r2_depth3_tree record top1")
+
+
+@case("realcurve4096", "a-banked-rung-reading-off-by-0.0001-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["readings"]["r1_model"]["ext_real_top1"] = round(a["readings"]["r1_model"]["ext_real_top1"] + 0.0001, 4)
+    return _realcurve_void(root, _rc_mut(m), expect_clause="readings: r1_model.ext_real_top1")
+
+
+@case("realcurve4096", "a-banked-curve-point-off-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["curves"]["model"]["rungs"][0]["ext_real_top1"] = round(a["curves"]["model"]["rungs"][0]["ext_real_top1"] + 0.0001, 4)
+    return _realcurve_void(root, _rc_mut(m), expect_clause="curve: curves.model.rungs")
+
+
+@case("realcurve4096", "a-banked-slope-off-by-0.00001-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["curves"]["model"]["slope_per_doubling"] = round(a["curves"]["model"]["slope_per_doubling"] + 0.00001, 6)
+        a["model_slope_per_doubling"] = a["curves"]["model"]["slope_per_doubling"]
+        a["slope_model_minus_logistic"] = round(a["model_slope_per_doubling"] - a["logistic_slope_per_doubling"], 6)
+        a["slope_model_minus_depth3_tree"] = round(a["model_slope_per_doubling"] - a["depth3_tree_slope_per_doubling"], 6)
+    return _realcurve_void(root, _rc_mut(m), expect_clause="curve: curves.model.slope_per_doubling")
+
+
+@case("realcurve4096", "a-top-level-slope-that-is-not-the-curves-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a.__setitem__("model_slope_per_doubling", 0.02)), expect_clause="curve: a banked top-level slope")
+
+
+@case("realcurve4096", "a-slope-difference-that-is-not-model-minus-logistic-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a.__setitem__("slope_model_minus_logistic", 0.0)), expect_clause="curve: a banked slope difference")
+
+
+@case("realcurve4096", "a-banked-bootstrap-interval-off-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["slope_bootstrap"]["model"]["ci95"][0] = round(a["slope_bootstrap"]["model"]["ci95"][0] - 0.000001, 6)
+    return _realcurve_void(root, _rc_mut(m), expect_clause="curve: slope_bootstrap.model")
+
+
+@case("realcurve4096", "a-banked-paired-difference-interval-off-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["slope_bootstrap"]["model_minus_logistic"]["share_of_resamples_with_model_ahead"] = 0.5
+    return _realcurve_void(root, _rc_mut(m), expect_clause="curve: slope_bootstrap.model_minus_logistic")
+
+
+@case("realcurve4096", "a-bar-banked-lower-than-sealed-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a["bar"].__setitem__("slope_per_doubling", 0.001)), expect_clause="scope: bar=")
+
+
+@case("realcurve4096", "log2-plaintexts-off-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["log2_chunks"] = [x + 0.5 for x in a["log2_chunks"]]
+    return _realcurve_void(root, _rc_mut(m), expect_clause="scope: roles=")
+
+
+@case("realcurve4096", "an-incomplete-artifact-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["complete"] = False; a["run_finished_utc"] = None
+    return _realcurve_void(root, _rc_mut(m), expect_clause="complete: complete=False")
+
+
+@case("realcurve4096", "a-wrong-thread-count-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["environment"]["threads"] = 4
+    return _realcurve_void(root, _rc_mut(m), expect_clause="environment: threads")
+
+
+@case("realcurve4096", "a-launch-that-was-not-ok-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["launch_environment"]["ok"] = False; a["launch_environment"]["problems"] = ["load 3.1"]
+    return _realcurve_void(root, _rc_mut(m), expect_clause="environment: launch_environment")
+
+
+@case("realcurve4096", "a-scores-file-from-a-smoke-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        s["smoke"] = True
+    return _realcurve_void(root, _rc_mut(m), expect_clause="scores: the scores file")
+
+
+@case("realcurve4096", "an-absent-scores-file-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, drop_scores=True, expect_clause="scores: the scores file is absent")
+
+
+@case("realcurve4096", "an-absent-artifact-is-pending-not-a-pass", "fail")
+def _(root):
+    rc, out = _realcurve(root, drop_artifact=True)
+    if rc != 2:
+        return 0, out + " !! expected exit 2 (pending)"
+    return rc, out
+
+
+@case("realcurve4096", "a-NOT-RUN-file-is-pending-not-a-pass", "fail")
+def _(root):
+    rc, out = _realcurve(root, not_run={"schema": "raise-v1/realcurve_4096_not_run/1", "preregistration": "0023-realcurve-4096",
+                                        "stage": "run", "reason": "r4_model read 0.13 against 0021's banked 0.1193", "utc": "2026-09-19T02:00:00Z",
+                                        "smoke": False, "n_checkpoints": 4})
+    if rc != 2 or "NOT RUN" not in out:
+        return 0, out + " !! expected exit 2 with NOT RUN"
+    return rc, out
+
+
+@case("realcurve4096", "an-artifact-of-unexpected-shape-is-VOID-with-every-result-key", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"] = ["not", "a", "mapping"]
+    rc, out = _realcurve_void(root, _rc_mut(m))
+    v = json.load(open(os.path.join(root, "artifacts", "pivot", "realcurve_4096_verdict.json")))
+    r23 = _rc_reader()
+    missing = sorted(set(r23.RESULT_KEYS) - set(v))
+    if missing:
+        return 0, f"!! the exception path omitted result keys {missing}"
+    return rc, out
+
+
+@case("realcurve4096", "a-control-whose-partition-is-the-readers-own-literals-is-detected", "fail")
+def _(root):
+    shape = json.load(open(_RC_SHAPE, encoding="utf-8")); S_art = shape["artifact"]
+    art, _ = _good_realcurve(); r23 = _rc_reader()
+    art["partition"] = dict(r23.PARTITION)
+    problems = _shape_problems(art, S_art, [("partition", art["partition"], S_art["partition"])], [], [])
+    if not problems:
+        return 0, "!! a partition taken from the reader's literals was not detected"
+    return 1, problems[0]
+
+
+@case("realcurve4096", "the-readers-record-requirements-hold-against-the-runners-own-banked-values", "pass")
+def _(root):
+    shape = json.load(open(_RC_SHAPE, encoding="utf-8")); r23 = _rc_reader()
+    problems = []
+    for name, rec in shape["artifact"]["fits"].items():
+        role = "model" if name == "null" else name.split("_", 1)[1]
+        fam = r23.RECIPES[role]["family"]; info = rec.get("fit_info")
+        if rec["id"] != r23.RECIPES[role]["id"]:
+            problems.append(f"{name}: id {rec['id']} is not the sealed {r23.RECIPES[role]['id']}")
+        if fam in ("hgb", "logistic") and not isinstance(info.get("n_iter"), int):
+            problems.append(f"{name}: {fam} without n_iter")
+        if fam == "tree" and not (isinstance(info.get("depth"), int) and isinstance(info.get("n_leaves"), int)):
+            problems.append(f"{name}: tree without depth/n_leaves")
+        if sorted(rec["per_family"]) != sorted(r23.FAMILIES + ["ext:" + f for f in r23.EXT_FAMILIES]):
+            problems.append(f"{name}: per_family keys {sorted(rec['per_family'])}")
+        if any(not rf.get("probe_ok") for rf in rec.get("block_refills") or []):
+            problems.append(f"{name}: a failed probe")
+        want_rung = r23.N_RUNGS if name == "null" else (r23.REPLICATE if name.startswith(r23.REPLICATE + "_") else int(name[1:name.index("_")]))
+        if rec.get("rung") != want_rung or rec.get("role") != ("null" if name == "null" else role):
+            problems.append(f"{name}: rung/role fields {rec.get('rung')}/{rec.get('role')}")
+    if problems:
+        return 1, "; ".join(problems[:4])
+    return 0, f"{len(shape['artifact']['fits'])} records satisfy the reader's per-record requirements on the runner's own values"
+
+
+@case("realcurve4096", "the-control-artifact-is-built-from-the-runners-own-output-shape", "pass")
+def _(root):
+    shape = json.load(open(_RC_SHAPE, encoding="utf-8")); S_art = shape["artifact"]
+    art, scores = _good_realcurve(); r23 = _rc_reader()
+    blocks = [("partition", art["partition"], S_art["partition"]), ("corpus", art["corpus"], S_art["corpus"]),
+              ("ext_corpus", art["ext_corpus"], S_art["ext_corpus"]), ("fit_corpus", art["fit_corpus"], S_art["fit_corpus"]),
+              ("curve_spec", art["curve_spec"], S_art["curve_spec"]), ("bar", art["bar"], S_art["bar"]),
+              ("slope_bootstrap", art["slope_bootstrap"], S_art["slope_bootstrap"]),
+              ("replicate_rung_1", art["replicate_rung_1"], S_art["replicate_rung_1"]),
+              ("replicate_rung_1.rung", art["replicate_rung_1"]["rung"], S_art["replicate_rung_1"]["rung"]),
+              ("partition.replicate_rung_1", art["partition"]["replicate_rung_1"], S_art["partition"]["replicate_rung_1"]),
+              ("scores (file)", {k: v for k, v in scores.items()}, dict(shape["scores"], per_example=None, eval_chunk_ids=None, ext_chunk_ids=None, ext_fam=None))]
+    blocks += [(f"readings.{n}", art["readings"][n], S_art["readings"]["r1_model"]) for n in art["readings"]]
+    blocks += [(f"curves.{r}", art["curves"][r], S_art["curves"][r]) for r in art["curves"]]
+    blocks += [(f"partition.rungs[{i}]", a, b) for i, (a, b) in enumerate(zip(art["partition"]["rungs"], S_art["partition"]["rungs"]))]
+    records = [(f"fits.{n}", art["fits"][n], S_art["fits"][n]) for n in art["fits"]]
+    problems = _shape_problems(art, S_art, blocks, records,
+                               [("PARTITION", r23.PARTITION, S_art["partition"]), ("CORPUS", r23.CORPUS, S_art["corpus"]),
+                                ("EXT", r23.EXT, S_art["ext_corpus"]), ("FIT", r23.FIT, S_art["fit_corpus"])])
+    if problems:
+        return 1, "; ".join(problems[:4])
+    return 0, (f"control and fixture agree both ways on {len(S_art)} artifact keys, {len(art['fits'])} records, every curve and every block; "
+               f"every reader expectation is a key the runner writes")
+
+
+
+
+def _rc_ckpt(root, art, scores, mutate=None):
+    """Write the control's checkpoints into the scratch root so the reader's cross-check runs; mutate(ck_by_name) first if given."""
+    d = os.path.join(root, "artifacts", "pivot", "realcurve_4096_ckpt"); os.makedirs(d, exist_ok=True)
+    cks = {n: {"fingerprint": art["fits"][n]["fingerprint"], "record": dict(art["fits"][n]), "per_example": list(scores["per_example"][n])}
+           for n in art["fits"]}
+    if mutate:
+        mutate(cks)
+    for n, ck in cks.items():
+        json.dump(ck, open(os.path.join(d, f"run_{n}.json"), "w"))
+
+
+@case("realcurve4096", "two-roles-banking-the-same-per-example-vector-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        # r2_model's vector becomes r3_model's, and every field that describes it is rebanked consistently
+        s["per_example"]["r2_model"] = list(s["per_example"]["r3_model"])
+        a["fits"]["r2_model"]["per_example_sha256"] = a["fits"]["r3_model"]["per_example_sha256"]
+        for k in ("top1", "top1_non_gutenberg", "per_family"):
+            a["fits"]["r2_model"][k] = a["fits"]["r3_model"][k]
+        a["readings"]["r2_model"] = dict(a["readings"]["r3_model"])
+        for k in ("ext_real_top1", "ext_real_correct", "ext_top1", "builder_eval_top1", "ext_per_family"):
+            a[k]["r2_model"] = a[k]["r3_model"]
+    return _realcurve_void(root, _rc_mut(m), expect_clause="fit: roles")
+
+
+@case("realcurve4096", "a-completion-under-a-foreign-name-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        done = [e for e in a["ledger"] if e["name"] == "run_r1_model" and e["event"] == "completed"][0]
+        a["ledger"].append(dict(done, name="confirm_model"))
+    return _realcurve_void(root, _rc_mut(m), expect_clause="order: the ledger carries completions under names outside")
+
+
+@case("realcurve4096", "a-VOID-banks-no-slope-and-no-interval", "fail")
+def _(root):
+    def m(a, s):
+        a["curves"]["logistic"]["end_to_end_gain"] = round(a["curves"]["logistic"]["end_to_end_gain"] + 0.0001, 4)
+    rc, out = _realcurve_void(root, _rc_mut(m), expect_clause="curve: curves.logistic.end_to_end_gain")
+    v = json.load(open(os.path.join(root, "artifacts", "pivot", "realcurve_4096_verdict.json")))
+    if v.get("model_slope_per_doubling") is not None or v.get("model_slope_ci95") is not None or v.get("curves") is not None:
+        return 0, out + " !! a VOID verdict banked a slope, an interval or a curve"
+    return rc, out
+
+
+@case("realcurve4096", "a-bootstrap-only-FLAT-names-the-interval-clause-in-its-meaning", "fail")
+def _(root):
+    rc, out = _realcurve_flat(root, "slope_bootstrap:", mode="disjoint", acc={"model": [0.1033, 0.1086, 0.114, 0.1193]})
+    v = json.load(open(os.path.join(root, "artifacts", "pivot", "realcurve_4096_verdict.json")))
+    m = v.get("meaning") or ""
+    if rc != 0 and ("the interval clause" not in m or "do not agree on the rise" not in m or "would not have moved" in m):
+        return 0, out + " !! the FLAT meaning does not name the interval clause"
+    return rc, out
+
+
+@case("realcurve4096", "a-replicate-rung-hash-off-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["partition"]["replicate_rung_1"]["chunks_sha256"] = "b" * 64
+    return _realcurve_void(root, _rc_mut(m), expect_clause="sealed set: partition.replicate_rung_1")
+
+
+@case("realcurve4096", "a-missing-replicate-role-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        del a["fits"]["rep1_model"]
+    return _realcurve_void(root, _rc_mut(m), expect_clause="fit: the artifact banks roles outside the sealed order")
+
+
+@case("realcurve4096", "a-banked-replicate-difference-off-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["replicate_rung_1"]["difference_from_rung_1"]["model"] = round(a["replicate_rung_1"]["difference_from_rung_1"]["model"] + 0.0001, 4)
+    return _realcurve_void(root, _rc_mut(m), expect_clause="replicate: replicate_rung_1.difference_from_rung_1")
+
+
+@case("realcurve4096", "a-replicate-banking-rung-1s-vector-is-VOID-as-a-shared-vector", "fail")
+def _(root):
+    def m(a, s):
+        s["per_example"]["rep1_model"] = list(s["per_example"]["r1_model"])
+        for k in ("per_example_sha256", "top1", "top1_non_gutenberg", "per_family"):
+            a["fits"]["rep1_model"][k] = a["fits"]["r1_model"][k]
+        a["readings"]["rep1_model"] = dict(a["readings"]["r1_model"])
+        for k in ("ext_real_top1", "ext_real_correct", "ext_top1", "builder_eval_top1", "ext_per_family"):
+            a[k]["rep1_model"] = a[k]["r1_model"]
+        a["replicate_rung_1"]["readings"]["model"] = dict(a["replicate_rung_1"]["readings"]["model"],
+                                                          ext_real_top1=a["readings"]["r1_model"]["ext_real_top1"],
+                                                          ext_real_correct=a["readings"]["r1_model"]["ext_real_correct"],
+                                                          builder_eval_top1=a["readings"]["r1_model"]["builder_eval_top1"],
+                                                          ext_per_family={f: a["readings"]["r1_model"]["ext_per_family"][f] for f in a["ext_real_families"]})
+        a["replicate_rung_1"]["difference_from_rung_1"]["model"] = 0.0
+        a["replicate_rung_1"]["slope_with_replicate_at_rung_1"]["model"] = a["curves"]["model"]["slope_per_doubling"]
+    return _realcurve_void(root, _rc_mut(m), expect_clause="fit: roles")
+
+
+@case("realcurve4096", "a-banked-sensitivity-slope-off-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["curves"]["model"]["slope_with_top_rung_at_reference"] = round(a["curves"]["model"]["slope_with_top_rung_at_reference"] + 0.00001, 6)
+    return _realcurve_void(root, _rc_mut(m), expect_clause="curve: curves.model.slope_with_top_rung_at_reference")
+
+
+@case("realcurve4096", "a-banked-rung-to-rung-gain-off-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["curves"]["depth3_tree"]["rung_to_rung_gains"][1] = round(a["curves"]["depth3_tree"]["rung_to_rung_gains"][1] + 0.0001, 4)
+    return _realcurve_void(root, _rc_mut(m), expect_clause="curve: curves.depth3_tree.rung_to_rung_gains")
+
+
+@case("realcurve4096", "a-banked-per-family-slope-off-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["curves"]["model"]["per_family_slope_per_doubling"]["py_src"] = round(a["curves"]["model"]["per_family_slope_per_doubling"]["py_src"] + 0.00001, 6)
+    return _realcurve_void(root, _rc_mut(m), expect_clause="curve: curves.model.per_family_slope_per_doubling")
+
+
+@case("realcurve4096", "a-bootstrap-block-without-its-unit-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        del a["slope_bootstrap"]["unit"]
+    return _realcurve_void(root, _rc_mut(m), expect_clause="curve: slope_bootstrap carries no unit")
+
+
+@case("realcurve4096", "a-banked-paired-interval-off-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["slope_bootstrap"]["model_minus_logistic"]["ci95"][1] = round(a["slope_bootstrap"]["model_minus_logistic"]["ci95"][1] + 0.000001, 6)
+    return _realcurve_void(root, _rc_mut(m), expect_clause="curve: slope_bootstrap.model_minus_logistic")
+
+
+@case("realcurve4096", "eval-chunk-ids-with-two-entries-swapped-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        ids = s["eval_chunk_ids"]; i = next(i for i in range(1, len(ids)) if ids[i] != ids[0]); ids[0], ids[i] = ids[i], ids[0]
+    return _realcurve_void(root, _rc_mut(m), expect_clause="scores: eval_chunk_ids")
+
+
+@case("realcurve4096", "ext-chunk-ids-with-two-entries-swapped-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        ids = s["ext_chunk_ids"]; i = next(i for i in range(1, len(ids)) if ids[i] != ids[0]); ids[0], ids[i] = ids[i], ids[0]
+    return _realcurve_void(root, _rc_mut(m), expect_clause="scores: ext_chunk_ids")
+
+
+@case("realcurve4096", "ext-fam-with-two-entries-swapped-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        f = s["ext_fam"]; i = next(i for i in range(1, len(f)) if f[i] != f[0]); f[0], f[i] = f[i], f[0]
+    return _realcurve_void(root, _rc_mut(m), expect_clause="scores: ext_fam")
+
+
+@case("realcurve4096", "a-scores-file-naming-different-arrays-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        s["ext_arrays_sha256"]["X"] = "9" * 64
+    return _realcurve_void(root, _rc_mut(m), expect_clause="scores: the scores file is not this run's")
+
+
+@case("realcurve4096", "fit-info-by-name-off-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fit_info_by_name"] = {k: dict(v) for k, v in a["fit_info_by_name"].items()}     # a copy: the control aliases the records' dicts
+        a["fit_info_by_name"]["r1_model"]["n_iter"] = 999
+    return _realcurve_void(root, _rc_mut(m), expect_clause="fit: fit_info_by_name is not the records' fit_info")
+
+
+@case("realcurve4096", "an-extra-banked-reading-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["readings"]["r5_model"] = dict(a["readings"]["r4_model"])
+    return _realcurve_void(root, _rc_mut(m), expect_clause="readings: banked readings for")
+
+
+@case("realcurve4096", "a-record-per-family-off-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"]["r2_logistic"]["per_family"] = dict(a["fits"]["r2_logistic"]["per_family"], code=0.5)
+    return _realcurve_void(root, _rc_mut(m), expect_clause="fit: r2_logistic record per_family")
+
+
+@case("realcurve4096", "a-record-with-the-wrong-stage-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a["fits"]["r3_model"].__setitem__("stage", "confirmatory")), expect_clause="fit: r3_model stage")
+
+
+@case("realcurve4096", "a-record-banked-infeasible-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a["fits"]["r3_model"].__setitem__("status", "infeasible_memory")), expect_clause="fit: r3_model status")
+
+
+@case("realcurve4096", "a-record-with-a-wrong-environment-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"]["r4_logistic"]["environment"] = dict(a["fits"]["r4_logistic"]["environment"], sklearn="0.0.0")
+    return _realcurve_void(root, _rc_mut(m), expect_clause="environment: r4_logistic sklearn")
+
+
+@case("realcurve4096", "a-record-with-a-failed-block-probe-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["fits"]["r2_model"]["block_refills"] = [{"probe_ok": False}]
+    return _realcurve_void(root, _rc_mut(m), expect_clause="fit: r2_model banked a failed block probe")
+
+
+@case("realcurve4096", "a-null-control-field-that-is-not-the-null-record-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["null_control"] = dict(a["fits"]["r4_model"])
+    return _realcurve_void(root, _rc_mut(m), expect_clause="null control: null_control is not the banked null record")
+
+
+@case("realcurve4096", "null-rows-off-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a.__setitem__("null_rows", a["null_rows"] - 1)), expect_clause="null control: null_rows")
+
+
+@case("realcurve4096", "a-banked-reference-off-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["reference_top1"] = dict(a["reference_top1"], model=0.12)
+    return _realcurve_void(root, _rc_mut(m), expect_clause="reproduction: the banked reference readings")
+
+
+@case("realcurve4096", "a-banked-drift-off-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["reproduction_drift"] = dict(a["reproduction_drift"], logistic=0.001)
+    return _realcurve_void(root, _rc_mut(m), expect_clause="reproduction: reproduction_drift")
+
+
+@case("realcurve4096", "a-banked-shuffled-label-reading-off-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a.__setitem__("shuffled_label_accuracy_real", 0.0381)), expect_clause="null control: a banked shuffled-label")
+
+
+@case("realcurve4096", "a-banked-summary-reading-off-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["ext_real_top1"] = dict(a["ext_real_top1"]); a["ext_real_top1"]["r2_model"] = round(a["ext_real_top1"]["r2_model"] + 0.0001, 4)
+    return _realcurve_void(root, _rc_mut(m), expect_clause="readings: a banked summary reading for r2_model")
+
+
+@case("realcurve4096", "a-select-stage-artifact-is-VOID", "fail")
+def _(root):
+    return _realcurve_void(root, _rc_mut(lambda a, s: a.__setitem__("stage", "select")), expect_clause="scope: stage")
+
+
+@case("realcurve4096", "a-completion-event-with-a-wrong-fingerprint-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        e = [e for e in a["ledger"] if e["name"] == "run_r2_model" and e["event"] == "completed"][0]; e["fingerprint"] = "ffffffffffffffff"
+    return _realcurve_void(root, _rc_mut(m), expect_clause="fit: r2_model's completion event does not carry")
+
+
+@case("realcurve4096", "a-completion-without-its-start-is-VOID", "fail")
+def _(root):
+    def m(a, s):
+        a["ledger"] = [e for e in a["ledger"] if not (e["name"] == "run_r3_logistic" and e["event"] == "started")]
+    return _realcurve_void(root, _rc_mut(m), expect_clause="fit: r3_logistic has no 'started' event")
+
+
+@case("realcurve4096", "a-malformed-artifact-file-is-pending-not-a-pass", "fail")
+def _(root):
+    art, scores = _good_realcurve()
+    piv = os.path.join(root, "artifacts", "pivot"); os.makedirs(piv, exist_ok=True)
+    json.dump(scores, open(os.path.join(piv, "realcurve_4096_scores.json"), "w"))
+    open(os.path.join(piv, "realcurve_4096.json"), "w").write("{not json")
+    shutil.copy(os.path.join(REPO, "tools", "readers", "realcurve4096_verdict.py"), os.path.join(root, "tools", "readers", "realcurve4096_verdict.py"))
+    rc, out = run([PY, "tools/readers/realcurve4096_verdict.py"], root)
+    if rc != 2:
+        return 0, out + " !! expected exit 2 on a malformed artifact"
+    return rc, out
+
+
+@case("realcurve4096", "a-resumed-run-that-relogged-its-rung-bound-events-passes", "pass")
+def _(root):
+    def m(a, s):
+        # a relaunch after a crash: every step re-logs rung_bound; the crashed fit restarts with attempt 2 and one completion
+        L = a["ledger"]; extra = []
+        for e in L:
+            if e["event"] == "rung_bound":
+                extra.append(dict(e, utc="2026-09-19T04:00:00Z"))
+        i = next(i for i, e in enumerate(L) if e["name"] == "run_r2_model" and e["event"] == "started")
+        L.insert(i + 1, dict(L[i], attempt=2, utc="2026-09-19T04:00:01Z"))
+        a["ledger"] = L + extra; a["launch_number"] = 2
+        a["launch_environment"] = dict(a["launch_environment"], loadavg_waited_seconds=45)
+    return _realcurve(root, _rc_mut(m))
+
+
+@case("realcurve4096", "committed-checkpoints-that-agree-pass", "pass")
+def _(root):
+    art, scores = _good_realcurve()
+    _rc_ckpt(root, art, scores)
+    rc, out = _realcurve(root)
+    v = json.load(open(os.path.join(root, "artifacts", "pivot", "realcurve_4096_verdict.json")))
+    if rc == 0 and v.get("checkpoints_cross_checked") != len(art["fits"]):
+        return 1, out + f" !! checkpoints_cross_checked={v.get('checkpoints_cross_checked')}"
+    return rc, out
+
+
+@case("realcurve4096", "a-committed-checkpoint-with-a-different-vector-is-VOID", "fail")
+def _(root):
+    art, scores = _good_realcurve()
+
+    def m(cks):
+        v = cks["r2_model"]["per_example"]; v[0] = 1 - v[0]
+    _rc_ckpt(root, art, scores, m)
+    return _realcurve_void(root, expect_clause="checkpoint: r2_model's committed checkpoint")
+
+
+@case("realcurve4096", "a-missing-committed-checkpoint-is-VOID", "fail")
+def _(root):
+    art, scores = _good_realcurve()
+    _rc_ckpt(root, art, scores)
+    os.remove(os.path.join(root, "artifacts", "pivot", "realcurve_4096_ckpt", "run_r1_logistic.json"))
+    return _realcurve_void(root, expect_clause="checkpoint: r1_logistic has no checkpoint")
+
+
+@case("realcurve4096", "the-exception-path-writes-the-normal-paths-key-set", "pass")
+def _(root):
+    rc, out = _realcurve(root)
+    ok = json.load(open(os.path.join(root, "artifacts", "pivot", "realcurve_4096_verdict.json")))
+    rc2, out2 = _realcurve_void(root, _rc_mut(lambda a, s: a.__setitem__("fits", ["not", "a", "mapping"])))
+    bad = json.load(open(os.path.join(root, "artifacts", "pivot", "realcurve_4096_verdict.json")))
+    if set(ok) != set(bad):
+        return 1, f"!! key sets differ: normal-only {sorted(set(ok) - set(bad))}, exception-only {sorted(set(bad) - set(ok))}"
+    return 0, f"{len(ok)} keys on both paths"
+
+
 def main() -> int:
     # `python3 tests/mutation_test.py <gate> [<gate> ...]` runs only those gates' cases and writes NO report (a partial
     # report would make the banked count stale); the full suite, as CI runs it, takes no arguments.

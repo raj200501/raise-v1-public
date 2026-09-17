@@ -1,0 +1,117 @@
+{
+  "cost": {
+    "checkpoints": "artifacts/pivot/realcurve_4096_ckpt; resume by relaunching the identical command",
+    "estimate_stated_in_advance": "model fits at 1, 1/2, 1/4 and 1/8 of the block: about 702 s if time scales with rows (374.6 s at the top rung); logistic about 122 s; trees seconds; the null 51.2 s; scoring-set materialisation and the row-identity scan a few minutes. About 20 to 25 minutes on this machine at three threads, one launch; COULD NOT VERIFY until run - the banked seconds are the measurement.",
+    "fit_seconds_0022_banked_for_the_recipes_on_the_whole_block": {
+      "depth3_tree": 3.3,
+      "logistic": 65.0,
+      "model": 374.6,
+      "null": 51.2
+    }
+  },
+  "design_decisions": {
+    "a_pass_is_a_rise_to_a_failing_reading": "adopted from the design lens (finding 3): the top rung IS 0021's REAL_FIT_FAILS reading; every verdict string, the scope and the thesis say so, and the three slopes are quoted together",
+    "null_first_then_the_top_rung": "the null control is the first fit so the label permutation is drawn at 0021's generator state and hashes to 0021's array; the top rung's three roles follow as the reproduction of 0021 (within 0.005, else NOT RUN) before any lower rung is fitted; then rungs 1, 2, 3 ascending, the model last in each.",
+    "one_decade": "the record's only real content outside its sealed scoring set is 0021's fit block; 1/8 of it to all of it is 2.98 doublings, 0.90 decades, under 0003's two-decade scope rule, and the sealed file names the span and the rule",
+    "recipes_are_fixed": "0021's M4, L3 and D1 verbatim (0022's recipes_reference): 0022 measured that searching the recipes on this content moves the model by -0.0004 and the logistic by 0.0003, so a search inside each rung would cost an hour per rung and change nothing the clause reads.",
+    "rungs_are_nested_and_family_stratified": "The unit is plaintexts (source chunks), each with every one of its encoder variants, because that is what a corpus costs (0016's convention) and because the builder curve's abscissa is manufactured fragments of a fixed plaintext supply. Rungs are nested and family-stratified: per family, one seeded permutation of its chunk ids; rung d takes the first ceil(n_f / d). Every rung therefore has the fit block's family mix (py_src carries r1 0.652, r2 0.6537, r3 0.6523, r4 0.6527 of the rows), so the curve is not a change of mixture in disguise, and a lower rung is a subset of the next, so the curve is one corpus growing rather than four draws. The rows of a rung are the fit block's rows of its chunks in 0021's fit-block order, so the top rung is 0021's block row for row (the reproduction) and M4's last-10% validation split at every rung is a random tenth of that rung.",
+    "the_bar": "the model's slope, in real-family accuracy per doubling of plaintexts over the four rungs, >= 0.005. The bar is a design choice restated from 0016, whose 0.005 was per doubling of FAMILIES under transfer - a different abscissa and regime; it is about half the builder's in-distribution per-plaintext rate (0.010093 per doubling, sealed under reference_slopes_informational), and it is the smallest rise the instrument can call a rise: 0.005 over 2.984659 doublings is an end-to-end rise of about 0.0149, roughly 574 rows of 38452. A pass is 'rises at all at the record's rate', not 'rises like the builder curve'; the fraction of the builder rate is a flag.",
+    "the_bootstrap_clause": "the 2.5th percentile of the model's slope under the sealed cluster bootstrap over the scored real chunks is > 0. The interval is over the scored chunks only: it does not resample the fit side (which plaintexts fell into the lower rungs, where early stopping halted), so it is expected to be narrow and this clause is expected to bind only when the slope is already near 0. A slope at or above the bar whose interval reaches 0 is REAL_CURVE_FLAT: four points and a rise the scored chunks do not agree on is not a rise.",
+    "the_projection_is_dropped": "adopted from the design lens (finding 2): a straight-line extrapolation to 0022's bar counted plaintexts that do not exist and targeted a bar the design's own logistic curve says moves; the sealed file now states that no extrapolation beyond the top rung is banked or quoted",
+    "the_replicate": "adopted from the design lens (finding 1d): three more fits, about a minute; the smallest rung cut again under a second seeded nesting gives a direct reading of the fit-side variance the scored-chunk bootstrap cannot see, where that variance is largest; informational, never a verdict",
+    "what_the_bootstrap_resamples_and_what_it_does_not": "the scored real chunks (1500 of them), one resample per draw for every rung and every role, so role differences are paired; it does not resample the fit side (one seed, nested rungs), and the sealed file says so under rival_explanations_run_as_arms; a second seed would be a different preregistration."
+  },
+  "gate_evolution": {
+    "v1": "60 cases, 58 detected: the disjoint-chunk control's curve was too flat to clear the slope clause (0.004715), so the bootstrap clause was never isolated; the order mutation swapped two completion events, which the reader caught as a start-after-completion defect rather than as an order defect",
+    "v2": "60/60: the disjoint control uses the same rung readings as the just-above-the-bar control (slope 0.005366, interval [-0.002161, 0.013153]); the order mutation moves a whole role's three events, so only the sealed order is broken",
+    "v3": "98 cases after the review, 69 detected on the first run: the new pairwise-distinct-vector clause fired on the control itself, whose vectors were a pure function of the target accuracy, so two fits with equal targets banked byte-identical vectors and every downstream case voided on that clause; each fit now carries a distinct builder-evaluation marking and the replicate-identical case copies rung 1's vector explicitly. 98/98."
+  },
+  "instrument": {
+    "fixture": "tests/fixtures/realcurve_runner_shape.json, captured from the runner's smoke run",
+    "gate": "tests/mutation_test.py realcurve4096: the control is built from the fixture's key set with the reader's sealed values, vectors marked at chunk granularity with row precision (nested, or rotated per rung for the bootstrap case), the curve, slopes and bootstrap computed with the runner's own functions; v2: sixteen roles incl. the replicate, ~100 cases including the reader lens's list (shared vector, foreign completion, VOID banks nothing, bootstrap-only FLAT meaning, scores-file layout mutations, checkpoint cross-check pass/fail, a resumed ledger passes, exception-path key set)",
+    "pre_freeze_check": "tools/prereg_checks/prefreeze_0023.py",
+    "preregistration_generator": "make_prereg_0023.py (scratchpad): every sealed value read from 0021's, 0022's and 0003's banked artifacts or computed by calling the runner's own functions on the data",
+    "reader": "tools/readers/realcurve4096_verdict.py, generated from a template by a generator; every literal from the sealed file or a banked artifact; slope_bootstrap and ols_slope copied from the runner statement for statement (the pre-freeze check compares the ASTs); v2: pairwise-distinct per-example vectors required, every completion must name a sealed role, the committed checkpoints are cross-checked when present, the VOID path banks no slope or interval, the FLAT meaning names the failing clause, the RISES meaning states the rise to 0021's failing reading with all four rung readings per role and the three slopes together, the difference flag is read by the sealed rule, no projection",
+    "runner": "tools/pivot/run_realcurve.py (single stage; rung_partition, sealed_order, slope_bootstrap and ols_slope are module-level so the generator, the check and the gate call them); reuses run_recipe_search.py's Store/run_fit/Block/launch rules and run_realfit.py's corpus_block; refusal and NOT RUN paths as 0022's; v2: an informational replicate of the smallest rung under a second seeded nesting (rep1_*, fitted last), per-family chunk streams seeded [seed, family_index + 1] (a second word of 0 would have been the fit-block permutation's own stream), rung_to_rung_gains and the slope with the top rung held at 0021's reading banked per role, the projection removed, NOT RUN on a role that banks no vector, the top block freed after its model, two more refusals (roles, null_rows)",
+    "smoke": {
+      "v1": {
+        "corpus": "0021's smoke_realfit/fit_small.npz (3 plaintexts per family): rungs 1 and 2 coincided",
+        "fits": 13,
+        "wall_seconds": 130.3
+      },
+      "v2": {
+        "corpus": "smoke_realfit/fit_small16.npz (16 per family, built by corpus_realfit.py --cap-per-family 16 into the scratchpad)",
+        "fits": 16,
+        "note": "scratchpad corpora only; voided by the reader by design; the fixture is captured from this run",
+        "rungs_plaintexts": [
+          10,
+          20,
+          40,
+          80
+        ],
+        "wall_seconds": 241.8
+      }
+    }
+  },
+  "pre_freeze_review": {
+    "adopted": {
+      "condition": [
+        "1 (medium): the misattributed quotation - 0021 named the recipe search as open; 0022 closed it and named the budget excuse: the prose now says which file said what",
+        "2 (medium): the null-label, pool and evaluation hashes are recomputed from the data with the runner's own split and generator in the pre-freeze check, not compared copy to copy",
+        "3 (medium): the bootstrap's scope is stated in bootstrap.rule, bar.slope_bootstrap, design.curve and the rival arm, which now reads 'the rise is scoring noise'; the replicate rung is the direct reading of the other side",
+        "4 (low): caps restated from 0022 with a note that selection_fit_seconds is dormant",
+        "5 (low): cache_identity.X_note restated for what it is",
+        "6 (low): 'one decade' is now 'just under one decade (0.90)', computed",
+        "7 (low): sealed_partition.restated_from names the two keys added to fit_block",
+        "8 (low): a 16-plaintext-per-family smoke corpus so the four smoke rungs are distinct; the fixture recaptured from it",
+        "9 (low): one result key per line in the template, so RESULT_KEYS carries meaning and source_artifact (41 keys)",
+        "10 (low): no typed target (the projection is gone); bar.slope names the 0.005 as a design choice restated from 0016's different abscissa; readings[...] keyed by order step named as such"
+      ],
+      "design": [
+        "1 (high): the interval's scope stated everywhere it is named; the rival arm reworded; 'a second seed or nesting' added to what_this_does_not_cover; the informational replicate of the smallest rung added (1d)",
+        "2 (high): the projection dropped from the protocol, the runner, the reader, the flags and the stop rules; the sealed file says no extrapolation beyond the top rung is banked or quoted",
+        "3 (high): the RISES meaning and the scope state the rise to 0021's failing reading, quote all four rung readings per role and the three slopes together",
+        "4 (medium): bar.slope names the bar as 0016's transfer-regime bar restated as a design choice, about half the builder's per-plaintext rate; the builder rate is sealed as a reference and the fraction is a flag",
+        "5 (medium): the expected outcome rewritten on the banked per-plaintext references (0.010093 with rows growing, 0.003492 at fixed rows), the mixed family's flat curve (0.000854), all three transfer points, and 0011 as a rising curve to a failing verdict",
+        "6 (medium): the reading rule for the paired difference sealed in design.how_the_difference_flag_is_read and applied by the reader; the share labelled as not a probability; the iteration-cap rule",
+        "7 (medium): the FLAT reading is 'does not rise at the preregistered rate'; what_a_fail and the thesis say 'at the record's rate'",
+        "8 (medium): slope_with_top_rung_at_0021s_reading banked per role beside the drift; the 30 percent sensitivity stated in bar.reproduces_0021",
+        "9 (medium-low): the iteration-cap reading rule",
+        "10 (low): 'outside its sealed scoring set'; the null control's second row set named in the disclosure",
+        "11 (low): rung_to_rung_gains banked and quoted",
+        "12 (low): what_this_does_not_cover additions (second seed or nesting, saturation, per-family verdict)",
+        "13 (low): every projection reference removed consistently"
+      ],
+      "reader": [
+        "1 (medium): the sixteen per-example vectors must be pairwise distinct; the committed checkpoints are cross-checked (fingerprint, vector hash, top-1) whenever the directory is present; the docstring says what the binding of vector to fit rests on",
+        "2 (medium): the FLAT meaning names the failing clause and drops 'would not have moved'",
+        "3 (low-medium): a VOID banks no slope, interval, curve or replicate",
+        "4 (low): SLOPE_AGREEMENT dropped; the sealed curve_arithmetic clause says 'exactly'",
+        "5 (low): every 'completed' event must name a sealed role",
+        "6 (low): the listed gate cases added (scores-file layout swaps, fit_info_by_name on a copy, extra reading, per-family and gain and sensitivity slopes, bootstrap unit, the paired interval itself, record per_family/stage/status/environment/probe, null_control, null_rows, reference, drift, shuffled, summary, stage, completion fingerprint, missing start, malformed JSON exit 2, a resumed ledger passes, checkpoint pass/fail, exception-path key set)",
+        "7 (low): the exception-path key set is compared to the normal path's by a gate case",
+        "8 (low): the docstring's WHAT THIS READER CANNOT SEE paragraph"
+      ],
+      "runner": [
+        "1 (low): per-family chunk streams seeded [seed, family_index + 1]; rung hashes regenerated",
+        "2 (low): the top block is freed after its model",
+        "3 (low): a role that banks no per-example vector is NOT RUN, not a traceback",
+        "4 (low): .gitignore carries the realcurve checkpoint .tmp/.hb patterns and the two output .tmp files",
+        "5 (coverage): the 16-plaintext smoke corpus; resume and completed-record-deleted NOT RUN were exercised by the reviewer on copies of the smoke checkpoints (rv_resumeA, rv_notrunB) and behaved",
+        "7 (info): cheap refusals on P['roles'] and P['null_rows']"
+      ]
+    },
+    "declined": [
+      "design 6 (equivalence margin): not sealed - an interval that includes 0 is read as 'not resolved at this size', never as 'equal', which is the honest reading without a second arbitrary threshold",
+      "reader 1b as a hard requirement when the checkpoint directory is absent: the reader cross-checks the checkpoints whenever the directory is present and banks checkpoints_cross_checked; an absent directory is visible in that flag rather than a VOID, because the record's readers never required checkpoints and a reviewer can see the flag",
+      "runner 8 and 9 (three-launch window; the alive check's blindness to the in-process gate): inherited from 0022 by design, noted",
+      "runner 10 (block probe coverage at small rungs): the source is an in-memory array; noted, unchanged"
+    ],
+    "method": "four independent read-only reviewers on the unfrozen file, the runner, the reader and the gate: condition (sealed values and traceability), runner (operational paths), reader (false pass, false VOID, gate gaps) and design (failability, over-reading, confounds, the expected outcome). Every finding below was adopted unless listed as declined, with the reason.",
+    "reviewer_experiments_kept": "the runner reviewer's resume and NOT RUN experiments (scratchpad rv_resumeA, rv_notrunB) and the reader reviewer's 49 mutation runs (scratchpad review0023/exp.log); read-only, on the smoke's outputs"
+  },
+  "preregistration": "0023-realcurve-4096",
+  "schema": "raise-v1/engineering_log/1",
+  "status": "unfrozen; instrument v2 after the four-lens review; gate 98/98; full suite and pre-freeze check pending",
+  "why_this_exists": "0021 read REAL_FIT_FAILS (0.1193 against a depth-3 tree at 0.0929) and 0022 read REAL_RECIPE_FAILS (a searched model at 0.1189 against a searched logistic at 0.1182; gains from the search -0.0004 and 0.0003). Both closed the recipe excuse and both named the budget excuse as the one left open: 'a scaling curve on real plaintexts (a different preregistration)'. The record's headline is a scaling law on manufactured labels over the builder's content (0.0491 accuracy per decade, 0.014787 per doubling, over 2.9031 decades); whether real content shows any such law, and whether the boosted model buys more from each doubling than a linear rule does, is the FDM-1 question asked of real content. This run asks it with the only real content the record has: 0021's fit block, cut into nested rungs of plaintexts from 1/8 of it to all of it (2.984659 doublings). It cannot reach 0003's two-decade scope rule; it is a one-decade curve and says so."
+}
