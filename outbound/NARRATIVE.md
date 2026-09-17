@@ -137,6 +137,14 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > so the headline recipe is not even its own best transfer recipe on this content, which 0018 said in advance it would say
 > — the first reading in this record taken outside the builder, filed at full size, and read under 0019 after
 > 0018's own frozen reader voided the run on one wrong sealed literal, which is filed at full size too.
+> Then we fitted on the real files themselves (0021; 0020 sealed the same design and refused at launch on a
+> condition the builder's own corpus could not meet — nine duplicate chunk pairs nobody had measured, filed at full
+> size). Real content carries the signal: 0.1193 on the same 38452 rows, 3.1× chance, nearly double the builder-fitted
+> 0.0637. And a depth-3 tree fitted on the same rows reads 0.0929. The clause is floor plus 0.05, not chance plus 0.05,
+> because a reviewer argued before the freeze that a chance bar could publish a pass over a hand-beatable result —
+> which is exactly what the measurement turned out to be. `REAL_FIT_FAILS`, a margin of 0.0264 where 0.05 was
+> required; under the chance bar it would have passed. That verdict exists because the bar was moved, and it is
+> the most useful number in this record: the signal is real, and most of it is cheap.
 > The boundary of our result is
 > bracketed to (2048, 4096], and the near-miss on the slack reading is published beside the
 > clear miss on the strict one.

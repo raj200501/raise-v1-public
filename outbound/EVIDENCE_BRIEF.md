@@ -43,6 +43,7 @@ eight families reads **0.0637** on the 38452 real-family rows against chance + 0
 sealed literal); the incumbent reads 0.0634 and the standardised logistic 0.0716; the eight-family mixture, three synthetic
 families included, reads 0.0766 as a flag. Every number below is a statement
 about the corpus builder's eight content families and the eight extension families.
+**Fitted on real content, the signal is there — and a depth-3 tree gets most of it.** Preregistration 0021 fitted the same three recipes on 26346 rows from 1029 plaintexts of the same five real files (the chunks 0018's sealed corpus does not use) and read them in distribution on the same 38452 rows. The searched model reads **0.1193** — 3.1× chance, nearly double the builder-fitted 0.0637 on the same rows. A depth-3 decision tree fitted on the same rows reads **0.0929**. The clause is that floor plus 0.05, never chance (`OPERATING_RULES` §4a): 5495 rows needed, 4587 arrived, `REAL_FIT_FAILS`, a margin of 0.0264 over a rule a person could write by hand; under the chance bar (3402) it would have passed. 0 of 5 real families clear their own floor. The builder-matched arms read 0.0671 (same rows) and 0.0638 (same plaintexts), so it is the content, not the budget. 0020 sealed the same design and refused at launch seven seconds in: its condition required the builder's own pool to be free of duplicate chunks, and the builder has nine such pairs, unmeasured since 0003 — now banked.
 
 ## The headline curve, with corrected statistics
 
@@ -151,6 +152,7 @@ reading available, fixed before the run; the looser reading would have given **+
   logistic's real-family count exceeds M4's, so the headline recipe is not its best transfer recipe on this content. 0018's
   frozen reader voided the run on a wrong sealed literal (filed); 0019 re-read it with the literal corrected. Eight more
   families, not "all content"; no buyer established.
+- **Real-content fit at 4096: `REAL_FIT_FAILS`, 0.1193 against a floor of 0.0929 + 0.05 — and the finding is that real content carries the signal.** The same recipes fitted on 26346 rows of the same five real files and read in distribution: 4587 of 38452 rows, 3.1× chance, nearly double 0018's builder-fitted 2450 rows. Four trivial baselines fitted on the same rows set the floor (§4a); the depth-3 tree reaches 0.0929, the searched model beats it by 0.0264, not 0.05. Under the chance bar it would have passed. 0 of 5 families clear their own floor, py_src missing by 0.0033; builder-matched arms 0.0671 and 0.0638; reproduction 0.1965 exactly, null 0.0394. 0020 sealed the design and refused at launch on the builder's nine duplicate chunk pairs, filed. No buyer established.
 - **Leave-one-family-out transfer at 4096: `TRANSFER_FAILS`, stitched mixture 0.0859 against a
   0.0885 bar.** 0003's recipes fitted on seven families and scored on the eighth, eight times,
   every fold sealed by hash with zero withheld rows and zero shared chunks in training. Per

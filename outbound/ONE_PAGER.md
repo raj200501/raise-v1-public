@@ -121,6 +121,7 @@ literal (the null block's hash), filed in `CORRECTIONS.md`; preregistration 0019
 that literal corrected and every number disclosed in advance, and its reader emitted the verdict above. Every number on
 this page other than the 0018 reading is a statement about the corpus builder's eight content families; the 0018 numbers
 are statements about the eight extension families, as pinned.
+Fitted on real content instead, the signal is there — and a hand-writable rule gets most of it. Preregistration 0021 (0020 sealed the same design and refused at launch on the builder's own duplicate chunks, filed at full size) fitted the same three recipes on 26346 rows from 1029 plaintexts of the same five real files and read them in distribution on the same 38452 rows: the searched model reads **0.1193** (4587 rows), 3.1× chance and nearly double the builder-fitted 0.0637. But a depth-3 decision tree fitted on the same rows reads **0.0929**, and the clause is floor + 0.05, never chance (`docs/OPERATING_RULES.md` §4a): 5495 rows needed, 4587 arrived, `REAL_FIT_FAILS` — a margin of 0.0264 over a rule a person could write by hand. Under the chance bar (3402) it would have passed. 0 of 5 families clear their own floor; the same recipe on the builder's rows at the same budget reads 0.0671 (row-matched) and 0.0638 (plaintext-matched), so it is the content that buys the lift, not the budget. An in-distribution reading on real content, not a transfer reading.
 The window boundary of
 this recipe lies in (2048, 4096]; every number above remains a 4096-byte-window number.
 

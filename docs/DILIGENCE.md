@@ -100,6 +100,10 @@ wrong sealed literal (the null block hash restated from 0017's fold-based block;
 preregistration 0019 re-read the same banked artifact with the literal corrected and every number disclosed in advance. It is a
 statement about these families at 4096 bytes, as pinned, chosen before any fit touched them.
 
+## "Does real content carry the signal at all, if you fit on it?"
+
+**Yes — and a hand-writable rule gets most of it** (prereg 0021; 0020 sealed the identical design and refused at launch). The same three recipes fitted on 26346 rows from 1029 plaintexts of the same five pinned files (the chunks 0018's sealed corpus does not use, disjoint by index, chunk id, source-chunk hash and feature-row bytes) and read in distribution on the same 38452 rows: the searched model reads 0.1193 (4587 rows), 3.1× chance and nearly double 0018's builder-fitted 0.0637 (`artifacts/pivot/realfit_4096_rerun_verdict.json`). Four trivial baselines fitted on the same rows set the floor per `OPERATING_RULES` §4a; the depth-3 tree reaches 0.0929, so 5495 rows were needed and 4587 arrived: `REAL_FIT_FAILS`, a margin of 0.0264 over a rule a person could write by hand. Under the chance-based bar 0020 first drafted (3402 rows) it would have passed; the bar was moved before the freeze on a reviewer's argument that is now the measurement. 0 of 5 families clear their own floor (all five are above it; py_src short by 0.0033). Builder-matched arms at the same row and plaintext budgets read 0.0671 and 0.0638: content, not budget. Reproduction 0.1965 against 0003's banked 0.1965, drift 0.0; null 0.0394. An in-distribution reading on real content, not a transfer reading. 0020's refusal measured a property of the record's foundation no preregistration had: the corpus builder emitted 9 pairs of duplicate source chunks, one straddling 0003's split (`artifacts/pivot/builder_duplicate_chunks.json`); 0021 seals their collisions by row identity.
+
 ## "Who buys it?"
 
 Uncleared, and filed in the coverage map's **weakest class** rather than dressed as a finding. The
