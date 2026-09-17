@@ -37,24 +37,24 @@
       "total": 9
     },
     "fdc4096": {
-      "detected": 40,
-      "total": 40
+      "detected": 42,
+      "total": 42
     },
     "freshness": {
       "detected": 9,
       "total": 9
     },
     "lofo4096": {
-      "detected": 25,
-      "total": 25
+      "detected": 27,
+      "total": 27
     },
     "lofol3": {
-      "detected": 29,
-      "total": 29
+      "detected": 31,
+      "total": 31
     },
     "oob4096": {
-      "detected": 85,
-      "total": 85
+      "detected": 87,
+      "total": 87
     },
     "pivot-curve": {
       "detected": 11,
@@ -69,12 +69,12 @@
       "total": 63
     },
     "recipe2048": {
-      "detected": 27,
-      "total": 27
+      "detected": 29,
+      "total": 29
     },
     "recipe4096": {
-      "detected": 11,
-      "total": 11
+      "detected": 13,
+      "total": 13
     },
     "record_counts": {
       "detected": 5,
@@ -4256,10 +4256,118 @@
       "gate": "realfit4096",
       "mutation": "the-control-artifact-is-built-from-the-runners-own-output-shape",
       "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "control and recipe_search_2048.json agree both ways at the top level, in every block and in every fit record; every key the reader seals is one the runner writes",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "recipe2048",
+      "mutation": "the-control-artifact-is-built-from-the-banked-runner-output-shape",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "partition: control-only [], runner-only ['holdout_chunks_per_family']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe2048",
+      "mutation": "a-control-whose-partition-is-the-readers-own-literals-is-detected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "control and recipe_search_4096.json agree both ways at the top level, in every block and in every fit record; every key the reader seals is one the runner writes",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "recipe4096",
+      "mutation": "the-control-artifact-is-built-from-the-banked-runner-output-shape",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "partition: control-only [], runner-only ['holdout_chunks_per_family']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "recipe4096",
+      "mutation": "a-control-whose-partition-is-the-readers-own-literals-is-detected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "control and lofo_4096.json agree both ways at the top level, in every block and in every fit record; every key the reader seals is one the runner writes",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "lofo4096",
+      "mutation": "the-control-artifact-is-built-from-the-banked-runner-output-shape",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "partition: control-only [], runner-only ['eval_frac', 'folds', 'seed', 'split_is_grouped_by_source', 'top_rung']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofo4096",
+      "mutation": "a-control-whose-partition-is-the-readers-own-literals-is-detected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "control and fdc_4096.json agree both ways at the top level, in every block and in every fit record; every key the reader seals is one the runner writes",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "fdc4096",
+      "mutation": "the-control-artifact-is-built-from-the-banked-runner-output-shape",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "partition: control-only [], runner-only ['eval_frac', 'every_block_carries_all_classes_in_fit_and_validation_rows', 'folds', 'seed', 'split_is_grouped_by_source', 'top_rung']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "fdc4096",
+      "mutation": "a-control-whose-partition-is-the-readers-own-literals-is-detected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "control and lofo_l3_4096.json agree both ways at the top level, in every block and in every fit record; every key the reader seals is one the runner writes",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "lofol3",
+      "mutation": "the-control-artifact-is-built-from-the-banked-runner-output-shape",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "partition: control-only [], runner-only ['eval_frac', 'folds', 'seed', 'split_is_grouped_by_source', 'top_rung']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "lofol3",
+      "mutation": "a-control-whose-partition-is-the-readers-own-literals-is-detected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "control and oob_4096.json agree both ways at the top level, in every block and in every fit record; every key the reader seals is one the runner writes",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "oob4096",
+      "mutation": "the-control-artifact-is-built-from-the-banked-runner-output-shape",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "partition: control-only [], runner-only ['eval_chunks_shared_with_ext', 'eval_frac', 'eval_rows_identical_to_an_ext_row', 'null_labels_permuted', 'null_labels_same_multiset', 'null_y_shuffled_sha256',",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "oob4096",
+      "mutation": "a-control-whose-partition-is-the-readers-own-literals-is-detected",
+      "observed": "fail"
     }
   ],
-  "detected": 463,
+  "detected": 475,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 463
+  "total_mutations": 475
 }

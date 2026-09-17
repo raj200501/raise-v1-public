@@ -1,0 +1,288 @@
+{
+ "schema": "raise-v1/gate_controls_before_fix/1",
+ "why": "CORRECTIONS.md 2026-09-16 said four gates of twenty-two built their mutation-gate controls from the reader's literals and that 'the remaining three' were owed the fix given to realfit4096. Before changing any of them on 2026-09-17, each gate's control was built by the builder as committed at 2c29021 and compared, key set against key set, with the banked runner artifact its reader read: at the top level, in the partition, corpus (and ext_corpus, selection) blocks, and in every fit record. This artifact is that measurement; CORRECTIONS.md 2026-09-17 quotes it.",
+ "measured_on": "2026-09-17",
+ "builders_as_of_commit": "2c29021",
+ "method": "python3: import tests/mutation_test.py; for each gate call its _good_* builder with defaults and load its banked artifact; report sorted(set(banked) - set(control)) as runner_only and sorted(set(control) - set(banked)) as control_only at each level; a record 'differs' if either set is non-empty",
+ "gates_that_took_blocks_from_reader_literals": [
+  "fdc4096",
+  "lofo4096",
+  "lofol3",
+  "oob4096",
+  "recipe2048",
+  "recipe4096"
+ ],
+ "builders": {
+  "recipe2048": "_good_recipe2048(_CFG2048)",
+  "recipe4096": "_good_recipe2048(_CFG4096)",
+  "lofo4096": "_good_lofo",
+  "fdc4096": "_good_fdc",
+  "lofol3": "_good_lofol3",
+  "oob4096": "_good_oob"
+ },
+ "gates_with_readers_that_did_not": {
+  "realfit4096": "built from tests/fixtures/realfit_runner_shape.json since 2026-09-16",
+  "pivot-curve, ephemerr-a2, topk, carve, carve2048, c1, bytemodel, byteflat": "their controls never import reader constants; the reader runs as a subprocess only"
+ },
+ "per_gate": {
+  "recipe2048": {
+   "banked_artifact": "artifacts/pivot/recipe_search_2048.json",
+   "top_level": {
+    "runner_only": [
+     "best_expanded_non_gutenberg_head",
+     "best_frozen_non_gutenberg_for_bar",
+     "best_frozen_non_gutenberg_searched",
+     "cluster_ci95_note",
+     "launch_environment",
+     "launch_number"
+    ],
+    "control_only": [],
+    "n_runner_keys": 48
+   },
+   "partition": {
+    "runner_only": [
+     "holdout_chunks_per_family"
+    ],
+    "control_only": []
+   },
+   "corpus": {
+    "runner_only": [],
+    "control_only": []
+   },
+   "selection": {
+    "runner_only": [
+     "launch_environment",
+     "launch_number"
+    ],
+    "control_only": []
+   },
+   "records": {
+    "n_records": 50,
+    "n_records_differing": 50,
+    "runner_only_fields": [
+     "heartbeat_max_rss_gb",
+     "interruptions_before_this_fit",
+     "last_heartbeat_rss_gb_before_this_fit",
+     "rss_gb",
+     "ru_maxrss_gb",
+     "utc"
+    ],
+    "control_only_fields": []
+   }
+  },
+  "recipe4096": {
+   "banked_artifact": "artifacts/pivot/recipe_search_4096.json",
+   "top_level": {
+    "runner_only": [
+     "best_expanded_non_gutenberg_head",
+     "best_frozen_non_gutenberg_for_bar",
+     "best_frozen_non_gutenberg_searched",
+     "cluster_ci95_note",
+     "launch_environment",
+     "launch_number"
+    ],
+    "control_only": [],
+    "n_runner_keys": 48
+   },
+   "partition": {
+    "runner_only": [
+     "holdout_chunks_per_family"
+    ],
+    "control_only": []
+   },
+   "corpus": {
+    "runner_only": [],
+    "control_only": []
+   },
+   "selection": {
+    "runner_only": [
+     "launch_environment",
+     "launch_number"
+    ],
+    "control_only": []
+   },
+   "records": {
+    "n_records": 50,
+    "n_records_differing": 50,
+    "runner_only_fields": [
+     "heartbeat_max_rss_gb",
+     "interruptions_before_this_fit",
+     "last_heartbeat_rss_gb_before_this_fit",
+     "rss_gb",
+     "rss_gb_is",
+     "rss_total_gb",
+     "ru_maxrss_gb",
+     "utc"
+    ],
+    "control_only_fields": []
+   }
+  },
+  "lofo4096": {
+   "banked_artifact": "artifacts/pivot/lofo_4096.json",
+   "top_level": {
+    "runner_only": [
+     "cluster_ci95_note"
+    ],
+    "control_only": [],
+    "n_runner_keys": 35
+   },
+   "partition": {
+    "runner_only": [
+     "eval_frac",
+     "seed",
+     "split_is_grouped_by_source",
+     "top_rung"
+    ],
+    "control_only": []
+   },
+   "corpus": {
+    "runner_only": [],
+    "control_only": []
+   },
+   "records": {
+    "n_records": 27,
+    "n_records_differing": 27,
+    "runner_only_fields": [
+     "heartbeat_max_rss_gb",
+     "last_heartbeat_rss_gb_before_this_fit",
+     "rss_gb",
+     "rss_gb_is",
+     "rss_total_gb",
+     "ru_maxrss_gb",
+     "utc"
+    ],
+    "control_only_fields": []
+   },
+   "fold_block_runner_only": [],
+   "fold_block_control_only": []
+  },
+  "fdc4096": {
+   "banked_artifact": "artifacts/pivot/fdc_4096.json",
+   "top_level": {
+    "runner_only": [
+     "cluster_ci95_note"
+    ],
+    "control_only": [],
+    "n_runner_keys": 36
+   },
+   "partition": {
+    "runner_only": [
+     "eval_frac",
+     "every_block_carries_all_classes_in_fit_and_validation_rows",
+     "seed",
+     "split_is_grouped_by_source",
+     "top_rung"
+    ],
+    "control_only": []
+   },
+   "corpus": {
+    "runner_only": [],
+    "control_only": []
+   },
+   "records": {
+    "n_records": 258,
+    "n_records_differing": 258,
+    "runner_only_fields": [
+     "heartbeat_max_rss_gb",
+     "last_heartbeat_rss_gb_before_this_fit",
+     "rss_gb",
+     "rss_gb_is",
+     "rss_total_gb",
+     "ru_maxrss_gb",
+     "utc"
+    ],
+    "control_only_fields": []
+   },
+   "fold_block_runner_only": [],
+   "fold_block_control_only": [],
+   "fold_by_k_block_runner_only": [],
+   "fold_by_k_block_control_only": []
+  },
+  "lofol3": {
+   "banked_artifact": "artifacts/pivot/lofo_l3_4096.json",
+   "top_level": {
+    "runner_only": [
+     "cluster_ci95_note"
+    ],
+    "control_only": [],
+    "n_runner_keys": 41
+   },
+   "partition": {
+    "runner_only": [
+     "eval_frac",
+     "seed",
+     "split_is_grouped_by_source",
+     "top_rung"
+    ],
+    "control_only": []
+   },
+   "corpus": {
+    "runner_only": [],
+    "control_only": []
+   },
+   "records": {
+    "n_records": 10,
+    "n_records_differing": 10,
+    "runner_only_fields": [
+     "heartbeat_max_rss_gb",
+     "last_heartbeat_rss_gb_before_this_fit",
+     "rss_gb",
+     "rss_gb_is",
+     "rss_total_gb",
+     "ru_maxrss_gb",
+     "utc"
+    ],
+    "control_only_fields": []
+   },
+   "fold_block_runner_only": [],
+   "fold_block_control_only": []
+  },
+  "oob4096": {
+   "banked_artifact": "artifacts/pivot/oob_4096.json",
+   "top_level": {
+    "runner_only": [
+     "cluster_ci95_note",
+     "fit_record_top1_is"
+    ],
+    "control_only": [],
+    "n_runner_keys": 55
+   },
+   "partition": {
+    "runner_only": [
+     "eval_frac",
+     "row_identity_digest",
+     "seed",
+     "top_rung"
+    ],
+    "control_only": []
+   },
+   "corpus": {
+    "runner_only": [],
+    "control_only": []
+   },
+   "ext_corpus": {
+    "runner_only": [],
+    "control_only": []
+   },
+   "records": {
+    "n_records": 4,
+    "n_records_differing": 4,
+    "runner_only_fields": [
+     "heartbeat_max_rss_gb",
+     "last_heartbeat_rss_gb_before_this_fit",
+     "rss_gb",
+     "rss_gb_is",
+     "rss_total_gb",
+     "ru_maxrss_gb",
+     "utc"
+    ],
+    "control_only_fields": []
+   }
+  }
+ },
+ "sealed_values_disagreeing_with_the_banked_artifact": {
+  "oob4096": [
+   "partition.null_sorted_sha256 under 0018's reader (CORRECTIONS.md 2026-09-10; 0019's reader carries the runner's block)"
+  ]
+ }
+}

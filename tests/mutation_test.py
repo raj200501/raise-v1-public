@@ -1841,12 +1841,62 @@ def _sha12(o):
     return hashlib.sha256(_canon12(o).encode("utf-8")).hexdigest()
 
 
-_CFG2048 = {"reader": "recipe2048_verdict.py", "prereg": "0012-recipe-search-2048.json",
+# ---- The five readers below (0012/0014, 0015, 0016, 0017, 0018/0019) take their gate controls' SHAPE from the banked
+# runner artifact of the run each reader actually read (docs/OPERATING_RULES.md section 4: "the runner's output
+# shape"). Until 2026-09-17 every one of them built `partition`, `corpus` (and `ext_corpus`) as dict(<reader>.PARTITION)
+# and so on - the reader's own literals - and wrote fit records with a field set of the test's own: 6 to 8 runner-written
+# fields absent from every record (heartbeat_max_rss_gb, utc, rss_gb, ...), 1 to 5 from every partition (eval_frac, seed,
+# top_rung, holdout_chunks_per_family, ...), 1 to 6 from the top level, and nothing able to notice. CORRECTIONS.md
+# 2026-09-16 filed the class for realfit4096 and undercounted the siblings; the entry of 2026-09-17 closes it. The VALUES
+# are still the sealed ones; the KEY SET at every level is the runner's, via _rf_sub (defined with the realfit gate
+# below) and _shape_fill, and one pass/fail pair per gate, registered before main(), holds the two together.
+
+_BANKED_SHAPE = {"recipe2048": "recipe_search_2048.json", "recipe4096": "recipe_search_4096.json",
+                 "lofo4096": "lofo_4096.json", "fdc4096": "fdc_4096.json", "lofol3": "lofo_l3_4096.json",
+                 "oob4096": "oob_4096.json"}
+
+
+def _banked_shape(gate):
+    """The runner artifact the gate's reader read, as banked: the control's shape source."""
+    return json.load(open(os.path.join(REPO, "artifacts", "pivot", _BANKED_SHAPE[gate]), encoding="utf-8"))
+
+
+def _shape_fill(shape_block, control_block, label):
+    """A block the control assembles field by field, completed to the runner's key set: every key the runner wrote and
+    the control does not set is carried at its banked value, and a key the control sets that the runner never wrote is
+    refused, because an invented key is a reader expectation in disguise (the `ledger` 0020's control injected)."""
+    invented = sorted(set(control_block) - set(shape_block))
+    if invented:
+        raise AssertionError(f"{label}: the control carries keys the runner never writes: {invented}")
+    return dict(shape_block, **control_block)
+
+
+def _shape_problems(art, shape, blocks, records, reader_blocks):
+    """Both directions, at every level a reader compares: the top level, each named block, each fit record; and every
+    key a reader seals must be one the runner writes. Returns the disagreements (an empty list is the pass)."""
+    problems = []
+    if set(shape) != set(art):
+        problems.append(f"top-level key sets differ: control-only {sorted(set(art) - set(shape))}, "
+                        f"runner-only {sorted(set(shape) - set(art))}")
+    for label, a, b in blocks:
+        if set(a) != set(b):
+            problems.append(f"{label}: control-only {sorted(set(a) - set(b))}, runner-only {sorted(set(b) - set(a))}")
+    for label, a, b in records:
+        if set(a) != set(b):
+            problems.append(f"record {label}: control-only {sorted(set(a) - set(b))}, runner-only {sorted(set(b) - set(a))}")
+    for name, sealed, blk in reader_blocks:
+        unwritten = sorted(set(sealed) - set(blk))
+        if unwritten:
+            problems.append(f"the reader's {name} expects keys the runner never writes: {unwritten}")
+    return problems
+
+
+_CFG2048 = {"gate": "recipe2048", "reader": "recipe2048_verdict.py", "prereg": "0012-recipe-search-2048.json",
             "conf": {"majority": (0.0385, 0.0385), "stratified": (0.0385, 0.0385), "best_single_feat": (0.0726, 0.0762),
                      "depth3_tree": (0.09, 0.091), "deep_tree": (0.15, 0.155), "logistic": (0.13, 0.135),
                      "model": (0.21, 0.22)},
             "incumbent": (0.1741, 0.1819), "l1": (0.1266, 0.1315), "stamp": "0012-recipe-search-2048"}
-_CFG4096 = {"reader": "recipe4096_verdict.py", "prereg": "0014-recipe-search-4096.json",
+_CFG4096 = {"gate": "recipe4096", "reader": "recipe4096_verdict.py", "prereg": "0014-recipe-search-4096.json",
             "conf": {"majority": (0.0385, 0.0385), "stratified": (0.0387, 0.0388), "best_single_feat": (0.0751, 0.0769),
                      "depth3_tree": (0.10, 0.101), "deep_tree": (0.19, 0.195), "logistic": (0.15, 0.155),
                      "model": (0.26, 0.27)},
@@ -1860,20 +1910,26 @@ def _good_recipe2048(cfg=None):
     import importlib.util
     spec = importlib.util.spec_from_file_location("r12", os.path.join(REPO, "tools", "readers", cfg["reader"]))
     r12 = importlib.util.module_from_spec(spec); spec.loader.exec_module(r12)
-    part = dict(r12.PARTITION)
+    shape = _banked_shape(cfg["gate"])          # the run this reader read: the control's shape at every level
+    part = _rf_sub(shape["partition"], dict(r12.PARTITION), f"{cfg['gate']} partition", sealed_may_be_subset=True)
     _R = json.load(open(os.path.join(REPO, "prereg", cfg["prereg"])))["scope"]["roster"]
     proto = _R["protocol"]; heads = _R["heads"]
     by_id = {c["id"]: c for h in heads for c in h["candidates"]}
     fam8 = ["gutenberg", "base64", "binary", "code", "csv", "json", "log", "mixed"]
 
+    # the runner's own record of the same head (selection and confirmatory records share one field set)
+    tmpl = dict({h: shape["final"][h] for h in shape["final"]}, incumbent=shape["incumbent_refit"],
+                logistic_l1=shape["logistic_l1_refit"], null=shape["null_control"])
+
     def rec(head, cid, stage, n_rows, rows_sha, sorted_sha, top1, ng):
         c = by_id[cid]
-        return {"id": cid, "head": head, "family": c["family"], "params": c.get("params", {}),
+        return _rf_sub(tmpl[head], {"id": cid, "head": head, "family": c["family"], "params": c.get("params", {}),
                 "scaled": bool(c.get("scaled", False)), "val": c.get("val"), "seed": 20260825,
                 "params_sha256": _sha12(c), "stage": stage, "n_fit_rows": n_rows, "fit_rows_sha256": rows_sha,
                 "fit_rows_sorted_sha256": sorted_sha, "environment": dict(_ENV12), "status": "fit",
                 "seconds": 1.0, "top1": top1, "top1_non_gutenberg": ng,
-                "per_family": {f: round(top1, 4) for f in fam8}, "block_refills": [], "fit_info": {}}
+                "per_family": {f: round(top1, 4) for f in fam8}, "block_refills": [], "fit_info": {}},
+                       f"record {head}/{cid}/{stage}", sealed_may_be_subset=True)
 
     # selection: stage-1 scores rise with roster index except M1/L1 (index 0) so the winner is a
     # searched recipe; keep 2 then 1
@@ -1901,14 +1957,14 @@ def _good_recipe2048(cfg=None):
         selection[hid] = {"side": h["side"], "stages": stages, "selected_id": survivors[0]}
         selected[hid] = survivors[0]
     sel_part = {k: v for k, v in part.items() if k != "eval_y_sha256"}
-    corpus = dict(r12.CORPUS)
-    sel_doc = {"schema_version": 1, "preregistration": cfg["stamp"], "smoke": False,
+    corpus = _rf_sub(shape["corpus"], dict(r12.CORPUS), f"{cfg['gate']} corpus", sealed_may_be_subset=True)
+    sel_doc = _shape_fill(shape["selection"], {"schema_version": 1, "preregistration": cfg["stamp"], "smoke": False,
                "roster_sha256": _sha12(_R), "roster": _R, "corpus": corpus, "partition": sel_part,
                "n_classes": 26, "class_names": [], "chance_accuracy": 0.038462, "stage": "select",
                "gathers": [{"name": "holdout", "n_rows": part["n_holdout_rows"], "n_eval_rows": 0}],
                "eval_rows_gathered_in_selection": 0, "environment": dict(_ENV12), "selection": selection,
                "selected_ids": selected, "ledger": [], "cost": {"selection_seconds_total": 1.0},
-               "selection_started_utc": "2026-09-04T00:00:00Z", "selection_finished_utc": "2026-09-04T01:00:00Z"}
+               "selection_started_utc": "2026-09-04T00:00:00Z", "selection_finished_utc": "2026-09-04T01:00:00Z"}, "selection")
     sel_bytes = _canon12(sel_doc).encode("utf-8")
     pool_sha, pool_sorted = part["pool_idx_sha256"], part["pool_sorted_sha256"]
     conf = cfg["conf"]
@@ -1929,7 +1985,8 @@ def _good_recipe2048(cfg=None):
     frozen = ["majority", "stratified", "depth3_tree", "logistic"]; expanded = frozen + ["best_single_feat", "deep_tree"]
     bf = max(max(conf[h][0], floors[h]) for h in frozen); be = max(max(conf[h][0], floors[h]) for h in expanded)
     ben = max(max(conf[h][1], floors_ng[h]) for h in expanded)
-    art = {"schema_version": 1, "preregistration": cfg["stamp"], "smoke": False, "stage": "confirm",
+    bfn = max(max(conf[h][1], floors_ng[h]) for h in frozen)
+    art = _shape_fill(shape, {"schema_version": 1, "preregistration": cfg["stamp"], "smoke": False, "stage": "confirm",
            "roster_sha256": _sha12(_R), "roster": _R, "corpus": corpus, "partition": part, "n_classes": 26,
            "class_names": [], "chance_accuracy": 0.038462, "selection_sha256": sel_sha, "selection": sel_doc,
            "selected_ids": selected, "selected_model_id": selected["model"], "environment": dict(_ENV12),
@@ -1937,12 +1994,14 @@ def _good_recipe2048(cfg=None):
            "final_top1": conf["model"][0], "final_top1_non_gutenberg": conf["model"][1],
            "final_per_family": final["model"]["per_family"], "final_status": "fit",
            "best_frozen_for_bar": bf, "best_frozen_searched": conf["logistic"][0], "best_frozen_head": "logistic",
+           "best_frozen_non_gutenberg_for_bar": bfn, "best_frozen_non_gutenberg_searched": conf["logistic"][1],
            "best_expanded_for_bar": be, "best_expanded_searched": conf["deep_tree"][0], "best_expanded_head": "deep_tree",
            "best_expanded_non_gutenberg_for_bar": ben, "best_expanded_non_gutenberg_searched": conf["deep_tree"][1],
+           "best_expanded_non_gutenberg_head": "deep_tree",
            "incumbent_refit": inc, "incumbent_refit_top1": cfg["incumbent"][0], "logistic_l1_refit": l1,
            "logistic_l1_refit_top1": cfg["l1"][0], "null_control": null, "shuffled_label_accuracy": 0.039,
            "null_rows": 20000, "cluster_ci95_informational": {}, "ledger": ledger, "cost": {},
-           "confirmatory_started_utc": "2026-09-04T02:00:00Z"}
+           "confirmatory_started_utc": "2026-09-04T02:00:00Z"}, "artifact")
     scores = {"per_example": {k: [1] * part["n_eval_rows"] for k in list(conf) + ["incumbent", "logistic_l1"]}}
     return art, sel_bytes, scores
 
@@ -2319,7 +2378,8 @@ def _stable_evidence(out: str) -> str:
 #
 # The 0015 reader reads a leave-one-family-out artifact: eight folds x three roles, two reproduction
 # controls, a null control, and a mixture it re-derives from the per-example vectors. The control
-# artifact below is built in the runner's output shape from the reader's sealed constants, with the
+# artifact below takes its shape - every key, nesting and record field - from the banked run the reader read
+# (artifacts/pivot/lofo_4096.json) and its values from the reader's sealed constants, with the
 # mixture, the per-family readings and the fold records all computed from the same vectors, exactly
 # as the runner does; every case then breaks one thing and must be read as VOID or TRANSFER_FAILS.
 
@@ -2335,7 +2395,9 @@ def _good_lofo(per_family=None, total_correct=None):
     logistic gets 0.6x, the majority 0.0385); total_correct overrides the model's correct count and is
     spread over the families so the mixture prints exactly total_correct / 260000."""
     r15 = _lofo_reader()
-    fam = list(r15.FAMILIES); folds = r15.FOLDS; part = dict(r15.PARTITION); rec = r15.RECIPES
+    shape = _banked_shape("lofo4096")
+    fam = list(r15.FAMILIES); folds = r15.FOLDS; rec = r15.RECIPES
+    part = _rf_sub(shape["partition"], dict(r15.PARTITION), "lofo4096 partition", sealed_may_be_subset=True)
     n_eval = part["n_eval_rows"]
     # evaluation chunk ids: family k's rows carry chunk id k (family = chunk % 8), in family blocks
     counts = {f: folds[f]["n_eval_rows"] for f in fam}
@@ -2363,13 +2425,22 @@ def _good_lofo(per_family=None, total_correct=None):
             v[i] = 1 if i - starts[f] < c else 0
         return v
 
+    def _tmpl(name):                            # the runner's own record of the same name
+        if name == "null":
+            return shape["null_control"]
+        if name.startswith("repro_"):
+            return shape["reproduction"][name[len("repro_"):]]
+        f, role = name[len("fold_"):].rsplit("_", 1)
+        return shape["folds"][f][role]
+
     def record(name, role, n_rows, rows_sha, sorted_sha, top1, perfam, stage):
         c = rec[role]
-        return {"id": c["id"], "head": role, "family": c["family"], "params": c.get("params", {}),
+        return _rf_sub(_tmpl(name), {"id": c["id"], "head": role, "family": c["family"], "params": c.get("params", {}),
                 "scaled": False, "val": c.get("val"), "seed": 20260825, "params_sha256": _sha12(c),
                 "stage": stage, "n_fit_rows": n_rows, "fit_rows_sha256": rows_sha, "fit_rows_sorted_sha256": sorted_sha,
                 "environment": dict(_ENV12), "interruptions_before_this_fit": 0, "status": "fit", "seconds": 1.0,
-                "top1": top1, "top1_non_gutenberg": top1, "per_family": perfam, "block_refills": [], "fit_info": {}}
+                "top1": top1, "top1_non_gutenberg": top1, "per_family": perfam, "block_refills": [], "fit_info": {}},
+                       f"record {name}", sealed_may_be_subset=True)
 
     per_example, fold_recs, lofo = {}, {f: {} for f in fam}, {}
     for role in ("majority", "logistic", "model"):
@@ -2402,13 +2473,16 @@ def _good_lofo(per_family=None, total_correct=None):
     for i, nm in enumerate(names):
         ledger += [{"name": nm, "fingerprint": nm, "event": "started", "utc": f"2026-09-08T20:{i:02d}:00Z"},
                    {"name": nm, "fingerprint": nm, "event": "completed", "utc": f"2026-09-08T20:{i:02d}:30Z"}]
-    pfolds = {f: dict(folds[f], n_eval_chunks=1, n_train_chunks=1, train_rows_of_heldout_family=0,
-                      train_chunks_shared_with_eval=0, train_rows_in_eval=0) for f in fam}
+    pfolds = {f: _rf_sub(shape["partition"]["folds"][f],
+                         dict(folds[f], n_eval_chunks=1, n_train_chunks=1, train_rows_of_heldout_family=0,
+                              train_chunks_shared_with_eval=0, train_rows_in_eval=0),
+                         f"partition.folds.{f}", sealed_may_be_subset=True) for f in fam}
     partition = dict(part, folds=pfolds)
     mm, lm = lofo["model"]["mixture_top1"], lofo["logistic"]["mixture_top1"]
-    art = {"schema_version": 1, "schema": "raise-v1/lofo_4096/1", "preregistration": "0015-lofo-4096", "smoke": False,
+    corpus = _rf_sub(shape["corpus"], dict(r15.CORPUS), "lofo4096 corpus", sealed_may_be_subset=True)
+    art = _shape_fill(shape, {"schema_version": 1, "schema": "raise-v1/lofo_4096/1", "preregistration": "0015-lofo-4096", "smoke": False,
            "stage": "run", "protocol": r15.PROTOCOL, "protocol_sha256": r15.PROTOCOL_SHA256, "recipes": rec,
-           "recipes_sha256": r15.RECIPES_SHA256, "corpus": dict(r15.CORPUS), "partition": partition, "n_classes": 26,
+           "recipes_sha256": r15.RECIPES_SHA256, "corpus": corpus, "partition": partition, "n_classes": 26,
            "class_names": [], "chance_accuracy": 0.038462, "environment": dict(_ENV12), "launch_environment": {},
            "launch_number": 1, "complete": True, "missing_roles": [],
            "reproduction": {"model": inc, "logistic": l1}, "incumbent_refit_top1": 0.2395,
@@ -2416,7 +2490,7 @@ def _good_lofo(per_family=None, total_correct=None):
            "null_control": null, "shuffled_label_accuracy": 0.039, "null_rows": part["null_rows"],
            "folds": fold_recs, "lofo": lofo, "lofo_mixture_top1": mm,
            "lofo_margin_model_over_logistic": round(mm - lm, 6), "cluster_ci95_informational": {}, "ledger": ledger,
-           "cost": {}, "run_started_utc": "2026-09-08T20:00:00Z", "run_finished_utc": "2026-09-08T21:00:00Z"}
+           "cost": {}, "run_started_utc": "2026-09-08T20:00:00Z", "run_finished_utc": "2026-09-08T21:00:00Z"}, "artifact")
     scores = {"schema": "raise-v1/lofo_4096_scores/1", "preregistration": "0015-lofo-4096", "smoke": False,
               "eval_idx_sha256": part["eval_idx_sha256"], "eval_chunk_ids": chunk_ids, "families": fam,
               "per_example": per_example}
@@ -2649,7 +2723,9 @@ def _good_fdc(model_acc=None, total_correct_by_k=None):
     0.0385); total_correct_by_k: four integers, the model's correct count at each fixed-budget k, spread over the
     families so the mixture prints exactly count / 260000."""
     r16 = _fdc_reader()
-    fam = list(r16.FAMILIES); ks = list(r16.KS); folds = r16.FOLDS; part = dict(r16.PARTITION); rec = r16.RECIPES
+    shape = _banked_shape("fdc4096")
+    fam = list(r16.FAMILIES); ks = list(r16.KS); folds = r16.FOLDS; rec = r16.RECIPES
+    part = _rf_sub(shape["partition"], dict(r16.PARTITION), "fdc4096 partition", sealed_may_be_subset=True)
     C = r16.BUDGET_CHUNKS; depth_sizes = list(r16.DEPTH_CHUNKS[1:])
     n_eval = part["n_eval_rows"]
     counts = {f: folds[f]["n_eval_rows"] for f in fam}
@@ -2692,13 +2768,14 @@ def _good_fdc(model_acc=None, total_correct_by_k=None):
             v[i] = "1" if i - starts[f] < c else "0"
         return "".join(v)
 
-    def record(name, role, n_rows, rows_sha, sorted_sha, top1, perfam, stage):
-        c = rec[role]
-        return {"id": c["id"], "head": role, "family": c["family"], "params": c.get("params", {}),
+    def record(name, role, n_rows, rows_sha, sorted_sha, top1, perfam, stage, tmpl):
+        c = rec[role]                            # tmpl: the runner's own record at the same place in the banked artifact
+        return _rf_sub(tmpl, {"id": c["id"], "head": role, "family": c["family"], "params": c.get("params", {}),
                 "scaled": bool(c.get("scaled", False)), "val": c.get("val"), "seed": 20260825, "params_sha256": _sha12(c),
                 "stage": stage, "n_fit_rows": n_rows, "fit_rows_sha256": rows_sha, "fit_rows_sorted_sha256": sorted_sha,
                 "environment": dict(_ENV12), "interruptions_before_this_fit": 0, "status": "fit", "seconds": 1.0,
-                "top1": top1, "top1_non_gutenberg": top1, "per_family": perfam, "block_refills": [], "fit_info": {}}
+                "top1": top1, "top1_non_gutenberg": top1, "per_family": perfam, "block_refills": [], "fit_info": {}},
+                       f"record {name}", sealed_may_be_subset=True)
 
     mean = lambda xs: round(sum(xs) / len(xs), 4)  # noqa: E731
     r6 = lambda a, b: round(a - b, 6)  # noqa: E731
@@ -2720,7 +2797,8 @@ def _good_fdc(model_acc=None, total_correct_by_k=None):
             perfam = {h: mean([1 if ch == "1" else 0 for ch in v[starts[h]:starts[h] + counts[h]]]) for h in fam}
             sb = sealed_of(f, sec, key)
             rr = record(name, role, sb["n_train_rows"], sb["train_idx_sha256"], sb["train_sorted_sha256"],
-                        mean([1 if ch == "1" else 0 for ch in v]), perfam, stage_fmt.format(f=f))
+                        mean([1 if ch == "1" else 0 for ch in v]), perfam, stage_fmt.format(f=f),
+                        (shape["folds"][f][sec] if key is None else shape["folds"][f][sec][key])[role])
             if key is None:
                 fold_recs[f][sec][role] = rr
             else:
@@ -2754,8 +2832,9 @@ def _good_fdc(model_acc=None, total_correct_by_k=None):
                      "family_effect_at_matched_depth": {str(k): r6(ys[i], dys[i]) for i, k in enumerate(ks) if i > 0},
                      "composition_spread_k1": r6(ys[0], pred["mixture_top1"])}
     inc = record("repro_100k", "model", part["repro_rows"], part["repro_idx_sha256"], part["repro_sorted_sha256"],
-                 r16.RUNG_100K_TOP1, {f: r16.RUNG_100K_TOP1 for f in fam}, "reproduction")
-    null = record("null", "model", part["null_rows"], "x", part["null_sorted_sha256"], 0.039, {f: 0.039 for f in fam}, "null")
+                 r16.RUNG_100K_TOP1, {f: r16.RUNG_100K_TOP1 for f in fam}, "reproduction", shape["reproduction"]["model_100k"])
+    null = record("null", "model", part["null_rows"], "x", part["null_sorted_sha256"], 0.039, {f: 0.039 for f in fam}, "null",
+                  shape["null_control"])
     null["head"] = "null"
     per_example["repro_100k"] = "1" * n_eval
     names = ["repro_100k", "null"]
@@ -2767,31 +2846,32 @@ def _good_fdc(model_acc=None, total_correct_by_k=None):
         ledger += [{"name": nm, "fingerprint": nm, "event": "started", "utc": f"2026-09-09T{3 + i // 60:02d}:{i % 60:02d}:00Z"},
                    {"name": nm, "fingerprint": nm, "event": "completed", "utc": f"2026-09-09T{3 + i // 60:02d}:{i % 60:02d}:30Z"}]
 
-    def pblock(f, sb, chosen, per):
-        return dict(sb, train_rows_per_family={c: (sb["n_train_rows"] // len(chosen) if c in chosen else 0) for c in fam},
+    def pblock(f, sb, chosen, per, tmpl):
+        return _rf_sub(tmpl, dict(sb, train_rows_per_family={c: (sb["n_train_rows"] // len(chosen) if c in chosen else 0) for c in fam},
                     train_chunks_per_family={c: (per if c in chosen else 0) for c in fam},
                     train_rows_of_heldout_family=0, train_rows_outside_chosen_families=0,
-                    train_chunks_shared_with_eval=0, train_rows_in_eval=0)
+                    train_chunks_shared_with_eval=0, train_rows_in_eval=0), f"partition.folds.{f} block", sealed_may_be_subset=True)
 
     pfolds = {}
     for f in fam:
         pf = {"n_eval_rows": folds[f]["n_eval_rows"], "eval_idx_sha256": folds[f]["eval_idx_sha256"], "n_eval_chunks": folds[f]["n_eval_chunks"],
               "by_k": {}, "depth": {}, "pred_k1": None}
         for k in ks:
-            sb = folds[f]["by_k"][str(k)]; pf["by_k"][str(k)] = pblock(f, sb, sb["families"], C // k)
+            sb = folds[f]["by_k"][str(k)]; pf["by_k"][str(k)] = pblock(f, sb, sb["families"], C // k, shape["partition"]["folds"][f]["by_k"][str(k)])
         for n in depth_sizes:
-            sb = folds[f]["depth"][str(n)]; pf["depth"][str(n)] = pblock(f, sb, sb["families"], n)
-        sb = folds[f]["pred_k1"]; pf["pred_k1"] = pblock(f, sb, sb["families"], C)
+            sb = folds[f]["depth"][str(n)]; pf["depth"][str(n)] = pblock(f, sb, sb["families"], n, shape["partition"]["folds"][f]["depth"][str(n)])
+        sb = folds[f]["pred_k1"]; pf["pred_k1"] = pblock(f, sb, sb["families"], C, shape["partition"]["folds"][f]["pred_k1"])
         # make the row maps sum exactly to the sealed rows (integer division above may lose a remainder)
         for blk in list(pf["by_k"].values()) + list(pf["depth"].values()) + [pf["pred_k1"]]:
             rm = blk["train_rows_per_family"]; chosen = blk["families"]
             rm[chosen[0]] += blk["n_train_rows"] - sum(rm.values())
-        pfolds[f] = pf
+        pfolds[f] = _rf_sub(shape["partition"]["folds"][f], pf, f"partition.folds.{f}", sealed_may_be_subset=True)
     partition = dict(part, folds=pfolds)
     ms, ls = fdc["model"]["slope_per_doubling"], fdc["logistic"]["slope_per_doubling"]
-    art = {"schema_version": 1, "schema": "raise-v1/fdc_4096/1", "preregistration": "0016-fdc-4096", "smoke": False,
+    corpus = _rf_sub(shape["corpus"], dict(r16.CORPUS), "fdc4096 corpus", sealed_may_be_subset=True)
+    art = _shape_fill(shape, {"schema_version": 1, "schema": "raise-v1/fdc_4096/1", "preregistration": "0016-fdc-4096", "smoke": False,
            "stage": "run", "protocol": r16.PROTOCOL, "protocol_sha256": r16.PROTOCOL_SHA256, "recipes": rec,
-           "recipes_sha256": r16.RECIPES_SHA256, "corpus": dict(r16.CORPUS), "partition": partition, "n_classes": 26,
+           "recipes_sha256": r16.RECIPES_SHA256, "corpus": corpus, "partition": partition, "n_classes": 26,
            "class_names": [], "chance_accuracy": 0.038462, "environment": dict(_ENV12), "launch_environment": {},
            "launch_number": 1, "complete": True, "missing_roles": [],
            "reproduction": {"model_100k": inc}, "incumbent_100k_refit_top1": r16.RUNG_100K_TOP1,
@@ -2799,7 +2879,7 @@ def _good_fdc(model_acc=None, total_correct_by_k=None):
            "folds": fold_recs, "fdc": fdc, "fdc_slope_per_doubling": ms,
            "fdc_mixture_top1_by_k": fdc["model"]["mixture_top1_by_k"], "fdc_end_difference": fdc["model"]["end_difference"],
            "fdc_slope_model_minus_logistic": round(ms - ls, 6), "cluster_ci95_informational": {}, "ledger": ledger,
-           "cost": {}, "run_started_utc": "2026-09-09T03:00:00Z", "run_finished_utc": "2026-09-09T09:00:00Z"}
+           "cost": {}, "run_started_utc": "2026-09-09T03:00:00Z", "run_finished_utc": "2026-09-09T09:00:00Z"}, "artifact")
     scores = {"schema": "raise-v1/fdc_4096_scores/1", "preregistration": "0016-fdc-4096", "smoke": False,
               "eval_idx_sha256": part["eval_idx_sha256"], "eval_chunk_ids": chunk_ids, "families": fam,
               "per_example": per_example}
@@ -3162,7 +3242,9 @@ def _good_lofol3(per_family=None, total_correct=None):
     total_correct overrides the correct count and is spread over the families so the mixture prints exactly
     total_correct / 260000."""
     r17 = _lofol3_reader()
-    fam = list(r17.FAMILIES); folds = r17.FOLDS; part = dict(r17.PARTITION); rec = r17.RECIPES
+    shape = _banked_shape("lofol3")
+    fam = list(r17.FAMILIES); folds = r17.FOLDS; rec = r17.RECIPES
+    part = _rf_sub(shape["partition"], dict(r17.PARTITION), "lofol3 partition", sealed_may_be_subset=True)
     n_eval = part["n_eval_rows"]
     counts = {f: folds[f]["n_eval_rows"] for f in fam}
     chunk_ids = []
@@ -3187,13 +3269,21 @@ def _good_lofol3(per_family=None, total_correct=None):
             v[i] = 1 if i - starts[f] < c else 0
         return v
 
+    def _tmpl(name):                            # the runner's own record of the same name
+        if name == "null":
+            return shape["null_control"]
+        if name == "repro_l3":
+            return shape["reproduction"]["logistic_l3"]
+        return shape["folds"][name[len("fold_"):-len("_logistic_l3")]]["logistic_l3"]
+
     def record(name, n_rows, rows_sha, sorted_sha, top1, perfam, stage):
         c = rec["logistic_l3"]
-        return {"id": c["id"], "head": "logistic_l3", "family": c["family"], "params": c.get("params", {}),
+        return _rf_sub(_tmpl(name), {"id": c["id"], "head": "logistic_l3", "family": c["family"], "params": c.get("params", {}),
                 "scaled": True, "val": c.get("val"), "seed": 20260825, "params_sha256": _sha12(c),
                 "stage": stage, "n_fit_rows": n_rows, "fit_rows_sha256": rows_sha, "fit_rows_sorted_sha256": sorted_sha,
                 "environment": dict(_ENV12), "interruptions_before_this_fit": 0, "status": "fit", "seconds": 1.0,
-                "top1": top1, "top1_non_gutenberg": top1, "per_family": perfam, "block_refills": [{"probe_ok": True}], "fit_info": {}}
+                "top1": top1, "top1_non_gutenberg": top1, "per_family": perfam, "block_refills": [{"probe_ok": True}], "fit_info": {}},
+                       f"record {name}", sealed_may_be_subset=True)
 
     per_example, fold_recs = {}, {}
     mix = [0] * n_eval
@@ -3222,14 +3312,17 @@ def _good_lofol3(per_family=None, total_correct=None):
     for i, nm in enumerate(names):
         ledger += [{"name": nm, "fingerprint": nm, "event": "started", "utc": f"2026-09-09T20:{i:02d}:00Z"},
                    {"name": nm, "fingerprint": nm, "event": "completed", "utc": f"2026-09-09T20:{i:02d}:30Z"}]
-    pfolds = {f: dict(folds[f], train_rows_of_heldout_family=0, train_chunks_shared_with_eval=0, train_rows_in_eval=0) for f in fam}
+    pfolds = {f: _rf_sub(shape["partition"]["folds"][f],
+                         dict(folds[f], train_rows_of_heldout_family=0, train_chunks_shared_with_eval=0, train_rows_in_eval=0),
+                         f"partition.folds.{f}", sealed_may_be_subset=True) for f in fam}
     partition = dict(part, folds=pfolds)
     mm = lofo["logistic_l3"]["mixture_top1"]; ref = r17.REFERENCE_0015; l3c = sum(mix)
-    art = {"schema_version": 1, "schema": "raise-v1/lofo_l3_4096/1", "preregistration": "0017-lofo-l3-4096", "smoke": False,
+    corpus = _rf_sub(shape["corpus"], dict(r17.CORPUS), "lofol3 corpus", sealed_may_be_subset=True)
+    art = _shape_fill(shape, {"schema_version": 1, "schema": "raise-v1/lofo_l3_4096/1", "preregistration": "0017-lofo-l3-4096", "smoke": False,
            "lofo_correct_l3": l3c, "lofo_margin_l3_over_0015_model_exact": round((l3c - ref["model_correct"]) / n_eval, 6),
            "n_iter_by_fold": {f: 500 for f in fam}, "any_fold_at_iteration_cap": False,
            "stage": "run", "protocol": r17.PROTOCOL, "protocol_sha256": r17.PROTOCOL_SHA256, "recipes": rec,
-           "recipes_sha256": r17.RECIPES_SHA256, "corpus": dict(r17.CORPUS), "partition": partition, "n_classes": 26,
+           "recipes_sha256": r17.RECIPES_SHA256, "corpus": corpus, "partition": partition, "n_classes": 26,
            "class_names": [], "chance_accuracy": 0.038462, "environment": dict(_ENV12), "launch_environment": {},
            "launch_number": 1, "complete": True, "missing_roles": [],
            "reproduction": {"logistic_l3": l3}, "logistic_l3_refit_top1": r17.L3_TOP1_0014,
@@ -3239,7 +3332,7 @@ def _good_lofol3(per_family=None, total_correct=None):
            "lofo_margin_l3_over_0015_logistic": round(mm - ref["logistic_mixture_top1"], 6),
            "lofo_per_family_margin_over_0015_model": {f: round(lofo["logistic_l3"]["per_family"][f] - ref["model_per_family"][f], 6) for f in fam},
            "cluster_ci95_informational": {}, "ledger": ledger, "cost": {},
-           "run_started_utc": "2026-09-09T20:00:00Z", "run_finished_utc": "2026-09-09T23:00:00Z"}
+           "run_started_utc": "2026-09-09T20:00:00Z", "run_finished_utc": "2026-09-09T23:00:00Z"}, "artifact")
     scores = {"schema": "raise-v1/lofo_l3_4096_scores/1", "preregistration": "0017-lofo-l3-4096", "smoke": False,
               "eval_idx_sha256": part["eval_idx_sha256"], "eval_chunk_ids": chunk_ids, "families": fam,
               "per_example": per_example}
@@ -3545,10 +3638,15 @@ def _good_oob(ext_acc=None, model_real_correct=None, model_synth_acc=None, repro
     array is family-major, g is the expansion of the sealed chunk ids by their row counts). ext_acc: extension accuracy per
     role (spread evenly over families); model_real_correct overrides M4's correct count over the real-family rows exactly;
     model_synth_acc overrides M4's accuracy on the synthetic families; repro overrides a role's reproduction accuracy.
-    reader names the module whose sealed literals (partition hashes, fingerprints) the artifact is built from: 0018's carries
-    the fold-block null hash it sealed in error, 0019's the pool block the runner fits (CORRECTIONS.md 2026-09-10)."""
+    reader names the module whose sealed VALUES (partition hashes, fingerprints) the control carries: 0018's the fold-block null
+    hash it sealed in error, 0019's the pool block the runner fits (CORRECTIONS.md 2026-09-10). The SHAPE - every key, nesting
+    and record field - is the banked run's (artifacts/pivot/oob_4096.json; OPERATING_RULES section 4, CORRECTIONS.md 2026-09-17),
+    so under 0018's reader the control is the runner's artifact with one value put back to the literal that reader disagrees
+    with the world on; the case `0018s-frozen-reader-VOIDs-the-runners-null-block` is where that disagreement is shown."""
     r18 = _oob_reader(reader)
-    part = dict(r18.PARTITION); n_eval = part["n_eval_rows"]; n_ext = r18.N_EXT; rec = r18.RECIPES; roles = list(r18.ROLES)
+    shape = _banked_shape("oob4096")
+    part = _rf_sub(shape["partition"], dict(r18.PARTITION), "oob4096 partition", sealed_may_be_subset=True)
+    n_eval = part["n_eval_rows"]; n_ext = r18.N_EXT; rec = r18.RECIPES; roles = list(r18.ROLES)
     fams = list(r18.EXT_FAMILIES); rpf = r18.EXT["rows_per_family"]
     fam_idx = []
     for k, f in enumerate(fams):
@@ -3597,13 +3695,13 @@ def _good_oob(ext_acc=None, model_real_correct=None, model_synth_acc=None, repro
     def record(name, role, head, n_rows, rows_sha, sorted_sha, stage, v):
         c = rec[role]; m4 = lambda xs: round(sum(xs) / len(xs), 4)  # noqa: E731
         ng = [v[i] for i in range(n_eval) if fam_e[i] != "gutenberg"] + v[n_eval:]
-        return {"id": c["id"], "head": head, "family": c["family"], "params": c.get("params", {}), "scaled": bool(c.get("scaled", False)),
+        return _rf_sub(shape["fits"][name], {"id": c["id"], "head": head, "family": c["family"], "params": c.get("params", {}), "scaled": bool(c.get("scaled", False)),
                 "val": c.get("val"), "seed": 20260825, "params_sha256": _sha12(c), "stage": stage, "n_fit_rows": n_rows,
                 "fit_rows_sha256": rows_sha, "fit_rows_sorted_sha256": sorted_sha, "environment": dict(_ENV12),
                 "interruptions_before_this_fit": 0, "status": "fit", "seconds": 1.0, "top1": m4(v), "top1_non_gutenberg": m4(ng),
                 "per_family": {f: m4([v[i] for i in range(n_eval) if fam_e[i] == f]) for f in r18.FAMILIES},
                 "block_refills": [{"probe_ok": True}], "fit_info": {"n_iter": 100}, "fingerprint": fp(name),
-                "per_example_sha256": hashlib.sha256(bytes(v)).hexdigest()}
+                "per_example_sha256": hashlib.sha256(bytes(v)).hexdigest()}, f"fits.{name}", sealed_may_be_subset=True)
 
     per_example, reads, fits = {}, {}, {}
     for name in ["null"] + roles:
@@ -3620,9 +3718,10 @@ def _good_oob(ext_acc=None, model_real_correct=None, model_synth_acc=None, repro
                  "eval_rows_identical_to_an_ext_row": 0, "null_y_shuffled_sha256": "0" * 64, "null_labels_permuted": True,
                  "null_labels_same_multiset": True})
     n_real = reads["model"]["n_ext_real_rows"]
-    art = {"schema_version": 1, "schema": "raise-v1/oob_4096/1", "preregistration": "0018-oob-4096", "smoke": False, "stage": "run",
+    art = _shape_fill(shape, {"schema_version": 1, "schema": "raise-v1/oob_4096/1", "preregistration": "0018-oob-4096", "smoke": False, "stage": "run",
            "protocol": r18.PROTOCOL, "protocol_sha256": r18.PROTOCOL_SHA256, "recipes": rec, "recipes_sha256": r18.RECIPES_SHA256,
-           "corpus": dict(r18.CORPUS), "ext_corpus": dict(r18.EXT), "partition": part, "n_classes": 26, "class_names": [],
+           "corpus": _rf_sub(shape["corpus"], dict(r18.CORPUS), "oob4096 corpus", sealed_may_be_subset=True),
+           "ext_corpus": _rf_sub(shape["ext_corpus"], dict(r18.EXT), "oob4096 ext_corpus"), "partition": part, "n_classes": 26, "class_names": [],
            "chance_accuracy": 0.038462, "environment": dict(_ENV12),
            "launch_environment": {"ok": True, "problems": [], "env": dict(_ENV12), "loadavg_1_5_15": [0.1, 0.1, 0.1]},
            "launch_number": 1, "complete": True, "missing_roles": [], "fits": fits, "readings": reads,
@@ -3642,7 +3741,7 @@ def _good_oob(ext_acc=None, model_real_correct=None, model_synth_acc=None, repro
            "shuffled_label_accuracy_eval": reads["null"]["reproduction_top1"], "null_rows": part["null_rows"],
            "n_ext_rows": n_ext, "n_eval_rows": n_eval, "fit_info_by_role": {r: fits[r]["fit_info"] for r in roles},
            "cluster_ci95_informational": {}, "ledger": ledger, "cost": {},
-           "run_started_utc": "2026-09-10T00:00:00Z", "first_launch_utc": "2026-09-10T00:00:00Z", "run_finished_utc": "2026-09-10T06:00:00Z"}
+           "run_started_utc": "2026-09-10T00:00:00Z", "first_launch_utc": "2026-09-10T00:00:00Z", "run_finished_utc": "2026-09-10T06:00:00Z"}, "artifact")
     scores = {"schema": "raise-v1/oob_4096_scores/1", "preregistration": "0018-oob-4096", "smoke": False,
               "n_eval_rows": n_eval, "n_ext_rows": n_ext, "eval_idx_sha256": part["eval_idx_sha256"],
               "eval_chunk_ids": eval_ids, "ext_chunk_ids": ext_ids, "ext_fam": fam_idx, "ext_families": fams,
@@ -5179,6 +5278,138 @@ def _(root):
     return 0, (f"control and fixture agree both ways on {len(shape)} artifact keys, {len(art['fits'])} arms, "
                f"{len(art['fits']['real_model'])} record fields and the corpus/partition/readings nesting; "
                f"every reader expectation is a key the runner writes")
+
+
+# ---------------------------------------------------------------- section 4 provenance for the five earlier readers
+#
+# One pass/fail pair per gate. The pass case fails if the control and the banked runner artifact disagree in EITHER
+# direction at ANY level a reader compares (top level, every block, every fit record), or if a reader seals a key the
+# runner never writes. The fail case rebuilds the control the way every one of these gates built it until 2026-09-17 -
+# partition = dict(<reader>.PARTITION) - and requires that the same check refuses it. (CORRECTIONS.md 2026-09-17.)
+
+
+def _recipe_reader(cfg):
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("rr", os.path.join(REPO, "tools", "readers", cfg["reader"]))
+    m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+    return m
+
+
+def _prov_recipe(cfg, art):
+    shape = _banked_shape(cfg["gate"]); r = _recipe_reader(cfg)
+    blocks = [("partition", art["partition"], shape["partition"]), ("corpus", art["corpus"], shape["corpus"]),
+              ("selection", art["selection"], shape["selection"]),
+              ("selection.partition", art["selection"]["partition"], shape["selection"]["partition"]),
+              ("final (arms)", art["final"], shape["final"])]
+    records = [(f"final.{h}", art["final"][h], shape["final"][h]) for h in art["final"] if h in shape["final"]]
+    records += [(k, art[k], shape[k]) for k in ("incumbent_refit", "logistic_l1_refit", "null_control")]
+    for hid, h in art["selection"]["selection"].items():
+        for st in h["stages"]:
+            records += [(f"selection.{hid}.{st['stage']}.{rc['id']}", rc, shape["final"][hid]) for rc in st["records"]]
+    return _shape_problems(art, shape, blocks, records,
+                           [("PARTITION", r.PARTITION, shape["partition"]), ("CORPUS", r.CORPUS, shape["corpus"])])
+
+
+def _prov_lofo_like(gate, r, art):
+    """0015's and 0017's artifacts: eight folds of records, reproduction arms, a null control, a lofo block per role."""
+    shape = _banked_shape(gate)
+    blocks = [("partition", art["partition"], shape["partition"]), ("corpus", art["corpus"], shape["corpus"]),
+              ("folds (families)", art["folds"], shape["folds"]),
+              ("reproduction (arms)", art["reproduction"], shape["reproduction"]), ("lofo (roles)", art["lofo"], shape["lofo"])]
+    blocks += [(f"lofo.{role}", art["lofo"][role], shape["lofo"][role]) for role in art["lofo"] if role in shape["lofo"]]
+    if "folds" in art["partition"]:
+        blocks.append(("partition.folds (families)", art["partition"]["folds"], shape["partition"]["folds"]))
+        blocks += [(f"partition.folds.{f}", art["partition"]["folds"][f], shape["partition"]["folds"][f])
+                   for f in art["partition"]["folds"] if f in shape["partition"]["folds"]]
+    records = [(f"folds.{f}.{role}", art["folds"][f][role], shape["folds"][f][role])
+               for f in art["folds"] if f in shape["folds"] for role in art["folds"][f] if role in shape["folds"][f]]
+    records += [(f"reproduction.{k}", art["reproduction"][k], shape["reproduction"][k]) for k in art["reproduction"] if k in shape["reproduction"]]
+    records.append(("null_control", art["null_control"], shape["null_control"]))
+    return _shape_problems(art, shape, blocks, records,
+                           [("PARTITION", r.PARTITION, shape["partition"]), ("CORPUS", r.CORPUS, shape["corpus"])])
+
+
+def _prov_fdc(art):
+    shape = _banked_shape("fdc4096"); r = _fdc_reader()
+    blocks = [("partition", art["partition"], shape["partition"]), ("corpus", art["corpus"], shape["corpus"]),
+              ("folds (families)", art["folds"], shape["folds"]),
+              ("reproduction (arms)", art["reproduction"], shape["reproduction"]), ("fdc (roles)", art["fdc"], shape["fdc"])]
+    blocks += [(f"fdc.{role}", art["fdc"][role], shape["fdc"][role]) for role in art["fdc"] if role in shape["fdc"]]
+    P, S = art["partition"], shape["partition"]
+    if "folds" in P:
+        blocks.append(("partition.folds (families)", P["folds"], S["folds"]))
+        for f in P["folds"]:
+            if f not in S["folds"]:
+                continue
+            a, b = P["folds"][f], S["folds"][f]
+            blocks.append((f"partition.folds.{f}", a, b))
+            for sec in ("by_k", "depth"):
+                if sec in a and sec in b:
+                    blocks.append((f"partition.folds.{f}.{sec} (sizes)", a[sec], b[sec]))
+                    blocks += [(f"partition.folds.{f}.{sec}.{k}", a[sec][k], b[sec][k]) for k in a[sec] if k in b[sec]]
+            if "pred_k1" in a and "pred_k1" in b:
+                blocks.append((f"partition.folds.{f}.pred_k1", a["pred_k1"], b["pred_k1"]))
+    records = []
+    for f in art["folds"]:
+        if f not in shape["folds"]:
+            continue
+        a, b = art["folds"][f], shape["folds"][f]
+        blocks.append((f"folds.{f} (sections)", a, b))
+        for sec in ("by_k", "depth"):
+            blocks.append((f"folds.{f}.{sec} (sizes)", a[sec], b[sec]))
+            for k in a[sec]:
+                if k not in b[sec]:
+                    continue
+                blocks.append((f"folds.{f}.{sec}.{k} (roles)", a[sec][k], b[sec][k]))
+                records += [(f"folds.{f}.{sec}.{k}.{role}", a[sec][k][role], b[sec][k][role]) for role in a[sec][k] if role in b[sec][k]]
+        blocks.append((f"folds.{f}.pred_k1 (roles)", a["pred_k1"], b["pred_k1"]))
+        records += [(f"folds.{f}.pred_k1.{role}", a["pred_k1"][role], b["pred_k1"][role]) for role in a["pred_k1"] if role in b["pred_k1"]]
+    records += [(f"reproduction.{k}", art["reproduction"][k], shape["reproduction"][k]) for k in art["reproduction"] if k in shape["reproduction"]]
+    records.append(("null_control", art["null_control"], shape["null_control"]))
+    return _shape_problems(art, shape, blocks, records,
+                           [("PARTITION", r.PARTITION, shape["partition"]), ("CORPUS", r.CORPUS, shape["corpus"])])
+
+
+def _prov_oob(art, reader="oob4096_verdict.py"):
+    shape = _banked_shape("oob4096"); r = _oob_reader(reader)
+    blocks = [("partition", art["partition"], shape["partition"]), ("corpus", art["corpus"], shape["corpus"]),
+              ("ext_corpus", art["ext_corpus"], shape["ext_corpus"]), ("fits (arms)", art["fits"], shape["fits"]),
+              ("readings (arms)", art["readings"], shape["readings"])]
+    blocks += [(f"readings.{a}", art["readings"][a], shape["readings"][a]) for a in art["readings"] if a in shape["readings"]]
+    records = [(f"fits.{a}", art["fits"][a], shape["fits"][a]) for a in art["fits"] if a in shape["fits"]]
+    return _shape_problems(art, shape, blocks, records,
+                           [("PARTITION", r.PARTITION, shape["partition"]), ("CORPUS", r.CORPUS, shape["corpus"]),
+                            ("EXT", r.EXT, shape["ext_corpus"])])
+
+
+def _register_provenance(gate, build, prov, reader_partition):
+    @case(gate, "the-control-artifact-is-built-from-the-banked-runner-output-shape", "pass")
+    def _(root):
+        problems = prov(build())
+        if problems:
+            return 1, "; ".join(problems[:4])
+        return 0, (f"control and {_BANKED_SHAPE[gate]} agree both ways at the top level, in every block and in every "
+                   f"fit record; every key the reader seals is one the runner writes")
+
+    @case(gate, "a-control-whose-partition-is-the-readers-own-literals-is-detected", "fail")
+    def _(root):
+        art = build(); art["partition"] = dict(reader_partition())   # the construction until 2026-09-17
+        problems = prov(art)
+        if not problems:
+            return 0, "!! a partition taken from the reader's literals was not detected"
+        return 1, problems[0]
+
+
+_register_provenance("recipe2048", lambda: _good_recipe2048(_CFG2048)[0], lambda a: _prov_recipe(_CFG2048, a),
+                     lambda: _recipe_reader(_CFG2048).PARTITION)
+_register_provenance("recipe4096", lambda: _good_recipe2048(_CFG4096)[0], lambda a: _prov_recipe(_CFG4096, a),
+                     lambda: _recipe_reader(_CFG4096).PARTITION)
+_register_provenance("lofo4096", lambda: _good_lofo()[0], lambda a: _prov_lofo_like("lofo4096", _lofo_reader(), a),
+                     lambda: _lofo_reader().PARTITION)
+_register_provenance("fdc4096", lambda: _good_fdc()[0], _prov_fdc, lambda: _fdc_reader().PARTITION)
+_register_provenance("lofol3", lambda: _good_lofol3()[0], lambda a: _prov_lofo_like("lofol3", _lofol3_reader(), a),
+                     lambda: _lofol3_reader().PARTITION)
+_register_provenance("oob4096", lambda: _good_oob()[0], _prov_oob, lambda: _oob_reader().PARTITION)
 
 
 def main() -> int:

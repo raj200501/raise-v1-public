@@ -19,6 +19,61 @@ Format:
 
 ---
 
+## 2026-09-17 — Said three gates were still owed the section-4 treatment; six gate names behind five builders were, and every one of them was missing runner-written fields at three levels
+
+**Claimed.** `CORRECTIONS.md` 2026-09-16, "Size": "Four gates of twenty-two build their controls
+this way (`oob4096`, and three siblings whose docstrings say so, plus `realfit4096`)", and "Fix":
+"the remaining three gates are owed the same." `artifacts/pivot/engineering_log_0019.json` filed
+the same count as an open follow-up: "the oob4096 gate ... and three sibling gates do the same".
+
+**Actual.** Six gate names take their controls from reader literals: `recipe2048` and `recipe4096`
+(one builder, `_good_recipe2048`, in two configurations), `lofo4096`, `fdc4096`, `lofol3` and
+`oob4096`. Measured on 2026-09-17 before any of them changed, each control as built at commit
+`2c29021` against the banked runner artifact its reader read
+(`artifacts/verification/gate_controls_before_fix.json`): every fit record the six controls wrote
+lacked 6 to 8 fields the runner writes (`heartbeat_max_rss_gb`,
+`last_heartbeat_rss_gb_before_this_fit`, `rss_gb`, `ru_maxrss_gb`, `utc`; `rss_gb_is` and
+`rss_total_gb` from the later runners; `interruptions_before_this_fit` in the recipe gates) — 50 of
+50 records in each recipe gate, 27 of 27 in `lofo4096`, 258 of 258 in `fdc4096`, 10 of 10 in
+`lofol3`, 4 of 4 in `oob4096`. Every partition lacked 1 to 5 (`holdout_chunks_per_family`;
+`eval_frac`, `seed`, `split_is_grouped_by_source`, `top_rung`;
+`every_block_carries_all_classes_in_fit_and_validation_rows`; `row_identity_digest`). The top level
+lacked 1 to 6 (`cluster_ci95_note` in all six; `launch_environment`, `launch_number`,
+`best_frozen_non_gutenberg_for_bar`, `best_frozen_non_gutenberg_searched` and
+`best_expanded_non_gutenberg_head` in the recipe gates; `fit_record_top1_is` in `oob4096`). No
+control carried a key the runner does not write, and every value a reader seals matched the banked
+artifact except the one already filed (0018's null-block hash, entry of 2026-09-10) — which is the
+defect this construction could not see, and the six gates were green through all of it. The eight
+earlier reader gates (`pivot-curve` through `byteflat`) never import their readers' constants and
+are not in the class.
+
+**Size.** Two gate names and one builder: "the remaining three" was five builders behind six names,
+so "four gates of twenty-two" was six of twenty-two before `realfit4096` is counted. The 2026-09-16
+entry was written the day before this one, from which docstrings mentioned the construction rather
+than from a measurement. No published number moved: the controls' values were the sealed ones
+either way, and the readers read the same banked artifacts either way.
+
+**Cause.** The count was taken from a docstring grep. `recipe2048` and `recipe4096` share one
+builder whose docstring says nothing about where its blocks come from, so the grep could not see
+them, and the one entry that undercounted was the entry filing the class.
+
+**Fix.** Every one of the six controls now takes its shape from the banked runner artifact its
+reader read (`_BANKED_SHAPE` in `tests/mutation_test.py`): `partition`, `corpus` and `ext_corpus`
+through `_rf_sub` (sealed values into the runner's key set, refusing any key the runner never
+wrote), every fit record through `_rf_sub` against the runner's own record at the same place in the
+artifact, and the top level and the selection document through `_shape_fill`, which carries every
+runner-written key the control does not set at its banked value and refuses any invented key. One
+pass/fail pair per gate — `the-control-artifact-is-built-from-the-banked-runner-output-shape` and
+`a-control-whose-partition-is-the-readers-own-literals-is-detected` — checks both directions at the
+top level, in every block and in every fit record, and that every key a reader seals is one the
+runner writes; the fail case rebuilds the partition the old way and must be refused. The suite goes
+from 463 cases to 475. The 0019 follow-up is closed, and `docs/OPERATING_RULES.md` §4 records that
+the rule now holds for every reader's gate. Under 0018's reader the control still carries 0018's
+wrong null-block literal, on purpose: that is the value the reader disagrees with the world on, and
+the case `0018s-frozen-reader-VOIDs-the-runners-null-block` is where the disagreement is shown.
+
+---
+
 ## 2026-09-16 — Said the mutation gates' controls are never built from the reader's expectations; four of them are, and it hid ten VOID clauses in an unfrozen preregistration
 
 **Claimed.** `docs/OPERATING_RULES.md` §4 states the rule without exception: a reader's

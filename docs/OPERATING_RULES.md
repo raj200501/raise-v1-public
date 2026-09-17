@@ -49,7 +49,9 @@ expectations, because a control that shares an assumption with the reader cannot
 reader disagree with the world. A reader is not frozen until its control case has been produced
 that way. (Added 2026-09-03 after preregistration 0012's frozen reader voided an honest run on
 a record-order expectation its own gate had been built to satisfy; `CORRECTIONS.md`, entry of
-that date.)
+that date.) (Extended 2026-09-17 to the six gate names that had taken the exception, each control now
+built from the banked runner artifact its reader read, with a pass/fail provenance pair per gate;
+`CORRECTIONS.md`, entries of 2026-09-16 and 2026-09-17.)
 
 A sealed literal that a preregistration restates from a predecessor (a row-block hash, an index
 hash, a reference value) is named for what it is beside the hash (which block, which split, which
