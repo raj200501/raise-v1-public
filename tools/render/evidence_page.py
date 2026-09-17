@@ -80,6 +80,10 @@ rsv = json.load(open(_rsvp, encoding="utf-8")) if os.path.exists(_rsvp) else Non
 rss = json.load(open(_rssp, encoding="utf-8")) if os.path.exists(_rssp) else None
 _e14p = A("pivot", "engineering_log_0014.json")
 e14 = json.load(open(_e14p, encoding="utf-8")) if os.path.exists(_e14p) else None
+# 0023: the scaling curve on real plaintexts; verdict and run artifacts
+_rcp = A("pivot", "realcurve_4096.json"); _rcvp = A("pivot", "realcurve_4096_verdict.json")
+rca = json.load(open(_rcp, encoding="utf-8")) if os.path.exists(_rcp) else None
+rcv = json.load(open(_rcvp, encoding="utf-8")) if os.path.exists(_rcvp) else None
 
 git_head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO,
                           capture_output=True, text=True).stdout.strip()
@@ -260,7 +264,19 @@ chips = "".join([
             f'depth-3 tree {rsv["flags"]["gain_from_search_by_head"]["depth3_tree"]}; {rsv["flags"]["families_clearing"]} of 5 families '
             f'clear; four reproduction arms drift 0.0')
            if rsv["verdict"] != "VOID" and rsa and rsa.get("complete")
-           else f'VOID: {"; ".join(rsv["validity_failed_clauses"])[:140]}')] if rsv else []))
+           else f'VOID: {"; ".join(rsv["validity_failed_clauses"])[:140]}')] if rsv else [])
+ + ([chip(rcv["verdict"], {"REAL_CURVE_RISES": "pass", "REAL_CURVE_FLAT": "fail", "VOID": "inc"}[rcv["verdict"]], "0023",
+           (f'0021\'s real fit block cut into four nested rungs of plaintexts ({", ".join(str(r["n_chunks"]) for r in rcv["bar_applied"]["rungs"])}), '
+            f'0021\'s three fixed recipes fitted on each: the model reads {rcv["model_real_top1_by_rung"]}, a slope of '
+            f'{rcv["model_slope_per_doubling"]} per doubling of plaintexts (scored-chunk interval {rcv["model_slope_ci95"]}) against '
+            f'{rcv["bar_applied"]["slope_per_doubling"]} required - a rise to 0021\'s failing reading '
+            f'({rcv["flags"]["top_rung_is_0021s_failing_reading"]["model"]} against '
+            f'{rcv["flags"]["top_rung_is_0021s_failing_reading"]["needed_over_the_tree_at_0021"]} needed). The linear rule rises faster: '
+            f'{rcv["logistic_slope_per_doubling"]} per doubling, model minus logistic {rcv["slope_model_minus_logistic"]} (paired interval '
+            f'{rcv["flags"]["slope_model_minus_logistic_ci95_paired"]}); the depth-3 tree {rcv["depth3_tree_slope_per_doubling"]}. Reproduction drift 0.0; '
+            f'null {rcv["shuffled_label_accuracy_real"]}; no extrapolation beyond the top rung')
+           if rcv["verdict"] != "VOID" and rca and rca.get("complete")
+           else f'VOID: {"; ".join(rcv["validity_failed_clauses"])[:140]}')] if rcv else []))
 
 fam2048_table = ""
 _pf2048 = A("pivot", "per_family_curves_2048.json")
@@ -542,6 +558,53 @@ if rsa and rsv and rss and rsv["verdict"] != "VOID" and rsa.get("complete"):
                      f'<th>searched logistic</th><th>searched depth-3 tree</th><th>0021 M4 refit</th></tr>'
                      f'</thead><tbody>{_fam_rows}</tbody></table>')
 
+boundary_0023 = ""
+if rca and rcv and rcv["verdict"] != "VOID" and rca.get("complete"):
+    _f = rcv["flags"]; _b = rcv["bar_applied"]; _cv = rcv["curves"]; _rp = _f["replicate_rung_1"]; _boot = rcv["slope_bootstrap"]
+    _roles = [("model", "0021\'s model (M4)"), ("logistic", "standardised logistic (L3)"), ("depth3_tree", "depth-3 tree (D1)")]
+    _rung_rows = "".join(
+        f'<tr><td class="mono">{r["rung"]}</td><td class="mono">1/{r["denominator"]}</td><td class="mono">{r["n_chunks"]}</td><td class="mono">{r["n_rows"]}</td>'
+        + "".join(f'<td class="mono">{_cv[role]["rungs"][i]["ext_real_top1"]}</td>' for role, _ in _roles) + '</tr>'
+        for i, r in enumerate(_b["rungs"]))
+    _slope_rows = "".join(
+        f'<tr><td>{label}</td><td class="mono">{_cv[role]["slope_per_doubling"]}</td><td class="mono">{_boot[role]["ci95"]}</td>'
+        f'<td class="mono">{_cv[role]["end_to_end_gain"]}</td><td class="mono">{_cv[role]["rung_to_rung_gains"]}</td>'
+        f'<td class="mono">{_rp["difference_from_rung_1"][role]}</td><td class="mono">{_rp["slope_with_replicate_at_rung_1"][role]}</td></tr>'
+        for role, label in _roles)
+    _top = _f["top_rung_is_0021s_failing_reading"]
+    boundary_0023 = (f'<p><strong>More real plaintexts help — and they help the linear rule more: <span class="mono">{rcv["verdict"]}</span></strong> '
+                     f'(preregistration 0023, chain entry 23, read by its own frozen reader, which recounts every reading, slope and interval from the '
+                     f'banked score vectors and cross-checked the {rcv["checkpoints_cross_checked"]} committed checkpoints). 0021\'s '
+                     f'{_b["fit_rows"]}-row real fit block was cut into four nested, family-stratified rungs of plaintexts '
+                     f'({", ".join(str(r["n_chunks"]) for r in _b["rungs"])}; {_b["doublings_spanned"]} doublings, just under a decade) and 0021\'s three '
+                     f'fixed recipes were fitted once per rung and scored once on the same {_b["n_real_rows"]} real-family rows. The model reads '
+                     f'<strong>{rcv["model_real_top1_by_rung"]}</strong>: a slope of <strong>{rcv["model_slope_per_doubling"]}</strong> per doubling of '
+                     f'plaintexts (scored-chunk bootstrap interval {rcv["model_slope_ci95"]}) against {_b["slope_per_doubling"]} required, with the '
+                     f'interval\'s lower bound above {_b["bootstrap_lower_bound_gt"]}: both clauses pass. <strong>The curve rises to 0021\'s failing '
+                     f'reading</strong>: its top rung is {_top["model"]} against {_top["needed_over_the_tree_at_0021"]} needed over the depth-3 tree and '
+                     f'{_top["margin_over_the_logistic_at_0021"]} over the logistic, and the sealed file said before the run that a pass is never '
+                     f'"more real data fixes the model". <strong>The linear rule rises faster</strong>: {rcv["logistic_slope_per_doubling"]} per doubling '
+                     f'against the model\'s {rcv["model_slope_per_doubling"]}; model minus logistic {rcv["slope_model_minus_logistic"]}, paired interval '
+                     f'{_f["slope_model_minus_logistic_ci95_paired"]}, the model ahead in {_f["share_of_resamples_with_model_ahead_of_logistic"]} of '
+                     f'the resamples — read by the rule sealed in advance as "{_f["difference_reading"].split(": ", 1)[1]}". The model leads at every rung '
+                     f'and its rung-to-rung gains fall ({_cv["model"]["rung_to_rung_gains"]}) while the logistic\'s do not '
+                     f'({_cv["logistic"]["rung_to_rung_gains"]}). The model\'s slope is {_f["model_slope_as_fraction_of_builder_per_plaintext_slope"]} of '
+                     f'the builder\'s in-distribution per-plaintext rate ({_f["builder_per_plaintext_slope_per_doubling_reference"]}). The scored-chunk '
+                     f'interval does not resample the fit side, so the smallest rung was cut a second time under a second seeded nesting and refitted: '
+                     f'the model moved by {_rp["difference_from_rung_1"]["model"]}, the logistic by {_rp["difference_from_rung_1"]["logistic"]}, the tree '
+                     f'by {_rp["difference_from_rung_1"]["depth3_tree"]} — the tree\'s rise ({rcv["depth3_tree_slope_per_doubling"]}) is within a redraw, '
+                     f'the model\'s and the logistic\'s are not. On the builder\'s own evaluation set the model\'s curve is flat '
+                     f'({_f["builder_eval_slope_per_doubling"]["model"]} per doubling of real plaintexts). The top rung reproduced 0021\'s three readings '
+                     f'with drift 0.0; the null control reads {rcv["shuffled_label_accuracy_real"]} on the real rows against chance '
+                     f'{rca["chance_accuracy"]}; {rca["cost"]["wall_seconds_this_invocation"]} s wall on one launch. <strong>An in-distribution reading '
+                     f'on real content, not a transfer reading</strong>, and no extrapolation beyond the top rung is banked or quoted: the plaintexts it '
+                     f'would count do not exist. Nothing here revises 0003, 0014, 0015, 0016, 0017, 0018, 0019, 0021 or 0022, and nothing here '
+                     f'establishes a buyer.</p>'
+                     f'<table><thead><tr><th>rung</th><th>share</th><th>plaintexts</th><th>rows</th><th>model</th><th>logistic</th><th>depth-3 tree</th></tr>'
+                     f'</thead><tbody>{_rung_rows}</tbody></table>'
+                     f'<table><thead><tr><th>role</th><th>slope / doubling</th><th>scored-chunk 95%</th><th>end-to-end</th><th>rung-to-rung</th>'
+                     f'<th>replicate − rung 1</th><th>slope with replicate</th></tr></thead><tbody>{_slope_rows}</tbody></table>')
+
 # ---------------------------------------------------------------- seed panel
 if seeds:
     slopes = [curve["slope"]] + [d["slope"] for _, d in seeds]
@@ -693,7 +756,7 @@ protocol returns <span class="mono">CARVE_FAILS</span>: within-size top-1
 (margin below the 0.05 bar), and a 4096-trained model transfers at {carve["transfer_top1"]} —
 chance. The byte-identity ceiling barely moves across carve sizes, so this is a modelling failure
 and is reported as one. Two learned byte-sequence attempts (preregs 0009, 0010) did not rescue it.</p>
-{boundary_2048}{boundary_0012}{boundary_0014}{boundary_0015}{boundary_0016}{boundary_0017}{boundary_0018}{boundary_0020}{boundary_0022}{fam2048_table}
+{boundary_2048}{boundary_0012}{boundary_0014}{boundary_0015}{boundary_0016}{boundary_0017}{boundary_0018}{boundary_0020}{boundary_0022}{boundary_0023}{fam2048_table}
 </div>
 <div class="panel good">
 <p><strong>And the leak correction ran against us.</strong> When an adversarial audit found source

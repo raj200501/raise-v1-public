@@ -152,6 +152,14 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > by -0.0004 and the logistic by 0.0003, where the identical search on the builder's corpus had moved them by
 > 0.0489 and 0.0965. On real content the boosted model and the linear rule are the same rule, and we said in
 > advance the run would probably say so.
+> Then we asked the budget question (0023): 0021's real fit block cut into four nested rungs of plaintexts,
+> 130 to 1029, 0021's three fixed recipes fitted on each. The signal rises — 0.0974, 0.1065, 0.1139, 0.1193
+> for the model, 0.007344 per doubling of plaintexts against 0.005 required, `REAL_CURVE_RISES` — to 0021's
+> failing reading, which the sealed file said in advance is all a pass could mean. And the linear rule rises
+> faster: 0.009551 per doubling, model minus logistic -0.002207 with a paired interval of [-0.003707,
+> -0.000752], read by a rule we wrote down before the run as 'the linear rule buys more per doubling than the
+> model'. More real data helps, and it helps the cheap rule more. We do not extrapolate past the top rung: the
+> plaintexts it would count do not exist.
 > The boundary of our result is
 > bracketed to (2048, 4096], and the near-miss on the slack reading is published beside the
 > clear miss on the strict one.
@@ -174,7 +182,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 
 > So here is the honest inventory. A validated instrument that reproduces on a cold clone. One
 > real curve with its boundaries measured by the same instrument. A corrections ledger that costs
-> us something to keep. A verification map that prints its weakest class first — 14 of 253 claims
+> us something to keep. A verification map that prints its weakest class first — 14 of 266 claims
 > we ourselves cannot currently re-derive, and it says so. And no buyer yet: G5, a named buyer
 > type, is the gate this work has not cleared, and no result in the repository could have cleared
 > it, because that work happens outside the repository. We are raising to do exactly that work,

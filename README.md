@@ -84,14 +84,16 @@ search moved nothing**: the searched model reads 0.1189 on the 38452 real-family
 searched margin of 0.0007 where 0.05 was required (4573 correct against 6468 needed). Gains from the search over 0021's
 unsearched readings: model -0.0004, logistic 0.0003, depth-3 tree 0.0044; on the builder's corpus the same search had moved the
 model by 0.0489 and the logistic by 0.0965. On real content a searched boosted model and a searched linear rule are the same
-rule. The recipe excuse is closed at this budget; the budget excuse (a scaling curve on real plaintexts) is the next
-preregistration, not a claim.
+rule. The recipe excuse is closed at this budget; the budget excuse (a scaling curve on real plaintexts) was preregistered and read as 0023, below.
 
-Preregistration 0023 (chain entry 23, frozen 2026-09-17) asks the budget question both left open: 0021's real fit block cut
-into four nested rungs of plaintexts (130, 258, 515, 1029), 0021's three fixed recipes fitted on each, the model's slope per doubling of
-plaintexts read against 0.005 with a cluster-bootstrap lower bound above 0.0; a pass is a rise to 0021's failing reading. Expected
-outcome stated in advance: rises, more likely than not; the number of interest is the model's slope minus the linear rule's. It is
-frozen and running.
+Preregistration 0023 (chain entry 23) asked the budget question both left open: 0021's real fit block cut into four nested rungs
+of plaintexts (130, 258, 515, 1029), 0021's three fixed recipes fitted on each. **`REAL_CURVE_RISES`, and the linear rule rises
+faster**: the model reads 0.0974, 0.1065, 0.1139, 0.1193 over the rungs, 0.007344 per doubling of plaintexts (scored-chunk
+interval [0.006199, 0.00846]) against 0.005 required — a rise to 0021's failing reading, never 'more real data fixes the model';
+the standardised logistic rises 0.009551 per doubling, model minus logistic -0.002207 (paired interval [-0.003707, -0.000752]),
+which the sealed reading rule calls 'the linear rule buys more per doubling than the model'. The signal on real content grows
+with real plaintexts at 0.7276 of the builder's per-plaintext rate, and what grows fastest is the hand-writable rule. No
+extrapolation beyond the top rung is banked or quoted.
 
 The curve and the searched margin stand as measured, and they are statements about the corpus builder's eight
 content families (gutenberg, base64, binary, code, csv, json, log, mixed), not about DEFLATE streams in general;

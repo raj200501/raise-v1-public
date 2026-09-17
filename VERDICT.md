@@ -307,6 +307,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 | **Carved-DEFLATE scaling curve** | **`CURVE_ESTABLISHED`** — +0.0491/decade, cluster-corrected 95% CI [0.048216, 0.050014], over 2.9031 decades; margin +0.1003 frozen and +0.0583 stricter under fixed recipes, both above 0.05 | primary-verifiable |
 | **Family-diversity curve at 4096 (0016)** | **`DIVERSITY_HELPS`** — at a fixed budget of 4900 source chunks, the incumbent's accuracy on an unseen family rises 0.00596 per doubling of training families (bar 0.005): 0.0666 with one family, 0.0829 with seven; per-family depth moves it by -0.002; the linear rules' curves are steeper. Chain entry 16. |
 | **Symmetric recipe search at 4096 (0014)** | **`RECIPE_CLEARS`** — the searched model (M4) reaches 0.2884 against a searched-and-floored bar of 0.2317 set by the standardised logistic: +0.0567 frozen, +0.0567 expanded, +0.0576 with the leaked family excluded, all above 0.05; the headline survives a fair baseline at a smaller margin than fixed recipes gave | primary-verifiable |
+| **Real-plaintext scaling curve at 4096 (0023)** | **`REAL_CURVE_RISES`** — the budget question 0021 and 0022 left open, answered on the only real content the record has outside its sealed scoring set: 0021's fit block cut into four nested rungs of plaintexts (130, 258, 515, 1029), 0021's three fixed recipes fitted on each. The model rises 0.0974, 0.1065, 0.1139, 0.1193: 0.007344 per doubling of plaintexts (scored-chunk interval [0.006199, 0.00846]) against 0.005 required — a rise to 0021's failing reading (0.1193 against 0.1429 needed). The linear rule rises faster: 0.009551 per doubling, model minus logistic -0.002207 (paired interval [-0.003707, -0.000752]), read in advance as 'the linear rule buys more per doubling'. Reproduction drift 0.0; null 0.0409; the replicate of the smallest rung moved the model by 0.001. Chain entry 23. | primary-verifiable |
 
 ### Failed, or did not reach a conclusion
 
@@ -338,7 +339,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 
 **The weakest row, stated loudest:**
 
-> **14 of 253 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
+> **14 of 266 claims are in `neither`.** They can be neither re-derived nor re-run by anyone,
 > including us. Eight are subagent measurements made inside ephemeral scratch directories that no
 > longer exist, with no script banked and no inputs retained. **The ninth is worse than unverified:
 > it is a figure this repository actively tried to reproduce and could not.** The tenth is of a
@@ -368,7 +369,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
 | `arithmetic-verifiable` | 36 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 203 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `primary-verifiable` | 216 | A stranger can re-derive it from raw inputs with the shipped code. |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -1052,11 +1053,56 @@ searched recipe read against a fixed one, so the comparison is asymmetric by des
 nothing about 0014's searched model M4, which was not fitted here; that nothing here revises 0003,
 0014 or 0015; and that no buyer is established.
 
-**In flight — preregistration 0023 (chain seq 23, frozen 2026-09-17T11:43:52Z).** The budget excuse 0021 and 0022 named: does the encoder signal on real content rise with the volume of real plaintexts fitted, and faster for the boosted model than for the linear rule? 0021's 26346-row real fit block is cut into four nested, family-stratified rungs of plaintexts (130, 258, 515, 1029 plaintexts; 3344, 6635, 13207, 26346 rows; 2.984659 doublings, 0.8985 decades); 0021's three fixed recipes (M4, L3, D1 — 0022 measured that searching them on this content moves nothing) are fitted once per rung and scored once on the same 38452 real-family rows, and the smallest rung is cut once more under a second seeded nesting and fitted again (informational). The null control runs first (M4 on the whole block with 0021's permuted labels, hash sealed); the top rung is 0021's block row for row and its three roles must land within 0.005 of 0021's banked 0.1193, 0.1179 and 0.0929 before any lower rung is fitted — so the curve, if it rises, rises to 0021's failing reading, and the sealed file says a pass is never 'more real data fixes the model'.
+**Preregistration 0023 (chain seq 23) — `REAL_CURVE_RISES`, and what it found.** The encoder signal on real
+content rises with the real plaintexts fitted — and the hand-writable linear rule rises faster. 0021's 26346-row
+real fit block was cut into four nested, family-stratified rungs of plaintexts (130, 258, 515, 1029; 3344, 6635,
+13207, 26346 rows; 2.984659 doublings, just under a decade); 0021's three fixed recipes were fitted once per
+rung and scored once on the same 38452 real-family rows. The model reads **0.0974, 0.1065, 0.1139, 0.1193** over
+the four rungs, the standardised logistic **0.0911, 0.0939, 0.1085, 0.1179**, the depth-3 tree **0.0834, 0.0901,
+0.0915, 0.0929**. Slopes per doubling of plaintexts: model **0.007344** (scored-chunk interval [0.006199,
+0.00846]), logistic **0.009551** ([0.008478, 0.010649]), depth-3 tree 0.003002 ([0.002448, 0.003574]). Both
+clauses pass: the model's slope is above 0.005 and the interval's lower bound above 0.0. The curve rises to
+0021's failing reading: its top rung is 0021's 0.1193, against 0.1429 needed over the depth-3 tree and 0.0014
+over the logistic. A pass here is never 'more real data fixes the model', and the sealed file said so before the
+run.
 
-Two clauses, read by `tools/readers/realcurve4096_verdict.py` on the recounted score vectors: the model's ordinary-least-squares slope of real-family top-1 against log2(plaintexts) must reach **0.005 per doubling of plaintexts** (0016's per-doubling bar, the record's smallest, stated in the sealed file with its reason), and the 2.5th percentile of that slope under a sealed cluster bootstrap over the scored real chunks (2000 resamples, one resample serving every rung and every role; an interval over the scored chunks only, which does not resample the fit side) must sit above 0.0. `REAL_CURVE_RISES` needs both; either failing is `REAL_CURVE_FLAT`. The logistic's and the tree's slopes, the paired model-minus-logistic slope difference with its interval (read by a rule sealed in advance), per-family slopes and the replicate's readings are banked as flags, never a verdict; no extrapolation beyond the top rung is banked. The expected outcome, stated in the sealed file: `REAL_CURVE_RISES`, more likely than not, with the model-minus-logistic difference the number of interest.
+**The linear rule rises faster.** Model minus logistic is **-0.002207** per doubling, paired interval
+[-0.003707, -0.000752], the model ahead in 0.002 of the resamples; the reading rule sealed in advance calls this
+'the linear rule buys more per doubling than the model'. The model leads at every rung, and the lead shrinks
+from 0.0063 at 130 plaintexts to 0.0014 at 1029: the model's rung-to-rung gains fall (0.0091, 0.0074, 0.0054)
+while the logistic's do not (0.0028, 0.0146, 0.0094). Because the top rung is pinned to 0021's reading, a
+negative difference means the model led at the small rungs and the linear rule caught up. Against the depth-3
+tree the model's slope leads by 0.004342 ([0.003036, 0.005609]); the tree's own rise (0.003002) is within a
+redraw of the smallest rung (below). The model's slope is 0.7276 of the builder's in-distribution per-plaintext
+rate (0.010093 per doubling, sealed as a reference).
 
-A curve of just under one decade on the only real content the record has outside its sealed scoring set, in distribution, **not a transfer reading**. Nothing below this line changes until its frozen reader has read the completed run.
+**The replicate, and what the interval does not cover.** The scored-chunk bootstrap resamples the held-out
+chunks, not the fit side; the sealed file says so, and the smallest rung was cut a second time under a second
+seeded nesting (16 of 130 plaintexts shared) and refitted: the model moved by 0.001, the logistic by -0.0013,
+the tree by 0.0084. With the replicate in rung 1's place the slopes read model 0.007043, logistic 0.009942, tree
+0.000474 — the model's and the logistic's rises survive the redraw, the tree's does not. One replicate reads the
+size of that variance; it does not bound it.
+
+**Per family, and the reverse curve.** Model slopes per doubling by family: py_src 0.010108, c_src 0.008694,
+rfc_txt 0.007443, pe_bin 0.005704, rst_doc 0.004711; the logistic's: py_src 0.012356, rfc_txt 0.012034, c_src
+0.0093, rst_doc 0.008975, pe_bin 0.005019 (c_src's lowest rung is 3 plaintexts and carries no verdict). On the
+builder's own evaluation set the model's curve is flat (0.000222 per doubling of real plaintexts): more real
+plaintexts do not move the reading on content the model was not fitted on — 0018's transfer finding from the
+other side.
+
+Controls: the top rung reproduced 0021's three readings with drift 0.0 on all three; the null control on 0021's
+permuted labels reads 0.0409 on the real rows, 0.0394 on the extension set and 0.0388 on the evaluation set
+against chance 0.038462; no role at its iteration cap; the sixteen committed checkpoints cross-checked by the
+reader; sensitivity to the allowed reproduction drift 0 (the top rung landed exactly). Cost: 1208.2 s wall on
+one launch, 930.0 s of fits, against the 20 to 25 minutes estimated in advance.
+
+**What it means.** The budget excuse is answered on this content: the signal grows with real plaintexts at about
+three quarters of the builder's per-plaintext rate, so the record's scaling thesis holds on real files — and the
+recipe conclusion of 0021 and 0022 is reinforced, not reversed, because what grows fastest with real data is the
+linear rule. No extrapolation beyond the top rung is banked or quoted: the plaintexts it would count do not
+exist. An **in-distribution** reading on real content, not a transfer reading: the fit and scored chunks come
+from the same five files and share no byte. Nothing here revises 0003, 0014, 0015, 0016, 0017, 0018, 0019, 0021
+or 0022, and nothing here establishes a buyer.
 
 **Preregistration 0022 (chain seq 22) — `REAL_RECIPE_FAILS`, and what it found.** On real content, a searched
 boosted model and a searched linear rule are the same rule. 0014's roster verbatim — 35 candidates over seven
@@ -1099,7 +1145,7 @@ estimated in advance.
 **What it means.** 0021's reading stands and gains the searched sibling it anticipated: real content carries the
 encoder signal (0.1189 against chance 0.038462), and a rule a person could write by hand — now a searched linear
 one — gets essentially all of it. The recipe excuse is closed on 0014's roster at this budget. The budget
-excuse, a scaling curve on real plaintexts, stays open as the sealed file says. An **in-distribution** reading
+excuse, a scaling curve on real plaintexts, was preregistered and read as 0023, above. An **in-distribution** reading
 on real content, not a transfer reading: the fit and scored chunks come from the same five files and share no
 byte. Nothing here revises 0003, 0014, 0015, 0016, 0017, 0018, 0019 or 0021, and nothing here establishes a
 buyer.

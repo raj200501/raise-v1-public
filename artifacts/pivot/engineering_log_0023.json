@@ -156,7 +156,212 @@
     "reviewer_experiments_kept": "the runner reviewer's resume and NOT RUN experiments (scratchpad rv_resumeA, rv_notrunB) and the reader reviewer's 49 mutation runs (scratchpad review0023/exp.log); read-only, on the smoke's outputs"
   },
   "preregistration": "0023-realcurve-4096",
+  "run_record": {
+    "controls_all_passed": {
+      "chance": 0.038462,
+      "checkpoints_cross_checked": 16,
+      "null_on_evaluation": 0.0388,
+      "null_on_extension": 0.0394,
+      "null_on_real_rows": 0.0409,
+      "reproduction_drift": {
+        "depth3_tree": 0.0,
+        "logistic": 0.0,
+        "model": 0.0
+      },
+      "roles_at_iteration_cap": [],
+      "sensitivity_slope_with_top_rung_at_0021s_reading": {
+        "depth3_tree": 0.003002,
+        "logistic": 0.009551,
+        "model": 0.007344
+      }
+    },
+    "cost": "1208.2 s wall on one launch, 930.0 s of fits (r4_model 355.5 s, null 115.9 s); no arm at its iteration cap; load wait 0 s; the estimate stated in advance was 20 to 25 minutes.",
+    "finished_utc": "2026-09-17T12:07:32Z",
+    "fit_seconds_banked": 930.0,
+    "gains": {
+      "builder_reference": 0.010093,
+      "end_to_end": {
+        "depth3_tree": 0.0095,
+        "logistic": 0.0268,
+        "model": 0.0219
+      },
+      "model_slope_as_fraction_of_builder_per_plaintext_slope": 0.7276,
+      "rung_to_rung": {
+        "depth3_tree": [
+          0.0067,
+          0.0014,
+          0.0014
+        ],
+        "logistic": [
+          0.0028,
+          0.0146,
+          0.0094
+        ],
+        "model": [
+          0.0091,
+          0.0074,
+          0.0054
+        ]
+      }
+    },
+    "invocation": "OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3 nice -n 10 python3 tools/pivot/run_realcurve.py --stage run ...",
+    "launches": 1,
+    "load_wait_seconds": 0,
+    "per_family_slopes": {
+      "depth3_tree": {
+        "c_src": 0.0047,
+        "pe_bin": 0.000975,
+        "py_src": 0.000704,
+        "rfc_txt": 0.002845,
+        "rst_doc": 0.005664
+      },
+      "logistic": {
+        "c_src": 0.0093,
+        "pe_bin": 0.005019,
+        "py_src": 0.012356,
+        "rfc_txt": 0.012034,
+        "rst_doc": 0.008975
+      },
+      "model": {
+        "c_src": 0.008694,
+        "pe_bin": 0.005704,
+        "py_src": 0.010108,
+        "rfc_txt": 0.007443,
+        "rst_doc": 0.004711
+      }
+    },
+    "replicate_rung_1": {
+      "chunks_shared_with_rung_1": 16,
+      "difference_from_rung_1": {
+        "depth3_tree": 0.0084,
+        "logistic": -0.0013,
+        "model": 0.001
+      },
+      "readings": {
+        "depth3_tree": 0.0918,
+        "logistic": 0.0898,
+        "model": 0.0984
+      },
+      "slope_with_replicate_at_rung_1": {
+        "depth3_tree": 0.000474,
+        "logistic": 0.009942,
+        "model": 0.007043
+      }
+    },
+    "reverse_curve_on_the_builders_evaluation_set": {
+      "depth3_tree": 0.009842,
+      "logistic": 0.002707,
+      "model": 0.000222
+    },
+    "run_started_utc": "2026-09-17T11:47:41Z",
+    "seconds_by_name": {
+      "null": 115.9,
+      "r1_depth3_tree": 0.4,
+      "r1_logistic": 2.9,
+      "r1_model": 30.4,
+      "r2_depth3_tree": 0.8,
+      "r2_logistic": 14.1,
+      "r2_model": 75.5,
+      "r3_depth3_tree": 1.6,
+      "r3_logistic": 33.5,
+      "r3_model": 191.6,
+      "r4_depth3_tree": 3.7,
+      "r4_logistic": 65.5,
+      "r4_model": 355.5,
+      "rep1_depth3_tree": 0.4,
+      "rep1_logistic": 6.1,
+      "rep1_model": 32.1
+    },
+    "slope_failed_clauses": [],
+    "the_clause": {
+      "bar_slope_per_doubling": 0.005,
+      "bootstrap_lower_bound_gt": 0.0,
+      "doublings_spanned": 2.984659,
+      "model_real_top1_by_rung": [
+        0.0974,
+        0.1065,
+        0.1139,
+        0.1193
+      ],
+      "model_slope_ci95": [
+        0.006199,
+        0.00846
+      ],
+      "model_slope_per_doubling": 0.007344,
+      "plaintexts_per_rung": [
+        130,
+        258,
+        515,
+        1029
+      ],
+      "rows_per_rung": [
+        3344,
+        6635,
+        13207,
+        26346
+      ]
+    },
+    "the_number_of_interest": {
+      "model_leads_logistic_at_every_rung": true,
+      "model_minus_logistic_by_rung": [
+        0.0063,
+        0.0126,
+        0.0054,
+        0.0014
+      ],
+      "paired_ci95": [
+        -0.003707,
+        -0.000752
+      ],
+      "paired_ci95_tree": [
+        0.003036,
+        0.005609
+      ],
+      "reading_by_the_sealed_rule": "the paired interval is entirely below 0: on this content the linear rule buys more per doubling than the model",
+      "share_of_resamples_with_model_ahead": 0.002,
+      "slope_model_minus_depth3_tree": 0.004342,
+      "slope_model_minus_logistic": -0.002207
+    },
+    "the_other_roles": {
+      "depth3_tree_by_rung": [
+        0.0834,
+        0.0901,
+        0.0915,
+        0.0929
+      ],
+      "depth3_tree_ci95": [
+        0.002448,
+        0.003574
+      ],
+      "depth3_tree_slope": 0.003002,
+      "logistic_by_rung": [
+        0.0911,
+        0.0939,
+        0.1085,
+        0.1179
+      ],
+      "logistic_ci95": [
+        0.008478,
+        0.010649
+      ],
+      "logistic_slope": 0.009551
+    },
+    "validity_failed_clauses": [],
+    "verdict": "REAL_CURVE_RISES",
+    "wall_seconds": 1208.2,
+    "what_it_found": {
+      "expected_outcome_vs_measured": "the sealed file expected REAL_CURVE_RISES, more likely than not, and named the model-minus-logistic difference as the number of interest; the difference came out entirely below 0, the outcome the sealed reading rule labels 'the linear rule buys more per doubling'.",
+      "one_line": "Real content's encoder signal rises with real plaintexts (0.007344 per doubling, 0.7276 of the builder's per-plaintext rate) - and the hand-writable linear rule rises faster (0.009551): the growth belongs more to the cheap rule than to the boosted recipe.",
+      "per_family": "model slopes per family: py_src 0.010108, c_src 0.008694, rfc_txt 0.007443, pe_bin 0.005704, rst_doc 0.004711; logistic: py_src 0.012356, rfc_txt 0.012034, c_src 0.0093, rst_doc 0.008975, pe_bin 0.005019. c_src's lowest rung is 3 plaintexts and carries no verdict.",
+      "the_curve_rises_to_a_failing_reading": "the model reads [0.0974, 0.1065, 0.1139, 0.1193] over [130, 258, 515, 1029] plaintexts; the top rung is 0021's 0.1193 against 0.1429 needed over the depth-3 tree, 0.0014 over the logistic. A pass here is never 'more real data fixes the model'.",
+      "the_linear_rule_rises_faster": "the logistic reads [0.0911, 0.0939, 0.1085, 0.1179] (0.009551 per doubling) against the model's 0.007344: model minus logistic -0.002207, paired interval [-0.003707, -0.000752], the model ahead in 0.002 of resamples. The model leads at every rung, and the lead shrinks from 0.0063 at 130 plaintexts to 0.0014 at 1029; the model's rung-to-rung gains fall ([0.0091, 0.0074, 0.0054]) while the logistic's do not ([0.0028, 0.0146, 0.0094]). Read by the sealed rule: on this content the linear rule buys more per doubling than the model - and, because the top rung is pinned to 0021's reading, that means the model led at the small rungs and the linear rule caught up.",
+      "the_replicate": "the smallest rung cut again under a second nesting moved the model by 0.001, the logistic by -0.0013 and the tree by 0.0084 (16 of 130 plaintexts shared with rung 1); the slopes with the replicate in rung 1's place are {'depth3_tree': 0.000474, 'logistic': 0.009942, 'model': 0.007043}. The scored-chunk intervals are narrower than that fit-side movement for the tree and wider for the model and the logistic.",
+      "the_reverse_curve": "on the builder's own evaluation set the model's curve is flat (0.000222 per doubling of real plaintexts): more real plaintexts do not move the reading on content the model was not fitted on, which is 0018's transfer finding again from the other side.",
+      "the_tree_is_flat": "the depth-3 tree reads [0.0834, 0.0901, 0.0915, 0.0929] (0.003002 per doubling); with the replicate in rung 1's place its slope is 0.000474: its rise is within a redraw of the smallest rung.",
+      "what_it_means_for_the_record": "the budget excuse is answered on this content: the signal grows with real plaintexts at about three quarters of the builder's per-plaintext rate, so the record's scaling thesis does hold on real files - but the recipe conclusion of 0021 and 0022 is reinforced, not reversed: what grows fastest with real data is the linear rule. No extrapolation beyond the top rung is banked or quoted. An in-distribution reading on real content, not a transfer reading. Nothing here revises 0003, 0014, 0015, 0016, 0017, 0018, 0019, 0021 or 0022, and nothing here establishes a buyer."
+    }
+  },
   "schema": "raise-v1/engineering_log/1",
-  "status": "frozen; not yet run",
+  "status": "complete: REAL_CURVE_RISES",
   "why_this_exists": "0021 read REAL_FIT_FAILS (0.1193 against a depth-3 tree at 0.0929) and 0022 read REAL_RECIPE_FAILS (a searched model at 0.1189 against a searched logistic at 0.1182; gains from the search -0.0004 and 0.0003). Both closed the recipe excuse and both named the budget excuse as the one left open: 'a scaling curve on real plaintexts (a different preregistration)'. The record's headline is a scaling law on manufactured labels over the builder's content (0.0491 accuracy per decade, 0.014787 per doubling, over 2.9031 decades); whether real content shows any such law, and whether the boosted model buys more from each doubling than a linear rule does, is the FDM-1 question asked of real content. This run asks it with the only real content the record has: 0021's fit block, cut into nested rungs of plaintexts from 1/8 of it to all of it (2.984659 doublings). It cannot reach 0003's two-decade scope rule; it is a one-decade curve and says so."
 }

@@ -2257,9 +2257,126 @@
       "json_path": "$.selected_model_id",
       "reverify": "python3 tools/readers/realsearch4096_verdict.py",
       "value": "M3"
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve_4096_verdict.json",
+      "claim": "Preregistration 0023: REAL_CURVE_RISES \u2014 on real content the model's accuracy rises with the plaintexts fitted at or above 0.005 per doubling, with the scored-chunk interval above 0.0; a rise to 0021's failing reading.",
+      "class": "primary-verifiable",
+      "id": "realcurve4096-verdict",
+      "json_path": "$.verdict",
+      "reverify": "python3 tools/readers/realcurve4096_verdict.py",
+      "value": "REAL_CURVE_RISES"
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve_4096_verdict.json",
+      "claim": "The model's slope is 0.007344 per doubling of real plaintexts over 2.984659 doublings.",
+      "class": "primary-verifiable",
+      "id": "realcurve4096-model-slope",
+      "json_path": "$.model_slope_per_doubling",
+      "reverify": "python3 tools/readers/realcurve4096_verdict.py",
+      "value": 0.007344
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve_4096_verdict.json",
+      "claim": "The scored-chunk bootstrap 2.5th percentile of the model's slope is 0.006199.",
+      "class": "primary-verifiable",
+      "id": "realcurve4096-model-slope-ci-low",
+      "json_path": "$.model_slope_ci95[0]",
+      "reverify": "python3 tools/readers/realcurve4096_verdict.py",
+      "value": 0.006199
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve_4096_verdict.json",
+      "claim": "The standardised logistic's slope is 0.009551 per doubling, faster than the model's.",
+      "class": "primary-verifiable",
+      "id": "realcurve4096-logistic-slope",
+      "json_path": "$.logistic_slope_per_doubling",
+      "reverify": "python3 tools/readers/realcurve4096_verdict.py",
+      "value": 0.009551
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve_4096_verdict.json",
+      "claim": "The depth-3 tree's slope is 0.003002 per doubling.",
+      "class": "primary-verifiable",
+      "id": "realcurve4096-tree-slope",
+      "json_path": "$.depth3_tree_slope_per_doubling",
+      "reverify": "python3 tools/readers/realcurve4096_verdict.py",
+      "value": 0.003002
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve_4096_verdict.json",
+      "claim": "Model minus logistic is -0.002207 per doubling; the paired interval [-0.003707, -0.000752] lies entirely below 0.",
+      "class": "primary-verifiable",
+      "id": "realcurve4096-model-minus-logistic",
+      "json_path": "$.slope_model_minus_logistic",
+      "reverify": "python3 tools/readers/realcurve4096_verdict.py",
+      "value": -0.002207
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve_4096_verdict.json",
+      "claim": "The paired interval's upper bound is -0.000752: the linear rule buys more per doubling than the model on this content.",
+      "class": "primary-verifiable",
+      "id": "realcurve4096-model-minus-logistic-ci-high",
+      "json_path": "$.flags.slope_model_minus_logistic_ci95_paired[1]",
+      "reverify": "python3 tools/readers/realcurve4096_verdict.py",
+      "value": -0.000752
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve_4096_verdict.json",
+      "claim": "At 130 plaintexts the model reads 0.0974 on the real-family rows.",
+      "class": "primary-verifiable",
+      "id": "realcurve4096-rung1-model",
+      "json_path": "$.model_real_top1_by_rung[0]",
+      "reverify": "python3 tools/readers/realcurve4096_verdict.py",
+      "value": 0.0974
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve_4096_verdict.json",
+      "claim": "At 1029 plaintexts the model reads 0.1193: 0021's reading, reproduced with drift 0.0.",
+      "class": "primary-verifiable",
+      "id": "realcurve4096-top-rung-model",
+      "json_path": "$.model_real_top1_top_rung",
+      "reverify": "python3 tools/readers/realcurve4096_verdict.py",
+      "value": 0.1193
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve_4096_verdict.json",
+      "claim": "The top rung reproduces 0021's three readings with drift 0.0.",
+      "class": "primary-verifiable",
+      "id": "realcurve4096-reproduction-drift",
+      "json_path": "$.reproduction_drift.model",
+      "reverify": "python3 tools/readers/realcurve4096_verdict.py",
+      "value": 0.0
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve_4096_verdict.json",
+      "claim": "The replicate of the smallest rung under a second nesting moved the model by 0.001.",
+      "class": "primary-verifiable",
+      "id": "realcurve4096-replicate-model",
+      "json_path": "$.flags.replicate_rung_1.difference_from_rung_1.model",
+      "reverify": "python3 tools/readers/realcurve4096_verdict.py",
+      "value": 0.001
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve_4096_verdict.json",
+      "claim": "The model's slope is 0.7276 of the builder's in-distribution per-plaintext rate.",
+      "class": "primary-verifiable",
+      "id": "realcurve4096-fraction-of-builder-rate",
+      "json_path": "$.flags.model_slope_as_fraction_of_builder_per_plaintext_slope",
+      "reverify": "python3 tools/readers/realcurve4096_verdict.py",
+      "value": 0.7276
+    },
+    {
+      "artifact": "artifacts/pivot/realcurve_4096_verdict.json",
+      "claim": "The null control reads 0.0409 on the real-family rows.",
+      "class": "primary-verifiable",
+      "id": "realcurve4096-null",
+      "json_path": "$.shuffled_label_accuracy_real",
+      "reverify": "python3 tools/readers/realcurve4096_verdict.py",
+      "value": 0.0409
     }
   ],
-  "n_claims": 253,
+  "n_claims": 266,
   "principle": "Three classes. The weakest is printed first and loudest, because the value of a coverage map is entirely in its worst row.",
   "schema": "raise-v1/coverage_map/1"
 }
