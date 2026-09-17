@@ -461,10 +461,32 @@
       "reader_sha256": "b426b1d557cc08685a150dc03afd2b40e8229939fafa8c131e81af444a2ecfcb",
       "seq": 21,
       "slug": "realfit-4096-rerun"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "218a27eb2fd6c7bda2bc03cf7943ee2160673765105aa7d53838a7ff8ba97f78",
+          "round": 6473287
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "52B0B2ECB10C5E1594E0E3A21DCFD18E95687BF9EF616F20CEB731483109388F031B51255C6B3DF7BCA47AD81E30FE5368D46A959BDCCC99ABA3E3C985DDB97A",
+          "pulse": 1945034,
+          "time_stamp": "2026-09-17T07:20:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-09-17T07:20:35Z",
+      "hash": "bc7b6475831c9f7c94bcd043162a06a73130025c4e4dfbd34cb3f5e9fec5a687",
+      "id": "0022",
+      "prev_hash": "fbb2cc70afe2d9421f6d4b0dfa10f9725b8a8b2c1fe6afc4c34c3399239cc621",
+      "reader": "tools/readers/realsearch4096_verdict.py",
+      "reader_sha256": "174d18b016992151217a28835d14fcaab90741d4b427419740beb21df3adc836",
+      "seq": 22,
+      "slug": "realsearch-4096"
     }
   ],
-  "entries": 21,
-  "head": "fbb2cc70afe2d9421f6d4b0dfa10f9725b8a8b2c1fe6afc4c34c3399239cc621",
+  "entries": 22,
+  "head": "bc7b6475831c9f7c94bcd043162a06a73130025c4e4dfbd34cb3f5e9fec5a687",
   "problems": 0,
   "schema": "raise-v1/prereg_status/1",
   "verified": true

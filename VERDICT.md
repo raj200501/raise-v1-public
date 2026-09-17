@@ -297,7 +297,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 |---|---|---|
 | Every gate can be shown to fail | 555 mutations, 555 detected, 0 survived | primary-verifiable |
 | A number that is real but STALE is caught, not just a fabricated one | `tools/freshness.py`, 9 mutations | primary-verifiable |
-| Preregistration chain verifies, reader unchanged since freeze | 21 entries, head `fbb2cc70…` | primary-verifiable |
+| Preregistration chain verifies, reader unchanged since freeze | 22 entries, head `bc7b6475…` | primary-verifiable |
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |
 | ACS PUMS record count reproduced | 392,318 records | primary-verifiable |
 | Instrument reproduces on a cold clone | preflight names cause and fix | primary-verifiable |
@@ -1050,6 +1050,12 @@ does not beat 0003's boosted recipe on unseen families by 0.02 of the evaluation
 searched recipe read against a fixed one, so the comparison is asymmetric by design and says
 nothing about 0014's searched model M4, which was not fitted here; that nothing here revises 0003,
 0014 or 0015; and that no buyer is established.
+
+**In flight — preregistration 0022 (chain seq 22, frozen 2026-09-17T07:20:35Z).** The question 0021 deferred: what a recipe searched on real content would do. 0014's roster verbatim — 35 candidates over seven heads, eight enumerated recipes each for the model, the logistic, the depth-3 tree and the deep tree, the record's recipe first — searched INSIDE 0021's 26346-row real fit block (1029 plaintexts of 0018's five pinned real files): selection on a chunk-rule holdout (fit-block chunk_id % 5 == 0: 5291 rows, 206 chunks, py_src 3471 of them), one stage on the other 21055 rows, keep 1, ties to the lower roster index; each head's winner then fitted once on the whole fit block and scored once on 0018's scoring set, row for row. Four reproduction arms — M1, M4, L3 and D1 refit on the same block — must land within 0.005 of 0021's banked 0.1012, 0.1193, 0.1179 and 0.0929; a head that selects its reference recipe reproduces it with its own fit, so a model head that selects M4 is pinned to 0021's 0.1193 and cannot clear. The null control refits the selected model recipe on 0021's permuted labels, hash sealed.
+
+Two clauses, read by `tools/readers/realsearch4096_verdict.py` on the recounted score vectors, measured against the **best searched trivial baseline, floored at 0021's reading, plus 0.05** (`docs/OPERATING_RULES.md` §4a; 0014's frozen and expanded head sets, 0021's floors and count arithmetic): the model's correct rows over the 38452 rows of the five real-file families must reach `ceil(38452 × (bar + 0.05))` where the bar is the best of a searched logistic (floor 0.1179), a searched depth-3 tree (0.0929), majority (0.0387) and the label prior (0.0382) — and, under the expanded set, also a depth-1 tree (0.0549) and a searched deep tree. **The thresholds are not knowable before the run**; under 0021's unsearched readings the frozen bar is already the logistic's 0.1179, so at least 6457 correct rows are needed before the search moves anything, against 0021's model at 4587. The expected outcome, stated in the sealed file: `REAL_RECIPE_FAILS`, more likely than not, with the searched margin itself — which may be negative — the number of interest.
+
+It is an in-distribution reading on real content, **not a transfer reading**: the fit and scored chunks come from the same five files. Nothing below this line changes until its frozen reader has read the completed run.
 
 **Preregistration 0021 (chain seq 21) — `REAL_FIT_FAILS`, and what it found.** Real content does carry the encoder
 signal. 0014's searched model M4, fitted on 26346 rows from 1029 plaintexts of real

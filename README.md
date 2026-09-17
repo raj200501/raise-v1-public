@@ -78,6 +78,11 @@ builder-fitted model reached on those rows in 0018. **And a depth-3 tree fitted 
 not chance plus 0.05, so the verdict is `REAL_FIT_FAILS`: a margin of 0.0264 over a rule a person could write by hand, where
 0.05 was required. Under the chance bar it would have passed. That is what the bar is for.
 
+Preregistration 0022 (chain entry 22, frozen 2026-09-17) asks the question 0021 deferred: 0014's roster searched on the real
+fit block itself, symmetric, with every baseline head floored at 0021's reading and the logistic in the frozen set, so the model
+needs at least 6457 of 38452 rows before the search moves anything. Expected outcome stated in advance: fails, more likely
+than not. It is frozen and running.
+
 The curve and the searched margin stand as measured, and they are statements about the corpus builder's eight
 content families (gutenberg, base64, binary, code, csv, json, log, mixed), not about DEFLATE streams in general;
 the 0018 numbers are statements about the eight extension families, as pinned.

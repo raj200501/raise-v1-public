@@ -26132,7 +26132,7 @@
   ],
   "thesis": "The manufactured-label thesis on real content, under a fair search: if a recipe searched on real content cannot beat a searched linear rule and a searched depth-3 tree by 0.05 on the same rows, the boosted recipe is not what carries the real-content signal, and the record says so at full size.",
   "reader": "tools/readers/realsearch4096_verdict.py",
-  "frozen": false,
+  "frozen": true,
   "invocation": {
     "select": "OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3 nice -n 10 python3 tools/pivot/run_realsearch.py --stage select --prereg-file prereg/0022-realsearch-4096.json --cache data/pivot/full_c4096.npz --ext data/pivot/ext_c4096.npz --realfit data/pivot/realfit_c4096.npz --workdir artifacts/pivot/realsearch_4096_ckpt --selection-out artifacts/pivot/realsearch_4096_selection.json --out artifacts/pivot/realsearch_4096.json --scores-out artifacts/pivot/realsearch_4096_scores.json",
     "confirm": "the same command with --stage confirm, launched when the box is idle (no gate suite running; the runner waits up to five minutes for the 1-minute load to fall to 2.0)",
@@ -26301,5 +26301,23 @@
       "selection_fit_seconds": 20000,
       "memory_kill_gb": 13.0
     }
-  }
+  },
+  "reader_sha256": "174d18b016992151217a28835d14fcaab90741d4b427419740beb21df3adc836",
+  "frozen_utc": "2026-09-17T07:20:35Z",
+  "git_commit": "6fb3856978500569333bfe5466d5fa1d91c42f4c",
+  "git_dirty_at_freeze": false,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1945034,
+      "time_stamp": "2026-09-17T07:20:00.000Z",
+      "output_value": "52B0B2ECB10C5E1594E0E3A21DCFD18E95687BF9EF616F20CEB731483109388F031B51255C6B3DF7BCA47AD81E30FE5368D46A959BDCCC99ABA3E3C985DDB97A"
+    },
+    "drand": {
+      "round": 6473287,
+      "randomness": "218a27eb2fd6c7bda2bc03cf7943ee2160673765105aa7d53838a7ff8ba97f78"
+    }
+  },
+  "chain_hash": "bc7b6475831c9f7c94bcd043162a06a73130025c4e4dfbd34cb3f5e9fec5a687",
+  "chain_prev_hash": "fbb2cc70afe2d9421f6d4b0dfa10f9725b8a8b2c1fe6afc4c34c3399239cc621"
 }
