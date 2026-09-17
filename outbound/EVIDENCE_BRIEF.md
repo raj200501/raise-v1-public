@@ -214,7 +214,7 @@ rerun would have said something different. It would not have.
 
 ## The instrument these numbers passed through
 
-**22** preregistrations, hash-chained (entry *N* carries entry *N−1*'s hash) and anchored to NIST
+**23** preregistrations, hash-chained (entry *N* carries entry *N−1*'s hash) and anchored to NIST
 Beacon 2.0 and drand; readers frozen by sha256 before their data existed.
 **653** deliberate mutations across **24** gates, **653** detected, **0** survived — every gate provably capable of
 failing. **20** corrections filed against this work at full size, including a **54-agent

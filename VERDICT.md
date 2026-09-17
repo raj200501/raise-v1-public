@@ -297,7 +297,7 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 |---|---|---|
 | Every gate can be shown to fail | 653 mutations, 653 detected, 0 survived | primary-verifiable |
 | A number that is real but STALE is caught, not just a fabricated one | `tools/freshness.py`, 9 mutations | primary-verifiable |
-| Preregistration chain verifies, reader unchanged since freeze | 22 entries, head `bc7b6475…` | primary-verifiable |
+| Preregistration chain verifies, reader unchanged since freeze | 23 entries, head `08282b91…` | primary-verifiable |
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |
 | ACS PUMS record count reproduced | 392,318 records | primary-verifiable |
 | Instrument reproduces on a cold clone | preflight names cause and fix | primary-verifiable |
@@ -1051,6 +1051,12 @@ does not beat 0003's boosted recipe on unseen families by 0.02 of the evaluation
 searched recipe read against a fixed one, so the comparison is asymmetric by design and says
 nothing about 0014's searched model M4, which was not fitted here; that nothing here revises 0003,
 0014 or 0015; and that no buyer is established.
+
+**In flight — preregistration 0023 (chain seq 23, frozen 2026-09-17T11:43:52Z).** The budget excuse 0021 and 0022 named: does the encoder signal on real content rise with the volume of real plaintexts fitted, and faster for the boosted model than for the linear rule? 0021's 26346-row real fit block is cut into four nested, family-stratified rungs of plaintexts (130, 258, 515, 1029 plaintexts; 3344, 6635, 13207, 26346 rows; 2.984659 doublings, 0.8985 decades); 0021's three fixed recipes (M4, L3, D1 — 0022 measured that searching them on this content moves nothing) are fitted once per rung and scored once on the same 38452 real-family rows, and the smallest rung is cut once more under a second seeded nesting and fitted again (informational). The null control runs first (M4 on the whole block with 0021's permuted labels, hash sealed); the top rung is 0021's block row for row and its three roles must land within 0.005 of 0021's banked 0.1193, 0.1179 and 0.0929 before any lower rung is fitted — so the curve, if it rises, rises to 0021's failing reading, and the sealed file says a pass is never 'more real data fixes the model'.
+
+Two clauses, read by `tools/readers/realcurve4096_verdict.py` on the recounted score vectors: the model's ordinary-least-squares slope of real-family top-1 against log2(plaintexts) must reach **0.005 per doubling of plaintexts** (0016's per-doubling bar, the record's smallest, stated in the sealed file with its reason), and the 2.5th percentile of that slope under a sealed cluster bootstrap over the scored real chunks (2000 resamples, one resample serving every rung and every role; an interval over the scored chunks only, which does not resample the fit side) must sit above 0.0. `REAL_CURVE_RISES` needs both; either failing is `REAL_CURVE_FLAT`. The logistic's and the tree's slopes, the paired model-minus-logistic slope difference with its interval (read by a rule sealed in advance), per-family slopes and the replicate's readings are banked as flags, never a verdict; no extrapolation beyond the top rung is banked. The expected outcome, stated in the sealed file: `REAL_CURVE_RISES`, more likely than not, with the model-minus-logistic difference the number of interest.
+
+A curve of just under one decade on the only real content the record has outside its sealed scoring set, in distribution, **not a transfer reading**. Nothing below this line changes until its frozen reader has read the completed run.
 
 **Preregistration 0022 (chain seq 22) — `REAL_RECIPE_FAILS`, and what it found.** On real content, a searched
 boosted model and a searched linear rule are the same rule. 0014's roster verbatim — 35 candidates over seven

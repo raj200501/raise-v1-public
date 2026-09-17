@@ -87,6 +87,12 @@ model by 0.0489 and the logistic by 0.0965. On real content a searched boosted m
 rule. The recipe excuse is closed at this budget; the budget excuse (a scaling curve on real plaintexts) is the next
 preregistration, not a claim.
 
+Preregistration 0023 (chain entry 23, frozen 2026-09-17) asks the budget question both left open: 0021's real fit block cut
+into four nested rungs of plaintexts (130, 258, 515, 1029), 0021's three fixed recipes fitted on each, the model's slope per doubling of
+plaintexts read against 0.005 with a cluster-bootstrap lower bound above 0.0; a pass is a rise to 0021's failing reading. Expected
+outcome stated in advance: rises, more likely than not; the number of interest is the model's slope minus the linear rule's. It is
+frozen and running.
+
 The curve and the searched margin stand as measured, and they are statements about the corpus builder's eight
 content families (gutenberg, base64, binary, code, csv, json, log, mixed), not about DEFLATE streams in general;
 the 0018 numbers are statements about the eight extension families, as pinned.

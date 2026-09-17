@@ -21,6 +21,51 @@
     "the_replicate": "adopted from the design lens (finding 1d): three more fits, about a minute; the smallest rung cut again under a second seeded nesting gives a direct reading of the fit-side variance the scored-chunk bootstrap cannot see, where that variance is largest; informational, never a verdict",
     "what_the_bootstrap_resamples_and_what_it_does_not": "the scored real chunks (1500 of them), one resample per draw for every rung and every role, so role differences are paired; it does not resample the fit side (one seed, nested rungs), and the sealed file says so under rival_explanations_run_as_arms; a second seed would be a different preregistration."
   },
+  "freeze": {
+    "anchors": {
+      "drand": {
+        "randomness": "d5abe60552155e5fc2bb230ad7f30d1c914de9d372bccbab7cf3af5e1ed465d7",
+        "round": 6473813
+      },
+      "nist_beacon_v2": {
+        "chain": 2,
+        "output_value": "6CBE3E5C94FF3F8F6571E637283E448F7BE4BC63464C628F1E57CA91DAA5D2BE3EED9FE7178AC74B37512228F80B4B50673DDC481D63C1764470C832875DD8F4",
+        "pulse": 1945297,
+        "time_stamp": "2026-09-17T11:43:00.000Z"
+      }
+    },
+    "frozen_utc": "2026-09-17T11:43:52Z",
+    "git_commit_at_freeze": "028336ddd07fdf3d37555b29bd8eae355a84152c",
+    "git_dirty_at_freeze": false,
+    "hash": "08282b91ed946a56166d04057ffd2076f7558b8ac1f01c5d08cac330ca286f72",
+    "pre_freeze_check": "artifacts/verification/prefreeze_0023.json PASS (69 checks) at the pre-freeze commit",
+    "prev_hash": "bc7b6475831c9f7c94bcd043162a06a73130025c4e4dfbd34cb3f5e9fec5a687",
+    "reader_sha256": "6d721f2bffef1038b091d5653cc0ef43b8efb0c5cbe97da60ddbda81a9d251f8",
+    "sealed_span": {
+      "decades_spanned": 0.8985,
+      "doublings_spanned": 2.984659,
+      "fits": 16,
+      "replicate_rung_1": {
+        "chunks_shared_with_rung_1": 16,
+        "n_chunks": 130,
+        "n_rows": 3345
+      },
+      "restated_from": "the sealed file, so the in-flight paragraphs trace to a banked artifact",
+      "rungs_plaintexts": [
+        130,
+        258,
+        515,
+        1029
+      ],
+      "rungs_rows": [
+        3344,
+        6635,
+        13207,
+        26346
+      ]
+    },
+    "seq": 23
+  },
   "gate_evolution": {
     "v1": "60 cases, 58 detected: the disjoint-chunk control's curve was too flat to clear the slope clause (0.004715), so the bootstrap clause was never isolated; the order mutation swapped two completion events, which the reader caught as a start-after-completion defect rather than as an order defect",
     "v2": "60/60: the disjoint control uses the same rung readings as the just-above-the-bar control (slope 0.005366, interval [-0.002161, 0.013153]); the order mutation moves a whole role's three events, so only the sealed order is broken",
@@ -112,6 +157,6 @@
   },
   "preregistration": "0023-realcurve-4096",
   "schema": "raise-v1/engineering_log/1",
-  "status": "unfrozen; instrument v2 after the four-lens review; gate 98/98; full suite and pre-freeze check pending",
+  "status": "frozen; not yet run",
   "why_this_exists": "0021 read REAL_FIT_FAILS (0.1193 against a depth-3 tree at 0.0929) and 0022 read REAL_RECIPE_FAILS (a searched model at 0.1189 against a searched logistic at 0.1182; gains from the search -0.0004 and 0.0003). Both closed the recipe excuse and both named the budget excuse as the one left open: 'a scaling curve on real plaintexts (a different preregistration)'. The record's headline is a scaling law on manufactured labels over the builder's content (0.0491 accuracy per decade, 0.014787 per doubling, over 2.9031 decades); whether real content shows any such law, and whether the boosted model buys more from each doubling than a linear rule does, is the FDM-1 question asked of real content. This run asks it with the only real content the record has: 0021's fit block, cut into nested rungs of plaintexts from 1/8 of it to all of it (2.984659 doublings). It cannot reach 0003's two-decade scope rule; it is a one-decade curve and says so."
 }

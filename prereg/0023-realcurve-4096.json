@@ -26115,7 +26115,7 @@
   ],
   "thesis": "The manufactured-label thesis asked of real content: if the encoder signal on real files does not rise with the real plaintexts fitted at the record's rate, the budget was never the excuse; if it rises, the number that matters is whether the boosted recipe rises faster than a linear rule - and the record says either at full size, as a rise to a reading that fails its margin.",
   "reader": "tools/readers/realcurve4096_verdict.py",
-  "frozen": false,
+  "frozen": true,
   "invocation": {
     "run": "OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3 nice -n 10 python3 tools/pivot/run_realcurve.py --stage run --prereg-file prereg/0023-realcurve-4096.json --cache data/pivot/full_c4096.npz --ext data/pivot/ext_c4096.npz --realfit data/pivot/realfit_c4096.npz --workdir artifacts/pivot/realcurve_4096_ckpt --out artifacts/pivot/realcurve_4096.json --scores-out artifacts/pivot/realcurve_4096_scores.json",
     "checkpoints": "artifacts/pivot/realcurve_4096_ckpt is committed and pushed as checkpoints land; a container restart is recovered by relaunching the identical command; the reader cross-checks the checkpoints when the directory is present",
@@ -26288,5 +26288,23 @@
       "seed": 20260825
     },
     "note": "the smoke fit corpus carries 16 plaintexts per family (corpus_realfit.py --cap-per-family 16, scratchpad only) so the four smoke rungs are distinct (2, 4, 8, 16 per family); 0021's 3-per-family smoke corpus made rungs 1 and 2 coincide"
-  }
+  },
+  "reader_sha256": "6d721f2bffef1038b091d5653cc0ef43b8efb0c5cbe97da60ddbda81a9d251f8",
+  "frozen_utc": "2026-09-17T11:43:52Z",
+  "git_commit": "028336ddd07fdf3d37555b29bd8eae355a84152c",
+  "git_dirty_at_freeze": false,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1945297,
+      "time_stamp": "2026-09-17T11:43:00.000Z",
+      "output_value": "6CBE3E5C94FF3F8F6571E637283E448F7BE4BC63464C628F1E57CA91DAA5D2BE3EED9FE7178AC74B37512228F80B4B50673DDC481D63C1764470C832875DD8F4"
+    },
+    "drand": {
+      "round": 6473813,
+      "randomness": "d5abe60552155e5fc2bb230ad7f30d1c914de9d372bccbab7cf3af5e1ed465d7"
+    }
+  },
+  "chain_hash": "08282b91ed946a56166d04057ffd2076f7558b8ac1f01c5d08cac330ca286f72",
+  "chain_prev_hash": "bc7b6475831c9f7c94bcd043162a06a73130025c4e4dfbd34cb3f5e9fec5a687"
 }
