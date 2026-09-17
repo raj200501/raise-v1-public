@@ -1,0 +1,47 @@
+{"name": "run_null", "fingerprint": "0204aab938341786", "event": "rung_bound", "utc": "2026-09-17T11:47:42Z", "rss_gb": 1.79, "pid": 27226, "rung": 4, "rung_sorted_sha256": "551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476"}
+{"name": "run_null", "fingerprint": "0204aab938341786", "event": "started", "utc": "2026-09-17T11:47:42Z", "rss_gb": 2.05, "pid": 27226, "attempt": 1}
+{"name": "run_null", "fingerprint": "0204aab938341786", "event": "completed", "utc": "2026-09-17T11:50:00Z", "rss_gb": 2.3, "pid": 27226, "seconds": 115.9}
+{"name": "run_r4_depth3_tree", "fingerprint": "7b172349662e7caa", "event": "rung_bound", "utc": "2026-09-17T11:50:00Z", "rss_gb": 2.3, "pid": 27226, "rung": 4, "rung_sorted_sha256": "551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476"}
+{"name": "run_r4_depth3_tree", "fingerprint": "7b172349662e7caa", "event": "started", "utc": "2026-09-17T11:50:00Z", "rss_gb": 2.3, "pid": 27226, "attempt": 1}
+{"name": "run_r4_depth3_tree", "fingerprint": "7b172349662e7caa", "event": "completed", "utc": "2026-09-17T11:50:05Z", "rss_gb": 2.3, "pid": 27226, "seconds": 3.7}
+{"name": "run_r4_logistic", "fingerprint": "f64a88fe9dd5f6b4", "event": "rung_bound", "utc": "2026-09-17T11:50:05Z", "rss_gb": 2.3, "pid": 27226, "rung": 4, "rung_sorted_sha256": "551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476"}
+{"name": "run_r4_logistic", "fingerprint": "f64a88fe9dd5f6b4", "event": "started", "utc": "2026-09-17T11:50:05Z", "rss_gb": 2.3, "pid": 27226, "attempt": 1}
+{"name": "run_r4_logistic", "fingerprint": "f64a88fe9dd5f6b4", "event": "completed", "utc": "2026-09-17T11:51:15Z", "rss_gb": 2.4, "pid": 27226, "seconds": 65.5}
+{"name": "run_r4_model", "fingerprint": "6089a443da48701b", "event": "rung_bound", "utc": "2026-09-17T11:51:15Z", "rss_gb": 2.4, "pid": 27226, "rung": 4, "rung_sorted_sha256": "551f13617e9673c93987807a2ccc03a6cc90c66c8897245bee23087f69b93476"}
+{"name": "run_r4_model", "fingerprint": "6089a443da48701b", "event": "started", "utc": "2026-09-17T11:51:15Z", "rss_gb": 2.4, "pid": 27226, "attempt": 1}
+{"name": "run_r4_model", "fingerprint": "6089a443da48701b", "event": "completed", "utc": "2026-09-17T11:58:07Z", "rss_gb": 2.72, "pid": 27226, "seconds": 355.5}
+{"name": "run_r1_depth3_tree", "fingerprint": "c84de48a2fb03546", "event": "rung_bound", "utc": "2026-09-17T11:58:07Z", "rss_gb": 2.44, "pid": 27226, "rung": 1, "rung_sorted_sha256": "2eb3ac15056acabc2ee1d2621d4554cf956876d86963f162e1dd18c22d89e47e"}
+{"name": "run_r1_depth3_tree", "fingerprint": "c84de48a2fb03546", "event": "started", "utc": "2026-09-17T11:58:07Z", "rss_gb": 2.44, "pid": 27226, "attempt": 1}
+{"name": "run_r1_depth3_tree", "fingerprint": "c84de48a2fb03546", "event": "completed", "utc": "2026-09-17T11:58:09Z", "rss_gb": 2.44, "pid": 27226, "seconds": 0.4}
+{"name": "run_r1_logistic", "fingerprint": "51ccc1096007febc", "event": "rung_bound", "utc": "2026-09-17T11:58:10Z", "rss_gb": 2.44, "pid": 27226, "rung": 1, "rung_sorted_sha256": "2eb3ac15056acabc2ee1d2621d4554cf956876d86963f162e1dd18c22d89e47e"}
+{"name": "run_r1_logistic", "fingerprint": "51ccc1096007febc", "event": "started", "utc": "2026-09-17T11:58:10Z", "rss_gb": 2.44, "pid": 27226, "attempt": 1}
+{"name": "run_r1_logistic", "fingerprint": "51ccc1096007febc", "event": "completed", "utc": "2026-09-17T11:58:17Z", "rss_gb": 2.44, "pid": 27226, "seconds": 2.9}
+{"name": "run_r1_model", "fingerprint": "ecca3ff84e436282", "event": "rung_bound", "utc": "2026-09-17T11:58:17Z", "rss_gb": 2.44, "pid": 27226, "rung": 1, "rung_sorted_sha256": "2eb3ac15056acabc2ee1d2621d4554cf956876d86963f162e1dd18c22d89e47e"}
+{"name": "run_r1_model", "fingerprint": "ecca3ff84e436282", "event": "started", "utc": "2026-09-17T11:58:17Z", "rss_gb": 2.44, "pid": 27226, "attempt": 1}
+{"name": "run_r1_model", "fingerprint": "ecca3ff84e436282", "event": "completed", "utc": "2026-09-17T11:59:13Z", "rss_gb": 2.44, "pid": 27226, "seconds": 30.4}
+{"name": "run_r2_depth3_tree", "fingerprint": "0577f2f325d06ad2", "event": "rung_bound", "utc": "2026-09-17T11:59:14Z", "rss_gb": 2.44, "pid": 27226, "rung": 2, "rung_sorted_sha256": "130bb1751bd05deeb8b8a5c4f8b910434c5ee04f5cc482926f09463f1d1faa44"}
+{"name": "run_r2_depth3_tree", "fingerprint": "0577f2f325d06ad2", "event": "started", "utc": "2026-09-17T11:59:14Z", "rss_gb": 2.44, "pid": 27226, "attempt": 1}
+{"name": "run_r2_depth3_tree", "fingerprint": "0577f2f325d06ad2", "event": "completed", "utc": "2026-09-17T11:59:16Z", "rss_gb": 2.44, "pid": 27226, "seconds": 0.8}
+{"name": "run_r2_logistic", "fingerprint": "4f2292237b561dd3", "event": "rung_bound", "utc": "2026-09-17T11:59:17Z", "rss_gb": 2.44, "pid": 27226, "rung": 2, "rung_sorted_sha256": "130bb1751bd05deeb8b8a5c4f8b910434c5ee04f5cc482926f09463f1d1faa44"}
+{"name": "run_r2_logistic", "fingerprint": "4f2292237b561dd3", "event": "started", "utc": "2026-09-17T11:59:17Z", "rss_gb": 2.44, "pid": 27226, "attempt": 1}
+{"name": "run_r2_logistic", "fingerprint": "4f2292237b561dd3", "event": "completed", "utc": "2026-09-17T11:59:36Z", "rss_gb": 2.44, "pid": 27226, "seconds": 14.1}
+{"name": "run_r2_model", "fingerprint": "d259ab36e65d828d", "event": "rung_bound", "utc": "2026-09-17T11:59:37Z", "rss_gb": 2.44, "pid": 27226, "rung": 2, "rung_sorted_sha256": "130bb1751bd05deeb8b8a5c4f8b910434c5ee04f5cc482926f09463f1d1faa44"}
+{"name": "run_r2_model", "fingerprint": "d259ab36e65d828d", "event": "started", "utc": "2026-09-17T11:59:37Z", "rss_gb": 2.44, "pid": 27226, "attempt": 1}
+{"name": "run_r2_model", "fingerprint": "d259ab36e65d828d", "event": "completed", "utc": "2026-09-17T12:01:27Z", "rss_gb": 2.44, "pid": 27226, "seconds": 75.5}
+{"name": "run_r3_depth3_tree", "fingerprint": "37cda575787ca6d6", "event": "rung_bound", "utc": "2026-09-17T12:01:28Z", "rss_gb": 2.44, "pid": 27226, "rung": 3, "rung_sorted_sha256": "7cca655b4f622f7c1aa245214d4a5858ccfa8cac9e88faad6d4e1c693236e0fb"}
+{"name": "run_r3_depth3_tree", "fingerprint": "37cda575787ca6d6", "event": "started", "utc": "2026-09-17T12:01:28Z", "rss_gb": 2.44, "pid": 27226, "attempt": 1}
+{"name": "run_r3_depth3_tree", "fingerprint": "37cda575787ca6d6", "event": "completed", "utc": "2026-09-17T12:01:31Z", "rss_gb": 2.44, "pid": 27226, "seconds": 1.6}
+{"name": "run_r3_logistic", "fingerprint": "33933a387087c9ef", "event": "rung_bound", "utc": "2026-09-17T12:01:33Z", "rss_gb": 2.44, "pid": 27226, "rung": 3, "rung_sorted_sha256": "7cca655b4f622f7c1aa245214d4a5858ccfa8cac9e88faad6d4e1c693236e0fb"}
+{"name": "run_r3_logistic", "fingerprint": "33933a387087c9ef", "event": "started", "utc": "2026-09-17T12:01:33Z", "rss_gb": 2.44, "pid": 27226, "attempt": 1}
+{"name": "run_r3_logistic", "fingerprint": "33933a387087c9ef", "event": "completed", "utc": "2026-09-17T12:02:10Z", "rss_gb": 2.44, "pid": 27226, "seconds": 33.5}
+{"name": "run_r3_model", "fingerprint": "6c0e26d3ad18a70e", "event": "rung_bound", "utc": "2026-09-17T12:02:11Z", "rss_gb": 2.44, "pid": 27226, "rung": 3, "rung_sorted_sha256": "7cca655b4f622f7c1aa245214d4a5858ccfa8cac9e88faad6d4e1c693236e0fb"}
+{"name": "run_r3_model", "fingerprint": "6c0e26d3ad18a70e", "event": "started", "utc": "2026-09-17T12:02:11Z", "rss_gb": 2.44, "pid": 27226, "attempt": 1}
+{"name": "run_r3_model", "fingerprint": "6c0e26d3ad18a70e", "event": "completed", "utc": "2026-09-17T12:06:09Z", "rss_gb": 2.44, "pid": 27226, "seconds": 191.6}
+{"name": "run_rep1_depth3_tree", "fingerprint": "28af5350ff2b04d6", "event": "rung_bound", "utc": "2026-09-17T12:06:10Z", "rss_gb": 2.45, "pid": 27226, "rung": "rep1", "rung_sorted_sha256": "80e3a896c44fa53446b53ae0c2c500c840dfc28bc66314004a38f5ca6aa7b23f"}
+{"name": "run_rep1_depth3_tree", "fingerprint": "28af5350ff2b04d6", "event": "started", "utc": "2026-09-17T12:06:10Z", "rss_gb": 2.45, "pid": 27226, "attempt": 1}
+{"name": "run_rep1_depth3_tree", "fingerprint": "28af5350ff2b04d6", "event": "completed", "utc": "2026-09-17T12:06:12Z", "rss_gb": 2.45, "pid": 27226, "seconds": 0.4}
+{"name": "run_rep1_logistic", "fingerprint": "69213f3f5fd816ab", "event": "rung_bound", "utc": "2026-09-17T12:06:14Z", "rss_gb": 2.45, "pid": 27226, "rung": "rep1", "rung_sorted_sha256": "80e3a896c44fa53446b53ae0c2c500c840dfc28bc66314004a38f5ca6aa7b23f"}
+{"name": "run_rep1_logistic", "fingerprint": "69213f3f5fd816ab", "event": "started", "utc": "2026-09-17T12:06:14Z", "rss_gb": 2.45, "pid": 27226, "attempt": 1}
+{"name": "run_rep1_logistic", "fingerprint": "69213f3f5fd816ab", "event": "completed", "utc": "2026-09-17T12:06:23Z", "rss_gb": 2.45, "pid": 27226, "seconds": 6.1}
+{"name": "run_rep1_model", "fingerprint": "bc9e66705b08dedd", "event": "rung_bound", "utc": "2026-09-17T12:06:25Z", "rss_gb": 2.45, "pid": 27226, "rung": "rep1", "rung_sorted_sha256": "80e3a896c44fa53446b53ae0c2c500c840dfc28bc66314004a38f5ca6aa7b23f"}
+{"name": "run_rep1_model", "fingerprint": "bc9e66705b08dedd", "event": "started", "utc": "2026-09-17T12:06:25Z", "rss_gb": 2.45, "pid": 27226, "attempt": 1}
