@@ -72,3 +72,4 @@
 {"name": "run_s4_logistic", "fingerprint": "056775db3ee8b9c3", "event": "completed", "utc": "2026-09-17T22:25:29Z", "rss_gb": 3.89, "pid": 7943, "seconds": 63.5}
 {"name": "run_s4_model", "fingerprint": "2e3f975a18ba747b", "event": "rung_bound", "utc": "2026-09-17T22:25:31Z", "rss_gb": 3.89, "pid": 7943, "rung": "s4", "rung_sorted_sha256": "016b97f622baebc2a2b1bb34eb8f564deecec1dac9b4674d1b97b4c9e3538f35"}
 {"name": "run_s4_model", "fingerprint": "2e3f975a18ba747b", "event": "started", "utc": "2026-09-17T22:25:31Z", "rss_gb": 3.89, "pid": 7943, "attempt": 1}
+{"name": "run_s4_model", "fingerprint": "2e3f975a18ba747b", "event": "completed", "utc": "2026-09-17T22:30:54Z", "rss_gb": 3.89, "pid": 7943, "seconds": 286.8}
