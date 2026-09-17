@@ -505,10 +505,32 @@
       "reader_sha256": "6d721f2bffef1038b091d5653cc0ef43b8efb0c5cbe97da60ddbda81a9d251f8",
       "seq": 23,
       "slug": "realcurve-4096"
+    },
+    {
+      "anchors": {
+        "drand": {
+          "randomness": "8a6398e26cb982798cc57cc55fef41e6e5fcb3aa454d29ce723c1e761f3cd41f",
+          "round": 6474882
+        },
+        "nist_beacon_v2": {
+          "chain": 2,
+          "output_value": "F044354BE9A6949657AD70F90A4FE66531158FA47E22F34482A5A07D79C5C25E95D984E6926B37FBE2E5801F3187C80E4EB98F923DA184159777A3B168C20E92",
+          "pulse": 1945831,
+          "time_stamp": "2026-09-17T20:37:00.000Z"
+        }
+      },
+      "frozen_utc": "2026-09-17T20:38:28Z",
+      "hash": "f57f067c83dd8bb572decd03840ddce9630331060e312734861f86b4befb98bc",
+      "id": "0024",
+      "prev_hash": "08282b91ed946a56166d04057ffd2076f7558b8ac1f01c5d08cac330ca286f72",
+      "reader": "tools/readers/realcurve2_4096_verdict.py",
+      "reader_sha256": "99fc413c16dcbd87965ca3e9aeb2f6930c8db50fcdcd91107b15b7dc749449e7",
+      "seq": 24,
+      "slug": "realcurve2-4096"
     }
   ],
-  "entries": 23,
-  "head": "08282b91ed946a56166d04057ffd2076f7558b8ac1f01c5d08cac330ca286f72",
+  "entries": 24,
+  "head": "f57f067c83dd8bb572decd03840ddce9630331060e312734861f86b4befb98bc",
   "problems": 0,
   "schema": "raise-v1/prereg_status/1",
   "verified": true

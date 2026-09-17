@@ -95,6 +95,14 @@ which the sealed reading rule calls 'the linear rule buys more per doubling than
 with real plaintexts at 0.7276 of the builder's per-plaintext rate, and what grows fastest is the hand-writable rule. No
 extrapolation beyond the top rung is banked or quoted.
 
+Preregistration 0024 (chain entry 24, frozen 2026-09-17) asks the second decade: a new fit corpus of 7574 real plaintexts
+from other files of the same five families (23 pinned archives, 600 RFC texts, licences filed), nested on
+0021's block in three exact doublings (130, 258, 515, 1029, 2058, 4116, 8232 plaintexts over seven rungs); the model's second-decade slope per doubling read
+against 0.005 with a cluster-bootstrap lower bound above 0.0, and the model's lead over the linear rule at the top rung read by a
+sealed paired-interval rule into the verdict string itself; a shift arm reads what the new files alone buy. Expected outcome
+stated in advance: rises, more likely than not; the linear rule ahead or not separated, more likely than the model ahead. It is
+frozen and running.
+
 The curve and the searched margin stand as measured, and they are statements about the corpus builder's eight
 content families (gutenberg, base64, binary, code, csv, json, log, mixed), not about DEFLATE streams in general;
 the 0018 numbers are statements about the eight extension families, as pinned.

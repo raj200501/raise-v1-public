@@ -27514,7 +27514,7 @@
   ],
   "thesis": "The manufactured-label thesis asked of real content, one decade further: if the encoder signal on real files keeps rising when the files fitted are other files of the same kinds, the budget was the excuse and buying real content is the road; if it does not, the excuse closes; and in either case the record says, at eight times 0021's plaintexts, whether the boosted recipe or a hand-writable linear rule is ahead - at full size, in the verdict string itself.",
   "reader": "tools/readers/realcurve2_4096_verdict.py",
-  "frozen": false,
+  "frozen": true,
   "invocation": {
     "run": "OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3 nice -n 10 python3 tools/pivot/run_realcurve2.py --stage run --prereg-file prereg/0024-realcurve2-4096.json --cache data/pivot/full_c4096.npz --ext data/pivot/ext_c4096.npz --realfit data/pivot/realfit_c4096.npz --realfit2 data/pivot/realfit2_c4096.npz --workdir artifacts/pivot/realcurve2_4096_ckpt --out artifacts/pivot/realcurve2_4096.json --scores-out artifacts/pivot/realcurve2_4096_scores.json",
     "checkpoints": "artifacts/pivot/realcurve2_4096_ckpt is committed and pushed as checkpoints land; a container restart is recovered by relaunching the identical command; the reader cross-checks the checkpoints when the directory is present",
@@ -27776,5 +27776,23 @@
       "seed": 20260917
     },
     "note": "the smoke fit corpus is 0023's 16-per-family one (rungs 2, 4, 8, 16 per family); the smoke second-decade corpus was built by corpus_realfit2.py --build --cap-per-family 126 --base-per-family 16 into the scratchpad (126 pool chunks per family, enough for 16 x 7 = 112 new plaintexts per family), so the three smoke second-decade rungs are 32, 64 and 128 per family"
-  }
+  },
+  "reader_sha256": "99fc413c16dcbd87965ca3e9aeb2f6930c8db50fcdcd91107b15b7dc749449e7",
+  "frozen_utc": "2026-09-17T20:38:28Z",
+  "git_commit": "a50a2e9d06905ecd83e5aa390fa43405016a974f",
+  "git_dirty_at_freeze": false,
+  "anchors": {
+    "nist_beacon_v2": {
+      "chain": 2,
+      "pulse": 1945831,
+      "time_stamp": "2026-09-17T20:37:00.000Z",
+      "output_value": "F044354BE9A6949657AD70F90A4FE66531158FA47E22F34482A5A07D79C5C25E95D984E6926B37FBE2E5801F3187C80E4EB98F923DA184159777A3B168C20E92"
+    },
+    "drand": {
+      "round": 6474882,
+      "randomness": "8a6398e26cb982798cc57cc55fef41e6e5fcb3aa454d29ce723c1e761f3cd41f"
+    }
+  },
+  "chain_hash": "f57f067c83dd8bb572decd03840ddce9630331060e312734861f86b4befb98bc",
+  "chain_prev_hash": "08282b91ed946a56166d04057ffd2076f7558b8ac1f01c5d08cac330ca286f72"
 }

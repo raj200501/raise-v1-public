@@ -339,6 +339,63 @@
     "the_two_0021_bar_flags": "0021's clause (best trivial baseline on the same rows plus 0.05) re-applied at the top rung, banked twice and labelled: against the depth-3 tree plus 0.05 (the tree stood in for the best of 0021's four baselines; the other three read below it at 0021 and are not refitted here, so that flag can only be optimistic), and against the higher of the tree and the standardised logistic plus 0.05 (OPERATING_RULES 4a names logistic regression among the trivial baselines; 0021's four did not include it, and L3 is fitted at every rung here). Neither is a verdict.",
     "why_the_lead_is_named_in_the_verdict": "0023's open question was whether the linear rule overtakes the model; a flag can be left unquoted, a verdict suffix cannot, so the verdict string carries MODEL_LEADS, LINEAR_LEADS or NO_SEPARATION beside RISES or FLAT and no document quotes one part without the other"
   },
+  "freeze": {
+    "anchors": {
+      "drand": {
+        "randomness": "8a6398e26cb982798cc57cc55fef41e6e5fcb3aa454d29ce723c1e761f3cd41f",
+        "round": 6474882
+      },
+      "nist_beacon_v2": {
+        "chain": 2,
+        "output_value": "F044354BE9A6949657AD70F90A4FE66531158FA47E22F34482A5A07D79C5C25E95D984E6926B37FBE2E5801F3187C80E4EB98F923DA184159777A3B168C20E92",
+        "pulse": 1945831,
+        "time_stamp": "2026-09-17T20:37:00.000Z"
+      }
+    },
+    "chain_hash": "f57f067c83dd8bb572decd03840ddce9630331060e312734861f86b4befb98bc",
+    "chain_prev_hash": "08282b91ed946a56166d04057ffd2076f7558b8ac1f01c5d08cac330ca286f72",
+    "chain_seq": 24,
+    "frozen_utc": "2026-09-17T20:38:28Z",
+    "git_commit": "a50a2e9d06905ecd83e5aa390fa43405016a974f",
+    "git_dirty_at_freeze": false,
+    "in_flight_documents": "VERDICT.md and README.md carry the in-flight paragraphs generated from the sealed file (freeze_docs_0024.py, scratchpad)",
+    "mutation_report_at_freeze": {
+      "cases": 148,
+      "detected": 801,
+      "gate": "realcurve2_4096",
+      "total": 801
+    },
+    "prefreeze_check": "artifacts/verification/prefreeze_0024.json (PASS at the pre-freeze commit)",
+    "reader_sha256": "99fc413c16dcbd87965ca3e9aeb2f6930c8db50fcdcd91107b15b7dc749449e7",
+    "sealed_span": {
+      "decades_spanned": 1.8016,
+      "decades_spanned_second_decade": 0.9031,
+      "doublings_spanned": 5.984659,
+      "doublings_spanned_second_decade": 3.0,
+      "rungs_plaintexts": [
+        130,
+        258,
+        515,
+        1029,
+        2058,
+        4116,
+        8232
+      ],
+      "rungs_rows": [
+        3344,
+        6635,
+        13207,
+        26346,
+        52766,
+        105214,
+        210751
+      ],
+      "shift_arm": {
+        "n_chunks": 1029,
+        "n_rows": 26420
+      }
+    }
+  },
   "gate_evolution": {
     "v1": "122 cases against the first instrument; the gate-only run was interrupted when the review's first overlap-scan prototype exhausted memory beside it and the container restarted; no result banked",
     "v2": "148 cases against the reviewed instrument (straddling-lead controls, the lead-versus-slope-difference control, FLAT with every lead suffix, the exception path exercised, the shift arm, the cap flag, the whole-record checkpoint comparison): 142 detected; the six holes were the control's own construction - the checkpoint helper wrote the banked record where the runner writes run_fit's (six fields fewer), the record-requirements case did not know the shift arm's name, and the just-above-the-bar control let the default logistic overtake the model at the top rung",
@@ -413,6 +470,6 @@
   },
   "preregistration": "0024-realcurve2-4096",
   "schema": "raise-v1/engineering_log/1",
-  "status": "unfrozen; instrument complete; four-lens pre-freeze review adopted; full gate run pending",
+  "status": "frozen 2026-09-17; run pending",
   "why_this_exists": "0023 read REAL_CURVE_RISES: over 130 to 1029 real plaintexts the model rose 0.007344 per doubling (interval [0.006199, 0.00846]), the standardised logistic 0.009551 ([0.008478, 0.010649]) and the depth-3 tree 0.003002; model minus logistic -0.002207 with a paired interval [-0.003707, -0.000752] entirely below 0, and the model's lead over the logistic by rung was [0.0063, 0.0126, 0.0054, 0.0014], 0.0014 at the top. The top rung was 0021's whole fit block - every chunk of the five pinned files that the sealed evaluation set does not use - so the record held no more real plaintexts, and 0023 named 'a second decade' and 'more real content than 0021's fit block (no such corpus exists in the record)' as what it did not cover. Two questions follow directly from its numbers. First, whether the rise continues when the added plaintexts are OTHER files of the same families, which is the only way real content can ever grow (0023's rise was measured on the scored files' own unscored chunks). Second, whether the linear rule, which bought more per doubling than the model over the first decade, overtakes it: if both of 0023's straight lines simply continued they would cross before the first new doubling (that arithmetic is sealed as informational under reference_slopes_informational and is not quoted in any document). This run builds the corpus that lets both be asked: 23 new archives and 600 new RFC texts, pinned, with licences filed and two COULD NOT VERIFY entries stated (docs/compliance/EXT_SOURCES2.md), cut into 7574 plaintexts with rows that share no whole chunk and no kilobyte run with anything 0018 pinned, and nested on 0021's block in exact doublings of every family."
 }
