@@ -6,7 +6,7 @@ the same five families, nested on 0021's block): the model's second-decade slope
 ahead of the standardised logistic at the top rung with a paired interval [0.0001, 0.0077]. The span was 1.8016 decades,
 short of 0003's two-decade scope rule. This run adds ONE more exact per-family doubling from 0025's corpus
 (tools/pivot/corpus_realfit3.py: 0024's pool in 0024's order, then a seeded permutation of the remaining and new
-candidates), so rung 8 holds 16 x rung 4's plaintexts of every family and the curve spans 2.1025 decades. 0024's seven
+candidates), so rung 8 holds 16 x rung 4's plaintexts of every family and the curve spans 2.1026 decades. 0024's seven
 rungs and its shift arm are refitted row for row under 0024's own seeds and must reproduce 0024's readings (rung 7's
 three roles within 0.0005, the rest within 0.005) and 0024's banked bootstrap intervals exactly (0024's bootstrap seed is
 sealed for every verdict interval here). Three of 0021's four trivial-baseline floors are refitted on rungs 7 and 8; the

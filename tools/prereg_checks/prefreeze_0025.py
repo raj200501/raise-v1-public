@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
-"""Pre-freeze check for preregistration 0024 (run before `tools/prereg.py freeze`; committed with the freeze, result
+"""Pre-freeze check for preregistration 0025 (run before `tools/prereg.py freeze`; committed with the freeze, result
 banked in artifacts/verification/prefreeze_0025.json). Exit 1 on any mismatch, 2 once the preregistration is frozen.
 
 What it checks, and why each one exists:
  1. The reader is exactly what the generator produces from the preregistration and the template - no hand edit.
- 2. Every sealed literal in the reader equals the preregistration's (protocol and curve hashes, recipes, references of
-    both decades, tolerances, the null-label hash, the partition and the seven rungs, the three corpora, the order, the
-    bar with its lead rule, the bootstrap).
+ 2. Every sealed literal in the reader equals the preregistration's (protocol and curve hashes, recipes, the references
+    of 0021, 0023 and 0024 including 0024's banked intervals, both tolerances, the null-label hash, the partition and the
+    eight rungs, both shift arms, the four corpora, the order of 37 fits, the bar with its gain rule and lead rule, the
+    bootstrap and the stability seeds).
  3. The corpora on disk hash to the sealed arrays and their blocks are REBUILT BY CALLING the runner's corpus_block();
-    the fit block and the seven rungs are REBUILT BY CALLING the runner's rung_partition2() on the two fit corpora and
-    must equal the sealed constants hash for hash; the sealed evaluation set, the pool and the null-label array are
-    RECOMPUTED from the builder cache and the corpora with the runner's own split and generator (OPERATING_RULES 4).
- 4. Rungs 1..4 are 0023's rungs hash for hash; the references trace to 0021's and 0023's banked artifacts; the recipes are
-    0023's; the second-decade corpus is disjoint by construction and its manifest is the sealed one; the reference numbers
-    quoted in the prose are banked numbers.
+    the fit block, the eight rungs and both shift arms are REBUILT BY CALLING the runner's rung_partition3() on the three
+    fit corpora and must equal the sealed constants hash for hash; the sealed evaluation set, the pool and the null-label
+    array are RECOMPUTED from the builder cache and the corpora with the runner's own split and generator
+    (OPERATING_RULES 4).
+ 4. Rungs 1..7 and 0024's shift arm are 0024's hash for hash; the references trace to 0021's, 0023's and 0024's banked
+    artifacts; the recipes are 0024's three and three of 0021's four floors (B-tree3 is D1); the fourth-doubling corpus
+    is nested on 0024's pool and its manifest is the sealed one; the reference numbers quoted in the prose are banked.
  5. Every key the reader compares is a key the runner writes (the captured fixture), the reader's per-record
     requirements hold against the runner's own banked records, and the fixture is current with the runner in the tree.
  6. Nothing of this run exists yet: no artifact, scores, verdict, NOT RUN file or checkpoints; the preregistration is
-    unfrozen and 0023 is the chain head; the smoke block names scratchpad corpora; a real run refuses to start.
+    unfrozen and 0024 is the chain head; the smoke block names scratchpad corpora; a real run refuses to start.
  7. The banked mutation report agrees with the coverage map's claim and carries this gate.
 """
 from __future__ import annotations
