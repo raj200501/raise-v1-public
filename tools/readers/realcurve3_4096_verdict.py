@@ -2607,11 +2607,18 @@ def read(d) -> int:
                     f"'scored exactly once, in the sealed order' is a property of the run, not of {len(ORDER)} names")
     for name in ORDER:
         check_record(name)
-    shas = [fits[n].get("per_example_sha256") for n in ORDER if isinstance(fits.get(n), dict)]
-    dup = sorted({x for x in shas if x is not None and shas.count(x) > 1})
-    if dup:
-        same = [n for n in ORDER if isinstance(fits.get(n), dict) and fits[n].get("per_example_sha256") in dup]
-        void.append(f"fit: roles {same} bank the same per-example vector; distinct fits on distinct row sets do not score identically")
+    # B-majority predicts one constant class, the majority label of its rung; when rungs 7 and 8 share that label the two majority
+    # floors bank the same vector honestly (found by the pre-freeze review on the runner's own smoke). That pair, and only that pair,
+    # may coincide; any other shared vector - including a majority floor equal to any other role - is VOID.
+    maj_pair = {f"r{N_0024_RUNGS}_floor_majority", f"r{N_RUNGS}_floor_majority"}
+    by_sha = {}
+    for n in ORDER:
+        if isinstance(fits.get(n), dict) and fits[n].get("per_example_sha256") is not None:
+            by_sha.setdefault(fits[n]["per_example_sha256"], []).append(n)
+    same = sorted(n for grp in by_sha.values() if len(grp) > 1 and set(grp) != maj_pair for n in grp)
+    if same:
+        void.append(f"fit: roles {same} bank the same per-example vector; distinct fits on distinct row sets do not score identically "
+                    f"(only the majority-class floor at rungs {N_0024_RUNGS} and {N_RUNGS} may)")
     foreign = [e.get("name") for e in ledger if isinstance(e, dict) and e.get("event") == "completed"
                and e.get("name") not in {f"run_{n}" for n in ORDER}]
     if foreign:

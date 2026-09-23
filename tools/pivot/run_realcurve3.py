@@ -227,7 +227,7 @@ def main() -> int:
             except OSError:
                 continue
             argv = [x.decode("utf-8", "replace") for x in parts if x]
-            if argv and os.path.basename(argv[0]).startswith("python") and any("tools/pivot/run_" in a for a in argv[1:]):
+            if argv and os.path.basename(argv[0]).startswith("python") and any(("tools/pivot/run_" in a or "tools/pivot/corpus_" in a or "tests/mutation_test.py" in a) for a in argv[1:]):
                 others.append(f"{pid}: {' '.join(argv)[:120]}")
         if others:
             print("REFUSING: another tools/pivot runner is alive: " + "; ".join(others), file=sys.stderr)
@@ -784,6 +784,41 @@ def main() -> int:
                 raise NotRun(f"{step} read {rd['ext_real_top1']} on the real-family rows against {what} banked {ref} (drift {drift} > {tol}): "
                              f"the rung, the scoring set or the machinery is not the banked run's")
 
+        def repro_intervals_0024():
+            """0024's verdict intervals (its second-decade slope over rungs 4..7, its leads at rungs 7 and 4) recomputed from this run's
+            vectors under 0024's bootstrap seed, and whether they equal 0024's banked values exactly. Called by the fit loop once all
+            twenty-one reproduction fits are banked (NOT RUN before rung 8 if they do not reproduce) and by the post-run assembly."""
+            vec = lambda n: per_ex[n][n_eval:][real_mask]  # noqa: E731
+            cid = gx[real_mask]
+
+            def pct(a):
+                return [round(float(np.percentile(a, 2.5)), 6), round(float(np.percentile(a, 97.5)), 6)]
+            by_role_0024 = {role: [vec(f"r{k}_{role}") for k in range(N_FIRST, N_0024_RUNGS + 1)] for role in ROLES}
+            sl24 = slope_bootstrap(by_role_0024, log2x_second_0024, cid, n_boot, boot_seed)
+            repro_boot = {"slope_bootstrap_0024": {role: {"ci95": pct(sl24[role]), "n_boot": n_boot, "seed": boot_seed, "mean": round(float(sl24[role].mean()), 6)} for role in ROLES}}
+            for a, b_ in (("model", "logistic"), ("model", "depth3_tree")):
+                d = sl24[a] - sl24[b_]
+                repro_boot["slope_bootstrap_0024"][f"{a}_minus_{b_}"] = {"ci95": pct(d), "paired": True, "share_of_resamples_with_model_ahead": round(float((d > 0).mean()), 4)}
+            repro_boot["lead_0024"] = {}
+            for k in (N_0024_RUNGS, N_FIRST):
+                for a, b_ in (("model", "logistic"), ("model", "depth3_tree")):
+                    dv = paired_lead_bootstrap(vec(f"r{k}_{a}"), vec(f"r{k}_{b_}"), cid, n_boot, boot_seed)
+                    lo, hi = pct(dv)
+                    repro_boot["lead_0024"][f"r{k}_{a}_minus_{b_}"] = {
+                        "point": round(readings(f"r{k}_{a}")["ext_real_top1"] - readings(f"r{k}_{b_}")["ext_real_top1"], 4), "ci95": [lo, hi],
+                        "n_boot": n_boot, "seed": boot_seed, "share_of_resamples_with_model_ahead": round(float((dv > 0).mean()), 4),
+                        "reading": ("MODEL_LEADS" if lo > 0 else "LINEAR_LEADS" if hi < 0 else "NO_SEPARATION") if b_ == "logistic"
+                                   else ("MODEL_LEADS" if lo > 0 else "TREE_LEADS" if hi < 0 else "NO_SEPARATION")}
+            ref_boot = P.get("reference_bootstrap_0024") or {}
+            repro_boot["equals_0024s_banked"] = {
+                "slope_bootstrap": bool(ref_boot.get("slope_bootstrap") is not None and all(repro_boot["slope_bootstrap_0024"].get(k) == v for k, v in ref_boot.get("slope_bootstrap", {}).items())),
+                "lead_at_top": bool(ref_boot.get("lead_at_top") is not None and all(repro_boot["lead_0024"].get(k) == v for k, v in ref_boot.get("lead_at_top", {}).items()))}
+            repro_boot["unit"] = ("0024's verdict intervals recomputed here from this run's vectors under 0024's bootstrap seed over the same "
+                                  "scored chunks; they must equal 0024's banked values exactly (a reproduction of the instrument, not a verdict)")
+            return repro_boot
+
+        exact_checked = False
+
         for step in order:
             if step == "null":
                 top_rows = rows_all[n_rungs - 1]
@@ -816,6 +851,14 @@ def main() -> int:
                 rd = fit_role(step, role, recipes[role], y_all, stage, k)
                 if rd:
                     check_repro(step, k, role, rd)
+                if (not args.smoke and not exact_checked
+                        and all(f"r{kk}_{r}" in per_ex for kk in range(1, N_0024_RUNGS + 1) for r in ROLES)):
+                    exact_checked = True
+                    eq = repro_intervals_0024()["equals_0024s_banked"]
+                    print(f"[run] 0024's intervals recomputed from this run's rung 1..{N_0024_RUNGS} vectors: {eq}", flush=True)
+                    if not (eq["slope_bootstrap"] and eq["lead_at_top"]):
+                        raise NotRun(f"after the last reproduction fit ({step}), 0024's banked slope and lead intervals do not recompute exactly "
+                                     f"from this run's vectors under 0024's seed ({eq}): the instrument is not 0024's; nothing of rung 8 is fitted")
                 if step.endswith("_model") and k in blocks:
                     del blocks[k]
             if step == "null" and n_rungs in blocks and order[order.index(step) + 1].split("_")[0] != f"r{n_rungs}":
@@ -839,29 +882,8 @@ def main() -> int:
 
         def pct(a):
             return [round(float(np.percentile(a, 2.5)), 6), round(float(np.percentile(a, 97.5)), 6)]
-        # (a) 0024's intervals, reproduced: the second-decade slope over rungs 4..7 and the leads at rungs 7 and 4 under 0024's seed
-        by_role_0024 = {role: [vec(f"r{k}_{role}") for k in range(N_FIRST, N_0024_RUNGS + 1)] for role in ROLES}
-        sl24 = slope_bootstrap(by_role_0024, log2x_second_0024, cid, n_boot, boot_seed)
-        repro_boot = {"slope_bootstrap_0024": {role: {"ci95": pct(sl24[role]), "n_boot": n_boot, "seed": boot_seed, "mean": round(float(sl24[role].mean()), 6)} for role in ROLES}}
-        for a, b_ in (("model", "logistic"), ("model", "depth3_tree")):
-            d = sl24[a] - sl24[b_]
-            repro_boot["slope_bootstrap_0024"][f"{a}_minus_{b_}"] = {"ci95": pct(d), "paired": True, "share_of_resamples_with_model_ahead": round(float((d > 0).mean()), 4)}
-        repro_boot["lead_0024"] = {}
-        for k in (N_0024_RUNGS, N_FIRST):
-            for a, b_ in (("model", "logistic"), ("model", "depth3_tree")):
-                dv = paired_lead_bootstrap(vec(f"r{k}_{a}"), vec(f"r{k}_{b_}"), cid, n_boot, boot_seed)
-                lo, hi = pct(dv)
-                repro_boot["lead_0024"][f"r{k}_{a}_minus_{b_}"] = {
-                    "point": round(readings(f"r{k}_{a}")["ext_real_top1"] - readings(f"r{k}_{b_}")["ext_real_top1"], 4), "ci95": [lo, hi],
-                    "n_boot": n_boot, "seed": boot_seed, "share_of_resamples_with_model_ahead": round(float((dv > 0).mean()), 4),
-                    "reading": ("MODEL_LEADS" if lo > 0 else "LINEAR_LEADS" if hi < 0 else "NO_SEPARATION") if b_ == "logistic"
-                               else ("MODEL_LEADS" if lo > 0 else "TREE_LEADS" if hi < 0 else "NO_SEPARATION")}
-        ref_boot = P.get("reference_bootstrap_0024") or {}
-        repro_boot["equals_0024s_banked"] = {
-            "slope_bootstrap": bool(ref_boot.get("slope_bootstrap") is not None and all(repro_boot["slope_bootstrap_0024"].get(k) == v for k, v in ref_boot.get("slope_bootstrap", {}).items())),
-            "lead_at_top": bool(ref_boot.get("lead_at_top") is not None and all(repro_boot["lead_0024"].get(k) == v for k, v in ref_boot.get("lead_at_top", {}).items()))}
-        repro_boot["unit"] = ("0024's verdict intervals recomputed here from this run's vectors under 0024's bootstrap seed over the same "
-                              "scored chunks; they must equal 0024's banked values exactly (a reproduction of the instrument, not a verdict)")
+        # (a) 0024's intervals, reproduced (the same function the fit loop called before rung 8)
+        repro_boot = repro_intervals_0024()
         # (b) this run's intervals: slopes over rungs 4..8 and 1..8 with the same resamples; the fourth-doubling gain and the rung-8 leads, paired
         by_role = {role: [vec(f"r{k}_{role}") for k in range(N_FIRST, n_rungs + 1)] for role in ROLES}
         sl = slope_bootstrap(by_role, log2x_second, cid, n_boot, boot_seed)

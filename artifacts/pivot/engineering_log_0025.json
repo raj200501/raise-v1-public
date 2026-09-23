@@ -184,7 +184,8 @@
   "gate_evolution": {
     "not_yet": "the review's blocking finding changes the reader and the default control; the gate is re-run, and the full suite banked, after those fixes",
     "v1": "159 cases against the first instrument; the controls' 'concentrated' gain mode was replaced before the run by a 'mixed' mode (flips up in one half of the real rows, down in the other) because four chunks' flips leave a chunk bootstrap's 2.5th percentile above 0 in about 98 percent of resamples; controls whose lead sat inside its own interval got a lower rung-8 logistic",
-    "v1_result": "157/159 detected in the partial run; the two misses were the harness's own (a control looked for a phrase the reader words differently, and a mutation used a corpus key that does not exist); fixed and re-run in isolation: both detected (159/159). The passing default control carries 0024's banked vectors and confirms that 0024's slope and lead intervals recompute exactly from them under 0024's seed."
+    "v1_result": "157/159 detected in the partial run; the two misses were the harness's own (a control looked for a phrase the reader words differently, and a mutation used a corpus key that does not exist); fixed and re-run in isolation: both detected (159/159). The passing default control carries 0024's banked vectors and confirms that 0024's slope and lead intervals recompute exactly from them under 0024's seed.",
+    "v2": "163 cases: four added for the majority-floor pair; the six cases the fix touches re-run in isolation, all detected; the full suite has not been run on this state"
   },
   "instrument": {
     "corpus_builder": "tools/pivot/corpus_realfit3.py (pins in tools/pivot/ext_source_pins3.json, fetch by tools/pivot/fetch_ext_sources3.sh); imports corpus_realfit2.py's candidate rule, window hashing and featurisation and never copies them; --verify-pins, --build, --check, --disjoint, --probe",
@@ -208,6 +209,11 @@
     }
   },
   "pre_freeze_instrument_review": {
+    "applied_before_the_freeze": {
+      "exact_interval_check_before_rung_8": "tools/pivot/run_realcurve3.py computes 0024's slope and lead intervals with one shared function, repro_intervals_0024(), once all twenty-one reproduction fits are banked, and files NOT RUN before any rung-8 fit if they do not recompute exactly (skipped on a smoke); the post-run assembly calls the same function; the generator's stop rules name the new NOT RUN condition",
+      "launch_memory": "the generator seals launch.min_mem_available_gb 11.0 (0024's 8.0 raised) and restates the memory estimate as a peak derived from 0024's banked rung_bound RSS plus the third corpus, rung 8's block and the trees' float32 copy; the runner refuses to launch beside a corpus builder or the mutation suite as well as beside another runner",
+      "majority_floor_pair": "the reader's pairwise-distinct clause (template and generated reader) now accepts exactly the pair r7_floor_majority / r8_floor_majority and nothing else; the gate's default control banks that pair identical as the runner does, and four new cases hold it: the identical pair passes; a duplicated stratified floor, a majority floor carrying a recipe's vector, and the pair plus a third role on the same vector are each VOID (all six affected cases re-run in isolation: detected)"
+    },
     "findings_unadjudicated": [
       {
         "lens": "runner",
@@ -302,6 +308,13 @@
       "the reader's cap sentence, scope-rule sentence and floors sentence rewritten to the sealed stop rules' words, with gate cases on them",
       "the minor findings (s8 wording, cost sum, stability_seeds, uncovered VOID clauses, a lead lower bound exactly at 0) adjudicated one by one"
     ],
+    "still_open_before_the_freeze": [
+      "regenerate prereg/0025-realcurve3-4096.json from the patched generator (the committed file still seals launch 8.0 and the older stop rules and floors text) and regenerate the reader from it",
+      "re-run the runner smoke on the patched runner and recapture the fixture if its shape moved",
+      "run the corpus-and-partition and design-and-prose review lenses that did not complete, and a skeptic pass over all findings",
+      "adjudicate the remaining findings: the cap sentence when only the logistic is capped, the scope-rule and floors sentences in the reader's meaning set to the stop rules' words, s8 wording (about a third of s8 is 0024's archives' unused chunks), the cost sum, the unused smoke stability_seeds, uncovered VOID clauses, a control with a lead lower bound exactly at 0",
+      "the full mutation suite (963 cases), the counts updated from its report, tools/prereg_checks/prefreeze_0025.py PASS, then the freeze"
+    ],
     "verified_first_hand": {
       "majority_floor_duplicate_vector": "confirmed on the runner's own smoke: r7_floor_majority and r8_floor_majority bank the same per_example_sha256 (DummyClassifier most_frequent predicts one constant class, and the majority class is the same at both rungs). Found independently by the runner lens and the reader-and-gate lens. The gate's control built every floor from zeros with a per-rung phase, so it could not see this: the same class of defect as B-tree3 = D1, one floor further."
     }
@@ -339,6 +352,6 @@
   },
   "preregistration": "0025-realcurve3-4096",
   "schema": "raise-v1/engineering_log/1",
-  "status": "unfrozen; NOT READY TO FREEZE: the pre-freeze instrument review found a blocking defect (the majority-class floor banks the same vector at rungs 7 and 8, which the reader's pairwise-distinct clause would VOID); see pre_freeze_instrument_review",
+  "status": "unfrozen; the review's blocking defect is fixed in the reader, the gate and the runner; the preregistration file still has to be regenerated from the patched generator, and the items in pre_freeze_instrument_review.still_open_before_the_freeze remain before the freeze",
   "why_this_exists": "0024 read SECOND_DECADE_RISES_MODEL_LEADS: over 130 to 8232 real plaintexts the model's second-decade slope was 0.00697 per doubling (interval [0.00571, 0.00824]), the logistic's 0.00638, the tree's -0.0003; at the top rung the model led the logistic by 0.0039 with a paired interval [0.0001, 0.0077], one unit of the fourth decimal above 0; the rung-to-rung model gains over the second decade were [0.0043, 0.0064, 0.0104]. The span was 1.8016 decades, and every 0024 document says 'short of 0003's two-decade scope rule'. This run buys the one doubling that closes that gap - twelve more PyPI archives and 600 more RFCs, pinned, licensed and hashed against every chunk and every kilobyte run of the 0018 files and of 0024's own sources, nested on 0024's pool so that 0024's seven rungs recur chunk for chunk - and asks the only question the eighth point can answer: does the fourth doubling of other files still buy the record's rate, and is the boosted recipe still ahead of a hand-writable rule at sixteen times 0021's plaintexts?"
 }

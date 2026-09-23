@@ -8957,6 +8957,9 @@ def _good_realcurve3(acc=None, null_acc=None, gain_mode="even", perturb=None, ev
         for i, fr in enumerate(r25.FLOOR_ROLES):
             base = _np.zeros(n_eval + n_ext, _np.int8)
             vec[f"r{k}_{fr}"] = eval_bumped(with_real_acc(base, accs[f"r{k}_{fr}"], "even", i + k), int(round(0.19 * n_eval)) + 7 * k + i, phase=i + k)
+    # B-majority predicts one constant class; the majority label is the same at rungs 7 and 8 (the runner's smoke banks the two
+    # identical), so the control does too: the reader must accept exactly this pair (pre-freeze review, runner and reader lenses)
+    vec[f"r{n_rungs}_floor_majority"] = vec[f"r{r7}_floor_majority"].copy()
     base = _np.zeros(n_eval + n_ext, _np.int8)
     vnull = with_real_acc(base, accs["null"], "even", 5); vnull = eval_bumped(vnull, int(round(0.038 * n_eval)), phase=5)
     synth_pos = n_eval + _np.flatnonzero(_np.isin(fam_x, r25.SYNTH_FAMILIES)); vnull[synth_pos[::27]] = 1
@@ -10078,6 +10081,44 @@ def _(root):
         for k in ("ext_real_top1", "ext_real_correct", "ext_top1", "builder_eval_top1", "ext_per_family"):
             a[k]["r8_floor_feat1"] = a[k]["r8_depth3_tree"]
     return _realcurve3_void(root, _rc3_mut(m), expect_clause="bank the same per-example vector")
+
+
+@case(_RC3_G, "control-the-majority-floor-banks-the-same-vector-at-rungs-7-and-8-as-the-runner-does", "pass")
+def _(root):
+    rc, out = _realcurve3(root)
+    if rc == 0:
+        v = _rc3_verdict(root)
+        a = json.load(open(os.path.join(root, "artifacts", "pivot", "realcurve3_4096.json")))
+        if a["fits"]["r7_floor_majority"]["per_example_sha256"] != a["fits"]["r8_floor_majority"]["per_example_sha256"] or v["verdict"] == "VOID":
+            return 1, out + " !! the identical majority pair must be banked and accepted"
+    return rc, out
+
+
+def _rc3_copy_vector(a, s, src, dst):
+    s["per_example"][dst] = list(s["per_example"][src])
+    for k in ("per_example_sha256", "top1", "top1_non_gutenberg", "per_family"):
+        a["fits"][dst][k] = a["fits"][src][k]
+    a["readings"][dst] = a["readings"][src]
+    for k in ("ext_real_top1", "ext_real_correct", "ext_top1", "builder_eval_top1", "ext_per_family"):
+        a[k][dst] = a[k][src]
+
+
+@case(_RC3_G, "two-stratified-floors-banking-the-same-vector-is-VOID-only-the-majority-pair-may", "fail")
+def _(root):
+    return _realcurve3_void(root, _rc3_mut(lambda a, s: _rc3_copy_vector(a, s, "r7_floor_stratified", "r8_floor_stratified")),
+                            expect_clause="bank the same per-example vector")
+
+
+@case(_RC3_G, "a-majority-floor-banking-a-recipes-vector-is-VOID", "fail")
+def _(root):
+    return _realcurve3_void(root, _rc3_mut(lambda a, s: _rc3_copy_vector(a, s, "r7_logistic", "r7_floor_majority")),
+                            expect_clause="bank the same per-example vector")
+
+
+@case(_RC3_G, "the-majority-pair-plus-a-third-role-on-the-same-vector-is-VOID", "fail")
+def _(root):
+    return _realcurve3_void(root, _rc3_mut(lambda a, s: _rc3_copy_vector(a, s, "r7_floor_majority", "r8_floor_stratified")),
+                            expect_clause="bank the same per-example vector")
 
 
 @case(_RC3_G, "two-shift-arms-banking-the-same-vector-is-VOID", "fail")
