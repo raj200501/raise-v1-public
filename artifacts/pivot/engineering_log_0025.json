@@ -1,0 +1,344 @@
+{
+  "corpus": {
+    "build_seconds": 625.7,
+    "candidates_per_family": {
+      "c_src": 2313,
+      "pe_bin": 5429,
+      "py_src": 11727,
+      "rfc_txt": 1653,
+      "rst_doc": 1241
+    },
+    "determinism": "corpus_realfit3.py --probe built a capped slice twice in two task orders and got identical arrays; --check and --disjoint pass on the built corpus",
+    "dropped_for_a_run_shared_with_0024s_blob": {
+      "c_src": 0,
+      "pe_bin": 0,
+      "py_src": 8,
+      "rfc_txt": 31,
+      "rst_doc": 1
+    },
+    "dropped_new_chunk_duplicate_of_a_0024_chunk": {
+      "c_src": 0,
+      "pe_bin": 0,
+      "py_src": 0,
+      "rfc_txt": 0,
+      "rst_doc": 0
+    },
+    "exclusion": {
+      "hashes_sha256": "3d5cf58a8aba9523af16054b42fa1eb5f7820574e17b4c74a488098565949c64",
+      "n_distinct_chunk_hashes_of_0018_pinned_blobs": 2534,
+      "n_whole_chunks_of_0018_pinned_blobs": 2537,
+      "run_overlap": {
+        "hash": "polynomial mod 2^64, base 0x9E3779B97F4A7C15|1, H(i) = sum_k b[i+k] * base^k",
+        "n_distinct_pinned_windows": 73451492,
+        "rule": "a candidate chunk is dropped if run_windows consecutive window-byte windows aligned to its own grid, none constant (all bytes equal), each occur at ANY offset of ANY 0018 pinned blob; run_windows x window = 1024 shared bytes",
+        "run_windows": 16,
+        "window": 64
+      },
+      "run_overlap_vs_0024": "every 64-byte window at every offset of 0024's blob of the same family; a new candidate chunk is dropped if 16 consecutive aligned non-constant windows of it all occur there"
+    },
+    "n_new_chunks_with_rows": 8569,
+    "n_new_rows": 218955,
+    "nesting": "the builder reproduces 0024's candidate scan on the 0024 part of every family blob and refuses on any difference in count or dropped lists; 0024's pool positions are read back from the realfit2 npz metas and checked against 0024's manifest; the new pool positions are default_rng([20260923, family_index + 1])'s permutation of the remaining candidates; chunk ids continue 0024's per family",
+    "new_candidates_per_family": {
+      "c_src": 0,
+      "pe_bin": 0,
+      "py_src": 5946,
+      "rfc_txt": 811,
+      "rst_doc": 478
+    },
+    "new_chunks_with_rows_per_family": {
+      "c_src": 198,
+      "pe_bin": 1684,
+      "py_src": 5595,
+      "rfc_txt": 756,
+      "rst_doc": 336
+    },
+    "npz_bytes": 974287217,
+    "pool_sizes": {
+      "c_src": 386,
+      "pe_bin": 3206,
+      "py_src": 10592,
+      "rfc_txt": 1426,
+      "rst_doc": 638
+    },
+    "pool_sizes_0024": {
+      "c_src": 185,
+      "pe_bin": 1501,
+      "py_src": 4948,
+      "rfc_txt": 670,
+      "rst_doc": 302
+    },
+    "pre_freeze_catches_in_the_builder": [
+      "the disjoint proof applied the new-files run rule to every built chunk and flagged the 43 smoke chunks cut from 0024's frame (each a region of 0024's blob, 512 windows shared); the proof now applies the build's own rule - new files against 0024's blob, frame chunks against 0024's pool positions - and prints the two counts"
+    ],
+    "rfc_sampler": {
+      "frame": "every RFC the index lists, minus 0018's and 0024's pinned RFCs and every RFC related to one of them by an Obsoletes, Obsoleted by, Updates or Updated by annotation in either direction; seed 20260923; the index as served is hashed in docs/compliance/sources/MANIFEST.json",
+      "validation": "the 0024 sampler's four-digit patterns skipped RFCs 1 to 999 and five wrapped annotations; the 0025 sampler parses any RFC number and joins wrapped lines, and was validated by re-deriving 0024's banked 600 from 0024's frame under 0024's seed: the residual differences are explained by the parser defect and filed as CORRECTIONS.md 2026-09-23 (the drawn sample and 0024's sealed corpus are unchanged; 0024's frame is now described as it was)"
+    },
+    "run_overlap_rules": "every new candidate is dropped on a 1024-byte run shared with any 0018 pinned blob at any offset (0024's rule) and, new files only, on a run shared with 0024's same-family blob (so a new archive vendoring a 0024 project adds no 0024 bytes); a chunk cut from 0024's frame IS a region of 0024's blob and is subject to the first rule and to not being a 0024 pool position",
+    "sources": {
+      "archives": 12,
+      "licences": "docs/compliance/EXT_SOURCES3.md",
+      "per_family_composition_of_the_fourth_doubling": {
+        "c_src": {
+          "from_0024_archives_unused": 175,
+          "from_0024_pool": 17,
+          "from_new_files": 0,
+          "n": 192
+        },
+        "pe_bin": {
+          "from_0024_archives_unused": 1553,
+          "from_0024_pool": 71,
+          "from_new_files": 0,
+          "n": 1624
+        },
+        "py_src": {
+          "from_0024_archives_unused": 627,
+          "from_0024_pool": 223,
+          "from_new_files": 4526,
+          "n": 5376
+        },
+        "rfc_txt": {
+          "from_0024_archives_unused": 127,
+          "from_0024_pool": 38,
+          "from_new_files": 555,
+          "n": 720
+        },
+        "rst_doc": {
+          "from_0024_archives_unused": 151,
+          "from_0024_pool": 22,
+          "from_new_files": 147,
+          "n": 320
+        }
+      },
+      "rfc_files": 600,
+      "share_of_the_fourth_doubling_from_new_files": {
+        "c_src": 0.0,
+        "pe_bin": 0.0,
+        "py_src": 0.84,
+        "rfc_txt": 0.77,
+        "rst_doc": 0.46
+      },
+      "why_these": "the same five real families, from projects pinned by neither 0018 nor 0024: twelve more PyPI source distributions (their .py feed py_src and their .rst feed rst_doc; vendored copies of other projects under _vendor, vendored or ext directories are excluded by the member rule, and every new chunk is also dropped if it shares a run of 1024 bytes with 0024's blob of the same family or with any 0018 pinned file) and 600 more RFC texts drawn by 0024's rule from the RFC Editor's index as served on the fetch date, excluding every RFC pinned by 0018 or 0024 and every RFC related to a 0018-pinned RFC by an Obsoletes, Obsoleted by, Updates or Updated by annotation in either direction. c_src, pe_bin and rst_doc need no new project: their fourth doubling comes from 0024's unused candidates of 0024's archives."
+    },
+    "what": "a third real-content fit corpus - the NEW pool positions of a pool nested on 0024's (0024's pool in 0024's order as its prefix) - built pre-freeze by tools/pivot/corpus_realfit3.py from twelve new pinned PyPI archives, 600 new RFC texts and the candidates of 0024's own archives that 0024's pool did not use, sealed by array hash; nothing under data/pivot is committed",
+    "why_no_new_c_or_windows_sources": "the C and Windows families' fourth doubling is served entirely by 0024's own archives' unused candidates (c_src 2313 candidate chunks against 386 needed, pe_bin 5429 against 3206); fetching more of either would have added sources without changing what the doubling can be, and codeload.github.com still answers 403 through the proxy"
+  },
+  "cost": {
+    "checkpoints": "artifacts/pivot/realcurve3_4096_ckpt; resume by relaunching the identical command",
+    "corpus_build_seconds_banked": 625.7,
+    "estimate_stated_in_advance": "a range, from banked numbers. The twenty-one reproductions of rungs 1..7 cost 0024 5374.2 s and its shift arm 353.2 s (a resumed run pays them again: they are fits, not readings); the floors are seconds each (about 60 s in all). Rung 8: the model's per-iteration seconds grew [5.4, 6.64, 9.753, 15.376] over rungs 4..7 ([62, 72, 117, 153] iterations), so rung 8 at 2.0 times rung 7's rows costs about 24.6 to 30.7 s per iteration; its iteration count is projected at [177, 248] against the cap of 250, so 4354 to 7675 s (the cap-bound). The logistic about 892 to 1119 s (its cap of 1000), the tree about 70 s, the null on the top rung about 446 s, the new shift arm about 0024's shift arm (353.2 s). In all 11963 to 15511 s of fits (3.3 to 4.3 hours) on this machine at three threads, plus the scoring-set materialisation, the row-identity scan over three fit corpora and 37 scorings; rung 8's model fit is one uncheckpointable stretch of up to 7675 s. COULD NOT VERIFY until run - the banked seconds are the measurement.",
+    "fit_seconds_0024_banked": {
+      "null": 223.1,
+      "r1_depth3_tree": 0.4,
+      "r1_logistic": 3.3,
+      "r1_model": 25.9,
+      "r2_depth3_tree": 0.8,
+      "r2_logistic": 11.4,
+      "r2_model": 60.7,
+      "r3_depth3_tree": 1.5,
+      "r3_logistic": 36.5,
+      "r3_model": 156.7,
+      "r4_depth3_tree": 3.2,
+      "r4_logistic": 56.2,
+      "r4_model": 334.8,
+      "r5_depth3_tree": 7.6,
+      "r5_logistic": 104.5,
+      "r5_model": 478.1,
+      "r6_depth3_tree": 16.6,
+      "r6_logistic": 175.5,
+      "r6_model": 1141.1,
+      "r7_depth3_tree": 35.2,
+      "r7_logistic": 371.6,
+      "r7_model": 2352.6,
+      "s4_depth3_tree": 2.9,
+      "s4_logistic": 63.5,
+      "s4_model": 286.8
+    },
+    "memory": "from 0024's banked heartbeats: anonymous RSS at the model fit was {4: 3.63, 5: 4.09, 6: 4.5, 7: 5.72} GB against float64 blocks of {4: 0.23, 5: 0.47, 6: 0.93, 7: 1.87} GB (rungs 4..7), a straight line of 3.41 + 1.23 x block; rung 8's block is 3.73 GB and the third fit corpus adds 0.97 GB in float32, so about 9.0 GB anonymous at the top rung's fit against the sealed memory_kill_gb of 13.0 on a 15 GB machine; COULD NOT VERIFY until run",
+    "what_a_kill_between_scoring_and_banking_does": "run_recipe_search.run_fit scores a fit, refills the block if it was standardised, and only then writes the checkpoint and the 'completed' event; a kill inside that window leaves no trace, the relaunch refits and rescores the role, and the reader's 'exactly one completion' check cannot see the first scoring (inherited from 0023's runner; stated rather than fixed, because the shared runner is behind frozen readers).",
+    "what_the_smoke_touches": "the smoke fits on scratchpad corpora and writes to the scratchpad only, but it hashes the sealed builder cache and scores on 0003's sealed evaluation rows (as 0023's did); the disclosure counts it."
+  },
+  "design_decisions": {
+    "b_tree3_is_d1": "0021's fourth floor, B-tree3, is D1 (DecisionTreeClassifier(max_depth=3, random_state=0)) under another name; fitted twice on the same rung it banks the identical per-example vector twice and the reader's pairwise-distinct clause VOIDs the run. Found while writing the gate's control (the recipe comparison), before the freeze: three floors are refitted, the tree floor is the rung's D1 reading, the order has 37 fits, and the gate keeps a case that banks the tree's vector under a floor's name and expects VOID",
+    "caps_never_raised": "the iteration caps are part of the sealed recipe; a capped role at rung 8 or 7 is named in the same sentence as the gain and the lead, the gain is read as is (never re-parameterised) and the flags gain_is_a_recipe_reading and lead_at_top_is_a_recipe_comparison say what the reading is",
+    "expected_outcome": "On the fourth doubling: FOURTH_DOUBLING_RISES if the gain resembles 0024's last two second-decade gains (0.0064, 0.0104), FOURTH_DOUBLING_BELOW_RATE if it resembles the first (0.0043); the paired half-width of a one-doubling model gain over the 1488 scored real chunks was 0.0035 to 0.0036 on 0024's banked vectors, so NOT_RESOLVED needs a gain below about 0.0035 and FALLS a fall of that size. For RISES: the gains grew over 0024's second decade and py_src, the largest family, gets its fourth doubling mostly from new projects, as its second decade did. Against: the fourth doubling's Python and RFC files come from projects other than rungs 5..7's, every reading the record has of content the model did not see is flat (0015, 0018/0019), and the model's iteration count is projected at [177, 248] against its cap of 250, which if reached biases the gain downward. On the lead: NO_SEPARATION at least as likely as MODEL_LEADS - 0024's gap of 0.0039 at rung 7 sat against a paired half-width of 0.0038, the rung-4 reading was NO_SEPARATION, and the second-decade slope difference's interval [-0.00102, 0.00231] includes 0; LINEAR_LEADS needs the gap to reverse by about 0.0077. Either reading on either part is published at the same size in the same places; the verdict string names both.",
+    "no_replicate": "a second nesting of rung 8 would double the fourth doubling's pool and its fits; the fit-side variance of one doubling is named as what this does not cover and the new shift arm against 0024's is the one between-draw comparison banked",
+    "no_slope_is_a_clause": "seven of the eight points are banked: with rung 8 equal to rung 7 the eight-rung OLS slope is 0.006237 per doubling, above the bar; it falls below 0.005 only if rung 8 reads below 0.1256, a fall of 0.0148 from rung 7, larger than any move in the record; a clause that cannot fail is decoration (OPERATING_RULES 4), so the two-decade slope is a flag and the fourth doubling alone is the clause",
+    "one_doubling_nested_on_0024s_pool": "Rung 8 holds rung 7 plus, per family, the next n_f x 8 chunks with rows of the concatenated pool (0024's pool in 0024's order, then 0025's pool positions in order), so every rung holds exactly 2^d times rung 4's plaintexts of every family and rungs 1..7 are 0024's chunk for chunk. One doubling, not more, because a fifth would need another 16 x n_f plaintexts per family (about 350 MB of Python source alone) and a float64 block of about 7.5 GB on a 15 GB machine; and because one doubling is what closes the two-decade span. The fourth doubling's rows are permuted whole by a sealed stream so that M4's last-10 percent validation split is a random tenth; rungs 1..7 keep 0024's order.",
+    "reproduction_before_any_new_plaintext": "null on the top rung; rung 7 first (three of 0021's floors refitted, then 0024's three roles: the anchor the fourth-doubling gain and the lead read against, so a failed reproduction of it is seen before anything else is spent); rung 4 (0021's block), rungs 1, 2, 3 (0023's), rungs 5 and 6 (0024's) - every reproduction before any new plaintext is fitted; rung 8 (the floors, then the tree, the logistic, the model); then 0024's shift arm (reproduced) and the new one, the model last within each",
+    "seed_stability": "twenty other bootstrap seeds re-read the two verdict intervals; the counts are flags, quoted beside any reading whose interval bound is within 0.0005 of 0 (0024's rung-7 lead had a 2.5th percentile of 0.0001)",
+    "seeds": {
+      "seed": "20260825: everything 0023 sealed (the grouped split, the fit block's row permutation, the per-family chunk permutations of rungs 1..4, the recipes' own seed)",
+      "seed2": "20260917: everything 0024 sealed (0024's pool permutation in the corpus builder, rungs 5..7's row order, 0024's shift arm's row order) and the bootstrap of every verdict interval here (so that 0024's intervals reproduce exactly)",
+      "seed3": "20260923: the new pool positions' permutation in tools/pivot/corpus_realfit3.py ([seed3, family_index + 1]), rung 8's row order ([seed3, 100 + 8]), the new shift arm's row order ([seed3, 150]) and the null control's label permutation ([seed3, 200])"
+    },
+    "the_clause_is_the_fourth_doubling": "rung 8 minus rung 7 for the model on the real-family rows, with the 95 percent paired cluster-bootstrap interval over the scored real chunks (0024's resamples: the same generator construction, seed and draw order): the interval's 97.5th percentile below 0 is FOURTH_DOUBLING_FALLS; else a gain >= 0.005 with the 2.5th percentile above 0 is FOURTH_DOUBLING_RISES; else a 2.5th percentile above 0 is FOURTH_DOUBLING_BELOW_RATE; otherwise FOURTH_DOUBLING_NOT_RESOLVED (never 'flat', never 'equal'). The interval covers the resampling of the 1488 scored real chunks of five files only, not the draw of rung 8's plaintexts nor the fit side. If the model at rung 8 or at rung 7 is at its iteration cap, the reading is still read by the rule as is (the cap is part of the sealed recipe and is never raised), the verdict string is still emitted, every document that states it states '(the model at its iteration cap at rung N)' in the same sentence, and the gain is not quoted as a recipe reading; a BELOW_RATE, NOT_RESOLVED or FALLS with the model at cap is published as such. The bar is 0023's and 0024's 0.005 per doubling restated as a one-doubling gain, a design choice made before any rung-8 number exists: 'the record's rate' in this document always means 0.005 per doubling. 0.005 over one doubling is 192 rows of 38452. Each of the four readings is a legitimate outcome published at the same size; no reading is a pass.",
+    "the_floors": "0021's four trivial-baseline recipes (majority class, stratified prior, one thresholded feature, depth-3 tree): B-majority, B-stratified and B-feat1 verbatim, refitted on rung 7 and on rung 8 and scored on the same rows; B-tree3 is D1 (DecisionTreeClassifier(max_depth=3, random_state=0)), so the tree floor at a rung is the curve's depth3_tree reading there, fitted once (fitted twice it would bank the same vector under two names and the reader's pairwise-distinct clause would VOID the run; found at the pre-freeze gate). 0021's clause - the best floor plus 0.05 - is banked at both rungs as a flag with no 'optimistic' caveat, beside the variant with the standardised logistic among the floors (OPERATING_RULES 4a names logistic regression). Pre-committed sentences: 'clears' reads '0021's margin re-applied at sixteen times 0021's plaintexts, informational, revising nothing of 0021's verdict'; 'does not clear' reads 'at sixteen times 0021's plaintexts the boosted recipe is still within 0.05 of the best rule a person could write out'.",
+    "the_lead_rule_is_in_the_verdict_string": "the 95 percent paired cluster-bootstrap interval of model minus logistic real-family top-1 at rung 8 (the top rung), over the scored real chunks with the slope bootstrap's own resamples: entirely above 0 is MODEL_LEADS, entirely below 0 is LINEAR_LEADS, otherwise NO_SEPARATION (never 'equal'); the verdict string carries it as a suffix. If the model or the logistic at rung 8 (the top rung) is at its iteration cap, the suffix is still read by the rule, but every document that states it states '(the <role> at its iteration cap at rung 8 (the top rung))' in the same sentence and the lead is not quoted as a recipe comparison, exactly as the difference flag is not. This is not a pass/fail clause: each of the three readings is a legitimate outcome and the verdict string carries whichever the interval gives, beside the gain part. No document quotes the gain part without the lead part.",
+    "the_new_shift_arm": "rung 5's new plaintexts alone - per family the first n_f chunks with rows of 0024's pool, none of 0021's block - with rows permuted by np.random.default_rng([20260917, 150]); informational: read beside rung 4 (the same plaintext count, the scored files' own chunks) as a direct reading of what other files of the same families buy for the original files (0024's, reproduced: its readings are reproduction references). the top rung's new plaintexts from 0025's corpus alone - per family the first n_f chunks with rows of the top rung's added chunks whose id is above 0024's - with rows permuted by np.random.default_rng([20260923, 150]); informational: read beside rung 4, rung 7, rung 8 and 0024's shift arm as a direct reading of what the fourth doubling's files buy alone for the original files at 0021's plaintext count. 1029 plaintexts, 26168 rows; per-family origin {'c_src': {'from_0024_pool': 0, 'from_0024_archives_unused': 24, 'from_new_files': 0, 'n': 24}, 'pe_bin': {'from_0024_pool': 0, 'from_0024_archives_unused': 203, 'from_new_files': 0, 'n': 203}, 'py_src': {'from_0024_pool': 0, 'from_0024_archives_unused': 92, 'from_new_files': 580, 'n': 672}, 'rfc_txt': {'from_0024_pool': 0, 'from_0024_archives_unused': 20, 'from_new_files': 70, 'n': 90}, 'rst_doc': {'from_0024_pool': 0, 'from_0024_archives_unused': 16, 'from_new_files': 24, 'n': 40}}. Its readings, its differences from rungs 4, 7 and 8 and from 0024's shift arm (the between-draw comparison of two draws of other files at the same count, with a paired interval) are banked as flags.",
+    "why_0024s_intervals_must_reproduce_exactly": "0024's bootstrap seed is sealed for every verdict interval here and 0024's banked slope and lead intervals must recompute exactly from this run's rung 1..7 vectors: the instrument that reads the fourth doubling is proven to be 0024's before it reads anything new (a drift of four rows in rung 7's vector, within the point tolerance, is caught by this clause; the gate has that control)",
+    "why_rung_7_has_the_tighter_tolerance": "rung 7 is the anchor the gain and the lead read against; 0.0005 is one tenth of the point tolerance and twenty rows of the 38452, against a banked determinism of 0.0 over fifteen reproductions",
+    "why_the_lead_stays_a_verdict_part": "0024's reason stands (a flag can be left unquoted, a verdict suffix cannot); the review's proposal to demote the lead to a flag was declined for that reason and the twelve-string verdict keeps it"
+  },
+  "gate_evolution": {
+    "not_yet": "the review's blocking finding changes the reader and the default control; the gate is re-run, and the full suite banked, after those fixes",
+    "v1": "159 cases against the first instrument; the controls' 'concentrated' gain mode was replaced before the run by a 'mixed' mode (flips up in one half of the real rows, down in the other) because four chunks' flips leave a chunk bootstrap's 2.5th percentile above 0 in about 98 percent of resamples; controls whose lead sat inside its own interval got a lower rung-8 logistic",
+    "v1_result": "157/159 detected in the partial run; the two misses were the harness's own (a control looked for a phrase the reader words differently, and a mutation used a corpus key that does not exist); fixed and re-run in isolation: both detected (159/159). The passing default control carries 0024's banked vectors and confirms that 0024's slope and lead intervals recompute exactly from them under 0024's seed."
+  },
+  "instrument": {
+    "corpus_builder": "tools/pivot/corpus_realfit3.py (pins in tools/pivot/ext_source_pins3.json, fetch by tools/pivot/fetch_ext_sources3.sh); imports corpus_realfit2.py's candidate rule, window hashing and featurisation and never copies them; --verify-pins, --build, --check, --disjoint, --probe",
+    "fixture": "tests/fixtures/realcurve3_runner_shape.json, captured from the runner's smoke run",
+    "gate": "tests/mutation_test.py realcurve3_4096: the control is built from the fixture's key set with the reader's sealed values; rungs 1..7 and 0024's shift arm carry 0024's BANKED per-example vectors verbatim (the exact-reproduction clause admits nothing else), rung 8, the new arm, the floors and the null are derived by flipping rows at a deterministic spread; curves, floors, bootstraps, gains, leads and the stability counts computed with the runners' own functions; controls for all twelve verdict strings and for the exactness clause",
+    "pre_freeze_check": "tools/prereg_checks/prefreeze_0025.py",
+    "preregistration_generator": "make_prereg_0025.py (scratchpad): every sealed value read from 0021's, 0023's and 0024's banked artifacts, the corpus manifests and the pins, or computed by calling the runner's own functions on the data",
+    "reader": "tools/readers/realcurve3_4096_verdict.py, generated from a template by a generator; every literal from the sealed file or a banked artifact; slope_bootstrap, ols_slope and paired_lead_bootstrap copied from the runners statement for statement (the pre-freeze check compares the ASTs)",
+    "runner": "tools/pivot/run_realcurve3.py (single stage; rung_partition3, sealed_order, gain_reading are module-level so the generator, the check and the gate call them; imports run_realcurve2.py's rung_partition2 and paired_lead_bootstrap and run_realcurve.py's ols_slope and slope_bootstrap); refusal and NOT RUN paths as 0024's",
+    "smoke": {
+      "fits": 37,
+      "gain_reading": "FOURTH_DOUBLING_NOT_RESOLVED",
+      "lead_at_top": "NO_SEPARATION",
+      "model_fourth_doubling_gain": 0.0077,
+      "note": "scratchpad corpora only (0023's 16-per-family smoke fit corpus, 0024's 126-per-family smoke of the second-decade corpus rebuilt hash for hash, and a 128-per-family smoke of the new corpus nested on it); the smoke's reproductions are of nothing, so its reproduction and exactness readings are false by construction and the reader VOIDs it by design",
+      "reproduction_bootstrap_0024_exact_on_the_smoke": {
+        "lead_at_top": false,
+        "slope_bootstrap": false
+      },
+      "wall_seconds": 2867.9
+    }
+  },
+  "pre_freeze_instrument_review": {
+    "findings_unadjudicated": [
+      {
+        "lens": "runner",
+        "proposed_change": "In the reader's distinct clause (and the reader template), exempt the same-floor pair across the two rungs. The narrowest version: compute dup over ORDER without r8_floor_majority, then check separately that r8_floor_majority's vector differs from every non-floor role. Better still, require its vector to equal (ys == its record's constant prediction). Add a gate control built from the runner's real shape, with r7_floor_majority and r8_floor_majority identical, that must PASS, and keep a mutation that banks a recipe's vector under a floor's name and expects VOID. Update design.floors and the englog so they name this second identical-vector case beside B-tree3.",
+        "severity": "blocking",
+        "title": "B-majority refitted at rungs 7 and 8 banks the identical per-example vector, so the reader's pairwise-distinct clause VOIDs every honest run"
+      },
+      {
+        "lens": "runner",
+        "proposed_change": "Set scope.curve.protocol.launch.min_mem_available_gb to 11.0, as review finding 21 proposed. Restate cost.memory as about 10.2 GB anonymous peak at rung 8's depth3_tree and floor_feat1, built from heartbeat maxima with the trees' float32 copy counted. Widen the runner's alive-process refusal to any python whose argv contains 'tools/pivot/' or 'tests/mutation_test.py', or seal in the invocation block that the run is launched alone in the cgroup. Optionally, have environment() resolve the process's own cgroup from /proc/self/cgroup so launch_environment banks the real 14.35 GB limit.",
+        "severity": "major",
+        "title": "The launch memory floor (8.0 GB) is below the run's own peak, and the sealed memory estimate (9.0 GB) understates the peak at rung 8 (about 10.2 GB anonymous)"
+      },
+      {
+        "lens": "runner",
+        "proposed_change": "Seal 0024's hash of the real-row sub-vector for r4..r7 (or the full per_example_sha256 for r1..r7 and s4) in the protocol. In check_repro, raise NotRun on a mismatch for those rungs, and add that condition to the stop rules' NOT RUN list. Alternatively, keep the code and correct the three passages so they say the exactness is checked after all fits and is a VOID.",
+        "severity": "minor",
+        "title": "The runner only checks reproduction within tolerance, while the published prose says the exact interval reproduction happens before rung 8"
+      },
+      {
+        "lens": "runner",
+        "proposed_change": "Reword those strings to 'rung 8's plaintexts from 0025's corpus alone (new projects for part of py_src, rfc_txt and rst_doc; 0024's archives' unused chunks for c_src and pe_bin)', which is how the runner's banked s8 'rule' and 'note' already put it.",
+        "severity": "minor",
+        "title": "Runner comments and the sealed rival_explanations call s8 'the new files alone', but a third of its plaintexts are 0024's archives' unused chunks"
+      },
+      {
+        "lens": "runner",
+        "proposed_change": "State 11903 to 15451 s, or say the floors are about 60 s per rung and keep 120 s in the sum.",
+        "severity": "minor",
+        "title": "The stated cost total is 60 s more than its own components sum to"
+      },
+      {
+        "lens": "runner",
+        "proposed_change": "Change 'one fifth' to 'one tenth'.",
+        "severity": "minor",
+        "title": "Engineering-log prose calls rung 7's tolerance 'one fifth of the point tolerance'; it is one tenth"
+      },
+      {
+        "lens": "runner",
+        "proposed_change": "Read int(P['stability_seeds']) and refuse a real run if it is not 20, or drop stability_seeds from the smoke block.",
+        "severity": "minor",
+        "title": "The runner ignores P['stability_seeds']; the smoke block's stability_seeds 3 is dead"
+      },
+      {
+        "lens": "reader-gate",
+        "proposed_change": "Reader: in the duplicate check, exempt a group made only of the same floor recipe at rungs 7 and 8. At minimum this is {r7_floor_majority, r8_floor_majority}; preferably also any same-recipe r7/r8 pair of B-feat1 or D1. Bank the exemption as a flag, e.g. flags.identical_vectors_across_rungs_7_and_8. Prereg: add one sentence saying B-majority is the constant class-21 predictor at both rungs (8232/210751 and 16463/421015), so its two vectors are identical by construction. Gate: in _good_realcurve3 set vec['r8_floor_majority'] = vec['r7_floor_majority'], as the runner writes it. Keep case 10070 (a floor banking a non-floor's vector is VOID), and add one where r8_floor_majority equals r8_depth3_tree and must VOID. Regenerate the reader afterwards.",
+        "severity": "blocking",
+        "title": "The two majority floors at rungs 7 and 8 bank the same per-example vector, so the pairwise-distinct clause VOIDs an honest run. The gate's control makes them distinct."
+      },
+      {
+        "lens": "reader-gate",
+        "proposed_change": "Compute the gain's cap from the model alone: capped_gain = [n for n in (f'r{R7}_model', f'r{TOPK}_model') if n in capped]; gain_is_a_recipe_reading = not capped_gain. Emit the gain parenthetical as f'(the model at its iteration cap at rung {int rung})' and the lead's as f'(the {role} at its iteration cap at rung {N_RUNGS} (the top rung))'. Gate: change 9407 to expect gain_is_a_recipe_reading True for a capped r7_logistic. Add a control with r8_logistic at 1000: the lead flag is False, the gain flag is True, and there is no cap note in the gain sentence. Add a control with r8_model at 249 and no cap text. In 9390, assert the sealed parenthetical verbatim. Mirror the fix in evidence_page.py.",
+        "severity": "major",
+        "title": "The gain's cap flag and sentence fire when the logistic, not the model, is capped. The wording is not the sealed parenthetical, and the gate asserts the wrong behaviour."
+      },
+      {
+        "lens": "reader-gate",
+        "proposed_change": "In both reader strings, replace the phrase with the prereg's sealed wording: 'the span is the two decades 0003's rule asked of the manufactured curve; the rule's one-corpus, one-seed terms are not met by this curve, whose first decade is the scored files' own chunks'. Add a gate assertion in the default control that the meaning carries this wording. Fix the evidence-page sentence the same way.",
+        "severity": "major",
+        "title": "The reader says the span 'satisfies 0003's two-decade scope rule by construction' without the qualification the prereg requires"
+      },
+      {
+        "lens": "reader-gate",
+        "proposed_change": "Emit the sealed sentence for the outcome verbatim, with the numbers and the needed_with_logistic_as_floor reading in the same sentence. In 9437-9446, and in a 'clears' control, assert the sealed sentences.",
+        "severity": "major",
+        "title": "The floors sentence in the verdict is not the preregistration's pre-committed sentence, and the gate checks the reader's own words"
+      },
+      {
+        "lens": "reader-gate",
+        "proposed_change": "Use the sealed phrases verbatim ('a rise below the record's rate'; 'whether the fourth doubling bought anything is not resolved by the scored chunks at this size'). Add the per-family origin clause from PARTITION['rungs'][7]['added_composition_per_family'] and the model's per-family gains to the gain sentence.",
+        "severity": "minor",
+        "title": "Other verdict-meaning wording drifts from the stop rules"
+      },
+      {
+        "lens": "reader-gate",
+        "proposed_change": "Give 9543 expect_clause='reproduction: reproduction_0024 or reference_0024' and forge the banked field without perturbing r7. Add single-field cases for the ungated clauses listed. Make 10414 require 'reader: artifact of unexpected shape' by writing an artifact that is a JSON list. Set is_a_transfer_reading and revises_* to False on the exception path. Delete or comment the dead clauses.",
+        "severity": "minor",
+        "title": "Many VOID clauses have no gate case, one case cannot fail, some clauses are dead, and the exception path is never exercised"
+      },
+      {
+        "lens": "reader-gate",
+        "proposed_change": "Add a control in which r8_logistic's real-family rows equal r8_model's, differing only in the evaluation rows so the vectors stay distinct. This gives lead ci [0.0, 0.0]; expect FOURTH_DOUBLING_RISES_NO_SEPARATION.",
+        "severity": "minor",
+        "title": "No control covers a lead interval whose lower bound is exactly 0, an outcome the smoke actually produced"
+      }
+    ],
+    "method": "a four-lens adversarial review of the unfrozen instrument (corpus and partition; runner; reader and gate; design and prose), each finding to be refuted by independent skeptics. The review's session hit its usage limit: the runner and reader-and-gate lenses returned findings, the corpus-and-partition and design-and-prose lenses did not run to completion, and no skeptic ran. The findings below are therefore unrefuted and not yet adjudicated; the two missing lenses must run before the freeze.",
+    "planned_fixes_before_the_freeze": [
+      "the reader's pairwise-distinct clause exempts exactly the pair r7_floor_majority / r8_floor_majority (which must still differ from every other role), the default gate control banks that pair identical as the runner does, and mutations keep a floor banking a recipe's vector VOID and a duplicated stratified or feat1 floor VOID",
+      "launch.min_mem_available_gb raised to 11.0 and the memory estimate restated from heartbeat maxima with the trees' float32 copy (about 10.2 GB at rung 8); the alive-process refusal widened to the corpus builders and the mutation suite",
+      "the runner checks 0024's intervals for exact reproduction after the last reproduction fit and files NOT RUN before rung 8 if they do not reproduce (making the in-flight prose true), skipped on a smoke",
+      "the reader's cap sentence, scope-rule sentence and floors sentence rewritten to the sealed stop rules' words, with gate cases on them",
+      "the minor findings (s8 wording, cost sum, stability_seeds, uncovered VOID clauses, a lead lower bound exactly at 0) adjudicated one by one"
+    ],
+    "verified_first_hand": {
+      "majority_floor_duplicate_vector": "confirmed on the runner's own smoke: r7_floor_majority and r8_floor_majority bank the same per_example_sha256 (DummyClassifier most_frequent predicts one constant class, and the majority class is the same at both rungs). Found independently by the runner lens and the reader-and-gate lens. The gate's control built every floor from zeros with a per-rung phase, so it could not see this: the same class of defect as B-tree3 = D1, one floor further."
+    }
+  },
+  "pre_freeze_review": {
+    "adopted": {
+      "diligence": [
+        "the two-decade span stated with the scope-rule caveat in every place ('one-corpus, one-seed terms are not met by this curve')",
+        "forward pointers pre-committed for the eight places that say 'short of 0003's two-decade scope rule' and for 'keep buying ... through 8232 plaintexts'",
+        "the floors refitted at rungs 7 and 8 so 0021's clause is banked without the 'optimistic' caveat, both variants",
+        "the fourth doubling's composition per family sealed and stated in every document (new projects for py_src and rfc_txt, other chunks of 0024's projects for c_src and pe_bin, a mixture for rst_doc)",
+        "the caps named in the sentence, never raised",
+        "a per-family gain flagged as the noisiest number (c_src adds 192 plaintexts)"
+      ],
+      "engineer": [
+        "the candidate scan runs two passes over one seen-set so a byte-identical collision is charged to the new chunk; the 0024 part must reproduce 0024's candidates and dropped lists or the build refuses",
+        "vendored directories excluded from the new archives",
+        "the pool size per family carries headroom and the shortfall refuses"
+      ],
+      "statistician": [
+        "the eight-rung slope clause dropped: seven of eight points are banked, so it could not fail short of a collapse (recomputed: with rung 8 flat at rung 7 the slope stays 0.0062, the bar fails only below about 0.12x); the verdict's curve part is the fourth doubling alone, read four ways",
+        "the gain's reading rule written from 0024's banked paired half-widths (0.0034 to 0.0036 over the scored chunks), with NOT_RESOLVED distinct from BELOW_RATE and FALLS",
+        "the sensitivity gain with rung 7 at 0024's banked reading banked as a flag, and rung 7's tolerance tightened to 0.0005",
+        "0024's seed sealed for every verdict interval so 0024's intervals reproduce exactly (a reproduction of the instrument, checked as a validity clause)",
+        "a seed-stability count banked for the two verdict intervals",
+        "the lead read at rung 8 by 0024's rule, not re-read at rung 7 under a new seed (rung 7's is reproduced exactly)"
+      ]
+    },
+    "declined": {
+      "a_second_seed_for_rung_8": "doubles the fourth doubling's fits on a 15 GB machine; named as what this does not cover, with the between-draw shift-arm comparison as the one banked reading of draw-to-draw variation",
+      "a_verdict_slope_over_the_second_decade_4_to_8": "four of its five points are banked; the same objection as the eight-rung slope, in smaller form; banked as a flag with its interval",
+      "demoting_the_lead_to_a_flag": "0024's reason stands: a flag can be left unquoted, a verdict suffix cannot"
+    },
+    "method": "an adversarial workflow on the design brief before any instrument was frozen: a statistician's lens (nine findings) and a diligence lens (fourteen), an engineer's lens on the corpus mechanics, each finding refuted twice by independent agents that recomputed the numbers from the banked artifacts; every confirmed finding adopted or declined with a reason, then the instrument built and the gate written; two further defects found by the author's own pre-freeze gate work (the B-tree3/D1 duplicate vector, the disjoint proof's rule)"
+  },
+  "preregistration": "0025-realcurve3-4096",
+  "schema": "raise-v1/engineering_log/1",
+  "status": "unfrozen; NOT READY TO FREEZE: the pre-freeze instrument review found a blocking defect (the majority-class floor banks the same vector at rungs 7 and 8, which the reader's pairwise-distinct clause would VOID); see pre_freeze_instrument_review",
+  "why_this_exists": "0024 read SECOND_DECADE_RISES_MODEL_LEADS: over 130 to 8232 real plaintexts the model's second-decade slope was 0.00697 per doubling (interval [0.00571, 0.00824]), the logistic's 0.00638, the tree's -0.0003; at the top rung the model led the logistic by 0.0039 with a paired interval [0.0001, 0.0077], one unit of the fourth decimal above 0; the rung-to-rung model gains over the second decade were [0.0043, 0.0064, 0.0104]. The span was 1.8016 decades, and every 0024 document says 'short of 0003's two-decade scope rule'. This run buys the one doubling that closes that gap - twelve more PyPI archives and 600 more RFCs, pinned, licensed and hashed against every chunk and every kilobyte run of the 0018 files and of 0024's own sources, nested on 0024's pool so that 0024's seven rungs recur chunk for chunk - and asks the only question the eighth point can answer: does the fourth doubling of other files still buy the record's rate, and is the boosted recipe still ahead of a hand-writable rule at sixteen times 0021's plaintexts?"
+}

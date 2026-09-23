@@ -8804,6 +8804,7 @@ def _(root):
 _RC3_SHAPE = os.path.join(REPO, "tests", "fixtures", "realcurve3_runner_shape.json")
 _RC3_SCORES_0024 = os.path.join(REPO, "artifacts", "pivot", "realcurve2_4096_scores.json")
 _RC3_MEM = {}
+_RC3_MIXED = 1600   # rows flipped each way in a 'mixed' control: a paired chunk sd of about 0.0022 on the real-family rows
 
 
 def _rc3_reader():
@@ -8865,8 +8866,9 @@ def _good_realcurve3(acc=None, null_acc=None, gain_mode="even", perturb=None, ev
 
     acc overrides a synthetic role's accuracy on the real-family rows (keys as in _RC3_ACC); null_acc the null's.
     gain_mode 'even' spreads rung 8's flips over the real rows in order (every chunk gets its share, so the paired interval
-    is narrow and the chunks agree on the direction); 'concentrated' puts them into the first chunks of the row order, so
-    the same point gain has a paired interval that reaches 0. perturb={name: n} flips n wrong real rows of a 0024 vector
+    is narrow and the chunks agree on the direction); 'mixed' makes the same net change from _RC3_MIXED rows flipped up in
+    one half of the real rows and as many (plus the net) flipped down in the other, so the chunks disagree and the same
+    point gain has a paired interval that straddles 0. perturb={name: n} flips n wrong real rows of a 0024 vector
     to correct (at the same spread) before anything is derived from it: the control for the reproduction clauses.
     eval_bump={name: n} adds n correct rows in the evaluation part only."""
     import numpy as _np
@@ -8921,6 +8923,17 @@ def _good_realcurve3(acc=None, null_acc=None, gain_mode="even", perturb=None, ev
 
     def with_real_acc(base, a, mode="even", phase=0):
         want = int(round(a * n_real)); have = int(base[real_pos].sum())
+        if mode == "mixed":
+            # the net change is want - have, but it is made of _RC3_MIXED rows flipped UP in the first half of the real rows and
+            # _RC3_MIXED rows flipped DOWN in the second (plus the net on the larger side): the chunks disagree on the direction,
+            # so the paired chunk interval straddles 0 whatever the net point
+            d = want - have; up, dn = (_RC3_MIXED + d, _RC3_MIXED) if d >= 0 else (_RC3_MIXED, _RC3_MIXED - d)
+            v = base.copy(); half = len(real_pos) // 2; first, second = real_pos[:half], real_pos[half:]
+            cu = first[v[first] == 0]; cd = second[v[second] == 1]
+            assert len(cu) >= up and len(cd) >= dn, "not enough rows to flip in the mixed control"
+            v[cu[::max(1, len(cu) // up)][:up]] = 1; v[cd[::max(1, len(cd) // dn)][:dn]] = 0
+            assert int(v[real_pos].sum()) == want
+            return v
         return spread_flip(base, abs(want - have), 1 if want > have else 0, mode, phase)
 
     def eval_bumped(v, n, phase=0):
@@ -9253,12 +9266,12 @@ def _(root):
 
 @case(_RC3_G, "control-gain-at-the-bar-exactly-0.005-with-lo-above-0-is-RISES", "pass")
 def _(root):
-    return _realcurve3(root, acc={"r8_model": _RC3_R7["model"] + 0.005}, expect="FOURTH_DOUBLING_RISES_MODEL_LEADS")
+    return _realcurve3(root, acc={"r8_model": _RC3_R7["model"] + 0.005, "r8_logistic": 0.134}, expect="FOURTH_DOUBLING_RISES_MODEL_LEADS")
 
 
 @case(_RC3_G, "control-gain-0.003-with-lo-above-0-is-BELOW_RATE-a-rise-below-the-rate", "pass")
 def _(root):
-    rc, out = _realcurve3(root, acc={"r8_model": _RC3_R7["model"] + 0.003}, expect="FOURTH_DOUBLING_BELOW_RATE_MODEL_LEADS")
+    rc, out = _realcurve3(root, acc={"r8_model": _RC3_R7["model"] + 0.003, "r8_logistic": 0.134}, expect="FOURTH_DOUBLING_BELOW_RATE_MODEL_LEADS")
     if rc == 0 and "below the record's rate" not in _rc3_verdict(root)["meaning"]:
         return 1, out + " !! the meaning must say the rise is below the record's rate"
     return rc, out
@@ -9266,12 +9279,12 @@ def _(root):
 
 @case(_RC3_G, "control-gain-0.0049-just-under-the-bar-is-BELOW_RATE-not-RISES", "pass")
 def _(root):
-    return _realcurve3(root, acc={"r8_model": _RC3_R7["model"] + 0.0049}, expect="FOURTH_DOUBLING_BELOW_RATE_MODEL_LEADS")
+    return _realcurve3(root, acc={"r8_model": _RC3_R7["model"] + 0.0049, "r8_logistic": 0.134}, expect="FOURTH_DOUBLING_BELOW_RATE_MODEL_LEADS")
 
 
-@case(_RC3_G, "control-gain-concentrated-in-a-few-chunks-has-an-interval-reaching-0-and-is-NOT_RESOLVED-never-flat", "pass")
+@case(_RC3_G, "control-gain-the-chunks-disagree-on-has-an-interval-straddling-0-and-is-NOT_RESOLVED-never-flat", "pass")
 def _(root):
-    rc, out = _realcurve3(root, acc={"r8_model": _RC3_R7["model"] + 0.002}, gain_mode="concentrated", expect="FOURTH_DOUBLING_NOT_RESOLVED_MODEL_LEADS")
+    rc, out = _realcurve3(root, acc={"r8_model": _RC3_R7["model"] + 0.002, "r8_logistic": 0.133}, gain_mode="mixed", expect="FOURTH_DOUBLING_NOT_RESOLVED_MODEL_LEADS")
     if rc == 0:
         m = _rc3_verdict(root)["meaning"]
         if "never read as 'flat' or 'equal'" not in m or " flat " in m.split("never read as")[0]:
@@ -9281,7 +9294,7 @@ def _(root):
 
 @case(_RC3_G, "control-rung-8-equal-to-rung-7-but-for-one-row-is-NOT_RESOLVED-with-a-zero-point", "pass")
 def _(root):
-    rc, out = _realcurve3(root, acc={"r8_model": _RC3_R7["model"]}, eval_bump={"r8_model": 3}, expect="FOURTH_DOUBLING_NOT_RESOLVED_MODEL_LEADS")
+    rc, out = _realcurve3(root, acc={"r8_model": _RC3_R7["model"], "r8_logistic": 0.13}, eval_bump={"r8_model": 3}, expect="FOURTH_DOUBLING_NOT_RESOLVED_MODEL_LEADS")
     if rc == 0 and "point=0.0 " not in out:
         return 1, out + " !! the point gain must be 0.0"
     return rc, out
@@ -9296,9 +9309,9 @@ def _(root):
     return rc, out
 
 
-@case(_RC3_G, "control-a-small-fall-concentrated-in-a-few-chunks-is-NOT_RESOLVED-not-FALLS", "pass")
+@case(_RC3_G, "control-a-small-fall-the-chunks-disagree-on-is-NOT_RESOLVED-not-FALLS", "pass")
 def _(root):
-    return _realcurve3(root, acc={"r8_model": _RC3_R7["model"] - 0.002}, gain_mode="concentrated", expect="FOURTH_DOUBLING_NOT_RESOLVED_MODEL_LEADS")
+    return _realcurve3(root, acc={"r8_model": _RC3_R7["model"] - 0.002, "r8_logistic": 0.129}, gain_mode="mixed", expect="FOURTH_DOUBLING_NOT_RESOLVED_MODEL_LEADS")
 
 
 @case(_RC3_G, "control-linear-rule-ahead-at-rung-8-is-RISES_LINEAR_LEADS", "pass")
@@ -9331,13 +9344,13 @@ def _(root):
 
 @case(_RC3_G, "control-NOT_RESOLVED_LINEAR_LEADS-is-reachable", "pass")
 def _(root):
-    return _realcurve3(root, acc={"r8_model": _RC3_R7["model"] + 0.002, "r8_logistic": 0.1565}, gain_mode="concentrated",
+    return _realcurve3(root, acc={"r8_model": _RC3_R7["model"] + 0.002, "r8_logistic": 0.1565}, gain_mode="mixed",
                        expect="FOURTH_DOUBLING_NOT_RESOLVED_LINEAR_LEADS")
 
 
 @case(_RC3_G, "control-NOT_RESOLVED_NO_SEPARATION-is-reachable", "pass")
 def _(root):
-    return _realcurve3(root, acc={"r8_model": _RC3_R7["model"] + 0.002, "r8_logistic": _RC3_R7["model"] + 0.002}, gain_mode="concentrated",
+    return _realcurve3(root, acc={"r8_model": _RC3_R7["model"] + 0.002, "r8_logistic": _RC3_R7["model"] + 0.002}, gain_mode="mixed",
                        expect="FOURTH_DOUBLING_NOT_RESOLVED_NO_SEPARATION")
 
 
@@ -9460,7 +9473,7 @@ def _(root):
     if rc == 0:
         v = _rc3_verdict(root)
         if v["verdict_components"] != {"gain": "FOURTH_DOUBLING_RISES", "lead": "MODEL_LEADS"} or "two_decade_slope_per_doubling" not in v["flags"] \
-                or "seven of its eight points were banked before this run" not in v["flags"]["two_decade_slope_is"] \
+                or "seven of its eight points were banked by 0023 and 0024 before this run" not in v["flags"]["two_decade_slope_is"] \
                 or "Seven of the eight points were banked before this run" not in v["meaning"] or v["model_two_decade_slope_ci95"] is None:
             return 1, out + " !! the two-decade slope must be a flag stated beside the verdict, never a verdict part"
     return rc, out
@@ -9577,8 +9590,8 @@ def _(root):
 @case(_RC3_G, "a-corpus-block-off-the-sealed-cache-identity-is-VOID", "fail")
 def _(root):
     def m(a, s):
-        a["corpus"]["n_chunks"] = a["corpus"]["n_chunks"] + 1
-    return _realcurve3_void(root, _rc3_mut(m), expect_clause="scope: corpus.n_chunks")
+        a["corpus"]["n_source_chunks"] = a["corpus"]["n_source_chunks"] + 1
+    return _realcurve3_void(root, _rc3_mut(m), expect_clause="scope: corpus.n_source_chunks")
 
 
 @case(_RC3_G, "a-curve-spec-that-does-not-hash-to-the-sealed-digest-is-VOID", "fail")
@@ -10281,7 +10294,7 @@ def _(root):
 def _(root):
     def m(a, s):
         a["fourth_doubling"]["model"]["reading"] = "FOURTH_DOUBLING_RISES"
-    return _realcurve3_void(root, _rc3_mut(m), acc={"r8_model": _RC3_R7["model"] + 0.003}, expect_clause="gain: fourth_doubling.model=")
+    return _realcurve3_void(root, _rc3_mut(m), acc={"r8_model": _RC3_R7["model"] + 0.003, "r8_logistic": 0.134}, expect_clause="gain: fourth_doubling.model=")
 
 
 @case(_RC3_G, "a-gain-bar-banked-as-0.004-is-VOID", "fail")
