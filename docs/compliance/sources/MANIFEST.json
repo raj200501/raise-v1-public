@@ -362,6 +362,84 @@
       "sha256": "f77ec69ad791023e9d1f50b136ed9912ebac3a7be70bfc1e08c5b5c37e4e9906",
       "bytes": 2025376,
       "note": "RFC Editor index as served 2026-09-17; the 0024 RFC sample (600 of the 8117 issued TXT-format RFCs not pinned by 0018) was drawn from it with random.Random(20260917).sample; the 600 files are pinned individually in tools/pivot/ext_source_pins2.json"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/93/b7/6ec11bf6b07c961ab2692cc082662f7279d7860921e2d0ed14f7f6cd6cfe/botocore-1.43.100.tar.gz",
+      "sha256": "b6e64e38e3c03663a0c20d3d207afd97a0409dbc27e4e43384ac3f93cb61279f",
+      "bytes": 16166265,
+      "note": "0025 source archive botocore-1.43.100.tar.gz: Apache-2.0 (LICENSE.txt); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES3.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/33/a7/6b3c7ac32b642fbbe0821111654e0bd8cfbe88f68560bcf23cc78ab35c71/dask-2026.8.0.tar.gz",
+      "sha256": "8a94c37b5de6d869343340dc26c3c3acca7ec48a3abdabe00ea3abb1125884d5",
+      "bytes": 11561752,
+      "note": "0025 source archive dask-2026.8.0.tar.gz: BSD-3-Clause (LICENSE.txt); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES3.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/99/77/eb19b80e976406594fa07eade6a4b2a427a5db2cca2502979059e51fc752/homeassistant-2026.9.3.tar.gz",
+      "sha256": "27e1b77bd8c9c5d9a7f5ac38a60f46e6a0f941354a509915a262f0d4bcfff388",
+      "bytes": 37658472,
+      "note": "0025 source archive homeassistant-2026.9.3.tar.gz: Apache-2.0 (LICENSE.md); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES3.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/b9/32/99451b1283ec5d92ad77073f12e1c667dc10775384d8f15c2914207149dd/ipython-9.17.1.tar.gz",
+      "sha256": "8919be8c27f20a6f4423145028063f6637b42a03ce57665bb12015ee1f073529",
+      "bytes": 4539289,
+      "note": "0025 source archive ipython-9.17.1.tar.gz: BSD-3-Clause (LICENSE; COPYING.rst restates the terms); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES3.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/cc/81/44d05e389bd907cd1a173a404a217ef43ea503e7c00a2c87a56972534bb4/nova-33.0.2.tar.gz",
+      "sha256": "84ab864ced8867f2989f3ba65ead61a7e39891ee7ea693850331636ac9d360ea",
+      "bytes": 9775937,
+      "note": "0025 source archive nova-33.0.2.tar.gz: Apache-2.0 (LICENSE); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES3.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/7a/90/2544f4e3a61e501d6c9a5418fd4b905323222693d54a02cab0106a0af865/numba-0.67.0.tar.gz",
+      "sha256": "cd75aa535b33fa05d9d930b1ae8af9f97a2881e96d72dfb38ec9b78284d9f851",
+      "bytes": 2836515,
+      "note": "0025 source archive numba-0.67.0.tar.gz: BSD-2-Clause (LICENSE); vendored components under the licences listed in LICENSES.third-party; families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES3.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/ae/15/4500e320e6b101ec3b719ae85b697d9940b6cda672bc555bd6016fc60c6f/pip-26.2.1.tar.gz",
+      "sha256": "f6ad667e89a1fe78046c8f13232b247200f5258d7828f3f7883d660878e0813f",
+      "bytes": 1848877,
+      "note": "0025 source archive pip-26.2.1.tar.gz: MIT (LICENSE.txt); the vendored packages under src/pip/_vendor are excluded from the corpus by the member rule; families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES3.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/77/91/eb657510e48d906b3488a595b9734559b22751f78f685423b76e15ac3038/salt-3008.2.tar.gz",
+      "sha256": "44a1e206a955bf57aaffbe3f1dfb5f4476c9442d64f3a103ce7ac0aa68bfa907",
+      "bytes": 15126429,
+      "note": "0025 source archive salt-3008.2.tar.gz: Apache-2.0 (LICENSE); the vendored packages under salt/ext are excluded from the corpus by the member rule; families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES3.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/6d/44/f5da03a8ef95d369145c5bb53050e7877c9f3d312e128605fd9504829143/setuptools-84.0.0.tar.gz",
+      "sha256": "f4695c21257f0d9b537ec2692c941d02ee143b7cc1276941349a546573b2ef73",
+      "bytes": 1168449,
+      "note": "0025 source archive setuptools-84.0.0.tar.gz: MIT (LICENSE); the vendored packages under setuptools/_vendor are excluded from the corpus by the member rule; families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES3.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/06/61/53d562a57b28c08eda40b258c0f975e360541943ad7c7bef897a40caafda/tornado-6.5.10.tar.gz",
+      "sha256": "a6b1ccd08c04b4a06fb5aeb381be99de5ad1e5375c1785e31d78c880feb57687",
+      "bytes": 537910,
+      "note": "0025 source archive tornado-6.5.10.tar.gz: Apache-2.0 (LICENSE); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES3.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/0e/9e/750649904a065007a838981785b2bd8d9ff26154c6c341ac67d0b7f82c68/transformers-5.17.0.tar.gz",
+      "sha256": "a153be279169b55b92d8000bf4af294aed684503d091cca7804da2dd8a9de000",
+      "bytes": 9817878,
+      "note": "0025 source archive transformers-5.17.0.tar.gz: Apache-2.0 (LICENSE); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES3.md)"
+    },
+    {
+      "url": "https://files.pythonhosted.org/packages/ea/96/3f7bdd00e505ec3698903415b30135024703e017b28c6b61f98da3193b0d/xarray-2026.7.0.tar.gz",
+      "sha256": "361b495928fdbf5b58d0969bb6775339019da5e93ca74d61ddf4eb5edd6ce604",
+      "bytes": 3145348,
+      "note": "0025 source archive xarray-2026.7.0.tar.gz: Apache-2.0 (LICENSE); families py_src, rst_doc; licence text committed in sources/ (see docs/compliance/EXT_SOURCES3.md)"
+    },
+    {
+      "url": "https://www.rfc-editor.org/rfc-index.txt",
+      "sha256": "8d6cf793f45042b08685d351169e4874f0e900b458269ea3f15799423ec6e8ff",
+      "bytes": 2026055,
+      "note": "RFC Editor index as served 2026-09-23; the 0025 RFC sample (600 of the 8827 issued TXT-format RFCs not pinned by 0018 or 0024 and not related to a 0018 pin, RFC 1 upward) was drawn from it with random.Random(20260923).sample; the 600 files are pinned individually in tools/pivot/ext_source_pins3.json; the sample's parser corrects 0024's (CORRECTIONS.md 2026-09-23)"
     }
   ],
   "unreachable": [
@@ -385,7 +463,12 @@
     {
       "utc_date": "2026-09-09",
       "what": "extension corpus sources for preregistration 0018 (four entries above); fetched through the same egress proxy with the same user agent"
+    },
+    {
+      "utc_date": "2026-09-23",
+      "what": "fourth-doubling corpus sources for preregistration 0025 (12 archives and the RFC index above); fetched through the same egress proxy; the PyPI files directly, as the proxy's no-proxy list names that host"
     }
   ],
-  "fetched_utc_date_0024": "2026-09-17"
+  "fetched_utc_date_0024": "2026-09-17",
+  "fetched_utc_date_0025": "2026-09-23"
 }

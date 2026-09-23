@@ -19,6 +19,48 @@ Format:
 
 ---
 
+## 2026-09-23 — Described 0024's RFC sampling frame as "every RFC the index lists"; the parser had skipped RFCs 1 to 999 and five wrapped annotations
+
+**Claimed.** `docs/compliance/EXT_SOURCES2.md` (rfc_txt row), `tools/pivot/ext_source_pins2.json`
+(`rfc_source.sample`) and `docs/compliance/sources/MANIFEST.json` (the rfc-index entry): the 0024 RFC sample was
+"a seeded sample over the 7838 RFCs the RFC Editor's index lists as issued with a TXT format, not pinned by 0018,
+and not related to a 0018-pinned RFC by an Obsoletes, Obsoleted by, Updates or Updated by annotation in either
+direction (323 numbers so excluded)"; the MANIFEST note put the issued-TXT count not pinned by 0018 at 8117.
+
+**Actual.** The sampling script (a scratchpad file, since deleted) parsed the index with a four-digit entry pattern
+and a four-digit `RFCnnnn` pattern. The index writes RFCs 1 to 999 without zero padding and writes the numbers
+inside annotations without padding too, and it wraps long annotations onto a second line. Rebuilding the parser
+from the documented rule for preregistration 0025 (`tools/pivot/ext_source_pins3.json`, `rfc_source.sample`) and
+checking it against 0024's banked lists on the index as served 2026-09-23 shows: (1) every entry numbered below
+1000 was outside 0024's frame, so "every RFC the index lists" was "every RFC numbered 1000 and above"; (2) five
+RFCs whose `(Updates RFC...)` annotation wraps a line - 5761 (updates 3550), 7111 (updates 4180), 7160 (updates
+3550), 8573 (updates 5905) and 9673 (updates 8200), each naming a 0018-pinned RFC - were not excluded as related,
+and two RFCs below 1000 (760, obsoleted by 791; 761, obsoleted by 793) were neither in the frame nor in the
+exclusion list; (3) RFC 9999 was banked as related although the index carries no such annotation today (a change
+in the index, or a parser artefact; COULD NOT VERIFY, the 2026-09-17 index text was hashed but not kept).
+None of the 600 RFCs 0024 drew is related to a 0018 pin under the corrected parser, so 0024's sample satisfies
+its stated rule; the frame it was drawn from was smaller than stated, and its exclusion count was five short.
+
+**Size.** The frame: 7838 stated against about 8800 under the corrected rule on the same index (the exact count
+for the 2026-09-17 index cannot be recomputed; on the 2026-09-23 index the corrected rule gives 9427 candidates
+before removing 0024's 600, of which about 950 are RFCs below 1000 and about 40 were issued since). The exclusion
+list: 323 stated, 329 under the corrected parser (five wrapped annotations and RFC 760/761 added, 9999 removed).
+No 0024 number moves: the drawn files, the corpus, the readings and the verdict are unchanged; what was wrong is
+a sentence about how the files were chosen.
+
+**Cause.** A regex written for the modern four-digit entries, tested on the numbers it was written for, and
+reported as "every RFC". The same failure class as the 2026-08-25 allocation-flag entry: a heuristic mistaken for
+the rule it approximates, caught only because 0025 re-implemented the rule and diffed the result against the
+banked lists rather than reusing the code.
+
+**Fix.** 0025's sampler (`rfc_source.sample` in `ext_source_pins3.json`) parses one-to-five-digit entry numbers
+and unpadded annotation numbers, joins wrapped annotation lines, and banks the frame size, the exclusion list and
+the candidate list's sha256 from the index as served, which is hashed in `docs/compliance/sources/MANIFEST.json`;
+its validation against 0024's banked lists is recorded in `artifacts/pivot/engineering_log_0025.json`. The 0024
+documents keep their sentence with a pointer to this entry (`docs/compliance/EXT_SOURCES2.md`, rfc_txt row).
+
+---
+
 ## 2026-09-17 — Said three gates were still owed the section-4 treatment; six gate names behind five builders were, and every one of them was missing runner-written fields at three levels
 
 **Claimed.** `CORRECTIONS.md` 2026-09-16, "Size": "Four gates of twenty-two build their controls
