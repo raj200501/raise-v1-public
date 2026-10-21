@@ -12,7 +12,9 @@ get() { local out="$1" url="$2"; [ -s "$out" ] && return 0
 get "$DIR/Python-3.11.9.tgz" "https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz"
 get "$DIR/python-3.11.9-embed-amd64.zip" "https://www.python.org/ftp/python/3.11.9/python-3.11.9-embed-amd64.zip"
 get "$DIR/sqlite-amalgamation-3450300.zip" "https://sqlite.org/2024/sqlite-amalgamation-3450300.zip"
-for f in $(python3 -c "import json;print(' '.join(k[4:-4] for k in json.load(open('$(dirname "${BASH_SOURCE[0]}")/ext_source_pins.json'))['files'] if k.startswith('rfc/')))"); do
+# The pins are keyed 'rfc/rfc1034.txt'; the number is the file name without 'rfc' and '.txt' (until 2026-10-21 this stripped only
+# 'rfc/', so a cold clone asked rfc-editor.org for rfcrfc1034.txt and failed: CORRECTIONS.md, entry of that date).
+for f in $(python3 -c "import json;print(' '.join(k.split('/')[-1][3:-4] for k in json.load(open('$(dirname "${BASH_SOURCE[0]}")/ext_source_pins.json'))['files'] if k.startswith('rfc/')))"); do
   get "$DIR/rfc/rfc${f}.txt" "https://www.rfc-editor.org/rfc/rfc${f}.txt"
 done
 echo "extension sources: $(du -sh "$DIR" | cut -f1) in $DIR"

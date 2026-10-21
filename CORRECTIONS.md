@@ -19,6 +19,41 @@ Format:
 
 ---
 
+## 2026-10-21 — A cold clone could not rebuild the corpora 0018 to 0025 rest on: one fetch script never worked, and two more Gutenberg books were re-edited
+
+**Claimed:** "Corpora rebuild deterministically from shipped sources and generators; the manifest banks content hashes of every
+array so the rebuild is *proven* identical, not assumed" (`docs/DILIGENCE.md`); the fetch scripts' own headers, which say every
+file is fetched and checked against its pins before any chunk is cut (`tools/pivot/fetch_ext_sources.sh`, `fetch_sources.sh`).
+
+**Actual:** On 2026-10-21 this work moved to a fresh container with nothing under `data/` and ran the documented fetches.
+Two of them failed. (1) `tools/pivot/fetch_ext_sources.sh` asked rfc-editor.org for `rfcrfc1034.txt`: the pins in
+`tools/pivot/ext_source_pins.json` are keyed `rfc/rfc1034.txt` and the script stripped only `rfc/`. Both files entered the
+repository in the same commit (4ca1ca5, 2026-09-16), so the script never fetched an RFC on a cold machine; the extension corpus
+of 0018 had been built from files fetched before the script existed. Every corpus downstream of it (0020 to 0025) inherited a
+rebuild path that stopped at the first RFC. (2) `tools/pivot/fetch_sources.sh` failed its pin check on `pg1952.txt` and
+`pg2701.txt`: gutenberg.org now serves editions other than the banked ones (sha256 `a40cdaa3…` and `f12eb530…` against the banked
+`0604e2f8…` and `0670d7bb…`), and neither re-edit is one of the line edits `tools/pivot/source_pins.json` records. The pin check
+failed loudly, as the 2026-09-02 entry designed it to, but there was no way through it. The banked measurements are untouched:
+they were made on the banked bytes.
+
+**Size:** one fetch script of four, broken for every cold clone since it was written; two of ten Gutenberg sources; the whole
+reproducibility claim for 0018's extension corpus and every real-content corpus built beside it, and for the builder cache.
+
+**Cause:** the fetch script was written after the corpus it fetches for had been built, and was never run on an empty machine;
+the corpus manifest checks are run at the end of a build, so a fetch that fails first is never reached by them. The Gutenberg
+drift is the one this ledger already predicted on 2026-09-02.
+
+**Fix:** `fetch_ext_sources.sh` takes the RFC number from the file name (`k.split('/')[-1][3:-4]`); run on the fresh container it
+fetched all 79 RFCs and `corpus_ext.py --verify-pins` reported every pinned file byte-identical. The banked editions of pg1952 and
+pg2701 were found byte for byte (full sha256 equal to the banked values) in a third-party repository, and `fetch_sources.sh` now
+falls back to those commit-pinned URLs only when Gutenberg's file does not hash to the banked value and the copy does;
+`pin_sources.py` remains the final arbiter. Tested on a scratch copy with both books deleted: Gutenberg served the new editions,
+the fallback restored the banked ones, `SOURCE PINS: PASS`. Every corpus rebuilt on this container is checked against its banked
+manifest before any preregistration uses it. A third party can delete or rewrite its repository; if that happens the rebuild
+fails loudly again and will be filed here again.
+
+---
+
 ## 2026-09-23 — Described 0024's RFC sampling frame as "every RFC the index lists"; the parser had skipped RFCs 1 to 999 and five wrapped annotations
 
 **Claimed.** `docs/compliance/EXT_SOURCES2.md` (rfc_txt row), `tools/pivot/ext_source_pins2.json`
