@@ -20,20 +20,23 @@
 # the source's own origin URL). It refuses to write into a directory it did not create. It verifies the result
 # before it finishes, and exits non-zero if anything is off. It never pushes.
 #
-# Environment overrides: SRC_REPO (default /home/user/raise-v1), SRC_REF (main),
+# Environment overrides: SRC_REPO (default: the checkout this script is in), SRC_REF (main), OWNER_EMAIL, MIRROR_TRAILER,
 # PUBLIC_URL (https://github.com/raj200501/raise-v1-public.git), ALLOW_PUBLISHED_REWRITE=1 to accept a result
 # that would change commits the published mirror already carries.
 set -euo pipefail
 
 OUT_ARG=${1:?usage: bash build_mirror.sh <out-dir>}
-SRC_REPO=${SRC_REPO:-/home/user/raise-v1}
+SRC_REPO=${SRC_REPO:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}
 SRC_REF=${SRC_REF:-main}
 PUBLIC_URL=${PUBLIC_URL:-https://github.com/raj200501/raise-v1-public.git}
 ALLOW_PUBLISHED_REWRITE=${ALLOW_PUBLISHED_REWRITE:-0}
 
 OWNER_NAME="raj200501"
-OWNER_EMAIL="<contact: see the repository owner>"
-FILTER_EMAIL="<contact: see the repository owner>"
+# The owner's address is read from the source history (the owner's own commits), never written in this file: the mirror
+# replaces it in EMAIL_FILES, and its scan requires it to appear in those files only.
+OWNER_EMAIL=${OWNER_EMAIL:-$(git -C "$SRC_REPO" log -1 --author="^$OWNER_NAME <" --format=%ae "$SRC_REF" 2>/dev/null || true)}
+[ -n "$OWNER_EMAIL" ] || { echo "build_mirror: ERROR: set OWNER_EMAIL (no commit by $OWNER_NAME on $SRC_REF)" >&2; exit 1; }
+FILTER_EMAIL=${FILTER_EMAIL:-$OWNER_EMAIL}
 EMAIL_PLACEHOLDER="<contact: see the repository owner>"
 GNSS_PATHS="data/gnss/brdc001.rnx.gz data/gnss/brdc_001.rnx.gz data/gnss/clk_001.CLK.gz data/gnss/sp3_001.SP3.gz"
 EMAIL_FILES="docs/qa/NEW_DOCS_REVIEW.md tools/gnss/fetch.sh"
@@ -437,12 +440,9 @@ NOW=$(date -u +%s)
 BUILT=$(date -u -d "@$NOW" '+%Y-%m-%d %H:%M')
 helper write-additions "$BUILT"
 g add -- docs/PUBLIC_MIRROR.md docs/public_mirror_commit_map.json README.md .github/workflows/verify.yml
-cat > "$WORK/msg" <<'EOF'
-Public mirror: filtered-history note, commit map, README banner
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01U5iod6VWk5bgLudyjRB2NV
-EOF
+# MIRROR_TRAILER (optional): trailer lines for the mirror commit's message, supplied by the operator at build time.
+{ printf 'Public mirror: filtered-history note, commit map, README banner\n'
+  [ -z "${MIRROR_TRAILER:-}" ] || printf '\n%s\n' "$MIRROR_TRAILER"; } > "$WORK/msg"
 # Authored and committed as the repository owner (contributions count); signed if the user's git config signs.
 GIT_AUTHOR_NAME="$OWNER_NAME" GIT_AUTHOR_EMAIL="$OWNER_EMAIL" GIT_AUTHOR_DATE="@$NOW +0000" \
 GIT_COMMITTER_NAME="$OWNER_NAME" GIT_COMMITTER_EMAIL="$OWNER_EMAIL" GIT_COMMITTER_DATE="@$NOW +0000" \

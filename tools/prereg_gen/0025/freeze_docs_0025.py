@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """In-flight paragraphs for 0025, generated from the sealed file after the freeze (0021's to 0024's precedent: never a typed
 threshold). Idempotent: replaces an earlier insertion."""
-import json
-R = '/home/user/raise-v1'
+import json, os
+R = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 pr = json.load(open(f'{R}/prereg/0025-realcurve3-4096.json')); S = pr['scope']; P = S['curve']['protocol']; sp = S['sealed_partition']
 assert pr.get('frozen') is True, 'run this after the freeze'
 chain = [json.loads(l) for l in open(f'{R}/prereg/chain.jsonl') if l.strip()]

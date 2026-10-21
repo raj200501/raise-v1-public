@@ -1,6 +1,6 @@
 """Update the banked mutation count and the gate count in every document that states them, by phrase, from the report itself."""
-import json, sys
-R = '/home/user/raise-v1'
+import json, os, sys
+R = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 r = json.load(open(f"{R}/artifacts/verification/mutation_report.json"))
 new, det, sur, gates = r["total_mutations"], r["detected"], r["survived"], len(r["by_gate"])
 assert det == new and sur == 0 and "realcurve3_4096" in r["by_gate"], (new, det, sur, sorted(r["by_gate"]))

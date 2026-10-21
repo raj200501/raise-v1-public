@@ -2,7 +2,7 @@
 the function run_study.py --cache uses, and save it exactly as run_study.py does; no model is trained and no artifact is written."""
 import os, sys, time
 import numpy as np
-REPO = '/home/user/raise-v1'; sys.path.insert(0, os.path.join(REPO, 'tools', 'pivot'))
+REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))); sys.path.insert(0, os.path.join(REPO, 'tools', 'pivot'))
 import run_study as rs
 out = os.path.join(REPO, 'data', 'pivot', 'full_c4096.npz')
 assert not os.path.exists(out), 'refusing to overwrite an existing cache'

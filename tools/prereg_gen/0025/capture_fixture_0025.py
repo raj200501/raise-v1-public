@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Capture tests/fixtures/realcurve3_runner_shape.json from the 0025 smoke run's artifact and scores file."""
 import json, os
-SP = os.environ.get('RAISE_SCRATCH', os.path.dirname(os.path.abspath(__file__))); R = '/home/user/raise-v1'
+SP = os.environ.get('RAISE_SCRATCH', os.path.dirname(os.path.abspath(__file__))); R = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 art = json.load(open(f'{SP}/smoke_realcurve3/out.json')); sc = json.load(open(f'{SP}/smoke_realcurve3/scores.json'))
 assert art['smoke'] is True and art['complete'] is True and sc['smoke'] is True and len(art['fits']) == 37
 dropped = ['per_example', 'eval_chunk_ids', 'ext_chunk_ids', 'ext_fam']

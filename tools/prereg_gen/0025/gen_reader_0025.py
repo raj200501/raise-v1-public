@@ -4,7 +4,7 @@ Every literal in the reader comes from the preregistration or from a banked arti
 import json, hashlib, pprint, sys, os, re
 canon = lambda x: json.dumps(x, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False)  # noqa: E731
 sha = lambda o: hashlib.sha256(canon(o).encode()).hexdigest()  # noqa: E731
-R = '/home/user/raise-v1'; SP = os.path.dirname(os.path.abspath(__file__))
+R = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))); SP = os.path.dirname(os.path.abspath(__file__))
 prereg_path = sys.argv[1] if len(sys.argv) > 1 else f'{R}/prereg/0025-realcurve3-4096.json'
 out_path = sys.argv[2] if len(sys.argv) > 2 else f'{R}/tools/readers/realcurve3_4096_verdict.py'
 pr = json.load(open(prereg_path)); S = pr['scope']; CU = S['curve']; P = CU['protocol']; RE = CU['recipes']; sp = S['sealed_partition']

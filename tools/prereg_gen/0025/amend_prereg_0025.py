@@ -4,9 +4,9 @@
 exact replacement asserted to occur exactly once, or an explicit value change; the sealed hashes are recomputed with the reader
 generator's canonical serialisation; every other byte of meaning is asserted unchanged; the changes are recorded in the file
 itself under amendments_before_freeze. Refuses on a frozen file. Idempotent: a second run changes nothing."""
-import copy, hashlib, json, sys
+import copy, hashlib, json, os, sys
 
-R = '/home/user/raise-v1'
+R = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 PATH = f'{R}/prereg/0025-realcurve3-4096.json'
 canon = lambda x: json.dumps(x, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False)  # noqa: E731
 sha = lambda o: hashlib.sha256(canon(o).encode()).hexdigest()  # noqa: E731

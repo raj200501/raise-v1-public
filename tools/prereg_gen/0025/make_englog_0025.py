@@ -1,7 +1,7 @@
 """artifacts/pivot/engineering_log_0025.json, pre-freeze state: numbers read from the preregistration, the corpus manifest and the
 smoke; later steps add the gate result, the freeze and the run record. Idempotent for the fields it owns."""
 import json, os
-R = '/home/user/raise-v1'; SP = os.environ.get('RAISE_SCRATCH', os.path.dirname(os.path.abspath(__file__)))
+R = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))); SP = os.environ.get('RAISE_SCRATCH', os.path.dirname(os.path.abspath(__file__)))
 pr = json.load(open(f'{R}/prereg/0025-realcurve3-4096.json')); S = pr['scope']; P = S['curve']['protocol']; sp = S['sealed_partition']
 sm = json.load(open(f'{SP}/smoke_realcurve3/out.json')); man = json.load(open(f'{R}/artifacts/pivot/realfit3_corpus_manifest.json'))
 pins = json.load(open(f'{R}/tools/pivot/ext_source_pins3.json'))
