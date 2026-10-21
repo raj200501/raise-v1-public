@@ -851,7 +851,9 @@ def main() -> int:
                 rd = fit_role(step, role, recipes[role], y_all, stage, k)
                 if rd:
                     check_repro(step, k, role, rd)
-                if (not args.smoke and not exact_checked
+                # A smoke skips this check (its rungs reproduce nothing), except under RAISE_SMOKE_EXACT_CHECK=1, a test-only switch that
+                # makes a smoke exercise this code path end to end: on smoke vectors it must fire and file NOT RUN before any rung-8 fit.
+                if ((not args.smoke or os.environ.get("RAISE_SMOKE_EXACT_CHECK") == "1") and not exact_checked
                         and all(f"r{kk}_{r}" in per_ex for kk in range(1, N_0024_RUNGS + 1) for r in ROLES)):
                     exact_checked = True
                     eq = repro_intervals_0024()["equals_0024s_banked"]
