@@ -177,8 +177,22 @@ def main() -> int:
     a21 = json.load(open(f"{REPO}/artifacts/pivot/realfit_4096_rerun.json", encoding="utf-8")); p21 = json.load(open(f"{REPO}/prereg/0021-realfit-4096-rerun.json", encoding="utf-8"))
     chk(RP["fit_idx_sha256"] == a21["partition"]["fit_idx_sha256"] == p21["scope"]["sealed_partition"]["fit_block"]["idx_sha256"] and RP["rungs"][3]["idx_sha256"] == RP["fit_idx_sha256"],
         "rung 4 is 0021's fit block, row for row (its banked and sealed hashes)")
-    chk(sp["eval"] == p24["scope"]["sealed_partition"]["eval"] and sp["pool"] == p24["scope"]["sealed_partition"]["pool"] and sp["fit_block"] == p24["scope"]["sealed_partition"]["fit_block"]
-        and P["pool_idx_sha256"] == a21["partition"]["pool_idx_sha256"], "the evaluation set, the pool and the fit block are 0024's sealed ones (0021's before it)")
+    # A rebuilt builder cache (CORRECTIONS.md, 2026-10-21) moves the row-POSITION hashes only; amend_cache_0025.py keeps each banked one
+    # beside its replacement as *_banked_2026_08. The banked values must be 0024's, and everything else - the labels and chunk ids of the
+    # evaluation rows in order, the row and chunk counts - must be 0024's unchanged.
+    _bk = lambda d: {k[:-len("_banked_2026_08")] if k.endswith("_banked_2026_08") else k: v for k, v in d.items()  # noqa: E731
+                     if k.endswith("_banked_2026_08") or f"{k}_banked_2026_08" not in d}
+    _pidx = P.get("pool_idx_sha256_banked_2026_08", P["pool_idx_sha256"])
+    chk(_bk(sp["eval"]) == p24["scope"]["sealed_partition"]["eval"] and _bk(sp["pool"]) == p24["scope"]["sealed_partition"]["pool"] and sp["fit_block"] == p24["scope"]["sealed_partition"]["fit_block"]
+        and sp["eval"]["eval_y_sha256"] == p24["scope"]["sealed_partition"]["eval"]["eval_y_sha256"] and sp["eval"]["eval_g_sha256"] == p24["scope"]["sealed_partition"]["eval"]["eval_g_sha256"]
+        and _pidx == a21["partition"]["pool_idx_sha256"], "the evaluation set, the pool and the fit block are 0024's sealed ones (0021's before it); a rebuilt cache moves row positions only")
+    _rebuilt = any(k.endswith("_banked_2026_08") for d in (P["cache_identity"], sp["eval"], sp["pool"]) for k in d)
+    if _rebuilt:
+        _proof = json.load(open(f"{REPO}/artifacts/verification/cache_rebuild_0025.json", encoding="utf-8"))
+        _am = [a for a in pr.get("amendments_before_freeze", []) if a.get("by") == "tools/prereg_gen/0025/amend_cache_0025.py"]
+        chk(_proof.get("passed") is True and len(_am) >= 1 and all(_am[-1]["order_proof"].values())
+            and P.get("pool_idx_sha256") == sp["pool"]["pool_idx_sha256"] and P["cache_identity"]["X_note"].startswith("REBUILT 2026-10-21"),
+            "the rebuilt cache's re-seal is recorded with its order proof, and its content proof (0021's recipes reproduce on its evaluation rows) passed")
     import io as _io, zipfile as _zf
     from run_recipe_search import grouped_split, _sha as _rsha
     with _zf.ZipFile(f"{REPO}/data/pivot/full_c4096.npz") as zf:
@@ -191,9 +205,13 @@ def main() -> int:
     sub = y_all[top_rows].copy(); np.random.default_rng([P["seed3"], rc2_.NULL_STREAM_WORD]).shuffle(sub)
     chk(_rsha(sub) == P["null_y_shuffled_sha256_expected"] and not np.array_equal(sub, y_all[top_rows]) and np.array_equal(np.sort(sub), np.sort(y_all[top_rows])),
         "the sealed null-label hash is what the sealed stream (seed3) produces on the top rung's labels, a permutation of them")
-    _ci = lambda d: {k: v for k, v in d.items() if k != "X_note"}  # noqa: E731
+    _ci = lambda d: {k[:-len("_banked_2026_08")] if k.endswith("_banked_2026_08") else k: v for k, v in d.items()  # noqa: E731
+                     if k != "X_note" and (k.endswith("_banked_2026_08") or f"{k}_banked_2026_08" not in d)}
+    _hk = {"cache_X_sha256": "X_sha256", "cache_y_sha256": "y_sha256", "cache_g_sha256": "g_sha256"}
     chk(_ci(P["cache_identity"]) == _ci(p21["scope"]["protocol"]["cache_identity"]) and r25.CORPUS["cache_X_sha256"] == P["cache_identity"]["X_sha256"]
-        and r25.CORPUS == {k: a21["corpus"][k] for k in r25.CORPUS}, "the builder cache identity is 0021's, X hash included, and the reader's CORPUS is 0021's banked block")
+        and all(r25.CORPUS[k] == (P["cache_identity"][_hk[k]] if k in _hk else a21["corpus"][k]) for k in r25.CORPUS)
+        and all(a21["corpus"][k] == P["cache_identity"].get(f"{c}_banked_2026_08", P["cache_identity"][c]) for k, c in _hk.items()),
+        "the builder cache identity is 0021's (or a rebuilt cache's with 0021's kept beside it), and the reader's CORPUS is 0021's banked block with the sealed cache hashes")
     chk(S["eval_chunk_layout"] == p24["scope"]["eval_chunk_layout"] and S["ext_chunk_layout"] == p24["scope"]["ext_chunk_layout"], "the chunk layouts are 0024's sealed ones")
 
     # 4. references, recipes, the corpus manifests and the quoted numbers trace to banked artifacts and sealed files

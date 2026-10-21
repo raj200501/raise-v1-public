@@ -78,7 +78,8 @@ def main():
     def walk(o, path):
         if isinstance(o, dict):
             for k in list(o):
-                if k.endswith('_banked_2026_08'):
+                # the banked values and the amendment records (whose 'banked' block holds them) are history, never rewritten
+                if k.endswith('_banked_2026_08') or k == 'amendments_before_freeze':
                     continue
                 if isinstance(o[k], str):
                     for key in old:

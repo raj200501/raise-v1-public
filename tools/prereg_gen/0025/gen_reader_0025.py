@@ -12,7 +12,12 @@ a21 = json.load(open(f'{R}/artifacts/pivot/realfit_4096_rerun.json'))
 assert set(CU) == {"protocol", "recipes"}, sorted(CU)
 CORPUS = {k: a21['corpus'][k] for k in ("carve_bytes", "carve_bytes_source", "chunk_size", "chunk_offset", "chunk_id_min", "chunk_id_max",
                                         "n_source_chunks", "cache_y_sha256", "cache_g_sha256", "n_rows", "n_features", "cache_X_sha256")}
-assert CORPUS["cache_X_sha256"] == P['cache_identity']['X_sha256'] and CORPUS["cache_y_sha256"] == P['cache_identity']['y_sha256']
+# The cache's identity hashes are the preregistration's: 0021's banked ones, or - after amend_cache_0025.py re-sealed a rebuilt cache
+# (CORRECTIONS.md, 2026-10-21) - the rebuilt cache's, with 0021's kept beside each as *_banked_2026_08. Every other key is 0021's block.
+CI = P['cache_identity']
+for k, ck in (("cache_X_sha256", "X_sha256"), ("cache_y_sha256", "y_sha256"), ("cache_g_sha256", "g_sha256")):
+    assert CORPUS[k] == CI.get(f"{ck}_banked_2026_08", CI[ck]), (k, "0021's banked hash is neither the sealed one nor recorded beside it")
+    CORPUS[k] = CI[ck]
 EXT = dict(P['ext_corpus']); FIT = dict(P['fit_corpus']); FIT2 = dict(P['fit2_corpus']); FIT3 = dict(P['fit3_corpus'])
 assert EXT['families'] == P['ext_families'] and FIT['families'] == P['fit_families'] == FIT2['families'] == FIT3['families']
 N_FIRST = int(P['n_first_decade_rungs']); D2 = int(P['doublings_0024']); D3 = int(P['doublings_0025']); N_RUNGS = N_FIRST + D2 + D3; N24 = int(P['n_0024_rungs'])
