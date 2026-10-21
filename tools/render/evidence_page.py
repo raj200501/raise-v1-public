@@ -409,7 +409,9 @@ if rc3a and rc3v and rc3v["verdict"] != "VOID" and rc3a.get("complete"):
                      f'one-seed terms are not met by this curve). <strong>{_gain_sentence}</strong>: the model reads <strong>{rc3v["model_real_top1_by_rung"]}</strong>, '
                      f'rung 8 minus rung 7 <strong>{_gm["point"]}</strong> with a paired scored-chunk interval {_gm["ci95"]} against the record\'s '
                      f'{_b3["gain_per_doubling"]} per doubling, read by the four-way rule sealed in advance as <span class="mono">{rc3v["gain_reading"]}</span>'
-                     + (f' (the {", ".join(n[n.index("_") + 1:] for n in _cap3 + _cap7)} at its iteration cap: the cap is part of the sealed recipe and is never raised; the gain is read as is and is not a recipe reading)' if (_cap3 or _cap7) else '')
+                     + "".join(f' (the model at its iteration cap at rung {k})' for k in (7, 8) if f"r{k}_model" in _f3["roles_at_iteration_cap"])
+                     + ('; the cap is part of the sealed recipe and is never raised, and the gain is read as is, not as a recipe reading'
+                        if any(f"r{k}_model" in _f3["roles_at_iteration_cap"] for k in (7, 8)) else '')
                      + f'; the logistic\'s fourth-doubling gain is {_g3["logistic"]["point"]} ({_g3["logistic"]["reading"]}), the tree\'s {_g3["depth3_tree"]["point"]} '
                      f'({_g3["depth3_tree"]["reading"]}); per family (model) {_f3["per_family_fourth_doubling_gain"]["model"]}. Seven of the eight points were '
                      f'banked by 0023 and 0024 before this run, so the two-decade slope (model {_f3["two_decade_slope_per_doubling"]["model"]["slope_per_doubling"]} '
@@ -417,14 +419,16 @@ if rc3a and rc3v and rc3v["verdict"] != "VOID" and rc3a.get("complete"):
                      f'{rc3v["model_slope_per_doubling"]}, interval {rc3v["model_slope_ci95"]}) is a flag quoted only beside the fourth-doubling reading, never a '
                      f'rise of its own. <strong>At rung 8, {_lead_sentence3}</strong>: model minus logistic {_lt3["point"]}, paired interval {_lt3["ci95"]}, read '
                      f'by 0024\'s sealed rule as <span class="mono">{rc3v["lead_reading"]}</span>'
-                     + (f' (the {", ".join(n[3:] for n in _cap3)} at its iteration cap at the top rung: not a recipe comparison)' if _cap3 else '')
+                     + "".join(f' (the {n[3:]} at its iteration cap at rung 8)' for n in _cap3) + ('; not a recipe comparison' if _cap3 else '')
                      + f'; at rung 7 the same reading is 0024\'s {_l7["point"]} with interval {_l7["ci95"]} ({_l7["reading"]}), reproduced exactly. Under '
                      f'{_st["n_seeds"]} other bootstrap seeds the gain reading would have differed {_st["n_seeds_with_another_gain_reading"]} times and the '
                      f'lead reading {_st["n_seeds_with_another_lead_reading"]} times (a flag). <strong>The floors</strong>, refitted at rung 8 (majority, '
-                     f'stratified, one thresholded feature; the depth-3 tree being D1 itself), put 0021\'s clause at {_fl3["r8"]["needed_0021_clause"]}: '
-                     f'{"cleared" if _fl3["r8"]["clears_0021_clause"] else "not cleared"} by the model\'s {_fl3["r8"]["model"]} (informational; with the logistic '
+                     f'stratified, one thresholded feature; the depth-3 tree being D1 itself), put 0021\'s clause at {_fl3["r8"]["needed_0021_clause"]}, '
+                     f'and the model\'s {_fl3["r8"]["model"]} ' + ("clears it: 0021\'s margin re-applied at sixteen times 0021\'s plaintexts, informational, revising nothing of 0021\'s verdict"
+                       if _fl3["r8"]["clears_0021_clause"] else "does not clear it: at sixteen times 0021\'s plaintexts the boosted recipe is still within 0.05 of the best rule a person could write out")
+                     + f' (with the logistic '
                      f'among the floors {_fl3["r8"]["needed_with_logistic_as_floor"]}, {"cleared" if _fl3["r8"]["clears_with_logistic_as_floor"] else "not cleared"}). '
-                     f'<strong>The new shift arm</strong> - the fourth doubling\'s files alone at rung 4\'s count - reads {_s8["readings_ext_real_top1"]}, against '
+                     f'<strong>The new shift arm</strong> - rung 8\'s plaintexts from 0025\'s corpus alone at rung 4\'s count - reads {_s8["readings_ext_real_top1"]}, against '
                      f'rung 4 by {_s8["difference_from_rung_4"]} and against 0024\'s shift arm by {_s8["difference_from_shift_arm_0024"]} (paired interval for the '
                      f'model {_s8["s8_minus_s4_model_ci95_paired"]}): the between-draw comparison of two draws of other files at the same count. The null control '
                      f'on the top rung reads {rc3v["shuffled_label_accuracy_real"]} on the real rows against chance {rc3a["chance_accuracy"]}; '

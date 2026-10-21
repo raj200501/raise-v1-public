@@ -9275,7 +9275,7 @@ def _(root):
 @case(_RC3_G, "control-gain-0.003-with-lo-above-0-is-BELOW_RATE-a-rise-below-the-rate", "pass")
 def _(root):
     rc, out = _realcurve3(root, acc={"r8_model": _RC3_R7["model"] + 0.003, "r8_logistic": 0.134}, expect="FOURTH_DOUBLING_BELOW_RATE_MODEL_LEADS")
-    if rc == 0 and "below the record's rate" not in _rc3_verdict(root)["meaning"]:
+    if rc == 0 and "a rise below the record's rate" not in _rc3_verdict(root)["meaning"]:
         return 1, out + " !! the meaning must say the rise is below the record's rate"
     return rc, out
 
@@ -9400,14 +9400,14 @@ def _(root):
     rc, out = _realcurve3(root, _rc3_mut(m))
     if rc == 0:
         v = _rc3_verdict(root)
+        m = v["meaning"]
         if v["flags"]["lead_at_top_is_a_recipe_comparison"] is not False or v["flags"]["gain_is_a_recipe_reading"] is not False \
-                or "at its iteration cap at the top rung: not a recipe comparison" not in v["meaning"] \
-                or "the cap is part of the sealed recipe and is never raised" not in v["meaning"]:
-            return 1, out + " !! a capped top-rung model must be named beside both readings"
+                or m.count("(the model at its iteration cap at rung 8)") != 2 or "the cap is part of the sealed recipe and is never raised" not in m:
+            return 1, out + " !! a capped rung-8 model must be named, in the stop rules' words, beside both readings"
     return rc, out
 
 
-@case(_RC3_G, "control-the-logistic-at-its-cap-at-rung-7-marks-the-gain-not-a-recipe-reading-but-the-lead-stays-a-comparison", "pass")
+@case(_RC3_G, "control-the-logistic-at-its-cap-at-rung-7-touches-neither-the-models-gain-nor-the-rung-8-lead", "pass")
 def _(root):
     r25 = _rc3_reader()
 
@@ -9417,9 +9417,54 @@ def _(root):
     rc, out = _realcurve3(root, _rc3_mut(m))
     if rc == 0:
         v = _rc3_verdict(root)
-        if v["flags"]["lead_at_top_is_a_recipe_comparison"] is not True or v["flags"]["gain_is_a_recipe_reading"] is not False \
-                or v["flags"]["roles_at_iteration_cap_at_rung_7"] != ["r7_logistic"]:
-            return 1, out + " !! a capped rung-7 role marks the gain, not the rung-8 lead"
+        if v["flags"]["lead_at_top_is_a_recipe_comparison"] is not True or v["flags"]["gain_is_a_recipe_reading"] is not True \
+                or v["flags"]["roles_at_iteration_cap_at_rung_7"] != ["r7_logistic"] or "at its iteration cap" in v["meaning"]:
+            return 1, out + " !! the verdict's gain is the model's: a capped rung-7 logistic is a flag, not a note on either reading"
+    return rc, out
+
+
+@case(_RC3_G, "control-the-model-at-its-cap-at-rung-7-is-named-beside-the-gain-which-is-then-not-a-recipe-reading", "pass")
+def _(root):
+    r25 = _rc3_reader()
+
+    def m(a, s):
+        a["fits"]["r7_model"]["fit_info"] = dict(a["fits"]["r7_model"]["fit_info"], n_iter=r25.MAX_ITER["model"])
+        a["fit_info_by_name"]["r7_model"] = a["fits"]["r7_model"]["fit_info"]
+    rc, out = _realcurve3(root, _rc3_mut(m))
+    if rc == 0:
+        v = _rc3_verdict(root); mm = v["meaning"]
+        if v["flags"]["gain_is_a_recipe_reading"] is not False or v["flags"]["lead_at_top_is_a_recipe_comparison"] is not True \
+                or mm.count("(the model at its iteration cap at rung 7)") != 1 or "rung 8)" in mm.split("(the model at its iteration cap at rung 7)")[0][-60:]:
+            return 1, out + " !! a capped rung-7 model must be named beside the gain only"
+    return rc, out
+
+
+@case(_RC3_G, "control-the-logistic-at-its-cap-at-rung-8-makes-the-lead-not-a-recipe-comparison-and-leaves-the-gain", "pass")
+def _(root):
+    r25 = _rc3_reader()
+
+    def m(a, s):
+        a["fits"]["r8_logistic"]["fit_info"] = dict(a["fits"]["r8_logistic"]["fit_info"], n_iter=r25.MAX_ITER["logistic"])
+        a["fit_info_by_name"]["r8_logistic"] = a["fits"]["r8_logistic"]["fit_info"]
+    rc, out = _realcurve3(root, _rc3_mut(m))
+    if rc == 0:
+        v = _rc3_verdict(root); mm = v["meaning"]
+        if v["flags"]["lead_at_top_is_a_recipe_comparison"] is not False or v["flags"]["gain_is_a_recipe_reading"] is not True \
+                or "(the logistic at its iteration cap at rung 8); not a recipe comparison" not in mm or "(the model at its iteration cap" in mm:
+            return 1, out + " !! a capped rung-8 logistic is named beside the lead, never beside the gain"
+    return rc, out
+
+
+@case(_RC3_G, "control-an-iteration-count-above-the-cap-counts-as-capped", "pass")
+def _(root):
+    r25 = _rc3_reader()
+
+    def m(a, s):
+        a["fits"]["r8_model"]["fit_info"] = dict(a["fits"]["r8_model"]["fit_info"], n_iter=r25.MAX_ITER["model"] + 5)
+        a["fit_info_by_name"]["r8_model"] = a["fits"]["r8_model"]["fit_info"]
+    rc, out = _realcurve3(root, _rc3_mut(m))
+    if rc == 0 and _rc3_verdict(root)["flags"]["gain_is_a_recipe_reading"] is not False:
+        return 1, out + " !! an iteration count above the cap is a capped fit"
     return rc, out
 
 
@@ -9432,7 +9477,8 @@ def _(root):
             if v["floors"][k]["floors"]["floor_tree3"] != v["floors"][k]["depth3_tree"] or "floor_tree3" in v["fourth_doubling"] \
                     or any(n.endswith("floor_tree3") for n in v["ext_real_top1"]):
                 return 1, out + " !! B-tree3 is D1: the tree floor must be the rung's tree reading and never a second fit"
-        if v["floors"]["r8"]["clears_0021_clause"] is not True or v["floors"]["r8"]["needed_0021_clause"] != round(max(v["floors"]["r8"]["floors"].values()) + 0.05, 4):
+        if v["floors"]["r8"]["clears_0021_clause"] is not True or v["floors"]["r8"]["needed_0021_clause"] != round(max(v["floors"]["r8"]["floors"].values()) + 0.05, 4) \
+                or "clears it: 0021's margin re-applied at sixteen times 0021's plaintexts, informational, revising nothing of 0021's verdict" not in v["meaning"]:
             return 1, out + " !! 0021's clause must be re-applied on the best floor plus 0.05"
     return rc, out
 
@@ -9443,7 +9489,7 @@ def _(root):
     if rc == 0:
         v = _rc3_verdict(root)
         if v["floors"]["r8"]["clears_0021_clause"] is not False or v["floors"]["r7"]["clears_0021_clause"] is not False \
-                or "not cleared by the model's" not in v["meaning"]:
+                or "does not clear it: at sixteen times 0021's plaintexts the boosted recipe is still within 0.05 of the best rule a person could write out" not in v["meaning"]:
             return 1, out + " !! the floors are a flag: 'not cleared' must be stated, the verdict unchanged"
     return rc, out
 
@@ -9477,7 +9523,8 @@ def _(root):
         v = _rc3_verdict(root)
         if v["verdict_components"] != {"gain": "FOURTH_DOUBLING_RISES", "lead": "MODEL_LEADS"} or "two_decade_slope_per_doubling" not in v["flags"] \
                 or "seven of its eight points were banked by 0023 and 0024 before this run" not in v["flags"]["two_decade_slope_is"] \
-                or "Seven of the eight points were banked before this run" not in v["meaning"] or v["model_two_decade_slope_ci95"] is None:
+                or "Seven of the eight points were banked before this run" not in v["meaning"] or v["model_two_decade_slope_ci95"] is None \
+                or "its one-corpus, one-seed terms are not met by this curve" not in v["meaning"] or "by construction" in v["meaning"]:
             return 1, out + " !! the two-decade slope must be a flag stated beside the verdict, never a verdict part"
     return rc, out
 

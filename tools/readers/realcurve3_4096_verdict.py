@@ -2961,7 +2961,8 @@ def read(d) -> int:
         two_decade = {role: {"slope_per_doubling": my_curves[role]["slope_per_doubling_both_decades"], "ci95": boot["both_decades"][role]["ci95"]} for role in ROLES}
         flags = {"gain_reading": gain_read, "lead_at_top": lead_read,
                  "roles_at_iteration_cap_at_the_top_rung": capped_top, "roles_at_iteration_cap_at_rung_7": capped_r7,
-                 "lead_at_top_is_a_recipe_comparison": not capped_top, "gain_is_a_recipe_reading": not (capped_top or capped_r7),
+                 "lead_at_top_is_a_recipe_comparison": not capped_top,
+                 "gain_is_a_recipe_reading": not any(f"r{k}_model" in capped for k in (R7, TOPK)),
                  "fourth_doubling_gain": gm["point"], "fourth_doubling_gain_ci95_paired": gm["ci95"],
                  "fourth_doubling_gain_by_role": {role: gain[role]["point"] for role in ROLES},
                  "fourth_doubling_gain_ci95_by_role": {role: gain[role]["ci95"] for role in ROLES},
@@ -2972,7 +2973,7 @@ def read(d) -> int:
                  "two_decade_slope_per_doubling": two_decade,
                  "two_decade_slope_is": f"the OLS slope over all eight rungs ({round(PARTITION['doublings_spanned'] * math.log10(2), 4)} decades) with its scored-chunk interval; seven of its eight points "
                                         "were banked by 0023 and 0024 before this run, so it is a flag quoted only beside the fourth-doubling reading, "
-                                        "never a rise of its own; the span satisfies 0003's two-decade scope rule by construction",
+                                        "never a rise of its own; the span meets 0003's two-decade scope rule only in the sense that the rule asked for two decades of data; its one-corpus, one-seed terms are not met by this curve, whose first decade is the scored files' own chunks",
                  "second_decade_slope_per_doubling": {role: my_curves[role]["slope_per_doubling_second_decade"] for role in ROLES},
                  "second_decade_slope_ci95": {role: boot[role]["ci95"] for role in ROLES},
                  "second_decade_slope_0024_reproduced": {role: my_curves[role]["slope_per_doubling_second_decade_0024"] for role in ROLES},
@@ -3024,15 +3025,17 @@ def read(d) -> int:
     else:
         verdict = f"{gain_read}_{lead_read}"
         gm = gain["model"]; lt = lead[f"{TOP}model_minus_logistic"]
-        cap_note = (f" (the {', '.join(n[len(TOP):] for n in flags['roles_at_iteration_cap_at_the_top_rung'])} at its iteration cap at the top rung: "
-                    f"not a recipe comparison)" if flags["roles_at_iteration_cap_at_the_top_rung"] else "")
-        gain_cap = (f" (the {', '.join(n[n.index('_') + 1:] for n in flags['roles_at_iteration_cap_at_the_top_rung'] + flags['roles_at_iteration_cap_at_rung_7'])} "
-                    f"at its iteration cap at rung {', '.join(sorted({n[:n.index('_')] for n in flags['roles_at_iteration_cap_at_the_top_rung'] + flags['roles_at_iteration_cap_at_rung_7']}))}: "
-                    f"the cap is part of the sealed recipe and is never raised; the gain is read as is and is not a recipe reading)"
-                    if (flags["roles_at_iteration_cap_at_the_top_rung"] or flags["roles_at_iteration_cap_at_rung_7"]) else "")
+        # the stop rules' words: '(the model at its iteration cap at rung N)' in the same sentence as the reading it touches; the gain is
+        # the model's, so only the model's cap at rung 7 or 8 touches it; the lead is model minus logistic at rung 8, so either one's cap does
+        cap_note = ("".join(f" (the {n[len(TOP):]} at its iteration cap at rung {N_RUNGS})" for n in flags["roles_at_iteration_cap_at_the_top_rung"])
+                    + ("; not a recipe comparison" if flags["roles_at_iteration_cap_at_the_top_rung"] else ""))
+        gain_cap_rungs = [k for k in (R7, TOPK) if f"r{k}_model" in flags["roles_at_iteration_cap"]]
+        gain_cap = ("".join(f" (the model at its iteration cap at rung {k})" for k in gain_cap_rungs)
+                    + ("; the cap is part of the sealed recipe and is never raised, and the gain is read as is, not as a recipe reading"
+                       if gain_cap_rungs else ""))
         gain_text = {"FOURTH_DOUBLING_RISES": f"the fourth doubling buys the model {gm['point']} on the real-family rows (paired interval {gm['ci95']}, entirely above 0), at or above the record's rate of {BAR_GAIN} per doubling",
-                     "FOURTH_DOUBLING_BELOW_RATE": f"the fourth doubling buys the model {gm['point']} on the real-family rows (paired interval {gm['ci95']}, entirely above 0), below the record's rate of {BAR_GAIN} per doubling: a rise, but not at the rate the record calls a rise",
-                     "FOURTH_DOUBLING_NOT_RESOLVED": f"the fourth doubling moves the model by {gm['point']} on the real-family rows with a paired interval {gm['ci95']} that includes 0: whether it bought anything is not resolved by the scored chunks at this size, never read as 'flat' or 'equal'",
+                     "FOURTH_DOUBLING_BELOW_RATE": f"the fourth doubling buys the model {gm['point']} on the real-family rows (paired interval {gm['ci95']}, entirely above 0), below the record's rate of {BAR_GAIN} per doubling: a rise below the record's rate",
+                     "FOURTH_DOUBLING_NOT_RESOLVED": f"the fourth doubling moves the model by {gm['point']} on the real-family rows with a paired interval {gm['ci95']} that includes 0: whether the fourth doubling bought anything is not resolved by the scored chunks at this size, never read as 'flat' or 'equal'",
                      "FOURTH_DOUBLING_FALLS": f"the fourth doubling moves the model by {gm['point']} on the real-family rows with a paired interval {gm['ci95']} entirely below 0: adding the fourth doubling's files of the same kinds lowered the model's reading on the original files"}[gain_read] + gain_cap
         lead_text = {"MODEL_LEADS": f"at rung {N_RUNGS} the model leads the standardised logistic by {lt['point']} (paired interval {lt['ci95']}, entirely above 0)",
                      "LINEAR_LEADS": f"at rung {N_RUNGS} the standardised logistic leads the model by {round(-lt['point'], 4)} (paired interval of model minus logistic {lt['ci95']}, entirely below 0): a rule a person can write out has overtaken the boosted recipe",
@@ -3045,11 +3048,15 @@ def read(d) -> int:
                    f"fixed recipes read, per rung: the model {by_rung['model']}, the standardised logistic {by_rung['logistic']}, the depth-3 tree "
                    f"{by_rung['depth3_tree']} on the {N_REAL} real-family rows. Seven of the eight points were banked before this run, so the two-decade slope "
                    f"(model {flags['two_decade_slope_per_doubling']['model']['slope_per_doubling']} per doubling, interval {flags['two_decade_slope_per_doubling']['model']['ci95']}) "
-                   f"is a flag quoted only beside the fourth-doubling reading, never a rise of its own; the span satisfies 0003's two-decade scope rule by "
-                   f"construction. Rungs 1..{N_0024_RUNGS} and 0024's shift arm reproduced 0024's readings (rung {N_0024_RUNGS} within {REPRO_TOLERANCE_R7}) and "
-                   f"0024's bootstrap intervals exactly. The floors refitted at rung {N_RUNGS} put 0021's clause at {my_floors[RTOP]['needed_0021_clause']} "
-                   f"({'cleared' if my_floors[RTOP]['clears_0021_clause'] else 'not cleared'} by the model's {top_read}; informational). The new shift arm "
-                   f"(the fourth doubling's files alone at rung 4's count) reads {flags['shift_arm_0025']['readings_ext_real_top1']}, against rung 4 by "
+                   f"is a flag quoted only beside the fourth-doubling reading, never a rise of its own; the span meets 0003's two-decade scope rule only in "
+                   f"the sense that the rule asked for two decades of data; its one-corpus, one-seed terms are not met by this curve, whose first decade "
+                   f"is the scored files' own chunks. Rungs 1..{N_0024_RUNGS} and 0024's shift arm reproduced 0024's readings (rung {N_0024_RUNGS} within {REPRO_TOLERANCE_R7}) and "
+                   f"0024's bootstrap intervals exactly. The floors refitted at rung {N_RUNGS} put 0021's clause at {my_floors[RTOP]['needed_0021_clause']} and "
+                   f"the model's {top_read} "
+                   + ("clears it: 0021's margin re-applied at sixteen times 0021's plaintexts, informational, revising nothing of 0021's verdict"
+                      if my_floors[RTOP]['clears_0021_clause'] else
+                      "does not clear it: at sixteen times 0021's plaintexts the boosted recipe is still within 0.05 of the best rule a person could write out")
+                   + f". The new shift arm (rung {N_RUNGS}'s plaintexts from 0025's corpus alone at rung 4's count) reads {flags['shift_arm_0025']['readings_ext_real_top1']}, against rung 4 by "
                    f"{flags['shift_arm_0025']['difference_from_rung_4']} and against 0024's shift arm by {flags['shift_arm_0025']['difference_from_shift_arm_0024']}.{stab_text} "
                    f"Not a transfer reading: every rung holds the scored files' own unscored chunks; the added plaintexts are other files of the same families; "
                    f"nothing fitted shares a byte, a kilobyte run, a chunk id or a source-chunk hash with anything scored; the intervals are over the scored chunks "
