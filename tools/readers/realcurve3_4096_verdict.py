@@ -269,7 +269,7 @@ PROTOCOL = {'seed': 20260825,
  'caps_note': "0024's caps verbatim: the model's max_iter 250 and the logistic's 1000 are part of the sealed "
               "recipes and are never raised; memory_kill_gb is the live one; the top rung's float64 block is "
               'about 3.73 GB beside the scoring set and the three fit corpora',
- 'launch': {'min_disk_free_gb': 0.5, 'min_mem_available_gb': 8.0, 'max_load1': 2.0},
+ 'launch': {'min_disk_free_gb': 0.5, 'min_mem_available_gb': 11.0, 'max_load1': 2.0},
  'environment': {'sklearn': '1.9.0', 'numpy': '2.4.6', 'python': '3.11.15'},
  'reference_top1': {'model': 0.1193, 'logistic': 0.1179, 'depth3_tree': 0.0929},
  'reference_source': "0021's banked real-family readings (artifacts/pivot/realfit_4096_rerun.json "
@@ -1531,8 +1531,8 @@ PROTOCOL = {'seed': 20260825,
                                                                              'flag'},
                                     'note': 'informational references for the prose and the flags; none is a '
                                             'clause'}}
-PROTOCOL_SHA256 = "962c2424ddb5f614ef2b15833d810c4f65a9ea39ddaa5ae03e57e4a300b6ebce"
-CURVE_SHA256 = "169162365693cb623ffc2402ec14679f38f982018ad0ad7bcffd0c675b668584"
+PROTOCOL_SHA256 = "8312439426f8951aaff7c75f6a9bf7477933328ac172c42f6fd9e0fd621018b2"
+CURVE_SHA256 = "181f4be2496a35ce76e3c72b3d674916f1debcdfdeb7a6cd424f8ce1bb11568a"
 RECIPES = {'model': {'id': 'M4',
            'family': 'hgb',
            'val': 'frag',
