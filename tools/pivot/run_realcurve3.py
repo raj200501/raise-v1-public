@@ -29,6 +29,7 @@ import hashlib
 import io as _io
 import json
 import os
+import re
 import sys
 import time
 import zipfile as _zf
@@ -332,6 +333,9 @@ def main() -> int:
         carve_source = "sealed cache identity (sha256 of y and g); the cache carries no build metadata"
     X = npz_memmap(args.cache, "X"); ncols = X.shape[1]
     cache_x_sha = None
+    if not args.smoke and not re.fullmatch(r"[0-9a-f]{64}", str((P.get("cache_identity") or {}).get("X_sha256") or "")):
+        print("REFUSING: the preregistration seals no X hash for the builder cache; a run never scores an unsealed feature array", file=sys.stderr)
+        return 3
     if (P.get("cache_identity") or {}).get("X_sha256"):
         cache_x_sha, x_shape, x_dtype = _array_sha(args.cache, "X")
         if cache_x_sha != P["cache_identity"]["X_sha256"]:

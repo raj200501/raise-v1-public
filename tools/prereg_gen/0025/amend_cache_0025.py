@@ -38,8 +38,12 @@ def main():
     a = ap.parse_args()
     pr = json.load(open(a.prereg, encoding='utf-8')); assert pr.get('frozen') is False, 'refusing: frozen'
     S = pr['scope']; P = S['curve']['protocol']; sp = S['sealed_partition']
+    # an edit made without rehashing would otherwise be laundered by the recomputation at the end
+    assert shao(P) == S['sealed_hashes']['protocol_sha256'] and shao(S['curve']) == S['sealed_hashes']['curve_sha256'], \
+        'refusing: the sealed hashes are stale (the file was edited without recomputing them)'
     proof = json.load(open(a.proof, encoding='utf-8'))
-    assert proof.get('passed') is True, f'refusing: the cache content proof has not passed ({a.proof})'
+    assert proof.get('passed') is True and proof.get('mode') == 'full', f'refusing: the cache content proof has not passed ({a.proof})'
+    proof_sha = hashlib.sha256(open(a.proof, 'rb').read()).hexdigest()
 
     import zipfile, io
     with zipfile.ZipFile(a.cache) as zf:
@@ -62,6 +66,17 @@ def main():
     assert all(order_ok.values()), 'refusing: the reordered cache does not give the banked evaluation rows in the banked order'
 
     x_sha, x_shape, x_dtype = _array_sha(a.cache, 'X')
+    # the proof must have been made on THIS cache: its recorded whole-cache hashes and its digest of the evaluation rows' features
+    # in the sealed order (float32, C order - as cache_content_proof.py computes it) are recomputed here
+    Xm = npz_memmap(a.cache, 'X'); hx = hashlib.sha256()
+    for i in range(0, len(ev), 20000):
+        hx.update(np.ascontiguousarray(Xm[ev[i:i + 20000]], dtype=np.float32).tobytes())
+    eval_x = hx.hexdigest(); del Xm
+    cf = proof.get('cache_file') or {}
+    bound = {"X": cf.get('X_sha256') == x_sha, "y": cf.get('y_sha256') == _sha(y), "g": cf.get('g_sha256') == _sha(g),
+             "eval_X_sha256_in_sealed_order": proof.get('eval_X_sha256_in_sealed_order') == eval_x}
+    print('proof bound to this cache:', bound)
+    assert all(bound.values()), 'refusing: the content proof was not made on this cache'
     new = {'X': x_sha, 'y': _sha(y), 'g': _sha(g), 'eval_idx': _sha(ev), 'pool_idx': _sha(tr), 'pool_sorted': _sha(np.sort(tr).astype(np.int64)),
            'pool_y': _sha(np.asarray(y[tr]))}
     ci = P['cache_identity']
@@ -71,6 +86,10 @@ def main():
            'pool_sorted': sp['pool'].get('pool_sorted_sha256_banked_2026_08', sp['pool']['pool_sorted_sha256']),
            'pool_y': sp['pool'].get('pool_y_sha256_banked_2026_08', sp['pool']['pool_y_sha256'])}
     assert list(x_shape) == list(ci['X_shape']) and x_dtype == ci['X_dtype'], (x_shape, x_dtype)
+    # a second run with a DIFFERENT rebuilt cache must not pass as 'unchanged' and leave the first cache's hashes sealed
+    cur = {'X': ci['X_sha256'], 'y': ci['y_sha256'], 'g': ci['g_sha256'], 'eval_idx': sp['eval']['eval_idx_sha256'],
+           'pool_idx': sp['pool']['pool_idx_sha256'], 'pool_sorted': sp['pool']['pool_sorted_sha256'], 'pool_y': sp['pool']['pool_y_sha256']}
+    assert all(cur[k] in (old[k], new[k]) for k in cur), 'refusing: a different rebuilt cache is already sealed in this file'
 
     before = copy.deepcopy(pr)
     replaced = []
@@ -118,7 +137,7 @@ def main():
             "source": "CORRECTIONS.md 2026-10-21 (the builder cache's row order cannot be rebuilt); artifacts/verification/cache_rebuild_0025.json",
             "changes": [{"where": p, "why": "the rebuilt cache's identity or row-position hash replaces the banked one"} for p in sorted(set(replaced))]
                        + [{"where": "scope.curve.protocol.cache_identity.X_note", "why": "states what the cache is now"}],
-            "order_proof": order_ok, "new": new, "banked": old})
+            "order_proof": order_ok, "new": new, "banked": old, "eval_X_sha256_in_sealed_order": eval_x, "proof_sha256": proof_sha})
         with open(a.prereg, 'w', encoding='utf-8') as fh:
             json.dump(pr, fh, indent=2, ensure_ascii=False); fh.write('\n')
     print(f"{'amended' if changed else 'unchanged'}: {len(set(replaced))} literal(s) replaced at {sorted(set(replaced))}")

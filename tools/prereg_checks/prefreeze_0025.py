@@ -75,7 +75,7 @@ def main() -> int:
     # 2. the reader's sealed literals are the preregistration's
     import importlib.util
     spec = importlib.util.spec_from_file_location("r25", reader_path)
-    r25 = importlib.util.module_from_spec(spec); spec.loader.exec_module(r24)
+    r25 = importlib.util.module_from_spec(spec); spec.loader.exec_module(r25)
     chk(r25.PREREG == f"{pr['id']}-{pr['slug']}", "the reader is frozen for this preregistration")
     chk(set(CU) == {"protocol", "recipes"}, "the sealed curve spec is exactly {protocol, recipes}")
     chk(r25.PROTOCOL == P and r25.PROTOCOL_SHA256 == sha(P) == S["sealed_hashes"]["protocol_sha256"],
@@ -180,24 +180,65 @@ def main() -> int:
     # A rebuilt builder cache (CORRECTIONS.md, 2026-10-21) moves the row-POSITION hashes only; amend_cache_0025.py keeps each banked one
     # beside its replacement as *_banked_2026_08. The banked values must be 0024's, and everything else - the labels and chunk ids of the
     # evaluation rows in order, the row and chunk counts - must be 0024's unchanged.
+    _MOVABLE = {"X_sha256", "y_sha256", "g_sha256", "eval_idx_sha256", "pool_idx_sha256", "pool_sorted_sha256", "pool_y_sha256"}
     _bk = lambda d: {k[:-len("_banked_2026_08")] if k.endswith("_banked_2026_08") else k: v for k, v in d.items()  # noqa: E731
                      if k.endswith("_banked_2026_08") or f"{k}_banked_2026_08" not in d}
-    _pidx = P.get("pool_idx_sha256_banked_2026_08", P["pool_idx_sha256"])
+    _banked_keys = []
+
+    def _scan(o, path):
+        if isinstance(o, dict):
+            for k, v in o.items():
+                if path == "" and k == "amendments_before_freeze":
+                    continue
+                if k.endswith("_banked_2026_08"):
+                    _banked_keys.append((f"{path}.{k}", k[:-len("_banked_2026_08")]))
+                _scan(v, f"{path}.{k}")
+        elif isinstance(o, list):
+            for i, v in enumerate(o):
+                _scan(v, f"{path}[{i}]")
+    _scan(pr, "")
+    chk(all(base in _MOVABLE for _, base in _banked_keys)
+        and {p for p, _ in _banked_keys} <= {f".scope.curve.protocol.cache_identity.{k}_banked_2026_08" for k in ("X_sha256", "y_sha256", "g_sha256")}
+        | {".scope.sealed_partition.eval.eval_idx_sha256_banked_2026_08"}
+        | {f".scope.sealed_partition.pool.{k}_banked_2026_08" for k in ("pool_idx_sha256", "pool_sorted_sha256", "pool_y_sha256")},
+        "a banked-beside-the-new value exists only for the seven hashes a rebuilt cache may move, and only where amend_cache_0025.py puts them")
+    _pidx = sp["pool"].get("pool_idx_sha256_banked_2026_08", P["pool_idx_sha256"])
     chk(_bk(sp["eval"]) == p24["scope"]["sealed_partition"]["eval"] and _bk(sp["pool"]) == p24["scope"]["sealed_partition"]["pool"] and sp["fit_block"] == p24["scope"]["sealed_partition"]["fit_block"]
         and sp["eval"]["eval_y_sha256"] == p24["scope"]["sealed_partition"]["eval"]["eval_y_sha256"] and sp["eval"]["eval_g_sha256"] == p24["scope"]["sealed_partition"]["eval"]["eval_g_sha256"]
         and _pidx == a21["partition"]["pool_idx_sha256"], "the evaluation set, the pool and the fit block are 0024's sealed ones (0021's before it); a rebuilt cache moves row positions only")
-    _rebuilt = any(k.endswith("_banked_2026_08") for d in (P["cache_identity"], sp["eval"], sp["pool"]) for k in d)
+    _rebuilt = bool(_banked_keys)
+    _hex64 = lambda v: isinstance(v, str) and re.fullmatch(r"[0-9a-f]{64}", v) is not None  # noqa: E731
+    chk(all(_hex64(P["cache_identity"][k]) for k in ("X_sha256", "y_sha256", "g_sha256")) and _hex64(P["pool_idx_sha256"])
+        and all(_hex64(sp[b][k]) for b, k in (("eval", "eval_idx_sha256"), ("eval", "eval_y_sha256"), ("eval", "eval_g_sha256"),
+                                               ("pool", "pool_idx_sha256"), ("pool", "pool_sorted_sha256"), ("pool", "pool_y_sha256"))),
+        "every sealed cache and partition hash is a sha256 (an empty X hash would switch the runner's X check off)")
     if _rebuilt:
-        _proof = json.load(open(f"{REPO}/artifacts/verification/cache_rebuild_0025.json", encoding="utf-8"))
+        _proof_path = f"{REPO}/artifacts/verification/cache_rebuild_0025.json"
+        _proof = json.load(open(_proof_path, encoding="utf-8"))
         _am = [a for a in pr.get("amendments_before_freeze", []) if a.get("by") == "tools/prereg_gen/0025/amend_cache_0025.py"]
-        chk(_proof.get("passed") is True and len(_am) >= 1 and all(_am[-1]["order_proof"].values())
+        _cf = _proof.get("cache_file") or {}
+        _sealed_new = {"X": P["cache_identity"]["X_sha256"], "y": P["cache_identity"]["y_sha256"], "g": P["cache_identity"]["g_sha256"],
+                       "eval_idx": sp["eval"]["eval_idx_sha256"], "pool_idx": sp["pool"]["pool_idx_sha256"],
+                       "pool_sorted": sp["pool"]["pool_sorted_sha256"], "pool_y": sp["pool"]["pool_y_sha256"]}
+        chk(_proof.get("passed") is True and _proof.get("mode") == "full" and len(_am) >= 1 and all(_am[-1]["order_proof"].values())
+            and _am[-1].get("new") == _sealed_new
+            and _am[-1].get("proof_sha256") == hashlib.sha256(open(_proof_path, "rb").read()).hexdigest()
+            and _cf.get("X_sha256") == _sealed_new["X"] and _cf.get("y_sha256") == _sealed_new["y"] and _cf.get("g_sha256") == _sealed_new["g"]
+            and _proof.get("eval_X_sha256_in_sealed_order") == _am[-1].get("eval_X_sha256_in_sealed_order")
             and P.get("pool_idx_sha256") == sp["pool"]["pool_idx_sha256"] and P["cache_identity"]["X_note"].startswith("REBUILT 2026-10-21"),
-            "the rebuilt cache's re-seal is recorded with its order proof, and its content proof (0021's recipes reproduce on its evaluation rows) passed")
+            "the rebuilt cache's re-seal is recorded with its order proof, its content proof (0021's recipes reproduce on its evaluation "
+            "rows) passed on THIS cache (the proof's cache hashes and evaluation-feature digest are the sealed ones), and the proof file is "
+            "the one the re-seal read")
     import io as _io, zipfile as _zf
     from run_recipe_search import grouped_split, _sha as _rsha
     with _zf.ZipFile(f"{REPO}/data/pivot/full_c4096.npz") as zf:
         y_b = np.load(_io.BytesIO(zf.read("y.npy"))); g_b = np.load(_io.BytesIO(zf.read("g.npy")))
     ev, tr, rng = grouped_split(y_b, g_b, P["seed"], P["eval_frac"], P["top_rung"])
+    from run_realfit import _array_sha as _xsha
+    chk(_rsha(y_b) == P["cache_identity"]["y_sha256"] and _rsha(g_b) == P["cache_identity"]["g_sha256"]
+        and _xsha(f"{REPO}/data/pivot/full_c4096.npz", "X")[0] == P["cache_identity"]["X_sha256"]
+        and _rsha(np.asarray(y_b[tr])) == sp["pool"]["pool_y_sha256"],
+        "the builder cache on disk is the sealed one (y, g and X hashes) and its pool labels hash to the sealed pool_y_sha256")
     chk(_rsha(ev) == r25.PARTITION["eval_idx_sha256"] and _rsha(np.asarray(g_b[ev])) == r25.PARTITION["eval_g_sha256"] and _rsha(np.asarray(y_b[ev])) == r25.PARTITION["eval_y_sha256"]
         and _rsha(tr) == P["pool_idx_sha256"] and _rsha(np.sort(tr).astype(np.int64)) == r25.PARTITION["pool_sorted_sha256"] and int(len(ev)) == r25.PARTITION["n_eval_rows"],
         "the sealed evaluation set and pool hashes are what the runner's grouped_split() computes from the builder cache on disk")
