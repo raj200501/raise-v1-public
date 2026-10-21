@@ -19,6 +19,53 @@ Format:
 
 ---
 
+## 2026-10-21 — Said the CI determinism probe proves the property the real corpus build's parallelism depends on; it never ran the real build, and the sort in its own assembly hid the row order that makes the builder caches unrebuildable
+
+**Claimed:** CI runs `tools/ci/determinism_probe.py` as "Corpus determinism probe (small slice built twice + order-shuffled,
+hashes must match; refuses without source bytes)" (`.github/workflows/verify.yml`). The probe's module docstring set it beside
+the manifest's proof: "The full corpora (gigabytes) are banked by content hash in tools/pivot/corpus_manifest.py, but that proof
+has only ever been executed on the machine that built them. This probe manufactures a SMALL corpus slice twice in the CI
+container". It went on: "It also proves the property the real build's parallelism depends on: run_study.py's build() feeds a
+multiprocessing Pool with imap_unordered, so per-chunk generation MUST be order-independent [...] Build 3 therefore manufactures
+the same chunks in REVERSED order, reassembles them in canonical order, and must reproduce the same hashes." `build_slice()`'s
+docstring called its sorted assembly "exactly the invariant that makes the real build's imap_unordered pool safe." The text
+stood from at least 2026-09-03 (the board review repaired the probe's zero-source-bytes defect that day, item 9 of that day's
+board-review entry; this clone's history begins at 4ca1ca5, 2026-09-16, where the text is as quoted) until 27a61aa (2026-10-21).
+
+**Actual:** The probe never called `run_study.build()`, never started a Pool and never called `imap_unordered`. It called the two
+per-chunk primitives (`corpus.chunk_fragments`, `features.features_many`) in a plain loop over 40 chunks at offset 900400, three
+times, assembled each build's blocks in sorted chunk-id order - a step the real build does not have - and compared the three
+builds' X, y and g hashes with each other. That shows a chunk's rows depend only on its index, within one process in one
+container: necessary for a parallel build to be reproducible, not sufficient. `build()` writes rows in batch-completion order
+and never sorts, so the X and g of the three caches it wrote (`full_c4096`, `carve_c1024`, `carve_c2048`) cannot be rebuilt, and
+the probe's sort removed exactly that difference before anything was hashed. It passed while the property it was cited for was
+false for every cache `build()` has written. It never covered the builder cache in any form: no line of it ran the code that
+orders the cache's rows; its chunks lie outside every banked corpus by design; and it compared a build only with another build
+in the same container, never with a banked hash, so it did not execute the manifest proof it was set beside, on any machine. The
+probe that does exercise its builder was already in the repository: `tools/pivot/corpus_ext.py --probe` runs 0018's real
+`build()`, Pool and all, with the task order shuffled and that builder's own sort in place
+(`artifacts/pivot/engineering_log_0018.json`, `determinism_probe`).
+
+**Size:** One CI gate's stated coverage, from "the property the real build's parallelism depends on" to a property of two
+per-chunk functions in one process: it covered none of the three caches `build()` wrote. No number moves; the probe's three
+comparisons were right about what they compared. The claim stood for at least seven weeks.
+
+**Cause:** The probe sorts its blocks so that builds in different manufacture orders can be compared - the right construction
+for a probe of per-chunk determinism - and its docstring then credited the sort's guarantee to a build that does not sort. A
+check that supplies the property it is meant to test cannot see that property missing: the class in `docs/OPERATING_RULES.md`
+§4 and in the 2026-09-03 entry on 0012's gate, here between a probe and the code it names. The 2026-09-03 board review read the
+probe closely enough to find that it ran with no source bytes, and did not ask whether it ran the build at all. Found by the
+cold-clone audit (D1) on 2026-10-21, when the builder cache had to be rebuilt.
+
+**Fix:** At 27a61aa both docstrings were rewritten to say what the probe does not prove (comments only). Now: the module's first
+line and the paragraph that set it beside the manifest say what it checks and that it compares no banked hash; the CI step is
+renamed "Per-chunk determinism probe (small slice built three ways + the real build()'s rows as a set; not the manifest proof;
+refuses without source bytes)"; and a fourth build calls `run_study.build()` itself, with a Pool of 2 processes, on the probe's
+slice and requires its rows, sorted by chunk id and label, to be byte-identical to the canonical assembly - the property the
+real build does have - and prints whether its own row order was canonical. On its first run here (2026-10-21) the four builds'
+sorted rows were identical and the real build's own order was not canonical: the builder-cache row-order defect the cold-clone
+audit (D1) found, shown by the gate that had stood in for it (that defect's own entry is filed with the cache's content proof).
+
 ## 2026-10-21 — A cold clone could not rebuild the corpora 0018 to 0025 rest on: one fetch script never worked, and two more Gutenberg books were re-edited
 
 **Claimed:** "Corpora rebuild deterministically from shipped sources and generators; the manifest banks content hashes of every

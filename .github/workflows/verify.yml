@@ -35,7 +35,7 @@ jobs:
       - name: Fetch the ten source texts and pin them to the banked edition (fails on drift)
         run: bash tools/pivot/fetch_sources.sh
 
-      - name: Corpus determinism probe (small slice built twice + order-shuffled, hashes must match; refuses without source bytes)
+      - name: Per-chunk determinism probe (small slice built three ways + the real build()'s rows as a set; not the manifest proof; refuses without source bytes)
         run: |
           python3 -m pip install --quiet -r requirements-pivot.txt
           python3 tools/ci/determinism_probe.py

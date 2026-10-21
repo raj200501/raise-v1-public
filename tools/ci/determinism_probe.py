@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""CI determinism probe: prove, on every push, that a corpus slice rebuilds byte-identically.
+"""CI determinism probe: per-chunk determinism of the corpus primitives, and the real build()'s rows as a SET.
 
-The full corpora (gigabytes) are banked by content hash in tools/pivot/corpus_manifest.py, but
-that proof has only ever been executed on the machine that built them. This probe manufactures a
-SMALL corpus slice twice in the CI container - same primitives the real build uses
-(tools/pivot/corpus.py chunk_fragments + tools/pivot/features.py features_many) - and fails the
-build unless the sha256 of the X, y and g arrays is identical across builds.
+This probe does not execute the manifest proof (tools/pivot/corpus_manifest.py --check) and compares nothing with a banked
+hash: it compares builds made in the same container with each other. It manufactures a SMALL slice three times with the
+per-chunk primitives the real build uses (tools/pivot/corpus.py chunk_fragments + tools/pivot/features.py features_many) and
+fails unless the sha256 of the X, y and g arrays is identical across those builds. A fourth build calls run_study.py's real
+build() itself (Pool and imap_unordered, 2 processes) on the same slice and fails unless its rows, sorted by chunk id and
+label, are byte-identical to the canonical assembly: the property the real build does have. Whether its rows came out in
+canonical order is printed, never required (CORRECTIONS.md 2026-10-21: the CI-probe entry).
 
 It also proves that per-chunk generation is order-independent: chunk i's bytes depend only on i,
 never on which chunks were built before it (no shared RNG or module state leaking between chunks).
@@ -25,7 +27,7 @@ Scale is deliberately small (~40 chunks) so it finishes in well under 3 minutes 
 chunk offset (900400) is far past any index range used to build training data, so this slice
 collides with no banked corpus (chunk index IS the generator seed - see build() in run_study.py).
 
-Exit 0 = deterministic and order-independent; exit 1 = any hash mismatch.
+Exit 0 = deterministic, order-independent, and the real build's rows equal the canonical rows as a set; 1 = any mismatch.
 """
 from __future__ import annotations
 
@@ -107,6 +109,20 @@ def main() -> int:
         for k in ("X", "y", "g"):
             print(f"    {k} sha256 {h[k]}")
 
+    # build 4: the real build() - Pool, imap_unordered, no sort - on the same slice; its rows must be the canonical rows as a set
+    import run_study  # noqa: E402
+    t = time.perf_counter()
+    X4, y4, g4, _ = run_study.build(N_CHUNKS, CHUNK_SIZE, CARVE_LEN, SRC_DIR, 2, 0, CHUNK_OFFSET)
+    order = np.lexsort((y4, g4))
+    in_canonical_order = bool(np.array_equal(order, np.arange(len(order))))
+    h4 = hashes(np.ascontiguousarray(X4[order]), np.ascontiguousarray(y4[order]), np.ascontiguousarray(g4[order]))
+    name4 = "build 4 (run_study.build(), 2 processes; rows sorted by chunk id and label)"
+    results.append((name4, h4, X4.shape, len(y4)))
+    print(f"  {name4}: {len(y4)} fragments, X{X4.shape}  ({time.perf_counter()-t:.1f}s); "
+          f"its own row order {'was' if in_canonical_order else 'was NOT'} canonical (informational)")
+    for k in ("X", "y", "g"):
+        print(f"    {k} sha256 {h4[k]}")
+
     ref = results[0][1]
     failed = False
     for name, h, _, _ in results[1:]:
@@ -118,8 +134,8 @@ def main() -> int:
     if failed:
         print(f"\nDETERMINISM PROBE: FAIL ({total:.1f}s) - rebuild is NOT byte-identical")
         return 1
-    print(f"\nDETERMINISM PROBE: PASS ({total:.1f}s) - two rebuilds byte-identical and "
-          f"per-chunk generation is order-independent")
+    print(f"\nDETERMINISM PROBE: PASS ({total:.1f}s) - two rebuilds byte-identical, per-chunk generation "
+          f"order-independent, and the real build()'s rows equal the canonical rows as a set (not their order)")
     return 0
 
 
