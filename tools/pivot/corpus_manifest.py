@@ -8,6 +8,7 @@ the ARRAY CONTENTS (X, y, g), not the .npz container, because the container embe
 field that legitimately differs between runs.
 
 Re-verify after a rebuild:  python3 tools/pivot/corpus_manifest.py --check
+Re-bank (owner only; rewrites artifacts/pivot/corpus_manifest.json):  python3 tools/pivot/corpus_manifest.py --write
 """
 from __future__ import annotations
 import argparse, hashlib, json, os, sys
@@ -39,8 +40,13 @@ def digest(path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--check", action="store_true")
+    ap.add_argument("--check", action="store_true", help="compare the corpora on disk with the banked manifest")
+    ap.add_argument("--write", action="store_true",
+                    help="re-hash data/pivot/src and the corpora present and OVERWRITE the banked manifest")
     args = ap.parse_args()
+    if not (args.check or args.write):
+        # Until the cold-clone audit (D4) a bare run rewrote the banked manifest, dropping every absent corpus.
+        ap.print_help(); return 2
     if args.check:
         want = json.load(open(OUT, encoding="utf-8"))["corpora"]
         bad = 0

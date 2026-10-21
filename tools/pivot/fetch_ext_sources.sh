@@ -7,8 +7,11 @@ set -euo pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/data/pivot/ext_src"
 mkdir -p "$DIR/rfc"
 UA="raise-v1-research/1.0"
+# Downloads land in "$out.part" and are moved to "$out" only after curl succeeds, so an interrupted transfer never leaves a
+# non-empty "$out" that a re-run would skip as fetched (cold-clone audit D9; fetch_ext_sources2.sh/3.sh do the same).
 get() { local out="$1" url="$2"; [ -s "$out" ] && return 0
-  curl -fsS --retry 3 --max-time 240 -A "$UA" -o "$out" "$url" || { rm -f "$out"; echo "fetch failed: $url" >&2; exit 1; }; }
+  curl -fsS --retry 3 --max-time 240 -A "$UA" -o "$out.part" "$url" && mv "$out.part" "$out" \
+    || { rm -f "$out.part"; echo "fetch failed: $url" >&2; exit 1; }; }
 get "$DIR/Python-3.11.9.tgz" "https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz"
 get "$DIR/python-3.11.9-embed-amd64.zip" "https://www.python.org/ftp/python/3.11.9/python-3.11.9-embed-amd64.zip"
 get "$DIR/sqlite-amalgamation-3450300.zip" "https://sqlite.org/2024/sqlite-amalgamation-3450300.zip"

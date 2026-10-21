@@ -133,14 +133,29 @@ SYNTH = {"json": gen_json, "csv": gen_csv, "log": gen_log, "code": gen_code,
 FAMILIES = ["gutenberg"] + sorted(SYNTH)
 
 
+SOURCE_MANIFEST = os.path.join(REPO, "artifacts", "pivot", "corpus_manifest.json")
+
+
 def load_real(src_dir: str) -> bytes:
+    """Every file in src_dir, concatenated in sorted-name order (subdirectories ignored).
+
+    Refuses a directory holding any file that is not a banked source name (sources_sha256 in
+    artifacts/pivot/corpus_manifest.json). One extra file - an interrupted fetch's temporary, an editor
+    backup, a .DS_Store - lengthens the blob, so every gutenberg offset (make_chunk) moves and every
+    gutenberg chunk of a rebuild changes (cold-clone audit D5). For the banked sources the bytes
+    returned are exactly what they were."""
     blobs = []
     if os.path.isdir(src_dir):
-        for f in sorted(os.listdir(src_dir)):
-            p = os.path.join(src_dir, f)
-            if os.path.isfile(p):
-                with open(p, "rb") as fh:
-                    blobs.append(fh.read())
+        names = sorted(f for f in os.listdir(src_dir) if os.path.isfile(os.path.join(src_dir, f)))
+        with open(SOURCE_MANIFEST, encoding="utf-8") as fh:
+            banked = set(json.load(fh)["sources_sha256"])
+        extra = [f for f in names if f not in banked]
+        if extra:
+            raise RuntimeError(f"{src_dir} holds files that are not banked sources: {', '.join(extra)}. Remove them; "
+                               f"every file here is read into the gutenberg blob (banked: {', '.join(sorted(banked))}).")
+        for f in names:
+            with open(os.path.join(src_dir, f), "rb") as fh:
+                blobs.append(fh.read())
     return b"".join(blobs)
 
 

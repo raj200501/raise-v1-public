@@ -11,8 +11,10 @@ permutation of the remaining candidates. Only the new pool positions are featuri
 npz holds the NEW rows only, and the runner concatenates [0021 fit corpus | realfit2 | realfit3].
 
   python3 tools/pivot/corpus_realfit3.py --verify-pins
-  python3 tools/pivot/corpus_realfit3.py --build          # writes data/pivot/realfit3_c4096.npz + artifacts/pivot/realfit3_corpus_manifest.json
-  python3 tools/pivot/corpus_realfit3.py --check          # the built arrays hash to the manifest
+  python3 tools/pivot/corpus_realfit3.py --build          # writes data/pivot/realfit3_c4096.npz + data/pivot/realfit3_c4096_rebuilt_manifest.json
+  python3 tools/pivot/corpus_realfit3.py --check          # the built arrays hash to the banked manifest
+                                                          # (artifacts/pivot/realfit3_corpus_manifest.json; --build writes it only
+                                                          # with --bank-manifest)
   python3 tools/pivot/corpus_realfit3.py --disjoint       # nothing shared with 0018's evaluation corpus, 0021's fit block or 0024's corpus
 """
 import argparse, hashlib, json, os, re, sys, time
@@ -400,7 +402,10 @@ def main():
     ap.add_argument("--src", default=SRC_DIR); ap.add_argument("--pins", default=PINS_PATH)
     ap.add_argument("--src-0024", default=c2.SRC_DIR, help="0024's pinned sources (verified against ext_source_pins2.json)")
     ap.add_argument("--realfit2", default=c2.NPZ_PATH); ap.add_argument("--realfit2-manifest", default=c2.MANIFEST_PATH)
-    ap.add_argument("--out", default=NPZ_PATH); ap.add_argument("--manifest", default=MANIFEST_PATH)
+    ap.add_argument("--out", default=NPZ_PATH)
+    ap.add_argument("--manifest", default=None, help="--check: the manifest to compare with (default: the banked one); "
+                                                      "--build: where to write (default: beside the npz)")
+    ap.add_argument("--bank-manifest", action="store_true", help="--build: write the banked manifest, overwriting it")
     ap.add_argument("--cap-per-family", type=int, default=None, help="probe/smoke only: at most this many NEW pool chunks per family")
     ap.add_argument("--base-per-family", type=int, default=None, help="smoke only: the per-family base count the doublings start from")
     a = ap.parse_args()
@@ -412,7 +417,7 @@ def main():
         print("PINS: " + ("every 0025 and 0024 pinned file present and byte-identical" if ok and ok2 else "PROBLEMS: " + "; ".join((problems + problems2)[:10])))
         return 0 if ok and ok2 else 1
     if a.check:
-        return 0 if check(a.out, a.manifest) else 1
+        return 0 if check(a.out, a.manifest or MANIFEST_PATH) else 1
     if a.disjoint:
         return 0 if disjoint(a.chunk_size, a.out, a.src, a.realfit2, a.realfit2_manifest, a.src_0024) else 1
     if a.probe:
@@ -425,12 +430,13 @@ def main():
     if a.build:
         if (a.cap_per_family is not None or base is not None) and os.path.abspath(a.out) == os.path.abspath(NPZ_PATH):
             print("REFUSING: a capped or rebased build is a smoke; it never writes the sealed corpus path", file=sys.stderr); return 2
+        man_path = ce.build_manifest_path(a.manifest, a.bank_manifest, MANIFEST_PATH, a.out)
+        if man_path is None:
+            return 2
         X, Y, G, F, meta, sel, info, secs = build(a.chunk_size, a.carve, a.procs, a.src, pins, cap_per_family=a.cap_per_family, base=base, **kw)
         man = manifest_of(X, Y, G, F, meta, sel, info, a.chunk_size, a.carve, secs, pins, a.realfit2, a.realfit2_manifest)
         save_npz(a.out, X, Y, G, F, meta, a.chunk_size, a.carve)
-        os.makedirs(os.path.dirname(a.manifest), exist_ok=True)
-        with open(a.manifest, "w", encoding="utf-8") as fh:
-            json.dump(man, fh, indent=2, sort_keys=True); fh.write("\n")
+        ce.write_manifest(man, man_path, MANIFEST_PATH)
         print(f"built {man['n_rows']} NEW rows from {man['n_chunks']} new chunks over {len(FAMILIES)} real families in {secs}s, nested on 0024's pool")
         print(f"  {os.path.relpath(a.out, REPO)}  X {man['arrays']['X']['sha256'][:16]}  y {man['arrays']['y']['sha256'][:16]}")
         for f in FAMILIES:

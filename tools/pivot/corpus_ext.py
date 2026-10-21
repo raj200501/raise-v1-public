@@ -25,8 +25,12 @@ permutation picks which chunks are used: no two chunks share a byte (the audit's
 offsets let evaluation windows overlap). Chunk ids live in their own space (CHUNK_ID_BASE + family stride + k), and
 the family of a row is the `fam` array, never `g % 8`. Nothing here is ever fitted on: the corpus is scored only.
 
-    python3 tools/pivot/corpus_ext.py --build            # data/pivot/ext_c4096.npz + artifacts/pivot/ext_corpus_manifest.json
+    python3 tools/pivot/corpus_ext.py --build            # data/pivot/ext_c4096.npz + data/pivot/ext_c4096_rebuilt_manifest.json
     python3 tools/pivot/corpus_ext.py --check            # array hashes of the npz against the banked manifest
+                                                         # (artifacts/pivot/ext_corpus_manifest.json)
+
+--build never writes over a banked manifest (an existing file under artifacts/) unless --bank-manifest is given: a rebuild's
+manifest goes beside its npz, so `--build && --check` compares the rebuild with the banked hashes, not with itself.
     python3 tools/pivot/corpus_ext.py --probe            # determinism: a small slice built twice, in two chunk orders
     python3 tools/pivot/corpus_ext.py --verify-pins      # every pinned source file present and byte-identical
 """
@@ -340,6 +344,41 @@ def manifest_of(X, Y, G, F, meta, n_per_family, chunk_size, carve_len, seed, bui
             "generated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
 
 
+def rebuilt_manifest_path(npz_path):
+    """Where --build writes a rebuilt corpus's manifest by default: beside the npz (data/pivot/ is never committed)."""
+    return os.path.splitext(npz_path)[0] + "_rebuilt_manifest.json"
+
+
+def build_manifest_path(manifest, bank_manifest, banked_path, npz_path):
+    """The path a builder's --build writes its manifest to, or None (after saying why) when that would overwrite a banked
+    manifest without --bank-manifest. Shared by corpus_ext.py, corpus_realfit.py, corpus_realfit2.py and corpus_realfit3.py.
+
+    Until the cold-clone audit (D2) --manifest defaulted to the banked artifact for --build as well as for --check, so the
+    documented `--build && --check` compared a rebuild with the manifest it had just written and always passed. Now: an
+    explicit --manifest is used as given; otherwise the banked path only with --bank-manifest, else beside the npz. Any
+    existing file under artifacts/ is overwritten only with --bank-manifest."""
+    path = os.path.realpath(manifest or (banked_path if bank_manifest else rebuilt_manifest_path(npz_path)))
+    banked_root = os.path.join(os.path.realpath(REPO), "artifacts") + os.sep
+    if path.startswith(banked_root) and os.path.exists(path) and not bank_manifest:
+        print(f"REFUSING: {os.path.relpath(path, REPO)} is a banked manifest and --build would overwrite it. Omit --manifest "
+              f"to write the rebuilt one to {os.path.relpath(rebuilt_manifest_path(npz_path), REPO)} (then --check compares "
+              f"the rebuild with the banked one), or pass --bank-manifest to re-bank on purpose.", file=sys.stderr)
+        return None
+    return path
+
+
+def write_manifest(man, path, banked_path):
+    """Write a builder's manifest (the banked format: indent 2, sorted keys, trailing newline) and say where it went."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(man, fh, indent=2, sort_keys=True); fh.write("\n")
+    if path == os.path.realpath(banked_path):
+        print(f"manifest: {os.path.relpath(path, REPO)} - written at the BANKED path")
+    else:
+        print(f"manifest: {os.path.relpath(path, REPO)} (rebuilt; the banked {os.path.relpath(banked_path, REPO)} is untouched, "
+              f"and --check compares the npz with it)")
+
+
 def save_npz(path, X, Y, G, F, meta, n_per_family, chunk_size, carve_len, seed):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     np.savez(path, X=X, y=Y, g=G, fam=F, carve=np.int64(carve_len), chunk_size=np.int64(chunk_size),
@@ -373,7 +412,10 @@ def main():
     ap.add_argument("--seed", type=int, default=DEFAULTS["seed"])
     ap.add_argument("--procs", type=int, default=4)
     ap.add_argument("--src", default=SRC_DIR)
-    ap.add_argument("--out", default=NPZ_PATH); ap.add_argument("--manifest", default=MANIFEST_PATH)
+    ap.add_argument("--out", default=NPZ_PATH)
+    ap.add_argument("--manifest", default=None, help="--check: the manifest to compare with (default: the banked one); "
+                                                      "--build: where to write (default: beside the npz)")
+    ap.add_argument("--bank-manifest", action="store_true", help="--build: write the banked manifest, overwriting it")
     a = ap.parse_args()
     if a.verify_pins:
         ok, problems = verify_pins(a.src)
@@ -391,6 +433,9 @@ def main():
         print("EXT CORPUS PROBE: " + ("deterministic (two builds, two task orders, identical arrays)" if same else "NOT deterministic"))
         return 0 if same else 1
     if a.build:
+        man_path = build_manifest_path(a.manifest, a.bank_manifest, MANIFEST_PATH, a.out)
+        if man_path is None:
+            return 2
         pins = load_pins()
         blobs = load_real_blobs(a.src, pins); sel = real_selection(blobs, a.n_per_family, a.chunk_size, a.seed)
         del blobs
@@ -399,17 +444,14 @@ def main():
         X, Y, G, F, meta, s = build(a.n_per_family, a.chunk_size, a.carve, a.seed, a.procs, a.src)
         save_npz(a.out, X, Y, G, F, meta, a.n_per_family, a.chunk_size, a.carve, a.seed)
         man = manifest_of(X, Y, G, F, meta, a.n_per_family, a.chunk_size, a.carve, a.seed, s, pins, sel)
-        os.makedirs(os.path.dirname(a.manifest), exist_ok=True)
-        with open(a.manifest, "w", encoding="utf-8") as fh:
-            json.dump(man, fh, indent=2, sort_keys=True); fh.write("\n")
-        print(f"wrote {os.path.relpath(a.out, REPO)} ({len(Y)} rows, {man['n_chunks']} chunks, {s}s) and "
-              f"{os.path.relpath(a.manifest, REPO)}")
+        print(f"wrote {os.path.relpath(a.out, REPO)} ({len(Y)} rows, {man['n_chunks']} chunks, {s}s)")
+        write_manifest(man, man_path, MANIFEST_PATH)
         for f, r in man["per_family"].items():
             print(f"  {f:<8} rows {r['n_rows']:>6} chunks {r['n_chunks']:>4} ceilings streams {r['ceiling_distinct_streams']} "
                   f"fragments {r['ceiling_distinct_fragments']}")
         return 0
     if a.check:
-        return 0 if check(a.out, a.manifest) else 1
+        return 0 if check(a.out, a.manifest or MANIFEST_PATH) else 1
     ap.print_help(); return 2
 
 

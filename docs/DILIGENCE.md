@@ -143,7 +143,12 @@ numbers.
 
 ```
 bash tools/gates.sh                                  # every gate, one command, exit non-zero on failure
+pip install -r requirements-pivot.txt                # the compressors the corpus builder calls (zopfli, isal, libdeflate)
 bash tools/pivot/fetch_sources.sh                    # fetch sources; pin_sources.py fails unless they hash to the banked edition
+python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --chunks 50000 --carve 4096 \
+    --model hgb --rungs 1000 10000 100000 800000 --tag full \
+    --out /tmp/deflate_curve.json --scores-out /tmp/deflate_rung_scores.json
+                                                     # build the corpus (then re-measure it into scratch files, not the banked ones)
 python3 tools/pivot/corpus_manifest.py --check       # prove a rebuilt corpus is byte-identical to ours
 ```
 

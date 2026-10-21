@@ -24,11 +24,16 @@ echo
 
 cat <<'MSG'
 
-To re-derive the result from scratch rather than read the banked one:
+To re-derive the result from scratch rather than read the banked one, in this order:
 
     pip install -r requirements-pivot.txt     # zopfli, isal, libdeflate
     tools/pivot/fetch_sources.sh              # Project Gutenberg source bytes; terms in docs/compliance/LICENSE_AUDIT.md
-    python3 tools/pivot/run_study.py --help   # the manufacture-and-measure pipeline
+    python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --chunks 50000 --carve 4096 \
+        --model hgb --rungs 1000 10000 100000 800000 --tag full \
+        --out /tmp/deflate_curve.json --scores-out /tmp/deflate_rung_scores.json
+                                              # builds the corpus first (no cache yet), then measures; the banked
+                                              # artifacts/pivot/ files are not written
+    python3 tools/pivot/corpus_manifest.py --check   # the rebuilt corpus against the banked array hashes
 
 Everything above exits non-zero on failure.
 MSG

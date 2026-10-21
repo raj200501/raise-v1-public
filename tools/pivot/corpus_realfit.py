@@ -20,8 +20,10 @@ are not built, because the question is about real content.
 Chunk ids live in their own space (20000000 + family stride + k), disjoint from the builder's (0..49999)
 and from the sealed extension corpus's (10000000+), so a shared id is impossible rather than unlikely.
 
-    python3 tools/pivot/corpus_realfit.py --build     # data/pivot/realfit_c4096.npz + artifacts/pivot/realfit_corpus_manifest.json
+    python3 tools/pivot/corpus_realfit.py --build     # data/pivot/realfit_c4096.npz + data/pivot/realfit_c4096_rebuilt_manifest.json
     python3 tools/pivot/corpus_realfit.py --check     # array hashes of the npz against the banked manifest
+                                                      # (artifacts/pivot/realfit_corpus_manifest.json; --build writes it only
+                                                      # with --bank-manifest)
     python3 tools/pivot/corpus_realfit.py --disjoint  # prove fit and sealed chunks share no blob chunk and no id
     python3 tools/pivot/corpus_realfit.py --probe     # determinism: a small slice built twice, in two task orders
 """
@@ -268,11 +270,14 @@ def main():
     ap.add_argument("--carve", type=int, default=ce.DEFAULTS["carve"])
     ap.add_argument("--procs", type=int, default=4)
     ap.add_argument("--src", default=ce.SRC_DIR)
-    ap.add_argument("--out", default=NPZ_PATH); ap.add_argument("--manifest", default=MANIFEST_PATH)
+    ap.add_argument("--out", default=NPZ_PATH)
+    ap.add_argument("--manifest", default=None, help="--check: the manifest to compare with (default: the banked one); "
+                                                      "--build: where to write (default: beside the npz)")
+    ap.add_argument("--bank-manifest", action="store_true", help="--build: write the banked manifest, overwriting it")
     ap.add_argument("--cap-per-family", type=int, default=None, help="probe/smoke only: at most this many chunks per family")
     a = ap.parse_args()
     if a.check:
-        return 0 if check(a.out, a.manifest) else 1
+        return 0 if check(a.out, a.manifest or MANIFEST_PATH) else 1
     if a.disjoint:
         return 0 if disjoint(a.chunk_size) else 1
     if a.probe:
@@ -282,6 +287,9 @@ def main():
         print(f"PROBE: {len(r1[1])} rows; two task orders give {'IDENTICAL' if same else 'DIFFERENT'} arrays")
         return 0 if same else 1
     if a.build:
+        man_path = ce.build_manifest_path(a.manifest, a.bank_manifest, MANIFEST_PATH, a.out)
+        if man_path is None:
+            return 2
         pins = ce.load_pins()
         ok, problems = ce.verify_pins(a.src, pins)
         if not ok:
@@ -291,9 +299,7 @@ def main():
         man = manifest_of(X, Y, G, F, meta, sel, sealed, dropped, counts, a.chunk_size, a.carve, secs, pins,
                           ce.load_real_blobs(a.src))
         save_npz(a.out, X, Y, G, F, meta, a.chunk_size, a.carve)
-        os.makedirs(os.path.dirname(a.manifest), exist_ok=True)
-        with open(a.manifest, "w", encoding="utf-8") as fh:
-            json.dump(man, fh, indent=2, sort_keys=True); fh.write("\n")
+        ce.write_manifest(man, man_path, MANIFEST_PATH)
         print(f"built {man['n_rows']} rows from {man['n_chunks']} chunks over {len(FAMILIES)} real families in {secs}s")
         print(f"  {os.path.relpath(a.out, REPO)}  X {man['arrays']['X']['sha256'][:16]}  y {man['arrays']['y']['sha256'][:16]}")
         for f in FAMILIES:

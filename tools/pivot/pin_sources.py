@@ -68,6 +68,11 @@ def main() -> int:
             bad.append(name); continue
         print(f"pinned   {name}: upstream edition {got[:16]}… (seen {edition['observed_utc_date']}) "
               f"-> banked edition via {len(edition['line_edits'])} recorded line edit(s)")
+    # tools/pivot/corpus.py load_real reads EVERY file here and refuses one that is not banked (cold-clone audit D5)
+    for name in sorted(os.listdir(SRC)) if os.path.isdir(SRC) else []:
+        if os.path.isfile(os.path.join(SRC, name)) and name not in banked:
+            print(f"EXTRA    {name}: not a banked source; the corpus loader refuses a source directory "
+                  f"holding it. Remove it."); bad.append(name)
     print("SOURCE PINS:", "PASS - every source is the banked edition" if not bad
           else f"FAIL ({len(bad)}: {', '.join(bad)})")
     return 1 if bad else 0

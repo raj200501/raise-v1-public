@@ -329,7 +329,7 @@
       "class": "primary-verifiable",
       "id": "deflate-curve-slope",
       "json_path": "$.slope",
-      "reverify": "python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --tag full",
+      "reverify": "python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --chunks 50000 --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --tag full --out /tmp/deflate_curve.json --scores-out /tmp/deflate_rung_scores.json",
       "value": 0.04912072076972296
     },
     {
@@ -356,7 +356,7 @@
       "class": "primary-verifiable",
       "id": "deflate-margin-expanded",
       "json_path": "$.margin_over_expanded_baseline",
-      "reverify": "python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --tag full",
+      "reverify": "python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --chunks 50000 --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --tag full --out /tmp/deflate_curve.json --scores-out /tmp/deflate_rung_scores.json",
       "value": 0.0583
     },
     {
@@ -720,7 +720,7 @@
       "class": "primary-verifiable",
       "id": "seed-robustness",
       "json_path": "$.slope_spread",
-      "reverify": "bash -c '.venv/bin/python tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --seed 7 --tag seed-7 --out /tmp/s7.json --scores-out /tmp/s7s.json'",
+      "reverify": "python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --chunks 50000 --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --seed 7 --tag seed-7 --out /tmp/s7.json --scores-out /tmp/s7s.json",
       "value": 0.0014
     },
     {

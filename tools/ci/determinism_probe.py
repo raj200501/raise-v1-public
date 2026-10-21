@@ -7,11 +7,19 @@ SMALL corpus slice twice in the CI container - same primitives the real build us
 (tools/pivot/corpus.py chunk_fragments + tools/pivot/features.py features_many) - and fails the
 build unless the sha256 of the X, y and g arrays is identical across builds.
 
-It also proves the property the real build's parallelism depends on: run_study.py's build() feeds
-a multiprocessing Pool with imap_unordered, so per-chunk generation MUST be order-independent
-(chunk i's bytes must depend only on i, never on which chunks were built before it, i.e. no shared
-RNG or module state leaking between chunks). Build 3 therefore manufactures the same chunks in
-REVERSED order, reassembles them in canonical order, and must reproduce the same hashes.
+It also proves that per-chunk generation is order-independent: chunk i's bytes depend only on i,
+never on which chunks were built before it (no shared RNG or module state leaking between chunks).
+Build 3 therefore manufactures the same chunks in REVERSED order, reassembles them in canonical
+order, and must reproduce the same hashes.
+
+What it does NOT prove: that the real build's ROW ORDER is reproducible. It is not. run_study.py's
+build() feeds a multiprocessing Pool with imap_unordered (chunksize 8) and writes each finished
+batch at the next free row, and nothing sorts the rows before the cache is saved, so the row order
+of a cache it builds (full_c4096, and carve_c1024/carve_c2048 through run_carve.py) depends on
+worker scheduling; order-independence makes the SET of rows reproducible, not their order. The
+canonical-order assembly below is this probe's own, not the real build's. build() is deliberately
+left as it is: a different behaviour would make the banked corpora impossible to reason about
+(cold-clone audit D1).
 
 Scale is deliberately small (~40 chunks) so it finishes in well under 3 minutes on 2 CPUs, and the
 chunk offset (900400) is far past any index range used to build training data, so this slice
@@ -44,8 +52,9 @@ def build_slice(order: list[int], real: bytes):
     """Manufacture the chunks in the given order, then assemble in CANONICAL (index) order.
 
     Same per-chunk primitives as run_study.py's build(); assembly is sorted by chunk index so two
-    builds are comparable regardless of manufacture order - exactly the invariant that makes the
-    real build's imap_unordered pool safe.
+    builds are comparable regardless of manufacture order. The real build does NOT sort: it keeps
+    imap_unordered's completion order (see the module docstring), so this establishes per-chunk
+    order-independence only, not a reproducible row order for the real caches.
     """
     blocks = {}
     for idx in order:
