@@ -4401,6 +4401,17 @@ def _(root):
         return 1, f"pool-block hashes {sorted(h[:8] for h in pool)} fold-block hashes {sorted(h[:8] for h in fold)}"
     cache = os.path.join(REPO, "data", "pivot", "full_c4096.npz")
     if os.path.exists(cache):
+        # the null blocks are drawn from row POSITIONS of the banked cache; a rebuilt cache holds the same rows in another order
+        # (the builder writes worker-completion order; CORRECTIONS.md 2026-10-21), so the recomputation runs only on the banked one
+        import hashlib, io, zipfile
+        with zipfile.ZipFile(cache) as zf:
+            import numpy as np
+            g_sha = hashlib.sha256(np.ascontiguousarray(np.load(io.BytesIO(zf.read("g.npy")))).tobytes()).hexdigest()
+        banked_g = A("artifacts", "pivot", "corpus_manifest.json")["corpora"]["data/pivot/full_c4096.npz"]["g"]["sha256"]
+        if g_sha != banked_g:
+            return 0, ("one pool block, one fold block (the cache on disk is a rebuild, g " + g_sha[:12] + " not the banked "
+                       + banked_g[:12] + ": the banked row order is lost, so the recomputation from y and g cannot be run; "
+                       "CORRECTIONS.md 2026-10-21)")
         rc, out = run([PY, "tools/pivot/null_block_check.py", "--cache", cache, "--sealed", r19.PARTITION["null_sorted_sha256"],
                        "--artifact", "artifacts/pivot/oob_4096.json"], REPO)
         if rc != 0:
