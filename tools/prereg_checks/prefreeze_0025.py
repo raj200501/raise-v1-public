@@ -242,6 +242,16 @@ def main() -> int:
     chk(_rsha(ev) == r25.PARTITION["eval_idx_sha256"] and _rsha(np.asarray(g_b[ev])) == r25.PARTITION["eval_g_sha256"] and _rsha(np.asarray(y_b[ev])) == r25.PARTITION["eval_y_sha256"]
         and _rsha(tr) == P["pool_idx_sha256"] and _rsha(np.sort(tr).astype(np.int64)) == r25.PARTITION["pool_sorted_sha256"] and int(len(ev)) == r25.PARTITION["n_eval_rows"],
         "the sealed evaluation set and pool hashes are what the runner's grouped_split() computes from the builder cache on disk")
+    if _rebuilt:
+        # the evaluation rows' features on disk, in the sealed order, are the ones the content proof covered (a hand-written proof
+        # or record cannot stand in for them)
+        from npzmap import npz_memmap as _nm
+        _Xm = _nm(f"{REPO}/data/pivot/full_c4096.npz", "X"); _h = hashlib.sha256()
+        for _i in range(0, len(ev), 20000):
+            _h.update(np.ascontiguousarray(_Xm[ev[_i:_i + 20000]], dtype=np.float32).tobytes())
+        del _Xm
+        chk(_h.hexdigest() == _am[-1].get("eval_X_sha256_in_sealed_order") == _proof.get("eval_X_sha256_in_sealed_order"),
+            "the evaluation rows' features on disk, in the sealed order, are the ones the content proof covered")
     y_all = np.concatenate([np.asarray(dfit["y"]), y23]); top_rows = rows_all[RP["n_rungs"] - 1]
     sub = y_all[top_rows].copy(); np.random.default_rng([P["seed3"], rc2_.NULL_STREAM_WORD]).shuffle(sub)
     chk(_rsha(sub) == P["null_y_shuffled_sha256_expected"] and not np.array_equal(sub, y_all[top_rows]) and np.array_equal(np.sort(sub), np.sort(y_all[top_rows])),

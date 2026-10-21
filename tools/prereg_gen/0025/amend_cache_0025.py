@@ -130,7 +130,9 @@ def main():
             "hashes and the row-position hashes are this cache's (CORRECTIONS.md, 2026-10-21)")
     ci['X_note'] = note
     S['sealed_hashes']['protocol_sha256'] = shao(P); S['sealed_hashes']['curve_sha256'] = shao(S['curve'])
-    changed = pr != before
+    # a proof re-run after the re-seal (new bytes, same cache) must be recordable: append a record instead of printing 'unchanged'
+    _last = [r for r in before.get('amendments_before_freeze', []) if r.get('by') == 'tools/prereg_gen/0025/amend_cache_0025.py']
+    changed = pr != before or bool(_last and (_last[-1].get('proof_sha256'), _last[-1].get('eval_X_sha256_in_sealed_order')) != (proof_sha, eval_x))
     if changed:
         pr.setdefault('amendments_before_freeze', []).append({
             "date": "2026-10-21", "by": "tools/prereg_gen/0025/amend_cache_0025.py",
