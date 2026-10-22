@@ -40,15 +40,18 @@ rule in that case is to take the reading that does not flatter us.
 
 ## What the search actually produced
 
-The useful output is not the absence of a domain. It is four laws, each derived by measurement —
-three from the search, and a fourth from our own pivot — one conjecture that is explicitly *not*
-measured, and a precise statement of the class of problem that would work, which no candidate had.
+The useful output is not the absence of a domain. It is four laws, each resting on measurement —
+three from the search, several of whose load-bearing measurements are subagent numbers this
+repository cannot reproduce (the coverage map's `neither` class, below), and a fourth from our own
+pivot — one conjecture that is explicitly *not* measured, and a precise statement of the class of
+problem that would work, which no candidate had.
 
 ### L1 — Smooth reprocessing corrections are fitted, not learned
 
 A cubic polynomial plus a once-per-revolution sinusoid — about ten lines, no learning — explains
 between 0.946 and 0.994 of the residual variance in eight of nine Sentinel-1 orbit-correction
-component-arcs. This retires the entire *"an agency later revises its own product"* family:
+component-arcs — a subagent measurement this repository cannot reproduce (coverage class `neither`,
+below). On that evidence we retire the entire *"an agency later revises its own product"* family:
 orbit corrections, tide-gauge and streamflow revisions, precipitation reanalysis, altimetry
 reprocessing, definitive magnetometer data, air-quality certification. They are curve fits.
 
@@ -58,7 +61,7 @@ Four candidates died to this in one round: NMR apodization read off the reconstr
 cryo-EM sharpening off a Guinier plot, halftone screen parameters off a 2-D FFT, read aligner off
 the MAPQ value set. Only lossy, non-invertible generators are candidates at all.
 
-### L3 — For labels to be free at scale, the labelling must already be someone's job or by-product — and there are exactly three ways that happens, each destroying a different gate
+### L3 — For labels to be free at scale, the labelling must already be someone's job or by-product — and among our candidates we found three ways that happens, each destroying a different gate
 
 **(i) A machine does it.** Then the machine is re-runnable, and *re-run-and-compare* is a
 zero-training decoder. Six CDCL SAT solvers, same instance, models kept and trajectories discarded —
@@ -131,16 +134,19 @@ because the within-size result at 1024 fails its own margin independently of any
 
 ### C1 — a CONJECTURE, not a law: withholding the transform's input is what creates the white space, and it is the same thing that makes the market small
 
-Everything above this line is measured. **This is not**, and it is labelled `C1` rather than `L5`
-for that reason. It is an argued reading of this repository's own search record, which is the
-weakest kind of evidence there is — our search, our framing, our blind spots.
+Everything above this line rests on measurement, several of the load-bearing ones subagent
+measurements in the coverage map's `neither` class. **This is not**, and it is labelled `C1` rather
+than `L5` for that reason. It is an argued reading of this repository's own search record, which is
+the weakest kind of evidence there is — our search, our framing, our blind spots.
 
 The pattern it names is this. The identity-shortcut law says to hunt **transform** label factories
 rather than **record** ones, because a transform's label varies within an entity while a record's
 does not. The carved-DEFLATE task is the one candidate that survived that screen, and it survived
 because the manufacturer's input — the plaintext — is withheld from the student. That withholding is
-precisely why no incumbent tool applies: `preflate` needs the stream start, `precomp` needs the
-plaintext, and a carved fragment has neither. **The withholding is the white space.**
+precisely why none of the five public tools we found applies (encode.su and patents were not
+searched, and commercial forensic suites were not checked): `preflate` needs the stream start,
+`precomp` needs the plaintext, and a carved fragment has neither. **The withholding is the white
+space.**
 
 But an artifact examined without the input that produced it, by someone who wants to know what
 produced it, *is* a forensics problem. That is what forensics means. So the same withholding that
@@ -291,11 +297,21 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 
 ## Results at the same size, passes and failures alike
 
+**What `primary-verifiable` means below for a result fitted on a builder-cache pool** (0003, 0006,
+0007, 0011, 0012, 0014 to 0018, and 0021's reproduction and builder-matched blocks): a stranger can
+re-measure it with the shipped code on a different draw of the same design, not re-derive the banked
+number on the same rows. The three caches `run_study.build()` wrote keep their rows in
+worker-completion order, which no rebuild repeats, and that order fixed which rows formed the pool.
+Nor are 0024's rung-6 and rung-7 fits re-derivable bit for bit on a rebuilt second-decade corpus:
+its rung-7 logistic, refitted on one, differed slightly. Every banked number stands; what a rebuild
+does and does not reproduce is in the Phase 3 row below and in `CORRECTIONS.md` (entries of
+2026-10-21 and 2026-10-22).
+
 ### Passed
 
 | Result | Value | Class |
 |---|---|---|
-| Every gate can be shown to fail | 801 mutations, 801 detected, 0 survived | primary-verifiable |
+| Every gate can be shown to fail | 801 mutations, 801 detected, 0 survived | primary-verifiable (report banked 2026-09-17, before the unfrozen 0025 gate was registered) |
 | A number that is real but STALE is caught, not just a fabricated one | `tools/freshness.py`, 9 mutations | primary-verifiable |
 | Preregistration chain verifies, reader unchanged since freeze | 24 entries, head `f57f067c…` | primary-verifiable |
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |
@@ -304,11 +320,11 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 | SAT free decoder re-derived | 0.9857 with zero training rows, against 0.1667 chance | primary-verifiable |
 | Assembly-provenance split leak re-derived | temporal split 0.4765 **loses** to a 0.4805 constant | primary-verifiable |
 | Assembly-provenance confound re-derived | a fake BioProject partition is predictable at 0.7772 | primary-verifiable |
-| **Carved-DEFLATE scaling curve** | **`CURVE_ESTABLISHED`** — +0.0491/decade, cluster-corrected 95% CI [0.048216, 0.050014], over 2.9031 decades; margin +0.1003 frozen and +0.0583 stricter under fixed recipes, both above 0.05 | primary-verifiable |
+| **Carved-DEFLATE scaling curve** | **`CURVE_ESTABLISHED`** — +0.0491/decade, cluster-corrected 95% CI [0.048216, 0.050014], over 2.9031 decades; margin +0.1003 frozen and +0.0583 stricter under fixed recipes, both above 0.05 | primary-verifiable as a re-measurement: on a rebuilt builder cache these numbers are re-measured on a different draw of the pool, not re-derived on the banked rows (see above) |
 | **Family-diversity curve at 4096 (0016)** | **`DIVERSITY_HELPS`** — at a fixed budget of 4900 source chunks, the incumbent's accuracy on an unseen family rises 0.00596 per doubling of training families (bar 0.005): 0.0666 with one family, 0.0829 with seven; per-family depth moves it by -0.002; the linear rules' curves are steeper. Chain entry 16. |
 | **Symmetric recipe search at 4096 (0014)** | **`RECIPE_CLEARS`** — the searched model (M4) reaches 0.2884 against a searched-and-floored bar of 0.2317 set by the standardised logistic: +0.0567 frozen, +0.0567 expanded, +0.0576 with the leaked family excluded, all above 0.05; the headline survives a fair baseline at a smaller margin than fixed recipes gave | primary-verifiable |
 | **Real-plaintext scaling curve at 4096 (0023)** | **`REAL_CURVE_RISES`** — the budget question 0021 and 0022 left open, answered on the only real content the record has outside its sealed scoring set: 0021's fit block cut into four nested rungs of plaintexts (130, 258, 515, 1029), 0021's three fixed recipes fitted on each. The model rises 0.0974, 0.1065, 0.1139, 0.1193: 0.007344 per doubling of plaintexts (scored-chunk interval [0.006199, 0.00846]) against 0.005 required — a rise to 0021's failing reading (0.1193 against 0.1429 needed). The linear rule rises faster: 0.009551 per doubling, model minus logistic -0.002207 (paired interval [-0.003707, -0.000752]), read in advance as 'the linear rule buys more per doubling'. Reproduction drift 0.0; null 0.0409; the replicate of the smallest rung moved the model by 0.001. Chain entry 23. | primary-verifiable |
-| **Second decade of real plaintexts at 4096 (0024)** | **`SECOND_DECADE_RISES_MODEL_LEADS`** — the second decade of real plaintexts rises — and the boosted model still leads the hand-writable linear rule at the top rung: a second fit corpus of 7574 plaintexts from 23 newly pinned archives and 600 more RFC texts (other files of 0021's five families), nested on 0021's block in three exact doublings (130, 258, 515, 1029, 2058, 4116, 8232 plaintexts; the 'second decade' is 3.0 doublings (0.9031 of a decade) of other files above 0021's block; both together span 1.8016 decades, short of 0003's two-decade scope rule). The model reads 0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404: second-decade slope 0.00697 per doubling (scored-chunk interval [0.00571, 0.00824]) against 0.005 required; the logistic 0.00638, the tree -0.0003. At the top rung model minus logistic 0.0039 (paired interval [0.0001, 0.0077]), `MODEL_LEADS`. The shift arm (rung 5's new plaintexts alone at rung 4's count) reads 0.1184 for the model against rung 4's 0.1193. Rung 4 reproduced 0021 with drift 0.0; null 0.0372. Chain entry 24. | primary-verifiable |
+| **Second decade of real plaintexts at 4096 (0024)** | **`SECOND_DECADE_RISES_MODEL_LEADS`** — the second decade of real plaintexts rises — and at the top rung the boosted model leads the standardised logistic by 0.0039, after trailing it at rungs 5 and 6: a second fit corpus of 7574 plaintexts from 23 newly pinned archives and 600 more RFC texts (other files of 0021's five families), nested on 0021's block in three exact doublings (130, 258, 515, 1029, 2058, 4116, 8232 plaintexts; the 'second decade' is 3.0 doublings (0.9031 of a decade) of other files above 0021's block; both together span 1.8016 decades, short of 0003's two-decade scope rule). The model reads 0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404: second-decade slope 0.00697 per doubling (scored-chunk interval [0.00571, 0.00824]) against 0.005 required; the logistic 0.00638, the tree -0.0003. At the top rung model minus logistic 0.0039 (paired interval [0.0001, 0.0077], over the scored chunks only; fit-side variance unmeasured), `MODEL_LEADS`. The shift arm (rung 5's new plaintexts alone at rung 4's count) reads 0.1184 for the model against rung 4's 0.1193. Rung 4 reproduced 0021 with drift 0.0; null 0.0372. Chain entry 24. | primary-verifiable |
 
 ### Failed, or did not reach a conclusion
 
@@ -322,9 +338,9 @@ The wider claim — that this was "a usable specification" — is withdrawn in `
 | **Phase 0 domain selection** | **Terminated with no domain. 99 candidates, 8 adversarial reviews, 0 SELECT.** | arithmetic-verifiable |
 | Phase 1 (falsify the data thesis) | Delivered on the pivot, not on a selected domain. The null control, the grouped split and the trivial-baseline floor were all measured before any learned number was believed. | primary-verifiable |
 | Phase 2 (the scaling curve) | **Delivered on the pivot.** `CURVE_ESTABLISHED` over 2.9031 decades, both margins clearing 0.05. It is a real curve on a real task — and on a domain that reached it through the archived trial rather than through Phase 0 selection, and that still has no buyer. | primary-verifiable |
-| **2048-byte carve (0011)** | **`CARVE_FAILS`** — top-1 0.1741 against logistic 0.1266 (+0.0475, 0.0025 short of the bar) and against a depth-16 tree at 0.1447 (+0.0294); transfer from 4096 at 0.0455. The window boundary is bracketed to (2048, 4096]. Expected outcome, stated in the preregistration before the corpus existed. | primary-verifiable |
+| **2048-byte carve (0011)** | **`CARVE_FAILS`** — top-1 0.1741 against logistic 0.1266 (+0.0475, 0.0025 short of the bar) and against a depth-16 tree at 0.1447 (+0.0294); transfer from 4096 at 0.0455. The window boundary is bracketed to (2048, 4096], each size under its own protocol (top rung 800000 at 4096, 500000 at 2048 and 1024). Expected outcome, stated in the preregistration before the corpus existed. | primary-verifiable |
 | **Symmetric recipe search at 2048 (0012, re-read under 0013)** | **`RECIPE_FAILS`** — the searched model (M7) reaches 0.212, +0.0379 over the incumbent; the searched logistic (L3, standardised) reaches 0.1886, +0.062 over the 0011 logistic, and sets every bar; margins +0.0234 (frozen), +0.0234 (expanded), +0.0248 (gutenberg excluded) against 0.05. 0012's own frozen reader emitted `VOID` on a defect of its own (filed in `CORRECTIONS.md`); 0013 re-read the same artifact with the numbers disclosed and the outcome committed in advance. | primary-verifiable |
-| Phase 3 (credibility artifact) | Partially delivered. The *instrument* ships and reproduces, and the manufacture-and-measure pipeline ships with it; the corpus itself is 5.8 GB and is not committed, so a stranger must re-manufacture rather than download. | n/a |
+| Phase 3 (credibility artifact) | Partially delivered. The *instrument* ships and reproduces, and the manufacture-and-measure pipeline ships with it; the corpus itself is 5.8 GB and is not committed, so a stranger must re-manufacture rather than download, and a re-manufacture does not reproduce all of it. It reproduces the pinned sources (byte-checked), the labels (y) of every corpus, `raw_c1024` whole, the builder cache's evaluation set as a set of chunks (its banked order restorable from banked layouts), and the real-content corpora of 0018 and 0021 (`ext_c4096`, `realfit_c4096`; rebuilt identical on a second machine on 2026-10-21). It does not reproduce X and g of the three caches `run_study.build()` wrote (`full_c4096`, `carve_c1024`, `carve_c2048`), whose rows are in worker-completion order by design, so every builder-pool result can be re-measured on a different draw but not re-derived on the same rows; nor 0024's `realfit2_c4096`, whose X rebuilt on a second machine differs in rare rows outside 0024's smoke subset (that subset rebuilds identical; 0024's rung-7 logistic, refitted on the rebuilt corpus, does not reproduce bit for bit). The rebuild status of 0025's `realfit3_c4096` is recorded in `artifacts/pivot/engineering_log_0025.json`. Detail in `CORRECTIONS.md`, entries of 2026-10-21 and 2026-10-22. | n/a |
 | Round 3 screener's own arithmetic | Reported 11 adversarial reviews. Recounted from the banked artifacts: **8**. The screener's candidate total of 99 is correct. | arithmetic-verifiable |
 | Our own allocation-flag count | Recorded 76 against a subagent's 77 and filed it as *the subagent's* discrepancy. The subagent was right. Filed in `CORRECTIONS.md` at full size. | primary-verifiable |
 | **G5 — a named buyer type** | **Not cleared, for any candidate including the pivot.** No buyer has been contacted, none is claimed, and nothing measured here establishes that one would pay. A rising curve does not supply a buyer. | n/a |
@@ -370,7 +386,7 @@ primary-verifiable unless the command that re-derives it exists in this reposito
 |---|---:|---|
 | `neither` | **14** | Cannot be re-derived or re-run. Eight asserted from sources we cannot reproduce; one actively failed to reproduce; one is a statement about what was not done; three are explicitly labelled conjectures; one is a methodological inference from an inconclusive run. |
 | `arithmetic-verifiable` | 36 | Follows by arithmetic from a banked artifact, but the artifact rests on our run. |
-| `primary-verifiable` | 233 | A stranger can re-derive it from raw inputs with the shipped code. |
+| `primary-verifiable` | 233 | A stranger can re-derive it from raw inputs with the shipped code; for a result fitted on a builder-cache pool, only as a re-measurement on a different draw, not on the same rows (`CORRECTIONS.md`, 2026-10-21). |
 
 Three of the four load-bearing subagent measurements have now been pulled out of the weakest class
 by re-deriving them here — the census leak, the SAT decoder, and the assembly-provenance split leak.
@@ -387,8 +403,9 @@ such in `data/asmprov/README.md`.
 ## The pivot — `CURVE_ESTABLISHED` on carved-DEFLATE encoder provenance
 
 The first curve in this repository that is a claim about the world rather than a test of the
-instrument. **It does not make the thesis fundable** — see the buyer paragraph below, which is the
-part to read.
+instrument — about four real DEFLATE libraries, on the corpus builder's eight content families,
+seven of which are its own parametric generators. **It does not make the thesis fundable** — see the
+buyer paragraph below, which is the part to read.
 
 **The task.** Take a window from the MIDDLE of a DEFLATE stream — no header, no stream start, no
 plaintext, and not the stream length — and recover which of 26 (implementation, level)
@@ -447,11 +464,11 @@ model had seen gutenberg-adjacent bytes and still collapsed to chance. Filed in 
 
 Derived from the banked per-example scores with a cluster bootstrap per family
 (`artifacts/pivot/per_family_curves.json`): the headline slope is a **mixture**. Structured content
-carries the curve — csv **+0.0906**, log **+0.0909**, json **+0.0901**, code **+0.0690** per
-decade, with top-rung accuracies of 0.3888, 0.3756, 0.3581 and 0.2944 against 0.038462 chance —
-while the incompressible families sit near the byte-identity collision ceiling: binary **+0.0097**,
-mixed **+0.0028**. Every family's interval excludes zero, including the ones that make the task
-look hard, and all eight are reported either way.
+from the builder's own generators carries the curve — csv **+0.0906**, log **+0.0909**, json
+**+0.0901**, code **+0.0690** per decade, with top-rung accuracies of 0.3888, 0.3756, 0.3581 and
+0.2944 against 0.038462 chance — while the incompressible families sit near the byte-identity
+collision ceiling: binary **+0.0097**, mixed **+0.0028**. Every family's interval excludes zero,
+including the ones that make the task look hard, and all eight are reported either way.
 
 ### Would a rerun have said something different? Measured: no
 
@@ -466,11 +483,12 @@ verdict; they close its stated weakness.
 
 ### Both readings of the margin, at equal prominence
 
-`artifacts/pivot/prereg_interpretation.json` — recorded mid-run and anchored to drand round
-**6408095**, before the baseline and model numbers were known — commits this document to reporting
-the stricter reading alongside the frozen one. Deep trees were added to the baseline set during
-piloting and are **not** in the preregistered list, and they are substantially stronger than
-anything that is:
+`artifacts/pivot/prereg_interpretation.json` — recorded mid-run, before the baseline and model
+numbers were known, and anchored to drand round **6408095**, which proves only that it was written
+no earlier than that round (the precedence rests on the run logs and commit history) — commits this
+document to reporting the stricter reading alongside the frozen one. Deep trees were added to the
+baseline set during piloting and are **not** in the preregistered list, and they are substantially
+stronger than anything that is:
 
 | Reading | Best baseline | Margin |
 |---|---|---:|
@@ -511,7 +529,7 @@ footnote.
   established. Encoders absent from this box — 7-Zip's deflate, Java's `Deflater`, Go's `flate`,
   the Cloudflare and Windows zlib forks — are not covered.
 - **Incompressible content caps what is achievable.** Base64 and packed-binary sources collapse to
-  roughly **14** distinct streams of 26 (14.667 and 14.75 respectively); 22.27 is the mean across
+  roughly **14** distinct streams of 26 (14.667 and 14.75 respectively); 22.261 is the mean across
   all eight content families, which an earlier version of this bullet wrongly attributed to the
   worst families — an error in the flattering direction, inside this very section. Caught by
   adversarial audit; filed in `CORRECTIONS.md`. Some fragments carry no recoverable signal at all.
@@ -534,11 +552,13 @@ exist — `preflate`, `precomp`, `grittibanzli`, `list-compresslevel.py`, and
 The honest limits stand: encode.su was unreachable and was not searched, and no patent search was
 run.
 
-But the buyers this points at — forensic carving of unallocated disk, archive recompression,
-repackaged-APK detection — are narrow, and **no buyer has been contacted, none is claimed, and
-nothing here establishes that one would pay.** A rising curve on a task nobody needs is a rising
-curve on a task nobody needs. This is a validated label factory and a validated instrument; it is
-not a business, and the gap between those two things is the honest state of this repository.
+But the one buyer type this points at where a carved fragment is the real input — forensic carving
+of unallocated disk — is narrow (archive recompression and repackaged-APK checks hold the whole
+stream and the plaintext, so incumbent tools apply there; see the 0006 section), and **no buyer has
+been contacted, none is claimed, and nothing here establishes that one would pay.** A rising curve
+on a task nobody needs is a rising curve on a task nobody needs. This is a validated label factory
+and a validated instrument; it is not a business, and the gap between those two things is the honest
+state of this repository.
 
 ---
 
@@ -591,9 +611,13 @@ distribution rather than a noisier one.
 
 A1 was run on the **input** before the bar was frozen, and it removes the obvious defence. The
 byte-identity collision ceiling barely moves across the range: **20.9125** distinct streams of 26 at
-4096 against **20.79** at 512. The information is present at 1024. **This is a modelling failure,
-not an information failure**, and the preregistration committed this document to saying so in those
-words before the number existed.
+4096 against **20.79** at 512. Byte collisions therefore do not explain the failure. **The
+preregistration committed this document, before the number existed, to calling this a modelling
+failure, not an information failure**, and it is reported as one — but the ceiling bounds what any
+model could recover from above; it is not evidence that a better model would clear the bar. The
+frozen reader's own banked reading is that the information is not recoverable at the shorter carve,
+and the one small learned representation tried since (0009) did not rescue it, its variant (0010)
+inconclusive.
 
 ### A rising curve that is worthless, which is the whole reason the margin clause exists
 
@@ -677,8 +701,8 @@ a set, **+0.0774** and **+0.0549** at top-1 **0.2419**. So the honest sentence i
 "a pass masked by noise": two families pass outright, the structured four pass together, and the
 mixture fails even with the incompressible families removed, because gutenberg prose and json sit
 between. This changes nothing about the verdict — the preregistered unit is the mixture, and the
-mixture fails — and the per-family rows are what a buyer whose carves are csv or log would need
-to see. The same script at
+mixture fails — and the per-family rows are banked beside it (csv and log here are the builder's
+own synthetic generators, and no buyer has been asked what it would need to see). The same script at
 1024 (`per_family_curves_1024.json`, model side only; that run banked no per-family baselines)
 puts csv at **0.2218** with a slope of **+0.0470** per decade, the steepest thing in the 1024 run.
 
@@ -1055,8 +1079,8 @@ nothing about 0014's searched model M4, which was not fitted here; that nothing 
 0014 or 0015; and that no buyer is established.
 
 **Preregistration 0024 (chain seq 24) — `SECOND_DECADE_RISES_MODEL_LEADS`, and what it found.** The second
-decade of real plaintexts rises — and the boosted model still leads the hand-writable linear rule at the top
-rung. The question 0023's numbers raised — when the plaintexts fitted come from OTHER files of the same five
+decade of real plaintexts rises — and at the top rung the boosted model leads the standardised logistic, by
+0.0039, after trailing it at rungs 5 and 6. The question 0023's numbers raised — when the plaintexts fitted come from OTHER files of the same five
 real families, does the encoder signal keep rising at the record's rate, and does the boosted model keep its
 lead over a hand-writable linear rule? — was put to a second fit corpus built and sealed before the freeze
 (other files of the same five families — 23 newly pinned archives and 600 more RFC texts: other Python projects'
@@ -1078,7 +1102,7 @@ interval's lower bound above 0.0 — `SECOND_DECADE_RISES`. The logistic's secon
 the same bar and the tree's (-0.0003) does not: a rise the linear rule shares is a rise of the cheap signal, not
 of the recipe.
 
-**The boosted model still leads the hand-writable linear rule at the top rung.** At 8232 plaintexts the model
+**At the top rung the boosted model leads the standardised logistic, by 0.0039.** At 8232 plaintexts the model
 reads 0.1404 and the standardised logistic 0.1365: the model leads the standardised logistic by 0.0039 (paired
 interval [0.0001, 0.0077], entirely above 0), the model ahead in 0.976 of the resamples — `MODEL_LEADS` by the
 rule sealed in advance. At rung 4 (0021's block) the same reading is 0.0014 with a paired interval [-0.002303,
@@ -1110,11 +1134,14 @@ from the banked score vectors. Cost: 6456.7 s wall on the last of 1 launch(es), 
 rung's model fit 2352.6 s, the null 223.1 s), against the 8097 s (2.2 hours) to 24604 s (6.8 hours) of fits
 estimated in advance.
 
-**What it means.** Other files of the same kinds keep buying the recipe the record's rate on the files it is
-scored on, through 8232 plaintexts (eight times 0021's), so the budget excuse is answered a second time on real
-content, this time with other files; at eight times 0021's plaintexts the boosted recipe still leads a rule a
-person can write out on the record's own real content, by 0.0039 — the recipe conclusion of 0021, 0022 and 0023
-(that the linear rule gets most of the signal) is bounded by the size of that lead, not reversed. Not a transfer
+**What it means.** Other files of the same kinds keep raising the recipe's accuracy on the files it is
+scored on at or above the record's bar of 0.005 per doubling (the bar 0024 sealed; 0.00697 measured), through
+8232 plaintexts (eight times 0021's), so the budget excuse is answered a second time on real content, this time
+with other files, to a top reading (0.1404) that still does not clear 0021's bar re-applied there (0.1419); at
+eight times 0021's plaintexts the boosted recipe leads the standardised logistic (26 classes over 1108 features)
+on the record's own real content by 0.0039, with a paired interval over the scored chunks that does not
+resample the fit side — the recipe conclusion of 0021, 0022 and 0023 (that the linear rule gets most of
+the signal) is bounded by the size of that lead, not reversed. Not a transfer
 reading, and not 0023's in-distribution reading either: every rung holds the scored files' own unscored chunks,
 and the plaintexts added above rung 4 are other files of the same kinds, so the second decade confounds more
 plaintexts with plaintexts from other files, which the shift arm reads directly. The sealed file expected
@@ -1124,7 +1151,7 @@ rung is banked or quoted. Nothing here revises 0003, 0014, 0015, 0016, 0017, 001
 nothing here establishes a buyer.
 
 **Preregistration 0023 (chain seq 23) — `REAL_CURVE_RISES`, and what it found.** The encoder signal on real
-content rises with the real plaintexts fitted — and the hand-writable linear rule rises faster. 0021's 26346-row
+content rises with the real plaintexts fitted — and the standardised linear rule rises faster. 0021's 26346-row
 real fit block was cut into four nested, family-stratified rungs of plaintexts (130, 258, 515, 1029; 3344, 6635,
 13207, 26346 rows; 2.984659 doublings, just under a decade); 0021's three fixed recipes were fitted once per
 rung and scored once on the same 38452 real-family rows. The model reads **0.0974, 0.1065, 0.1139, 0.1193** over
@@ -1156,9 +1183,10 @@ size of that variance; it does not bound it.
 **Per family, and the reverse curve.** Model slopes per doubling by family: py_src 0.010108, c_src 0.008694,
 rfc_txt 0.007443, pe_bin 0.005704, rst_doc 0.004711; the logistic's: py_src 0.012356, rfc_txt 0.012034, c_src
 0.0093, rst_doc 0.008975, pe_bin 0.005019 (c_src's lowest rung is 3 plaintexts and carries no verdict). On the
-builder's own evaluation set the model's curve is flat (0.000222 per doubling of real plaintexts): more real
-plaintexts do not move the reading on content the model was not fitted on — 0018's transfer finding from the
-other side.
+builder's own evaluation set the model's curve is nearly flat over this decade (0.000222 per doubling of real
+plaintexts), an informational reading, not a verdict and not a general law: over 0024's second decade the same
+reading rose 0.00231 per doubling (below the rate), and over 0023's rungs the depth-3 tree's rose 0.009842 per
+doubling (all informational).
 
 Controls: the top rung reproduced 0021's three readings with drift 0.0 on all three; the null control on 0021's
 permuted labels reads 0.0409 on the real rows, 0.0394 on the extension set and 0.0388 on the evaluation set
@@ -1167,15 +1195,16 @@ reader; sensitivity to the allowed reproduction drift 0 (the top rung landed exa
 one launch, 930.0 s of fits, against the 20 to 25 minutes estimated in advance.
 
 **What it means.** The budget excuse is answered on this content: the signal grows with real plaintexts at about
-three quarters of the builder's per-plaintext rate, so the record's scaling thesis holds on real files — and the
-recipe conclusion of 0021 and 0022 is reinforced, not reversed, because what grows fastest with real data is the
+three quarters of the builder's per-plaintext rate, so the record's scaling thesis holds on these real files, in
+distribution, over just under a decade (0003's scope rule asks for two), rising to a reading that fails the
+record's margin — and the recipe conclusion of 0021 and 0022 is reinforced, not reversed, because what grows fastest with real data is the
 linear rule. No extrapolation beyond the top rung is banked or quoted: the plaintexts it would count do not
 exist. An **in-distribution** reading on real content, not a transfer reading: the fit and scored chunks come
 from the same five files and share no byte. Nothing here revises 0003, 0014, 0015, 0016, 0017, 0018, 0019, 0021
 or 0022, and nothing here establishes a buyer.
 
-**Preregistration 0022 (chain seq 22) — `REAL_RECIPE_FAILS`, and what it found.** On real content, a searched
-boosted model and a searched linear rule are the same rule. 0014's roster verbatim — 35 candidates over seven
+**Preregistration 0022 (chain seq 22) — `REAL_RECIPE_FAILS`, and what it found.** On real content at this budget, a searched
+boosted model and a searched linear rule score 0.0007 apart. 0014's roster verbatim — 35 candidates over seven
 heads, eight enumerated recipes each for the model, the logistic, the depth-3 tree and the deep tree — was
 searched inside 0021's 26346-row real fit block (1029 plaintexts of 0018's five pinned real files): each head
 selected on a chunk-rule holdout of 5291 rows (206 chunks), fitted its winner once on the whole block and was
@@ -1512,7 +1541,8 @@ technicality:
 
 Preregistration 0006, frozen at chain seq 6 and anchored to NIST Beacon pulse **1917953** and drand
 round **6408784** — **before any top-k, calibration or selective-prediction number existed on this
-corpus**. It is a separate preregistration rather than an addition to 0003 precisely because 0003's
+corpus** (the anchors prove not-before only; that the freeze preceded the numbers rests on commit
+history). It is a separate preregistration rather than an addition to 0003 precisely because 0003's
 verdict was already known, and bolting a new reading onto a study whose result you have seen is the
 move this instrument exists to prevent.
 
@@ -1715,14 +1745,24 @@ not a judgement that was made.
 
 - **It does not establish that a viable domain does not exist.** It establishes that a search of
   99 candidates across three framings did not find one, and it names the framing that was missing.
-- **It contains four fitted, interval-bounded curves, and exactly one of them is a claim about
-  the world** — the carved-DEFLATE curve of preregistration 0003, valid at a 4096-byte window and
-  only there (0007). The round-4 curve validates the instrument on a G4-dead domain; the 0006
-  top-5 curve reads the same models operationally; the 1024-carve curve rises from a base that
-  never separates from a dumb rule. An earlier version of this bullet said "no scaling curve that
-  means anything" — prose written before the pivot that survived three sweeps of the exact
+- **Its fitted, interval-bounded curves, more than the four this bullet once counted, are not all
+  claims about the world, and the ones that are are bounded.** The only one whose model clears the
+  record's margin over a trivial baseline is the carved-DEFLATE curve of preregistration 0003 (with
+  its seed replicates and 0006's top-5 reading of the same models), on the corpus builder's eight
+  content families, seven of them its own generators, valid at a 4096-byte window and only there
+  (0007, 0011). The real-plaintext curves of 0023 and 0024 rise on held-out chunks of five pinned
+  real files to readings 0021's floor-plus-0.05 bar does not clear (0024's top reading 0.1404
+  against 0.1419, re-applied there), with the standardised logistic 0.0039 behind the model at
+  0024's top rung. The 0016 family-diversity curve is a transfer reading on the builder's families;
+  the round-4 curve validates the instrument on a G4-dead domain; the 1024- and 2048-carve curves
+  rise from bases that never clear their bars. An earlier version of this bullet said "no scaling
+  curve that means anything" — prose written before the pivot that survived three sweeps of the exact
   stale-claim bug this repository built a gate for. Found by adversarial audit; filed in
   `CORRECTIONS.md`.
 - **It has no customers, no users and no partners.** None are claimed anywhere.
-- **Most of its findings rest on subagent measurements** that have not been independently
-  reproduced, as the coverage map states in detail.
+- **Some of its findings rest on subagent measurements** that have not been independently
+  reproduced: eight of the 14 claims in the coverage map's weakest class, among them the Sentinel-1
+  fit behind L1 and the MOT numbers behind L3(iii), as the coverage map states in detail. 233 of the
+  283 claims are primary-verifiable — re-derivable by a stranger with the shipped code (for a
+  builder-pool result, only as a re-measurement on a different draw), which is a property of the
+  code, not a reproduction by anyone outside this team.

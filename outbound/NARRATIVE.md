@@ -1,5 +1,8 @@
 # NARRATIVE — the spoken raise, in the founder's voice
 
+*As of 2026-10-22: the last preregistered verdict in this document is 0024's, whose preregistration was
+frozen 2026-09-17; 0025 is not yet frozen.*
+
 Every number in this document exists in a banked artifact under `artifacts/` at the written
 precision, enforced by `.venv/bin/python tools/claimcheck.py outbound/NARRATIVE.md`. Failures are
 named at the same volume as passes. The words **"no buyer yet"** appear inside the first ninety
@@ -9,21 +12,26 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 
 ## The ninety-second version
 
-> I'll tell you the ending first: we have one real, preregistered scaling curve, and **no buyer
-> yet**. Here is how we got both halves of that sentence.
+> I'll tell you the ending first: we have one preregistered scaling curve that clears its margins, on
+> content mostly from our own generators; on real files the signal also rises with data but has not
+> cleared the margin a cheap rule sets; and **no buyer yet**. Here is how we got there.
 >
 > Before we measured anything, we built the instrument. Bars frozen and hash-chained before the
-> data existed, verdict readers frozen by hash, and every gate proven able to fail —
+> data existed, verdict readers frozen by hash, and every gate shown to fail on its deliberate
+> mutations at the suite's last full run —
 > 801 deliberate mutations, 801 detected, 0 survived.
+> The gate added since, for the still-unfrozen preregistration 0025, is not in that count.
 >
 > Then we ran the search the thesis demanded: 99 candidate domains over three rounds, 8 through
 > adversarial review with default posture reject, 0 selected. We published that negative under a
 > rule frozen before the final round ran.
 >
-> The pivot found one real curve: recover which of 26 DEFLATE encoder configurations produced a
+> The pivot found a curve: recover which of 26 DEFLATE encoder configurations produced a
 > fragment carved from the middle of a compressed stream — no header, no plaintext. Accuracy
 > 0.2395 at the top rung against 0.038462 chance, rising +0.0491 per decade over 2.9031 decades,
-> clearing margins frozen in advance.
+> clearing margins frozen in advance. Seven of its eight content families come from our own
+> generators, the eighth is Gutenberg prose; on real files it was never fitted on, the headline
+> recipe fails its bar — 0.0637 against 0.088462.
 >
 > Then we measured where our own result breaks, and published that with the same confidence: at a
 > 1024-byte carve the same protocol fails its own bar, and at 2048 it fails on every reading —
@@ -33,7 +41,8 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > ever quote you is a 4096-byte-window number.
 >
 > Then we ran 54 adversarial agents against the whole record. 13 findings survived refutation; all
-> 13 were fixed by measurement and the full audit is published, rejected findings included.
+> 13 were fixed — the three critical ones by new measurement, the other ten by correcting the text —
+> and the full audit is published, rejected findings included.
 >
 > Nobody has been contacted, no customer is claimed. What we are asking you to underwrite is the
 > instrument, the curve, and a team that publishes its own negatives.
@@ -52,9 +61,12 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > Before any measurement, we built the thing that would keep us honest. 24 preregistrations,
 > hash-chained so nothing can be silently inserted between two that already exist, each anchored
 > to public randomness beacons — NIST and drand — with the verdict-emitting readers frozen by
-> sha256 before their data existed. Then we proved the instrument itself can fail:
+> sha256 before their data existed, except two disclosed re-reads of banked runs (0013, 0019). Then
+> we proved the instrument itself can fail:
 > 801 deliberate mutations across 25 gates, 801 detected, 0 survived. A gate that cannot fail is decoration, so
-> we broke every one on purpose and checked that it noticed.
+> we broke every one on purpose and checked that it noticed. That count is the suite's last full run
+> (`artifacts/verification/mutation_report.json`); the gate added since, for the still-unfrozen
+> preregistration 0025, is not in it.
 
 **The search, and the negative we published.**
 
@@ -62,25 +74,31 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > rises with data. We searched for one: 99 candidate domains across three rounds, 8 put through
 > adversarial review with default posture reject — and 0 selected. The stopping rule was frozen
 > before the final round ran, and the verdict, no viable domain found, is published as a finding,
-> not hidden as a failure. The search still paid: three measured laws about *why* these domains
-> die, each retiring an entire candidate family. A fourth round was later authorised under its own
-> preregistration with a higher bar. It also found nothing, and we published that too.
+> not hidden as a failure. The search still paid: three laws about *why* these domains die, each
+> derived from measurements — some of them a subagent's that we have not re-derived here, so a reader
+> who declines to take a subagent's word for those is left with those laws unproven, and would be
+> right to. A fourth round was later authorised under its own preregistration with a higher bar. It
+> also found nothing, and we published that too.
 
 **The curve.**
 
-> The pivot produced one result that is a claim about the world. The task: take a window carved
-> from the middle of a DEFLATE stream — no header, no stream start, no plaintext — and recover
+> The pivot produced a result that clears its preregistered margins; it is a statement about eight
+> content families, seven of them from our own generators and one of Gutenberg prose. The task: take
+> a window carved from the middle of a DEFLATE stream — no header, no stream start, no plaintext — and recover
 > which of 26 implementation-and-level configurations produced it. The label factory is free:
 > compress any bytes under a configuration and the label is the configuration. Accuracy runs
 > 0.0988, 0.1415, 0.1965, 0.2395 across rungs from 1000 to 800000 manufactured fragments, against
 > chance of 0.038462. The slope is +0.0491 accuracy points per decade over 2.9031 decades, and the
 > 95% interval — cluster-corrected after our own audit found the original too tight — is
-> [0.0482, 0.0500]. The margin over the strongest trivial baseline is +0.1003 under the frozen
-> reading and +0.0583 under a stricter reading we committed to before the numbers existed; both
-> clear the preregistered 0.05. And we tell you where the signal lives rather than quoting the
-> mixture: structured content — csv, log, json — rises at roughly +0.09 per decade, about ten
-> times chance at the top rung, while incompressible content sits near a measured collision
-> ceiling.
+> [0.0482, 0.0500]. Under 0003's fixed recipes the margin was +0.1003 over the best of the frozen
+> baseline set, a logistic regression, and +0.0583 over the strongest baseline of all, a depth-16
+> tree — a stricter reading we recorded mid-run, before the final numbers were known; given the same
+> recipe search as the model (0014), the standardised logistic narrows it to +0.0567, and that is the
+> margin we quote. All three clear the preregistered 0.05. And we tell you where the signal lives
+> rather than quoting the mixture: our generators' structured families — csv, log, json — rise at
+> roughly +0.09 per decade, about ten times chance at the top rung, while incompressible content sits
+> near a measured collision ceiling. No real csv, log or json file has been measured; on the real
+> files we have, the best the model reaches is 0.1404 (0024).
 
 **The operational reading.**
 
@@ -88,8 +106,8 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > guess is the wrong question. Under a separate preregistration, frozen before any top-k number
 > existed: the top-5 shortlist reaches 0.5694, a +0.1084 margin over the strongest baseline; the
 > most-confident decile scores 0.7922. The shortlist improves at +0.0985 per decade — roughly
-> twice the top-1 slope. The output has the shape a forensic use would need. Shape is not demand,
-> and I'll come back to that.
+> twice the top-1 slope. The output has the shape we expect a forensic use would need; no forensic
+> analyst has told us so. Shape is not demand, and I'll come back to that.
 
 **The boundary, stated with the same confidence as the passes.**
 
@@ -97,10 +115,12 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > model ties a dumb rule — margin +0.0099 against the same 0.05 bar — and a 4096-trained model
 > transferred to 1024-byte fragments scores 0.0403, which is chance. We measured away the easy
 > excuse before freezing the bar: the byte-identity ceiling barely moves, 20.9125 distinct streams
-> of 26 at 4096 against 20.79 at 512, so the information is present at the shorter window and this
-> is a modelling failure, and we say so in those words. A byte-sequence CNN did not rescue it —
-> 0.0849 against the hand-engineered 0.1165 — and a corrected-head variant came back inconclusive,
-> which its frozen reader states rather than counting it either way. So: every number I have
+> of 26 at 4096 against 20.79 at 512, so byte-identical windows do not explain the failure, and we
+> committed in advance to call it a modelling failure. That is not proof the label can be recovered
+> at 1024: our frozen reader reads this result as "not recoverable at the shorter carve". A
+> byte-sequence CNN did not rescue it — 0.0849 against the hand-engineered 0.1165 — and a
+> corrected-head variant came back inconclusive, which its frozen reader states rather than
+> counting it either way. So: every number I have
 > quoted is a 4096-byte-window number, and the forensic setting does not guarantee that window.
 > That caveat is in every document we ship, because it is the most important sentence in the
 > record. We then measured the midpoint under a third preregistration, with the expected
@@ -150,8 +170,8 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > the bar could only rise. The searched model reads 0.1189 and the searched logistic 0.1182 on the same 38452
 > rows: a searched margin of 0.0007 where 0.05 was required. `REAL_RECIPE_FAILS`. The search moved the model
 > by -0.0004 and the logistic by 0.0003, where the identical search on the builder's corpus had moved them by
-> 0.0489 and 0.0965. On real content the boosted model and the linear rule are the same rule, and we said in
-> advance the run would probably say so.
+> 0.0489 and 0.0965. On real content, at 1029 plaintexts, the searched boosted model and the searched linear
+> rule score 0.0007 apart, and we said in advance the run would probably fail.
 > Then we asked the budget question (0023): 0021's real fit block cut into four nested rungs of plaintexts,
 > 130 to 1029, 0021's three fixed recipes fitted on each. The signal rises — 0.0974, 0.1065, 0.1139, 0.1193
 > for the model, 0.007344 per doubling of plaintexts against 0.005 required, `REAL_CURVE_RISES` — to 0021's
@@ -160,19 +180,25 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > -0.000752], read by a rule we wrote down before the run as 'the linear rule buys more per doubling than the
 > model'. More real data helps, and it helps the cheap rule more. We do not extrapolate past the top rung: the
 > plaintexts it would count do not exist.
-> Then we bought the plaintexts that did not exist (0024): 23 more archives and 600 more RFCs of the same five
-> kinds, pinned, licensed and hashed against every chunk and every kilobyte run of the original files, nested
+> Then we bought the plaintexts that did not exist (0024) in our record — with work, not money: 23 more archives
+> and 600 more RFCs of the same five kinds, fetched from public upstreams, pinned, licences filed and hashed
+> against every chunk and every kilobyte run of the original files, nested
 > on 0021's block in three exact doublings — 1029 to 8232 plaintexts, 3.0 doublings (0.9031 of a decade) of
-> other files above the block; both decades together 1.8016 decades, short of our own two-decade scope rule.
+> other files above the block; both together span 1.8016 decades, short of 0003's two-decade scope rule.
 > The model's second-decade slope is 0.00697 per doubling against 0.005 required (interval [0.00571,
 > 0.00824]): `SECOND_DECADE_RISES`. And at the top rung, the model leads the standardised logistic by 0.0039
-> (paired interval [0.0001, 0.0077], entirely above 0): `MODEL_LEADS`, by a rule we wrote down before the run.
+> (paired interval [0.0001, 0.0077], entirely above 0): `MODEL_LEADS`, by a rule we wrote down before the run —
+> together, the verdict `SECOND_DECADE_RISES_MODEL_LEADS`.
 > The shift arm — the new files alone at 0021's count — read 0.1184 for the model against 0021's 0.1193. Other
-> files of the same kinds keep buying the recipe the record's rate on the files it is scored on, through 8232
-> plaintexts (eight times 0021's), so the budget excuse is answered a second time on real content, this time
-> with other files; at eight times 0021's plaintexts the boosted recipe still leads a rule a person can write
-> out on the record's own real content, by 0.0039 — the recipe conclusion of 0021, 0022 and 0023 (that the
-> linear rule gets most of the signal) is bounded by the size of that lead, not reversed. We do not
+> files of the same kinds kept raising the model's accuracy on the files it is scored on at or above the 0.005 per
+> doubling we required, through 8232 plaintexts (eight times 0021's), so more real data paid a second time on
+> real content, this time with other files — though the top rung's 0.1404 still does not clear 0021's
+> floor-plus-0.05 bar re-applied at that rung (0.1419), and the logistic's slope (0.00638) is not
+> resolved from the model's. At eight times 0021's plaintexts the boosted recipe leads the standardised
+> logistic — a 26-class linear model over 1108 features, not a rule anyone writes out by hand — by 0.0039,
+> after reading below it at the two rungs before; the interval resamples the scored chunks only, from one
+> fit per rung. The recipe conclusion of 0021, 0022 and 0023
+> (that the linear rule gets most of the signal) is bounded by the size of that lead, not reversed. We do not
 > extrapolate past the top rung.
 > The boundary of our result is
 > bracketed to (2048, 4096], and the near-miss on the slack reading is published beside the
@@ -184,24 +210,31 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > finding attacked by two refuters instructed to kill anything wrong or vague. 13 findings
 > survived, three of them critical: a bootstrap that contradicted our own split, a split guarantee
 > that was false for one of eight content families, and subagent evidence mislabelled first-hand.
-> All 13 were fixed by measurement, and the audit record is banked with its rejected findings
-> included, so the filter itself can be audited. The corrections ledger now carries 23 entries at
+> All 13 were fixed — the three critical ones by new measurement, the other ten by correcting the
+> text — and the audit record is banked with its rejected findings included, so the filter itself
+> can be audited. The corrections ledger now carries 23 entries at
 > full size — including one where the error ran *against* our interest and was filed anyway. And
 > the uncomfortable meta-finding is published with it: every gate passed while all of those
-> defects were live, because gates check that numbers trace, not that the reasoning between them
+> defects were live, because gates check that numbers are banked, not that the reasoning between them
 > is sound. Adversarial review is the only thing that caught them, which is why it is now part of
 > the process.
 
 **The close.**
 
-> So here is the honest inventory. A validated instrument that reproduces on a cold clone. One
-> real curve with its boundaries measured by the same instrument. A corrections ledger that costs
-> us something to keep. A verification map that prints its weakest class first — 14 of 283 claims
-> we ourselves cannot currently re-derive, and it says so. And no buyer yet: G5, a named buyer
-> type, is the gate this work has not cleared, and no result in the repository could have cleared
+> So here is the honest inventory. A mutation-tested instrument whose gates run on a cold clone —
+> though no rebuild reproduces our headline corpus byte for byte (its results can be re-measured on a
+> fresh draw, not re-derived on the same rows), one real-content corpus did not rebuild identical on a
+> second machine, and the rebuild path has broken twice besides; all of it is filed in our corrections
+> ledger. One curve that clears its margins, on content mostly from our own generators, with its
+> boundaries measured by the same instrument; and on real files a signal that rises with real
+> plaintexts but has not cleared the margin a cheap rule sets, and that a linear rule nearly matches.
+> A corrections ledger that costs us something to keep. A verification map that prints its
+> weakest class first — 14 of 283 claims we ourselves cannot currently re-derive, and it says
+> so. And no buyer yet: G5, a named buyer type, is the gate this work has not cleared, and no result in the repository could have cleared
 > it, because that work happens outside the repository. We are raising to do exactly that work,
-> on top of an evidence base built so that you never have to take our word for anything —
-> `bash tools/gates.sh` on a cold clone, exit non-zero on any failure. If you want the flattering
+> on top of an evidence base built so that you take our word for as little as we can manage — most of
+> our claims are filed as re-derivable or re-measurable from raw inputs with shipped code, and
+> `bash tools/gates.sh` on a cold clone exits non-zero on any failure. If you want the flattering
 > version, we cannot give it to you. We built a machine that stops us.
 
 *(At a measured speaking pace this is about five minutes.)*
@@ -210,10 +243,12 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 
 ## The hard-questions crib — the spoken one-sentence answer to each diligence question
 
-The diligence map at `docs/DILIGENCE.md` carries **nine** question headings (the brief for this
-document said eight; the file itself has nine, so all nine are answered here — see COULD NOT
-VERIFY below). Each answer is one sentence, meant to be said out loud, unhedged where the record
-allows and explicitly hedged where it does not.
+The diligence map at `docs/DILIGENCE.md` carries **seventeen** question headings. Nine are
+answered here; the other eight — unseen content, more content types, the recipe for unseen content,
+content outside the builder, a fit on real content, a search on real content, more real data and a
+second decade of real files — are answered in the five-minute version above (0015 to 0024), not in
+this crib (see COULD NOT VERIFY below). Each answer is short, meant to be said out loud, unhedged
+where the record allows and explicitly hedged where it does not.
 
 **"Is the slope real, or a seed artifact?"**
 > Measured, both ways: the interval is a cluster bootstrap over the 10000 held-out source chunks —
@@ -227,13 +262,15 @@ allows and explicitly hedged where it does not.
 > family made every rung and the slope better, not worse, so the leak was hurting us, not helping.
 
 **"Won't a frontier model just do this?"**
-> The input is mid-stream entropy-coded bitstream with nothing renderable in it, and the measured
-> stand-ins for a clever prior with no task data — logistic regression and depth-16 trees trained
-> on the same 800000 fragments — are exactly what every headline margin is scored against.
+> Not measured: no pretrained or frontier model has been run on this task. The input is mid-stream
+> entropy-coded bitstream with nothing renderable in it, and every headline margin is scored against
+> logistic regression and depth-16 trees trained on the same 800000 fragments, which measures what a
+> cheap learned rule does with all of our data, not what a frontier model could do.
 
 **"Where does the signal actually live?"**
-> In structured content — csv, log and json rise at roughly +0.09 per decade at about ten times
-> chance — while incompressible families sit at a measured collision ceiling, and we publish that
+> In our generators' structured families — csv, log and json rise at roughly +0.09 per decade at about
+> ten times chance — while incompressible families sit at a measured collision ceiling; no real csv, log or
+> json file has been measured, and on the real files we have the best reading is 0.1404. We publish that
 > decomposition rather than letting the headline mixture speak for the whole task.
 
 **"Does it survive realistic carve sizes?"**
@@ -264,9 +301,20 @@ allows and explicitly hedged where it does not.
 > that our gates check mechanical honesty, not reasoning, which the ledger states out loud.
 
 **"Can my engineer verify any of this without trusting you?"**
-> Yes — `bash tools/gates.sh` on a cold clone runs every gate with two CPU-only dependencies and
-> exits non-zero on any failure, and the corpus manifest proves a rebuilt corpus byte-identical
-> rather than assuming it.
+> For consistency, yes — `bash tools/gates.sh` on a cold clone runs every gate with two CPU-only
+> dependencies and exits non-zero on any failure, but it re-reads our banked artifacts rather than
+> re-measuring them. To re-measure, your engineer rebuilds the corpora from pinned sources and the
+> corpus manifest checks the rebuild against ours rather than assuming it: the sources verify byte for
+> byte; every corpus's labels and `raw_c1024` rebuild identical, as do the corpora 0018 and 0021 rest
+> on (`ext_c4096` and `realfit_c4096`, shown on a second machine on 2026-10-21); the headline cache's
+> evaluation chunks come back as a set whose banked order our banked layouts can restore. The check
+> cannot pass for the features and row order of the three caches our original
+> builder wrote (`full_c4096`, `carve_c1024`, `carve_c2048`), which by design keep rows in the order
+> its workers finished, so every result fitted on a builder pool, the headline slope included, can be
+> re-measured on a different draw but not re-derived on the same rows; and it fails today for 0024's
+> real-content corpus (`realfit2_c4096`), whose features rebuilt on a second machine differ in rare
+> rows, enough that 0024's top-rung logistic does not reproduce on it bit for bit. 0025's corpus
+> rebuild is recorded in `artifacts/pivot/engineering_log_0025.json`; the detail is in `CORRECTIONS.md`.
 
 ---
 
@@ -289,7 +337,8 @@ allows and explicitly hedged where it does not.
 - ~~Seed variance of the headline slope~~ — resolved after this document's first draft: two
   replications are banked in `artifacts/pivot/seed_robustness.json` and quoted in the crib above.
 - **The count of diligence questions.** The brief for this document specified eight questions;
-  `docs/DILIGENCE.md` contains nine question headings. All nine are answered above rather than
-  silently dropping one.
+  `docs/DILIGENCE.md` contains seventeen question headings. Nine are answered in the crib above;
+  the eight that concern preregistrations 0015 to 0024 are answered in the five-minute version, not
+  in the crib.
 - **That any buyer would pay.** No buyer has been contacted; `establishes_a_buyer: false` is
   emitted by the reader itself, and nothing in this narrative asserts otherwise.
