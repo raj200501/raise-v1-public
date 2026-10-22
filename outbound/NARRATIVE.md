@@ -98,7 +98,8 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > rather than quoting the mixture: our generators' structured families — csv, log, json — rise at
 > roughly +0.09 per decade, about ten times chance at the top rung, while incompressible content sits
 > near a measured collision ceiling. No real csv, log or json file has been measured; on the real
-> files we have, the best the model reaches is 0.1404 (0024).
+> files we have, the model's top reading over the five real kinds together is 0.1404, up to 0.1553 on
+> one kind (py_src; 0024).
 
 **The operational reading.**
 
@@ -186,12 +187,14 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > on 0021's block in three exact doublings — 1029 to 8232 plaintexts, 3.0 doublings (0.9031 of a decade) of
 > other files above the block; both together span 1.8016 decades, short of 0003's two-decade scope rule.
 > The model's second-decade slope is 0.00697 per doubling against 0.005 required (interval [0.00571,
-> 0.00824]): `SECOND_DECADE_RISES`. And at the top rung, the model leads the standardised logistic by 0.0039
-> (paired interval [0.0001, 0.0077], entirely above 0): `MODEL_LEADS`, by a rule we wrote down before the run —
-> together, the verdict `SECOND_DECADE_RISES_MODEL_LEADS`.
+> 0.00824]; second decade minus first: -0.000374): `SECOND_DECADE_RISES`. And at the top rung, the model leads
+> the standardised logistic by 0.0039 (paired interval [0.0001, 0.0077], entirely above 0): `MODEL_LEADS`, by a
+> rule we wrote down before the run — together, the verdict `SECOND_DECADE_RISES_MODEL_LEADS` (second decade
+> minus first: -0.000374).
 > The shift arm — the new files alone at 0021's count — read 0.1184 for the model against 0021's 0.1193. Other
 > files of the same kinds kept raising the model's accuracy on the files it is scored on at or above the 0.005 per
-> doubling we required, through 8232 plaintexts (eight times 0021's), so more real data paid a second time on
+> doubling we required (0.00697; second decade minus first: -0.000374), through 8232 plaintexts (eight times
+> 0021's), so more real data paid a second time on
 > real content, this time with other files — though the top rung's 0.1404 still does not clear 0021's
 > floor-plus-0.05 bar re-applied at that rung (0.1419), and the logistic's slope (0.00638) is not
 > resolved from the model's. At eight times 0021's plaintexts the boosted recipe leads the standardised
@@ -270,8 +273,9 @@ where the record allows and explicitly hedged where it does not.
 **"Where does the signal actually live?"**
 > In our generators' structured families — csv, log and json rise at roughly +0.09 per decade at about
 > ten times chance — while incompressible families sit at a measured collision ceiling; no real csv, log or
-> json file has been measured, and on the real files we have the best reading is 0.1404. We publish that
-> decomposition rather than letting the headline mixture speak for the whole task.
+> json file has been measured, and on the real files we have the model's top reading over the five real
+> kinds together is 0.1404, up to 0.1553 on one kind (py_src). We publish that decomposition rather than
+> letting the headline mixture speak for the whole task.
 
 **"Does it survive realistic carve sizes?"**
 > No — at 1024 bytes the model ties a dumb rule, at 2048 it misses the bar on every reading (by

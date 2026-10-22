@@ -123,14 +123,14 @@ plaintexts over seven rungs; the 'second decade' is 3.0 doublings (0.9031 of a d
 together span 1.8016 decades, short of 0003's two-decade scope rule). **`SECOND_DECADE_RISES_MODEL_LEADS` — the second decade of
 real plaintexts rises — and at the top rung the boosted model leads the standardised logistic, by 0.0039**: the model reads
 0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, a second-decade slope of 0.00697 per doubling of plaintexts (scored-chunk
-interval [0.00571, 0.00824]) against 0.005 required with the lower bound above 0.0; the standardised logistic 0.00638, the
+interval [0.00571, 0.00824]; second decade minus first: -0.000374) against 0.005 required with the lower bound above 0.0; the standardised logistic 0.00638, the
 depth-3 tree -0.0003; model minus logistic 0.00059 (paired interval [-0.00102, 0.00231]). At the top rung, the model leads the
 standardised logistic by 0.0039 (paired interval [0.0001, 0.0077], entirely above 0) — `MODEL_LEADS` by the rule sealed in
 advance; the interval resamples the scored chunks only, not the fit side, and the model was behind the logistic at rungs 5
 and 6 (0.1236 against 0.1241, 0.13 against 0.1321) and not separated from it at rung 4. The shift arm (rung 5's new
 plaintexts alone at rung 4's count) reads 0.1184 for the model against rung 4's 0.1193 (-0.0009). Other files of the same kinds keep buying the recipe the record's rate on the files it is scored on, through 8232
 plaintexts (eight times 0021's) — the record's rate being the 0.005-per-doubling bar 0024 sealed, against 0.00697 measured
-over the second decade — so the budget excuse is answered a second time on real content, this time with other files, to a
+over the second decade (second decade minus first: -0.000374) — so the budget excuse is answered a second time on real content, this time with other files, to a
 top reading (0.1404) still short of 0021's floor-plus-0.05 bar re-applied there with the depth-3 tree as the floor (0.1419,
 informational); at eight times 0021's plaintexts the boosted recipe leads the standardised logistic (26 classes over 1108
 features) on the record's own real content by 0.0039 — the recipe conclusion of 0021, 0022 and 0023 (that the linear
