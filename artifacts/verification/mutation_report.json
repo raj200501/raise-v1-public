@@ -68,6 +68,10 @@
       "detected": 148,
       "total": 148
     },
+    "realcurve3_4096": {
+      "detected": 176,
+      "total": 176
+    },
     "realcurve4096": {
       "detected": 98,
       "total": 98
@@ -3650,7 +3654,7 @@
     },
     {
       "detected": true,
-      "evidence": "one pool block, one fold block, and the cache recomputation agrees",
+      "evidence": "one pool block, one fold block (cache absent: the recomputation from y and g was not run here)",
       "exit_code": 0,
       "expected": "pass",
       "gate": "oob4096",
@@ -7310,10 +7314,1594 @@
       "gate": "realcurve2_4096",
       "mutation": "a-committed-checkpoint-whose-record-differs-from-the-banked-one-is-VOID",
       "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None sta",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-fourth-doubling-rises-with-the-model-ahead-is-FOURTH_DOUBLING_RISES_MODEL_LEADS",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.005 ci=[0.0043, 0.005603] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1454] ckpt=None s",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-gain-at-the-bar-exactly-0.005-with-lo-above-0-is-RISES",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_BELOW_RATE_MODEL_LEADS gain=FOURTH_DOUBLING_BELOW_RATE lead=MODEL_LEADS point=0.003 ci=[0.0025, 0.0035] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1434] ckp",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-gain-0.003-with-lo-above-0-is-BELOW_RATE-a-rise-below-the-rate",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_BELOW_RATE_MODEL_LEADS gain=FOURTH_DOUBLING_BELOW_RATE lead=MODEL_LEADS point=0.0049 ci=[0.0043, 0.0056] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1453] ck",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-gain-0.0049-just-under-the-bar-is-BELOW_RATE-not-RISES",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_NOT_RESOLVED_MODEL_LEADS gain=FOURTH_DOUBLING_NOT_RESOLVED lead=MODEL_LEADS point=0.002 ci=[-0.0038, 0.0074] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1424",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-gain-the-chunks-disagree-on-has-an-interval-straddling-0-and-is-NOT_RESOLVED-never-flat",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_NOT_RESOLVED_MODEL_LEADS gain=FOURTH_DOUBLING_NOT_RESOLVED lead=MODEL_LEADS point=0.0 ci=[0.0, 0.0] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1404] ckpt=No",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-rung-8-equal-to-rung-7-but-for-one-row-is-NOT_RESOLVED-with-a-zero-point",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_FALLS_MODEL_LEADS gain=FOURTH_DOUBLING_FALLS lead=MODEL_LEADS point=-0.01 ci=[-0.0109, -0.0092] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1304] ckpt=None s",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-rung-8-below-rung-7-with-the-interval-below-0-is-FALLS",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_NOT_RESOLVED_MODEL_LEADS gain=FOURTH_DOUBLING_NOT_RESOLVED lead=MODEL_LEADS point=-0.002 ci=[-0.0075, 0.0034] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.138",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-a-small-fall-the-chunks-disagree-on-is-NOT_RESOLVED-not-FALLS",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_LINEAR_LEADS gain=FOURTH_DOUBLING_RISES lead=LINEAR_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None s",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-linear-rule-ahead-at-rung-8-is-RISES_LINEAR_LEADS",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_NO_SEPARATION gain=FOURTH_DOUBLING_RISES lead=NO_SEPARATION point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-model-and-logistic-level-at-rung-8-is-RISES_NO_SEPARATION-never-equal",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_BELOW_RATE_LINEAR_LEADS gain=FOURTH_DOUBLING_BELOW_RATE lead=LINEAR_LEADS point=0.003 ci=[0.0025, 0.0035] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1434] c",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-BELOW_RATE_LINEAR_LEADS-is-reachable",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_BELOW_RATE_NO_SEPARATION gain=FOURTH_DOUBLING_BELOW_RATE lead=NO_SEPARATION point=0.003 ci=[0.0025, 0.0035] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1434]",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-BELOW_RATE_NO_SEPARATION-is-reachable",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_NOT_RESOLVED_LINEAR_LEADS gain=FOURTH_DOUBLING_NOT_RESOLVED lead=LINEAR_LEADS point=0.002 ci=[-0.0038, 0.0074] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.14",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-NOT_RESOLVED_LINEAR_LEADS-is-reachable",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_NOT_RESOLVED_NO_SEPARATION gain=FOURTH_DOUBLING_NOT_RESOLVED lead=NO_SEPARATION point=0.002 ci=[-0.0038, 0.0074] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-NOT_RESOLVED_NO_SEPARATION-is-reachable",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_FALLS_LINEAR_LEADS gain=FOURTH_DOUBLING_FALLS lead=LINEAR_LEADS point=-0.01 ci=[-0.0109, -0.0092] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1304] ckpt=None",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-FALLS_LINEAR_LEADS-is-reachable",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_FALLS_NO_SEPARATION gain=FOURTH_DOUBLING_FALLS lead=NO_SEPARATION point=-0.01 ci=[-0.0109, -0.0092] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1304] ckpt=No",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-FALLS_NO_SEPARATION-is-reachable",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_LINEAR_LEADS gain=FOURTH_DOUBLING_RISES lead=LINEAR_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None s",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-the-lead-part-is-read-at-rung-8-not-at-rung-7-where-0024-read-MODEL_LEADS",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_NO_SEPARATION gain=FOURTH_DOUBLING_RISES lead=NO_SEPARATION point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-a-marginal-lead-publishes-how-many-other-seeds-would-read-differently",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None sta",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-the-model-at-its-iteration-cap-at-rung-8-is-named-and-the-lead-is-not-a-recipe-comparison",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None sta",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-reader-whose-lead-cap-note-drops-the-lead-rules-words-the-top-rung-is-detected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None sta",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-the-logistic-at-its-cap-at-rung-7-touches-neither-the-models-gain-nor-the-rung-8-lead",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None sta",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-the-model-at-its-cap-at-rung-7-is-named-beside-the-gain-which-is-then-not-a-recipe-reading",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None sta",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-the-logistic-at-its-cap-at-rung-8-makes-the-lead-not-a-recipe-comparison-and-leaves-the-gain",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None sta",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-an-iteration-count-above-the-cap-counts-as-capped",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None sta",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-the-tree-floor-at-each-rung-is-the-curves-depth-3-tree-fitted-once",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None sta",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-high-floors-flip-the-informational-clears-flag-and-leave-the-verdict-alone",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=37 stab=",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-committed-checkpoints-that-match-are-cross-checked-37-times",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None sta",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-the-new-shift-arm-and-its-differences-are-banked-and-recomputed",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None sta",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-the-two-decade-slope-is-a-flag-beside-the-verdict-never-a-verdict",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None sta",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-the-sensitivity-gain-with-rung-7-at-0024s-reading-equals-the-gain-when-rung-7-reproduces-exactly",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_BELOW_RATE_MODEL_LEADS gain=FOURTH_DOUBLING_BELOW_RATE lead=MODEL_LEADS point=0.005 ci=[0.0043, 0.005603] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1454] c",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-a-measured-RISES-that-reads-BELOW_RATE-with-rung-7-at-0024s-banked-reading-publishes-BELOW_RATE-naming-both",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_BELOW_RATE_MODEL_LEADS gain=FOURTH_DOUBLING_BELOW_RATE lead=MODEL_LEADS point=0.0049 ci=[0.0043, 0.0056] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1453] ck",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-a-measured-BELOW_RATE-that-reads-RISES-with-rung-7-at-0024s-banked-reading-stays-BELOW_RATE-naming-both",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_BELOW_RATE_MODEL_LEADS gain=FOURTH_DOUBLING_BELOW_RATE lead=MODEL_LEADS point=0.005 ci=[0.0043, 0.005603] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1454] c",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-reader-that-drops-the-straddle-sentence-is-detected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.005 ci=[0.0043, 0.005603] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1454] ckpt=None s",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-reader-that-publishes-the-measured-reading-on-a-straddle-is-detected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_BELOW_RATE_MODEL_LEADS gain=FOURTH_DOUBLING_BELOW_RATE lead=MODEL_LEADS point=0.005 ci=[0.0043, 0.005603] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1454] c",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-reader-that-quotes-the-measured-point-beside-the-published-sensitivity-reading-is-detected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None sta",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-the-meaning-carries-every-roles-gain-the-per-family-gains-both-shift-arms-and-the-fourth-doublings-files-per-family",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_FALLS_MODEL_LEADS gain=FOURTH_DOUBLING_FALLS lead=MODEL_LEADS point=-0.01 ci=[-0.0109, -0.0092] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1304] ckpt=None s",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-a-FALLS-is-published-beside-the-per-family-gains-and-the-new-shift-arm-at-the-same-size",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None sta",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-reader-whose-meaning-omits-what-the-fourth-doublings-files-are-per-family-is-detected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None sta",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-reader-whose-meaning-omits-the-per-family-and-other-roles-gains-is-detected",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"reproduction: r7_model read 0.1412 against 0024's banked 0.1404 (drift 0.0008 ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "rung-7-model-drifting-by-0.0008-from-0024s-banked-reading-is-VOID-on-the-tighter-anchor-tolerance",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"reproduction: 0024's banked slope and lead intervals do not reproduce exactly ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "rung-7-model-drifting-by-4-rows-within-tolerance-but-0024s-intervals-no-longer-exact-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"reproduction: r4_logistic read 0.1239 against 0021's banked 0.1179 (drift 0.00",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "rung-4-logistic-drifting-by-0.006-from-0021s-banked-reading-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"reproduction: r2_depth3_tree read 0.0961 against 0023's banked 0.0901 (drift 0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "rung-2-tree-drifting-by-0.006-from-0023s-banked-reading-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"reproduction: r6_model read 0.136 against 0024's banked 0.13 (drift 0.006 > 0.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "rung-6-model-drifting-by-0.006-from-0024s-banked-reading-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"reproduction: 0024's banked slope and lead intervals do not reproduce exactly ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "rung-5-model-drifting-by-2-rows-within-tolerance-but-0024s-slope-interval-no-longer-exact-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"reproduction: s4_model read 0.1244 against 0024's banked shift-arm 0.1184 (dri",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "0024s-shift-arm-drifting-by-0.006-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['null control: shuffled labels read 0.0514 on the extension rows and 0.038 on t",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "null-control-above-chance-on-the-extension-rows-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['null control: shuffled labels read 0.0371 on the extension rows and 0.058 on t",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "null-control-above-chance-on-the-evaluation-rows-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['reproduction: reproduction_0024 or reference_0024 is not the recomputed or sea",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-forged-reproduction-drift-of-0-with-a-banked-rung-7-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"reproduction: reproduction_bootstrap_0024.lead_0024 is not the reader's recomp",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "equals_0024s_banked-forged-True-over-a-banked-interval-that-differs-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"reproduction: reproduction_bootstrap_0024.slope_bootstrap_0024 is not the read",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-0024-slope-interval-off-in-the-sixth-decimal-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['reproduction: reproduction_bootstrap_0024 carries no unit']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "reproduction_bootstrap_0024-without-its-unit-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"scope: preregistration='0024-realcurve2-4096', this reader is frozen for 0025-",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "another-preregistrations-artifact-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['scope: smoke=True; a smoke run is not the preregistered run']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-smoke-run-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"scope: stage='dry', the verdict is read from the run artifact\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-non-run-stage-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['scope: corpus.n_source_chunks=50001, preregistered 50000']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-corpus-block-off-the-sealed-cache-identity-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['scope: the banked curve spec does not hash to the sealed CURVE_SHA256', 'scope",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-curve-spec-that-does-not-hash-to-the-sealed-digest-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['scope: the banked curve spec does not hash to the sealed CURVE_SHA256', 'scope",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-recipe-parameter-off-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"scope: roles=['depth3_tree', 'logistic', 'model'], floor_roles=['floor_majorit",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-fourth-refitted-floor-role-in-the-artifact-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"scope: roles=['depth3_tree', 'logistic', 'model'], floor_roles=['floor_majorit",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "seven-rungs-instead-of-eight-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"scope: roles=['depth3_tree', 'logistic', 'model'], floor_roles=['floor_majorit",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "two-new-doublings-instead-of-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['scope: bar={\\'gain_per_doubling\\': 0.004, \\'gain_rule\\': \"rung 8 minus rung 7 ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-bar-with-another-gain-rate-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['scope: bar={\\'gain_per_doubling\\': 0.005, \\'gain_rule\\': \"rung 8 minus rung 7 ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-bar-with-another-bootstrap-seed-than-0024s-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['scope: bar={\\'gain_per_doubling\\': 0.005, \\'gain_rule\\': \"rung 8 minus rung 7 ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-bar-with-a-reworded-gain-rule-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"evaluation corpus: ext_corpus.arrays={'X': {'sha256': '<hash>', 'shape': [6140",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "an-evaluation-corpus-array-hash-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['fit corpus: fit_corpus.n_rows=26347, preregistered 26346']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-fit-corpus-row-count-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"second-decade corpus: fit2_corpus.arrays={'X': {'sha256': '<hash>', 'shape': [",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-second-decade-corpus-array-hash-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fourth-doubling corpus: fit3_corpus.arrays={'X': {'sha256': '<hash>', 'shape':",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-fourth-doubling-corpus-array-hash-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['fourth-doubling corpus: fit3_corpus.n_chunks=8568, preregistered 8569']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-fourth-doubling-corpus-with-another-chunk-count-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['corpora: the banked family lists or fit row counts are not the sealed ones']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "fit3-rows-per-family-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['corpora: n_ext_rows=61409, n_eval_rows=260000, n_ext_real_rows=38451']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "n_ext_real_rows-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['sealed set: partition.rungs=[{\\'rung\\': 1, \\'denominator\\': 8, \\'n_chunks\\': 1",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-rung-8-row-set-hash-off-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['sealed set: partition.shift_arm_0025={\\'rung\\': \\'s8\\', \\'decade\\': 2, \\'n_chu",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-new-shift-arm-hash-off-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['leakage: partition.fit3_chunks_shared_with_fit2=1, must be the measured 0']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "one-fourth-doubling-chunk-shared-with-the-second-decade-corpus-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['leakage: partition.fit3_source_chunks_shared_with_ext=1, must be the measured ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "one-fourth-doubling-source-chunk-shared-with-the-scored-corpus-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['leakage: partition.fit3_rows_identical_to_a_scored_row=1, must be the measured",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "one-fourth-doubling-row-identical-to-a-scored-row-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['leakage: partition.fit2_chunks_shared_with_ext=1, must be the measured 0']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "one-second-decade-chunk-shared-with-the-scored-corpus-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"rungs: 0025's chunk ids are not banked as continuing 0024's per family\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "chunk-ids-not-continuing-0024s-for-one-family-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['sealed set: partition.rungs_nested=False, preregistered True', 'rungs: partiti",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "rungs-not-nested-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"sealed set: partition.pool_short={'rfc_txt': 3}, preregistered {}\", \"rungs: pa",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-pool-short-for-one-family-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['sealed set: partition.shift_arm={\\'rung\\': \\'s4\\', \\'decade\\': 2, \\'n_chunks\\'",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "0024s-shift-arm-not-rung-5s-new-chunks-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['sealed set: partition.shift_arm_0025={\\'rung\\': \\'s8\\', \\'decade\\': 2, \\'n_chu",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "the-new-shift-arm-holding-a-chunk-at-or-below-0024s-ids-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['sealed set: partition.shift_arm_0025={\\'rung\\': \\'s8\\', \\'decade\\': 2, \\'n_chu",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "the-new-shift-arm-not-inside-the-top-rung-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"null control: the null labels are not banked as a permutation of the top rung'",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "null-labels-not-a-permutation-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"null control: the permuted label array hashes to '<hash>', not the sealed '<ha",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "null-labels-hashing-to-another-array-than-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"complete: complete=False, run_finished_utc='2026-09-24T06:00:00Z'; missing ['s",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "an-incomplete-run-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['complete: complete=True, run_finished_utc=None; missing []']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-run-without-a-finish-time-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['environment: launch_environment is not ok with the sealed environment']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-launch-environment-with-a-problem-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['environment: threads=4, banked 3']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "four-threads-instead-of-the-sealed-three-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['environment: r8_model nice=0, banked 10']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-fit-record-at-another-nice-level-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['scores: the scores file is absent', 'scores: ext_fam missing, not N_EXT long, ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "an-absent-scores-file-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"scores: the scores file is not this run's, or is a smoke run's, or names a dif",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-smoke-scores-file-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"scores: the scores file is not this run's, or is a smoke run's, or names a dif",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-scores-file-naming-another-fourth-doubling-corpus-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['scores: ext_fam does not hash to the sealed fam array']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "an-ext_fam-array-not-hashing-to-the-sealed-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['scores: ext_chunk_ids do not hash to the sealed g array', 'scores: ext_chunk_i",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "ext_chunk_ids-not-the-sealed-layout-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['scores: eval_chunk_ids are not the sealed evaluation chunk ids expanded by the",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "eval_chunk_ids-not-the-sealed-evaluation-chunks-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['fit: r8_model per-example vector missing, not 321409 long, or not in {0, 1}']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-per-example-vector-one-row-short-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['fit: r8_logistic per-example vector missing, not 321409 long, or not in {0, 1}",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-per-example-vector-with-a-2-in-it-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: the artifact banks roles outside the sealed order (extra [], missing ['r8",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-missing-refitted-floor-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: the artifact banks roles outside the sealed order (extra ['r8_floor_tree3",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-role-outside-the-sealed-order-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: s8_model status 'skipped'; must be 'fit'\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-skipped-fit-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['fit: r8_model is not the sealed M4 (id, params, params hash, family, scaled, v",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "rung-8-model-fitted-off-recipe-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['fit: r7_floor_feat1 is not the sealed B-feat1 (id, params, params hash, family",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-floor-fitted-under-another-recipe-id-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['fit: r8_logistic was not fitted on sealed rung 8 with the preregistered seed']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-fit-under-another-seed-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['fit: r8_model was not fitted on sealed rung 8 with the preregistered seed']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "rung-8-model-fitted-on-rung-7s-rows-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['fit: s8_model was not fitted on sealed rung s8 with the preregistered seed']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "the-new-shift-arm-fitted-on-0024s-arm-rows-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: r8_floor_majority stage 'curve' is not 'floor'\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-floor-banked-under-the-curve-stage-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: r7_model stage 'curve' is not 'reproduction'\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "rung-7-model-banked-under-the-curve-stage-instead-of-reproduction-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['fit: r8_model banked a failed block probe check']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-failed-block-probe-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['fit: r8_model has no integer iteration count']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-model-fit-without-an-iteration-count-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['fit: r8_depth3_tree has no integer depth and leaf count']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-tree-fit-without-a-depth-and-leaf-count-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['fit: r8_floor_stratified banked no fit_info']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-floor-without-fit_info-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: r8_model fingerprint '<hash>' is not the one recomputed from the sealed l",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-fingerprint-not-recomputed-from-the-sealed-literals-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['fit: r8_model has 0 ledger completions, must be exactly 1', \"order: the ledger",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-fit-with-no-ledger-completion-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['fit: r8_model has 2 ledger completions, must be exactly 1', \"order: the ledger",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-fit-completed-twice-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: s8_model's completion event does not carry the sealed fingerprint\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-completion-without-the-sealed-fingerprint-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: r8_logistic has no 'started' event with its fingerprint before its comple",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-fit-with-no-started-event-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: r8_floor_feat1 has no 'rung_bound' event naming sealed rung 8 before its ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-fit-with-no-rung-bound-event-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: the ledger's completions are not in the sealed order null, r7_floor_major",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "rung-8-fitted-before-rung-7-is-VOID-on-the-sealed-order",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"order: the ledger carries completions under names outside the sealed order (['",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-completion-under-a-name-outside-the-order-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['fit: r8_model per_example_sha256 is not the hash of its banked vector']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-record-whose-vector-hash-is-not-its-vectors-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: r8_model record top1 0.0976 is not its vector's mean 0.0975\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-record-top1-not-its-vectors-mean-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: r8_model record per_family is not its vector's per-family means over the ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-record-per-family-not-its-vectors-means-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: r7_floor_feat1 record top1_non_gutenberg 0.1597 is not its vector's non-g",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-record-non-gutenberg-top1-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: roles ['r8_depth3_tree', 'r8_floor_feat1'] bank the same per-example vect",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-floor-banking-the-trees-vector-under-a-second-name-is-VOID-on-the-pairwise-distinct-clause",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=FOURTH_DOUBLING_RISES_MODEL_LEADS gain=FOURTH_DOUBLING_RISES lead=MODEL_LEADS point=0.008 ci=[0.0072, 0.0088] rungs=[0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404, 0.1484] ckpt=None sta",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "control-the-majority-floor-banks-the-same-vector-at-rungs-7-and-8-as-the-runner-does",
+      "observed": "pass"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: roles ['r7_floor_stratified', 'r8_floor_stratified'] bank the same per-ex",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "two-stratified-floors-banking-the-same-vector-is-VOID-only-the-majority-pair-may",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: roles ['r7_floor_majority', 'r7_logistic'] bank the same per-example vect",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-majority-floor-banking-a-recipes-vector-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: roles ['r7_floor_majority', 'r8_floor_majority', 'r8_floor_stratified'] b",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "the-majority-pair-plus-a-third-role-on-the-same-vector-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: roles ['s4_model', 's8_model'] bank the same per-example vector; distinct",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "two-shift-arms-banking-the-same-vector-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['null control: null_control is not the banked null record']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "null_control-not-the-banked-null-record-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['null control: null_rows=421014, the null control is fitted on the whole top ru",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-null-fitted-on-fewer-rows-than-the-top-rung-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"fit: fit_info_by_name is not the records' fit_info\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "fit_info_by_name-not-the-records-fit_info-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=36 stab=None cap_lead=None cap_gain=None validity=['checkpoint: r8_model has no checkpoint although the checkpoint directory is pres",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-committed-checkpoint-missing-for-one-fit-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=36 stab=None cap_lead=None cap_gain=None validity=[\"checkpoint: r8_model's committed checkpoint does not carry the sealed fingerprin",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-committed-checkpoint-whose-record-differs-from-the-banked-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=36 stab=None cap_lead=None cap_gain=None validity=[\"checkpoint: s8_logistic's committed checkpoint does not carry the sealed fingerp",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-committed-checkpoint-whose-vector-differs-from-the-banked-one-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=36 stab=None cap_lead=None cap_gain=None validity=[\"checkpoint: r7_model's committed checkpoint does not carry the sealed fingerprin",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-committed-checkpoint-under-another-fingerprint-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['readings: a banked summary reading for r8_model is not the recomputed value']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-ext_real_top1-off-its-vector-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"readings: r8_model.ext_real_correct=5707 is not the reader's recomputation 570",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-readings-block-off-its-vector-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"curve: curves.model.fourth_doubling_gain is not the reader's recomputation\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-fourth-doubling-gain-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['curve: model_fourth_doubling_gain is not the recomputed fourth-doubling gain']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-top-level-model-gain-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"curve: curves.model.fourth_doubling_gain_with_rung7_at_reference is not the re",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-sensitivity-gain-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"curve: curves.logistic.per_family_fourth_doubling_gain is not the reader's rec",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-per-family-gain-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"curve: curves.model.slope_per_doubling_both_decades is not the reader's recomp",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-two-decade-slope-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"curve: curves.model.slope_per_doubling_second_decade_0024 is not the reader's ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-0024-second-decade-slope-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['curve: model_slope_per_doubling is not the recomputed second-decade slope over",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-top-level-slope-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['curve: the banked top-rung readings or differences are not the recomputed valu",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-top-rung-difference-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"floors: floors.r8 is not the reader's recomputation\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-floor-clause-threshold-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"floors: floors.r7 is not the reader's recomputation\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-tree-floor-not-the-rungs-tree-reading-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['floors: the floors block carries no note']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-floors-block-without-its-note-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"shift arm: shift_arm.readings is not the reader's recomputation (0024's shift ",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-0024-shift-arm-reading-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"shift arm: shift_arm_0025.difference_from_shift_arm_0024 is not the reader's r",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-new-shift-arm-difference-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['shift arm: shift_arm_0025 carries no note']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-new-shift-arm-block-without-its-note-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"curve: slope_bootstrap.model is not the reader's recomputation\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-slope-interval-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"curve: slope_bootstrap.both_decades is not the reader's recomputation\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-two-decade-interval-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['curve: slope_bootstrap carries no unit']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-slope-bootstrap-without-its-unit-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"gain: fourth_doubling.model={'point': 0.008, 'ci95': [0.007201, 0.0088], 'n_bo",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-gain-interval-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"gain: fourth_doubling.model={'point': 0.003, 'ci95': [0.0025, 0.0035], 'n_boot",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-gain-reading-forged-to-RISES-over-a-BELOW_RATE-interval-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"gain: fourth_doubling.bar=0.004 is not the reader's recomputation 0.005\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-gain-bar-banked-as-0.004-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"gain: fourth_doubling.verdict_role='logistic' is not the reader's recomputatio",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-gain-block-with-the-logistic-as-verdict-role-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['gain: fourth_doubling carries no unit']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-gain-block-without-its-unit-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"lead: lead_at_top.r8_model_minus_logistic={'point': 0.0079, 'ci95': [0.003801,",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-rung-8-lead-interval-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"lead: lead_at_top.r8_model_minus_logistic={'point': 0.0, 'ci95': [-0.0041, 0.0",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-lead-reading-forged-to-MODEL_LEADS-over-a-straddling-interval-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"lead: lead_at_top.r4_model_minus_depth3_tree={'point': 0.0265, 'ci95': [0.0234",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-rung-4-lead-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"lead: lead_at_top.s8_minus_s4_model={'point': 0.0017, 'ci95': [0.0013, 0.00210",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-new-arm-minus-old-arm-interval-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"lead: lead_at_top carries no unit or names a verdict pair other than the top r",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-lead-block-naming-rung-7-as-the-verdict-pair-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"lead: lead_at_top carries no unit or names a verdict pair other than the top r",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-lead-block-without-its-unit-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"stability: seed_stability.n_seeds_with_another_lead_reading is not the reader'",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-stability-count-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"stability: seed_stability.seeds is not the reader's recomputation\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-stability-seed-list-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=[\"stability: seed_stability.gain_readings is not the reader's recomputation\"]",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-banked-stability-reading-off-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['stability: seed_stability carries no note']",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-stability-block-without-its-note-is-VOID",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "  Absence is not a pass. No verdict emitted.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "an-absent-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "READER 0025: NOT RUN \u2014 'load' (stage run, filed 2026-09-24T00:00:00Z, 3 checkpoints). A NOT RUN is not a verdict.",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-not-run-file-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "READER 0025: artifact malformed (JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)).",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "a-malformed-artifact-emits-no-verdict",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "verdict=VOID gain=None lead=None point=None ci=None rungs=None ckpt=None stab=None cap_lead=None cap_gain=None validity=['sealed set: partition.rungs=\\'eight\\', preregistered [{\\'rung\\': 1, \\'denomina",
+      "exit_code": 1,
+      "expected": "fail",
+      "gate": "realcurve3_4096",
+      "mutation": "an-artifact-of-another-shape-is-VOID-not-a-crash",
+      "observed": "fail"
+    },
+    {
+      "detected": true,
+      "evidence": "control and runner agree at every level",
+      "exit_code": 0,
+      "expected": "pass",
+      "gate": "realcurve3_4096",
+      "mutation": "the-control-has-the-runners-shape-at-every-level-the-reader-compares",
+      "observed": "pass"
     }
   ],
-  "detected": 801,
+  "detected": 977,
   "schema": "raise-v1/mutation_report/1",
   "survived": 0,
-  "total_mutations": 801
+  "total_mutations": 977
 }

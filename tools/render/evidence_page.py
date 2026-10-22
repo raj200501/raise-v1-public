@@ -992,7 +992,7 @@ inflated. Defect and direction are filed together in the corrections ledger.</p>
 <h2>The instrument the numbers passed through</h2>
 <div class="tiles">
 <div class="tile"><div class="v">{len(prereg["chain"])}</div><div class="k">preregistrations, hash-chained; entry N carries entry N−1's hash; NIST Beacon + drand anchors</div></div>
-<div class="tile"><div class="v">{mut["detected"]}/{mut["total_mutations"]}</div><div class="k">deliberate mutations detected across {len(mut["by_gate"])} gates in the suite's last full run (the gate added since for the unfrozen preregistration 0025 is not in it) — every gate then in the suite shown to fail on its deliberate mutations</div></div>
+<div class="tile"><div class="v">{mut["detected"]}/{mut["total_mutations"]}</div><div class="k">deliberate mutations detected across {len(mut["by_gate"])} gates in the suite's last full run (the gate for the unfrozen preregistration 0025 included) — every gate in the suite shown to fail on its deliberate mutations</div></div>
 <div class="tile"><div class="v">{n_corrections}</div><div class="k">corrections filed against this work at full size, none softened</div></div>
 <div class="tile"><div class="v">{audit["n_confirmed"]}/{audit["n_raw_findings"]}</div><div class="k">adversarial-audit findings confirmed by double refutation ({audit_reject} rejected, record banked) — every finding fixed, the load-bearing ones by new measurement</div></div>
 <div class="tile"><div class="v">{cov_neither}/{cov_n}</div><div class="k">claims in the coverage map's weakest class — published loudest, on purpose</div></div>

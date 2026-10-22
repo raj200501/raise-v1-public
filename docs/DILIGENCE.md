@@ -179,8 +179,8 @@ second machine differs in rare rows of the larger chunks (its smoke subset rebui
 rebuild of 0025's `realfit3_c4096` stands is recorded in
 `artifacts/pivot/engineering_log_0025.json`.
 
-801 mutations across 25 gates certify every gate can fail
-(as banked on 2026-09-17, before the unfrozen 0025 gate was registered; that count is checked
+977 mutations across 26 gates certify every gate can fail
+(as banked on 2026-10-22, the gate for the unfrozen preregistration 0025 included; that count is checked
 against the mutation report by `tools/freshness.py`, because an earlier version of this sentence
 said 132 while the artifact said 134); the reproduction that matters most — the audit — is
 banked with its kill-list included.

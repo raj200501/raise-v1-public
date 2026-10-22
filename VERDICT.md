@@ -311,7 +311,7 @@ does and does not reproduce is in the Phase 3 row below and in `CORRECTIONS.md` 
 
 | Result | Value | Class |
 |---|---|---|
-| Every gate can be shown to fail | 801 mutations, 801 detected, 0 survived | primary-verifiable (report banked 2026-09-17, before the unfrozen 0025 gate was registered) |
+| Every gate can be shown to fail | 977 mutations, 977 detected, 0 survived | primary-verifiable (report banked 2026-10-22, the gate for the unfrozen preregistration 0025 included) |
 | A number that is real but STALE is caught, not just a fabricated one | `tools/freshness.py`, 9 mutations | primary-verifiable |
 | Preregistration chain verifies, reader unchanged since freeze | 24 entries, head `f57f067c…` | primary-verifiable |
 | Census leak reproduced first-hand | mean AUC 0.8026 from a one-line rule, 0 training rows | primary-verifiable |

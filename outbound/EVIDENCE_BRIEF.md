@@ -235,10 +235,10 @@ rerun would have said something different. It would not have.
 Beacon 2.0 and drand; readers frozen by sha256 before their data existed, except the two disclosed re-reads (0013, 0019),
 whose readers were frozen with the numbers they read already known. A 25th, 0025 (one more doubling of real plaintexts), is
 written and not yet frozen or run; no number here comes from it.
-**801** deliberate mutations across **25** gates, **801** detected, **0** survived in the suite's last full run
+**977** deliberate mutations across **26** gates, **977** detected, **0** survived in the suite's last full run
 (`artifacts/verification/mutation_report.json`) — every gate then in the suite shown to fail on its own deliberate
 mutations, which is not proof that it catches every defect (reader defects have passed green gates; see the corrections
-ledger); the gate added since for the unfrozen preregistration 0025 is not in that count. **42** corrections filed against this work at full size, including a **54-agent
+ledger); it includes the gate for the unfrozen preregistration 0025. **42** corrections filed against this work at full size, including a **54-agent
 adversarial audit** whose 13 confirmed findings (three critical) were each fixed — the load-bearing ones by new measurement,
 with the audit record banked — rejected findings included — so the filter itself can be audited.
 

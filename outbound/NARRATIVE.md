@@ -19,8 +19,8 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > Before we measured anything, we built the instrument. Bars frozen and hash-chained before the
 > data existed, verdict readers frozen by hash, and every gate shown to fail on its deliberate
 > mutations at the suite's last full run —
-> 801 deliberate mutations, 801 detected, 0 survived.
-> The gate added since, for the still-unfrozen preregistration 0025, is not in that count.
+> 977 deliberate mutations, 977 detected, 0 survived.
+> It includes the gate for the still-unfrozen preregistration 0025.
 >
 > Then we ran the search the thesis demanded: 99 candidate domains over three rounds, 8 through
 > adversarial review with default posture reject, 0 selected. We published that negative under a
@@ -63,10 +63,10 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > to public randomness beacons — NIST and drand — with the verdict-emitting readers frozen by
 > sha256 before their data existed, except two disclosed re-reads of banked runs (0013, 0019). Then
 > we proved the instrument itself can fail:
-> 801 deliberate mutations across 25 gates, 801 detected, 0 survived. A gate that cannot fail is decoration, so
+> 977 deliberate mutations across 26 gates, 977 detected, 0 survived. A gate that cannot fail is decoration, so
 > we broke every one on purpose and checked that it noticed. That count is the suite's last full run
-> (`artifacts/verification/mutation_report.json`); the gate added since, for the still-unfrozen
-> preregistration 0025, is not in it.
+> (`artifacts/verification/mutation_report.json`), and it includes the gate for the still-unfrozen
+> preregistration 0025.
 
 **The search, and the negative we published.**
 

@@ -260,7 +260,7 @@ manufacturing a discrepancy against a subagent that turned out to be right.
 git clone <repo> && cd raise-v1
 python3 tools/preflight.py                        # interpreter + dependency floors, cause and fix
 python3 tools/prereg.py verify                    # chain order, sealed fields, reader hashes
-python3 tests/mutation_test.py                    # 801 deliberate mutations, 801 detected, 0 survived, as banked before the unfrozen 0025 gate was added
+python3 tests/mutation_test.py                    # 977 deliberate mutations, 977 detected, 0 survived, the gate for the unfrozen 0025 included
 python3 tools/coverage.py                         # coverage map, weakest class first
 python3 tools/claimcheck.py outbound VERDICT.md   # every number equals some banked value at its written precision, not necessarily the one cited
 python3 tools/freshness.py                        # every registered live number equals its CURRENT artifact value
