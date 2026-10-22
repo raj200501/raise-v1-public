@@ -9,8 +9,8 @@ rejected findings included, is banked at `artifacts/verification/adversarial_aud
 The interval is a cluster bootstrap over the 10,000 held-out source chunks — the dependence unit
 the split declares — after an audit found the original fragment-level interval anti-conservative
 (`artifacts/pivot/audit_rederivations.json`, CORRECTIONS.md 2026-08-31). Seed variance is measured
-by full-pipeline replications at independent seeds: `artifacts/pivot/deflate_curve_seed*.json`, or
-the row stays PENDING in `outbound/EVIDENCE_BRIEF.md`.
+by two full-pipeline replications at independent seeds: `artifacts/pivot/deflate_curve_seed*.json`,
+summarised in `artifacts/pivot/seed_robustness.json` and tabled in `outbound/EVIDENCE_BRIEF.md`.
 
 ## "Is it memorising content rather than identifying encoders?"
 
@@ -25,33 +25,39 @@ excluding the leaked family widens both margins (`$.gutenberg_excluded_margins` 
 
 The input is mid-stream entropy-coded bitstream — no header, no text, nothing `javap`-like renders
 legible (the attack that killed the JVM candidate in `trial/pivot/DOMAIN_SELECTION.md` was checked
-here and does not transfer). The measured stand-ins for "clever prior, no task-specific data" are
-the trivial-baseline ladder up to depth-16 trees and logistic regression, all trained on the same
-data as the top rung; the margins over them are the headline clauses.
+here and does not transfer). No stand-in for "clever prior, no task-specific data" was measured:
+no large pretrained model was tested. The headline margins are over the trivial-baseline ladder up
+to depth-16 trees and logistic regression (since 0014, a searched standardised logistic), all
+trained on the same data as the top rung, which bounds cheap learned rules, not a frontier model.
 
 ## "Where does the signal actually live?"
 
-`artifacts/pivot/per_family_curves.json`: ~+0.09/decade on structured content (csv, log, json) at
-ten times chance, near-flat on incompressible families sitting at the measured collision ceiling
-(`carve_channel_capacity.json`). The headline is a mixture and the decomposition is published —
-at 2048 too (`per_family_curves_2048.json`): csv and log clear the 0.05 bar on both readings
-(+0.0554 and +0.0501 against the depth-16 tree), the structured four clear it as a set (+0.0549),
-and the mixture misses on every reading — even without the three incompressible families (+0.0478).
+`artifacts/pivot/per_family_curves.json`: ~+0.09/decade on the builder's synthetic structured
+generators (csv, log, json) at about ten times chance (on real files, scored on held-out chunks of
+the files fitted, the model reaches at most 0.1404, prereg 0024), near-flat on incompressible
+families sitting at the measured collision ceiling (`channel_capacity.json`: 14.667 and 14.75
+distinct streams of 26 for base64 and binary). The headline is a mixture and the decomposition is
+published — at 2048 too (`per_family_curves_2048.json`): csv and log clear the 0.05 bar on both
+readings (+0.0554 and +0.0501 against the depth-16 tree), the structured four clear it as a set
+(+0.0549), and the mixture misses on every reading — even without the three incompressible families
+(+0.0478).
 
 ## "Does it survive realistic carve sizes?"
 
 **No, and that is preregistered and published**: `CARVE_FAILS` at 1024 bytes (prereg 0007), with
-transfer collapsing to chance, an information-ceiling measurement ruling out the easy excuse, and
-two learned-representation attempts (0009, 0010) that did not rescue it. At 2048 bytes (prereg
-0011, expected outcome stated before the corpus existed) it fails again — +0.0475 against the 0.05
-bar on the frozen set, +0.0294 against all baselines, transfer from 4096 at 0.0455 — so the
-boundary of the working window is bracketed to (2048, 4096]. A symmetric recipe search at 2048
-(prereg 0012, read under 0013 after 0012's own frozen reader voided the run on a defect of its own,
-filed in `CORRECTIONS.md`) moved the model to 0.212 and the standardised logistic baseline to
-0.1886, so the margin fell to +0.0234: `RECIPE_FAILS`. The same search at 4096 (prereg 0014, its
-expected outcome stated in advance as uncertain) clears: 0.2884 against a searched logistic at
-0.2317, +0.0567 on every reading, `RECIPE_CLEARS`, so the headline margin is quoted at its searched
-size rather than the +0.1003 fixed recipes gave. Every number in this repository is a
+transfer collapsing to chance, an information-ceiling measurement showing that byte collisions
+barely change across sizes and so do not explain it, and two learned-representation attempts
+(0009, 0010) that did not rescue it. At 2048 bytes (prereg 0011, expected outcome stated before the corpus
+existed) it fails again — +0.0475 against the 0.05 bar on the frozen set, +0.0294 against all
+baselines, transfer from 4096 at 0.0455 — so the boundary of the working window is bracketed to
+(2048, 4096], each size under its own protocol (top rung 800000 at 4096, 500000 at 2048 and 1024). A
+symmetric recipe search at 2048 (prereg 0012, read under 0013 after 0012's own frozen reader voided
+the run on a defect of its own, filed in `CORRECTIONS.md`) moved the model to 0.212 and the
+standardised logistic baseline to 0.1886, so the margin fell to +0.0234: `RECIPE_FAILS`. The same
+search at 4096 (prereg 0014, its expected outcome stated in advance as uncertain) clears: 0.2884
+against a searched logistic at 0.2317, +0.0567 on the frozen and the expanded reading and +0.0576
+with the leaked gutenberg family excluded, `RECIPE_CLEARS`, so the headline margin is quoted at its
+searched size rather than the +0.1003 fixed recipes gave. Every number in this repository is a
 4096-byte-window number and the documents say so.
 
 ## "Does it work on content it has never seen?"
@@ -110,11 +116,11 @@ statement about these families at 4096 bytes, as pinned, chosen before any fit t
 
 ## "Does more real data help?"
 
-**Yes — and it helps the linear rule more** (prereg 0023, the budget question 0021 and 0022 left open). 0021's 26346-row real fit block was cut into four nested, family-stratified rungs of plaintexts (130, 258, 515, 1029; 3344, 6635, 13207, 26346 rows; 2.984659 doublings, just under a decade: the only real content the record has outside its sealed scoring set), and 0021's three fixed recipes (M4, L3, D1; 0022 measured that searching them moves nothing) were fitted once per rung and scored once on the same 38452 rows (`artifacts/pivot/realcurve_4096_verdict.json`). The model reads 0.0974, 0.1065, 0.1139, 0.1193: 0.007344 per doubling of plaintexts, scored-chunk interval [0.006199, 0.00846], against 0.005 required with the lower bound above 0.0 — `REAL_CURVE_RISES`. The top rung is 0021's reading (0.1193 against 0.1429 needed over the depth-3 tree), so the curve rises to a failing number and the sealed file said in advance that a pass is never 'more real data fixes the model'. The standardised logistic reads 0.0911, 0.0939, 0.1085, 0.1179 (0.009551 per doubling); model minus logistic -0.002207, paired interval [-0.003707, -0.000752], the model ahead in 0.002 of the resamples, read by the rule sealed in advance as 'the linear rule buys more per doubling than the model' — the model leads at every rung and the lead shrinks from 0.0063 to 0.0014. The depth-3 tree rises 0.003002; the smallest rung cut again under a second nesting moved it by 0.0084 (the model by 0.001, the logistic by -0.0013), so its rise is within a redraw; the scored-chunk interval does not resample the fit side and the sealed file says so. The model's slope is 0.7276 of the builder's in-distribution per-plaintext rate (0.010093). On the builder's own evaluation set the model's curve is flat (0.000222): more real plaintexts do not move a reading on content the model was not fitted on. The top rung reproduced 0021's three readings with drift 0.0; null 0.0409 against chance 0.038462; no role at its cap; sixteen committed checkpoints cross-checked by the reader; 1208.2 s wall on one launch. Expected outcome stated in the sealed file: rises, more likely than not, with the difference the number of interest; the difference came out entirely below 0. What it means: the record's scaling thesis holds on real files, and what grows fastest with real data is the hand-writable rule. No extrapolation beyond the top rung is banked or quoted: the plaintexts it would count do not exist.
+**Yes — and it helps the linear rule more** (prereg 0023, the budget question 0021 and 0022 left open). 0021's 26346-row real fit block was cut into four nested, family-stratified rungs of plaintexts (130, 258, 515, 1029; 3344, 6635, 13207, 26346 rows; 2.984659 doublings, just under a decade: the only real content the record has outside its sealed scoring set), and 0021's three fixed recipes (M4, L3, D1; 0022 measured that searching them moves nothing) were fitted once per rung and scored once on the same 38452 rows (`artifacts/pivot/realcurve_4096_verdict.json`). The model reads 0.0974, 0.1065, 0.1139, 0.1193: 0.007344 per doubling of plaintexts, scored-chunk interval [0.006199, 0.00846], against 0.005 required with the lower bound above 0.0 — `REAL_CURVE_RISES`. The top rung is 0021's reading (0.1193 against 0.1429 needed over the depth-3 tree), so the curve rises to a failing number and the sealed file said in advance that a pass is never 'more real data fixes the model'. The standardised logistic reads 0.0911, 0.0939, 0.1085, 0.1179 (0.009551 per doubling); model minus logistic -0.002207, paired interval [-0.003707, -0.000752], the model ahead in 0.002 of the resamples, read by the rule sealed in advance as 'the linear rule buys more per doubling than the model' — the model leads at every rung and the lead shrinks from 0.0063 to 0.0014. The depth-3 tree rises 0.003002; the smallest rung cut again under a second nesting moved it by 0.0084 (the model by 0.001, the logistic by -0.0013), so its rise is within a redraw; the scored-chunk interval does not resample the fit side and the sealed file says so. The model's slope is 0.7276 of the builder's in-distribution per-plaintext rate (0.010093). On content the model was not fitted on, more real plaintexts have moved readings little, not uniformly, and none of these readings is a verdict: on the builder's own evaluation set the model's reading moved 0.000222 per doubling over these rungs and the depth-3 tree's rose 0.009842 (informational); over 0024's second decade the model's moved 0.00231 per doubling, below the rate, and its reading on the extension corpus's three synthetic families (hexdump, sql, xml), which no real-fit corpus contains, went from 0.0693 at 1029 plaintexts to 0.0987 at 8232 (`realcurve2_4096_verdict.json`, `ext_subsets`). The top rung reproduced 0021's three readings with drift 0.0; null 0.0409 against chance 0.038462; no role at its cap; sixteen committed checkpoints cross-checked by the reader; 1208.2 s wall on one launch. Expected outcome stated in the sealed file: rises, more likely than not, with the difference the number of interest; the difference came out entirely below 0. What it means: on these five files, in distribution, over just under a decade (0003's scope rule asks for two), the record's scaling thesis holds — rising to a reading that fails the record's margin — and what grows fastest with real data is the standardised linear rule. No extrapolation beyond the top rung is banked or quoted: the plaintexts it would count do not exist.
 
 ## "Does a second decade of real files help?"
 
-**Yes — and the boosted model still leads the linear rule** (prereg 0024, the question 0023's numbers raised). A second fit corpus was built and sealed before the freeze from other files of the same five families — 23 newly pinned archives and 600 more RFC texts: other Python projects' .py and .rst, other C projects' .c and .h, other Windows programs' .exe and .dll, other RFCs; 193926 rows, 7574 plaintexts with rows, every chunk hashed against every whole chunk and every kilobyte run of the 0018 pinned files (`artifacts/pivot/realfit2_corpus_manifest.json`, `docs/compliance/EXT_SOURCES2.md`), and nested on 0021's block in three exact per-family doublings: seven rungs of 130, 258, 515, 1029, 2058, 4116, 8232 plaintexts (3344, 6635, 13207, 26346, 52766, 105214, 210751 rows; 5.984659 doublings in all), rungs 1..4 being 0023's cuts row for row, and the 'second decade' is 3.0 doublings (0.9031 of a decade) of other files above 0021's block; both together span 1.8016 decades, short of 0003's two-decade scope rule. 0021's three fixed recipes were fitted once per rung and scored once on the same 38452 rows (`artifacts/pivot/realcurve2_4096_verdict.json`). The model reads 0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404: a second-decade slope of 0.00697 per doubling of plaintexts, scored-chunk interval [0.00571, 0.00824], against 0.005 required with the lower bound above 0.0 — both clauses pass: the model's second-decade slope is at or above 0.005 and the interval's lower bound above 0.0 — `SECOND_DECADE_RISES`. The logistic's second-decade slope (0.00638) clears the same bar and the tree's (-0.0003) does not: a rise the linear rule shares is a rise of the cheap signal, not of the recipe. The standardised logistic reads 0.0911, 0.0939, 0.1085, 0.1179, 0.1241, 0.1321, 0.1365 (0.00638 per doubling over the second decade), the depth-3 tree 0.0834, 0.0901, 0.0915, 0.0929, 0.0921, 0.0921, 0.0919 (-0.0003); model minus logistic 0.00059, paired interval [-0.00102, 0.00231], the model ahead in 0.756 of the resamples: the paired interval includes 0: not resolved at this size; never read as 'equal'. At the top rung, the model leads the standardised logistic by 0.0039 (paired interval [0.0001, 0.0077], entirely above 0) — `MODEL_LEADS` by the rule sealed in advance; at rung 4 the same reading is 0.0014 ([-0.002303, 0.0047], NO_SEPARATION), and model minus logistic by rung is 0.0063, 0.0126, 0.0054, 0.0014, -0.0005, -0.0021, 0.0039. The shift arm — rung 5's new plaintexts alone (1029 plaintexts, 26420 rows: rung 4's count, none of 0021's block) — reads model 0.1184, logistic 0.118, tree 0.0923: against rung 4 by -0.0009, 0.0001 and -0.0006, against rung 5 by -0.0052, -0.0061 and 0.0002 — the direct reading of what other files of the same families buy for the original files at the same count, informational. 0021's clause re-applied at the top rung (informational): 0.1404 does not clear 0.1419 over the tree and does not clear 0.1865 over the higher of the tree and the logistic. Rung 4 reproduced 0021's three readings with drift 0.0, 0.0, 0.0, rungs 1..4 reproduced 0023's; null 0.0372 against chance 0.038462; roles at their iteration cap: none; 25 committed checkpoints cross-checked by the reader; 6456.7 s wall on the last of 1 launch(es), 5950.5 s of fits against 8097 to 24604 s estimated in advance. Expected outcome stated in the sealed file: rises, more likely than not but less likely than 0023's pass; the linear rule ahead or not separated, more likely than the model ahead; the run read `SECOND_DECADE_RISES_MODEL_LEADS`. What it means: other files of the same kinds keep buying the recipe the record's rate on the files it is scored on, through 8232 plaintexts (eight times 0021's), so the budget excuse is answered a second time on real content, this time with other files; at eight times 0021's plaintexts the boosted recipe still leads a rule a person can write out on the record's own real content, by 0.0039 — the recipe conclusion of 0021, 0022 and 0023 (that the linear rule gets most of the signal) is bounded by the size of that lead, not reversed. Not a transfer reading, and not 0023's in-distribution reading either: every rung holds the scored files' own unscored chunks, and the plaintexts added above rung 4 are other files of the same kinds, so the second decade confounds more plaintexts with plaintexts from other files, which the shift arm reads directly. No extrapolation beyond the top rung is banked or quoted.
+**Yes — and at the top rung the boosted model leads the linear rule, by 0.0039** (prereg 0024, the question 0023's numbers raised). A second fit corpus was built and sealed before the freeze from other files of the same five families — 23 newly pinned archives and 600 more RFC texts: other Python projects' .py and .rst, other C projects' .c and .h, other Windows programs' .exe and .dll, other RFCs; 193926 rows, 7574 plaintexts with rows, every chunk hashed against every whole chunk and every kilobyte run of the 0018 pinned files (`artifacts/pivot/realfit2_corpus_manifest.json`, `docs/compliance/EXT_SOURCES2.md`), and nested on 0021's block in three exact per-family doublings: seven rungs of 130, 258, 515, 1029, 2058, 4116, 8232 plaintexts (3344, 6635, 13207, 26346, 52766, 105214, 210751 rows; 5.984659 doublings in all), rungs 1..4 being 0023's cuts row for row, and the 'second decade' is 3.0 doublings (0.9031 of a decade) of other files above 0021's block; both together span 1.8016 decades, short of 0003's two-decade scope rule. 0021's three fixed recipes were fitted once per rung and scored once on the same 38452 rows (`artifacts/pivot/realcurve2_4096_verdict.json`). The model reads 0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404: a second-decade slope of 0.00697 per doubling of plaintexts, scored-chunk interval [0.00571, 0.00824], against 0.005 required with the lower bound above 0.0 — both clauses pass: the model's second-decade slope is at or above 0.005 and the interval's lower bound above 0.0 — `SECOND_DECADE_RISES`. The logistic's second-decade slope (0.00638) clears the same bar and the tree's (-0.0003) does not: a rise the linear rule shares is a rise of the cheap signal, not of the recipe. The standardised logistic reads 0.0911, 0.0939, 0.1085, 0.1179, 0.1241, 0.1321, 0.1365 (0.00638 per doubling over the second decade), the depth-3 tree 0.0834, 0.0901, 0.0915, 0.0929, 0.0921, 0.0921, 0.0919 (-0.0003); model minus logistic 0.00059, paired interval [-0.00102, 0.00231], the model ahead in 0.756 of the resamples: the paired interval includes 0: not resolved at this size; never read as 'equal'. At the top rung, the model leads the standardised logistic by 0.0039 (paired interval [0.0001, 0.0077], entirely above 0) — `MODEL_LEADS` by the rule sealed in advance; at rung 4 the same reading is 0.0014 ([-0.002303, 0.0047], NO_SEPARATION), and model minus logistic by rung is 0.0063, 0.0126, 0.0054, 0.0014, -0.0005, -0.0021, 0.0039. The shift arm — rung 5's new plaintexts alone (1029 plaintexts, 26420 rows: rung 4's count, none of 0021's block) — reads model 0.1184, logistic 0.118, tree 0.0923: against rung 4 by -0.0009, 0.0001 and -0.0006, against rung 5 by -0.0052, -0.0061 and 0.0002 — the direct reading of what other files of the same families buy for the original files at the same count, informational. 0021's clause re-applied at the top rung (informational): 0.1404 does not clear 0.1419 over the tree and does not clear 0.1865 over the higher of the tree and the logistic. Rung 4 reproduced 0021's three readings with drift 0.0, 0.0, 0.0, rungs 1..4 reproduced 0023's; null 0.0372 against chance 0.038462; roles at their iteration cap: none; 25 committed checkpoints cross-checked by the reader; 6456.7 s wall on the last of 1 launch(es), 5950.5 s of fits against 8097 to 24604 s estimated in advance. Expected outcome stated in the sealed file: rises, more likely than not but less likely than 0023's pass; the linear rule ahead or not separated, more likely than the model ahead; the run read `SECOND_DECADE_RISES_MODEL_LEADS`. What it means: other files of the same kinds keep raising the recipe's accuracy on the files it is scored on at or above the record's bar of 0.005 per doubling, through 8232 plaintexts (eight times 0021's), so the budget excuse is answered a second time on real content, this time with other files; at eight times 0021's plaintexts the boosted recipe leads the standardised logistic (26 classes over 1108 features) on the record's own real content by 0.0039, with a paired interval over the scored chunks that does not resample the fit side — the recipe conclusion of 0021, 0022 and 0023 (that the linear rule gets most of the signal) is bounded by the size of that lead, not reversed. Not a transfer reading, and not 0023's in-distribution reading either: every rung holds the scored files' own unscored chunks, and the plaintexts added above rung 4 are other files of the same kinds, so the second decade confounds more plaintexts with plaintexts from other files, which the shift arm reads directly. No extrapolation beyond the top rung is banked or quoted.
 
 ## "Who buys it?"
 
@@ -148,12 +154,32 @@ bash tools/pivot/fetch_sources.sh                    # fetch sources; pin_source
 python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --chunks 50000 --carve 4096 \
     --model hgb --rungs 1000 10000 100000 800000 --tag full \
     --out /tmp/deflate_curve.json --scores-out /tmp/deflate_rung_scores.json
-                                                     # build the corpus (then re-measure it into scratch files, not the banked ones)
-python3 tools/pivot/corpus_manifest.py --check       # prove a rebuilt corpus is byte-identical to ours
+                                                     # build the cache, then re-measure the curve into scratch files
+                                                     # (a re-measurement on a different draw of the pool, not the banked number)
+python3 tools/pivot/corpus_manifest.py --check       # compare the rebuild's array hashes with the banked ones; X and g
+                                                     # of the build() caches print DIFF by design (see below)
 ```
 
-Corpora rebuild deterministically from shipped sources and generators; the manifest banks
-content hashes of every array so the rebuild is *proven* identical, not assumed. 801 mutations across 25 gates certify every gate can fail
-(that count is checked against the mutation report by `tools/freshness.py`, because an earlier
-version of this sentence said 132 while the artifact said 134); the reproduction that matters most — the audit — is
+The corpora are not committed: they are rebuilt from upstream sources pinned by sha256 and the
+shipped generators. The fetch has broken before: Gutenberg re-edited banked books twice and one
+fetch script never worked on an empty machine until it was repaired; two books now come from a
+commit-pinned third-party copy (`CORRECTIONS.md`, 2026-09-02 and 2026-10-21). The manifests bank
+content hashes of every array, so a rebuild is checked rather than assumed, and the check does not
+pass for every array (`CORRECTIONS.md`, 2026-10-21 and 2026-10-22). A rebuild reproduces the pinned
+sources, checked byte for byte; the labels (y) of the builder caches and of 0024's corpus;
+`raw_c1024` whole; the 4096 builder cache's evaluation set as a set of chunks, whose banked order
+can be restored from banked layouts; and 0018's and 0021's corpora (`ext_c4096`, `realfit_c4096`),
+rebuilt identical on a second machine on 2026-10-21. It does not reproduce X and g of the three
+caches `run_study.build()` wrote (`full_c4096`, `carve_c1024`, `carve_c2048`), whose rows are in
+worker-completion order by design, so every builder-pool result can be re-measured on a different
+draw but not re-derived on the same rows; nor the X of 0024's `realfit2_c4096`, which rebuilt on a
+second machine differs in rare rows of the larger chunks (its smoke subset rebuilds identical;
+0024's rung-7 logistic does not reproduce on it bit for bit; the cause is not identified). Where the
+rebuild of 0025's `realfit3_c4096` stands is recorded in
+`artifacts/pivot/engineering_log_0025.json`.
+
+801 mutations across 25 gates certify every gate can fail
+(as banked on 2026-09-17, before the unfrozen 0025 gate was registered; that count is checked
+against the mutation report by `tools/freshness.py`, because an earlier version of this sentence
+said 132 while the artifact said 134); the reproduction that matters most — the audit — is
 banked with its kill-list included.

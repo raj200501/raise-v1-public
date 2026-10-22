@@ -21,11 +21,13 @@ raise spent this way buys answers — including the answer "stop" — not activi
   window** (0007).
 - `CARVE_FAILS` (prereg 0007): at a 1024-byte window the model ties logistic regression
   (margin +0.0099 against a bar of 0.05), and a 4096-trained model transfers at 0.0403 —
-  chance. The information is present (byte-identity ceiling 20.79 of 26 at 512 bytes
-  against 20.9125 at 4096); the representation is what fails.
+  chance. Byte collisions do not explain it (byte-identity ceiling 20.79 of 26 at 512 bytes
+  against 20.9125 at 4096); whether a better representation would clear the bar is untested
+  beyond 0009 and 0010.
 - `CARVE_FAILS` at 2048 too (prereg 0011, run 2026-09-02 ahead of M4 with the deviation stated in
   the preregistration): frozen-set margin +0.0475 against 0.05, stricter margin +0.0294, transfer
-  0.0455. The boundary of the working window is bracketed to (2048, 4096].
+  0.0455. The boundary of the working window is bracketed to (2048, 4096], each size under its
+  own protocol (top rung 800000 at 4096, 500000 at 2048 and 1024).
 - `BYTE_MODEL_FAILS` / `BYTE_FLAT_FAILS` (preregs 0009, 0010): one small learned
   representation did not rescue 1024, and the corrected-head round came back inconclusive
   because a training recipe tuned under one architecture privileged the incumbent.
@@ -48,10 +50,15 @@ All compute below is priced from these banked fields (4 CPU cores, `gpu: "none"`
 | `artifacts/pivot/carve_generalisation_2048.json` | 2048-byte corpus, 650000 fragments | `build_seconds` 1564.0 |
 | `artifacts/pivot/carve_generalisation_2048.json` | training, rungs 1000 / 10000 / 100000 / 500000 (niced, 3 threads — see the artifact's `cost.train_environment`) | `train_seconds_per_rung` 12.1 / 26.0 / 125.5 / 1036.0 |
 
-Corpus sizes are banked as array shapes and dtypes in `artifacts/pivot/corpus_manifest.json`
-(the corpora themselves are not committed; a cold clone re-manufactures them and checks the
-hashes — after `tools/pivot/pin_sources.py` has verified the fetched sources are the banked
-edition, because gutenberg.org re-edits files in place; CORRECTIONS.md 2026-09-02):
+Corpus sizes are banked as array shapes and dtypes in `artifacts/pivot/corpus_manifest.json`.
+The corpora themselves are not committed. A cold clone fetches the sources,
+`tools/pivot/pin_sources.py` checks them byte for byte against the banked edition (gutenberg.org
+re-edits files in place; CORRECTIONS.md 2026-09-02), and the builders re-manufacture the corpora.
+The rebuild reproduces their labels (y), `raw_c1024` whole, and the 4096 cache's evaluation set as
+a set of chunks whose banked order can be restored from banked layouts. It does not reproduce X
+and g of `full_c4096`, `carve_c1024` and `carve_c2048`: `run_study.build()` writes their rows in
+worker-completion order by design, so a builder-pool result can be re-measured on a different
+draw but not re-derived on the same rows (CORRECTIONS.md 2026-10-21):
 
 | Corpus | Shape | Element size |
 |---|---|---|
@@ -162,18 +169,20 @@ COULD NOT VERIFY.
 own scope paragraph names what is uncovered: *"encoders absent from this box, notably
 7-Zip's deflate, Java's Deflater, Go's flate and the Cloudflare and Windows zlib forks"*,
 and *"carve sizes other than the one frozen here."* Today there are three measured
-sizes — 4096 (works, margin +0.1003 frozen and +0.0583 stricter), 2048 (fails by 0.0025 on the
-frozen set, +0.0475, and by more on the stricter one, +0.0294; prereg 0011) and 1024 (fails,
-margin +0.0099) — the boundary is bracketed to (2048, 4096], and nothing is measured beyond
-4096 or below 1024. The 2048 failure survives a *symmetric* recipe search: preregistration
+sizes — 4096 (works, margin +0.0567 under a symmetric recipe search, prereg 0014; +0.1003 frozen
+and +0.0583 stricter under fixed recipes), 2048 (fails by 0.0025 on the frozen set, +0.0475, and
+by more on the stricter one, +0.0294; prereg 0011) and 1024 (fails, margin +0.0099) — the boundary
+is bracketed to (2048, 4096] under those protocols (top rung 800000 at 4096, 500000 below), and
+nothing is measured beyond 4096 or below 1024. The 2048 failure survives a *symmetric* recipe search: preregistration
 0012 (2026-09-03) gave every head with a hyperparameter eight recipes under one rule and floored
 every baseline at its 0011 value; the model rose to 0.212 and the standardised logistic baseline
 to 0.1886, the margin fell to +0.0234, and the verdict is `RECIPE_FAILS` (read under 0013 after
 0012's own reader voided the run on a defect of its own, filed in `CORRECTIONS.md`). The
 recipe is not what fails at 2048. The information-side prerequisite is already
 banked down to 512 bytes: the byte-identity ceiling is 20.79 distinct streams of 26 at 512
-against 20.9125 at 4096, so any per-size failure is a modelling result, not an information
-result, exactly as 0007 was forced to say.
+against 20.9125 at 4096, so byte collisions do not explain any per-size failure, and 0007 was
+committed to report its failure as a modelling result; whether a better model would clear the
+bar at a shorter size is what this milestone tests.
 
 **Preregistration it needs.** Per carve size: the 0007 protocol re-frozen — within-size
 margin at 0.05 against same-rung baselines including the deep trees, four rungs, grouped
@@ -197,8 +206,9 @@ here is cheap and informative in both directions.
 1300000 at 4096, with train ladders of 11.1–751.5, 12.1–1036.0 (the 2048 ladder ran niced at 3
 threads, so it is an upper bound on the 4-thread cost) and 14.5–1324.6 seconds respectively.
 An earlier version of this paragraph extrapolated a fresh carve size at "about 1066.6 build
-seconds plus under 1000 train seconds"; the measured 2048 run came in at 1564.0 and 1199.6, so
-the extrapolation was low by roughly half on both counts. **EXTRAPOLATION, revised:** one
+seconds plus under 1000 train seconds"; the measured 2048 run came in at 1564.0 build seconds
+and train rungs of 12.1, 26.0, 125.5 and 1036.0 seconds (the top rung alone over 1000), so the
+extrapolation was low on both counts. **EXTRAPOLATION, revised:** one
 additional carve size run to the full 0007 protocol costs on the order of the measured 2048
 ladder — basis: same fragment count, same pipeline, the three banked points. For encoder families the labels remain free — marginal cost one
 compression call per fragment — and the build cost scales with the configuration count;
