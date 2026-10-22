@@ -19,14 +19,20 @@ Sites, each written idempotently (a second run changes no byte; a stale 0025 uni
   artifacts/verification/coverage.json        primary-verifiable claims on artifacts/pivot/realcurve3_4096_verdict.json
   tools/render/evidence_page.py               the forward pointer and the lead bound in 0024's panel, read from 0025's verdict at
                                               render time (guarded), then outbound/evidence_page.html re-rendered
-The stop rules' forward pointers and bounds, in every place the bounded sentence stands (VERDICT.md, README.md, outbound/*.md,
-docs/*.md; never CORRECTIONS.md, a ledger):
-  every "1.8016 decades, short of 0003's (our own) two-decade scope rule"  -> the sealed pointer sentence, verbatim
-  on BELOW_RATE, NOT_RESOLVED, FALLS: 0024's "keep buying the recipe the record's rate ... through 8232 plaintexts" -> bounded,
-      with the rung-8 gain, its reading and the lead part beside it
-  on FALLS: 0023's "the record's scaling thesis holds on real files" -> a forward pointer
-  on LINEAR_LEADS, NO_SEPARATION: every published MODEL_LEADS of 0024 (its headline, its lead reading, its meaning sentence) ->
-      bounded to 8232 plaintexts with the rung-8 reading beside it
+The stop rules' forward pointers and bounds, each site touched once (VERDICT.md, README.md, outbound/*.md, docs/DILIGENCE.md;
+never CORRECTIONS.md, a ledger, nor a plan under docs/strategy, which is named in a NOTE), anchored on the documents' wording after
+the 2026-10-22 honesty pass:
+  every "1.8016 decades, short of 0003's two-decade scope rule"  -> the sealed pointer sentence, verbatim
+  on BELOW_RATE, NOT_RESOLVED, FALLS, in the documents the stop rule names (VERDICT.md, README.md): 0024's "other files of the same
+      kinds keep buying the recipe the record's rate ... through 8232 plaintexts" (VERDICT.md now: "keep raising the recipe's
+      accuracy ... at or above the record's bar ..., through 8232 plaintexts") -> bounded, with the rung-8 gain, its reading and
+      the lead part beside it
+  on FALLS, in VERDICT.md and DILIGENCE.md: 0023's "the record's scaling thesis holds on real files" (now "holds on these real
+      files, in distribution, over just under a decade (...)" and "... the record's scaling thesis holds") -> a forward pointer
+  on LINEAR_LEADS, NO_SEPARATION: every published MODEL_LEADS of 0024 (each sentence that states its top-rung lead of 0.0039 or
+      its `MODEL_LEADS` after the interval [0.0001, 0.0077], once per sentence; the one-pager's headline) -> bounded to 8232
+      plaintexts with the rung-8 reading beside it
+A keep or thesis site that no longer carries the stop rule's own words is bounded all the same and named in a NOTE.
 
 Environment: PUBLISH_0025_ROOT (default: the checkout this script is in) points the script at another root (the dry run's copies);
 PUBLISH_0025_DRYRUN=1 skips the committed-checkpoint count (a dry-run root has no checkpoints); PUBLISH_0025_RENDER=0 skips
@@ -429,7 +435,12 @@ BOUND_LEAD = f" [bounded by 0025 to {p7} plaintexts: {lead_short_n}]"
 BOUNDED_GAINS = ('FOURTH_DOUBLING_BELOW_RATE', 'FOURTH_DOUBLING_NOT_RESOLVED', 'FOURTH_DOUBLING_FALLS')
 
 # ---------------------------------------------------------------- 3. the anchors of the earlier sentences, whitespace-tolerant
-SEP = r'(?:[ ]|\n(?:> ?)?)'
+# Anchored on the documents' wording after the 2026-10-22 honesty pass (0024's lead is stated as the reader read it, 'leads the
+# standardised logistic ... by 0.0039', never 'still leads the hand-writable linear rule'), and wherever possible on 0024's banked
+# numbers (the lead 0.0039, its interval [0.0001, 0.0077], rung 7's 8232 plaintexts) and the verdict token rather than on prose.
+SEP = r'(?:[ ]|\n[ ]*(?:> ?)?)'                               # a space, or a line break (a list item's indent, a quote's '> ')
+IN_SENT = r'(?:(?!\.(?:\*\*)?(?:\s|$))[^\n]|\n(?!\s*\n))'     # one character that neither ends the sentence nor the paragraph
+SENT_END = re.compile(r'\.(?:\*\*)?(?=\s|$)|\n\s*\n')
 
 
 def flex(phrase):
@@ -437,14 +448,43 @@ def flex(phrase):
 
 
 RX_SPAN = re.compile(flex(f'{dec24} decades, short of') + SEP + r"(?:0003's|our" + SEP + "own)" + SEP + flex('two-decade scope rule'))
-RX_KEEP = re.compile(flex(f"keep buying the recipe the record's rate on the files it is scored on, through {p7} plaintexts ({x7} times 0021's)"))
-RX_THESIS = re.compile(flex("the record's scaling thesis holds on real files"))
-RX_LEAD_HEAD = re.compile('[Tt]' + flex('he boosted model still leads the hand-writable linear rule at the top rung'))
-RX_LEAD_MEAN = re.compile(flex(f"the boosted recipe still leads a rule a person can write out on the record's own real content, by {lp24}"))
-RX_LEAD_QA = re.compile(flex('and the boosted model still leads the linear rule'))
+# 0024's meaning sentence: other files of the same kinds keep (buying the recipe the record's rate | raising the recipe's accuracy
+# at or above the record's bar) ... through rung 7's plaintexts; the bound goes after "(eight times 0021's)"
+RX_KEEP = re.compile(flex('of the same kinds keep') + IN_SENT + '{0,300}?' + SEP + flex(f"through {p7} plaintexts ({x7} times 0021's)"))
+# 0023's meaning sentence ("holds on real files" before the honesty pass; "holds on these real files, in distribution, over just
+# under a decade (0003's scope rule asks for two)" in VERDICT.md and "... the record's scaling thesis holds" in DILIGENCE.md after it);
+# the pointer goes after the scope words when they follow
+RX_THESIS = re.compile(flex("the record's scaling thesis holds") + '(?:' + SEP + flex('on') + '(?:' + SEP + flex('these') + ')?' + SEP
+                       + flex('real files') + '(?:' + flex(', in distribution, over just under a decade') + SEP
+                       + r"\(0003's" + SEP + flex('scope rule asks for two)') + ')?)?')
+# every statement of 0024's top-rung lead: "leads the standardised logistic / the linear rule ... by 0.0039" in one sentence
+# (headlines, headings, the meaning sentences, DILIGENCE's answer), "the standardised logistic 0.0039 behind the model", the one-pager's
+# headline (which carries no number), and a `MODEL_LEADS` token with 0024's interval just before it
+RX_LEAD_BY = re.compile(r'leads' + SEP + 'the' + SEP + r'(?:standardised' + SEP + 'logistic|linear' + SEP + 'rule)' + IN_SENT + '{0,160}?'
+                        + SEP + 'by' + SEP + re.escape(str(lp24)) + r'(?![0-9])')
+RX_LEAD_BEHIND = re.compile(re.escape(str(lp24)) + SEP + flex('behind the model') + '(?:' + SEP + flex("at 0024's top rung") + ')?')
+RX_LEAD_EDGE = re.compile(flex('the boosted model edges ahead of the standardised linear rule'))
 RX_LEAD_TOKEN = re.compile(r'`MODEL_LEADS`')
 RX_LEAD_SUFFIX = re.compile(SEP + flex('by the rule sealed in advance'))
 MARKS = ("with 0025's", 'bounded by 0025')
+
+
+def docs_named(s):
+    """the publication documents a stop rule's parenthesis names ('VERDICT.md, README.md', 'VERDICT.md, DILIGENCE.md')"""
+    out = set()
+    for x in re.split(r',\s*|\s+and\s+', s.strip()):
+        hit = [c for c in (x, 'docs/' + x, 'outbound/' + x) if os.path.exists(P(c))]
+        assert hit, f'the stop rule names {x!r}, which is not a document here'
+        out.add(hit[0])
+    return out
+
+
+mkeep = re.search(r"the sentence 'other files of the same kinds keep buying the recipe the record's rate \.\.\. through (\d+) plaintexts' \(([^)]*)\)", SRULES)
+mthes = re.search(r"on 0023's 'the record's scaling thesis holds on real files' \(([^)]*)\)", SRULES)
+assert mkeep and int(mkeep.group(1)) == p7 and mthes, 'the stop rule does not name the keep or the thesis sentence where the publication expects it'
+KEEP_DOCS, THESIS_DOCS = docs_named(mkeep.group(2)), docs_named(mthes.group(1))
+assert KEEP_DOCS == {'VERDICT.md', 'README.md'} and THESIS_DOCS == {'VERDICT.md', 'docs/DILIGENCE.md'}, (KEEP_DOCS, THESIS_DOCS)
+KEEP_WORDS = "keep buying the recipe the record's rate"; THESIS_WORDS = "the record's scaling thesis holds on real files"   # the stop rule's own
 
 
 def close_bracket(s, i):
@@ -482,20 +522,44 @@ def lead_token_ends(text):
     return ends
 
 
+def strip_marks(s):
+    """s without the 0025 pointers and bounds already in it (so that a second run sees the sentences the first run saw)"""
+    for mk in MARKS:
+        while ' [' + mk in s:
+            i = s.index(' [' + mk); s = s[:i] + s[close_bracket(s, i + 1) + 1:]
+    return s
+
+
+def lead_ends(text):
+    """one bound per sentence that states 0024's top-rung lead, after the last statement of it in that sentence (a sentence that
+    gives the lead and then its `MODEL_LEADS` is bounded once, after the token)"""
+    ends = sorted(set([m.end() for rx in (RX_LEAD_BY, RX_LEAD_BEHIND, RX_LEAD_EDGE) for m in rx.finditer(text)] + lead_token_ends(text)))
+    return [e for e, nxt in zip(ends, ends[1:] + [None]) if nxt is None or SENT_END.search(strip_marks(text[e:nxt]))]
+
+
 COUNTS = {}
+SITE_NOTES = []
 
 
 def passes(text, name):
-    """the stop rules' pointers and bounds on the sentences that stand OUTSIDE 0025's own units (which are cut out first)"""
+    """the stop rules' pointers and bounds on the sentences that stand OUTSIDE 0025's own units (which are cut out first): the span
+    sentence and 0024's lead wherever they stand, the keep and the thesis sentences in the documents their stop rule names"""
     c = COUNTS.setdefault(name, {})
     ends = [m.end() for m in RX_SPAN.finditer(text)]; c['span'] = len(ends); text = insert_after(text, ends, PTR_SPAN)
-    if pub in BOUNDED_GAINS:
-        ends = [m.end() for m in RX_KEEP.finditer(text)]; c['keep'] = len(ends); text = insert_after(text, ends, BOUND_KEEP)
-    if pub == 'FOURTH_DOUBLING_FALLS':
-        ends = [m.end() for m in RX_THESIS.finditer(text)]; c['thesis'] = len(ends); text = insert_after(text, ends, BOUND_THESIS)
+    for key, rx, docs, words, applies, bound in (('keep', RX_KEEP, KEEP_DOCS, KEEP_WORDS, pub in BOUNDED_GAINS, BOUND_KEEP),
+                                                 ('thesis', RX_THESIS, THESIS_DOCS, THESIS_WORDS, pub == 'FOURTH_DOUBLING_FALLS', BOUND_THESIS)):
+        if name not in docs:
+            continue
+        ms = list(rx.finditer(text))
+        for m in ms:     # the sentence no longer in the stop rule's words: still the stop rule's site, and named for the operator
+            if words not in re.sub(r'\s+', ' ', text[max(0, m.start() - 60):m.end()].replace('\n>', ' ')):
+                SITE_NOTES.append(f"{name} line {text.count(chr(10), 0, m.start()) + 1}: the {key} sentence the stop rule names no longer reads "
+                                  f"'{words}' (it reads '{re.sub(r'[ ]+', ' ', m.group(0).replace(chr(10), ' '))[:90]}...'); "
+                                  + ('bounded here all the same' if applies else 'it is still its site on the outcomes the stop rule names'))
+        if applies:
+            c[key] = len(ms); text = insert_after(text, [m.end() for m in ms], bound)
     if lead in ('LINEAR_LEADS', 'NO_SEPARATION'):
-        ends = [m.end() for rx in (RX_LEAD_HEAD, RX_LEAD_MEAN, RX_LEAD_QA) for m in rx.finditer(text)] + lead_token_ends(text)
-        c['lead'] = len(ends); text = insert_after(text, ends, BOUND_LEAD)
+        ends = lead_ends(text); c['lead'] = len(ends); text = insert_after(text, ends, BOUND_LEAD)
     return text
 
 
@@ -663,7 +727,7 @@ for extra in sorted(os.path.relpath(os.path.join(dp, f), R) for sub in ('outboun
         continue
     t = T(extra)
     hit = bool(RX_SPAN.search(t) or (pub in BOUNDED_GAINS and RX_KEEP.search(t)) or (pub == 'FOURTH_DOUBLING_FALLS' and RX_THESIS.search(t)) or
-               (lead != 'MODEL_LEADS' and (RX_LEAD_HEAD.search(t) or RX_LEAD_MEAN.search(t) or RX_LEAD_QA.search(t) or lead_token_ends(t))))
+               (lead != 'MODEL_LEADS' and lead_ends(t)))
     if hit and extra.startswith('outbound/'):
         OLD[extra] = t; NEW[extra] = passes(t, extra)
     elif hit:
@@ -675,16 +739,16 @@ for f, k in (('README.md', 1), ('outbound/ONE_PAGER.md', 1), ('outbound/EVIDENCE
     assert cnt('span', f) == k, (f, COUNTS.get(f))
 assert cnt('span', 'VERDICT.md') >= 1
 if pub in BOUNDED_GAINS:
-    assert cnt('keep', 'VERDICT.md') >= 1 and cnt('keep', 'README.md') >= 1, COUNTS
+    assert all(cnt('keep', f) >= 1 for f in KEEP_DOCS), COUNTS
 if pub == 'FOURTH_DOUBLING_FALLS':
-    assert cnt('thesis', 'VERDICT.md') >= 1 and cnt('thesis', 'docs/DILIGENCE.md') >= 1, COUNTS
+    assert all(cnt('thesis', f) >= 1 for f in THESIS_DOCS), COUNTS
 if lead != 'MODEL_LEADS':
     assert all(cnt('lead', f) >= 1 for f in ('VERDICT.md', 'README.md', 'outbound/ONE_PAGER.md', 'outbound/EVIDENCE_BRIEF.md', 'outbound/NARRATIVE.md', 'docs/DILIGENCE.md')), COUNTS
-# nothing of 0025's own may stand where a stop rule's anchor would find it on the next run
+# nothing of 0025's own may stand where a stop rule's anchor would find it on the next run (0025's lead is bounded only on
+# LINEAR_LEADS or NO_SEPARATION, whose units state no lead of the model)
 for unit_text in (block, row25, para_r, para_o, para_b, bullet, para_n, qa):
     assert not (RX_SPAN.search(unit_text) or RX_KEEP.search(unit_text) or RX_THESIS.search(unit_text)), 'a 0025 unit carries an anchor phrase'
-    assert not (RX_LEAD_HEAD.search(unit_text) or RX_LEAD_MEAN.search(unit_text) or RX_LEAD_QA.search(unit_text)), 'a 0025 unit carries a lead anchor'
-    assert lead == 'MODEL_LEADS' or not lead_token_ends(unit_text), 'a 0025 unit carries a bare `MODEL_LEADS`'
+    assert lead == 'MODEL_LEADS' or not lead_ends(unit_text), 'a 0025 unit carries a lead anchor or a bare `MODEL_LEADS`'
 
 # ---------------------------------------------------------------- 11. tools/render/evidence_page.py: 0024's panel, read from 0025's verdict at render time
 ep = 'tools/render/evidence_page.py'; e = load(ep)
@@ -847,6 +911,6 @@ if RENDER:
     print('rendered outbound/evidence_page.html')
 for w_ in warn:
     print('WARNING:', w_)
-for n_ in NOTES:
+for n_ in sorted(set(SITE_NOTES)) + NOTES:
     print('NOTE:', n_)
 print(f'done: preregistration 0025 published as {verdict}' + (f' (the published gain reading is the less flattering {pub}, named as such)' if straddle else ''))

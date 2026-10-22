@@ -253,5 +253,9 @@ If the dispatch test recovers the banked bytes, steps 3 to 5 shrink to the findi
 10. Publication path:
     - Fix `publish_0025.py`, `dryrun_publish_0025.py`, `freeze_docs_0025.py` and `evidence_page.py` for old-8/new-22, old-11, new-14, new-15, new-18 and the (b) sentences, then get the dry run to ALL PASS.
     - Update `ROADMAP.md` R1's validity line and its half-width and cost lines (new-16, new-20).
+    - `stop_rules[0]` and `[4]` quote 0024's published sentences word for word, and the honesty pass applied on 2026-10-22
+      reworded three of the sites they name (`VERDICT.md` "keep raising the recipe's accuracy" and "holds on these real files,
+      in distribution", `docs/DILIGENCE.md` "the record's scaling thesis holds"). `publish_0025.py` now anchors on the current
+      wording and prints a NOTE at each such site; the amendment should name the sites, not their words.
 11. Engineering log: regenerate or re-sync `cost`, `the_floors`, the design decisions and the review lists (old-1, old-4, old-7, new-20, and the bookkeeping rows).
 12. Runner smoke on the amended runner, then the fixture recapture, the full mutation suite and the counts. Bank `prefreeze_0025.py` PASS to `artifacts/verification/prefreeze_0025.json`, and only then run `freeze_0025.sh`.

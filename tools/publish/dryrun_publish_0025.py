@@ -153,9 +153,13 @@ def add_inflight(root):
     v = T(root, 'VERDICT.md'); r = T(root, 'README.md')
     head24 = '**Preregistration 0024 (chain seq 24) —'
     lace = ("both together span 1.8016 decades, short of 0003's two-decade scope rule; other files of the same kinds keep buying the "
-            "recipe the record's rate on the files it is scored on, through 8232 plaintexts (eight times 0021's); the record's scaling thesis "
-            "holds on real files; the boosted model still leads the hand-writable linear rule at the top rung — `MODEL_LEADS` by the rule "
-            "sealed in advance")
+            "recipe the record's rate on the files it is scored on, through 8232 plaintexts (eight times 0021's); other files of the same "
+            "kinds keep raising the recipe's accuracy on the files it is scored on at or above the record's bar of 0.005 per doubling (the "
+            "bar 0024 sealed; 0.00697 measured), through 8232 plaintexts (eight times 0021's); the record's scaling thesis holds on these "
+            "real files, in distribution, over just under a decade (0003's scope rule asks for two); at the top rung the boosted model "
+            "leads the standardised logistic, by 0.0039; the boosted model edges ahead of the standardised linear rule; the standardised "
+            "logistic 0.0039 behind the model at 0024's top rung; the model leads the standardised logistic by 0.0039 (paired interval "
+            "[0.0001, 0.0077], entirely above 0) — `MODEL_LEADS` by the rule sealed in advance")
     st_v = (f"**In flight — preregistration 0025 (chain seq 25, frozen 2026-10-21T00:00:00Z).** Dry-run stand-in for the freeze's paragraph: "
             f"{lace}.\n\nIts second paragraph: it is frozen and running.\n\n")
     if '**In flight — preregistration 0025 ' not in v:
@@ -168,7 +172,7 @@ def add_inflight(root):
 
 # ---------------------------------------------------------------- the checks
 def norm(t):
-    return re.sub(r'\n(?:> ?)?', ' ', t)
+    return re.sub(r'\n[ ]*(?:> ?)?', ' ', t)
 
 
 def brackets(t, starts=("[with 0025's", '[bounded by 0025')):
@@ -214,10 +218,22 @@ def check_case(case, root, orig, before, after1, after2, out1, V, PR, problems):
     # which the changed-file set checks
     md = sorted(f for f in after1 if f in ('VERDICT.md', 'README.md', 'docs/DILIGENCE.md') or (f.startswith('outbound/') and f.endswith('.md')))
     span_phr = [f"{dec24} decades, short of 0003's two-decade scope rule", f"{dec24} decades, short of our own two-decade scope rule"]
-    keep_phr = f"keep buying the recipe the record's rate on the files it is scored on, through {p7} plaintexts (eight times 0021's)"
-    thesis_phr = "the record's scaling thesis holds on real files"
-    lead_phr = ["the boosted model still leads the hand-writable linear rule at the top rung", "The boosted model still leads the hand-writable linear rule at the top rung",
-                "the boosted recipe still leads a rule a person can write out on the record's own real content, by 0.0039", "and the boosted model still leads the linear rule"]
+    # the stop rules' sites in the documents' wording after the 2026-10-22 honesty pass, each phrase ending where its bound goes. The
+    # keep and thesis sentences are bounded only in the documents their stop rule names; a reworded copy elsewhere is left alone.
+    keep_phr = {'README.md': [f"keep buying the recipe the record's rate on the files it is scored on, through {p7} plaintexts (eight times 0021's)"],
+                'VERDICT.md': [f"keep raising the recipe's accuracy on the files it is scored on at or above the record's bar of 0.005 per doubling "
+                               f"(the bar 0024 sealed; 0.00697 measured), through {p7} plaintexts (eight times 0021's)"]}
+    thesis_phr = {'VERDICT.md': ["the record's scaling thesis holds on these real files, in distribution, over just under a decade (0003's scope rule asks for two)"],
+                  'docs/DILIGENCE.md': ["the record's scaling thesis holds"]}
+    lead_phr = ["at the top rung the boosted model leads the standardised logistic by 0.0039", "at the top rung the boosted model leads the standardised logistic, by 0.0039",
+                "At the top rung the boosted model leads the standardised logistic, by 0.0039", "at the top rung the boosted model leads the linear rule, by 0.0039",
+                "at the top rung the boosted model edges ahead of the standardised linear rule",
+                "the boosted recipe leads the standardised logistic (26 classes over 1108 features) on the record's own real content by 0.0039",
+                "the boosted recipe leads the standardised logistic on the record's own real content by 0.0039",
+                "the boosted recipe leads the standardised logistic — a 26-class linear model over 1108 features, not a rule anyone writes out by hand — by 0.0039",
+                "the standardised logistic 0.0039 behind the model at 0024's top rung"]
+    SITES = {'keep': {'VERDICT.md': 1, 'README.md': 1}, 'thesis': {'VERDICT.md': 1, 'docs/DILIGENCE.md': 1},   # counted by hand on 2026-10-22
+             'lead': {'VERDICT.md': 7, 'README.md': 3, 'outbound/ONE_PAGER.md': 3, 'outbound/EVIDENCE_BRIEF.md': 5, 'outbound/NARRATIVE.md': 2, 'docs/DILIGENCE.md': 3}}
     KEEP_P = f" [bounded by 0025 to {p7} plaintexts: at rung 8 ({p8} plaintexts) 0025 read `{verdict}`"
     THESIS_P = ' [bounded by 0025: at rung 8'
     LEAD_P = f' [bounded by 0025 to {p7} plaintexts: model minus logistic at rung 8 ({p8} plaintexts)'
@@ -231,12 +247,18 @@ def check_case(case, root, orig, before, after1, after2, out1, V, PR, problems):
                 P(f'{f}: {k} sites of {ph!r}, {t.count(ph + f" [{PTR}]")} carry the pointer, {t.count(ph)} stand')
         if t.count(f'[{PTR}]') != sum(o.count(ph) for ph in span_phr):
             P(f'{f}: the pointer stands {t.count(f"[{PTR}]")} times')
-        k = o.count(keep_phr); totals['keep'] += k
-        if t.count(keep_phr + KEEP_P) != (k if bounded else 0) or t.count(KEEP_P) != (k if bounded else 0):
-            P(f'{f}: keep-buying sites {k}, bounded {t.count(keep_phr + KEEP_P)} ({"bound expected" if bounded else "no bound expected"})')
-        k = o.count(thesis_phr); totals['thesis'] += k; falls = gain.endswith('FALLS')
-        if t.count(thesis_phr + THESIS_P) != (k if falls else 0) or t.count(THESIS_P) != (k if falls else 0):
-            P(f'{f}: thesis sites {k}, pointed {t.count(thesis_phr + THESIS_P)}')
+        k = sum(o.count(ph) for ph in keep_phr.get(f, [])); totals['keep'] += k
+        if k != SITES['keep'].get(f, 0):
+            P(f'{f}: {k} keep sites in the wording counted on 2026-10-22, not {SITES["keep"].get(f, 0)}')
+        got = sum(t.count(ph + KEEP_P) for ph in keep_phr.get(f, []))
+        if got != (k if bounded else 0) or t.count(KEEP_P) != (k if bounded else 0):
+            P(f'{f}: keep sites {k}, bounded {got} of {t.count(KEEP_P)} keep bounds ({"bound expected" if bounded else "no bound expected"})')
+        k = sum(o.count(ph) for ph in thesis_phr.get(f, [])); totals['thesis'] += k; falls = gain.endswith('FALLS')
+        if k != SITES['thesis'].get(f, 0):
+            P(f'{f}: {k} thesis sites in the wording counted on 2026-10-22, not {SITES["thesis"].get(f, 0)}')
+        got = sum(t.count(ph + THESIS_P) for ph in thesis_phr.get(f, []))
+        if got != (k if falls else 0) or t.count(THESIS_P) != (k if falls else 0):
+            P(f'{f}: thesis sites {k}, pointed {got} of {t.count(THESIS_P)} thesis pointers')
         lk = sum(o.count(ph) for ph in lead_phr)
         lk_tok = 0
         for mm in re.finditer(r'`MODEL_LEADS`', o):     # 0024's reading: its top-rung interval stands just before the token
@@ -244,6 +266,8 @@ def check_case(case, root, orig, before, after1, after2, out1, V, PR, problems):
                 continue
             lk_tok += 1
         lk += lk_tok; totals['lead'] += lk
+        if lk != SITES['lead'].get(f, 0):
+            P(f'{f}: {lk} statements of 0024\'s MODEL_LEADS in the wording counted on 2026-10-22, not {SITES["lead"].get(f, 0)}')
         want = lk if lead != 'MODEL_LEADS' else 0
         got_after_anchor = sum(t.count(ph + LEAD_P) for ph in lead_phr) + t.count('`MODEL_LEADS`' + LEAD_P) + t.count('`MODEL_LEADS` by the rule sealed in advance' + LEAD_P)
         if t.count(LEAD_P) != want or got_after_anchor != want:
@@ -252,6 +276,9 @@ def check_case(case, root, orig, before, after1, after2, out1, V, PR, problems):
             P(f'{f}: two 0025 pointers stand side by side')
     if totals['span'] != 8:
         P(f"the sealed span sentence stands {totals['span']} times in the Markdown copy, not the 8 counted when this was written (the page is the 9th)")
+    for key in ('keep', 'thesis', 'lead'):
+        if totals[key] != sum(SITES[key].values()):
+            P(f"{totals[key]} {key} sites in the Markdown copy, not the {sum(SITES[key].values())} counted on 2026-10-22")
     # the evidence page, source and rendered
     e = T(root, 'tools/render/evidence_page.py'); h = T(root, 'outbound/evidence_page.html')
     if e.count("+ _rc3_span +") != 1 or e.count('+ _rc3_lead_bound') != 1:
