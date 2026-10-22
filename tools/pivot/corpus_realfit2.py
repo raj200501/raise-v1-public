@@ -509,7 +509,7 @@ def main():
         X, Y, G, F, meta, sel, info, secs = build(a.chunk_size, a.carve, a.procs, a.src, pins, cap_per_family=a.cap_per_family, base=base)
         man = manifest_of(X, Y, G, F, meta, sel, info, a.chunk_size, a.carve, secs, pins)
         save_npz(a.out, X, Y, G, F, meta, a.chunk_size, a.carve)
-        ce.write_manifest(man, man_path, MANIFEST_PATH)
+        ce.write_manifest(man, man_path, MANIFEST_PATH, X=X)
         print(f"built {man['n_rows']} rows from {man['n_chunks']} chunks over {len(FAMILIES)} real families in {secs}s")
         print(f"  {os.path.relpath(a.out, REPO)}  X {man['arrays']['X']['sha256'][:16]}  y {man['arrays']['y']['sha256'][:16]}")
         for f in FAMILIES:

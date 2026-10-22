@@ -367,8 +367,75 @@ def build_manifest_path(manifest, bank_manifest, banked_path, npz_path):
     return path
 
 
-def write_manifest(man, path, banked_path):
-    """Write a builder's manifest (the banked format: indent 2, sorted keys, trailing newline) and say where it went."""
+X_BLOCK_ROWS = 4096
+
+
+def _file_sha256(path):
+    try:
+        with open(path, "rb") as fh:
+            return hashlib.sha256(fh.read()).hexdigest()
+    except OSError:
+        return None
+
+
+def platform_block():
+    """What a rebuild must match beyond library versions (CORRECTIONS.md 2026-10-22, the realfit2 entry): the CPU features that
+    select code paths with different OUTPUT (ISA-L's level-3 AVX2 vs AVX-512 paths), numpy's active SIMD targets (float64 log2
+    goes through SVML under X86_V4), the C library (zopfli's cost model calls log), the zlib actually loaded, and the hashes of
+    the compressor library files. Recorded, never compared by --check: a mismatch is localised with it, not refused."""
+    import ctypes.util, platform, zlib
+    flags = []
+    try:
+        with open("/proc/cpuinfo", encoding="utf-8") as fh:
+            for ln in fh:
+                if ln.startswith("flags"):
+                    have = set(ln.split(":", 1)[1].split())
+                    flags = sorted(f for f in have if f.startswith(("avx", "sse4", "bmi", "sha_ni", "vpclmulqdq", "gfni")))
+                    break
+    except OSError:
+        pass
+    try:
+        simd = np.__config__.CONFIG.get("SIMD Extensions")
+    except Exception:  # noqa: BLE001
+        simd = None
+    libs = {}
+    for mod in ("isal", "deflate", "zopfli"):
+        try:
+            m = __import__(mod); d = os.path.dirname(m.__file__)
+            libs[mod] = {os.path.relpath(os.path.join(r, f), d): _file_sha256(os.path.join(r, f))
+                         for r, _, fs in os.walk(d) for f in sorted(fs) if f.endswith((".so", ".pyd")) or ".so." in f}
+        except Exception as e:  # noqa: BLE001
+            libs[mod] = f"unavailable: {type(e).__name__}"
+    libz = ctypes.util.find_library("z")
+    loaded = {}
+    try:
+        with open("/proc/self/maps", encoding="utf-8") as fh:
+            for ln in fh:
+                parts = ln.split()
+                if len(parts) >= 6 and re.search(r"/lib(z|isal|deflate|m)[.-][^/]*$", parts[-1]):
+                    loaded[parts[-1]] = None
+    except OSError:
+        pass
+    loaded = {pth: _file_sha256(pth) for pth in sorted(loaded)}
+    return {"machine": platform.machine(), "cpu_flags": flags, "numpy_simd": simd, "libc": list(platform.libc_ver()),
+            "zlib_version": zlib.ZLIB_VERSION, "zlib_runtime_version": zlib.ZLIB_RUNTIME_VERSION, "libz_found": libz,
+            "loaded_libraries": loaded, "compressor_library_files": libs,
+            "python": platform.python_version()}
+
+
+def x_block_hashes(X, rows=X_BLOCK_ROWS):
+    """sha256 of X per block of `rows` rows (C order, the npz's dtype), so a rebuild that differs names its blocks."""
+    return {"rows_per_block": rows, "sha256": [hashlib.sha256(np.ascontiguousarray(X[i:i + rows]).tobytes()).hexdigest()
+                                               for i in range(0, len(X), rows)]}
+
+
+def write_manifest(man, path, banked_path, X=None):
+    """Write a builder's manifest (the banked format: indent 2, sorted keys, trailing newline) and say where it went. A new
+    manifest also records the build platform and, given X, X's per-block hashes (added 2026-10-22; banked manifests predate it)."""
+    man = dict(man)
+    man.setdefault("platform", platform_block())
+    if X is not None:
+        man.setdefault("X_blocks", x_block_hashes(X))
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(man, fh, indent=2, sort_keys=True); fh.write("\n")
@@ -445,7 +512,7 @@ def main():
         save_npz(a.out, X, Y, G, F, meta, a.n_per_family, a.chunk_size, a.carve, a.seed)
         man = manifest_of(X, Y, G, F, meta, a.n_per_family, a.chunk_size, a.carve, a.seed, s, pins, sel)
         print(f"wrote {os.path.relpath(a.out, REPO)} ({len(Y)} rows, {man['n_chunks']} chunks, {s}s)")
-        write_manifest(man, man_path, MANIFEST_PATH)
+        write_manifest(man, man_path, MANIFEST_PATH, X=X)
         for f, r in man["per_family"].items():
             print(f"  {f:<8} rows {r['n_rows']:>6} chunks {r['n_chunks']:>4} ceilings streams {r['ceiling_distinct_streams']} "
                   f"fragments {r['ceiling_distinct_fragments']}")
