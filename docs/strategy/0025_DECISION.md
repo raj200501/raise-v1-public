@@ -34,8 +34,8 @@
   - The two results are therefore confounded (a different corpus on a different host). The realfit2 rebuild on the later host, next, separates them.
 - **realfit2 on the later host** (`second_rebuild_other_host`, recorded in `b988afc`). A second realfit2 rebuild, on the later host, gives X `4ff8ec5760ccb069`, which is neither 0024's banked `d74bd30e71a5083f` nor the first rebuild's `c395da3f4c1aa3cb`.
   - Its y, g and fam are identical to the banked ones, and its smoke subset is again identical to 0024's banked smoke corpus.
-  - The two rebuilds differ in exactly 6 of 193926 rows (4 chunks), every one labelled 22 or 23 (ISA-L levels 1 and 2), and the whole feature row moves in each. The log concludes that ISA-L's output at those levels depends on the CPU generation on rare inputs, which localises the realfit2 difference to ISA-L's run-time code-path dispatch.
-  - The log reports a test of whether forcing a dispatch tier reproduces the banked bytes as under way, and no result is banked. COULD NOT VERIFY yet that the same mechanism explains the banked X.
+  - The two rebuilds differ in exactly 6 of 193926 rows (4 chunks), every one labelled 22 or 23 (ISA-L levels 1 and 2), and the whole feature row moves in each. The log first attributed this to ISA-L's output depending on the CPU generation (b988afc); the dispatch test showed that was wrong.
+  - **The dispatch test** (`isal_dispatch_test`). Both hosts select identical ISA-L code; forcing each code-path tier changes y on 8 to 20 chunks for every tier but the native AVX-512 one, and no tier or mixture hashes to the banked X. The flips are run to run: a full build changes the level-1 and level-2 streams of roughly 0 to 4 chunks, a third rebuild on one host flipped a chunk of its own, and isolated compressions never flip. The banked X is most likely the canonical X plus an unknown set of such flips, and it cannot be searched for: option (a) is ruled out.
   - Its manifest (scratchpad `rf2_spr/`) is the first realfit2 manifest to record the platform and per-block X hashes.
 - **Ledger.** At `b988afc`, `CORRECTIONS.md` has no entry for the realfit2 difference and none dated 2026-10-22. The builder-cache row-order defect's own entry is not filed either: the 2026-10-21 probe entry says it "is filed with the cache's content proof", and that proof has not run. `docs/DILIGENCE.md` said at `35b6493` that the manifest makes "the rebuild *proven* identical, not assumed"; `938e0c7` rewrote it to say which rebuilds match and which do not, citing `CORRECTIONS.md` entries of 2026-10-21 and 2026-10-22, the second of which is not committed yet. `docs/strategy/ROADMAP.md` (R1) states the exact-interval rule as 0025's validity clause. An entry is owed under every option.
 
@@ -49,7 +49,7 @@ Common to all three: the builder-cache rebuild, reorder, content proof and re-se
 - **Cost.**
   - One full realfit2 build per candidate: 452.2 s as banked in 0024's manifest, 2734.2 s under load on the first host here. Each build is then compared by whole-array hash. The banked manifest has no per-block X hashes, so a near miss cannot be localised.
   - A rebuild on the later host, on which realfit3 reproduced, was tried on 2026-10-22 and gave a third X (section 2).
-  - That rebuild localised the difference between the two rebuilds to ISA-L's CPU-dependent dispatch at levels 1 and 2. One bounded candidate follows from it: force each ISA-L dispatch tier and compare the result with `d74bd30e71a5083f`. The log reports that test as under way, and no result is banked.
+  - That rebuild localised the difference between the two rebuilds to ISA-L levels 1 and 2 (run-to-run flips on rare chunks, as the dispatch test then showed, not the CPU). One bounded candidate follows from it: force each ISA-L dispatch tier and compare the result with `d74bd30e71a5083f`. The log reports that test as under way, and no result is banked.
   - Beyond it, nothing in the record: the log's other explanations are not environments one can rebuild, and two byte-identical results under this container's python 3.11.17 (0024's smoke subset and realfit3) argue against the banked builder's own python 3.11.15 as the cause. Past the dispatch test the search has no bound.
 - **Can claim afterwards.** If the bytes are found: 0025 as sealed, with its instrument shown to be 0024's to the interval, and 0024's corpus reproducible again with the cause named. If they are not found: nothing, and 0025 is still blocked.
 - **Changes in the sealed file.** None to the rule. `invocation.corpus` and `invocation.interpreter` would name the environment that reproduced the bytes.
@@ -93,6 +93,8 @@ Common to all three: the builder-cache rebuild, reorder, content proof and re-se
 ### 3.1 Recommendation: (b), unless the ISA-L dispatch test recovers 0024's bytes first
 
 Decision rule, stated before that test's result is read: a forced dispatch tier whose realfit2 rebuild hashes to `d74bd30e71a5083f` means (a). 0025 then runs as sealed, with the tier named in `invocation.corpus`, the refits repeated on those bytes, and no rule changed. Any other result means (b), as specified here, and the search stops being a path for 0025.
+
+**Result, read after the rule above was committed (9a675c5):** no forced tier or mixture reproduces `d74bd30e71a5083f`, and the differences are run-to-run flips, so (a) is ruled out and the recommendation is (b).
 
 Reasons:
 
@@ -234,7 +236,7 @@ Commits after `35b6493`, through `b988afc`, move no status in the table, but the
 
 ## 5. Before any freeze under (b), in order
 
-If the dispatch test recovers the banked bytes, steps 3 to 5 shrink to the findings' own edits and the realfit2 parts of step 8 fall away; the rest stands.
+The dispatch test did not recover the banked bytes, so all of the steps below apply. (Had it, steps 3 to 5 would have shrunk to the findings' own edits and the realfit2 parts of step 8 would have fallen away.)
 
 1. Record in `engineering_log_0025.json` (`container_2026_10_21`) the ISA-L dispatch test's result and the decision taken under the rule in 3.1; the second realfit2 rebuild and the realfit3 rebuild are already recorded (`b988afc`, `6c8b75b`). Under (b), put the chosen realfit2 build at `data/pivot/realfit2_c4096.npz`, with its manifest, and keep a copy, since another host will not rebuild it.
 2. File the `CORRECTIONS.md` entries:
