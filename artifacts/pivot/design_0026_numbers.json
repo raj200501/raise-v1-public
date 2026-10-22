@@ -1,0 +1,2336 @@
+{
+  "brief": "docs/strategy/0026_DESIGN_BRIEF.md",
+  "checks": {
+    "ext_c4096_arrays_equal_manifest": {
+      "fam": {
+        "equals_manifest": true,
+        "sha256": "21b066e7020c5a4ba247101e679ba31f23cbeae5500ab67e64f453b83e61f917"
+      },
+      "g": {
+        "equals_manifest": true,
+        "sha256": "2f5b8a86cc0463c1376d1ceb379ffe710e709899f2db4e1a527d355d6fcfc8b9"
+      },
+      "y": {
+        "equals_manifest": true,
+        "sha256": "edbf9b3a9aa810338807a4a397884b58b27a28bbf0d99826050403bdeeabdd46"
+      }
+    },
+    "k0_equals_0024_s4_rows_and_chunks": true,
+    "oob_4096_scores_ext_rows_aligned_with_realcurve2": {
+      "ext_chunk_ids_equal": true,
+      "ext_chunk_ids_sha256": "c22e5e24cccd0c30180125fede483331435bc41d16e79958f5b62de30a9baa65",
+      "ext_fam_and_families_equal": true,
+      "ext_fam_sha256": "5a51510d4be69494d35b55e79d19f2709567a05a9d2d6639525d349b50ababae",
+      "n_ext_rows_equal": true
+    },
+    "pool_totals_equal_realfit3_n_pool_chunks_with_rows_total": true,
+    "positive_control_lead_equals_banked": true,
+    "positive_control_slope_equals_banked": true,
+    "realfit3_ids_continue_realfit2_ids_ascending_per_family": true
+  },
+  "conventions": {
+    "bootstrap": "0024's construction: 2000 cluster resamples of the scored chunks, numpy default_rng(20260917), rung accuracies rounded to 4 decimals inside each resample; ci95 = 2.5th and 97.5th percentiles rounded to 6 decimals",
+    "half_width": "(hi - lo) / 2 of the 6-decimal ci95",
+    "proxies": "0024's s4, r5 and r7 vectors stand in for 0026's k = 0, 1 and 3 at x = k; r5 and r7 still contain 0021's block, so they are proxies only",
+    "value": "at the precision the brief writes it, rounded half up from the shortest decimal repr; value_full holds the unrounded reading"
+  },
+  "discrepancies_with_the_draft": [
+    {
+      "brief": "null 218, reproduction 353.2, k0 1556, k1 2504, k3 10903 (M4 9283), floors about 50, core 15584 (4.33 h), A1 1551 (17135, 4.76 h), pair 850 (17985, 5.00 h), k2 5270; per fold 3662/3023/1254/3424/3600; k3 per fold 2694/2190/867/2506/2645; c_src k3 M4 2298",
+      "computed": {
+        "a1_arm": 1551.0,
+        "c_src_k3_model": 2298.0,
+        "clause_k0": 1556.0,
+        "clause_k1": 2504.0,
+        "clause_k3": 10903.0,
+        "clause_k3_model": 9283.0,
+        "core": 15582.0,
+        "core_hours": 4.33,
+        "cumulative": {
+          "a1": 17134.0,
+          "floors_core": 15582.0,
+          "k0": 2127.0,
+          "k1": 4631.0,
+          "k3": 15534.0,
+          "null": 218.0,
+          "pair": 17983.0,
+          "reproduction": 571.0
+        },
+        "cumulative_hours": {
+          "a1": 4.76,
+          "pair": 5.0
+        },
+        "floors": 48.0,
+        "null": 218.0,
+        "pair_fold": 850.0,
+        "per_fold_core": {
+          "c_src": 3662.0,
+          "pe_bin": 3023.0,
+          "py_src": 1254.0,
+          "rfc_txt": 3424.0,
+          "rst_doc": 3600.0
+        },
+        "per_fold_k3": {
+          "c_src": 2694.0,
+          "pe_bin": 2190.0,
+          "py_src": 867.0,
+          "rfc_txt": 2506.0,
+          "rst_doc": 2645.0
+        },
+        "reproduction": 353.2,
+        "skipped_k2": 5270.0
+      },
+      "key": "cost_fit_seconds",
+      "note": "floors were an allowance of about 50 s in the draft; the linear-in-rows estimate is 48 s, which moves the core and the cumulative totals by 2 s"
+    },
+    {
+      "brief": "about 4.1 + 5.3e-5 x rows; 13927 (3.87 h), 18294 (5.08 h), 22596 (6.28 h); c_src k3 M4 at the cap 3755",
+      "computed": {
+        "c_src_k3_model_at_cap": 3786.0,
+        "central_equivalent_n_iter": 141.7,
+        "core_hours": {
+          "117": 3.88,
+          "184": 5.1,
+          "250": 6.3
+        },
+        "core_seconds": {
+          "117": 13964.0,
+          "184": 18353.0,
+          "250": 22676.0
+        },
+        "intercept_seconds": 3.9,
+        "n_iter_cases": [
+          117,
+          184,
+          250
+        ],
+        "seconds_per_iteration_at_r4_to_r7": [
+          5.4,
+          6.64,
+          9.75,
+          15.38
+        ],
+        "seconds_per_row": 5.46e-05
+      },
+      "key": "cost_range_by_iterations",
+      "note": "the least-squares line through 0024's four per-iteration points is about 3.90 + 0.0000546 x rows, not the draft's 4.1 + 5.3e-5; the cases move by 39 to 82 s"
+    },
+    {
+      "brief": "0.038916 (py_src), 0.000454, under 0.00016 per doubling; 1473 of 1488 chunks carry all 26 rows (38298 rows)",
+      "computed": {
+        "chance": 0.038462,
+        "chunks_with_all_26_rows": 1473,
+        "family": "py_src",
+        "level_bound": 0.000454,
+        "max_family_label_frequency": 0.038916,
+        "real_chunks": 1488,
+        "rows_in_complete_chunks": 38298,
+        "slope_bound_per_doubling": 0.000162
+      },
+      "key": "label_prior_bound",
+      "note": "the brief's 'under 0.00016 per doubling' divided the level by the 3 doublings spanned (0.000151); the largest OLS slope over k = {0, 1, 3} of a level confined to a band of that width is 5/14 of it, 0.000162, which is not under 0.00016"
+    },
+    {
+      "brief": "about 6.2 GB (3.59 - 1.15 + 0.97 + 1.83 + 0.91)",
+      "computed": {
+        "minus_builder_scoring_set_gb": 1.15,
+        "peak_gb": 6.1,
+        "plus_c_src_k3_block_float64_gb": 1.83,
+        "plus_realfit3_gb": 0.97,
+        "plus_trees_float32_copy_gb": 0.91,
+        "start_rss_gb": 3.59
+      },
+      "key": "memory_peak",
+      "note": "the unrounded components sum to 6.15 GB, which is 6.1 at one decimal; the draft's 6.2 summed the rounded components"
+    }
+  ],
+  "environment": {
+    "numpy": "2.4.6",
+    "python": "3.11.17"
+  },
+  "estimates": {
+    "cost_fit_seconds": {
+      "basis": "0024's banked fit seconds by role and rows; the run's real seconds depend on iteration counts, which are not known in advance",
+      "brief_sections": [
+        "0",
+        "3",
+        "7",
+        "12"
+      ],
+      "brief_value": "null 218, reproduction 353.2, k0 1556, k1 2504, k3 10903 (M4 9283), floors about 50, core 15584 (4.33 h), A1 1551 (17135, 4.76 h), pair 850 (17985, 5.00 h), k2 5270; per fold 3662/3023/1254/3424/3600; k3 per fold 2694/2190/867/2506/2645; c_src k3 M4 2298",
+      "equals_brief": false,
+      "function": "tools/prereg_gen/0026/bank_design_numbers.py:loglog_seconds (piecewise-linear interpolation of log seconds on log fit rows over 0024's rungs 1..7, per role)",
+      "inputs": [
+        {
+          "keys": [
+            "fits.r{1..7}_{depth3_tree,logistic,model}.n_fit_rows",
+            "fits.r{1..7}_{depth3_tree,logistic,model}.seconds"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "fits.null.seconds",
+            "fits.null.n_fit_rows",
+            "cost.seconds_by_name.s4_*"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "base_chunks_with_rows_0021",
+            "chunk_ids_with_rows",
+            "rows_per_chunk",
+            "per_family.*.n_chunks_with_rows",
+            "chunk_order_note"
+          ],
+          "path": "artifacts/pivot/realfit2_corpus_manifest.json",
+          "sha256": "ebdd0ddfe8c54c61508a3d3d2a678a786a47fe098de72aa6c5e8ddcf4f0331f2"
+        },
+        {
+          "keys": [
+            "chunk_ids_with_rows",
+            "rows_per_chunk",
+            "per_family.*.n_new_chunks_with_rows",
+            "per_family.*.n_pool_chunks_with_rows_total",
+            "chunk_order_note"
+          ],
+          "path": "artifacts/pivot/realfit3_corpus_manifest.json",
+          "sha256": "152dd7c2c64197a43e4a203ffe09c86361371c1be190204936a4e8f7702a9352"
+        },
+        {
+          "keys": [
+            "cost.seconds_by_name.floor_feat1",
+            "cost.seconds_by_name.floor_majority",
+            "cost.seconds_by_name.floor_stratified"
+          ],
+          "path": "artifacts/pivot/realfit_4096_rerun.json",
+          "sha256": "1b268589dbf5c2bb5b1c32c6fb48cd2c8c95661e8b32ff7e07b34071a3518dee"
+        },
+        {
+          "keys": [
+            "n_rows",
+            "per_family.*.n_rows"
+          ],
+          "path": "artifacts/pivot/realfit_corpus_manifest.json",
+          "sha256": "1cd0d91636899723feaaf3259b220cff9f6fcc2e3d30cf452641e8d84847b430"
+        }
+      ],
+      "kind": "estimate",
+      "n_boot": null,
+      "note": "floors were an allowance of about 50 s in the draft; the linear-in-rows estimate is 48 s, which moves the core and the cumulative totals by 2 s",
+      "rule": "clause and arm fits: per role, log-log interpolation at each fold's fit rows; null: 0024's null seconds x rows / 210751; reproduction: 0024's three s4 seconds summed; floors: 0021's three floor seconds (B-feat1 1.1 s, the other two 0.0 s) at 26346 rows, linear in rows over the 15 fold-rung fits; A1: 0021's block minus F; pair fold: the all-five rung minus py_src and rst_doc at k = 0 and 3",
+      "seed": null,
+      "value": {
+        "a1_arm": 1551.0,
+        "c_src_k3_model": 2298.0,
+        "clause_k0": 1556.0,
+        "clause_k1": 2504.0,
+        "clause_k3": 10903.0,
+        "clause_k3_model": 9283.0,
+        "core": 15582.0,
+        "core_hours": 4.33,
+        "cumulative": {
+          "a1": 17134.0,
+          "floors_core": 15582.0,
+          "k0": 2127.0,
+          "k1": 4631.0,
+          "k3": 15534.0,
+          "null": 218.0,
+          "pair": 17983.0,
+          "reproduction": 571.0
+        },
+        "cumulative_hours": {
+          "a1": 4.76,
+          "pair": 5.0
+        },
+        "floors": 48.0,
+        "null": 218.0,
+        "pair_fold": 850.0,
+        "per_fold_core": {
+          "c_src": 3662.0,
+          "pe_bin": 3023.0,
+          "py_src": 1254.0,
+          "rfc_txt": 3424.0,
+          "rst_doc": 3600.0
+        },
+        "per_fold_k3": {
+          "c_src": 2694.0,
+          "pe_bin": 2190.0,
+          "py_src": 867.0,
+          "rfc_txt": 2506.0,
+          "rst_doc": 2645.0
+        },
+        "reproduction": 353.2,
+        "skipped_k2": 5270.0
+      },
+      "value_full": {
+        "a1_arm": 1551.353,
+        "clause_k3_model": 9282.839,
+        "core": 15582.407,
+        "floors": 48.394,
+        "layers": {
+          "k0": 1555.985,
+          "k1": 2504.022,
+          "k2": 5270.024,
+          "k3": 10902.724
+        },
+        "null": 218.081,
+        "pair_fold": 849.606,
+        "per_fold_per_rung_per_role": {
+          "c_src": {
+            "k0": {
+              "depth3_tree": 3.13,
+              "logistic": 55.497,
+              "model": 327.473
+            },
+            "k1": {
+              "depth3_tree": 7.372,
+              "logistic": 102.242,
+              "model": 472.139
+            },
+            "k2": {
+              "depth3_tree": 16.197,
+              "logistic": 172.658,
+              "model": 1110.263
+            },
+            "k3": {
+              "depth3_tree": 34.344,
+              "logistic": 362.581,
+              "model": 2297.505
+            }
+          },
+          "pe_bin": {
+            "k0": {
+              "depth3_tree": 2.524,
+              "logistic": 49.09,
+              "model": 263.909
+            },
+            "k1": {
+              "depth3_tree": 5.753,
+              "logistic": 85.59,
+              "model": 426.308
+            },
+            "k2": {
+              "depth3_tree": 12.941,
+              "logistic": 148.767,
+              "model": 864.765
+            },
+            "k3": {
+              "depth3_tree": 27.722,
+              "logistic": 292.795,
+              "model": 1869.446
+            }
+          },
+          "py_src": {
+            "k0": {
+              "depth3_tree": 1.076,
+              "logistic": 19.733,
+              "model": 94.925
+            },
+            "k1": {
+              "depth3_tree": 2.143,
+              "logistic": 44.719,
+              "model": 223.985
+            },
+            "k2": {
+              "depth3_tree": 4.816,
+              "logistic": 75.347,
+              "model": 396.208
+            },
+            "k3": {
+              "depth3_tree": 11.01,
+              "logistic": 133.639,
+              "model": 722.352
+            }
+          },
+          "rfc_txt": {
+            "k0": {
+              "depth3_tree": 2.899,
+              "logistic": 53.13,
+              "model": 303.295
+            },
+            "k1": {
+              "depth3_tree": 6.757,
+              "logistic": 96.046,
+              "model": 455.486
+            },
+            "k2": {
+              "depth3_tree": 14.974,
+              "logistic": 163.899,
+              "model": 1017.391
+            },
+            "k3": {
+              "depth3_tree": 31.87,
+              "logistic": 336.507,
+              "model": 2137.948
+            }
+          },
+          "rst_doc": {
+            "k0": {
+              "depth3_tree": 3.071,
+              "logistic": 54.903,
+              "model": 321.329
+            },
+            "k1": {
+              "depth3_tree": 7.205,
+              "logistic": 100.575,
+              "model": 467.702
+            },
+            "k2": {
+              "depth3_tree": 15.873,
+              "logistic": 170.359,
+              "model": 1085.566
+            },
+            "k3": {
+              "depth3_tree": 33.693,
+              "logistic": 355.724,
+              "model": 2255.588
+            }
+          }
+        }
+      },
+      "what": "fit seconds per layer of the run, central estimate"
+    },
+    "cost_range_by_iterations": {
+      "basis": "assumes seconds per iteration are linear in rows, as at 0024's rungs 4..7",
+      "brief_sections": [
+        "12"
+      ],
+      "brief_value": "about 4.1 + 5.3e-5 x rows; 13927 (3.87 h), 18294 (5.08 h), 22596 (6.28 h); c_src k3 M4 at the cap 3755",
+      "equals_brief": false,
+      "function": "numpy.polyfit (degree 1) on seconds / n_iter against n_fit_rows",
+      "inputs": [
+        {
+          "keys": [
+            "fits.r{4..7}_model.seconds",
+            "fits.r{4..7}_model.n_fit_rows",
+            "fit_info_by_name.r{4..7}_model.n_iter"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "fits.r{1..7}_{depth3_tree,logistic,model}.n_fit_rows",
+            "fits.r{1..7}_{depth3_tree,logistic,model}.seconds"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "base_chunks_with_rows_0021",
+            "chunk_ids_with_rows",
+            "rows_per_chunk",
+            "per_family.*.n_chunks_with_rows",
+            "chunk_order_note"
+          ],
+          "path": "artifacts/pivot/realfit2_corpus_manifest.json",
+          "sha256": "ebdd0ddfe8c54c61508a3d3d2a678a786a47fe098de72aa6c5e8ddcf4f0331f2"
+        },
+        {
+          "keys": [
+            "chunk_ids_with_rows",
+            "rows_per_chunk",
+            "per_family.*.n_new_chunks_with_rows",
+            "per_family.*.n_pool_chunks_with_rows_total",
+            "chunk_order_note"
+          ],
+          "path": "artifacts/pivot/realfit3_corpus_manifest.json",
+          "sha256": "152dd7c2c64197a43e4a203ffe09c86361371c1be190204936a4e8f7702a9352"
+        }
+      ],
+      "kind": "estimate",
+      "n_boot": null,
+      "note": "the least-squares line through 0024's four per-iteration points is about 3.90 + 0.0000546 x rows, not the draft's 4.1 + 5.3e-5; the cases move by 39 to 82 s",
+      "rule": "core minus the central k = 3 M4 seconds, plus n x sum over folds of (intercept + slope x fold rows); n = r6's 117, ceil(1.2 x r7's 153) = 184, and the cap 250",
+      "seed": null,
+      "value": {
+        "c_src_k3_model_at_cap": 3786.0,
+        "central_equivalent_n_iter": 141.7,
+        "core_hours": {
+          "117": 3.88,
+          "184": 5.1,
+          "250": 6.3
+        },
+        "core_seconds": {
+          "117": 13964.0,
+          "184": 18353.0,
+          "250": 22676.0
+        },
+        "intercept_seconds": 3.9,
+        "n_iter_cases": [
+          117,
+          184,
+          250
+        ],
+        "seconds_per_iteration_at_r4_to_r7": [
+          5.4,
+          6.64,
+          9.75,
+          15.38
+        ],
+        "seconds_per_row": 5.46e-05
+      },
+      "value_full": {
+        "cases": {
+          "117": 13963.903401888594,
+          "184": 18352.882241949766,
+          "250": 22676.35393514436
+        },
+        "intercept": 3.903106244047217,
+        "slope": 5.456484392362924e-05
+      },
+      "what": "core fit seconds when every k = 3 M4 fit runs n iterations, by a per-iteration rule fitted to 0024's rungs 4..7"
+    },
+    "fit_side": {
+      "basis": "one replicate reads the size of the fit-side variance; it does not bound it",
+      "brief_sections": [
+        "6"
+      ],
+      "brief_value": "about 0.00079; about 0.89",
+      "equals_brief": true,
+      "function": "tools/prereg_gen/0026/bank_design_numbers.py:reading_probabilities",
+      "inputs": [
+        {
+          "keys": [
+            "slope_bootstrap.model.n_boot",
+            "slope_bootstrap.model.seed"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "per_example.s4_model",
+            "per_example.r5_model",
+            "per_example.r7_model",
+            "ext_chunk_ids",
+            "ext_fam",
+            "ext_families",
+            "n_eval_rows"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096_scores.json",
+          "sha256": "7ff27c601bf448b776e17b67c3ead91c08a72e78c301b653d47a4df5023e64b3"
+        },
+        {
+          "keys": [
+            "flags.replicate_rung_1.difference_from_rung_1.model"
+          ],
+          "path": "artifacts/pivot/realcurve_4096_verdict.json",
+          "sha256": "016ca85b86de983b7d3755905fa7d9540d63d7f2361d0ce0bf21dd8b0edde5cd"
+        }
+      ],
+      "kind": "estimate",
+      "n_boot": null,
+      "rule": "sqrt(se^2 + sd^2 / Sxx), Sxx over x = {0, 1, 3}; the interval keeps the scored-side half-width",
+      "seed": null,
+      "value": {
+        "p_flat_at_true_zero": 0.89,
+        "slope_dispersion": 0.00079
+      },
+      "value_full": {
+        "fit_sd_per_rung": 0.001,
+        "p_flat_at_true_zero": 0.887995826249848,
+        "slope_dispersion": 0.0007909395888137431,
+        "sxx": 4.666666666666667
+      },
+      "what": "slope dispersion and P(FLAT | true slope 0) if 0023's one-replicate difference (0.001) were the per-rung fit-side SD, independent across rungs"
+    },
+    "memory_peak": {
+      "basis": "0024's anonymous RSS before its rung-7 block plus the arrays 0026 adds or drops; COULD NOT VERIFY until run",
+      "brief_sections": [
+        "12"
+      ],
+      "brief_value": "about 6.2 GB (3.59 - 1.15 + 0.97 + 1.83 + 0.91)",
+      "equals_brief": false,
+      "function": "sum",
+      "inputs": [
+        {
+          "keys": [
+            "arrays.X.shape"
+          ],
+          "path": "artifacts/pivot/ext_corpus_manifest.json",
+          "sha256": "143100fba6dc2b8890947021d211fdc4d0e6f9fcb0eb9a56f426a39dbd033923"
+        },
+        {
+          "keys": [
+            "ledger[event=rung_bound, name=run_r7_depth3_tree].rss_gb",
+            "n_eval_rows"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "base_chunks_with_rows_0021",
+            "chunk_ids_with_rows",
+            "rows_per_chunk",
+            "per_family.*.n_chunks_with_rows",
+            "chunk_order_note"
+          ],
+          "path": "artifacts/pivot/realfit2_corpus_manifest.json",
+          "sha256": "ebdd0ddfe8c54c61508a3d3d2a678a786a47fe098de72aa6c5e8ddcf4f0331f2"
+        },
+        {
+          "keys": [
+            "n_rows"
+          ],
+          "path": "artifacts/pivot/realfit3_corpus_manifest.json",
+          "sha256": "152dd7c2c64197a43e4a203ffe09c86361371c1be190204936a4e8f7702a9352"
+        },
+        {
+          "keys": [
+            "chunk_ids_with_rows",
+            "rows_per_chunk",
+            "per_family.*.n_new_chunks_with_rows",
+            "per_family.*.n_pool_chunks_with_rows_total",
+            "chunk_order_note"
+          ],
+          "path": "artifacts/pivot/realfit3_corpus_manifest.json",
+          "sha256": "152dd7c2c64197a43e4a203ffe09c86361371c1be190204936a4e8f7702a9352"
+        }
+      ],
+      "kind": "estimate",
+      "n_boot": null,
+      "note": "the unrounded components sum to 6.15 GB, which is 6.1 at one decimal; the draft's 6.2 summed the rounded components",
+      "rule": "start - 260000 x 1108 x 4 B + realfit3 rows x 1108 x 4 B + fold rows x 1108 x 8 B + fold rows x 1108 x 4 B (GB = 1e9 B)",
+      "seed": null,
+      "value": {
+        "minus_builder_scoring_set_gb": 1.15,
+        "peak_gb": 6.1,
+        "plus_c_src_k3_block_float64_gb": 1.83,
+        "plus_realfit3_gb": 0.97,
+        "plus_trees_float32_copy_gb": 0.91,
+        "start_rss_gb": 3.59
+      },
+      "value_full": {
+        "minus_builder_scoring_set_gb": 1.15232,
+        "peak_gb": 6.14719752,
+        "plus_c_src_k3_block_float64_gb": 1.82607264,
+        "plus_realfit3_gb": 0.97040856,
+        "plus_trees_float32_copy_gb": 0.91303632,
+        "start_rss_gb": 3.59
+      },
+      "what": "anonymous memory peak at the c_src k = 3 tree fit"
+    },
+    "wall_time": {
+      "basis": "0024 scored 321409 rows per fit; 0026 scores 61409, so the ratio is an upper allowance",
+      "brief_sections": [
+        "12"
+      ],
+      "brief_value": "1.085; about 16900 s (4.7 h)",
+      "equals_brief": true,
+      "function": "ratio",
+      "inputs": [
+        {
+          "keys": [
+            "cost.wall_seconds_this_invocation",
+            "cost.banked_fit_seconds_total"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        }
+      ],
+      "kind": "estimate",
+      "n_boot": null,
+      "rule": "core x ratio",
+      "seed": null,
+      "value": {
+        "core_wall_hours": 4.7,
+        "core_wall_seconds_at_most_about": 16900.0,
+        "wall_over_fit": 1.085
+      },
+      "value_full": {
+        "core_wall": 16907.978300776904,
+        "ratio": 1.0850684816401983
+      },
+      "what": "wall seconds at most 0024's wall-to-fit ratio times the fit seconds"
+    }
+  },
+  "generator": "tools/prereg_gen/0026/bank_design_numbers.py",
+  "inputs": {
+    "artifacts/pivot/ext_corpus_manifest.json": {
+      "bytes": 68686,
+      "sha256": "143100fba6dc2b8890947021d211fdc4d0e6f9fcb0eb9a56f426a39dbd033923"
+    },
+    "artifacts/pivot/oob_4096_scores.json": {
+      "bytes": 6419048,
+      "sha256": "e37670585e53ef521828cfb1996bcaa4121a5ab91dadcd164536db5427a2daf0"
+    },
+    "artifacts/pivot/realcurve2_4096.json": {
+      "bytes": 217088,
+      "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+    },
+    "artifacts/pivot/realcurve2_4096_scores.json": {
+      "bytes": 26668829,
+      "sha256": "7ff27c601bf448b776e17b67c3ead91c08a72e78c301b653d47a4df5023e64b3"
+    },
+    "artifacts/pivot/realcurve_4096_verdict.json": {
+      "bytes": 47260,
+      "sha256": "016ca85b86de983b7d3755905fa7d9540d63d7f2361d0ce0bf21dd8b0edde5cd"
+    },
+    "artifacts/pivot/realfit2_corpus_manifest.json": {
+      "bytes": 267132,
+      "sha256": "ebdd0ddfe8c54c61508a3d3d2a678a786a47fe098de72aa6c5e8ddcf4f0331f2"
+    },
+    "artifacts/pivot/realfit3_corpus_manifest.json": {
+      "bytes": 302403,
+      "sha256": "152dd7c2c64197a43e4a203ffe09c86361371c1be190204936a4e8f7702a9352"
+    },
+    "artifacts/pivot/realfit_4096_rerun.json": {
+      "bytes": 77026,
+      "sha256": "1b268589dbf5c2bb5b1c32c6fb48cd2c8c95661e8b32ff7e07b34071a3518dee"
+    },
+    "artifacts/pivot/realfit_corpus_manifest.json": {
+      "bytes": 40286,
+      "sha256": "1cd0d91636899723feaaf3259b220cff9f6fcc2e3d30cf452641e8d84847b430"
+    },
+    "data/pivot/ext_c4096.npz": {
+      "bytes": 273239663,
+      "sha256": "9dea132a603d7ce2d25726ab27afce8f911539ea448f28861158c814c7939d6d"
+    }
+  },
+  "not_a_preregistration": "0026 is written and frozen only after 0025's run; nothing here is sealed, and the preregistration's pre-freeze check must recompute these with the runner's own code",
+  "numbers": {
+    "fold_sizes": {
+      "brief_sections": [
+        "3"
+      ],
+      "brief_value": "section 3 fold table",
+      "equals_brief": true,
+      "function": "tools/prereg_gen/0026/bank_design_numbers.py:rung_sizes (counting over the manifests' chunk_ids_with_rows and rows_per_chunk)",
+      "inputs": [
+        {
+          "keys": [
+            "per_family.*.n_rows",
+            "per_family.*.n_chunks_with_rows"
+          ],
+          "path": "artifacts/pivot/ext_corpus_manifest.json",
+          "sha256": "143100fba6dc2b8890947021d211fdc4d0e6f9fcb0eb9a56f426a39dbd033923"
+        },
+        {
+          "keys": [
+            "base_chunks_with_rows_0021",
+            "chunk_ids_with_rows",
+            "rows_per_chunk",
+            "per_family.*.n_chunks_with_rows",
+            "chunk_order_note"
+          ],
+          "path": "artifacts/pivot/realfit2_corpus_manifest.json",
+          "sha256": "ebdd0ddfe8c54c61508a3d3d2a678a786a47fe098de72aa6c5e8ddcf4f0331f2"
+        },
+        {
+          "keys": [
+            "chunk_ids_with_rows",
+            "rows_per_chunk",
+            "per_family.*.n_new_chunks_with_rows",
+            "per_family.*.n_pool_chunks_with_rows_total",
+            "chunk_order_note"
+          ],
+          "path": "artifacts/pivot/realfit3_corpus_manifest.json",
+          "sha256": "152dd7c2c64197a43e4a203ffe09c86361371c1be190204936a4e8f7702a9352"
+        }
+      ],
+      "n_boot": null,
+      "rule": "all-five rung minus F's plaintexts and rows; scored sizes are the extension manifest's",
+      "seed": null,
+      "value": {
+        "c_src": {
+          "fit_rows": {
+            "k0": 25821,
+            "k1": 51491,
+            "k3": 206010
+          },
+          "scored_chunks_with_rows": 300,
+          "scored_rows": 7800,
+          "seen_plaintexts": {
+            "k0": 1005,
+            "k1": 2010,
+            "k3": 8040
+          }
+        },
+        "pe_bin": {
+          "fit_rows": {
+            "k0": 21219,
+            "k1": 42197,
+            "k3": 169011
+          },
+          "scored_chunks_with_rows": 288,
+          "scored_rows": 7407,
+          "seen_plaintexts": {
+            "k0": 826,
+            "k1": 1652,
+            "k3": 6608
+          }
+        },
+        "py_src": {
+          "fit_rows": {
+            "k0": 9179,
+            "k1": 18278,
+            "k3": 73205
+          },
+          "scored_chunks_with_rows": 300,
+          "scored_rows": 7709,
+          "seen_plaintexts": {
+            "k0": 357,
+            "k1": 714,
+            "k3": 2856
+          }
+        },
+        "rfc_txt": {
+          "fit_rows": {
+            "k0": 24081,
+            "k1": 48010,
+            "k3": 192254
+          },
+          "scored_chunks_with_rows": 300,
+          "scored_rows": 7761,
+          "seen_plaintexts": {
+            "k0": 939,
+            "k1": 1878,
+            "k3": 7512
+          }
+        },
+        "rst_doc": {
+          "fit_rows": {
+            "k0": 25380,
+            "k1": 50552,
+            "k3": 202400
+          },
+          "scored_chunks_with_rows": 300,
+          "scored_rows": 7775,
+          "seen_plaintexts": {
+            "k0": 989,
+            "k1": 1978,
+            "k3": 7912
+          }
+        }
+      },
+      "value_full": {
+        "c_src": {
+          "fit_rows": {
+            "k0": 25821,
+            "k1": 51491,
+            "k3": 206010
+          },
+          "scored_chunks_with_rows": 300,
+          "scored_rows": 7800,
+          "seen_plaintexts": {
+            "k0": 1005,
+            "k1": 2010,
+            "k3": 8040
+          }
+        },
+        "pe_bin": {
+          "fit_rows": {
+            "k0": 21219,
+            "k1": 42197,
+            "k3": 169011
+          },
+          "scored_chunks_with_rows": 288,
+          "scored_rows": 7407,
+          "seen_plaintexts": {
+            "k0": 826,
+            "k1": 1652,
+            "k3": 6608
+          }
+        },
+        "py_src": {
+          "fit_rows": {
+            "k0": 9179,
+            "k1": 18278,
+            "k3": 73205
+          },
+          "scored_chunks_with_rows": 300,
+          "scored_rows": 7709,
+          "seen_plaintexts": {
+            "k0": 357,
+            "k1": 714,
+            "k3": 2856
+          }
+        },
+        "rfc_txt": {
+          "fit_rows": {
+            "k0": 24081,
+            "k1": 48010,
+            "k3": 192254
+          },
+          "scored_chunks_with_rows": 300,
+          "scored_rows": 7761,
+          "seen_plaintexts": {
+            "k0": 939,
+            "k1": 1878,
+            "k3": 7512
+          }
+        },
+        "rst_doc": {
+          "fit_rows": {
+            "k0": 25380,
+            "k1": 50552,
+            "k3": 202400
+          },
+          "scored_chunks_with_rows": 300,
+          "scored_rows": 7775,
+          "seen_plaintexts": {
+            "k0": 989,
+            "k1": 1978,
+            "k3": 7912
+          }
+        }
+      },
+      "what": "per held-out family F: seen plaintexts and fit rows at k = 0, 1, 3 (the all-five rung with F's rows deleted), and F's scored rows and chunks"
+    },
+    "k4_impossible": {
+      "brief_sections": [
+        "3"
+      ],
+      "brief_value": "c_src needs 384 and the pools hold 185 + 198 = 383",
+      "equals_brief": true,
+      "function": "tools/prereg_gen/0026/bank_design_numbers.py:rung_sizes (counting over the manifests' chunk_ids_with_rows and rows_per_chunk)",
+      "inputs": [
+        {
+          "keys": [
+            "base_chunks_with_rows_0021",
+            "chunk_ids_with_rows",
+            "rows_per_chunk",
+            "per_family.*.n_chunks_with_rows",
+            "chunk_order_note"
+          ],
+          "path": "artifacts/pivot/realfit2_corpus_manifest.json",
+          "sha256": "ebdd0ddfe8c54c61508a3d3d2a678a786a47fe098de72aa6c5e8ddcf4f0331f2"
+        },
+        {
+          "keys": [
+            "chunk_ids_with_rows",
+            "rows_per_chunk",
+            "per_family.*.n_new_chunks_with_rows",
+            "per_family.*.n_pool_chunks_with_rows_total",
+            "chunk_order_note"
+          ],
+          "path": "artifacts/pivot/realfit3_corpus_manifest.json",
+          "sha256": "152dd7c2c64197a43e4a203ffe09c86361371c1be190204936a4e8f7702a9352"
+        }
+      ],
+      "n_boot": null,
+      "note": "every family is short at k = 4, not only c_src: c_src 384 against 383, pe_bin 3248 against 3176, py_src 10752 against 10522, rfc_txt 1440 against 1424, rst_doc 640 against 638",
+      "rule": "needed = 16 x base_chunks_with_rows_0021; in_pools = realfit2 chunks with rows + realfit3 new chunks with rows",
+      "seed": null,
+      "value": {
+        "c_src": {
+          "in_pools": 383,
+          "needed": 384,
+          "short_by": 1
+        },
+        "pe_bin": {
+          "in_pools": 3176,
+          "needed": 3248,
+          "short_by": 72
+        },
+        "py_src": {
+          "in_pools": 10522,
+          "needed": 10752,
+          "short_by": 230
+        },
+        "rfc_txt": {
+          "in_pools": 1424,
+          "needed": 1440,
+          "short_by": 16
+        },
+        "rst_doc": {
+          "in_pools": 638,
+          "needed": 640,
+          "short_by": 2
+        }
+      },
+      "value_full": {
+        "c_src": {
+          "in_pools": 383,
+          "needed": 384,
+          "short_by": 1
+        },
+        "pe_bin": {
+          "in_pools": 3176,
+          "needed": 3248,
+          "short_by": 72
+        },
+        "py_src": {
+          "in_pools": 10522,
+          "needed": 10752,
+          "short_by": 230
+        },
+        "rfc_txt": {
+          "in_pools": 1424,
+          "needed": 1440,
+          "short_by": 16
+        },
+        "rst_doc": {
+          "in_pools": 638,
+          "needed": 640,
+          "short_by": 2
+        }
+      },
+      "what": "rung k = 4 needs 16 n_g plaintexts per family; the two pools hold fewer for every family"
+    },
+    "label_prior_bound": {
+      "brief_sections": [
+        "7"
+      ],
+      "brief_value": "0.038916 (py_src), 0.000454, under 0.00016 per doubling; 1473 of 1488 chunks carry all 26 rows (38298 rows)",
+      "equals_brief": false,
+      "function": "tools/pivot/run_realfit.py:_array_sha (hash check); numpy bincount",
+      "inputs": [
+        {
+          "keys": [
+            "arrays.y",
+            "arrays.g",
+            "arrays.fam",
+            "families"
+          ],
+          "path": "artifacts/pivot/ext_corpus_manifest.json",
+          "sha256": "143100fba6dc2b8890947021d211fdc4d0e6f9fcb0eb9a56f426a39dbd033923"
+        },
+        {
+          "keys": [
+            "y",
+            "g",
+            "fam"
+          ],
+          "path": "data/pivot/ext_c4096.npz",
+          "sha256": "9dea132a603d7ce2d25726ab27afce8f911539ea448f28861158c814c7939d6d"
+        }
+      ],
+      "n_boot": null,
+      "note": "the brief's 'under 0.00016 per doubling' divided the level by the 3 doublings spanned (0.000151); the largest OLS slope over k = {0, 1, 3} of a level confined to a band of that width is 5/14 of it, 0.000162, which is not under 0.00016",
+      "rule": "per family max_c count(y = c) / n_rows; level bound = max - 1/26; slope bound = level bound x the sum of the positive OLS weights (x - mean) / Sxx over x = {0, 1, 3}, i.e. 5/14 of it",
+      "seed": null,
+      "value": {
+        "chance": 0.038462,
+        "chunks_with_all_26_rows": 1473,
+        "family": "py_src",
+        "level_bound": 0.000454,
+        "max_family_label_frequency": 0.038916,
+        "real_chunks": 1488,
+        "rows_in_complete_chunks": 38298,
+        "slope_bound_per_doubling": 0.000162
+      },
+      "value_full": {
+        "chance": 0.038462,
+        "chunks_with_all_26_rows": 1473,
+        "family": "py_src",
+        "level_bound": 0.000454,
+        "max_family_label_frequency": 0.038916,
+        "per_family_max_label_frequency": {
+          "c_src": 0.03846154,
+          "pe_bin": 0.03888214,
+          "py_src": 0.03891555,
+          "rfc_txt": 0.03865481,
+          "rst_doc": 0.03858521
+        },
+        "real_chunks": 1488,
+        "rows_in_complete_chunks": 38298,
+        "slope_bound_endpoint_over_3": 0.00015134,
+        "slope_bound_ols": 0.00016215,
+        "slope_bound_per_doubling": 0.000162
+      },
+      "what": "largest per-family label frequency on the real rows, the level a prior-only rule can move, its bound per doubling over k = {0, 1, 3}, and the chunks that carry all 26 rows"
+    },
+    "oc_standard_error": {
+      "brief_sections": [
+        "6"
+      ],
+      "brief_value": "0.00064",
+      "equals_brief": true,
+      "function": "half_width / 1.96",
+      "inputs": [
+        {
+          "keys": [
+            "slope_bootstrap.model.n_boot",
+            "slope_bootstrap.model.seed"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "per_example.s4_model",
+            "per_example.r5_model",
+            "per_example.r7_model",
+            "ext_chunk_ids",
+            "ext_fam",
+            "ext_families",
+            "n_eval_rows"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096_scores.json",
+          "sha256": "7ff27c601bf448b776e17b67c3ead91c08a72e78c301b653d47a4df5023e64b3"
+        }
+      ],
+      "n_boot": 2000,
+      "rule": "from proxy_real_s4_anchored_slope",
+      "seed": 20260917,
+      "value": 0.00064,
+      "value_full": 0.00064133,
+      "what": "standard error of T under the normal approximation: the real proxy's 95% half-width / 1.96"
+    },
+    "oob_vectors_aligned": {
+      "brief_sections": [
+        "5"
+      ],
+      "brief_value": "chunk ids and families equal 0024's",
+      "equals_brief": true,
+      "function": "list equality",
+      "inputs": [
+        {
+          "keys": [
+            "ext_chunk_ids",
+            "ext_fam",
+            "ext_families",
+            "n_ext_rows"
+          ],
+          "path": "artifacts/pivot/oob_4096_scores.json",
+          "sha256": "e37670585e53ef521828cfb1996bcaa4121a5ab91dadcd164536db5427a2daf0"
+        },
+        {
+          "keys": [
+            "ext_chunk_ids",
+            "ext_fam",
+            "ext_families",
+            "n_ext_rows"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096_scores.json",
+          "sha256": "7ff27c601bf448b776e17b67c3ead91c08a72e78c301b653d47a4df5023e64b3"
+        }
+      ],
+      "n_boot": null,
+      "rule": "element-for-element equality of the two files' ext_chunk_ids, ext_fam and ext_families",
+      "seed": null,
+      "value": true,
+      "value_full": {
+        "ext_chunk_ids_equal": true,
+        "ext_chunk_ids_sha256": "c22e5e24cccd0c30180125fede483331435bc41d16e79958f5b62de30a9baa65",
+        "ext_fam_and_families_equal": true,
+        "ext_fam_sha256": "5a51510d4be69494d35b55e79d19f2709567a05a9d2d6639525d349b50ababae",
+        "n_ext_rows_equal": true
+      },
+      "what": "0018's per-example vectors (oob_4096_scores.json) carry the same extension chunk ids and families, row for row, as 0024's"
+    },
+    "operating_characteristics": {
+      "brief_sections": [
+        "6"
+      ],
+      "brief_value": "section 6 table; NOT_RESOLVED about 0.000",
+      "equals_brief": true,
+      "function": "tools/prereg_gen/0026/bank_design_numbers.py:reading_probabilities (statistics.NormalDist)",
+      "inputs": [
+        {
+          "keys": [
+            "slope_bootstrap.model.n_boot",
+            "slope_bootstrap.model.seed"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "per_example.s4_model",
+            "per_example.r5_model",
+            "per_example.r7_model",
+            "ext_chunk_ids",
+            "ext_fam",
+            "ext_families",
+            "n_eval_rows"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096_scores.json",
+          "sha256": "7ff27c601bf448b776e17b67c3ead91c08a72e78c301b653d47a4df5023e64b3"
+        }
+      ],
+      "n_boot": null,
+      "rule": "segments between the rule's thresholds on T, each read by the rule at its midpoint",
+      "seed": null,
+      "value": {
+        "0.0": {
+          "TRANSFER_BELOW_RATE": 0.02,
+          "TRANSFER_FALLS": 0.02,
+          "TRANSFER_FLAT": 0.95,
+          "TRANSFER_NOT_RESOLVED": 0.0,
+          "TRANSFER_RISES": 0.0
+        },
+        "0.0015": {
+          "TRANSFER_BELOW_RATE": 0.65,
+          "TRANSFER_FALLS": 0.0,
+          "TRANSFER_FLAT": 0.35,
+          "TRANSFER_NOT_RESOLVED": 0.0,
+          "TRANSFER_RISES": 0.0
+        },
+        "0.0025": {
+          "TRANSFER_BELOW_RATE": 0.97,
+          "TRANSFER_FALLS": 0.0,
+          "TRANSFER_FLAT": 0.03,
+          "TRANSFER_NOT_RESOLVED": 0.0,
+          "TRANSFER_RISES": 0.0
+        },
+        "0.0035": {
+          "TRANSFER_BELOW_RATE": 0.99,
+          "TRANSFER_FALLS": 0.0,
+          "TRANSFER_FLAT": 0.0,
+          "TRANSFER_NOT_RESOLVED": 0.0,
+          "TRANSFER_RISES": 0.01
+        },
+        "0.005": {
+          "TRANSFER_BELOW_RATE": 0.5,
+          "TRANSFER_FALLS": 0.0,
+          "TRANSFER_FLAT": 0.0,
+          "TRANSFER_NOT_RESOLVED": 0.0,
+          "TRANSFER_RISES": 0.5
+        },
+        "0.0065": {
+          "TRANSFER_BELOW_RATE": 0.01,
+          "TRANSFER_FALLS": 0.0,
+          "TRANSFER_FLAT": 0.0,
+          "TRANSFER_NOT_RESOLVED": 0.0,
+          "TRANSFER_RISES": 0.99
+        }
+      },
+      "value_full": {
+        "0.0": {
+          "TRANSFER_BELOW_RATE": 0.024998,
+          "TRANSFER_FALLS": 0.024998,
+          "TRANSFER_FLAT": 0.950004,
+          "TRANSFER_NOT_RESOLVED": 0.0,
+          "TRANSFER_RISES": 0.0
+        },
+        "0.0015": {
+          "TRANSFER_BELOW_RATE": 0.64762,
+          "TRANSFER_FALLS": 9e-06,
+          "TRANSFER_FLAT": 0.352372,
+          "TRANSFER_NOT_RESOLVED": 0.0,
+          "TRANSFER_RISES": 0.0
+        },
+        "0.0025": {
+          "TRANSFER_BELOW_RATE": 0.97365,
+          "TRANSFER_FALLS": 0.0,
+          "TRANSFER_FLAT": 0.026301,
+          "TRANSFER_NOT_RESOLVED": 0.0,
+          "TRANSFER_RISES": 4.8e-05
+        },
+        "0.0035": {
+          "TRANSFER_BELOW_RATE": 0.990095,
+          "TRANSFER_FALLS": 0.0,
+          "TRANSFER_FLAT": 0.000235,
+          "TRANSFER_NOT_RESOLVED": 0.0,
+          "TRANSFER_RISES": 0.00967
+        },
+        "0.005": {
+          "TRANSFER_BELOW_RATE": 0.5,
+          "TRANSFER_FALLS": 0.0,
+          "TRANSFER_FLAT": 0.0,
+          "TRANSFER_NOT_RESOLVED": 0.0,
+          "TRANSFER_RISES": 0.5
+        },
+        "0.0065": {
+          "TRANSFER_BELOW_RATE": 0.00967,
+          "TRANSFER_FALLS": 0.0,
+          "TRANSFER_FLAT": 0.0,
+          "TRANSFER_NOT_RESOLVED": 0.0,
+          "TRANSFER_RISES": 0.99033
+        }
+      },
+      "what": "probability of each verdict at six true slopes: T ~ N(true, se), interval T -/+ half-width, the ordered rule of section 1"
+    },
+    "positive_control_lead_r7_model_minus_logistic": {
+      "brief_sections": [
+        "status",
+        "7"
+      ],
+      "brief_value": "[0.0001, 0.0077]",
+      "equals_brief": true,
+      "function": "tools/pivot/run_realcurve2.py:paired_lead_bootstrap (point: difference of 4-decimal accuracies)",
+      "inputs": [
+        {
+          "keys": [
+            "slope_bootstrap.model.n_boot",
+            "slope_bootstrap.model.seed"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "lead_at_top.r7_model_minus_logistic"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "per_example.r7_model",
+            "per_example.r7_logistic",
+            "ext_chunk_ids",
+            "ext_fam",
+            "ext_families",
+            "n_eval_rows"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096_scores.json",
+          "sha256": "7ff27c601bf448b776e17b67c3ead91c08a72e78c301b653d47a4df5023e64b3"
+        }
+      ],
+      "n_boot": 2000,
+      "rule": "paired over the real chunks with the slope bootstrap's resamples; compared with the banked point and ci95 for exact equality",
+      "seed": 20260917,
+      "value": {
+        "ci95": [
+          0.0001,
+          0.0077
+        ],
+        "equals_banked": true,
+        "point": 0.0039
+      },
+      "value_full": {
+        "ci95": [
+          0.0001,
+          0.0077
+        ],
+        "half_width": 0.0038,
+        "n_chunks": 1488,
+        "point": 0.0039,
+        "share_of_resamples_above_zero": 0.976
+      },
+      "what": "reader positive control: 0024's lead of M4 over L3 at rung 7 on the real rows, recomputed"
+    },
+    "positive_control_model_slope_second_decade": {
+      "brief_sections": [
+        "status",
+        "7"
+      ],
+      "brief_value": "0.00697 [0.00571, 0.00824]",
+      "equals_brief": true,
+      "function": "tools/pivot/run_realcurve.py:slope_bootstrap (point: tools/pivot/run_realcurve.py:ols_slope on 4-decimal rung accuracies)",
+      "inputs": [
+        {
+          "keys": [
+            "slope_bootstrap.model.n_boot",
+            "slope_bootstrap.model.seed"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "log2_chunks_second_decade",
+            "model_slope_per_doubling",
+            "slope_bootstrap.model.ci95"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "per_example.r4_model",
+            "per_example.r5_model",
+            "per_example.r6_model",
+            "per_example.r7_model",
+            "ext_chunk_ids",
+            "ext_fam",
+            "ext_families",
+            "n_eval_rows"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096_scores.json",
+          "sha256": "7ff27c601bf448b776e17b67c3ead91c08a72e78c301b653d47a4df5023e64b3"
+        }
+      ],
+      "n_boot": 2000,
+      "rule": "x = 0024's log2_chunks_second_decade; real-family rows; compared with the banked point and ci95 for exact equality",
+      "seed": 20260917,
+      "value": {
+        "ci95": [
+          0.00571,
+          0.00824
+        ],
+        "equals_banked": true,
+        "point": 0.00697
+      },
+      "value_full": {
+        "ci95": [
+          0.00571,
+          0.00824
+        ],
+        "half_width": 0.001265,
+        "n_chunks": 1488,
+        "n_rows": 38452,
+        "point": 0.00697,
+        "rung_accuracies": [
+          0.1193,
+          0.1236,
+          0.13,
+          0.1404
+        ],
+        "x": [
+          10.007027,
+          11.007027,
+          12.007027,
+          13.007027
+        ]
+      },
+      "what": "reader positive control: 0024's model slope over rungs 4..7 on the 38452 real rows, recomputed from the banked vectors"
+    },
+    "proxy_one_fold_half_width": {
+      "brief_sections": [
+        "2",
+        "6"
+      ],
+      "brief_value": "0.00296, 0.00266, 0.00308, 0.00287, 0.00257 (range 0.0026 to 0.0031)",
+      "equals_brief": true,
+      "function": "tools/pivot/run_realcurve.py:slope_bootstrap (point: tools/pivot/run_realcurve.py:ols_slope on 4-decimal rung accuracies)",
+      "inputs": [
+        {
+          "keys": [
+            "slope_bootstrap.model.n_boot",
+            "slope_bootstrap.model.seed"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "per_example.s4_model",
+            "per_example.r5_model",
+            "per_example.r7_model",
+            "ext_chunk_ids",
+            "ext_fam",
+            "ext_families",
+            "n_eval_rows"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096_scores.json",
+          "sha256": "7ff27c601bf448b776e17b67c3ead91c08a72e78c301b653d47a4df5023e64b3"
+        }
+      ],
+      "n_boot": 2000,
+      "rule": "one family's rows; chunk_ids = that family's chunks",
+      "seed": 20260917,
+      "value": {
+        "c_src": 0.00296,
+        "pe_bin": 0.00266,
+        "py_src": 0.00308,
+        "range": [
+          0.0026,
+          0.0031
+        ],
+        "rfc_txt": 0.00287,
+        "rst_doc": 0.00257
+      },
+      "value_full": {
+        "c_src": {
+          "ci95": [
+            0.004271,
+            0.010186
+          ],
+          "half_width": 0.0029575,
+          "n_chunks": 300,
+          "n_rows": 7800,
+          "point": 0.007229,
+          "rung_accuracies": [
+            0.1264,
+            0.1312,
+            0.1476
+          ],
+          "x": [
+            0,
+            1,
+            3
+          ]
+        },
+        "pe_bin": {
+          "ci95": [
+            0.000621,
+            0.00595
+          ],
+          "half_width": 0.0026645,
+          "n_chunks": 288,
+          "n_rows": 7407,
+          "point": 0.00325,
+          "rung_accuracies": [
+            0.0998,
+            0.1013,
+            0.1092
+          ],
+          "x": [
+            0,
+            1,
+            3
+          ]
+        },
+        "py_src": {
+          "ci95": [
+            0.005257,
+            0.011414
+          ],
+          "half_width": 0.0030785,
+          "n_chunks": 300,
+          "n_rows": 7709,
+          "point": 0.008286,
+          "rung_accuracies": [
+            0.1302,
+            0.1397,
+            0.1553
+          ],
+          "x": [
+            0,
+            1,
+            3
+          ]
+        },
+        "rfc_txt": {
+          "ci95": [
+            0.006821,
+            0.012557
+          ],
+          "half_width": 0.002868,
+          "n_chunks": 300,
+          "n_rows": 7761,
+          "point": 0.009721,
+          "rung_accuracies": [
+            0.1193,
+            0.1212,
+            0.1469
+          ],
+          "x": [
+            0,
+            1,
+            3
+          ]
+        },
+        "rst_doc": {
+          "ci95": [
+            0.006242,
+            0.011386
+          ],
+          "half_width": 0.002572,
+          "n_chunks": 300,
+          "n_rows": 7775,
+          "point": 0.008786,
+          "rung_accuracies": [
+            0.1155,
+            0.1235,
+            0.1417
+          ],
+          "x": [
+            0,
+            1,
+            3
+          ]
+        }
+      },
+      "what": "95% half-width of one family's slope over {s4, r5, r7} at x = {0, 1, 3}, bootstrapped over that family's own chunks"
+    },
+    "proxy_real_s4_anchored_slope": {
+      "brief_sections": [
+        "5",
+        "6"
+      ],
+      "brief_value": "0.00749 [0.00624, 0.00876], half-width 0.00126",
+      "equals_brief": true,
+      "function": "tools/pivot/run_realcurve.py:slope_bootstrap (point: tools/pivot/run_realcurve.py:ols_slope on 4-decimal rung accuracies)",
+      "inputs": [
+        {
+          "keys": [
+            "slope_bootstrap.model.n_boot",
+            "slope_bootstrap.model.seed"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "per_example.s4_model",
+            "per_example.r5_model",
+            "per_example.r7_model",
+            "ext_chunk_ids",
+            "ext_fam",
+            "ext_families",
+            "n_eval_rows"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096_scores.json",
+          "sha256": "7ff27c601bf448b776e17b67c3ead91c08a72e78c301b653d47a4df5023e64b3"
+        }
+      ],
+      "n_boot": 2000,
+      "rule": "x = k; half-width = (hi - lo) / 2",
+      "seed": 20260917,
+      "value": {
+        "ci95": [
+          0.00624,
+          0.00876
+        ],
+        "half_width": 0.00126,
+        "point": 0.00749
+      },
+      "value_full": {
+        "ci95": [
+          0.006243,
+          0.008757
+        ],
+        "half_width": 0.001257,
+        "n_chunks": 1488,
+        "n_rows": 38452,
+        "point": 0.007486,
+        "rung_accuracies": [
+          0.1184,
+          0.1236,
+          0.1404
+        ],
+        "x": [
+          0,
+          1,
+          3
+        ]
+      },
+      "what": "s4-anchored in-distribution proxy: M4 slope over {s4, r5, r7} at x = {0, 1, 3} on the real rows (1488 chunks)"
+    },
+    "proxy_synthetic_s4_anchored_slope": {
+      "brief_sections": [
+        "6",
+        "9"
+      ],
+      "brief_value": "0.00490 [0.00371, 0.00619], half-width 0.00124",
+      "equals_brief": true,
+      "function": "tools/pivot/run_realcurve.py:slope_bootstrap (point: tools/pivot/run_realcurve.py:ols_slope on 4-decimal rung accuracies)",
+      "inputs": [
+        {
+          "keys": [
+            "slope_bootstrap.model.n_boot",
+            "slope_bootstrap.model.seed"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "per_example.s4_model",
+            "per_example.r5_model",
+            "per_example.r7_model",
+            "ext_chunk_ids",
+            "ext_fam",
+            "ext_families",
+            "n_eval_rows"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096_scores.json",
+          "sha256": "7ff27c601bf448b776e17b67c3ead91c08a72e78c301b653d47a4df5023e64b3"
+        }
+      ],
+      "n_boot": 2000,
+      "rule": "x = k; hexdump, sql and xml rows; half-width = (hi - lo) / 2",
+      "seed": 20260917,
+      "value": {
+        "ci95": [
+          0.00371,
+          0.00619
+        ],
+        "half_width": 0.00124,
+        "point": 0.0049
+      },
+      "value_full": {
+        "ci95": [
+          0.003707,
+          0.006186
+        ],
+        "half_width": 0.0012395,
+        "n_chunks": 899,
+        "n_rows": 22957,
+        "point": 0.0049,
+        "rung_accuracies": [
+          0.0846,
+          0.0865,
+          0.0987
+        ],
+        "x": [
+          0,
+          1,
+          3
+        ]
+      },
+      "what": "s4-anchored pilot on the never-fitted synthetic families: M4 slope over {s4, r5, r7} at x = {0, 1, 3} (899 chunks)"
+    },
+    "proxy_two_rung_half_width": {
+      "brief_sections": [
+        "6",
+        "12"
+      ],
+      "brief_value": "0.00123-0.00128",
+      "equals_brief": true,
+      "function": "tools/pivot/run_realcurve.py:slope_bootstrap (point: tools/pivot/run_realcurve.py:ols_slope on 4-decimal rung accuracies)",
+      "inputs": [
+        {
+          "keys": [
+            "slope_bootstrap.model.n_boot",
+            "slope_bootstrap.model.seed"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "per_example.s4_model",
+            "per_example.r7_model",
+            "ext_chunk_ids",
+            "ext_fam",
+            "ext_families",
+            "n_eval_rows"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096_scores.json",
+          "sha256": "7ff27c601bf448b776e17b67c3ead91c08a72e78c301b653d47a4df5023e64b3"
+        }
+      ],
+      "n_boot": 2000,
+      "rule": "x = {0, 3}",
+      "seed": 20260917,
+      "value": {
+        "real": 0.00123,
+        "synthetic": 0.00128
+      },
+      "value_full": {
+        "real": {
+          "ci95": [
+            0.006133,
+            0.0086
+          ],
+          "half_width": 0.0012335,
+          "n_chunks": 1488,
+          "n_rows": 38452,
+          "point": 0.007333,
+          "rung_accuracies": [
+            0.1184,
+            0.1404
+          ],
+          "x": [
+            0,
+            3
+          ]
+        },
+        "synthetic": {
+          "ci95": [
+            0.003467,
+            0.006033
+          ],
+          "half_width": 0.001283,
+          "n_chunks": 899,
+          "n_rows": 22957,
+          "point": 0.0047,
+          "rung_accuracies": [
+            0.0846,
+            0.0987
+          ],
+          "x": [
+            0,
+            3
+          ]
+        }
+      },
+      "what": "95% half-width of the slope over {s4, r7} at x = {0, 3} only (the k = 1 cut), real and synthetic rows"
+    },
+    "real_s4_minus_r4": {
+      "brief_sections": [
+        "6"
+      ],
+      "brief_value": "-0.0009 [-0.0048, 0.0027], half-width about 0.0038",
+      "equals_brief": true,
+      "function": "tools/pivot/run_realcurve2.py:paired_lead_bootstrap (point: difference of 4-decimal accuracies)",
+      "inputs": [
+        {
+          "keys": [
+            "slope_bootstrap.model.n_boot",
+            "slope_bootstrap.model.seed"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "per_example.s4_model",
+            "per_example.r4_model",
+            "ext_chunk_ids",
+            "ext_fam",
+            "ext_families",
+            "n_eval_rows"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096_scores.json",
+          "sha256": "7ff27c601bf448b776e17b67c3ead91c08a72e78c301b653d47a4df5023e64b3"
+        }
+      ],
+      "n_boot": 2000,
+      "rule": "half-width = (hi - lo) / 2",
+      "seed": 20260917,
+      "value": {
+        "ci95": [
+          -0.0048,
+          0.0027
+        ],
+        "half_width": 0.0038,
+        "point": -0.0009
+      },
+      "value_full": {
+        "ci95": [
+          -0.0048,
+          0.0027
+        ],
+        "half_width": 0.00375,
+        "n_chunks": 1488,
+        "point": -0.0009,
+        "share_of_resamples_above_zero": 0.3175
+      },
+      "what": "paired equal-count difference on the real rows: s4 (other projects) minus r4 (0021's block), M4"
+    },
+    "realfit3_share_of_k3_plaintexts": {
+      "brief_sections": [
+        "3"
+      ],
+      "brief_value": "about 8% (658 of 8232)",
+      "equals_brief": true,
+      "function": "tools/prereg_gen/0026/bank_design_numbers.py:rung_sizes (counting over the manifests' chunk_ids_with_rows and rows_per_chunk)",
+      "inputs": [
+        {
+          "keys": [
+            "base_chunks_with_rows_0021",
+            "chunk_ids_with_rows",
+            "rows_per_chunk",
+            "per_family.*.n_chunks_with_rows",
+            "chunk_order_note"
+          ],
+          "path": "artifacts/pivot/realfit2_corpus_manifest.json",
+          "sha256": "ebdd0ddfe8c54c61508a3d3d2a678a786a47fe098de72aa6c5e8ddcf4f0331f2"
+        },
+        {
+          "keys": [
+            "chunk_ids_with_rows",
+            "rows_per_chunk",
+            "per_family.*.n_new_chunks_with_rows",
+            "per_family.*.n_pool_chunks_with_rows_total",
+            "chunk_order_note"
+          ],
+          "path": "artifacts/pivot/realfit3_corpus_manifest.json",
+          "sha256": "152dd7c2c64197a43e4a203ffe09c86361371c1be190204936a4e8f7702a9352"
+        }
+      ],
+      "n_boot": null,
+      "rule": "realfit3 positions used at k = 3 / plaintexts at k = 3",
+      "seed": null,
+      "value": 0.08,
+      "value_full": 0.079932,
+      "what": "share of rung k = 3's plaintexts that come from realfit3"
+    },
+    "rotation_rows_ratio": {
+      "brief_sections": [
+        "2"
+      ],
+      "brief_value": "4.00x",
+      "equals_brief": true,
+      "function": "tools/prereg_gen/0026/bank_design_numbers.py:rung_sizes (counting over the manifests' chunk_ids_with_rows and rows_per_chunk)",
+      "inputs": [
+        {
+          "keys": [
+            "base_chunks_with_rows_0021",
+            "chunk_ids_with_rows",
+            "rows_per_chunk",
+            "per_family.*.n_chunks_with_rows",
+            "chunk_order_note"
+          ],
+          "path": "artifacts/pivot/realfit2_corpus_manifest.json",
+          "sha256": "ebdd0ddfe8c54c61508a3d3d2a678a786a47fe098de72aa6c5e8ddcf4f0331f2"
+        },
+        {
+          "keys": [
+            "chunk_ids_with_rows",
+            "rows_per_chunk",
+            "per_family.*.n_new_chunks_with_rows",
+            "per_family.*.n_pool_chunks_with_rows_total",
+            "chunk_order_note"
+          ],
+          "path": "artifacts/pivot/realfit3_corpus_manifest.json",
+          "sha256": "152dd7c2c64197a43e4a203ffe09c86361371c1be190204936a4e8f7702a9352"
+        }
+      ],
+      "n_boot": null,
+      "rule": "each family's rows are in four of the five folds",
+      "seed": null,
+      "value": {
+        "k0": 4.0,
+        "k1": 4.0,
+        "k3": 4.0
+      },
+      "value_full": {
+        "k0": 4.0,
+        "k1": 4.0,
+        "k3": 4.0
+      },
+      "what": "sum over the five folds of fit rows, over the all-five rung's rows, per rung"
+    },
+    "rungs_all_five": {
+      "brief_sections": [
+        "3"
+      ],
+      "brief_value": "1029/26420/0; 2058/52632/0; 8232/210720/658 (7/132/449/52/18)",
+      "equals_brief": true,
+      "function": "tools/prereg_gen/0026/bank_design_numbers.py:rung_sizes (counting over the manifests' chunk_ids_with_rows and rows_per_chunk)",
+      "inputs": [
+        {
+          "keys": [
+            "partition.shift_arm.rows_per_family",
+            "partition.shift_arm.n_rows",
+            "partition.shift_arm.chunks_sha256"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "base_chunks_with_rows_0021",
+            "chunk_ids_with_rows",
+            "rows_per_chunk",
+            "per_family.*.n_chunks_with_rows",
+            "chunk_order_note"
+          ],
+          "path": "artifacts/pivot/realfit2_corpus_manifest.json",
+          "sha256": "ebdd0ddfe8c54c61508a3d3d2a678a786a47fe098de72aa6c5e8ddcf4f0331f2"
+        },
+        {
+          "keys": [
+            "chunk_ids_with_rows",
+            "rows_per_chunk",
+            "per_family.*.n_new_chunks_with_rows",
+            "per_family.*.n_pool_chunks_with_rows_total",
+            "chunk_order_note"
+          ],
+          "path": "artifacts/pivot/realfit3_corpus_manifest.json",
+          "sha256": "152dd7c2c64197a43e4a203ffe09c86361371c1be190204936a4e8f7702a9352"
+        }
+      ],
+      "n_boot": null,
+      "rule": "per family g the first n_g * 2^k chunks with rows of realfit2's pool then realfit3's (chunk id ascending); rows summed from rows_per_chunk; k = 0 checked against 0024's s4 (rows per family and the sorted chunk-id digest)",
+      "seed": null,
+      "value": {
+        "k0": {
+          "plaintexts": 1029,
+          "plaintexts_per_family": {
+            "c_src": 24,
+            "pe_bin": 203,
+            "py_src": 672,
+            "rfc_txt": 90,
+            "rst_doc": 40
+          },
+          "realfit3_positions": 0,
+          "realfit3_positions_per_family": {
+            "c_src": 0,
+            "pe_bin": 0,
+            "py_src": 0,
+            "rfc_txt": 0,
+            "rst_doc": 0
+          },
+          "rows": 26420,
+          "rows_per_family": {
+            "c_src": 599,
+            "pe_bin": 5201,
+            "py_src": 17241,
+            "rfc_txt": 2339,
+            "rst_doc": 1040
+          }
+        },
+        "k1": {
+          "plaintexts": 2058,
+          "plaintexts_per_family": {
+            "c_src": 48,
+            "pe_bin": 406,
+            "py_src": 1344,
+            "rfc_txt": 180,
+            "rst_doc": 80
+          },
+          "realfit3_positions": 0,
+          "realfit3_positions_per_family": {
+            "c_src": 0,
+            "pe_bin": 0,
+            "py_src": 0,
+            "rfc_txt": 0,
+            "rst_doc": 0
+          },
+          "rows": 52632,
+          "rows_per_family": {
+            "c_src": 1141,
+            "pe_bin": 10435,
+            "py_src": 34354,
+            "rfc_txt": 4622,
+            "rst_doc": 2080
+          }
+        },
+        "k3": {
+          "plaintexts": 8232,
+          "plaintexts_per_family": {
+            "c_src": 192,
+            "pe_bin": 1624,
+            "py_src": 5376,
+            "rfc_txt": 720,
+            "rst_doc": 320
+          },
+          "realfit3_positions": 658,
+          "realfit3_positions_per_family": {
+            "c_src": 7,
+            "pe_bin": 132,
+            "py_src": 449,
+            "rfc_txt": 52,
+            "rst_doc": 18
+          },
+          "rows": 210720,
+          "rows_per_family": {
+            "c_src": 4710,
+            "pe_bin": 41709,
+            "py_src": 137515,
+            "rfc_txt": 18466,
+            "rst_doc": 8320
+          }
+        }
+      },
+      "value_full": {
+        "k0": {
+          "plaintexts": 1029,
+          "plaintexts_per_family": {
+            "c_src": 24,
+            "pe_bin": 203,
+            "py_src": 672,
+            "rfc_txt": 90,
+            "rst_doc": 40
+          },
+          "realfit3_positions": 0,
+          "realfit3_positions_per_family": {
+            "c_src": 0,
+            "pe_bin": 0,
+            "py_src": 0,
+            "rfc_txt": 0,
+            "rst_doc": 0
+          },
+          "rows": 26420,
+          "rows_per_family": {
+            "c_src": 599,
+            "pe_bin": 5201,
+            "py_src": 17241,
+            "rfc_txt": 2339,
+            "rst_doc": 1040
+          }
+        },
+        "k0_chunks_sha256": "e96399afd1b28d94d8e88d39363cea0aa1dddfad23480de7606b4ff90a4bfcd8",
+        "k0_equals_0024_s4": true,
+        "k1": {
+          "plaintexts": 2058,
+          "plaintexts_per_family": {
+            "c_src": 48,
+            "pe_bin": 406,
+            "py_src": 1344,
+            "rfc_txt": 180,
+            "rst_doc": 80
+          },
+          "realfit3_positions": 0,
+          "realfit3_positions_per_family": {
+            "c_src": 0,
+            "pe_bin": 0,
+            "py_src": 0,
+            "rfc_txt": 0,
+            "rst_doc": 0
+          },
+          "rows": 52632,
+          "rows_per_family": {
+            "c_src": 1141,
+            "pe_bin": 10435,
+            "py_src": 34354,
+            "rfc_txt": 4622,
+            "rst_doc": 2080
+          }
+        },
+        "k3": {
+          "plaintexts": 8232,
+          "plaintexts_per_family": {
+            "c_src": 192,
+            "pe_bin": 1624,
+            "py_src": 5376,
+            "rfc_txt": 720,
+            "rst_doc": 320
+          },
+          "realfit3_positions": 658,
+          "realfit3_positions_per_family": {
+            "c_src": 7,
+            "pe_bin": 132,
+            "py_src": 449,
+            "rfc_txt": 52,
+            "rst_doc": 18
+          },
+          "rows": 210720,
+          "rows_per_family": {
+            "c_src": 4710,
+            "pe_bin": 41709,
+            "py_src": 137515,
+            "rfc_txt": 18466,
+            "rst_doc": 8320
+          }
+        }
+      },
+      "what": "0026's all-five rungs k = 0, 1, 3: plaintexts, rows and realfit3 positions used, in total and per family"
+    },
+    "synthetic_first_decade_slope": {
+      "brief_sections": [
+        "9"
+      ],
+      "brief_value": "-0.00014 [-0.00121, 0.00108]",
+      "equals_brief": true,
+      "function": "tools/pivot/run_realcurve.py:slope_bootstrap (point: tools/pivot/run_realcurve.py:ols_slope on 4-decimal rung accuracies)",
+      "inputs": [
+        {
+          "keys": [
+            "slope_bootstrap.model.n_boot",
+            "slope_bootstrap.model.seed"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "log2_chunks"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "per_example.r1_model",
+            "per_example.r2_model",
+            "per_example.r3_model",
+            "per_example.r4_model",
+            "ext_chunk_ids",
+            "ext_fam",
+            "ext_families",
+            "n_eval_rows"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096_scores.json",
+          "sha256": "7ff27c601bf448b776e17b67c3ead91c08a72e78c301b653d47a4df5023e64b3"
+        }
+      ],
+      "n_boot": 2000,
+      "rule": "x = 0024's log2_chunks for rungs 1..4",
+      "seed": 20260917,
+      "value": {
+        "ci95": [
+          -0.00121,
+          0.00108
+        ],
+        "point": -0.00014
+      },
+      "value_full": {
+        "ci95": [
+          -0.001207,
+          0.001084
+        ],
+        "half_width": 0.0011455,
+        "n_chunks": 899,
+        "n_rows": 22957,
+        "point": -0.000142,
+        "rung_accuracies": [
+          0.0688,
+          0.0712,
+          0.0683,
+          0.0693
+        ],
+        "x": [
+          7.022368,
+          8.011227,
+          9.008429,
+          10.007027
+        ]
+      },
+      "what": "pilot: M4 slope over 0024's rungs 1..4 on the synthetic rows"
+    },
+    "synthetic_r7_minus_0018_builder_model": {
+      "brief_sections": [
+        "9"
+      ],
+      "brief_value": "+0.0006 [-0.0034, 0.0044]",
+      "equals_brief": true,
+      "function": "tools/pivot/run_realcurve2.py:paired_lead_bootstrap (point: difference of 4-decimal accuracies)",
+      "inputs": [
+        {
+          "keys": [
+            "per_example.model",
+            "ext_chunk_ids",
+            "ext_fam",
+            "ext_families",
+            "n_eval_rows"
+          ],
+          "path": "artifacts/pivot/oob_4096_scores.json",
+          "sha256": "e37670585e53ef521828cfb1996bcaa4121a5ab91dadcd164536db5427a2daf0"
+        },
+        {
+          "keys": [
+            "slope_bootstrap.model.n_boot",
+            "slope_bootstrap.model.seed"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "per_example.r7_model",
+            "ext_chunk_ids",
+            "ext_fam",
+            "ext_families",
+            "n_eval_rows"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096_scores.json",
+          "sha256": "7ff27c601bf448b776e17b67c3ead91c08a72e78c301b653d47a4df5023e64b3"
+        }
+      ],
+      "n_boot": 2000,
+      "rule": "paired; 0018's vector is aligned row for row with 0024's (see checks)",
+      "seed": 20260917,
+      "value": {
+        "ci95": [
+          -0.0034,
+          0.0044
+        ],
+        "point": 0.0006
+      },
+      "value_full": {
+        "ci95": [
+          -0.0034,
+          0.004402
+        ],
+        "half_width": 0.003901,
+        "n_chunks": 899,
+        "point": 0.0006,
+        "share_of_resamples_above_zero": 0.624
+      },
+      "what": "pilot: 0024's r7 M4 minus 0018's builder-fitted M4 on the synthetic rows"
+    },
+    "synthetic_s4_minus_r4": {
+      "brief_sections": [
+        "9"
+      ],
+      "brief_value": "+0.0153 [0.0115, 0.0192]",
+      "equals_brief": true,
+      "function": "tools/pivot/run_realcurve2.py:paired_lead_bootstrap (point: difference of 4-decimal accuracies)",
+      "inputs": [
+        {
+          "keys": [
+            "slope_bootstrap.model.n_boot",
+            "slope_bootstrap.model.seed"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "per_example.s4_model",
+            "per_example.r4_model",
+            "ext_chunk_ids",
+            "ext_fam",
+            "ext_families",
+            "n_eval_rows"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096_scores.json",
+          "sha256": "7ff27c601bf448b776e17b67c3ead91c08a72e78c301b653d47a4df5023e64b3"
+        }
+      ],
+      "n_boot": 2000,
+      "rule": "paired",
+      "seed": 20260917,
+      "value": {
+        "ci95": [
+          0.0115,
+          0.0192
+        ],
+        "point": 0.0153
+      },
+      "value_full": {
+        "ci95": [
+          0.0115,
+          0.0192
+        ],
+        "half_width": 0.00385,
+        "n_chunks": 899,
+        "point": 0.0153,
+        "share_of_resamples_above_zero": 1.0
+      },
+      "what": "pilot: s4 minus r4 on the synthetic rows (other projects against the pinned files at equal count), M4"
+    },
+    "synthetic_second_decade_r4_anchored_slope": {
+      "brief_sections": [
+        "5",
+        "9"
+      ],
+      "brief_value": "0.00977 [0.0086, 0.011]",
+      "equals_brief": true,
+      "function": "tools/pivot/run_realcurve.py:slope_bootstrap (point: tools/pivot/run_realcurve.py:ols_slope on 4-decimal rung accuracies)",
+      "inputs": [
+        {
+          "keys": [
+            "slope_bootstrap.model.n_boot",
+            "slope_bootstrap.model.seed"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "log2_chunks_second_decade"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096.json",
+          "sha256": "f0b6aa152e2794593e1b7ed2c3d40258d4833866e7d232e5678afd3764ac1bac"
+        },
+        {
+          "keys": [
+            "per_example.r4_model",
+            "per_example.r5_model",
+            "per_example.r6_model",
+            "per_example.r7_model",
+            "ext_chunk_ids",
+            "ext_fam",
+            "ext_families",
+            "n_eval_rows"
+          ],
+          "path": "artifacts/pivot/realcurve2_4096_scores.json",
+          "sha256": "7ff27c601bf448b776e17b67c3ead91c08a72e78c301b653d47a4df5023e64b3"
+        }
+      ],
+      "n_boot": 2000,
+      "rule": "x = 0024's log2_chunks_second_decade",
+      "seed": 20260917,
+      "value": {
+        "ci95": [
+          0.0086,
+          0.011
+        ],
+        "point": 0.00977
+      },
+      "value_full": {
+        "ci95": [
+          0.0086,
+          0.011
+        ],
+        "half_width": 0.0012,
+        "n_chunks": 899,
+        "n_rows": 22957,
+        "point": 0.00977,
+        "rung_accuracies": [
+          0.0693,
+          0.0865,
+          0.096,
+          0.0987
+        ],
+        "x": [
+          10.007027,
+          11.007027,
+          12.007027,
+          13.007027
+        ]
+      },
+      "what": "pilot: M4 slope over 0024's rungs 4..7 (0024's construction, r4-anchored) on the synthetic rows"
+    }
+  },
+  "schema": "raise-v1/design_0026_numbers/1",
+  "status": "design numbers for an unfrozen, unwritten preregistration; informational; computed 2026-10-21 from banked vectors"
+}
