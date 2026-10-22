@@ -19,6 +19,983 @@ Format:
 
 ---
 
+## 2026-10-22 — Published 0022's, 0023's and 0024's real-file readings in words their readers did not emit: a recipe and a rule that are "the same rule", a scaling thesis that "holds on real files", and a model that "still leads" a "hand-writable" rule
+
+**Claimed:**
+
+- **0022.** "Searched on real content, the best boosted recipe and the best linear rule are the same rule." (`outbound/ONE_PAGER.md`). The same reading appears in four more places:
+  - "**Searched on real content, the boosted recipe and the linear rule are the same rule.**" (`outbound/EVIDENCE_BRIEF.md`, a bold lead);
+  - "On real content a searched boosted model and a searched linear rule are the same rule." (`README.md`);
+  - "On real content, a searched boosted model and a searched linear rule are the same rule." (`VERDICT.md`);
+  - "On real content the boosted model and the linear rule are the same rule, and we said in advance the run would probably say so." (`outbound/NARRATIVE.md`).
+
+  The evidence page's 0022 panel says "Searched on real files, the boosted recipe and the linear rule are the same rule" (`tools/render/evidence_page.py`). `VERDICT.md`'s 0022 "What it means" says "a rule a person could write by hand — now a searched linear one — gets essentially all of it".
+- **0023, the thesis.** "The budget excuse is answered on this content: the record's scaling thesis holds on real files, and what grows fastest with real data is the hand-writable rule." (`outbound/EVIDENCE_BRIEF.md`). The same claim appears in three more places:
+  - "What it means: the record's scaling thesis holds on real files, and what grows fastest with real data is the hand-writable rule." (`docs/DILIGENCE.md`);
+  - "so the record's scaling thesis holds on real files" (`VERDICT.md`);
+  - "and what grows fastest is the hand-writable rule." (`README.md`).
+
+  `VERDICT.md`'s 0023 section opens "— and the hand-writable linear rule rises faster."
+- **0023, the reverse curve.** "On the builder's own evaluation set the model's curve is flat (0.000222): more real plaintexts do not move a reading on content the model was not fitted on." (`docs/DILIGENCE.md`). `VERDICT.md` has "more real plaintexts do not move the reading on content the model was not fitted on — 0018's transfer finding from the other side." The pass did not list this sentence. The same commits changed it, so it is filed here.
+- **0024, the lead.** "The second decade of real plaintexts rises — and the boosted model still leads the hand-writable linear rule at the top rung." It appears:
+  - in `outbound/ONE_PAGER.md`;
+  - in bold in `outbound/EVIDENCE_BRIEF.md`;
+  - as the lead sentence of `VERDICT.md`'s 0024 section.
+
+  The same clause follows the verdict string `SECOND_DECADE_RISES_MODEL_LEADS` in three more places: `README.md`'s headline, the brief's summary bullet and `VERDICT.md`'s Passed table. `VERDICT.md` also has the heading "**The boosted model still leads the hand-writable linear rule at the top rung.**" `docs/DILIGENCE.md` answers "**Yes — and the boosted model still leads the linear rule**". The evidence page's `_lead_sentence` renders "the boosted model still leads the hand-writable linear rule", and so would its 0025 panel's `_lead_sentence3` (`tools/render/evidence_page.py`).
+- **0024, the meaning.** "Other files of the same kinds keep buying the recipe the record's rate on the files it is scored on, through 8232 plaintexts (eight times 0021's), so the budget excuse is answered a second time on real content, this time with other files; at eight times 0021's plaintexts the boosted recipe still leads a rule a person can write out on the record's own real content, by 0.0039". It appears in five files: `outbound/NARRATIVE.md`, `README.md`, `VERDICT.md` (after "**What it means.**"), `docs/DILIGENCE.md` (after "What it means:", in lower case) and `outbound/EVIDENCE_BRIEF.md` (in its 0024 paragraph). Its second half stands alone in `outbound/ONE_PAGER.md`.
+
+All of this was first published on 2026-09-17: c855ede for 0022, 216fd60 for 0023 and cad24ab for 0024, whose preregistration's question wording dates from its pre-freeze commit a50a2e9 the same day. The exception is the 0025 panel's `_lead_sentence3`, written on 2026-09-23 (1b46b41) in a guarded panel that has never rendered, because 0025 has not run.
+
+**Actual:**
+
+- **0022** (`artifacts/pivot/realsearch_4096_verdict.json`):
+  - The selected model is a boosted tree (`flags.fit_info_by_family.model` "hgb") at 0.1189. The selected logistic reads 0.1182.
+  - The searched margin is 0.0007, at 0021's budget of 26346 rows from 1029 plaintexts.
+  - The selected logistic (L5) is a 26-class linear model over 1108 features (`realsearch_4096.json`, `n_features`).
+  - 0022 banks no paired interval on the difference. Its informational per-model intervals overlap: [0.1159, 0.1218] for the model and [0.1152, 0.1211] for the logistic (`realsearch_4096.json`, `cluster_ci95_informational`).
+
+  These are two model classes 0.0007 apart, not one rule.
+- **0023** (`realcurve_4096_verdict.json`):
+  - `REAL_CURVE_RISES` is a pass of the slope clause and of nothing else: the model's 0.007344 per doubling (scored-chunk interval [0.006199, 0.00846]) against 0.005.
+  - The span is 2.984659 doublings. 0023's preregistration puts that at 0.8985 of a decade and says "It cannot reach 0003's two-decade scope rule and says so."
+  - Its reader reads the pass as "a rise to 0021's failing reading, never 'more real data fixes the model'": 0.1193 against 0.1429 needed.
+  - `informational_only` calls the run "an in-distribution reading on real content whose top rung fails the record's margin".
+  - What grows fastest over those four rungs is the standardised logistic, at 0.009551 per doubling. Model minus logistic is -0.002207 (paired interval [-0.003707, -0.000752]).
+  - In 0024's second decade the difference is not resolved: 0.00059, [-0.00102, 0.00231].
+- **0023's reverse curve.** The same `informational_only` puts "the reverse curves on the builder's evaluation set" among the readings that are "not a verdict, not quotable as a pass". The readings on that set:
+  - Over 0023's rungs the model's reading moved 0.000222 per doubling and the depth-3 tree's 0.009842 (`curves.*.builder_eval_slope_per_doubling`).
+  - Over 0024's second decade the model's moved 0.00231 (`realcurve2_4096_verdict.json`, `flags.builder_eval_slope_per_doubling_second_decade`).
+  - On the extension corpus's synthetic families the model went from 0.0693 at rung 4 to 0.0987 at rung 7 (`ext_subsets`).
+
+  One informational slope over one decade was published as a general statement.
+- **0024, the lead** (`realcurve2_4096_verdict.json`):
+  - `MODEL_LEADS` at the top rung stands: 0.0039, paired interval [0.0001, 0.0077]. The reader's `meaning` says the intervals are "over the scored chunks only and do not resample the fit side".
+  - "Still" does not stand. `flags.model_leads_logistic_at_every_rung` is false.
+  - At rung 4 the lead is 0.0014, [-0.002303, 0.0047], `NO_SEPARATION`.
+  - At rungs 5 and 6 the model reads below the logistic: 0.1236 against 0.1241, and 0.13 against 0.1321.
+  - Over both decades the logistic rose faster (`both_decades_slope_per_doubling` 0.008166 against 0.006645).
+- **0024, the rule.**
+  - The model leads a standardised logistic regression over 1108 features (`realcurve2_4096.json`, `corpus.n_features`) and 26 classes.
+  - The record's own rule "a person could write by hand" is 0021's depth-3 tree (`outbound/ONE_PAGER.md`: "a margin of 0.0264 over a rule a person could write by hand").
+  - `prereg_interpretation.json` says even a depth-16 tree "is not a rule a person writes by hand".
+- **0024's sealed text.**
+  - "The record's rate" is defined only inside 0024's preregistration, as 0.005 per doubling, "never 0023's measured 0.007344".
+  - The same preregistration seals that "the second-minus-first-decade slope is quoted in the same sentence as any pass". For the model that slope is -0.000374 (`flags.second_minus_first_decade_slope`), and no published document quoted it.
+  - The top rung against 0021's bar re-applied: 0.1404 against 0.1419 needed with the tree as floor, and 0.1865 needed with the higher of tree and logistic as floor. The tree-floor flag is informational and "can only be optimistic". Only `docs/DILIGENCE.md`, `VERDICT.md`'s 0024 section and the evidence page stated either reading.
+
+**Size:** No banked number moves, and every verdict string stands. What moved is what the sentences say about the numbers, in every document that publishes 0022 to 0024. Four of the errors flatter us:
+
+- a lead read at one rung was published as continuous;
+- a 26-class linear model over 1108 features was published as a rule a person writes;
+- a slope-clause pass over 0.8985 of a decade was published as the record's scaling thesis holding;
+- one informational slope was published as a general statement about content the model was not fitted on.
+
+"The same rule" was wrong in kind: it called two model classes one rule. They differ by 0.0007, a difference 0022 does not resolve, so the direction of this error is not established. Every publication of 0024's pass also broke one of 0024's own sealed publication rules.
+
+**Cause:** The published sentences took the preregistrations' question words as the answers' words.
+
+- 0024's title asks "does the boosted model keep its lead over a hand-writable linear rule". Its sealed text says "a rule a person can write out" and "the record's rate". Those phrases were sealed to frame a question. `docs/OPERATING_RULES.md` §3 says frozen text is no licence for a flattering reading.
+- The verdict suffix `MODEL_LEADS` reads one rung. The prose added "still".
+- 0023's "What it means" was written in the voice of the pass, not in the voice of the reader's `meaning`, which bounds it. Its informational reverse curve was written up as a finding.
+- No gate compares a published reading with its reader's `meaning`, and no draft was checked against 0024's sealed same-sentence rule.
+
+**Fix:** The applied commits rewrote these sentences in place:
+
+- **0022.**
+  - `README.md` (aabcdb3) and `VERDICT.md` (8ebd2d4) say that at this budget the two "score 0.0007 apart".
+  - The one-pager (b3ff1bf) says they "finish 0.0007 apart" at 0021's budget.
+  - NARRATIVE (8ebd2d4) says "at 1029 plaintexts, the searched boosted model and the searched linear rule score 0.0007 apart, and we said in advance the run would probably fail".
+  - The brief's bold lead and the evidence page's 0022 panel were in no item and were not changed. Both still say "the same rule" at HEAD f275303.
+- **0023.**
+  - The brief (6d1f5d9) says the excuse is answered "in distribution and over 0.8985 of a decade (short of 0003's two-decade scope rule)". It says more real plaintexts raise the model's reading "faster than the 0.005-per-doubling bar, to a reading that still fails the record's margin", and that the standardised logistic grows fastest.
+  - `VERDICT.md` (8ebd2d4) and `docs/DILIGENCE.md` (938e0c7) keep "the record's scaling thesis holds". VERDICT.md scopes it to "these real files" and DILIGENCE.md to "these five files". Both add "in distribution, over just under a decade (0003's scope rule asks for two)" and a rise "to a reading that fails the record's margin".
+  - "Hand-writable" became "linear" in `README.md` and "standardised linear" in `VERDICT.md` and `docs/DILIGENCE.md`.
+- **The reverse curve.**
+  - `docs/DILIGENCE.md` (938e0c7) now says readings on content the model was not fitted on "have moved readings little, not uniformly, and none of these readings is a verdict". It gives 0.000222, 0.009842, 0.00231 and the synthetic families' 0.0693 to 0.0987.
+  - `VERDICT.md` (8ebd2d4) says the curve is "nearly flat over this decade", "an informational reading, not a verdict and not a general law".
+  - **A new error in DILIGENCE.md's replacement.** "Moved readings little" holds only for the model on the builder's evaluation set (0.000222 and 0.00231 per doubling). Two of the other readings in the same sentence rose faster. The depth-3 tree's 0.009842 per doubling is above the 0.005 bar and above the model's own real-family 0.007344. On the synthetic families the model went from 0.0693 to 0.0987 over the second decade, a larger rise than its real-family reading made over the same rungs (0.1193 to 0.1404). It was fixed in d778549: the sentence now says readings on unseen content moved unevenly and names which moved little and which rose.
+- **0024's lead.** No document now says "still leads the hand-writable linear rule".
+  - `README.md`, `VERDICT.md` (lead, heading, Passed table) and the brief (bold lead, summary bullet) say that at the top rung the boosted model leads the standardised logistic by 0.0039.
+  - README.md, VERDICT.md and the brief add that the model trailed at rungs 5 and 6. The one-pager says the model "edges ahead of the standardised linear rule, after reading below it at the two rungs before".
+  - `docs/DILIGENCE.md` answers "**Yes — and at the top rung the boosted model leads the linear rule, by 0.0039**".
+  - On the evidence page (388d0f1), `_lead_sentence` and `_lead_sentence3` read "leads the standardised logistic (a 26-class linear model over 1108 features, not a rule written by hand)". The 0024 panel now lists the rungs where the model read below the logistic, and says every interval is over the scored chunks only.
+- **0024's meaning.**
+  - "A rule a person can write out" became "the standardised logistic". README.md, VERDICT.md and DILIGENCE.md add "26 classes over 1108 features". NARRATIVE adds "a 26-class linear model over 1108 features, not a rule anyone writes out by hand".
+  - "The record's rate" is now spelled out as the 0.005-per-doubling bar in six places: README.md, VERDICT.md, DILIGENCE.md, the brief, NARRATIVE and the evidence page. `README.md` keeps the words "keep buying the recipe the record's rate" and puts the definition after them.
+  - The top rung against 0021's bar re-applied (0.1404 against 0.1419) now stands beside the lead in README.md, the one-pager, the brief and NARRATIVE. 8ebd2d4 also put it in VERDICT.md's 0024 meaning sentence and closing section. VERDICT.md's 0024 section, DILIGENCE.md and the evidence page already had it. The brief also gives 0.1865.
+- **Done later the same day (d778549).**
+  - 0024's same-sentence rule: every sentence stating 0024's pass in README.md, VERDICT.md, DILIGENCE.md, NARRATIVE, the one-pager, the brief and the evidence page now carries "second decade minus first: -0.000374"; VERDICT.md's section heading is left as two scripts anchor on it, and the sentence after it carries the value.
+  - "The record's scaling thesis holds" is withdrawn in VERDICT.md and DILIGENCE.md: the reading rises faster than the bar over 0.8985 of a decade, which does not establish the thesis 0003's scope rule ties to two decades.
+  - VERDICT.md's 0022 "a rule a person could write by hand" now reads "the standardised linear rule (a 26-class linear model over 1108 features), now searched".
+  - `tools/publish/publish_0025.py`: f275303 re-anchored its patterns on the rewritten wording, and the text it would publish itself is rewritten to the record's corrected wording (its lead sentences no longer say "still", "hand-writable" or "a rule a person can write out"; 6f05429); strings that quote the 0025 reader's sealed sentences verbatim are left as the reader words them.
+
+Nothing mechanical checks that a published reading says what its reader's `meaning` says. That is recorded here as a rule, not dressed as a gate: quote the reader, not the preregistration's question.
+
+
+## 2026-10-22 — Outbound copy called the headline "one real curve", "a claim about the world" and "structured content" without saying that seven of its eight content families are our own generators, and kept calling it the one real curve after a real-file curve existed
+
+**Claimed:**
+
+- `outbound/NARRATIVE.md`:
+  - "I'll tell you the ending first: we have one real, preregistered scaling curve, and **no buyer yet**."
+  - "The pivot found one real curve: recover which of 26 DEFLATE encoder configurations produced a fragment carved from the middle of a compressed stream"
+  - "The pivot produced one result that is a claim about the world."
+  - "structured content — csv, log, json — rises at roughly +0.09 per decade, about ten times chance at the top rung"
+  - "One real curve with its boundaries measured by the same instrument."
+  - In the crib: "In structured content — csv, log and json rise at roughly +0.09 per decade at about ten times chance —"
+- `outbound/EVIDENCE_BRIEF.md`:
+  - "on **structured content the curve rises at roughly +0.09 per decade** — nearly double the headline — with top-rung accuracy about **ten times chance**";
+  - "The verdict is the mixture's; the rows are what a buyer with csv or log carves would need to see."
+- The evidence page (`tools/render/evidence_page.py`): "Quality against the volume of manufactured labels — the FDM-1 question." and "structured content carries the curve at roughly twice the headline rate".
+- `docs/DILIGENCE.md`: "~+0.09/decade on structured content (csv, log, json) at ten times chance".
+- `VERDICT.md`:
+  - "The first curve in this repository that is a claim about the world rather than a test of the instrument.";
+  - "Structured content carries the curve";
+  - "the per-family rows are what a buyer whose carves are csv or log would need to see."
+- By omission, in two documents:
+  - `outbound/ONE_PAGER.md`: "The label factory is free and unbounded: compress any bytes under every configuration and the label *is* the configuration you used." The page calls its numbers "a statement about the corpus builder's eight content families" and never says what the builder is.
+  - `README.md`: "statements about the corpus builder's eight content families (gutenberg, base64, binary, code, csv, json, log, mixed), not about DEFLATE streams in general".
+
+All of these stand in 4ca1ca5 (2026-09-16), where this clone's history begins.
+
+**Actual:**
+
+- **What the content is.**
+  - `tools/pivot/corpus.py` builds `FAMILIES = ["gutenberg"] + sorted(SYNTH)`. `SYNTH` is seven generator functions: json, csv, log, code, base64, binary and mixed.
+  - `artifacts/pivot/deflate_curve.json` `content_families` lists those eight.
+  - 0016's reader banks the description "seven parametric generators and one real-prose family" (`fdc_4096_verdict.json`). `VERDICT.md` says the same twice. No outbound document said it of the builder's families.
+- **The "+0.09 per decade" families.** csv, log and json (`per_family_curves.json`) are generator output:
+  - slopes 0.090631, 0.090943 and 0.090131;
+  - top rung 0.3888, 0.3756 and 0.3581, against chance 0.038462 (`deflate_curve.json`, `chance_accuracy`).
+
+  The record holds no real csv, log or json file.
+- **Real files.**
+  - On real files the builder never produced, 0014's searched model reads 0.0637 against 0.088462 needed (`oob_4096_reread_verdict.json`, `OOB_TRANSFER_FAILS`).
+  - Since 0023 and 0024 (2026-09-17) the record also has a preregistered curve fitted and scored on real files (`realcurve2_4096_verdict.json`). It rises: second-decade slope 0.00697 per doubling, [0.00571, 0.00824].
+  - At the top rung it reaches 0.1404 over the five real kinds together. Per kind it reaches up to 0.1553, on py_src (`readings_banked.r7_model.ext_per_family`).
+  - It does not clear 0021's bar re-applied there: 0.1419 is needed with the tree as floor (informational).
+
+  "One real curve" therefore said too much about the headline's content. From 2026-09-17 it also said too little about the record.
+- **The FDM-1 subtitle.** The evidence page put the name over a boosted-tree model's curve (`deflate_curve.json`, `model_class` "hgb") on that content. It named neither the model nor the content.
+
+**Size:** The content of every 0003 and 0014 number: seven of eight families are generator output, in documents that never used the word. No banked number moves. Gutenberg is real prose, and `VERDICT.md` discloses the generators. The defect is that the investor-facing copy said "real", "the world" and "structured content" without saying what the content was. Two sentences also presented generator families as what a buyer's carves would need.
+
+**Cause:** The outbound documents were written as compressions of `VERDICT.md`. They kept "structured content", and "real" in its archived-trial sense (a curve that clears its margins), and dropped what the content is. When 0023 and 0024 produced a real-file curve, no sentence saying "one real curve" was revisited. No gate can see an omission.
+
+**Fix:**
+
+- **The one-pager** (b3ff1bf) adds, after the label-factory sentence: "The 26 are zlib 1–9, libdeflate 1–12, ISA-L 0–3 and zopfli. The bytes are the corpus builder's eight content families: seven are its own synthetic generators (csv, log, json, code, base64, binary, mixed) and one is real Project Gutenberg prose."
+- **README.md** (aabcdb3) adds "— seven of them the builder's own parametric generators, one real Project Gutenberg prose —".
+- **The brief** (6d1f5d9):
+  - says "on **the builder's synthetic structured generators (csv, log, json) the curve rises at roughly +0.09 per decade**";
+  - calls the 2048 per-family rows "a decomposition on the builder's synthetic csv and log generators, not a reading on real carves".
+- **The evidence page** (388d0f1):
+  - The subtitle reads "the FDM-1 question, asked here of a boosted-tree model on the corpus builder's eight content families (seven parametric generators and Gutenberg prose)". The proposed clause naming what it is not asked of was not written.
+  - The decomposition reads "the builder's generated structured families (csv, log, json; no real file of these kinds is among the record's real-content families)".
+- **NARRATIVE** (8ebd2d4):
+  - The ending reads "one preregistered scaling curve that clears its margins, on content mostly from our own generators; on real files the signal also rises with data but has not cleared the margin a cheap rule sets".
+  - "The pivot found a curve", followed by "Seven of its eight content families come from our own generators, the eighth is Gutenberg prose" and the 0.0637-against-0.088462 real-file reading.
+  - "The pivot produced a result that clears its preregistered margins; it is a statement about eight content families, seven of them from our own generators and one of Gutenberg prose."
+  - "our generators' structured families", with "No real csv, log or json file has been measured", in the curve section and in the crib.
+  - The close names one curve that clears its margins on content mostly from our generators, and a real-file signal that rises but has not cleared the margin a cheap rule sets.
+- **VERDICT.md** (8ebd2d4):
+  - keeps "The first curve in this repository that is a claim about the world rather than a test of the instrument" and appends "about four real DEFLATE libraries, on the corpus builder's eight content families, seven of which are its own parametric generators". NARRATIVE dropped its "claim about the world"; `VERDICT.md` still makes the claim, now qualified;
+  - says "Structured content from the builder's own generators carries the curve";
+  - gives the per-family rows as banked, "(csv and log here are the builder's own synthetic generators, and no buyer has been asked what it would need to see)".
+- **docs/DILIGENCE.md** (938e0c7) says "on the builder's synthetic structured generators (csv, log, json)".
+- **A new error in the replacements.**
+  - NARRATIVE's "on the real files we have, the best the model reaches is 0.1404 (0024)" and its crib's "the best reading is 0.1404" give the five-kind reading as the best.
+  - DILIGENCE.md's "the model reaches at most 0.1404" does the same.
+  - Per kind, the same rung reads up to 0.1553 (py_src), so "at most" and "best" are wrong per kind, in the direction against us. They were fixed in d778549: each now says the reading over the five kinds together is 0.1404, up to 0.1553 on one kind (py_src).
+
+No mechanical check exists for an omission. The rule is that a headline number in outbound copy says what its content is, in the same paragraph.
+
+
+## 2026-10-22 — Published "the information is present at 1024" from 0007's rationale; 0007's own reader reads the result as "not recoverable at the shorter carve"
+
+**Claimed:**
+
+- `outbound/ONE_PAGER.md`: "The information is there at 1024. This is a modelling failure, not an information failure."
+- `outbound/EVIDENCE_BRIEF.md`: "The information is present at 1024 (the collision ceiling barely moves: 20.9125 → 20.79 across 4096 → 512), so this is a modelling failure and is reported as one."
+- `outbound/NARRATIVE.md`: "so the information is present at the shorter window and this is a modelling failure, and we say so in those words."
+- `README.md`: "The information is present at 1024 — the byte-identity ceiling barely moves — so this is a modelling failure"
+- `VERDICT.md`: "The information is present at 1024. **This is a modelling failure, not an information failure**, and the preregistration committed this document to saying so in those words before the number existed."
+- `VERDICT.md`, L4's bullet: "The byte-identity ceiling barely moves across the range — 20.9125 distinct streams of 26 at 4096 against 20.79 at 512 — so this is a property of the representation, not of the fragment."
+- `tools/render/evidence_page.py`: "The byte-identity ceiling barely moves across carve sizes, so this is a modelling failure and is reported as one."
+- `docs/DILIGENCE.md`: "an information-ceiling measurement ruling out the easy excuse".
+- `docs/strategy/MILESTONES.md`, the use-of-funds plan:
+  - "The information is present (byte-identity ceiling 20.79 of 26 at 512 bytes against 20.9125 at 4096); the representation is what fails."
+  - "so any per-size failure is a modelling result, not an information result, exactly as 0007 was forced to say."
+
+**Actual:**
+
+- **What A1 measures.** A1 (`artifacts/pivot/carve_channel_capacity.json`) counts how many of the 26 encodings of the same plaintext give distinct byte windows: 20.9125 at 4096, 20.805 at 1024 and 20.79 at 512.
+  - Its own `why` calls this an information ceiling and says "This measures the input, never the outcome."
+  - A ceiling that barely moves rules out byte collisions as the cause. It does not show that any model can recover the label.
+- **The reader's reading.** 0007's reader banked: "The information is not recoverable at the shorter carve." (`carve_generalisation_verdict.json`, `meaning`).
+- **The preregistration says both.**
+  - `scope.why_1024`: "So the information is present at 1024, and anything that fails here is a MODELLING limit rather than an information limit."
+  - `stop_rules[0]`: "The information is not recoverable at 1024 and the forensic setting is narrower than the 4096 numbers imply." It continues: "this outcome would be a modelling failure and must be reported as one."
+- **What the model reads.** At 1024 the model reads 0.1355 against chance 0.038462, above chance. The logistic reads 0.1256, so the margin is +0.0099 against the bar of 0.05.
+- **What has been tried since.**
+  - 0009 is `BYTE_MODEL_FAILS`.
+  - 0010 is `BYTE_FLAT_FAILS`, which its reader reads as "Inconclusive on the point 0010 exists to settle".
+  - Whether any other model would clear the bar at 1024 is untested.
+
+The sealed commitment to report a modelling failure stands. "The information is present", "not an information failure" and "the representation is what fails" do not.
+
+**Size:** An untested inference was stated as a measured fact, in ten places across eight files. They include the one-pager, the README's headline section and the plan that sets milestone M1. The error flatters us, because it implies a better model would fix the failure. No number moves.
+
+**Cause:** The sentences were published from the preregistration's rationale (`why_1024`), not from the reader's emitted `meaning`. The rationale was written before the run, to say why the run was worth doing. When frozen text disagrees with itself, `docs/OPERATING_RULES.md` §3 takes the reading that does not flatter, and the reader had already taken it. The commitment "in those words" was read as licensing the rationale along with the label.
+
+**Fix:** Every sentence in that list but one was rewritten. Each now says byte collisions do not explain the failure and drops "the information is present". All but DILIGENCE.md's and MILESTONES.md's first sentence also keep the commitment to report a modelling failure:
+
+- **The one-pager** (b3ff1bf): "So a collision ceiling does not explain the failure, and 0007's frozen reader reads it as sealed: the information is not recoverable at the shorter carve. This is a modelling failure, and is reported as one." It adds that no model in this record has shown the label recoverable at 1024, naming 0009 and 0010.
+- **The brief** (6d1f5d9): "The frozen reader's banked reading is that the information is not recoverable at the shorter carve." It continues: "whether any model recovers the label at 1024 is untested beyond 0007's recipe, one byte-sequence CNN (0009) and an inconclusive variant (0010)".
+- **README.md** (aabcdb3): the failure is reported, as preregistered, as a modelling failure, "which means only that". Whether any other model clears the bar at 1024 is untested beyond 0009 and 0010, and the frozen reader's reading is that the information is not recoverable at the shorter carve.
+- **NARRATIVE** (8ebd2d4): "That is not proof the label can be recovered at 1024: our frozen reader reads this result as "not recoverable at the shorter carve"."
+- **VERDICT.md's 0007 section** (8ebd2d4): the ceiling "bounds what any model could recover from above; it is not evidence that a better model would clear the bar". It then gives the reader's reading, with 0009 and 0010.
+- **The evidence page** (388d0f1): "distinct bytes do not show that any model could recover the label, and the frozen reader reads it as not recoverable at the shorter carve".
+- **DILIGENCE.md** (938e0c7): the measurement now shows "that byte collisions barely change across sizes and so do not explain it".
+- **MILESTONES.md** (938e0c7): "whether a better representation would clear the bar is untested beyond 0009 and 0010". Also: "byte collisions do not explain any per-size failure, and 0007 was committed to report its failure as a modelling result; whether a better model would clear the bar at a shorter size is what this milestone tests".
+- **Not changed.**
+  - `VERDICT.md`'s L4 bullet ("so this is a property of the representation, not of the fragment") stands at HEAD f275303.
+  - `VERDICT.md`'s rewritten 0007 sentence (8ebd2d4) keeps, in bold, "a modelling failure, not an information failure", now attributed to the preregistration's commitment, followed by the ceiling-bound and reader clauses. The sealed stop rule commits only to "a modelling failure"; "rather than an information limit" is in `why_1024`, the rationale. The phrase stands at HEAD f275303.
+
+The rule, not a gate: a published reading of a verdict quotes the reader's `meaning`, not the preregistration's `why`.
+
+
+## 2026-10-22 — Kept leading with the fixed-recipe +0.1003 after VERDICT.md committed to label it as one wherever it appears, while the one-pager said it led with +0.0567
+
+**Claimed:**
+
+- `VERDICT.md`, in 0014's write-up: "The frozen recipes' +0.1003 is no longer the number to lead with; it is a fixed-recipe number and is labelled as one wherever it still appears."
+- `outbound/ONE_PAGER.md`: "a smaller margin than the fixed-recipe **+0.1003**, and the one this page now leads with."
+  - The page's opening reads "margin **+0.1003** frozen and **+0.0583** under the stricter reading with fixed recipes, **+0.0567** when every baseline is searched too (0014)".
+  - Its result section reads "Best of the **preregistered** set: logistic at **0.1392**, margin **+0.1003**." The same paragraph continues "the commitment to report both was recorded mid-run and anchored to drand round **6408095**, before either number was known."
+- `README.md`, the headline paragraph: "a margin over the best trivial baseline of **+0.1003** under the frozen baseline set and **+0.0583** under the stricter one that adds deep trees. Both clear the 0.05 frozen before the corpus existed."
+- The evidence page's headline tile (`tools/render/evidence_page.py`, from `deflate_curve.json`): "+0.1003", "margin over the frozen baseline set (bar: 0.05) · stricter reading +0.0583".
+- `outbound/NARRATIVE.md`: "The margin over the strongest trivial baseline is +0.1003 under the frozen reading and +0.0583 under a stricter reading we committed to before the numbers existed; both clear the preregistered 0.05." The same document later calls +0.0567 "the margin we quote now".
+- `docs/strategy/MILESTONES.md`: "4096 (works, margin +0.1003 frozen and +0.0583 stricter)".
+
+**Actual:**
+
+- **0014** (`artifacts/pivot/recipe_search_4096_verdict.json`, `read`): the searched model reads 0.2884 against a searched logistic at 0.2317, on both the frozen and expanded readings. That is a margin of +0.0567. Without gutenberg it reads 0.3003 against 0.2427, a margin of +0.0576.
+- **The fixed-recipe margins.** +0.1003 and +0.0583 are 0003's margins over the logistic at 0.1392 and over the depth-16 tree at 0.1812 (`deflate_curve.json`). So NARRATIVE's "over the strongest trivial baseline" belongs to +0.0583, not to +0.1003.
+- **Where +0.1003 led.**
+  - The one-pager put +0.1003 first in its opening and in its result section, and labelled it as fixed-recipe only in the opening.
+  - README.md's headline paragraph, the evidence page's tile and NARRATIVE never labelled it.
+  - MILESTONES.md quoted it as the working margin at 4096.
+- **When the stricter reading was committed.** Not "before the numbers existed".
+  - `prereg_interpretation.json` records it "before the final baseline and model numbers were known".
+  - The same note says the deep trees were added during piloting, when "a depth-8 tree already reaches 0.1192 against 0.0385 chance".
+  - By the note's own `anchor_direction_correction`, its drand anchor proves only that it was written no earlier than the anchored round. This ledger filed that defect on 2026-08-31 (item 4) and corrected the artifact. At fab3678 the one-pager and `VERDICT.md` still set the anchor beside the precedence claim.
+  - The precedence rests on run logs and commit history from before 4ca1ca5, which this clone does not hold: COULD NOT VERIFY.
+
+**Size:** The headline margin was quoted at the size the record had retired, in five documents. The sentence claiming the one-pager led with the smaller margin was false as published. It flattered us twice: it overstated the margin, and it claimed a candour the page did not deliver.
+
+**Cause:**
+
+- The 0014 write-up appended +0.0567 to the end of the one-pager's existing margin sentence instead of leading with it.
+- The one-pager's later sentence was written to the intent and never re-read against the opening.
+- The evidence page's tile is rendered from `deflate_curve.json`'s fields and was never pointed at 0014's artifact.
+- README.md, NARRATIVE and MILESTONES.md were not swept for the commitment `VERDICT.md` made.
+
+**Fix:**
+
+- **The one-pager** (b3ff1bf):
+  - Its opening now reads "**+0.0567** when every baseline is searched too (0014) — the margin we lead with — and, with 0003's fixed recipes, **+0.1003** frozen and **+0.0583** under the stricter reading".
+  - Its result section labels +0.1003 "a fixed-recipe number" and gives +0.0567 beside it.
+  - Its later sentence was left as written and is now true.
+  - In the same paragraph, the precedence claim is said to rest "on the run logs and commit history, not on its drand anchor (round **6408095**), which proves only that it was written no earlier than that round".
+- **The evidence page** (388d0f1): the tile's value is now computed from `recipe_search_4096.json` (`final_top1` less `best_frozen_for_bar`) and renders +0.0567. It is labelled "margin with every baseline searched too" and gives the fixed-recipe pair as "+0.1003 over the frozen set, +0.0583 over a depth-16 tree".
+- **NARRATIVE** (8ebd2d4):
+  - It says that under 0003's fixed recipes the margin was +0.1003 over "the best of the frozen baseline set, a logistic regression" and +0.0583 over "the strongest baseline of all, a depth-16 tree".
+  - It calls the stricter reading one "we recorded mid-run, before the final numbers were known", and says +0.0567 "is the margin we quote".
+- **VERDICT.md** (8ebd2d4) now says its drand anchor "proves only that it was written no earlier than that round (the precedence rests on the run logs and commit history)".
+- **README.md** (aabcdb3) labels the pair "with fixed recipes" and adds "**+0.0567** once the model's and every baseline's recipes are searched too (0014, below), the margin quoted".
+- **MILESTONES.md** (938e0c7) reads "margin +0.0567 under a symmetric recipe search, prereg 0014; +0.1003 frozen and +0.0583 stricter under fixed recipes".
+- **Still asserted, COULD NOT VERIFY.** The replacements state the precedence as fact. NARRATIVE says "a stricter reading we recorded mid-run, before the final numbers were known". The one-pager says "recorded mid-run, before either number was known" and `VERDICT.md` "recorded mid-run, before the baseline and model numbers were known"; both say the claim rests on the run logs and commit history. Those records predate 4ca1ca5 and are not in this clone, so the precedence in all three COULD NOT BE VERIFIED here.
+
+No gate checks which margin a page leads with. A `docs/live_claims.json` entry tying the one-pager's lead margin to 0014's fields would make the next regression fail `tools/freshness.py`. It is proposed here, not built.
+
+
+## 2026-10-22 — Said every reader was frozen before its data existed; two of the twenty-four were re-reads frozen with every number they read already known
+
+**Claimed:**
+
+- `outbound/ONE_PAGER.md`, its first sentence: "**It is** a preregistered evaluation instrument, built and frozen before any of the numbers it reports existed, and designed so that each of its gates can be shown to fail on demand."
+- `outbound/EVIDENCE_BRIEF.md`, of its **24** preregistrations: "readers frozen by sha256 before their data existed."
+- `outbound/NARRATIVE.md`: "with the verdict-emitting readers frozen by sha256 before their data existed."
+- `tools/render/evidence_page.py`, the verdicts panel: "Emitted by readers frozen by sha256 before their data existed."
+- `README.md`: "**Readers are frozen by hash before the data exists.**" and "the machinery constraining how numbers may be reported was built and committed *before* the numbers existed".
+
+All of these stand in 4ca1ca5 (2026-09-16T06:50:35Z), after both re-reads below were frozen.
+
+**Actual:**
+
+- **The two re-reads.**
+  - `prereg/0013-recipe-search-2048-reread.json`, frozen 2026-09-03T19:30:49Z after 0012 ran: "No new measurement. Every 0012 number was known when this was written and is quoted here; under these clauses they read RECIPE_FAILS."
+  - `prereg/0019-oob-4096-reread.json`, frozen 2026-09-16T04:14:59Z: "Every 0018 number was known when this was written and is quoted here; under these clauses they read OOB_TRANSFER_FAILS."
+  - Both verdicts are quoted on the one-pager, and both re-reads are chain entries.
+  - Both are disclosed as re-reads where they are quoted, and both read a failure, so no result was flattered. What was flattered is the instrument's first-sentence guarantee.
+- **The gates were not all built first either.** `tools/freshness.py` was written after stale numbers had been published (this ledger, 2026-08-25). `tools/record_counts.py` came with the 2026-09-04 entry.
+- **What git can show.**
+  - For 0021 to 0024, each preregistration's `frozen_utc` precedes the first commit of its artifact in this clone. For example, 0024 was frozen at 2026-09-17T20:38:28Z, and `realcurve2_4096.json` was first committed in 7e536c3 at 21:06.
+  - For 0001 to 0019 the order COULD NOT BE VERIFIED from git, because this clone is shallow at 4ca1ca5.
+
+**Size:** Two of twenty-four chain entries. The property was stated without exception in the one-pager's first sentence, the brief's instrument paragraph, NARRATIVE, the evidence page and two README sentences. No result moves.
+
+**Cause:** The sentence describes the rule in `docs/OPERATING_RULES.md` §1. The re-reads were disclosed one at a time, where their verdicts appear. Nobody re-read the blanket sentences when 0013 became the first exception. This is the class of the 2026-09-16 entry: an instrument property published without exception, when a minority of cases take one.
+
+**Fix:** Each sentence now names the exception:
+
+- **The one-pager** (b3ff1bf): "each verdict emitted by a reader frozen before the data it reads existed — except two disclosed re-reads (0013 and 0019), written after their runs and both reading a failure".
+- **The brief** (6d1f5d9): "except the two disclosed re-reads (0013, 0019), whose readers were frozen with the numbers they read already known".
+- **NARRATIVE** (8ebd2d4): "except two disclosed re-reads of banked runs (0013, 0019)".
+- **The evidence page** (388d0f1): "except the two re-reads of banked runs (0013, 0019), which their chips name as such".
+- **README.md** (aabcdb3) adds to both of its sentences that 0013 and 0019 "are disclosed re-reads of banked runs, frozen after them".
+
+README.md still says the machinery "was built and committed *before* the numbers existed". The re-read exception is added there, but `tools/freshness.py` and `tools/record_counts.py` came later, and that part stands at HEAD f275303.
+
+The brief's "measured under bars frozen and hash-chained **before the data existed**" was checked and left. The verdicts it lists do not include the re-reads, and the re-reads' bars are copies of bars frozen before their data.
+
+No gate checks prose about the chain. A chain field marking a re-read, which the documents could then count, is proposed here and not built.
+
+
+## 2026-10-22 — Described the outbound-number gate as tracing every number to its artifact; it checks that some banked value anywhere, or a hundred times or a hundredth of one, rounds to the number
+
+**Claimed:**
+
+- `outbound/ONE_PAGER.md` and `README.md`, the comment on the `claimcheck.py` command a cold-clone reader is told to run: "# every number traces to a banked artifact"
+- `outbound/EVIDENCE_BRIEF.md`, its first sentence: "Every number on this page traces to a machine-readable artifact in this repository at the written precision, enforced by `tools/claimcheck.py` with zero allowlist entries."
+- `outbound/README.md`: "**The rule:** every number in every file here must trace to a banked artifact under `artifacts/`, at the precision it is written. Enforced by `python3 tools/claimcheck.py outbound VERDICT.md`, which exits non-zero otherwise and has mutation tests proving it can fail"
+- `outbound/ONE_PAGER.md`: "This document passes the outbound-copy gate with no allowlist entries, and every live number on it is checked against the current artifact by the gate below it."
+- `outbound/NARRATIVE.md`: "because gates check that numbers trace, not that the reasoning between them is sound".
+- The evidence page's eyebrow: "Preregistered evidence · every number read from a banked artifact". Its renderer's docstring begins "Render outbound/evidence_page.html from the banked artifacts. No number is typed by hand." (`tools/render/evidence_page.py`).
+- This ledger, 2026-08-25, of the existence check: "For a fabricated number that is the right question."
+
+**Actual:**
+
+- **What `backed()` checks.** `backed()` in `tools/claimcheck.py` pools every value in every banked artifact, numbers inside prose strings included. It passes a written number if any value in the pool, or that value times 100 or divided by 100, rounds to it at its written places. Nothing ties a number to the artifact or field its sentence cites.
+- **An example.** `VERDICT.md`'s "About 3900 optimisation steps" passes only through the times-or-divided-by-100 path: as a banked 39.0 times 100, or a banked 390000 divided by 100. No banked value is 3900.
+- **Where the mechanism is described correctly.** `README.md`'s own bullet ("`claimcheck.py` asks whether a number exists in a banked artifact") is accurate. So is `docs/OPERATING_RULES.md` §2, apart from the times-100 path. The comments and opening sentences above are not.
+- **"Exits non-zero otherwise" is false** for any wrong number that happens to match an unrelated value. A pool this large matches many numbers written at the record's usual precision. A reviewer measured how many, in memory; the result is not banked and is not quoted here.
+- **What `tools/freshness.py` checks.** It checks a number against its own artifact field only if the number is registered in `docs/live_claims.json`.
+  - The one-pager registers two (`onepager-mutations`, `onepager-weakest-row`).
+  - Its other present-tense counts, such as "Eight are measurements made by subagents", are checked by nothing.
+  - This ledger said as much on 2026-08-25: "Only numbers entered in the registry are checked; a live number nobody registers is still unguarded."
+- **"Every number read".** The renderer types some measured values into its prose, as its own docstring now lists: 0.2395, 0.1392, 0.2317, 0.2884, 0.9031 and 1.8016. Each matches its banked value, but a typed number does not follow its artifact.
+
+**Size:** An instrument property, overstated in six documents:
+
+- the evidence brief's first sentence;
+- the rule `outbound/README.md` states for every outbound file;
+- the command comments in the one-pager and README.md;
+- the one-pager's claim about live numbers;
+- NARRATIVE's account of the audit;
+- the evidence page's eyebrow.
+
+This entry shows no number in any document to be wrong. The guarantee behind all of them is weaker than published.
+
+**Cause:** "Traces" is the intent of `docs/OPERATING_RULES.md` §2; what was built is a pooled existence check. The accurate description was written where the mechanism is explained, and the short descriptions kept the intent's word. This is the class of the 2026-09-16 entry and of the 2026-10-21 probe entry: a check credited with the property it was built to approximate.
+
+**Fix:**
+
+- **README.md** (aabcdb3):
+  - The claimcheck comment reads "# every number matches some banked value at its written precision, not necessarily the one cited".
+  - The freshness comment reads "# every number registered in docs/live_claims.json equals its artifact's current value".
+  - The bullet adds "It does not check that the supporting value is the one the sentence cites."
+  - The freshness bullet adds that "a number nobody registers is checked only by `claimcheck.py`".
+- **The one-pager** (b3ff1bf):
+  - Its comments read "# every number equals some banked value at its written precision, not necessarily the one cited" and "# every registered live number equals its CURRENT artifact value".
+  - Its closing sentence names the two registered numbers, and says "a live number nobody registers is unguarded".
+- **The brief** (6d1f5d9): its first sentence now says each number "matches a value banked", "a necessary check, not a trace". It names the times-or-divided-by-100 path, and says the gate "does not check that the artifact a sentence cites is the one that holds it". It names the three counts `tools/freshness.py` ties to their fields; the brief's preregistration, mutation and correction counts are all registered.
+- **outbound/README.md** (6d1f5d9): it keeps the rule, and says the command "checks a necessary condition only". It adds that "which artifact field a number comes from is checked only for the numbers registered in `docs/live_claims.json`".
+- **NARRATIVE** (8ebd2d4) reads "gates check that numbers are banked".
+- **The evidence page** (388d0f1): the eyebrow reads "rendered from banked artifacts", and the docstring lists the typed values.
+- **Not changed.**
+  - `tools/claimcheck.py` itself is unchanged; its docstring still opens "every number in a document must trace to a banked artifact".
+  - `docs/OPERATING_RULES.md` §2 still omits the times-100 path.
+
+No check ties each outbound number to the artifact its sentence cites, and none is claimed. The registry remains the only field-level check.
+
+
+## 2026-10-22 — Kept saying the manifest proves a rebuilt corpus byte-identical after two filed fetch failures; the builder caches cannot be rebuilt to their banked hashes, and 0024's corpus rebuilt twice with two different feature arrays, neither the banked one
+
+**Claimed:**
+
+- `docs/DILIGENCE.md`: "Corpora rebuild deterministically from shipped sources and generators; the manifest banks content hashes of every array so the rebuild is *proven* identical, not assumed." Also its command comment "# prove a rebuilt corpus is byte-identical to ours". The pass refuted that comment taken alone, as a description of a check on a rebuild that matches. It is filed here with the evidence page's identical, confirmed comment, because for the builder caches that check cannot pass.
+- `outbound/NARRATIVE.md`: "the corpus manifest proves a rebuilt corpus byte-identical rather than assuming it." and "A validated instrument that reproduces on a cold clone."
+- `tools/render/evidence_page.py`, in the evidence page's cold-clone block: "# prove a rebuilt corpus is byte-identical"
+- `README.md`, its opening paragraph: "plus one shipped open artifact a stranger can reproduce from a cold clone."
+
+This ledger quoted the DILIGENCE and NARRATIVE sentences on 2026-09-02, and the DILIGENCE one again on 2026-10-21. Both entries fixed the fetch and left the sentences standing.
+
+**Actual:**
+
+1. **The builder caches.** `run_study.build()` writes whole batches in worker-completion order and never sorts. So the X and g of the three builder caches it wrote cannot be rebuilt to their banked hashes on any machine. The caches are `full_c4096` (0003), `carve_c1024` (0007) and `carve_c2048` (0011). Sources: this ledger, 2026-10-21, the CI-probe entry; and ea495ac, "the banked X/g/position hashes cannot be recovered".
+2. **The rebuilds of 2026-10-21 and 2026-10-22.** A fresh container rebuilt three real-file corpora on 2026-10-21 (`artifacts/pivot/engineering_log_0025.json`, `container_2026_10_21.corpora_rebuilt`).
+   - 0018's and 0021's corpora matched their manifests byte for byte.
+   - 0024's did not. Its y, g and fam hash to the banked values, but X hashes to c395da3f4c1aa3cb, not the banked d74bd30e71a5083f. The log's `realfit2_localisation_2026_10_22.cause` reads COULD NOT VERIFY.
+   - A second rebuild of 0024's corpus on 2026-10-22, on a host with a different CPU, gave a third X hash, 4ff8ec5760ccb069, with y, g and fam identical. It differs from the first rebuild in 6 of 193926 rows, all labelled 22 or 23 (ISA-L levels 1 and 2). Forcing ISA-L's code paths showed this is not the CPU: the flips are run to run, roughly 0 to 4 chunks per full build (`realfit2_localisation_2026_10_22.isal_dispatch_test`; the entry of this date on 0024's corpus).
+   - Refitted on the first rebuild, 0024's trees and its rung-5 logistic reproduce their banked vectors. Its rung-7 logistic does not: "r7_logistic DIFFERS on 264 rows (171 real; 5248 against 5249 real correct" (`realfit2_localisation_2026_10_22.refits_against_0024`).
+3. **The CPU.** ISA-L's level 3 picks AVX2 or AVX-512 code at run time, and the two give different bytes. The log says: "Any rebuild on an AVX2-only machine would differ for ext, realfit and realfit2 alike: the manifests record no CPU features" (`isal_level3_dispatch_hazard`).
+4. **The gates.** `tools/gates.sh` re-reads banked artifacts and re-runs no fit, so "reproduces on a cold clone" said more than the gates do.
+
+The banked measurements are untouched: they were made on the banked bytes. Any rebuild of a builder cache itself COULD NOT BE VERIFIED: the log lists `full_c4096` as "not built yet".
+
+**Size:** The reproducibility claim fails in three ways:
+
+- for the three builder caches, on which the headline (0003, 0014) and the 1024 and 2048 carve studies rest;
+- for 0024's corpus, whose two rebuilds also differ from each other, at ISA-L levels 1 and 2 on a few chunks per build, run to run;
+- for every real-file corpus, on an AVX2-only machine.
+
+This is the third ledger entry against the same sentences, and the first to find them false beyond the fetch.
+
+**Cause:** The sentences describe what the manifest was designed to do. They rely on one property: that the builder writes the same bytes in the same order on any machine. No cold rebuild tested that against banked hashes until 2026-10-21. Both earlier entries fixed the step that failed first, the fetch, and did not ask whether the sentence held beyond it.
+
+**Fix:**
+
+- **docs/DILIGENCE.md** (938e0c7):
+  - The sentence became a paragraph. It says the corpora are rebuilt from upstream sources pinned by sha256, that the fetch has broken before, and that "a rebuild is checked rather than assumed, and the check does not pass for every array". It then lists what a rebuild does and does not reproduce.
+  - The command comment reads "# compare the rebuild's array hashes with the banked ones; X and g", continued on the next line as "of the build() caches print DIFF by design (see below)".
+  - MILESTONES.md's corpus-size paragraph says the same.
+- **NARRATIVE** (8ebd2d4):
+  - The close reads "A mutation-tested instrument whose gates run on a cold clone — though no rebuild reproduces our headline corpus byte for byte (its results can be re-measured on a fresh draw, not re-derived on the same rows), one real-content corpus did not rebuild identical on a second machine, and the rebuild path has broken twice besides".
+  - The crib answer opens "For consistency, yes" and says the gates re-read our banked artifacts. It says the manifest "checks the rebuild against ours rather than assuming it", and names what cannot pass and what fails today.
+- **The evidence page** (388d0f1): the comment reads "# compare a rebuilt corpus with the banked hashes (what can match: below)", and a paragraph below it says what can match.
+- **README.md** (aabcdb3): "a stranger can rebuild from a cold clone, though not all of it to the byte", followed by what a rebuild does and does not reproduce.
+- **The other documents.**
+  - The one-pager (b3ff1bf) renames its section "Check the record's integrity yourself, on a cold clone", and says "None of these commands re-runs a measurement".
+  - The brief (6d1f5d9) says `gates.sh` "reads the banked artifacts; it does not rebuild the corpora", and lists what a rebuild does and does not reproduce. `outbound/README.md` (6d1f5d9) says "A stranger cannot re-derive every number by rebuilding".
+  - `VERDICT.md` (8ebd2d4) says what "primary-verifiable" means for a builder-pool result: "re-measure it with the shipped code on a different draw of the same design, not re-derive the banked number on the same rows". That paragraph points to the Phase 3 row, which lists what a rebuild reproduces. The headline curve's Passed-table class and the coverage table's definition of `primary-verifiable` now say the same: a re-measurement on a different draw.
+- **The tooling** (f44b63b):
+  - `corpus_manifest.py`'s docstring now promises a comparison "array by array", not a proof.
+  - `verify.sh`, `pin_sources.py` and `fetch_sources.sh` say the right sources are necessary for a matching rebuild, not sufficient.
+  - In `coverage.json`, `corpus-manifest-2048` now files only y as primary-verifiable. The reverify commands of `deflate-curve-slope`, `deflate-margin-expanded`, `seed-robustness` and `carve2048-within` say they return a re-measurement on a different draw.
+  - Separately, 35b6493 makes new manifests record the CPU feature flags and library files a build ran on, and hash X per block of rows. The banked manifests predate it.
+- **COULD NOT VERIFY in the replacements.** The new texts say a rebuild reproduces three things: the labels of every corpus, `raw_c1024` whole, and the 4096 cache's evaluation set as a set of chunks. No rebuild of a builder cache or of `raw_c1024` is banked. Those clauses rest on the builder's code and the banked hashes, not on a rebuild.
+- **The defects themselves** are filed in the two entries of this date on the builder caches' row order and on the rebuild of
+  0024's corpus; this entry covers the published sentences and their rewrites.
+- **The reorder tool.** ea495ac gives a rebuilt cache a documented canonical order. It cannot recover the banked hashes, and nothing here claims it does.
+
+
+## 2026-10-22 — NARRATIVE.md still said all 13 audit findings were fixed by measurement; ten were fixed by editing text, and the QA review that caught the same wording elsewhere did not cover this file
+
+**Claimed:** `outbound/NARRATIVE.md`: "13 findings survived refutation; all 13 were fixed by measurement and the full audit is published, rejected findings included." and "All 13 were fixed by measurement, and the audit record is banked with its rejected findings".
+
+**Actual:**
+
+- `artifacts/verification/adversarial_audit.json` holds 13 confirmed findings: 3 critical, 6 major and 4 minor.
+- The three critical findings were answered by new measurement or derivation (`audit_rederivations.json`, `baseline_family_rescore.json`, `g4_github_firsthand.json`).
+- The six major and four minor findings were corrected in the text ("All thirteen are corrected in place", this ledger, 2026-08-31).
+- The QA review of 2026-08-31 (`docs/qa/NEW_DOCS_REVIEW.md`, Finding 3) flagged the same universal claim in `outbound/EVIDENCE_BRIEF.md` and on the evidence page. Both say "the load-bearing ones by new measurement".
+- `outbound/NARRATIVE.md` was outside that review's scope and kept the sentence.
+
+**Size:** Ten of thirteen findings, in two sentences of the spoken narrative. It flatters us: it overstates the rigour of our response to the one review whose subject was overstatement.
+
+**Cause:** The QA fix was applied to the files the review named, not to every file carrying the sentence. This is the shape of the 2026-09-02 entry: a fix scoped to the review's list rather than to the defect.
+
+**Fix:** Both sentences now say all 13 were fixed, "the three critical ones by new measurement, the other ten by correcting the text" (8ebd2d4). The brief and the evidence page were already right and were not changed. The rule, not a gate: a wording correction is applied by searching every published document for the phrase, not by working through the review's file list.
+
+
+## 2026-10-22 — Answered "Won't a frontier model just do this?" by calling baselines trained on all of the task data "stand-ins for a clever prior with no task data"; no pretrained model has been run
+
+**Claimed:**
+
+- `docs/DILIGENCE.md`: "The measured stand-ins for "clever prior, no task-specific data" are the trivial-baseline ladder up to depth-16 trees and logistic regression, all trained on the same data as the top rung; the margins over them are the headline clauses."
+- `outbound/NARRATIVE.md`, the crib: "the measured stand-ins for a clever prior with no task data — logistic regression and depth-16 trees trained on the same 800000 fragments — are exactly what every headline margin is scored against."
+
+**Actual:**
+
+- The baselines were trained on the same 800000 task fragments as the top rung (`deflate_curve.json`, `baselines_trained_on_n`). With all of the task data, they cannot stand in for a prior with none.
+- No pretrained, LLM, transformer or frontier model appears in any verdict, curve or score artifact under `artifacts/pivot/`. The only matches for those words are a search note in `g4_firsthand.json` and a file name in `realfit3_corpus_manifest.json`.
+- The answer to the question is that it has not been measured. Whether a frontier model would do this is COULD NOT VERIFY.
+
+**Size:** The record's answer to the central competition question, in the diligence map and the investor crib, describes a measurement that was not made. It flatters us.
+
+**Cause:** The question was answered with the measurement we had, relabelled to fit the question.
+
+**Fix:**
+
+- `docs/DILIGENCE.md` (938e0c7): "No stand-in for "clever prior, no task-specific data" was measured: no large pretrained model was tested." The margins are over the baseline ladder trained on the same data, "which bounds cheap learned rules, not a frontier model".
+- The crib (8ebd2d4) opens "Not measured: no pretrained or frontier model has been run on this task". It says the margins measure "what a cheap learned rule does with all of our data, not what a frontier model could do".
+
+No gate can check that an answer answers its question.
+
+
+## 2026-10-22 — Headed the one-pager's competitor paragraph "Why no existing tool does this" on a search with two disclosed gaps the page left out
+
+**Claimed:**
+
+- `outbound/ONE_PAGER.md`: "**Why no existing tool does this.**"
+- `VERDICT.md`'s conjecture C1, on the same search: "That withholding is precisely why no incumbent tool applies:"
+
+**Actual:**
+
+- The search behind both is `artifacts/pivot/g4_firsthand.json`, with its GitHub arm in `g4_github_firsthand.json`. Its own `honest_limits` list two gaps:
+  - encode.su, "the venue where compression practitioners actually argue", returned 403 and "was NOT searched". It is "the single most likely place for undocumented prior work on this exact question".
+  - "No patent search was run.", although round 4 found two USPTO patents on another candidate's exact task.
+- `VERDICT.md` prints both limits beside the same tool list: "The honest limits stand: encode.su was unreachable and was not searched, and no patent search was run." The one-pager did not.
+- The paragraph names four of the artifact's five known tools; the fifth identifies compression type only.
+- Commercial forensic suites appear in no search artifact: COULD NOT VERIFY.
+
+**Size:** One heading and one sentence of a conjecture, on the competition question, stating absence in our search as absence in the world. It flatters us, and `docs/OPERATING_RULES.md` §6 forbids exactly this.
+
+**Cause:** The one-pager compressed `VERDICT.md`'s paragraph and kept its conclusion without its limits; C1 restated the conclusion away from the paragraph that carries them.
+
+**Fix:**
+
+- The one-pager (b3ff1bf):
+  - The heading reads "**Why none of the tools we found does this.**".
+  - The paragraph ends: "The search has known gaps: encode.su was unreachable and was not searched, and no patent search was run (`artifacts/pivot/g4_firsthand.json`)."
+- C1 (8ebd2d4) reads "none of the five public tools we found applies (encode.su and patents were not searched, and commercial forensic suites were not checked)".
+
+§6 is a rule and stays one.
+
+
+## 2026-10-22 — Listed archive recompression and repackaged-APK detection as uses of the result; the record's frozen analysis says the task's advantage disappears in both
+
+**Claimed:**
+
+- `outbound/ONE_PAGER.md`, "What it does not establish": "The uses this points at — forensic carving of unallocated disk, archive recompression, repackaged-APK detection — are narrow, nobody has been contacted, and nothing measured here says anyone would pay."
+- `VERDICT.md`: "But the buyers this points at — forensic carving of unallocated disk, archive recompression, repackaged-APK detection — are narrow".
+
+**Actual:**
+
+- 0006's scope, frozen 2026-08-25T21:49:05Z (`prereg/0006-deflate-operational-output.json`, `scope.what_this_is_for`): "archive recompression and repackaged-artifact checks both have the whole stream and the plaintext, so incumbent tools apply there and this task's advantage disappears".
+- `VERDICT.md` says the same in its 0006 section: "Archive recompression and repackaged-artifact checks both hold the whole stream and the plaintext, so incumbent tools apply there and this task's advantage disappears."
+- Just above the listed sentence, the one-pager itself names forensic carving as "the buyer type the entire G5 argument leaned on".
+
+**Size:** Two of the three listed uses, in the paragraph whose job is to say what the result does not establish. It flatters us: it widens the apparent market against our own frozen analysis.
+
+**Cause:** The list names adjacent applications. The analysis that rules two of them out lives in 0006 and in `VERDICT.md`. It was not carried into the one-pager, or into `VERDICT.md`'s own earlier paragraph.
+
+**Fix:**
+
+- The one-pager (b3ff1bf) names one use where a carved fragment is the real input, forensic carving of unallocated disk. It says archive recompression and repackaged-APK detection "hold the whole stream and the plaintext, so incumbent tools apply there and this task's advantage disappears".
+- `VERDICT.md` (8ebd2d4) now says the same, pointing to its 0006 section.
+
+
+## 2026-10-22 — The one-pager said every candidate died to a failure mode "established by measurement rather than argument", L3 said there are "exactly three ways", and L1's range was stated past its own numbers; some kills were argued, the record names a fourth way, and the range holds for seven of nine
+
+**Claimed:**
+
+- `outbound/ONE_PAGER.md`:
+  - "Every candidate died to one of five failure modes, each established by measurement rather than argument."
+  - L3: "the labelling must already be someone's job, and there are exactly three ways that happens — each destroying a different gate."
+  - L1: "explains up to 0.994 of the residual variance in satellite orbit-correction arcs".
+- `VERDICT.md`:
+  - L3's heading: "— and there are exactly three ways that happens, each destroying a different gate";
+  - "It is four laws, each derived by measurement";
+  - "Everything above this line is measured.";
+  - L1: "explains between 0.946 and 0.994 of the residual variance in eight of nine Sentinel-1 orbit-correction component-arcs". `artifacts/verification/coverage.json`'s claim `sentinel1-fit` gives the same range.
+- `outbound/NARRATIVE.md`: "The search still paid: three measured laws about *why* these domains die, each retiring an entire candidate family."
+- The evidence page's footer (`tools/render/evidence_page.py`): "four measured laws".
+
+**Actual:**
+
+- **Measurement.**
+  - `VERDICT.md` calls L3(i) "the only law whose evidence is primary-verifiable".
+  - L1's Sentinel-1 fit and L3(iii)'s MOT numbers are in the coverage map's weakest class (`artifacts/verification/coverage.json`, ids `sentinel1-fit`, `mot-untrained-rule`, `mot-prior-outcome`).
+  - `VERDICT.md` says a reader who declines a subagent's word "is left with the laws unproven, and would be right to."
+- **Argument.**
+  - Some candidates were killed by argument. A round-3 scout recorded that "every F5 reading in its submission is an argument rather than a result" (`artifacts/phase0/round3_domain_search.json`).
+  - No banked artifact defines "five failure modes": COULD NOT VERIFY.
+- **"Exactly three".**
+  - `VERDICT.md` says "There is a fourth case, and the pool contained zero instances of it." In that case the label is a by-product of a human acting on a rich sensor stream.
+  - The one-pager's own "What that leaves" paragraph, a few lines later, describes the class the pool lacked.
+  - The three ways were observed among 99 candidates (`artifacts/phase0/phase0_totals.json`, `total_candidates`).
+- **L1's range.**
+  - The subagent's per-component values (`artifacts/phase0/round2_domain_search.json`) are 0.993, 0.975 and 0.946; 0.974, 0.954 and 0.480; and 0.983, 0.994 and 0.944.
+  - Eight of nine are 0.944 or better. Only seven are 0.946 or better.
+  - The subagent's own summary, "0.946 or better in 8 of 9", does not match its values, and `VERDICT.md` and `coverage.json` copied it.
+
+**Size:** Seven sentences on the laws' evidence, two of them statements of a law, and one range overstated in two published places (`VERDICT.md` and `coverage.json`; the archived trial notes `trial/pivot/_analysis.md` and `trial/pivot/DOMAIN_SELECTION.md` carry it too) and given only by its top in the one-pager:
+
+- Argument was presented as measurement.
+- An observation over 99 candidates was presented as an exhaustive taxonomy, which the record itself contradicts.
+- L1's lower bound was overstated for one component-arc in nine, by 0.002.
+
+It flatters us.
+
+**Cause:** The laws were first written as derived results. The record later qualified them in three places: the coverage map, its weakest-row paragraph, and its fourth-case section. The summary sentences were not brought into line. This is the class of this ledger's 2026-08-31 items 9 to 12, a law "derived by measurement". L1's range was copied from a subagent's summary sentence, not from its values.
+
+**Fix:**
+
+- **The one-pager** (b3ff1bf):
+  - The section heading "Why it is worth more than a domain would have been" became "What the search produced".
+  - The sentence reads "Every candidate died to one of five failure modes. Only L3(i)'s evidence below is primary-verifiable (reproduced here). L1's and L3(iii)'s rest on subagent measurements no one can now re-run (see *The part that should be read first*), and L3's three-way split is argued, not measured."
+  - L1 reads "0.944 to 0.994 of the residual variance in eight of nine component-arcs of three Sentinel-1 orbit-correction arcs (0.480 in the ninth) — a subagent measurement this repository cannot re-run".
+  - L3 reads "across 99 candidates we found it happen in three ways".
+- **VERDICT.md** (8ebd2d4):
+  - "four laws, each resting on measurement — three from the search, several of whose load-bearing measurements are subagent numbers this repository cannot reproduce";
+  - L1 adds "a subagent measurement this repository cannot reproduce (coverage class `neither`, below)";
+  - L3's heading reads "among our candidates we found three ways that happens";
+  - "Everything above this line rests on measurement, several of the load-bearing ones subagent measurements in the coverage map's `neither` class."
+- **NARRATIVE** (8ebd2d4): "three laws about *why* these domains die, each derived from measurements — some of them a subagent's that we have not re-derived here".
+- **The evidence page** (388d0f1): "four laws derived by measurement (three of them from the search, part of whose evidence was measured in scratch directories that no longer exist and cannot be reproduced here)".
+- **Not changed.**
+  - "five failure modes" stands in the one-pager, with no banked definition.
+  - `VERDICT.md`'s L1 range and `coverage.json`'s `sentinel1-fit` claim still say 0.946 in eight of nine at HEAD f275303, so the one-pager (0.944) and `VERDICT.md` now disagree. The two archived trial notes are unchanged.
+
+`docs/OPERATING_RULES.md` §6 is the rule.
+
+
+## 2026-10-22 — VERDICT.md's closing section still counted four curves with exactly one a claim about the world, and said most findings rest on subagent measurements; the record outgrew both
+
+**Claimed:** `VERDICT.md`, "What this repository does not establish":
+
+- "**It contains four fitted, interval-bounded curves, and exactly one of them is a claim about the world** — the carved-DEFLATE curve of preregistration 0003, valid at a 4096-byte window and only there (0007)."
+- "**Most of its findings rest on subagent measurements** that have not been independently reproduced, as the coverage map states in detail."
+
+**Actual:**
+
+- **The curves.**
+  - The record now banks more than four fitted, interval-bounded curves. They include 0011's at 2048 (`carve_generalisation_2048_verdict.json`), and 0023's and 0024's on real files (`realcurve_4096_verdict.json`, `realcurve2_4096_verdict.json`).
+  - The real-file curves are claims about real files. They rise, and their top readings do not clear 0021's bar: 0.1193 against 0.1429. Re-applied with the tree as floor (informational), 0.1404 does not clear 0.1419.
+  - 0003's curve is a claim about the builder's eight content families, seven of them generators (see the generator-content entry above).
+- **The findings.**
+  - The coverage map holds 283 claims (`artifacts/verification/coverage.json`). 14 are in the weakest class, and nine of those rest on subagent measurements: eight that no one can re-run, and one (`sat-subagent-slope-not-reproduced`) that this repository tried to reproduce and could not. 233 are primary-verifiable.
+  - So "most of its findings" was false, in the direction against us.
+
+**Size:** Two bullets in the section that exists to say what the repository does not establish.
+
+- The first erred both ways at once: it understated the curves and overstated what the one it names is about. It was corrected once already for the same class (this ledger, 2026-08-31, item 5).
+- The second ran against us.
+
+**Cause:** The closing section is prose with no registered numbers, so nothing fails when the record grows. It was true when written and was not revisited when 0011, 0023, 0024 and the coverage work landed.
+
+**Fix:** Both bullets were rewritten (8ebd2d4).
+
+- **The first** gives no count of curves ("more than the four this bullet once counted"). It names:
+  - 0003's curve, "on the corpus builder's eight content families, seven of them its own generators";
+  - the real-plaintext curves and the bar they do not clear (0.1404 against 0.1419, re-applied);
+  - the curves that miss.
+
+  An error in the proposed replacement, which gave 0024's reading for 0023's, was not carried over.
+- **The second** says "Some of its findings" rest on subagent measurements, and names the Sentinel-1 fit behind L1 and the MOT numbers behind L3(iii). It says the shipped code's re-derivability "is a property of the code, not a reproduction by anyone outside this team".
+- **The proposal not followed.** The draft of this entry proposed bullets without counts. The second bullet as written carries four counts ("eight of the 14 claims", "233 of the 283 claims"). None is registered in `docs/live_claims.json`, so the same cause can recur when the coverage map moves. Its "eight" follows `VERDICT.md`'s own split, which counts the actively unreproduced figure separately as "the ninth"; under the bullet's own words (subagent measurements "that have not been independently reproduced") that figure counts too, and the number is nine. It stands at HEAD f275303.
+
+
+## 2026-10-22 — NARRATIVE.md said the diligence map has nine question headings and that its crib answers all of them; the map has more, and the questions on 0015 onward are answered elsewhere in the document
+
+**Claimed:** `outbound/NARRATIVE.md`:
+
+- "The diligence map at `docs/DILIGENCE.md` carries **nine** question headings (the brief for this document said eight; the file itself has nine, so all nine are answered here — see COULD NOT VERIFY below)."
+- In that COULD NOT VERIFY section: "`docs/DILIGENCE.md` contains nine question headings. All nine are answered above rather than silently dropping one."
+
+**Actual:**
+
+- `docs/DILIGENCE.md` carries seventeen question headings at fab3678. Among them are the questions on 0015 to 0024, from "Does it work on content it has never seen?" to "Does a second decade of real files help?". The newest were added on 2026-09-17 (216fd60, cad24ab).
+- The crib answers none of these. They are answered in NARRATIVE's five-minute version.
+- `tools/publish/publish_0025.py` adds another heading when 0025 is published, and nothing updates or checks this count.
+
+**Size:** One count and one completeness claim, false since at least 4ca1ca5 (2026-09-16), where this clone's history begins. They sit in the section of the document meant to list what could not be verified. Flattering: the sentences claimed the crib covered all of the map's question headings; it covered nine of seventeen.
+
+**Cause:** The count of a growing file was written as prose and never registered. This is the class of this ledger's 2026-09-04 entry.
+
+**Fix:** Both sentences were rewritten (8ebd2d4).
+
+- They say the map carries **seventeen** question headings. They say nine are answered in the crib and the eight on 0015 to 0024 in the five-minute version.
+- The draft of this entry proposed giving no count. The text as written gives one, unregistered.
+- 0025's publication script adds the heading "Does a fourth doubling of real files help?" to the map. So "seventeen" goes stale the day 0025 is published, unless that script or a registry entry moves it. The cause stands.
+
+
+## 2026-10-22 — DILIGENCE.md said 0014's margin is +0.0567 "on every reading"; with gutenberg excluded it is +0.0576, and two more documents say the same
+
+**Claimed:**
+
+- `docs/DILIGENCE.md`, "Does it survive realistic carve sizes?": "0.2317, +0.0567 on every reading, `RECIPE_CLEARS`,".
+- `outbound/EVIDENCE_BRIEF.md`, its summary: "0014: +0.0567 on every reading against a searched logistic at 0.2317".
+- `outbound/NARRATIVE.md`: "and the margin held at +0.0567 on every reading".
+
+**Actual:** From `artifacts/pivot/recipe_search_4096_verdict.json`:
+
+- On the frozen and expanded readings, `read.final_top1` is 0.2884 against 0.2317, so +0.0567.
+- With the leaked family excluded, `read.final_top1_non_gutenberg` is 0.3003 against `bars_applied.expanded_non_gutenberg` 0.2427, so +0.0576.
+
+`VERDICT.md` and the one-pager give all three readings.
+
+**Size:** One reading of three, off by less than a thousandth, in the direction against us, in three documents. It is filed because this ledger files errors against our interest at the same size as the rest.
+
+**Cause:** "Every reading" was generalised from two readings that happen to be equal.
+
+**Fix:** `docs/DILIGENCE.md` (938e0c7) gives "+0.0567 on the frozen and the expanded reading and +0.0576 with the leaked gutenberg family excluded". The brief's bullet was rewritten in 6d1f5d9, to add the gutenberg clause, and kept "+0.0567 on every reading". NARRATIVE's sentence was in no item and is unchanged. Both stand at HEAD f275303.
+
+
+## 2026-10-22 — VERDICT.md, the dataset card and this ledger gave the all-family mean distinct-stream count as 22.27 (the card with a collision rate of 0.143), and the evidence page set a 4096-window mean of 20.9125 beside whole-stream values; the banked whole-stream mean is 22.261 and the banked collision rate 0.1438
+
+**Claimed:**
+
+- `VERDICT.md`, "Incompressible content caps what is achievable": "22.27 is the mean across all eight content families".
+- `tools/pivot/DATASET_CARD.md`: "22.27 of 26, collision rate 0.143".
+- This ledger, 2026-08-31, items 6 to 8: "22.27 — the all-family mean distinct-stream rate".
+- The evidence page, "Where the curve lives" (`outbound/evidence_page.html`, rendered by `tools/render/evidence_page.py`): "(14.667 and 14.75 distinct streams of 26 for base64 and binary; the mean across all eight families is 20.9125)".
+
+**Actual:**
+
+- **The whole-stream mean.** `artifacts/pivot/channel_capacity.json` banks `overall_mean_distinct_streams` as 22.261, which is 22.26 at two decimals.
+  - The mean of its eight `per_family` values (14.667 to 25.917) agrees.
+  - 22.27 appears only in the same artifact's prose `reading` field, beside its "collision rate of 0.143".
+  - The same artifact banks `collision_rate` as 0.1438, which is 0.144 at three places. The prose's 0.143 misstates it at three places, and in the same direction as 22.27: fewer collisions, more distinct streams.
+  - `tools/claimcheck.py` reads numbers out of strings, so it passed both figures.
+- **The page's 20.9125.** That figure is `carve_channel_capacity.json` `by_carve.4096.mean_distinct_streams_of_26`, a mean over 4096-byte windows. The page set it beside 14.667 and 14.75, which are whole-stream values from `channel_capacity.json`. That is two measurements from two artifacts, read as one comparison.
+- **The earlier review.** The QA review of 2026-08-31 (`docs/qa/NEW_DOCS_REVIEW.md`, Finding 1) flagged the page for giving 20.9125 as the incompressible families' ceiling. The repair added the right per-family values and kept 20.9125 beside them.
+
+**Size:** For 22.27: under a hundredth, in the second decimal, flattering by that much and no more. For the dataset card's 0.143: collisions understated by under a thousandth, flattering by that much. For the page: one comparison mixing window sizes. No number in it is wrong for its own measurement. It is filed because entries here are append-only, the 2026-08-31 entry repeats 22.27, and the page's figure survived one review already.
+
+**Cause:** 22.27 and 0.143 were copied from the artifact's prose, which rounds both wrongly, not from its numeric fields; the gate cannot tell the two apart. The page's sentence drew its per-family values from `channel_capacity.json` and its mean from `carve_channel_capacity.json`. Nothing checks that two numbers set side by side measure the same thing.
+
+**Fix:**
+
+- `VERDICT.md` (8ebd2d4) says 22.261.
+- The renderer (388d0f1) now reads `channel_capacity.json` `overall_mean_distinct_streams`, and the page says "against 22.261 across all eight families, all three on whole streams of 32768-byte source chunks".
+- `tools/pivot/DATASET_CARD.md` was in no applied commit: it still says "22.27 of 26, collision rate 0.143" at HEAD f275303, both figures wrong. This entry's draft said the 22.27 would be corrected, and it was not.
+- The artifact's `reading` field is banked and stays as written; this entry is its correction.
+
+
+## 2026-10-22 — The 2026-09-02 entry said one of six QA findings went unfixed; two did, and Finding 6's wrong artifact pointer in DILIGENCE.md stood until today
+
+**Claimed:**
+
+- This ledger, 2026-09-02: "**Size:** one of six findings claimed fixed; one integer; in the verification section of the diligence map."
+- The pointer at issue, `docs/DILIGENCE.md`, "Where does the signal actually live?": "near-flat on incompressible families sitting at the measured collision ceiling (`carve_channel_capacity.json`)."
+
+**Actual:**
+
+- `docs/qa/NEW_DOCS_REVIEW.md` Finding 6: `carve_channel_capacity.json` holds only all-family means per carve size. The per-family ceilings (14.667 for base64, 14.75 for binary) are in `channel_capacity.json`, `per_family`.
+- The 2026-09-02 entry itself records that "The commit did not touch `docs/DILIGENCE.md` at all". Finding 6 is in that file, so it was unfixed too, and the pointer stood unchanged at fab3678.
+- a42d0c7 predates this clone's history, so its diff COULD NOT BE VERIFIED directly. This finding rests on the ledger's own words and on the pointer still standing.
+
+**Size:** One wrong file pointer, with no number misquoted. One count in a ledger entry: one of six becomes two of six.
+
+**Cause:** The 2026-09-02 entry checked the finding that had been found again, the mutation count. It did not check the review's other findings against the same diff.
+
+**Fix:** The pointer (938e0c7) now reads "(`channel_capacity.json`: 14.667 and 14.75 distinct streams of 26 for base64 and binary)". The rule, not a gate: when a claim of "fixed" turns out false, every finding it covered is re-checked against the diff.
+
+## 2026-10-22 — Said a corpus rebuild is proven byte-identical; 0024's realfit2 corpus does not rebuild byte for byte, because ISA-L's level-1 and level-2 output on rare chunks is not reproducible from run to run, and 0024's rung-7 logistic does not reproduce on a rebuild
+
+**Claimed:** "Corpora rebuild deterministically from shipped sources and generators; the manifest banks content hashes of every
+array so the rebuild is *proven* identical, not assumed" (`docs/DILIGENCE.md`), said of every corpus the record rests on. For
+0024's second-decade corpus the claim carried weight: preregistration 0025 seals the rule that 0024's slope and lead intervals
+must recompute exactly from rungs 1..7 before any rung-8 fit, which presumes rungs 5..7 can be rebuilt byte for byte. The 0025
+engineering log, in its first entry on the refits (d8485ff, 2026-10-22), said the rebuilt corpus's difference "does not move
+these fits"; that was written before the rung-7 logistic finished and was corrected in the log itself (fab3678).
+
+**Actual:** On 2026-10-21 `tools/pivot/corpus_realfit2.py --build` on a fresh container, from pinned sources that verify byte for
+byte and with the library versions the banked manifest records (isal 1.8.0, libdeflate 0.9.0, zopfli 0.4.3, zlib 1.3, numpy
+2.4.6; python 3.11.17 here against 3.11.15 then), produced arrays whose y, g and fam, chunk metadata and every other manifest
+field equal the banked ones, but whose X (193926 x 1108 float32) hashes to `c395da3f…`, not the banked `d74bd30e…`
+(`artifacts/pivot/realfit2_corpus_manifest.json`; `artifacts/pivot/engineering_log_0025.json`, `container_2026_10_21`). The
+corpora 0018 and 0021 rest on (`ext_c4096`, `realfit_c4096`) rebuilt identical on the same container.
+
+What is known about where and how much:
+- The rows that form 0024's sealed smoke corpus (the first 126 pool chunks per family: 16027 rows, 629 chunks, all 26
+  configurations) hash to 0024's banked smoke y, g, fam and X (`41d1d6f3…`;
+  `tools/prereg_gen/0025/realfit2_smoke_subset_check.py`), so the difference lies in the chunks with k >= 126.
+- The container compresses deterministically (1745 chunks x 25 configurations, twice, 0 differences), and numpy's AVX-512
+  dispatch does not move the sampled rows (5135 rows recomputed with it disabled are byte-identical).
+- Refitted with the sealed interpreter through the repository's own partition and fitting code (every rung's row set hashes to
+  0024's sealed rung hashes), 0024's fits reproduce their banked per-example vectors on the 61409 extension rows exactly at
+  r4..r7 for the depth-3 tree and at r5 for the logistic (n_iter 479, as banked). The rung-7 logistic does not: 264 of 61409
+  rows differ (171 real; 5248 against 5249 real rows correct, a reading difference of about 0.00003), and it ran 678
+  iterations against the banked 664. The difference is in the fit inputs, in realfit2 rows that rungs 6 and 7 add.
+- A second rebuild on 2026-10-22, after the container restarted on a newer CPU (numpy's AVX512_ICL and AVX512_SPR targets
+  present), gives a third X, `4ff8ec57…`, with y, g, fam and the smoke subset identical again. The two rebuilds differ in
+  exactly 6 of 193926 rows in 4 chunks, every one labelled 22 or 23 - ISA-L levels 1 and 2 - with the whole feature row
+  moving: the compressed bytes differ. It is not the CPU. ISA-L dispatches 17 functions on the deflate path, both hosts
+  select identical code, and forcing each code-path tier shows every tier but the native AVX-512 one changes y on 8 to 20
+  chunks (so the banked build ran the native path too) while no tier or mixture reproduces the banked X. The flips are run
+  to run: a full build changes the level-1 and level-2 streams of roughly 0 to 4 chunks, a third rebuild on one host flipped
+  a chunk the other two did not, and seven million CPU-pinned compressions in isolation produced none. Why a full pipeline
+  run flips them is not identified (COULD NOT VERIFY). The banked X is most likely the canonical X plus an unknown set of
+  such flips; with no per-row or per-block banked hash it cannot be searched for, so the banked bytes are not recoverable.
+  Separately, ISA-L's level 3 writes different bytes on its AVX2 and AVX-512 paths, so a rebuild on an AVX2-only machine
+  would differ for every corpus.
+- The other three real-content corpora rebuild identical: 0018's and 0021's on the first host, 0025's `realfit3_c4096` (X
+  `98547322…`, y, g, fam) on the second, so the dependence has shown itself only on realfit2's rare inputs so far.
+
+**Size:** One of the four real-content corpora 0025 depends on (realfit2, 193926 rows) is not reproducible byte for byte on a
+second machine; its rare differing rows move 0024's rung-7 logistic on 264 of 61409 scored extension rows and one real row
+of 38452. Every 0024 verdict and number stands: each was measured on the banked corpus and each reader reads banked artifacts.
+What moves: a stranger rebuilding realfit2 cannot re-derive 0024's rung 6..7 fits bit for bit, only to within a reading
+difference of the order shown; and 0025, as sealed, cannot pass its own exact-interval rule on a rebuilt realfit2 and would
+file NOT RUN. 0025 is unfrozen; whether it is amended before its freeze (a reproduction within the reading tolerances, filed
+as weaker than the exact rule) or runs on the banked bytes reproduced is set out in `docs/strategy/0025_DECISION.md` and
+not yet taken.
+
+**Cause:** One of the four DEFLATE libraries the labels are made from, ISA-L, occasionally writes different level-1 and
+level-2 bytes for the same input inside a full build, and the builders feature the compressed stream; the builders assumed a
+compressor is a pure function of its input and level, and nothing checked it. The manifests banked the library versions but
+not the platform under them - CPU features, the C library, which `libz` was loaded, the library files' hashes - and banked X as
+one hash, so the difference could not be localised below "somewhere in 193926 rows" until two rebuilds on two hosts were
+compared row by row. The "proven identical" rebuild had never been run on a second machine before 2026-10-21; the two corpora that
+were rebuilt first came out identical, and the sentence was extended to all of them.
+
+**Fix:** `tools/prereg_gen/0025/realfit2_smoke_subset_check.py` localises a realfit2 rebuild against 0024's sealed smoke
+corpus. From now on every corpus builder's manifest records the platform it was built on (CPU feature flags, numpy's SIMD
+targets, the C library, the zlib runtime and the loaded `libz`'s path and hash, and the hashes of the isal, libdeflate and
+zopfli library files) and X hashed per block of rows, so a future mismatch names its block and its platform difference
+(`tools/pivot/corpus_ext.py` `platform_block`, `write_manifest`). `docs/DILIGENCE.md` says which corpora rebuilt identical on
+a second machine and which did not. The banked manifests are not rewritten. Proposed, not made: a builder that compresses
+each ISA-L configuration twice and refuses (or retries) on disagreement; whether that would catch this fault, which isolated
+compressions never showed, is untested.
+
+## 2026-10-21 — Said a rebuilt builder cache is proven byte-identical; its builder writes rows in worker-completion order, so no rebuild reproduces its X and g, or any row-position hash sealed from 0011 to 0025
+
+**Claimed:** "Corpora rebuild deterministically from shipped sources and generators; the manifest banks content hashes of every
+array so the rebuild is *proven* identical, not assumed" (`docs/DILIGENCE.md`). It sits under a command block that ends
+`corpus_manifest.py --check  # prove a rebuilt corpus is byte-identical to ours`. At 27a61aa (2026-10-21 21:07 UTC) that block
+gained the `run_study.py` command that builds `data/pivot/full_c4096.npz`, in the same commit whose message says the builder
+cache's X/g hashes cannot be rebuilt. Other places:
+- "the corpus manifest proves a rebuilt corpus byte-identical rather than assuming it" (`outbound/NARRATIVE.md`);
+- "`corpus_manifest.py --check` # prove a rebuilt corpus is byte-identical" (`outbound/evidence_page.html`);
+- "a cold clone re-manufactures them and checks the hashes" (`docs/strategy/MILESTONES.md`), said of the four corpora in the
+  manifest;
+- "a rebuilt corpus C is proven byte-identical rather than assumed" (`artifacts/verification/coverage.json`, claim
+  `corpus-manifest-2048`, filed primary-verifiable);
+- "so a stranger's rebuild can be PROVEN identical" (`tools/pivot/corpus_manifest.py`; the manifest banks the docstring's
+  second paragraph as its `why`);
+- "so a cold clone still rebuilds byte-identically" (`tools/pivot/source_pins.json`);
+- `tools/pivot/verify.sh`'s "To re-derive the result from scratch" block, which builds the cache and checks it against "the
+  banked array hashes";
+- three primary-verifiable coverage claims (`deflate-curve-slope`, `deflate-margin-expanded`, `seed-robustness`) whose
+  re-verification command is that rebuild followed by a re-measurement.
+
+This ledger said it too, this morning. The cold-clone entry of this date counted the builder cache among the claims the source
+fix restored, and its Fix says "Every corpus rebuilt on this container is checked against its banked manifest before any
+preregistration uses it."
+
+**Actual:** `tools/pivot/run_study.py` `build()` hands its chunk tasks to `Pool(procs).imap_unordered(_one, tasks, chunksize=8)`
+and writes each result at the next free row as it arrives (`X[n:n + m] = ...`). A batch of eight consecutive chunks comes back
+whole, but the batches come back in whatever order the workers finish them, and nothing sorts the rows before `np.savez`. The
+row order of every cache `build()` writes is therefore a record of one run's scheduling, and no rebuild can be asked to repeat
+it. Three of the four corpora `artifacts/pivot/corpus_manifest.json` banks were written by `build()`: `full_c4096` (by
+`run_study.py`, under 0003), and `carve_c1024` and `carve_c2048` (by `run_carve.py`, which imports it).
+
+The banked record shows the order is not reproducible, without any rebuild being needed to show it:
+1. `carve_c1024` and `raw_c1024` hold the same 25000 chunks (50000 to 74999) with the same y. `raw_c1024` was written by a
+   sequential loop in `run_byte_model.py`. Its banked g is the ascending sequence (sha256 `8e81f592…`, recomputed 2026-10-21).
+   `carve_c1024`'s banked g is not (`0076adaf…`).
+2. `full_c4096`'s banked g (`eda31b7c…`) is not the ascending sequence either (`677641ad…`). The sealed evaluation chunk
+   sequence (`scope.eval_chunk_layout` of 0024 and 0025: 10000 chunks in 5211 batches) runs backwards 711 times and is never
+   more than 3 batches from ascending. That is the signature of four workers finishing eight-chunk batches out of turn.
+
+So on any rebuild, X and g of the three caches hash differently, however faithful the sources, code and libraries are, and
+`corpus_manifest.py --check` prints DIFF for six of their nine arrays. y is unaffected. Every one of the 50000 chunks yields all
+26 configurations in configuration order, so y is the same periodic sequence in any batch order; the banked y hashes,
+`2b704268…` and `7f008413…`, equal that sequence's hashes. `raw_c1024` rebuilds whole. By the CI probe's own docstring, the
+manifest check had "only ever been executed on the machine that built them", against the files its hashes were taken from. The
+banked `full_c4096` went with the old container on 2026-10-21 (the cold-clone entry of this date), and its row order went with
+it.
+
+The order carried more than positions. `grouped_split` (`tools/pivot/run_carve.py`, the split every 4096 runner imports) holds
+out the first 20% of a seeded shuffle of the chunk ids. It then shuffles the training rows' *positions* with the same generator
+and keeps the first 800000. The permutation is fixed by the seed and the counts, so the cache's row order fixes which 800000 of
+the 1040000 training rows form the pool, not only the order they come in. The evaluation set is a set of chunks and survives a
+rebuild as a set; the pool does not. `tools/prereg_checks/prefreeze_0025.py` says the opposite: "a rebuilt cache moves row
+positions only".
+
+What is sealed on the lost orders:
+
+| Hash | Value | Sealed in |
+|---|---|---|
+| `eval_idx_sha256` (`full_c4096`) | `7da1099e…` | 0014–0018, 0020–0025 |
+| `pool_idx_sha256` | `17b0dc0b…` | 0014–0018, 0020–0025; restated in 0019 |
+| `pool_sorted_sha256` | `923cd266…` | 0014–0018, 0020–0025 |
+| `pool_y_sha256` | `d519612b…` | 0014–0018, 0020–0025 |
+| g, in `cache_identity` | `eda31b7c…` | 0014–0018, 0020–0025; 0011's corpus-A clause by reference to the manifest |
+| `eval_g_sha256` | `882292fc…` | 0020–0025 |
+| X, in `cache_identity` | `a28a2d40…` | 0021–0025 |
+| pool-block null | `822b6102…` | 0014, 0016, 0019 |
+| fold-block null | `0653cc12…` | 0015, 0017, 0018, 0019 |
+| g of `carve_c2048` | `070a4b08…` | 0012, and 0012's and 0013's readers |
+
+The two null blocks are derived from the pool. Every runner from 0014 on refuses a builder cache whose y and g (and, from 0021
+on, X) are not its sealed `cache_identity`. The runners from 0018 on also refuse a pool whose hash is not the sealed one. All of
+these preregistrations are frozen except 0025.
+
+What a reader can and cannot re-verify now, for the frozen ones:
+- **Re-read:** everything, unchanged. Every frozen reader reads banked artifacts, not the cache.
+- **Re-run under the frozen protocol:** nothing that touches the builder cache. Each frozen runner refuses a rebuilt cache at
+  its identity check, and no reorder recovers the banked order: nothing banked fixes the order of the 1039 batches that hold
+  no evaluation chunk (about 2^1257 admissible orders remain), and `tools/prereg_gen/0025/reorder_cache.py`'s documented order
+  gives g `82b87d8b…` on any complete rebuild, not the banked `eda31b7c…` (computed from the real y and g structure; no rebuilt
+  cache has been reordered yet). A run with that check removed is not the frozen protocol.
+- **The evaluation rows,** scored by every preregistration from 0014 to 0024: their chunks are a set, and their order is
+  banked (`eval_chunk_layout`, `eval_y_sha256`, `eval_g_sha256`). So a rebuilt cache can be put back into an order that yields
+  them in the banked sequence. No banked hash covers their features except the lost X, so their content can be shown only by
+  behaviour. 0021's recipes are refitted on 0021's fit block (a real-content corpus, rebuilt identical on 2026-10-21) and
+  scored on the rebuilt evaluation rows. Their per-example correctness vectors are compared with the banked vectors, which
+  agree hash for hash across 0021, 0022, 0023 and 0024. That proof (`tools/prereg_gen/0025/cache_content_proof.py`) compares
+  each row's 0/1 correctness, not its features, so it catches gross content errors and is not a byte-equality proof. It has
+  not been run on a rebuilt cache: the cache was not rebuilt on 2026-10-21/22, because the rebuild of realfit2 (the next
+  entry) showed this container does not reproduce every banked feature byte. Its control part - 0021's B-feat1, D1 and L3
+  refitted on 0021's fit block and scored on the sealed extension rows - reproduces the banked vectors exactly here. For 0022,
+  0023 and 0024, which fit only on real-content corpora, the evaluation rows are the whole of their dependence on the builder
+  cache.
+- **Pool rows:** nothing. Every fit on a builder pool was made on rows nobody can now identify, ourselves included:
+  - 0003's four rungs and 0006, on `full_c4096`;
+  - 0007 on `carve_c1024` and 0011 on `carve_c2048`, each with a matched model fitted on `full_c4096`'s pool;
+  - 0012 on `carve_c2048`;
+  - 0014's roster, 0015's and 0017's folds, 0016's family budgets, and 0018's pool fits and null block, on `full_c4096`;
+  - 0020's and 0021's reproduction and builder-matched blocks, with 0021's sealed collision-row hashes, on `full_c4096`.
+
+  The only exceptions are 26 pool rows in five batches whose absolute positions `artifacts/pivot/builder_duplicate_chunks.json`
+  banks. Those results stand as banked. A rebuild can re-measure them on a different draw of the same design but cannot
+  re-derive them on the same rows. The three coverage claims named above would return a re-measurement, not the banked number;
+  that includes 0003's headline slope.
+
+**Size:** Six of the twelve arrays the manifest banks were claimed "proven identical" and cannot be reproduced by any rebuild:
+X and g of three of its four corpora (X is 1300000 × 1108 float32 for one and 650000 × 1108 for the other two). The claim held
+for y in all four corpora and for `raw_c1024` whole. Fifteen preregistrations seal or carry hashes of the lost orders (0011 to
+0025): fourteen are frozen, and 0025 is unfrozen; its re-seal waits on a rebuilt cache. Every verdict and every banked number stands: each was measured
+on the banked caches, and each reader reads banked artifacts. What moves is what a stranger can re-derive. "Rebuild and check
+the hashes" becomes: rebuild the rows as a set, recover the evaluation rows' banked order from banked layouts, show their
+content by behaviour, and re-measure every builder-pool result on a different draw of the pool, never on the same rows.
+
+**Cause:** `build()` was written for memory (one preallocated copy) and speed (a Pool). `corpus_manifest.py` was written
+afterwards to hash whatever was on disk, and its proof was never run against a second build. So a row order no second build
+could produce was banked as content, then sealed, hash by hash, into every preregistration that read the cache. The evidence
+sat in the manifest from the day `raw_c1024` and `carve_c1024` were banked beside each other (the same chunks, the same y, two
+different g), and nobody compared them. The later builders were written knowing the hazard: `corpus_ext.build()` sorts its rows
+by chunk id and label "so the arrays do not depend on worker scheduling", and its `--probe` shuffles the task order to prove it.
+That lesson was never applied back to `run_study.build()`. The CI determinism probe sorted the same hazard out of its own
+assembly (the CI-probe entry of this date). The cold-clone entry of this date, filed hours earlier, treated a cold clone's
+failure to rebuild the builder cache as a fetch problem, because the fetch failed first.
+
+**Fix:**
+1. `run_study.build()` is not changed. This follows cold-clone audit D1, recorded in `tools/ci/determinism_probe.py` at
+   27a61aa: "a different behaviour would make the banked corpora impossible to reason about".
+2. For 0025 (unfrozen):
+   - `tools/prereg_gen/0025/reorder_cache.py` (committed ea495ac) writes the rebuilt cache in a documented order
+     that depends only on the cache's chunk-id set and the preregistration. Batches are kept whole, evaluation batches come in
+     the order of the sealed `eval_chunk_layout`, and each evaluation-free batch follows its id-predecessor. By its own
+     docstring, this puts the five batches with banked positions at those positions. It asserts that `grouped_split` then
+     returns the evaluation rows with the sealed `eval_y_sha256`, `eval_g_sha256` and chunk layout, and that the output holds
+     exactly the input's rows.
+   - `tools/prereg_gen/0025/cache_content_proof.py` (committed 9f33d6b, hardened 4dda925) is the behavioural content proof
+     described above, with M1 added to sharpen it. Its control is the extension rows, whose bytes are sealed. Not yet run on a
+     rebuilt cache (see above).
+   - `tools/prereg_gen/0025/amend_cache_0025.py` refuses unless that proof passed on the same cache (its whole-cache hashes
+     and its digest of the evaluation rows' features are recomputed) and the order proof holds. It then replaces
+     0025's `cache_identity` X and g, the evaluation-row position hash and the three pool hashes wherever they stand. It keeps
+     each banked value beside its replacement as `*_banked_2026_08` and records the change under `amendments_before_freeze`.
+   - `tools/prereg_checks/prefreeze_0025.py` accepts a rebuilt cache only with those records in place and the cache on disk
+     hashing to them.
+   - 0025 scores the evaluation rows and fits nothing on the pool. Its re-sealed pool is a different set of rows, and nothing
+     in 0025 reads it.
+3. 0011 to 0024 are frozen and are not edited; this entry is their record. The CI-probe entry of this date said this entry would be filed with the cache's content
+   proof; it is filed without it, because the cache was not rebuilt (above).
+4. The published sentences that said a rebuilt corpus is proven identical were rewritten with the entry of this date on
+   the manifest sentences, which lists each change; the `oob4096` mutation-gate case that recomputed 0019's null block
+   whenever a cache was present now recognises a rebuilt cache by its g and says the recomputation cannot run on it (5e86c5f).
+   Left as banked, superseded by this entry: the `why` field of `artifacts/pivot/corpus_manifest.json` and the comment in
+   `tools/pivot/source_pins.json` (both are hashed inputs; rewriting their prose would change banked bytes).
+
 ## 2026-10-21 — Said the CI determinism probe proves the property the real corpus build's parallelism depends on; it never ran the real build, and the sort in its own assembly hid the row order that makes the builder caches unrebuildable
 
 **Claimed:** CI runs `tools/ci/determinism_probe.py` as "Corpus determinism probe (small slice built twice + order-shuffled,

@@ -215,7 +215,7 @@ seconds by design, because burying that sentence is how trust dies in a meeting.
 > that was false for one of eight content families, and subagent evidence mislabelled first-hand.
 > All 13 were fixed — the three critical ones by new measurement, the other ten by correcting the
 > text — and the audit record is banked with its rejected findings included, so the filter itself
-> can be audited. The corrections ledger now carries 23 entries at
+> can be audited. The corrections ledger now carries 42 entries at
 > full size — including one where the error ran *against* our interest and was filed anyway. And
 > the uncomfortable meta-finding is published with it: every gate passed while all of those
 > defects were live, because gates check that numbers are banked, not that the reasoning between them
@@ -300,7 +300,7 @@ where the record allows and explicitly hedged where it does not.
 > the record itself rather than discovered by you.
 
 **"What did you get wrong?"**
-> 23 corrections at full size, including a published figure our own reproduction contradicted, an
+> 42 corrections at full size, including a published figure our own reproduction contradicted, an
 > instrument warning I personally grepped out of view, and 13 audit findings — the pattern being
 > that our gates check mechanical honesty, not reasoning, which the ledger states out loud.
 
