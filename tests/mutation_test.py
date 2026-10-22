@@ -9198,7 +9198,10 @@ def _good_realcurve3(acc=None, null_acc=None, gain_mode="even", perturb=None, ev
     return json.loads(json.dumps(_RC3_MEM[key]))
 
 
-def _realcurve3(root, mutate=None, drop_artifact=False, drop_scores=False, not_run=None, expect="FOURTH_DOUBLING_RISES_MODEL_LEADS", **kw):
+def _realcurve3(root, mutate=None, drop_artifact=False, drop_scores=False, not_run=None, expect="FOURTH_DOUBLING_RISES_MODEL_LEADS",
+                reader_subs=None, **kw):
+    """reader_subs=[(old, new), ...] edits the sandbox's copy of the reader, each old string exactly once (a missing one is a harness
+    error, never a detection): the way to reach a reader state no artifact can, or to mutate the reader itself."""
     art, scores = _good_realcurve3(**kw)
     if mutate:
         r = mutate(art, scores)
@@ -9213,6 +9216,13 @@ def _realcurve3(root, mutate=None, drop_artifact=False, drop_scores=False, not_r
         json.dump(not_run, open(os.path.join(piv, "realcurve3_4096_not_run.json"), "w"))
     shutil.copy(os.path.join(REPO, "tools", "readers", "realcurve3_4096_verdict.py"),
                 os.path.join(root, "tools", "readers", "realcurve3_4096_verdict.py"))
+    if reader_subs:
+        rp = os.path.join(root, "tools", "readers", "realcurve3_4096_verdict.py")
+        src = open(rp, encoding="utf-8").read()
+        for old, new in reader_subs:
+            assert src.count(old) == 1, f"reader substitution target found {src.count(old)} times, not once: {old[:80]!r}"
+            src = src.replace(old, new)
+        open(rp, "w", encoding="utf-8").write(src)
     rc, out = run([PY, "tools/readers/realcurve3_4096_verdict.py"], root)
     if rc != 0:
         return rc, out
@@ -9260,6 +9270,65 @@ def _rc3_verdict(root):
 
 _RC3_G = "realcurve3_4096"
 _RC3_R7 = {"model": 0.1404, "logistic": 0.1365, "depth3_tree": 0.0919}   # 0024's banked rung 7, which the control reproduces exactly
+_RC3_PREREG = os.path.join(REPO, "prereg", "0025-realcurve3-4096.json")
+
+
+def _rc3_lead_cap(role):
+    """The lead rule's own words for a role at its iteration cap at rung 8, read from the preregistration's bar (not from the reader)."""
+    words = re.findall(r"'(\(the <role> at its iteration cap at rung 8 \(the top rung\)\))'",
+                       json.load(open(_RC3_PREREG, encoding="utf-8"))["bar"]["lead_rule"]["passes_if"])
+    assert len(words) == 1, words
+    return words[0].replace("<role>", role)
+
+
+def _rc3_stop_rule_5():
+    """stop_rules[5]'s two required statements: 'one doubling (N against M plaintexts)' and what the added files are per family."""
+    s5 = json.load(open(_RC3_PREREG, encoding="utf-8"))["stop_rules"][5]
+    one, files = re.findall(r"one doubling \(\d+ against \d+ plaintexts\)", s5), re.findall(r"what those files are per family \(([^)]*)\)", s5)
+    assert len(one) == 1 and len(files) == 1, (one, files)
+    return one[0], files[0]
+
+
+# Rung 7 must reproduce 0024's intervals EXACTLY, which pins its model reading to 0024's banked 0.1404 (0024's vector: 5399 of 38452
+# rows, 0.140409; two rows up or three down move the fourth decimal, and with it 0024's exact rung-7 lead points against the tree
+# and the logistic): with the same reading at rung 7
+# the measured gain and the gain with rung 7 held at 0024's banked reading are the same number, so no artifact alone can make them
+# straddle a reading boundary. The straddle controls therefore move 0024's banked rung-7 model reading by one unit of the fourth
+# decimal in the sandbox's copy of the reader (and in the artifact's banked reference, drift and sensitivity gain, as a runner reading
+# that reference would bank them): this run's rung 7 then reads 0.0001 from the reference - inside the anchor tolerance - and the
+# two gains differ by 0.0001 on the same paired interval.
+_RC3_STRADDLE_ANCHOR = "\nREFERENCE_SHIFT_0024 = "
+
+
+def _rc3_straddle(root, ref7_step, r8_model, reader_subs=(), expect="FOURTH_DOUBLING_BELOW_RATE_MODEL_LEADS"):
+    r25 = _rc3_reader(); ref7 = round(r25.REFERENCE_0024["model"][r25.N_0024_RUNGS - 1] + ref7_step, 4)
+    patch = (f'\nREFERENCE_0024 = dict(REFERENCE_0024, model=REFERENCE_0024["model"][:-1] + [{ref7!r}])   # mutation_test: one unit of the fourth decimal'
+             + _RC3_STRADDLE_ANCHOR)
+
+    def m(a, s):
+        k = r25.N_0024_RUNGS - 1; y7 = a["reproduction_0024"]["model"][k]; y8 = a["curves"]["model"]["rungs"][r25.N_RUNGS - 1]["ext_real_top1"]
+        a["reference_0024"]["model"][k] = ref7
+        a["reproduction_0024_drift"]["model"][k] = round(y7 - ref7, 6)
+        a["curves"]["model"]["fourth_doubling_gain_with_rung7_at_reference"] = round(y8 - ref7, 4)
+    return _realcurve3(root, _rc3_mut(m), acc={"r8_model": r8_model, "r8_logistic": 0.134}, expect=expect,
+                       reader_subs=[(_RC3_STRADDLE_ANCHOR, patch)] + list(reader_subs))
+
+
+def _rc3_straddle_check(root, rc, out, measured, sensitivity, published_point):
+    """Both readings stated in the verdict's own sentence, the published one named as the less flattering, its point the one that reads so."""
+    if rc != 0:
+        return rc, out
+    v = _rc3_verdict(root); f = v["flags"]["fourth_doubling_measured_and_sensitivity_readings"]; s1 = v["meaning"].split(". At 4096 bytes")[0]
+    pub = min((measured, sensitivity), key=["FOURTH_DOUBLING_FALLS", "FOURTH_DOUBLING_NOT_RESOLVED", "FOURTH_DOUBLING_BELOW_RATE", "FOURTH_DOUBLING_RISES"].index)
+    if v["verdict_components"]["gain"] != pub or v["gain_reading"] != pub or v["flags"]["gain_reading"] != pub \
+            or v["fourth_doubling"]["model"]["reading"] != measured or v["flags"]["fourth_doubling_reading_with_rung7_at_0024s_reading"] != sensitivity \
+            or f["straddle_a_reading_boundary"] is not True or f["published_reading"] != pub or f["published_point"] != published_point \
+            or f["measured"]["reading"] != measured or f["with_rung7_at_0024s_reading"]["reading"] != sensitivity:
+        return 1, out + f" !! the published gain reading must be the less flattering of {measured} and {sensitivity}, with both banked"
+    if f"reads {measured}" not in s1 or f"reads {sensitivity}" not in s1 or f"the published reading, {pub}, is the less flattering one" not in s1 \
+            or f"the model {published_point} on the real-family rows" not in s1:
+        return 1, out + " !! the verdict's sentence must state both readings and name the published one as the less flattering, at its own point"
+    return 0, out
 
 
 # ---- controls: every one of the twelve verdict strings is reachable, and reads as it should
@@ -9401,21 +9470,33 @@ def _(root):
     return 0, out
 
 
-@case(_RC3_G, "control-the-model-at-its-iteration-cap-at-rung-8-is-named-and-the-lead-is-not-a-recipe-comparison", "pass")
-def _(root):
+def _rc3_capped_r8_model(root, reader_subs=None):
     r25 = _rc3_reader()
 
     def m(a, s):
         a["fits"]["r8_model"]["fit_info"] = dict(a["fits"]["r8_model"]["fit_info"], n_iter=r25.MAX_ITER["model"])
         a["fit_info_by_name"]["r8_model"] = a["fits"]["r8_model"]["fit_info"]
-    rc, out = _realcurve3(root, _rc3_mut(m))
+    rc, out = _realcurve3(root, _rc3_mut(m), reader_subs=reader_subs)
     if rc == 0:
         v = _rc3_verdict(root)
         m = v["meaning"]
+        s1 = m.split(". At 4096 bytes")[0]
         if v["flags"]["lead_at_top_is_a_recipe_comparison"] is not False or v["flags"]["gain_is_a_recipe_reading"] is not False \
-                or m.count("(the model at its iteration cap at rung 8)") != 2 or "the cap is part of the sealed recipe and is never raised" not in m:
-            return 1, out + " !! a capped rung-8 model must be named, in the stop rules' words, beside both readings"
+                or s1.count("(the model at its iteration cap at rung 8)") != 1 or s1.count(_rc3_lead_cap("model") + "; not a recipe comparison") != 1 \
+                or m.count("at its iteration cap") != 2 or "the cap is part of the sealed recipe and is never raised" not in s1:
+            return 1, out + " !! a capped rung-8 model must be named beside both readings, in the gain rule's and the lead rule's own words"
     return rc, out
+
+
+@case(_RC3_G, "control-the-model-at-its-iteration-cap-at-rung-8-is-named-and-the-lead-is-not-a-recipe-comparison", "pass")
+def _(root):
+    return _rc3_capped_r8_model(root)
+
+
+@case(_RC3_G, "a-reader-whose-lead-cap-note-drops-the-lead-rules-words-the-top-rung-is-detected", "fail")
+def _(root):
+    # the reader before the pre-freeze sentence check: ' (the model at its iteration cap at rung 8)' beside the lead, not the lead rule's words
+    return _rc3_capped_r8_model(root, reader_subs=[('" " + LEAD_CAP_NOTE.replace("<role>", n[len(TOP):])', 'f" (the {n[len(TOP):]} at its iteration cap at rung {N_RUNGS})"')])
 
 
 @case(_RC3_G, "control-the-logistic-at-its-cap-at-rung-7-touches-neither-the-models-gain-nor-the-rung-8-lead", "pass")
@@ -9461,7 +9542,7 @@ def _(root):
     if rc == 0:
         v = _rc3_verdict(root); mm = v["meaning"]
         if v["flags"]["lead_at_top_is_a_recipe_comparison"] is not False or v["flags"]["gain_is_a_recipe_reading"] is not True \
-                or "(the logistic at its iteration cap at rung 8); not a recipe comparison" not in mm or "(the model at its iteration cap" in mm:
+                or _rc3_lead_cap("logistic") + "; not a recipe comparison" not in mm or "(the model at its iteration cap" in mm:
             return 1, out + " !! a capped rung-8 logistic is named beside the lead, never beside the gain"
     return rc, out
 
@@ -9544,10 +9625,94 @@ def _(root):
 def _(root):
     rc, out = _realcurve3(root)
     if rc == 0:
-        v = _rc3_verdict(root); f = v["flags"]
-        if f["fourth_doubling_gain_with_rung7_at_0024s_reading"]["model"] != f["fourth_doubling_gain"] or f["fourth_doubling_reading_with_rung7_at_0024s_reading"] != "FOURTH_DOUBLING_RISES":
-            return 1, out + " !! with rung 7 reproduced exactly the sensitivity gain is the gain"
+        v = _rc3_verdict(root); f = v["flags"]; s = f["fourth_doubling_measured_and_sensitivity_readings"]
+        if f["fourth_doubling_gain_with_rung7_at_0024s_reading"]["model"] != f["fourth_doubling_gain"] or f["fourth_doubling_reading_with_rung7_at_0024s_reading"] != "FOURTH_DOUBLING_RISES" \
+                or s["straddle_a_reading_boundary"] is not False or s["published_reading"] != v["gain_reading"] != "FOURTH_DOUBLING_RISES" \
+                or "less flattering" in v["meaning"] or "straddle" in v["meaning"]:
+            return 1, out + " !! with rung 7 reproduced exactly the sensitivity gain is the gain, and nothing straddles"
     return rc, out
+
+
+# ---- the sensitivity straddle (scope.design.how_the_sensitivity_gain_is_read): both readings stated, the less flattering published
+
+@case(_RC3_G, "control-a-measured-RISES-that-reads-BELOW_RATE-with-rung-7-at-0024s-banked-reading-publishes-BELOW_RATE-naming-both", "pass")
+def _(root):
+    rc, out = _rc3_straddle(root, 0.0001, _RC3_R7["model"] + 0.005)
+    return _rc3_straddle_check(root, rc, out, "FOURTH_DOUBLING_RISES", "FOURTH_DOUBLING_BELOW_RATE", 0.0049)
+
+
+@case(_RC3_G, "control-a-measured-BELOW_RATE-that-reads-RISES-with-rung-7-at-0024s-banked-reading-stays-BELOW_RATE-naming-both", "pass")
+def _(root):
+    rc, out = _rc3_straddle(root, -0.0001, _RC3_R7["model"] + 0.0049)
+    return _rc3_straddle_check(root, rc, out, "FOURTH_DOUBLING_BELOW_RATE", "FOURTH_DOUBLING_RISES", 0.0049)
+
+
+@case(_RC3_G, "a-reader-that-drops-the-straddle-sentence-is-detected", "fail")
+def _(root):
+    anchor = '        pf_text = ", ".join(f"{f} {v}" for f, v in my_curves["model"]["per_family_fourth_doubling_gain"].items())'
+    rc, out = _rc3_straddle(root, 0.0001, _RC3_R7["model"] + 0.005, reader_subs=[(anchor, '        straddle_text = ""\n' + anchor)])
+    return _rc3_straddle_check(root, rc, out, "FOURTH_DOUBLING_RISES", "FOURTH_DOUBLING_BELOW_RATE", 0.0049)
+
+
+@case(_RC3_G, "a-reader-that-publishes-the-measured-reading-on-a-straddle-is-detected", "fail")
+def _(root):
+    # the reader before the pre-freeze sentence check: the verdict always from the measured gain, the sensitivity reading only a flag
+    rc, out = _rc3_straddle(root, 0.0001, _RC3_R7["model"] + 0.005,
+                            reader_subs=[("gain_read = min((gain_measured, gain_sens), key=GAIN_READINGS_LEAST_FLATTERING_FIRST.index)", "gain_read = gain_measured")])
+    return _rc3_straddle_check(root, rc, out, "FOURTH_DOUBLING_RISES", "FOURTH_DOUBLING_BELOW_RATE", 0.0049)
+
+
+@case(_RC3_G, "a-reader-that-quotes-the-measured-point-beside-the-published-sensitivity-reading-is-detected", "fail")
+def _(root):
+    rc, out = _rc3_straddle(root, 0.0001, _RC3_R7["model"] + 0.005,
+                            reader_subs=[('gain_pub_point = gain["model"]["point"] if gain_read == gain_measured else sens_point', 'gain_pub_point = gain["model"]["point"]')])
+    return _rc3_straddle_check(root, rc, out, "FOURTH_DOUBLING_RISES", "FOURTH_DOUBLING_BELOW_RATE", 0.0049)
+
+
+# ---- the stop rules' material beside the verdict (stop_rules[0] and [5]): every role's gain with its interval, the per-family gains
+# in the verdict's sentence, both shift arms, the floors, and what the fourth doubling is and what its files are per family
+
+def _rc3_material_check(root, rc, out):
+    if rc != 0:
+        return rc, out
+    v = _rc3_verdict(root); m = v["meaning"]; s1 = m.split(". At 4096 bytes")[0]; fl = v["flags"]; g = v["fourth_doubling"]
+    one, files = _rc3_stop_rule_5()
+    comp = json.load(open(_RC3_PREREG, encoding="utf-8"))["scope"]["sealed_partition"]["rungs"][-1]["added_composition_per_family"]
+    missing = [x for x in ([f"{f} {d}" for f, d in v["curves"]["model"]["per_family_fourth_doubling_gain"].items()]
+                           + [f"{g[r]['point']} (paired interval {g[r]['ci95']})" for r in ("logistic", "depth3_tree")] + [str(g["model"]["ci95"])])
+               if x not in s1]
+    missing += [x for x in ([f"{one} of other files of the same five families above 0024's top rung: {files} ("]
+                            + [f"{f} {c['from_new_files']} of {c['n']}" for f, c in comp.items()]
+                            + [str(fl["shift_arm_0024"]["readings_ext_real_top1"]), str(fl["shift_arm_0025"]["readings_ext_real_top1"]),
+                               str(fl["shift_arm_0025"]["s8_minus_s4_model_ci95_paired"]), str(v["floors"]["r8"]["needed_0021_clause"]),
+                               str(fl["two_decade_slope_per_doubling"]["model"]["ci95"])]
+                            + [str([p["ext_real_top1"] for p in v["curves"][role]["rungs"]]) for role in v["curves"]])
+                if x not in m]
+    if missing:
+        return 1, out + f" !! the verdict's meaning lacks the stop rules' material: {missing[:4]}"
+    return 0, out
+
+
+@case(_RC3_G, "control-the-meaning-carries-every-roles-gain-the-per-family-gains-both-shift-arms-and-the-fourth-doublings-files-per-family", "pass")
+def _(root):
+    return _rc3_material_check(root, *_realcurve3(root))
+
+
+@case(_RC3_G, "control-a-FALLS-is-published-beside-the-per-family-gains-and-the-new-shift-arm-at-the-same-size", "pass")
+def _(root):
+    rc, out = _realcurve3(root, acc={"r8_model": _RC3_R7["model"] - 0.01, "r8_logistic": _RC3_R7["logistic"] - 0.014}, expect="FOURTH_DOUBLING_FALLS_MODEL_LEADS")
+    return _rc3_material_check(root, rc, out)
+
+
+@case(_RC3_G, "a-reader-whose-meaning-omits-what-the-fourth-doublings-files-are-per-family-is-detected", "fail")
+def _(root):
+    anchor = '        meaning = (f"{verdict}: {gain_text}{straddle_text}'
+    return _rc3_material_check(root, *_realcurve3(root, reader_subs=[(anchor, '        comp_text = ""\n' + anchor)]))
+
+
+@case(_RC3_G, "a-reader-whose-meaning-omits-the-per-family-and-other-roles-gains-is-detected", "fail")
+def _(root):
+    return _rc3_material_check(root, *_realcurve3(root, reader_subs=[("; per family the model's fourth-doubling gain is {pf_text}, and {roles_text}", "")]))
 
 
 # ---- the reproduction clauses: the anchor within 0.0005, the rest within 0.005, and 0024's intervals EXACTLY

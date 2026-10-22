@@ -14,11 +14,13 @@ and the curve spans 2.1026 decades. Seven of the eight points were banked before
 can be the clause: the reader's verdict is read on the FOURTH DOUBLING alone - rung 8 minus rung 7 for the model,
 with a paired cluster-bootstrap interval over the scored real chunks - into RISES (at or above 0.005 with the interval
 above 0), BELOW_RATE (interval above 0, gain below 0.005), NOT_RESOLVED (interval includes 0) or FALLS (interval
-below 0), suffixed by the lead of the model over the logistic at rung 8 under 0024's sealed rule. 0024's seven rungs
+below 0), suffixed by the lead of the model over the logistic at rung 8 under 0024's sealed rule. The same gain with rung 7
+held at 0024's banked reading is read by the same rule; if the two straddle a reading boundary, the meaning states both and
+the published reading is the less flattering one, named as such. 0024's seven rungs
 and its shift arm are refitted row for row under 0024's own seeds and must reproduce 0024's readings (rung 7's three
 roles within 0.0005, the rest within 0.005) and 0024's banked bootstrap intervals exactly (0024's bootstrap seed is
 sealed for every verdict interval here). Three of 0021's four trivial-baseline floors are refitted on rungs 7 and 8 and
-banked as flags; the fourth, B-tree3, is D1 itself, so the tree floor at a rung is the curve's tree reading there. A second shift arm - rung 8's plaintexts from the new files alone at rung 4's count - is fitted last,
+banked as flags; the fourth, B-tree3, is D1 itself, so the tree floor at a rung is the curve's tree reading there. A second shift arm - rung 8's plaintexts from 0025's corpus alone at 0021's count (the new files and 0024's archives' unused chunks; the composition per family is banked) - is fitted last,
 informational, beside 0024's.
 
 This reader takes the runner's artifact (tools/pivot/run_realcurve3.py) and checks, clause by clause: the sealed
@@ -2154,6 +2156,11 @@ ENV_FULL = dict(ENV, threads=3, nice=10)
 BAR_GAIN = 0.005                # the record's rate: accuracy on the real-family rows per doubling of plaintexts
 GAIN_RULE = "rung 8 minus rung 7 for the model on the real-family rows, with the 95 percent paired cluster-bootstrap interval over the scored real chunks (0024's resamples: the same generator construction, seed and draw order): the interval's 97.5th percentile below 0 is FOURTH_DOUBLING_FALLS; else a gain >= 0.005 with the 2.5th percentile above 0 is FOURTH_DOUBLING_RISES; else a 2.5th percentile above 0 is FOURTH_DOUBLING_BELOW_RATE; otherwise FOURTH_DOUBLING_NOT_RESOLVED (never 'flat', never 'equal'). The interval covers the resampling of the 1488 scored real chunks of five files only, not the draw of rung 8's plaintexts nor the fit side. If the model at rung 8 or at rung 7 is at its iteration cap, the reading is still read by the rule as is (the cap is part of the sealed recipe and is never raised), the verdict string is still emitted, every document that states it states '(the model at its iteration cap at rung N)' in the same sentence, and the gain is not quoted as a recipe reading; a BELOW_RATE, NOT_RESOLVED or FALLS with the model at cap is published as such"
 LEAD_RULE = "the 95 percent paired cluster-bootstrap interval of model minus logistic real-family top-1 at rung 8 (the top rung), over the scored real chunks with the slope bootstrap's own resamples: entirely above 0 is MODEL_LEADS, entirely below 0 is LINEAR_LEADS, otherwise NO_SEPARATION (never 'equal'); the verdict string carries it as a suffix. If the model or the logistic at rung 8 (the top rung) is at its iteration cap, the suffix is still read by the rule, but every document that states it states '(the <role> at its iteration cap at rung 8 (the top rung))' in the same sentence and the lead is not quoted as a recipe comparison, exactly as the difference flag is not"
+GAIN_CAP_NOTE = "(the model at its iteration cap at rung N)"     # the gain rule's own words for a capped model, N the rung
+LEAD_CAP_NOTE = "(the <role> at its iteration cap at rung 8 (the top rung))"     # the lead rule's own words for a capped role, <role> the role
+# scope.design.how_the_sensitivity_gain_is_read: when the measured gain and the gain with rung 7 held at 0024's banked reading straddle
+# a reading boundary, the published reading is the less flattering one; least flattering first
+GAIN_READINGS_LEAST_FLATTERING_FIRST = ["FOURTH_DOUBLING_FALLS", "FOURTH_DOUBLING_NOT_RESOLVED", "FOURTH_DOUBLING_BELOW_RATE", "FOURTH_DOUBLING_RISES"]
 N_BOOT = 2000
 BOOT_SEED = 20260917              # 0024's seed2: the same resamples as 0024's verdict intervals
 STABILITY_SEEDS = 20
@@ -2270,6 +2277,17 @@ def paired_lead_bootstrap(vec_a, vec_b, chunk_ids, n_boot, seed):
         idx = rng.integers(0, n, n); tot = counts[idx].sum()
         out[b] = round(float(sa[idx].sum() / tot), 4) - round(float(sb[idx].sum() / tot), 4)
     return out
+
+
+def composition_phrase(comp):
+    """What the fourth doubling's added files are per family, in the stop rules' words, from the sealed counts alone: 'new projects'
+    where most of a family's added plaintexts come from new files, 'other chunks of 0024's projects' where none does, 'a mixture'
+    otherwise (stop_rules[5]; the generator refuses a reader whose phrase is not the stop rule's)."""
+    groups = {"new projects": [], "other chunks of 0024's projects": [], "a mixture": []}
+    for f, c in comp.items():
+        new = c["from_new_files"]
+        groups["new projects" if 2 * new > c["n"] else "other chunks of 0024's projects" if new == 0 else "a mixture"].append(f)
+    return ", ".join(f"{k} for {' and '.join(fs) if len(fs) < 3 else ', '.join(fs[:-1]) + ' and ' + fs[-1]}" for k, fs in groups.items() if fs)
 
 
 def _write(result):
@@ -2944,7 +2962,17 @@ def read(d) -> int:
         if not isinstance(bs.get("note"), str):
             void.append("stability: seed_stability carries no note")
 
-    gain_read = gain["model"]["reading"] if gain is not None and not void else None
+    # the measured reading (rung 8 minus this run's rung 7) and the sensitivity reading (rung 8 minus 0024's banked rung-7 reading, on the
+    # same paired interval). scope.design.how_the_sensitivity_gain_is_read: if the two straddle a reading boundary, every document states
+    # both and the published reading - the verdict's gain part - is the less flattering one, named as such; its point is the one that reads so
+    gain_measured = gain["model"]["reading"] if gain is not None and not void else None
+    gain_read = gain_measured; gain_sens = None; sens_point = None; gain_pub_point = None
+    if gain_measured is not None:
+        sens_point = my_curves["model"]["fourth_doubling_gain_with_rung7_at_reference"]
+        gain_sens = gain_reading(sens_point, gain["model"]["ci95"][0], gain["model"]["ci95"][1])
+        gain_read = min((gain_measured, gain_sens), key=GAIN_READINGS_LEAST_FLATTERING_FIRST.index)
+        gain_pub_point = gain["model"]["point"] if gain_read == gain_measured else sens_point
+    gain_straddle = gain_measured is not None and gain_sens != gain_measured
     lead_read = lead[f"{TOP}model_minus_logistic"]["reading"] if lead is not None and not void else None
 
     flags = None
@@ -2968,7 +2996,12 @@ def read(d) -> int:
                  "fourth_doubling_gain_ci95_by_role": {role: gain[role]["ci95"] for role in ROLES},
                  "fourth_doubling_reading_by_role": {role: gain[role]["reading"] for role in ROLES},
                  "fourth_doubling_gain_with_rung7_at_0024s_reading": {role: my_curves[role]["fourth_doubling_gain_with_rung7_at_reference"] for role in ROLES},
-                 "fourth_doubling_reading_with_rung7_at_0024s_reading": gain_reading(my_curves["model"]["fourth_doubling_gain_with_rung7_at_reference"], gm["ci95"][0], gm["ci95"][1]),
+                 "fourth_doubling_reading_with_rung7_at_0024s_reading": gain_sens,
+                 "fourth_doubling_measured_and_sensitivity_readings": {
+                     "measured": {"point": gm["point"], "rung7_reading": by_rung["model"][R7 - 1], "reading": gain_measured},
+                     "with_rung7_at_0024s_reading": {"point": sens_point, "rung7_reading": REFERENCE_0024["model"][R7 - 1], "reading": gain_sens},
+                     "interval": gm["ci95"], "straddle_a_reading_boundary": gain_straddle, "published_reading": gain_read, "published_point": gain_pub_point,
+                     "published_is": ("the less flattering one" if gain_straddle else "the reading both give")},
                  "per_family_fourth_doubling_gain": {role: my_curves[role]["per_family_fourth_doubling_gain"] for role in ROLES},
                  "two_decade_slope_per_doubling": two_decade,
                  "two_decade_slope_is": f"the OLS slope over all eight rungs ({round(PARTITION['doublings_spanned'] * math.log10(2), 4)} decades) with its scored-chunk interval; seven of its eight points "
@@ -3025,28 +3058,45 @@ def read(d) -> int:
     else:
         verdict = f"{gain_read}_{lead_read}"
         gm = gain["model"]; lt = lead[f"{TOP}model_minus_logistic"]
-        # the stop rules' words: '(the model at its iteration cap at rung N)' in the same sentence as the reading it touches; the gain is
-        # the model's, so only the model's cap at rung 7 or 8 touches it; the lead is model minus logistic at rung 8, so either one's cap does
-        cap_note = ("".join(f" (the {n[len(TOP):]} at its iteration cap at rung {N_RUNGS})" for n in flags["roles_at_iteration_cap_at_the_top_rung"])
+        # the sealed rules' own words in the same sentence as the reading they touch: the gain rule's '(the model at its iteration cap at
+        # rung N)' - the gain is the model's, so only the model's cap at rung 7 or 8 touches it - and the lead rule's '(the <role> at its
+        # iteration cap at rung 8 (the top rung))' - the lead is model minus logistic at rung 8, so either one's cap there does
+        cap_note = ("".join(" " + LEAD_CAP_NOTE.replace("<role>", n[len(TOP):]) for n in flags["roles_at_iteration_cap_at_the_top_rung"])
                     + ("; not a recipe comparison" if flags["roles_at_iteration_cap_at_the_top_rung"] else ""))
         gain_cap_rungs = [k for k in (R7, TOPK) if f"r{k}_model" in flags["roles_at_iteration_cap"]]
-        gain_cap = ("".join(f" (the model at its iteration cap at rung {k})" for k in gain_cap_rungs)
+        gain_cap = ("".join(" " + GAIN_CAP_NOTE.replace(" N)", f" {k})") for k in gain_cap_rungs)
                     + ("; the cap is part of the sealed recipe and is never raised, and the gain is read as is, not as a recipe reading"
                        if gain_cap_rungs else ""))
-        gain_text = {"FOURTH_DOUBLING_RISES": f"the fourth doubling buys the model {gm['point']} on the real-family rows (paired interval {gm['ci95']}, entirely above 0), at or above the record's rate of {BAR_GAIN} per doubling",
-                     "FOURTH_DOUBLING_BELOW_RATE": f"the fourth doubling buys the model {gm['point']} on the real-family rows (paired interval {gm['ci95']}, entirely above 0), below the record's rate of {BAR_GAIN} per doubling: a rise below the record's rate",
-                     "FOURTH_DOUBLING_NOT_RESOLVED": f"the fourth doubling moves the model by {gm['point']} on the real-family rows with a paired interval {gm['ci95']} that includes 0: whether the fourth doubling bought anything is not resolved by the scored chunks at this size, never read as 'flat' or 'equal'",
-                     "FOURTH_DOUBLING_FALLS": f"the fourth doubling moves the model by {gm['point']} on the real-family rows with a paired interval {gm['ci95']} entirely below 0: adding the fourth doubling's files of the same kinds lowered the model's reading on the original files"}[gain_read] + gain_cap
+        gp = gain_pub_point   # the point that gives the published reading: the measured one unless the less flattering reading is the sensitivity one
+        gain_text = {"FOURTH_DOUBLING_RISES": f"the fourth doubling buys the model {gp} on the real-family rows (paired interval {gm['ci95']}, entirely above 0), at or above the record's rate of {BAR_GAIN} per doubling",
+                     "FOURTH_DOUBLING_BELOW_RATE": f"the fourth doubling buys the model {gp} on the real-family rows (paired interval {gm['ci95']}, entirely above 0), below the record's rate of {BAR_GAIN} per doubling: a rise below the record's rate",
+                     "FOURTH_DOUBLING_NOT_RESOLVED": f"the fourth doubling moves the model by {gp} on the real-family rows with a paired interval {gm['ci95']} that includes 0: whether the fourth doubling bought anything is not resolved by the scored chunks at this size, never read as 'flat' or 'equal'",
+                     "FOURTH_DOUBLING_FALLS": f"the fourth doubling moves the model by {gp} on the real-family rows with a paired interval {gm['ci95']} entirely below 0: adding the fourth doubling's files of the same kinds lowered the model's reading on the original files"}[gain_read] + gain_cap
+        # scope.design.how_the_sensitivity_gain_is_read: on a straddle both readings are stated and the published one is named as the less flattering
+        straddle_text = (f"; the gain measured against this run's rung {R7} ({by_rung['model'][R7 - 1]}) is {gm['point']} and reads {gain_measured}, the gain with rung "
+                         f"{R7} held at 0024's banked {REFERENCE_0024['model'][R7 - 1]} is {sens_point} and reads {gain_sens}: the two straddle a reading boundary, and "
+                         f"the published reading, {gain_read}, is the less flattering one" if gain_straddle else "")
+        pf_text = ", ".join(f"{f} {v}" for f, v in my_curves["model"]["per_family_fourth_doubling_gain"].items())
+        roles_text = (f"the standardised logistic's fourth-doubling gain is {gain['logistic']['point']} (paired interval {gain['logistic']['ci95']}) and the depth-3 "
+                      f"tree's {gain['depth3_tree']['point']} (paired interval {gain['depth3_tree']['ci95']})")
         lead_text = {"MODEL_LEADS": f"at rung {N_RUNGS} the model leads the standardised logistic by {lt['point']} (paired interval {lt['ci95']}, entirely above 0)",
                      "LINEAR_LEADS": f"at rung {N_RUNGS} the standardised logistic leads the model by {round(-lt['point'], 4)} (paired interval of model minus logistic {lt['ci95']}, entirely below 0): a rule a person can write out has overtaken the boosted recipe",
                      "NO_SEPARATION": f"at rung {N_RUNGS} model minus logistic is {lt['point']} with a paired interval {lt['ci95']} that includes 0: the two are not separated at this size, never read as 'equal'"}[lead_read] + cap_note
         stab_text = (f" Under {STABILITY_SEEDS} other bootstrap seeds the gain reading would have differed {flags['seed_stability']['n_seeds_with_another_gain_reading']} "
                      f"times and the lead reading {flags['seed_stability']['n_seeds_with_another_lead_reading']} times (a flag).")
-        meaning = (f"{verdict}: {gain_text}; {lead_text}. At 4096 bytes, on nested rungs of {plaintexts[0]} to {plaintexts[-1]} real plaintexts "
+        # stop_rules[5]: what the fourth doubling is and what its files are per family, from the sealed composition of rung 8's added plaintexts
+        comp8 = rungs_sealed[TOPK - 1]["added_composition_per_family"]
+        fl7 = my_floors[f"r{R7}"]
+        comp_text = (f" The fourth doubling is one doubling ({plaintexts[TOPK - 1]} against {plaintexts[R7 - 1]} plaintexts) of other files of the same five "
+                     f"families above 0024's top rung: {composition_phrase(comp8)} (of each family's added plaintexts, from new files: "
+                     + ", ".join(f"{f} {c['from_new_files']} of {c['n']}" for f, c in comp8.items())
+                     + "; the rest are other chunks of 0024's projects, from its pool and its archives' unused chunks).")
+        meaning = (f"{verdict}: {gain_text}{straddle_text}; per family the model's fourth-doubling gain is {pf_text}, and {roles_text}; {lead_text}. "
+                   f"At 4096 bytes, on nested rungs of {plaintexts[0]} to {plaintexts[-1]} real plaintexts "
                    f"({PARTITION['doublings_spanned']} doublings, {flags['decades_spanned']} decades: rungs 1..{N_FIRST} are 0023's chunks of the five 0018 pinned files, rungs "
                    f"{N_FIRST + 1}..{N_0024_RUNGS} 0024's other files of the same five families, rung {N_RUNGS} one more exact doubling of other files), 0021's three "
                    f"fixed recipes read, per rung: the model {by_rung['model']}, the standardised logistic {by_rung['logistic']}, the depth-3 tree "
-                   f"{by_rung['depth3_tree']} on the {N_REAL} real-family rows. Seven of the eight points were banked before this run, so the two-decade slope "
+                   f"{by_rung['depth3_tree']} on the {N_REAL} real-family rows.{comp_text} Seven of the eight points were banked before this run, so the two-decade slope "
                    f"(model {flags['two_decade_slope_per_doubling']['model']['slope_per_doubling']} per doubling, interval {flags['two_decade_slope_per_doubling']['model']['ci95']}) "
                    f"is a flag quoted only beside the fourth-doubling reading, never a rise of its own; the span meets 0003's two-decade scope rule only in "
                    f"the sense that the rule asked for two decades of data; its one-corpus, one-seed terms are not met by this curve, whose first decade "
@@ -3056,8 +3106,16 @@ def read(d) -> int:
                    + ("clears it: 0021's margin re-applied at sixteen times 0021's plaintexts, informational, revising nothing of 0021's verdict"
                       if my_floors[RTOP]['clears_0021_clause'] else
                       "does not clear it: at sixteen times 0021's plaintexts the boosted recipe is still within 0.05 of the best rule a person could write out")
-                   + f". The new shift arm (rung {N_RUNGS}'s plaintexts from 0025's corpus alone at rung 4's count) reads {flags['shift_arm_0025']['readings_ext_real_top1']}, against rung 4 by "
-                   f"{flags['shift_arm_0025']['difference_from_rung_4']} and against 0024's shift arm by {flags['shift_arm_0025']['difference_from_shift_arm_0024']}.{stab_text} "
+                   + f" (with the standardised logistic among the floors the clause is {my_floors[RTOP]['needed_with_logistic_as_floor']}, "
+                   + ("cleared" if my_floors[RTOP]['clears_with_logistic_as_floor'] else "not cleared")
+                   + f"; at rung {R7} the two clauses are {fl7['needed_0021_clause']} and {fl7['needed_with_logistic_as_floor']} against the model's "
+                   f"{fl7['model']}, " + ("cleared" if fl7['clears_0021_clause'] else "not cleared") + " and "
+                   + ("cleared" if fl7['clears_with_logistic_as_floor'] else "not cleared")
+                   + f"). 0024's shift arm (rung {N_FIRST + 1}'s new plaintexts alone at rung 4's count, reproduced) reads {flags['shift_arm_0024']['readings_ext_real_top1']}, "
+                   f"against rung 4 by {flags['shift_arm_0024']['difference_from_rung_4']}; the new shift arm (rung {N_RUNGS}'s plaintexts from 0025's corpus alone at rung 4's "
+                   f"count: the new files and 0024's archives' unused chunks) reads {flags['shift_arm_0025']['readings_ext_real_top1']}, against rung 4 by "
+                   f"{flags['shift_arm_0025']['difference_from_rung_4']} and against 0024's shift arm by {flags['shift_arm_0025']['difference_from_shift_arm_0024']} "
+                   f"(the model's paired interval {flags['shift_arm_0025']['s8_minus_s4_model_ci95_paired']}).{stab_text} "
                    f"Not a transfer reading: every rung holds the scored files' own unscored chunks; the added plaintexts are other files of the same families; "
                    f"nothing fitted shares a byte, a kilobyte run, a chunk id or a source-chunk hash with anything scored; the intervals are over the scored chunks "
                    f"only and do not resample the fit side or the draw of the rung's plaintexts. Nothing here revises 0003, 0014, 0015, 0016, 0017, 0018, 0019, "
@@ -3126,7 +3184,9 @@ def read(d) -> int:
                               "gains and slopes, the sensitivity gain, the floors, both shift arms, the leads at rungs 7 and 4 and over the tree, "
                               "the seed-stability counts and the artifact's cluster intervals are informational: not a verdict, not quotable as a "
                               "rise of their own. The verdict is the `verdict` field: its gain part is read on the model's fourth-doubling gain and "
-                              "its paired scored-chunk interval by the sealed four-way rule, its lead part on the sealed lead rule at rung 8.",
+                              "its paired scored-chunk interval by the sealed four-way rule - and where the same gain with rung 7 held at 0024's "
+                              "banked reading reads otherwise, the less flattering of the two readings is published, named as such - its lead part "
+                              "on the sealed lead rule at rung 8.",
         "is_a_transfer_reading": False,
         "establishes_a_buyer": False,
         "revises_0003_0014_0015_0016_0017_0018_0019_0021_0022_0023_0024": False,
@@ -3144,7 +3204,9 @@ def read(d) -> int:
         print(f"  {k:<40} {v}")
     if not void:
         print(f"  {'model top-1 by rung':<40} {result['model_real_top1_by_rung']} over plaintexts {[r['n_chunks'] for r in rungs_sealed]}")
-        print(f"  {'fourth-doubling gain (model)':<40} {gain['model']['point']} paired {gain['model']['ci95']} -> {gain_read}; logistic {gain['logistic']['point']}, tree {gain['depth3_tree']['point']}")
+        print(f"  {'fourth-doubling gain (model)':<40} {gain['model']['point']} paired {gain['model']['ci95']} -> {gain_measured}; logistic {gain['logistic']['point']}, tree {gain['depth3_tree']['point']}")
+        print(f"  {'... with rung 7 at 0024s reading':<40} {sens_point} -> {gain_sens}; published {gain_read}"
+              + (" (the two straddle a reading boundary: the less flattering one)" if gain_straddle else ""))
         print(f"  {'lead at the top rung':<40} {lead[f'{TOP}model_minus_logistic']}")
         print(f"  {'two-decade slope (model)':<40} {flags['two_decade_slope_per_doubling']['model']}; 0024 intervals reproduced {repro_boot['equals_0024s_banked']}")
         print(f"  {'new shift arm minus rung 4 / minus s4':<40} {flags['shift_arm_0025']['difference_from_rung_4']} / {flags['shift_arm_0025']['difference_from_shift_arm_0024']}")

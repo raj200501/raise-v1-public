@@ -59,6 +59,11 @@ _body = _body[:_body.index('\n    }\n')]
 RESULT_KEYS = sorted(set(re.findall(r'^\s{8}"([a-z0-9_]+)":', _body, re.M)))
 assert {'verdict', 'bar_applied', 'flags', 'curves', 'lead_at_top', 'verdict_components', 'fourth_doubling', 'floors', 'shift_arm_0025',
         'reproduction_bootstrap_0024', 'seed_stability', 'gain_reading', 'lead_reading'} <= set(RESULT_KEYS) and len(RESULT_KEYS) > 40, RESULT_KEYS
+# the cap notes the reader prints are the sealed rules' own words: the gain rule's '(the model at its iteration cap at rung N)' and the
+# lead rule's '(the <role> at its iteration cap at rung 8 (the top rung))', each quoted once in its rule
+GAIN_CAP = re.findall(r"'(\(the model at its iteration cap at rung N\))'", P['bar']['gain_rule'])
+LEAD_CAP = re.findall(r"'(\(the <role> at its iteration cap at rung \d+ \(the top rung\)\))'", P['bar']['lead_rule'])
+assert len(GAIN_CAP) == 1 and len(LEAD_CAP) == 1 and f"at rung {N_RUNGS} (the top rung))" in LEAD_CAP[0], (GAIN_CAP, LEAD_CAP)
 fmt = lambda o: pprint.pformat(o, width=112, sort_dicts=False)  # noqa: E731
 out = _tpl % dict(
     fam=json.dumps(P['families']), ext_fam=json.dumps(P['ext_families']), real_fam=json.dumps(P['subsets']['real']),
@@ -75,8 +80,15 @@ out = _tpl % dict(
     repro_tol=P['reproduction_tolerance'], repro_tol_r7=P['reproduction_tolerance_rung7'], null_tol=P['null_tolerance'],
     null_sha=P['null_y_shuffled_sha256_expected'], env=fmt(P['environment']), threads=P['threads'], nice=P['nice'],
     bar_gain=P['bar']['gain_per_doubling'], gain_rule=json.dumps(P['bar']['gain_rule']), lead_rule=json.dumps(P['bar']['lead_rule']),
+    gain_cap_note=json.dumps(GAIN_CAP[0]), lead_cap_note=json.dumps(LEAD_CAP[0]),
     n_boot=P['bootstrap']['n_boot'], boot_seed=P['bootstrap']['seed'], stability_seeds=P['stability_seeds'], log2x=json.dumps(LOG2X),
     max_iter=fmt(MAX_ITER), decades=sp['decades_spanned'], shift4=P['shift'], shift8=P['shift_0025'], result_keys=fmt(RESULT_KEYS))
 assert sha(P) == S['sealed_hashes']['protocol_sha256'] and sha(CU) == S['sealed_hashes']['curve_sha256']
 open(out_path, 'w').write(out)
+# the reader's description of what the fourth doubling's files are per family, derived from the sealed composition, must be stop_rules[5]'s own
+import importlib.util  # noqa: E402
+sys.dont_write_bytecode = True   # loading the generated reader leaves no bytecode beside it
+_spec = importlib.util.spec_from_file_location("reader_0025_generated", out_path); _rd = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(_rd)
+_phrase = _rd.composition_phrase(sp['rungs'][N_RUNGS - 1]['added_composition_per_family'])
+assert f"({_phrase})" in pr['stop_rules'][5], (_phrase, "is not the stop rule's description of the fourth doubling's files per family")
 print("wrote", out_path, len(out), "bytes;", len(RESULT_KEYS), "result keys")
