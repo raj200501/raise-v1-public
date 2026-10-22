@@ -1,14 +1,21 @@
 # raise-v1 — a preregistered instrument, a curve that clears it, and no buyer
 
+*As of 2026-10-22. The last preregistered measurement is 0024's, frozen 2026-09-17; 0025 is
+unfrozen. Corrections, newest first, are in `CORRECTIONS.md`.*
+
 ## What this is, and what it is not
 
-**It is** a preregistered evaluation instrument, built and frozen before any of the numbers it
-reports existed, and designed so that each of its gates can be shown to fail on demand.
+**It is** a preregistered evaluation instrument, each verdict emitted by a reader frozen before the
+data it reads existed — except two disclosed re-reads (0013 and 0019), written after their runs and
+both reading a failure — and designed so that each of its gates can be shown to fail on demand.
 
-**It is** a scaling curve that clears every clause frozen before its corpus existed —
+**It is** a scaling curve that clears every clause frozen before its corpus existed (the split
+clause with an asterisk: its guarantee proved incomplete for one of eight content families, and the
+measured effect runs against the headline; see below) —
 `CURVE_ESTABLISHED`, **+0.0491** accuracy points per decade over **2.9031** decades, margin
-**+0.1003** frozen and **+0.0583** under the stricter reading with fixed recipes, **+0.0567** when every baseline is searched too (0014), all above the preregistered 0.05 —
-**at a 4096-byte window, and only there.**
+**+0.0567** when every baseline is searched too (0014) — the margin we lead with — and, with 0003's
+fixed recipes, **+0.1003** frozen and **+0.0583** under the stricter reading, all above the
+preregistered 0.05 — **at a 4096-byte window, and only there.**
 
 **It is not** a fundable thesis, and a later preregistration says why in the sharpest available
 terms. At a **1024**-byte carve the same protocol returns `CARVE_FAILS`: the model ties a dumb rule
@@ -23,7 +30,9 @@ and none is claimed. There are no customers, no users and no partners.
 Take a window from the MIDDLE of a DEFLATE stream — no header, no stream start, no plaintext, not
 even the stream length — and recover which of **26** (implementation, level) configurations produced
 it. The label factory is free and unbounded: compress any bytes under every configuration and the
-label *is* the configuration you used.
+label *is* the configuration you used. The 26 are zlib 1–9, libdeflate 1–12, ISA-L 0–3 and zopfli.
+The bytes are the corpus builder's eight content families: seven are its own synthetic generators
+(csv, log, json, code, base64, binary, mixed) and one is real Project Gutenberg prose.
 
 | Rung | 1000 | 10000 | 100000 | 800000 |
 |---|---:|---:|---:|---:|
@@ -39,13 +48,16 @@ rung and steepens the slope to **+0.0524**. Labels shuffled, the identical pipel
 falls to **0.0389**. Details and derivation are in `VERDICT.md` and the corrections ledger.
 
 Every trivial baseline was trained on the same 800000 fragments as the top rung, so none is
-starved. Best of the **preregistered** set: logistic at **0.1392**, margin **+0.1003**. Best of the
-stricter set that adds deep trees, which are *not* in the frozen list and are stronger than
-anything in it: a depth-16 tree at **0.1812**, margin **+0.0583**. Both clear 0.05, and the
-commitment to report both was recorded mid-run and anchored to drand round **6408095**, before
-either number was known.
+starved. Best of the **preregistered** set, under 0003's fixed recipes: logistic at **0.1392**,
+margin **+0.1003** (a fixed-recipe number; with every baseline searched too, 0014, the margin is
+**+0.0567**). Best of the stricter set that adds deep trees, which are *not* in the frozen list and
+are stronger than anything in it: a depth-16 tree at **0.1812**, margin **+0.0583**. Both clear
+0.05, and the commitment to report both was recorded mid-run, before either number was known — a
+claim that rests on the run logs and commit history, not on its drand anchor (round **6408095**),
+which proves only that it was written no earlier than that round.
 
-**The output has the shape a forensic use needs, which is a separate preregistered question.**
+**The output has the shape we argue a forensic use would need — a separate preregistered question;
+no analyst has been asked.**
 Top-1 answers "is the single best guess right", which is the wrong question for an analyst facing 26
 candidate encoders. Preregistration 0006 — frozen and anchored *before any top-k number existed* —
 asked whether the model yields a shortlist and a confidence worth abstaining on. Verdict
@@ -63,12 +75,13 @@ Both clauses written down in advance as the likely failures cleared, and the sel
 scored under the strictest reading fixed before the run — the looser reading would have given
 **+0.2510** instead of **+0.0985**.
 
-**Why no existing tool does this.** `preflate` and `grittibanzli` decode the token stream, which
+**Why none of the tools we found does this.** `preflate` and `grittibanzli` decode the token stream, which
 needs the dynamic Huffman tables at the STREAM START. `precomp` and `list-compresslevel.py`
 brute-force by RECOMPRESSING, which needs the PLAINTEXT. A carved fragment has neither. Three
 GitHub API query formulations return `total_count: 0` — re-run first-hand through the
 authenticated GitHub API after an audit found the original zeros were a subagent's, mislabelled
-first-hand (`artifacts/pivot/g4_github_firsthand.json`).
+first-hand (`artifacts/pivot/g4_github_firsthand.json`). The search has known gaps: encode.su was
+unreachable and was not searched, and no patent search was run (`artifacts/pivot/g4_firsthand.json`).
 
 **The published intervals were over-tight, twice over.** They never sampled seeds, corpora, or
 model classes — that was disclosed. An audit then found the bootstrap also resampled eval
@@ -87,7 +100,10 @@ the whole margin the study needed. Transfer to the shorter carve reaches **0.040
 
 A1 was run on the input *before* that bar was frozen and removes the obvious defence — the
 byte-identity ceiling barely moves, **20.9125** distinct streams of 26 at 4096 against **20.79** at
-512. The information is there at 1024. This is a modelling failure, not an information failure.
+512. So a collision ceiling does not explain the failure, and 0007's frozen reader reads it as
+sealed: the information is not recoverable at the shorter carve. This is a modelling failure, and
+is reported as one. No model in this record has shown the label recoverable at 1024: a byte-sequence model
+(0009) did not rescue it, and its position-preserving variant (0010) was inconclusive.
 
 **The boundary is bracketed.** Preregistration 0011 built a third corpus at **2048** bytes, disjoint
 by chunk id from both earlier corpora, and re-ran the protocol with gutenberg-excluded clauses in
@@ -122,11 +138,13 @@ that literal corrected and every number disclosed in advance, and its reader emi
 this page other than the 0018 reading is a statement about the corpus builder's eight content families; the 0018 numbers
 are statements about the eight extension families, as pinned.
 Fitted on real content instead, the signal is there — and a hand-writable rule gets most of it. Preregistration 0021 (0020 sealed the same design and refused at launch on the builder's own duplicate chunks, filed at full size) fitted the same three recipes on 26346 rows from 1029 plaintexts of the same five real files and read them in distribution on the same 38452 rows: the searched model reads **0.1193** (4587 rows), 3.1× chance and nearly double the builder-fitted 0.0637. But a depth-3 decision tree fitted on the same rows reads **0.0929**, and the clause is floor + 0.05, never chance (`docs/OPERATING_RULES.md` §4a): 5495 rows needed, 4587 arrived, `REAL_FIT_FAILS` — a margin of 0.0264 over a rule a person could write by hand. Under the chance bar (3402) it would have passed. 0 of 5 families clear their own floor; the same recipe on the builder's rows at the same budget reads 0.0671 (row-matched) and 0.0638 (plaintext-matched), so it is the content that buys the lift, not the budget. An in-distribution reading on real content, not a transfer reading.
-Searched on real content, the best boosted recipe and the best linear rule are the same rule. Preregistration 0022 searched 0014's roster (35 candidates, seven heads, symmetric) inside 0021's 26346-row real fit block, every baseline head floored at 0021's reading, and read the winners on the same 38452 rows: the searched model **0.1189**, the searched logistic **0.1182**, a searched margin of **0.0007** against the 0.05 required — `REAL_RECIPE_FAILS`, 4573 correct against 6468 needed. The search moved nothing: model -0.0004, logistic 0.0003, depth-3 tree 0.0044 over 0021's unsearched readings, where the identical search on the builder's corpus had moved the model by 0.0489 and the logistic by 0.0965. 0 of 5 families clear; the logistic leads the model outright on py_src and rst_doc. All four reproduction arms drift 0.0. The recipe excuse is closed at this budget; the budget excuse is 0023, next.
+Searched on real content at 0021's budget, the best boosted recipe and the best linear rule finish 0.0007 apart. Preregistration 0022 searched 0014's roster (35 candidates, seven heads, symmetric) inside 0021's 26346-row real fit block, every baseline head floored at 0021's reading, and read the winners on the same 38452 rows: the searched model **0.1189**, the searched logistic **0.1182**, a searched margin of **0.0007** against the 0.05 required — `REAL_RECIPE_FAILS`, 4573 correct against 6468 needed. The search moved nothing: model -0.0004, logistic 0.0003, depth-3 tree 0.0044 over 0021's unsearched readings, where the identical search on the builder's corpus had moved the model by 0.0489 and the logistic by 0.0965. 0 of 5 families clear; the logistic leads the model outright on py_src and rst_doc. All four reproduction arms drift 0.0. The recipe excuse is closed at this budget; the budget excuse is 0023, next.
 More real plaintexts help — and they help the linear rule more. Preregistration 0023 cut 0021's real fit block into four nested rungs of plaintexts (130, 258, 515, 1029; 2.984659 doublings) and fitted 0021's three fixed recipes on each: the model reads **0.0974, 0.1065, 0.1139, 0.1193**, a slope of **0.007344** per doubling of plaintexts (scored-chunk interval [0.006199, 0.00846]) against 0.005 required — `REAL_CURVE_RISES`, a rise to 0021's failing reading (0.1193 against 0.1429 needed), never 'more real data fixes the model'. The standardised logistic rises **0.009551** per doubling; model minus logistic **-0.002207** (paired interval [-0.003707, -0.000752]), read in advance as 'the linear rule buys more per doubling than the model'; the depth-3 tree 0.003002, within a redraw of the smallest rung. The model's slope is 0.7276 of the builder's per-plaintext rate. Reproduction drift 0.0; null 0.0409. No extrapolation beyond the top rung is banked or quoted.
-The second decade of real plaintexts rises — and the boosted model still leads the hand-writable linear rule at the top rung. Preregistration 0024 nested three exact doublings of other files of the same five families (23 newly pinned archives, 600 more RFC texts; 7574 plaintexts, every chunk hashed against every whole chunk and every kilobyte run of the 0018 files) on 0021's block — 130, 258, 515, 1029, 2058, 4116, 8232 plaintexts over seven rungs; the 'second decade' is 3.0 doublings (0.9031 of a decade) of other files above 0021's block; both together span 1.8016 decades, short of 0003's two-decade scope rule — and fitted 0021's three fixed recipes on each: the model reads **0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404**, a second-decade slope of **0.00697** per doubling of plaintexts (scored-chunk interval [0.00571, 0.00824]) against 0.005 required — `SECOND_DECADE_RISES_MODEL_LEADS`. The standardised logistic's second-decade slope is **0.00638**, the depth-3 tree's -0.0003; model minus logistic 0.00059 (paired interval [-0.00102, 0.00231]). At the top rung, the model leads the standardised logistic by 0.0039 (paired interval [0.0001, 0.0077], entirely above 0) — `MODEL_LEADS`. The shift arm (rung 5's new plaintexts alone at rung 4's count) reads 0.1184 for the model against rung 4's 0.1193. Rung 4 reproduced 0021 with drift 0.0; null 0.0372. At eight times 0021's plaintexts the boosted recipe still leads a rule a person can write out on the record's own real content, by 0.0039 — the recipe conclusion of 0021, 0022 and 0023 (that the linear rule gets most of the signal) is bounded by the size of that lead, not reversed. No extrapolation beyond the top rung is banked or quoted.
+The 'second decade' of real plaintexts (0.9031 of a decade) rises — and at the top rung the boosted model edges ahead of the standardised linear rule, after reading below it at the two rungs before. Preregistration 0024 nested three exact doublings of other files of the same five families (23 newly pinned archives, 600 more RFC texts; 7574 plaintexts, every chunk hashed against every whole chunk and every kilobyte run of the 0018 files) on 0021's block — 130, 258, 515, 1029, 2058, 4116, 8232 plaintexts over seven rungs; the 'second decade' is 3.0 doublings (0.9031 of a decade) of other files above 0021's block; both together span 1.8016 decades, short of 0003's two-decade scope rule — and fitted 0021's three fixed recipes on each: the model reads **0.0974, 0.1065, 0.1139, 0.1193, 0.1236, 0.13, 0.1404**, a second-decade slope of **0.00697** per doubling of plaintexts (scored-chunk interval [0.00571, 0.00824]) against 0.005 required — `SECOND_DECADE_RISES_MODEL_LEADS`. The standardised logistic's second-decade slope is **0.00638**, the depth-3 tree's -0.0003; model minus logistic 0.00059 (paired interval [-0.00102, 0.00231]). At the top rung, the model leads the standardised logistic by 0.0039 (paired interval [0.0001, 0.0077], entirely above 0) — `MODEL_LEADS`. The shift arm (rung 5's new plaintexts alone at rung 4's count) reads 0.1184 for the model against rung 4's 0.1193. Rung 4 reproduced 0021 with drift 0.0; null 0.0372. At eight times 0021's plaintexts the boosted recipe leads the standardised logistic on the record's own real content by 0.0039, after reading below it at rungs 5 and 6, and still short of 0021's bar re-applied with the tree as floor (0.1404 against 0.1419 needed; informational) — the recipe conclusion of 0021, 0022 and 0023 (that the linear rule gets most of the signal) is bounded by the size of that lead, not reversed. No extrapolation beyond the top rung is banked or quoted.
 The window boundary of
-this recipe lies in (2048, 4096]; every number above remains a 4096-byte-window number.
+this recipe lies in (2048, 4096], each size under its own protocol — 4096 cleared its bar at an
+800000-fragment top rung, 1024 and 2048 missed at 500000, and the like-for-like comparison is the
+matched 100000 rung above; every number above remains a 4096-byte-window number.
 
 Note what the 1024 curve does: it **rises**, at **+0.0204** per decade with a lower bound of
 **0.0197** (cluster-corrected) excluding zero, from a base that never separates from logistic regression. Without an A2
@@ -137,10 +155,11 @@ work.
 **So the forensic reading above is conditional on a window the forensic setting does not
 guarantee** — and that was the buyer type the entire G5 argument leaned on.
 
-**What it does not establish.** A buyer. The uses this points at — forensic carving of unallocated
-disk, archive recompression, repackaged-APK detection — are narrow, nobody has been contacted, and
-nothing measured here says anyone would pay. The permutation p of **0.0417** is exactly its
-arithmetic floor of 1/24 for four rungs and must not be read as "just under 0.05". The top rung was
+**What it does not establish.** A buyer. The one use where a carved fragment is the real input —
+forensic carving of unallocated disk — is narrow; archive recompression and repackaged-APK detection
+hold the whole stream and the plaintext, so incumbent tools apply there and this task's advantage
+disappears. Nobody has been contacted, and nothing measured here says anyone would pay. The
+permutation p of **0.0417** is exactly its arithmetic floor of 1/24 for four rungs and must not be read as "just under 0.05". The top rung was
 capped at 800000 by memory during OOM debugging, before any 800000-fragment number existed.
 
 ---
@@ -159,21 +178,25 @@ not-before time is anchored to a public randomness beacon (NIST Beacon 2.0 pulse
 round 6406735). The reader's sha256 is unchanged since freezing, and `tools/prereg.py verify`
 fails if it ever is.
 
-## Why it is worth more than a domain would have been
+## What the search produced
 
-Every candidate died to one of five failure modes, each established by measurement rather than
-argument. Three general laws fell out:
+Every candidate died to one of five failure modes. Only L3(i)'s evidence below is
+primary-verifiable (reproduced here). L1's and L3(iii)'s rest on subagent measurements no one can
+now re-run (see *The part that should be read first*), and L3's three-way split is argued, not
+measured. Three general laws fell out:
 
 **L1 — Smooth reprocessing corrections are fitted, not learned.** A cubic polynomial plus one
-sinusoid, about ten lines with no learning in them, explains up to 0.994 of the residual variance
-in satellite orbit-correction arcs. This retires an entire family of candidate domains.
+sinusoid, about ten lines with no learning in them, explains 0.944 to 0.994 of the residual variance
+in eight of nine component-arcs of three Sentinel-1 orbit-correction arcs (0.480 in the ninth) — a
+subagent measurement this repository cannot re-run. On it, we retired an entire family of candidate
+domains.
 
 **L2 — An analytically invertible generator yields a closed-form inverse that takes the whole
 label.** Only lossy, non-invertible generators are candidates at all.
 
-**L3 — For labels to be free at scale, the labelling must already be someone's job, and there are
-exactly three ways that happens — each destroying a different gate.** A *machine* does it, so
-re-run-and-compare is a zero-training decoder. An *institution* reveals it on a schedule, so the
+**L3 — For labels to be free at scale, the labelling must already be someone's job, and across 99
+candidates we found it happen in three ways — each destroying a different gate.** A *machine* does
+it, so re-run-and-compare is a zero-training decoder. An *institution* reveals it on a schedule, so the
 field already built the tool and the buyer's incumbent is "wait". A *human* records it in a
 register — and a register publishes the decision, not the state.
 
@@ -231,18 +254,34 @@ directory — luck, not process, and recorded as such.
 The ledger also carries a correction filed against this repository's own verification work, for
 manufacturing a discrepancy against a subagent that turned out to be right.
 
-## Verify it yourself, on a cold clone
+## Check the record's integrity yourself, on a cold clone
 
 ```
 git clone <repo> && cd raise-v1
 python3 tools/preflight.py                        # interpreter + dependency floors, cause and fix
 python3 tools/prereg.py verify                    # chain order, sealed fields, reader hashes
-python3 tests/mutation_test.py                    # 801 deliberate mutations, 801 detected, 0 survived
+python3 tests/mutation_test.py                    # 801 deliberate mutations, 801 detected, 0 survived, as banked before the unfrozen 0025 gate was added
 python3 tools/coverage.py                         # coverage map, weakest class first
-python3 tools/claimcheck.py outbound VERDICT.md   # every number traces to a banked artifact
-python3 tools/freshness.py                        # every live number equals its CURRENT artifact value
+python3 tools/claimcheck.py outbound VERDICT.md   # every number equals some banked value at its written precision, not necessarily the one cited
+python3 tools/freshness.py                        # every registered live number equals its CURRENT artifact value
 ```
 
 Two dependencies, both CPU-only. Every command above exits non-zero on failure. This document
-passes the outbound-copy gate with no allowlist entries, and every live number on it is checked
-against the current artifact by the gate below it.
+passes the outbound-copy gate with no allowlist entries, and the live numbers registered for it in
+`docs/live_claims.json` (the mutation count and the weakest-class row) are checked against the
+current artifact by the gate below it; a live number nobody registers is unguarded.
+
+None of these commands re-runs a measurement. Re-measuring means rebuilding the corpora with the
+shipped fetch scripts and builders, which a cold clone could not complete until the fix filed in
+`CORRECTIONS.md` on 2026-10-21 — and a rebuild does not return every banked byte. It reproduces the
+pinned sources (byte-checked), every corpus's labels, `raw_c1024` whole, the builder cache's
+evaluation set as a set of chunks (its banked order restorable from banked layouts), and the
+corpora 0018 and 0021 read (`ext_c4096`, `realfit_c4096`), rebuilt identical on a second machine on
+2026-10-21. It does not reproduce the feature and chunk-id arrays (X and g) of the three caches
+`run_study.build()` wrote (`full_c4096`, `carve_c1024`, `carve_c2048`): their rows land in
+worker-completion order by design, so every result fitted on a builder pool, the headline curve
+included, can be re-measured on a different draw but not re-derived on the same rows. Nor does it
+reproduce the features (X) of 0024's corpus (`realfit2_c4096`), which on a second machine differs
+in rare rows outside its smoke subset (that subset rebuilds identical; 0024's rung-7 logistic does
+not reproduce on it bit for bit). The rebuild of 0025's corpus (`realfit3_c4096`) is recorded in `artifacts/pivot/engineering_log_0025.json`.
+Detail in `CORRECTIONS.md`.
