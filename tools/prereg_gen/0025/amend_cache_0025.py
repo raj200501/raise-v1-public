@@ -32,6 +32,8 @@ shao = lambda o: hashlib.sha256(canon(o).encode()).hexdigest()  # noqa: E731
 
 
 def main():
+    if not __debug__:
+        sys.exit('refusing: every refusal in this script is an assert; run it without -O / PYTHONOPTIMIZE')
     ap = argparse.ArgumentParser(); ap.add_argument('--cache', default=os.path.join(R, 'data', 'pivot', 'full_c4096.npz'))
     ap.add_argument('--prereg', default=os.path.join(R, 'prereg', '0025-realcurve3-4096.json'))
     ap.add_argument('--proof', default=os.path.join(R, 'artifacts', 'verification', 'cache_rebuild_0025.json'))
@@ -126,9 +128,13 @@ def main():
     note = ("REBUILT 2026-10-21: the banked cache (0021's identity, kept beside each hash as *_banked_2026_08) was lost with a container and "
             "its row order - the build's parallel batch-completion order - cannot be reproduced; this is the rebuilt cache put in a documented "
             "order (tools/prereg_gen/0025/reorder_cache.py) in which the sealed evaluation rows come out in the banked order (eval_y_sha256, "
-            "eval_g_sha256 and eval_chunk_layout unchanged) with banked content (artifacts/verification/cache_rebuild_0025.json); the X and g "
+            "eval_g_sha256 and eval_chunk_layout unchanged), on which 0021's refitted recipes reproduce their banked per-example correctness "
+            "vectors (artifacts/verification/cache_rebuild_0025.json); the X and g "
             "hashes and the row-position hashes are this cache's (CORRECTIONS.md, 2026-10-21)")
     ci['X_note'] = note
+    # sealed: scope is in tools/prereg.py SEALED_FIELDS, amendments_before_freeze is not
+    ci['eval_X_sha256_in_sealed_order'] = eval_x
+    ci['content_proof_sha256'] = proof_sha
     S['sealed_hashes']['protocol_sha256'] = shao(P); S['sealed_hashes']['curve_sha256'] = shao(S['curve'])
     # a proof re-run after the re-seal (new bytes, same cache) must be recordable: append a record instead of printing 'unchanged'
     _last = [r for r in before.get('amendments_before_freeze', []) if r.get('by') == 'tools/prereg_gen/0025/amend_cache_0025.py']

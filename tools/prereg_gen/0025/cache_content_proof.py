@@ -17,9 +17,13 @@ How to read the result.
     identical extension part says this environment and this fitting path reproduce the banked fit.
   * The EVALUATION part is the TEST: with the fit reproduced, a differing evaluation row means that row's features
     differ from the banked ones (its label and position are excluded first by the y/g checks).
-  * L3 (standardised logistic) reads all 1108 features of every row through a dense linear map, so an identical L3
-    evaluation part is the strong statement: a content change would have to leave the argmax of all 260000 rows
-    untouched to escape it. B-feat1 reads one feature and D1 at most seven: cheap early warnings. M4 is optional
+  * What is compared is each row's 0/1 CORRECTNESS, not its predicted class: a change that moves a wrong row to
+    another wrong class, or touches only columns no fit reads, passes. L3 (standardised logistic) weights every column
+    that varies on the fit block; the columns constant there (report: columns_no_fit_reads) get scale 1 and weight 0
+    from L3 and no split from a tree. From the banked vectors, two same-label rows of different chunks exchanged escape
+    B-feat1+D1+M1+L3 with probability 0.79, two whole chunks exchanged with 0.002. So the test catches gross content
+    errors (a column misaligned or replaced, chunks exchanged); it is not a byte-equality proof and small numeric drift
+    can escape it. B-feat1 and D1 are cheap early warnings, M1 (about 25 s) sharpens the exchange test, M4 is optional
     (minutes). Each full vector's sha256 is compared with the per_example_sha256 its run artifact banked.
 
 Usage
@@ -38,7 +42,8 @@ requires its top-level "passed": true, which only a full-mode run that includes 
 vector identical can set).
 
 Exit status: 0 every compared part identical; 1 a compared part differs; 3 refused (a sealed hash, the evaluation
-order, a banked file's integrity or the environment).
+order, a banked file's integrity or the environment); 4 crashed (report status ERROR, passed false). A report whose
+passed is true is never overwritten without --replace-passed.
 """
 from __future__ import annotations
 
@@ -85,7 +90,7 @@ SCRIPT_DIR = os.environ.get("RAISE_SCRATCH") or __import__("tempfile").gettempdi
 DEFAULT_REPO = os.environ.get("RAISE_REPO", os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 ALLOWED_ENV = {"python": ("3.11.15", "3.11.17"), "numpy": ("2.4.6",), "sklearn": ("1.9.0",), "scipy": ("1.17.1",)}
 
-ROLE_ORDER = ["B-feat1", "D1", "L3", "M4"]          # cheapest first
+ROLE_ORDER = ["B-feat1", "D1", "M1", "L3", "M4"]    # cheapest first
 # recipe_0021: the key in prereg 0021 scope.recipes; curve: the key in 0024/0025 scope.curve.recipes (cross-checked);
 # banked: the per-example key of the SAME fit (0021's recipe on 0021's fit block) in each banked scores file.
 ROLE_SPEC = {
@@ -93,6 +98,7 @@ ROLE_SPEC = {
                 "banked": {"0021": "floor_feat1", "0022": "best_single_feat"}},
     "D1": {"recipe_0021": "floor_tree3", "curve": {"0024": "depth3_tree", "0025": "depth3_tree"},
            "banked": {"0021": "floor_tree3", "0024": "r4_depth3_tree", "0023": "r4_depth3_tree", "0022": "repro_d1"}},
+    "M1": {"recipe_0021": "incumbent", "curve": {}, "banked": {"0021": "real_incumbent", "0022": "repro_m1"}},
     "L3": {"recipe_0021": "logistic_l3", "curve": {"0024": "logistic", "0025": "logistic"},
            "banked": {"0021": "real_logistic", "0024": "r4_logistic", "0023": "r4_logistic", "0022": "repro_l3"}},
     "M4": {"recipe_0021": "model", "curve": {"0024": "model", "0025": "model"},
@@ -196,7 +202,7 @@ def main() -> int:
                     help="no cache: the evaluation slots of the scoring set are zero rows (same geometry), and only the "
                          "extension part is compared - tests the environment and the fitting path")
     ap.add_argument("--check-only", action="store_true", help="every sealed-hash, order and integrity check; no fit")
-    ap.add_argument("--roles", default="B-feat1,D1,L3", help=f"comma list from {ROLE_ORDER}; run in cheapness order")
+    ap.add_argument("--roles", default="B-feat1,D1,M1,L3", help=f"comma list from {ROLE_ORDER}; run in cheapness order")
     ap.add_argument("--with-m4", action="store_true", help="add M4 (about 5-6 minutes of fit at 3 threads, plus scoring)")
     ap.add_argument("--banked", default="0021,0024",
                     help=f"banked sources to compare with, from {sorted(SOURCES)} (0022 and 0023 bank the same vectors)")
@@ -215,6 +221,7 @@ def main() -> int:
     ap.add_argument("--allow-repo-out", action="store_true",
                     help="permit --out under the repository (e.g. artifacts/verification/cache_rebuild_0025.json, which "
                          "tools/prereg_gen/0025/amend_cache_0025.py reads); the checkpoint store is never put there")
+    ap.add_argument("--replace-passed", action="store_true", help="let --out replace a report whose passed is true")
     args = ap.parse_args()
 
     repo = os.path.abspath(args.repo)
@@ -228,6 +235,13 @@ def main() -> int:
         ap.error(f"--workdir-root {args.workdir_root} is under the repository {repo}; run_fit's store never goes there")
     if _under(args.out, repo) and not args.allow_repo_out:
         ap.error(f"--out {args.out} is under the repository {repo}; pass --allow-repo-out to write the report there")
+    if os.path.exists(args.out) and not args.replace_passed:
+        try:
+            prev = json.load(open(args.out, encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            prev = {}
+        if isinstance(prev, dict) and prev.get("passed") is True:
+            ap.error(f"{args.out} holds a passing proof; write elsewhere or pass --replace-passed")
     roles = [r.strip() for r in args.roles.split(",") if r.strip()]
     if args.with_m4 and "M4" not in roles:
         roles.append("M4")
@@ -265,6 +279,7 @@ def main() -> int:
         report["wall_seconds"] = round(time.perf_counter() - t_all, 1)
         _write_json(args.out, report)
 
+    save()   # --out says passed=false from here until this run sets it: a kill or crash cannot leave an earlier pass behind
     try:
         rc = _run(args, repo, ext_path, realfit_path, roles, sources, mode, report, mem, save)
     except Refuse as e:
@@ -272,6 +287,11 @@ def main() -> int:
         mem.stop(); save()
         _say(f"\nREFUSED: {e}\nreport: {args.out}")
         return 3
+    except Exception as e:  # noqa: BLE001  - a crash is not a content difference
+        report["status"] = "ERROR"; report["error"] = f"{type(e).__name__}: {e}"[:500]; report["passed"] = False
+        mem.stop(); save()
+        _say(f"\nERROR: {report['error']}\nreport: {args.out}")
+        return 4
     mem.stop(); save()
     _say(f"\nreport: {args.out}  (peak anonymous RSS {mem.peak:.2f} GB during '{mem.where}'; "
          f"wall {report['wall_seconds']} s)")
@@ -322,14 +342,13 @@ def _run(args, repo, ext_path, realfit_path, roles, sources, mode, report, mem, 
     _say(f"[env] mode {mode}; roles {roles}; banked sources {sources}")
     env = environment()
     env["scipy"] = scipy.__version__
-    env["threadpools"] = [{k: d.get(k) for k in ("user_api", "internal_api", "num_threads", "version")}
-                          for d in threadpoolctl.threadpool_info()]
+    env["threadpools"] = [{k: d.get(k) for k in ("user_api", "internal_api", "num_threads", "version", "architecture",
+                                                  "filepath")} for d in threadpoolctl.threadpool_info()]
+    env["blas_env"] = {k: os.environ.get(k) for k in ("OPENBLAS_CORETYPE", "NPY_DISABLE_CPU_FEATURES", "NPY_ENABLE_CPU_FEATURES")}
     report["environment"] = env
     problems = []
     if env["threads"] != BANKED_THREADS:
         problems.append(f"threads {env['threads']} (from OMP_NUM_THREADS) != the banked runs' {BANKED_THREADS}")
-    if env["nice"] != BANKED_NICE:
-        problems.append(f"nice {env['nice']} != the banked runs' {BANKED_NICE}")
     for k, allowed in ALLOWED_ENV.items():
         if env.get(k) not in allowed:
             problems.append(f"{k} {env.get(k)} not in {list(allowed)}")
@@ -340,16 +359,18 @@ def _run(args, repo, ext_path, realfit_path, roles, sources, mode, report, mem, 
         _say(f"  note: {n}")
     _say(f"  python {env['python']} numpy {env['numpy']} sklearn {env['sklearn']} scipy {env['scipy']} threads "
          f"{env['threads']} nice {env['nice']} pools {[(p['internal_api'], p['num_threads']) for p in env['threadpools']]}")
-    check("environment matches the banked runs", not problems, problems or "threads 3, nice 10, allowed versions",
+    check("environment matches the banked runs", not problems, problems or "threads 3, allowed versions",
           fatal=not args.allow_env_mismatch)
+    check("process nice is the banked runs' (scheduling only; the extension control catches any effect on a float)",
+          env["nice"] == BANKED_NICE, env["nice"], fatal=False)
     mods = [npzmap, rrs, run_carve, run_study, run_realfit, run_realsearch, run_realcurve, run_realcurve2,
-            corpus_ext, corpus_realfit]
+            corpus_ext, corpus_realfit, sys.modules["__main__"]]     # __main__: this script
     prov = module_provenance(repo, mods)
     report["module_provenance"] = prov
     report["repo_head"] = _git(repo, "rev-parse", "HEAD")
     dirty = [k for k, v in prov.items() if v["unmodified_vs_HEAD"] is False]
     check("repository modules used by the fits are unmodified vs HEAD", not dirty,
-          dirty or f"{len(prov)} modules at HEAD {str(report['repo_head'])[:12]}", fatal=False)
+          dirty or f"{len(prov)} modules at HEAD {str(report['repo_head'])[:12]}", fatal=not ext_only)
 
     # ------------------------------------------------------------------------ sealed constants (preregistrations)
     mem.phase = "sealed constants"
@@ -438,6 +459,14 @@ def _run(args, repo, ext_path, realfit_path, roles, sources, mode, report, mem, 
         art_rel, sc_rel = SOURCES[src]
         art = json.load(open(os.path.join(repo, art_rel), encoding="utf-8"))
         sc = json.load(open(os.path.join(repo, sc_rel), encoding="utf-8"))
+        aiw = pr["0025"]["scope"]["artifact_identity_at_writing"]
+        want = {"0021": (aiw["realfit_4096_rerun_sha256"], None),
+                "0024": (aiw["realcurve2_4096_sha256"], aiw["realcurve2_4096_scores_sha256"])}.get(src)
+        if want:
+            fsha = hashlib.sha256(open(os.path.join(repo, art_rel), "rb").read()).hexdigest()
+            ssha = hashlib.sha256(open(os.path.join(repo, sc_rel), "rb").read()).hexdigest()
+            check(f"banked {src}: the run artifact (and scores file) are the bytes 0025 seals",
+                  fsha == want[0] and (want[1] is None or ssha == want[1]), fsha[:16])
         eci = np.asarray(sc["eval_chunk_ids"], np.int32)
         lay_ok = (sc.get("smoke") is False and art.get("complete") is True and art.get("smoke") is False
                   and int(sc["n_eval_rows"]) == int(S21["eval"]["n_rows"]) and int(sc["n_ext_rows"]) == n_ext
@@ -471,6 +500,9 @@ def _run(args, repo, ext_path, realfit_path, roles, sources, mode, report, mem, 
                                         "builder_eval_top1": rd.get("builder_eval_top1"), "ext_top1": rd.get("ext_top1"),
                                         "ext_real_top1": rd.get("ext_real_top1")}
         del sc, art
+    dropped = [r for r in roles if r != "L3" and not any((r, s) in banked for s in sources)]
+    if dropped:   # e.g. --banked 0024 alone: B-feat1 and M1 are banked only in 0021/0022; recorded, never silent
+        report["roles_dropped_not_banked"] = dropped; roles = [r for r in roles if r not in dropped]
     for role in roles:   # the banked sources must agree with each other (they do: same fit, four runs)
         vs = [banked[(role, s)] for s in sources if (role, s) in banked]
         if not vs:
@@ -563,7 +595,7 @@ def _run(args, repo, ext_path, realfit_path, roles, sources, mode, report, mem, 
     if not ext_only:
         h = hashlib.sha256()
         for i in range(0, n_eval, 20000):
-            h.update(Xs[i:i + 20000])
+            h.update(Xs[i:min(i + 20000, n_eval)])
         report["eval_X_sha256_in_sealed_order"] = h.hexdigest()
         report["eval_X_sha256_note"] = ("sha256 of the evaluation rows' float32 features, C order, in the sealed evaluation "
                                         "order; nothing banked to compare it with - bank it beside a passing proof")
@@ -579,6 +611,8 @@ def _run(args, repo, ext_path, realfit_path, roles, sources, mode, report, mem, 
     store = Store(store_dir)
     report["store_dir"] = store_dir
     ctx = {"ge": ge, "fam_e": fam_e, "fam_x": fam_x, "real_mask": real_mask}
+    # the fit block is the whole fit corpus (fit_order is a permutation of its rows): columns constant there are read by no fit
+    report["columns_no_fit_reads"] = np.flatnonzero(np.asarray(Xr.min(axis=0)) == np.asarray(Xr.max(axis=0))).tolist()
 
     def compare(ours, theirs):
         out = {}
@@ -680,9 +714,10 @@ def _run(args, repo, ext_path, realfit_path, roles, sources, mode, report, mem, 
         eval_all = all(all(c["eval_identical"] and c["full_sha256_equal"] for c in report["roles"][r]["vs_banked"].values())
                        for r in done)
         if ext_all and eval_all and "L3" in done:
-            concl = ("EVAL_CONTENT_PROVEN: every vector is the banked one hash for hash; L3 reads all 1108 features of every "
-                     "evaluation row, so the evaluation rows carry the banked content and this environment reproduces "
-                     "0021's fits")
+            concl = ("EVAL_CONTENT_PROVEN: every 0/1 correctness vector is the banked one hash for hash and this environment "
+                     "reproduces 0021's fits. This excludes gross content changes (a column misaligned or replaced, chunks "
+                     "exchanged) but not changes confined to columns_no_fit_reads, small numeric drift, or rows whose "
+                     "correctness is unchanged; it is not a byte-equality proof")
         elif ext_all and eval_all:
             concl = (f"EVAL_IDENTICAL_WITHOUT_L3: {done} are the banked vectors hash for hash, but none of them reads every "
                      "feature; run L3 for the proof")
@@ -694,7 +729,7 @@ def _run(args, repo, ext_path, realfit_path, roles, sources, mode, report, mem, 
                      "inconclusive here")
     report["conclusion"] = concl
     report["status"] = "DIFFERS" if any_diff else "IDENTICAL"
-    report["passed"] = bool(not ext_only and not any_diff and concl.startswith("EVAL_CONTENT_PROVEN")
+    report["passed"] = bool(not ext_only and not any_diff and concl.startswith("EVAL_CONTENT_PROVEN") and "0021" in sources
                             and (report.get("cache_file") or {}).get("X_sha256") is not None)
     save()
     _say("\n[summary]")

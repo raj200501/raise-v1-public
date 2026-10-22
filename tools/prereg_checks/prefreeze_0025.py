@@ -225,6 +225,8 @@ def main() -> int:
             and _am[-1].get("proof_sha256") == hashlib.sha256(open(_proof_path, "rb").read()).hexdigest()
             and _cf.get("X_sha256") == _sealed_new["X"] and _cf.get("y_sha256") == _sealed_new["y"] and _cf.get("g_sha256") == _sealed_new["g"]
             and _proof.get("eval_X_sha256_in_sealed_order") == _am[-1].get("eval_X_sha256_in_sealed_order")
+            and P["cache_identity"].get("eval_X_sha256_in_sealed_order") == _proof.get("eval_X_sha256_in_sealed_order")
+            and P["cache_identity"].get("content_proof_sha256") == _am[-1].get("proof_sha256")
             and P.get("pool_idx_sha256") == sp["pool"]["pool_idx_sha256"] and P["cache_identity"]["X_note"].startswith("REBUILT 2026-10-21"),
             "the rebuilt cache's re-seal is recorded with its order proof, its content proof (0021's recipes reproduce on its evaluation "
             "rows) passed on THIS cache (the proof's cache hashes and evaluation-feature digest are the sealed ones), and the proof file is "
@@ -257,7 +259,8 @@ def main() -> int:
     chk(_rsha(sub) == P["null_y_shuffled_sha256_expected"] and not np.array_equal(sub, y_all[top_rows]) and np.array_equal(np.sort(sub), np.sort(y_all[top_rows])),
         "the sealed null-label hash is what the sealed stream (seed3) produces on the top rung's labels, a permutation of them")
     _ci = lambda d: {k[:-len("_banked_2026_08")] if k.endswith("_banked_2026_08") else k: v for k, v in d.items()  # noqa: E731
-                     if k != "X_note" and (k.endswith("_banked_2026_08") or f"{k}_banked_2026_08" not in d)}
+                     if k not in ("X_note", "eval_X_sha256_in_sealed_order", "content_proof_sha256")
+                     and (k.endswith("_banked_2026_08") or f"{k}_banked_2026_08" not in d)}
     _hk = {"cache_X_sha256": "X_sha256", "cache_y_sha256": "y_sha256", "cache_g_sha256": "g_sha256"}
     chk(_ci(P["cache_identity"]) == _ci(p21["scope"]["protocol"]["cache_identity"]) and r25.CORPUS["cache_X_sha256"] == P["cache_identity"]["X_sha256"]
         and all(r25.CORPUS[k] == (P["cache_identity"][_hk[k]] if k in _hk else a21["corpus"][k]) for k in r25.CORPUS)
