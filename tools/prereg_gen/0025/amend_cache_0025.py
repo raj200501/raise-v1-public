@@ -3,9 +3,11 @@
 
 Why. The banked data/pivot/full_c4096.npz was lost with the old container. tools/pivot/run_study.py build() writes rows in the
 order its Pool.imap_unordered(chunksize=8) batches finish, so a rebuild holds the same rows in another order, and the banked
-X and g hashes (and every row-position hash derived from them) cannot be reproduced (CORRECTIONS.md, 2026-10-21). 0025 scores
-the cache's sealed EVALUATION rows only (its fits are on the real-content corpora), so what must be preserved is the
-evaluation rows' order and content, not the positions of rows nobody reads. tools/prereg_gen/0025/reorder_cache.py puts the
+X and g hashes (and every row-position hash derived from them) cannot be reproduced (CORRECTIONS.md, 2026-10-21). The pool's
+membership moves with the order: grouped_split() keeps a seeded choice of training-row positions, so a rebuilt cache's pool
+is a different set of rows, not the banked pool in other positions. 0025 scores the cache's sealed EVALUATION rows only (its
+fits are on the real-content corpora, and nothing in 0025 reads the builder pool), so what must be preserved is the
+evaluation rows' order and content, not the pool. tools/prereg_gen/0025/reorder_cache.py puts the
 rebuilt cache in a documented order in which the evaluation rows come out in exactly the banked sequence; this script then
 
   * proves the ORDER: the runner's own grouped_split() on the reordered cache gives evaluation rows whose label and chunk-id
@@ -14,7 +16,8 @@ rebuilt cache in a documented order in which the evaluation rows come out in exa
   * requires the CONTENT proof (artifacts/verification/cache_rebuild_0025.json, written by cache_content_proof.py: 0021's
     recipes refitted on 0021's fit block reproduce their banked per-example vectors on these evaluation rows) to have passed;
   * re-seals only what a rebuild legitimately changes: cache_identity's X and g hashes (y if it moved), the evaluation-row
-    position hash, the pool position hashes - and replaces each old literal wherever it stands in the file, listing the paths;
+    position hash, the three pool hashes (positions and membership: the re-sealed pool is a different set of rows) - and
+    replaces each old literal wherever it stands in the file, listing the paths;
   * recomputes the sealed hashes and records the change under amendments_before_freeze. Idempotent; refuses on a frozen file.
 """
 import argparse, copy, hashlib, json, os, sys

@@ -8,9 +8,12 @@ Called by tools/pivot/fetch_sources.sh after every download. For each file under
                                                                  re-hash, must now equal banked
   anything else                                              -> FAIL, exit 1, name the file
 
-Exit 1 is the whole point. Before this existed, a changed upstream edition would have produced a
-corpus that hashes differently from the banked manifest, and the "a cold clone rebuilds it
-byte-identically" claim would have failed silently one step later (CORRECTIONS.md 2026-09-02).
+Exit 1 is the whole point. Before this existed, a changed upstream edition would have gone into a
+rebuilt corpus unnoticed until its arrays were hashed (CORRECTIONS.md 2026-09-02). The right source
+bytes are necessary for a rebuild to match the banked manifest, not sufficient: X and g of the
+caches tools/pivot/run_study.py build() writes (full_c4096, carve_c1024, carve_c2048) come out in
+worker-completion row order and differ on every rebuild, by design; y and raw_c1024 rebuild
+identical (CORRECTIONS.md, 2026-10-21, builder cache row order).
 """
 from __future__ import annotations
 

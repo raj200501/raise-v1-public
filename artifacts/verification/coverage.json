@@ -329,7 +329,7 @@
       "class": "primary-verifiable",
       "id": "deflate-curve-slope",
       "json_path": "$.slope",
-      "reverify": "python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --chunks 50000 --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --tag full --out /tmp/deflate_curve.json --scores-out /tmp/deflate_rung_scores.json",
+      "reverify": "python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --chunks 50000 --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --tag full --out /tmp/deflate_curve.json --scores-out /tmp/deflate_rung_scores.json  # on a rebuilt data/pivot/full_c4096.npz this returns a RE-MEASUREMENT on a different draw of the pool, not the banked number: run_study.build() writes rows in worker-completion order, so a rebuild holds the same chunks in another order, the evaluation set is the same set of chunks, and the training pool is a different set of rows (CORRECTIONS.md, 2026-10-21, builder cache row order). The banked number is read by python3 tools/readers/pivot_deflate_curve.py",
       "value": 0.04912072076972296
     },
     {
@@ -356,7 +356,7 @@
       "class": "primary-verifiable",
       "id": "deflate-margin-expanded",
       "json_path": "$.margin_over_expanded_baseline",
-      "reverify": "python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --chunks 50000 --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --tag full --out /tmp/deflate_curve.json --scores-out /tmp/deflate_rung_scores.json",
+      "reverify": "python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --chunks 50000 --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --tag full --out /tmp/deflate_curve.json --scores-out /tmp/deflate_rung_scores.json  # on a rebuilt data/pivot/full_c4096.npz this returns a RE-MEASUREMENT on a different draw of the pool, not the banked number: run_study.build() writes rows in worker-completion order, so a rebuild holds the same chunks in another order, the evaluation set is the same set of chunks, and the training pool is a different set of rows (CORRECTIONS.md, 2026-10-21, builder cache row order). The banked number is read by python3 tools/readers/pivot_deflate_curve.py",
       "value": 0.0583
     },
     {
@@ -720,7 +720,7 @@
       "class": "primary-verifiable",
       "id": "seed-robustness",
       "json_path": "$.slope_spread",
-      "reverify": "python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --chunks 50000 --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --seed 7 --tag seed-7 --out /tmp/s7.json --scores-out /tmp/s7s.json",
+      "reverify": "python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --chunks 50000 --carve 4096 --model hgb --rungs 1000 10000 100000 800000 --seed 7 --tag seed-7 --out /tmp/s7.json --scores-out /tmp/s7s.json  # on a rebuilt data/pivot/full_c4096.npz this returns a RE-MEASUREMENT of the seed-7 replication on a different draw of the pool, not its banked slope: run_study.build() writes rows in worker-completion order, so the training pool at a given seed is a different set of rows (CORRECTIONS.md, 2026-10-21, builder cache row order). The banked spread is read from artifacts/pivot/seed_robustness.json",
       "value": 0.0014
     },
     {
@@ -738,7 +738,7 @@
       "class": "primary-verifiable",
       "id": "carve2048-within",
       "json_path": "$.within_top1",
-      "reverify": "python3 tools/readers/carve2048_verdict.py   # reads the banked artifact; a full re-measurement is the preregistered invocation in prereg/0011-carve-2048-boundary.json with --out/--scores-out pointed at scratch paths, then diffed against the banked files",
+      "reverify": "python3 tools/readers/carve2048_verdict.py   # reads the banked artifact; a full re-measurement is the preregistered invocation in prereg/0011-carve-2048-boundary.json with --out/--scores-out pointed at scratch paths, then compared with the banked files: on a rebuilt data/pivot/carve_c2048.npz it is a RE-MEASUREMENT on a different draw of the pool, not the banked number, because run_study.build() writes rows in worker-completion order (CORRECTIONS.md, 2026-10-21, builder cache row order)",
       "value": 0.1741
     },
     {
@@ -780,12 +780,12 @@
     },
     {
       "artifact": "artifacts/pivot/corpus_manifest.json",
-      "claim": "The 2048-byte corpus is banked by content hash like the other three, so a rebuilt corpus C is proven byte-identical rather than assumed.",
+      "claim": "The 2048-byte corpus C is banked by content hash like the other three. A rebuild reproduces its labels: y hashes to the banked 7f008413fd5bff9a308ade8fa5769533c5ac557f66ce0f5789a664ac88316c73, the sequence of the 26 configurations in order, chunk after chunk, that every complete build yields. Its X and g are NOT reproducible and are not filed here: run_study.build(), which run_carve.py imports, writes rows in worker-completion order, so corpus_manifest.py --check reads DIFF for carve_c2048's X and g on every rebuild, by design (CORRECTIONS.md, 2026-10-21, builder cache row order).",
       "class": "primary-verifiable",
       "id": "corpus-manifest-2048",
-      "json_path": "$.corpora.data/pivot/carve_c2048.npz.X.dtype",
-      "reverify": "python3 tools/pivot/corpus_manifest.py --check",
-      "value": "float32"
+      "json_path": "$.corpora.data/pivot/carve_c2048.npz.y.sha256",
+      "reverify": "python3 tools/pivot/corpus_manifest.py --check   # after rebuilding data/pivot/carve_c2048.npz by the invocation in prereg/0011-carve-2048-boundary.json: the line ok data/pivot/carve_c2048.npz:y is this claim; its X and g read DIFF on every rebuild, by design, and corpora not rebuilt read MISSING, so the command exits 1 on a faithful rebuild",
+      "value": "7f008413fd5bff9a308ade8fa5769533c5ac557f66ce0f5789a664ac88316c73"
     },
     {
       "artifact": "artifacts/pivot/per_family_curves_2048.json",

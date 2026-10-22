@@ -9,8 +9,10 @@
 # re-edits files/ copies in place (pg1342 changed between 2026-08-25 and 2026-09-02; pg2701 by
 # 2026-09-08), so every
 # download is checked against the banked sha256 by tools/pivot/pin_sources.py, which fails
-# loudly rather than letting a changed edition rebuild a corpus that no longer matches
-# artifacts/pivot/corpus_manifest.json.
+# loudly rather than letting a changed edition into a rebuilt corpus. The right source bytes are
+# necessary for a rebuild to match artifacts/pivot/corpus_manifest.json, not sufficient: X and g
+# of the caches tools/pivot/run_study.py build() writes come out in worker-completion row order
+# and differ on every rebuild, by design (CORRECTIONS.md, 2026-10-21, builder cache row order).
 set -euo pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/data/pivot/src"
 # Every download lands in PART first - beside DIR, never in it, because tools/pivot/corpus.py reads every file in DIR - and

@@ -148,7 +148,7 @@ def main() -> int:
     chk(RP["shift_arm"] == P["shift_arm_hashes"] and RP["shift_arm_0025"] == P["shift_arm_0025_hashes"] and RP["shift_arm_0025"]["all_chunks_in_the_top_rung"]
         and RP["shift_arm_0025"]["all_chunks_above_0024s_ids"] and RP["shift_arm_0025"]["same_plaintext_count_as_rung_4"]
         and len(rows_all) == RP["n_rungs"] + 2 and len(rows_all[-1]) == RP["shift_arm_0025"]["n_rows"] and len(rows_all[-2]) == RP["shift_arm"]["n_rows"],
-        "the sealed shift arms are what rung_partition3() computes: 0024's reproduced, the new one from the top rung's new-file chunks at rung 4's count")
+        "the sealed shift arms are what rung_partition3() computes: 0024's reproduced, the new one from rung 8's plaintexts from 0025's corpus alone (the new files and 0024's archives' unused chunks) at rung 4's count")
     chk(all(RP[k] == v for k, v in P["fit_block_hashes"].items()), "the sealed fit-block hashes are what the runner's rung_partition3() computes")
     chk(RP["rungs"] == P["rung_hashes"] == sp["rungs"], "the sealed rung table is what the runner's rung_partition3() computes from the three corpora, hash for hash")
     chk(RP["rungs_nested"] and RP["rung_chunks_strictly_increasing"] and RP["rung4_is_fit_block"] and RP["second_decade_exact_doublings"]
@@ -177,7 +177,9 @@ def main() -> int:
     a21 = json.load(open(f"{REPO}/artifacts/pivot/realfit_4096_rerun.json", encoding="utf-8")); p21 = json.load(open(f"{REPO}/prereg/0021-realfit-4096-rerun.json", encoding="utf-8"))
     chk(RP["fit_idx_sha256"] == a21["partition"]["fit_idx_sha256"] == p21["scope"]["sealed_partition"]["fit_block"]["idx_sha256"] and RP["rungs"][3]["idx_sha256"] == RP["fit_idx_sha256"],
         "rung 4 is 0021's fit block, row for row (its banked and sealed hashes)")
-    # A rebuilt builder cache (CORRECTIONS.md, 2026-10-21) moves the row-POSITION hashes only; amend_cache_0025.py keeps each banked one
+    # A rebuilt builder cache (CORRECTIONS.md, 2026-10-21) moves the row-position hashes and the pool's membership with them (grouped_split
+    # keeps a seeded choice of training-row POSITIONS, so a different row order puts different rows in the pool; nothing in 0025 reads
+    # the pool); the evaluation rows' chunk set does not move. amend_cache_0025.py keeps each banked hash
     # beside its replacement as *_banked_2026_08. The banked values must be 0024's, and everything else - the labels and chunk ids of the
     # evaluation rows in order, the row and chunk counts - must be 0024's unchanged.
     _MOVABLE = {"X_sha256", "y_sha256", "g_sha256", "eval_idx_sha256", "pool_idx_sha256", "pool_sorted_sha256", "pool_y_sha256"}
@@ -205,7 +207,7 @@ def main() -> int:
     _pidx = sp["pool"].get("pool_idx_sha256_banked_2026_08", P["pool_idx_sha256"])
     chk(_bk(sp["eval"]) == p24["scope"]["sealed_partition"]["eval"] and _bk(sp["pool"]) == p24["scope"]["sealed_partition"]["pool"] and sp["fit_block"] == p24["scope"]["sealed_partition"]["fit_block"]
         and sp["eval"]["eval_y_sha256"] == p24["scope"]["sealed_partition"]["eval"]["eval_y_sha256"] and sp["eval"]["eval_g_sha256"] == p24["scope"]["sealed_partition"]["eval"]["eval_g_sha256"]
-        and _pidx == a21["partition"]["pool_idx_sha256"], "the evaluation set, the pool and the fit block are 0024's sealed ones (0021's before it); a rebuilt cache moves row positions only")
+        and _pidx == a21["partition"]["pool_idx_sha256"], "the evaluation set, the pool and the fit block are 0024's sealed ones (0021's before it), as banked; a rebuilt cache moves row positions and the pool's membership, not the evaluation chunk set")
     _rebuilt = bool(_banked_keys)
     _hex64 = lambda v: isinstance(v, str) and re.fullmatch(r"[0-9a-f]{64}", v) is not None  # noqa: E731
     chk(all(_hex64(P["cache_identity"][k]) for k in ("X_sha256", "y_sha256", "g_sha256")) and _hex64(P["pool_idx_sha256"])

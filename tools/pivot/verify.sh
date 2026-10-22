@@ -24,10 +24,11 @@ echo
 
 cat <<'MSG'
 
-To re-derive the result from scratch rather than read the banked one, in this order:
+To re-measure the result from scratch rather than read the banked one, in this order:
 
     pip install -r requirements-pivot.txt     # zopfli, isal, libdeflate
-    tools/pivot/fetch_sources.sh              # Project Gutenberg source bytes; terms in docs/compliance/LICENSE_AUDIT.md
+    tools/pivot/fetch_sources.sh              # Project Gutenberg source bytes, checked against their banked hashes;
+                                              # terms in docs/compliance/LICENSE_AUDIT.md
     python3 tools/pivot/run_study.py --cache data/pivot/full_c4096.npz --chunks 50000 --carve 4096 \
         --model hgb --rungs 1000 10000 100000 800000 --tag full \
         --out /tmp/deflate_curve.json --scores-out /tmp/deflate_rung_scores.json
@@ -35,5 +36,13 @@ To re-derive the result from scratch rather than read the banked one, in this or
                                               # artifacts/pivot/ files are not written
     python3 tools/pivot/corpus_manifest.py --check   # the rebuilt corpus against the banked array hashes
 
-Everything above exits non-zero on failure.
+What this reproduces and what it does not (CORRECTIONS.md, 2026-10-21, builder cache row order):
+the source bytes are checked byte for byte, and the rebuilt cache's labels y hash to the banked y.
+Its X and g do not: run_study.py build() writes rows in the order its workers finish, so --check
+reads DIFF for full_c4096's X and g on every rebuild, by design, and MISSING for the three corpora
+this block does not build, and exits non-zero. The evaluation set is the same set of chunks, but
+the training pool is a different draw of rows, so the curve printed is a re-measurement on a
+different draw of the pool, not a re-derivation of the banked numbers on the same rows.
+
+The other steps exit non-zero on failure; the manifest check exits non-zero on a faithful rebuild too.
 MSG

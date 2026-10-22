@@ -13,8 +13,8 @@ sealed for every verdict interval here). Three of 0021's four trivial-baseline f
 fourth, B-tree3, is D1 itself (a depth-3 tree, seed 0: fitted once per rung, it would bank the same vector twice). The reader's
 verdict is read on the FOURTH DOUBLING: rung 8 minus rung 7 for the model, with a paired cluster-bootstrap interval over
 the scored real chunks, into RISES / BELOW_RATE / NOT_RESOLVED / FALLS, suffixed by the lead of the model over the
-logistic at rung 8 by 0024's sealed rule. A second shift arm - rung 8's plaintexts from the new files alone at rung 4's
-count - is fitted last, informational, beside 0024's.
+logistic at rung 8 by 0024's sealed rule. A second shift arm - rung 8's plaintexts from 0025's corpus alone at rung 4's
+count (the new files and 0024's archives' unused chunks) - is fitted last, informational, beside 0024's.
 
 Everything scored is 0018's sealed corpus and 0003's sealed evaluation set; nothing fitted is ever scored, and the runner
 measures that (chunk ids, source-chunk hashes, byte-identical rows) rather than assuming it.

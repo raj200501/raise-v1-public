@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
-"""Bank content hashes of the manufactured corpora, so a stranger's rebuild can be PROVEN identical.
+"""Bank content hashes of the manufactured corpora, so a rebuild can be compared with ours array by array.
 
 The corpora (5.4 GB and friends) are not committed; a cold clone re-manufactures them with the
-shipped tools. Every "a stranger can re-derive it" claim therefore rests on the rebuild actually
-matching ours - which until this manifest existed could not be checked, only assumed. Hashes cover
-the ARRAY CONTENTS (X, y, g), not the .npz container, because the container embeds a build-time
-field that legitimately differs between runs.
+shipped tools. Hashes cover the ARRAY CONTENTS (X, y, g), not the .npz container, because the
+container embeds a build-time field that legitimately differs between runs. What a rebuild
+reproduces: y of all four corpora, and raw_c1024 whole. What it does not: X and g of full_c4096,
+carve_c1024 and carve_c2048, which tools/pivot/run_study.py build() writes in worker-completion
+row order, by design, so --check reads DIFF for those six arrays on every rebuild however faithful
+the sources, code and libraries. The builder cache's evaluation set survives a rebuild as a set of
+chunks, whose banked order can be restored from banked layouts; a result fitted on a builder pool
+can be re-measured on a different draw of the pool, not re-derived on the same rows. Detail:
+CORRECTIONS.md, 2026-10-21 (builder cache row order); the banked manifest's `why` field predates it.
 
 Re-verify after a rebuild:  python3 tools/pivot/corpus_manifest.py --check
 Re-bank (owner only; rewrites artifacts/pivot/corpus_manifest.json):  python3 tools/pivot/corpus_manifest.py --write
