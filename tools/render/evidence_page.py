@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""Render outbound/evidence_page.html from the banked artifacts. No number is typed by hand.
+"""Render outbound/evidence_page.html from the banked artifacts.
 
-The page is the investor-facing ledger: every figure is read from artifacts/ at render time, so a
-stale or retyped number is impossible by construction, and the emitted HTML still passes through
-the outbound claimcheck gate like any other outbound document. Failures are styled with the same
-visual weight as passes - that is the identity of the page, not a flourish.
+The page is the investor-facing ledger: its figures are read from artifacts/ at render time, and the
+emitted HTML passes through the outbound claimcheck gate like any other outbound document. Not every
+number is read: design constants (26 classes, the 0.05 bar, carve sizes, row and candidate counts),
+preregistration ids and a few measured values in the prose (0.2395, 0.1392, 0.2317, 0.2884, 0.9031,
+1.8016) are typed here; each typed measurement matches its banked value, and claimcheck checks every
+number on the page against artifacts/, but a typed number does not follow its artifact if that
+changes. Failures are styled with the same visual weight as passes - that is the identity of the
+page, not a flourish.
 """
 from __future__ import annotations
 import json, math, os, subprocess
@@ -101,6 +105,38 @@ rc3v = json.load(open(_rc3vp, encoding="utf-8")) if os.path.exists(_rc3vp) else 
 
 def _rc3_ok(v):
     return "inc" if v == "VOID" else ("pass" if v.startswith("FOURTH_DOUBLING_RISES") else "fail")
+
+
+def _rc3_parts(v):
+    """0025's gain and lead wording for a non-VOID verdict, in the sealed rules' own words.
+
+    The cap notes are the words bar.fourth_doubling and bar.lead_rule of prereg/0025-realcurve3-4096.json require in the same
+    sentence as the reading they touch. The gain point is the one that gives the published reading: the reader publishes the less
+    flattering of the measured gain (rung 8 minus this run's rung 7) and the gain with rung 7 held at 0024's banked reading, and
+    banks both in flags.fourth_doubling_measured_and_sensitivity_readings; when they straddle a reading boundary, both are stated.
+    """
+    import re
+    with open(os.path.join(REPO, "prereg", "0025-realcurve3-4096.json"), encoding="utf-8") as fh:
+        bar = json.load(fh)["bar"]
+    lead_words = re.search(r"states '([^']*)'", bar["lead_rule"]["passes_if"]).group(1)
+    gain_words = re.search(r"states '([^']*)'", bar["fourth_doubling"]["passes_if"]).group(1)
+    assert "<role>" in lead_words and gain_words.endswith(" N)"), "0025's sealed cap words are not where the renderer expects them"
+    f = v["flags"]; ms = f["fourth_doubling_measured_and_sensitivity_readings"]
+    m = ms["measured"]; s = ms["with_rung7_at_0024s_reading"]
+    gain_cap_rungs = [k for k in (7, 8) if f"r{k}_model" in f["roles_at_iteration_cap"]]
+    gain_cap = "".join(" " + gain_words.replace(" N)", f" {k})") for k in gain_cap_rungs)
+    lead_cap = "".join(" " + lead_words.replace("<role>", n[3:]) for n in f["roles_at_iteration_cap_at_the_top_rung"])
+    from_sensitivity = ms["published_reading"] != m["reading"]
+    point_label = (f'rung 8 minus 0024\'s banked rung-7 reading ({s["rung7_reading"]})' if from_sensitivity else 'rung 8 minus rung 7')
+    straddle = (f'; the gain measured against this run\'s rung 7 ({m["rung7_reading"]}) is {m["point"]} and reads {m["reading"]}, the gain '
+                f'with rung 7 held at 0024\'s banked {s["rung7_reading"]} is {s["point"]} and reads {s["reading"]}: the two straddle a reading '
+                f'boundary, and the published reading, {ms["published_reading"]}, is the less flattering one'
+                if ms["straddle_a_reading_boundary"] else "")
+    return {"gain_cap": gain_cap, "gain_cap_rungs": gain_cap_rungs, "lead_cap": lead_cap, "point_label": point_label,
+            "published_point": ms["published_point"], "interval": ms["interval"], "straddle": straddle}
+
+
+_p3 = _rc3_parts(rc3v) if (rc3v and rc3v["verdict"] != "VOID") else None
 
 git_head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO,
                           capture_output=True, text=True).stdout.strip()
@@ -308,11 +344,13 @@ chips = "".join([
  + ([chip(rc3v["verdict"], _rc3_ok(rc3v["verdict"]), "0025",
            (f'Two decades: one more exact doubling of other files of the same five families, nested on 0024\'s seven rungs '
             f'({", ".join(str(r["n_chunks"]) for r in rc3v["bar_applied"]["rungs"])} plaintexts, {rc3v["bar_applied"]["decades_spanned"]} decades). '
-            f'The model reads {rc3v["model_real_top1_by_rung"]}; the fourth doubling buys {rc3v["model_fourth_doubling_gain"]} '
-            f'(paired scored-chunk interval {rc3v["model_fourth_doubling_gain_ci95"]}) against the record\'s {rc3v["bar_applied"]["gain_per_doubling"]} per '
-            f'doubling: {rc3v["gain_reading"]}; the logistic {rc3v["logistic_fourth_doubling_gain"]}, the tree {rc3v["depth3_tree_fourth_doubling_gain"]}. '
+            f'The model reads {rc3v["model_real_top1_by_rung"]}; the fourth doubling\'s gain, {_p3["point_label"]} {_p3["published_point"]} '
+            f'(paired scored-chunk interval {_p3["interval"]}) against the record\'s {rc3v["bar_applied"]["gain_per_doubling"]} per '
+            f'doubling: {rc3v["gain_reading"]}{_p3["gain_cap"]}{"; not a recipe reading" if _p3["gain_cap"] else ""}{_p3["straddle"]}; the logistic {rc3v["logistic_fourth_doubling_gain"]}, '
+            f'the tree {rc3v["depth3_tree_fourth_doubling_gain"]}. '
             f'At rung 8, model minus logistic {rc3v["lead_at_top"]["r8_model_minus_logistic"]["point"]} (paired interval '
-            f'{rc3v["lead_at_top"]["r8_model_minus_logistic"]["ci95"]}): {rc3v["lead_reading"]}. Seven of the eight points were banked before this run, so the '
+            f'{rc3v["lead_at_top"]["r8_model_minus_logistic"]["ci95"]}): {rc3v["lead_reading"]}{_p3["lead_cap"]}'
+            f'{"; not a recipe comparison" if _p3["lead_cap"] else ""}. Seven of the eight points were banked before this run, so the '
             f'two-decade slope ({rc3v["model_two_decade_slope_per_doubling"]} per doubling, interval {rc3v["model_two_decade_slope_ci95"]}) is a flag, never a '
             f'rise of its own. Rungs 1..7 reproduced 0024 (rung 7 drift {rc3v["flags"]["reproduction_0024_drift"]["model"][6]}) and 0024\'s intervals exactly; '
             f'null {rc3v["shuffled_label_accuracy_real"]}')
@@ -334,8 +372,10 @@ if rc2a and rc2v and rc2v["verdict"] != "VOID" and rc2a.get("complete"):
         for role, label in _roles2)
     _lt = _ld["r7_model_minus_logistic"]; _l4 = _ld["r4_model_minus_logistic"]; _bar_t = _f2["top_rung_against_0021s_bar_with_the_tree_as_floor"]
     _bar_l = _f2["top_rung_against_0021s_bar_with_the_higher_of_tree_and_logistic_as_floor"]
-    _lead_sentence = {"MODEL_LEADS": "the boosted model still leads the hand-writable linear rule",
-                      "LINEAR_LEADS": "the hand-writable linear rule leads the boosted model",
+    _lead_sentence = {"MODEL_LEADS": "the boosted model leads the standardised logistic (a 26-class linear model over "
+                                     f'{rc2a["corpus"]["n_features"]} features, not a rule written by hand)',
+                      "LINEAR_LEADS": "the standardised logistic (a 26-class linear model over "
+                                      f'{rc2a["corpus"]["n_features"]} features) leads the boosted model',
                       "NO_SEPARATION": "the two are not separated at this size (never read as equal)"}[rc2v["lead_reading"]]
     _cap = _f2["roles_at_iteration_cap_at_the_top_rung"]
     boundary_0024 = (f'<p><strong>The second decade of real plaintexts: <span class="mono">{rc2v["verdict"]}</span></strong> '
@@ -348,14 +388,17 @@ if rc2a and rc2v and rc2v["verdict"] != "VOID" and rc2a.get("complete"):
                      f'{_b2["doublings_spanned_second_decade"]} doublings of other files above the block, {_b2["doublings_spanned"]} in all. The model reads '
                      f'<strong>{rc2v["model_real_top1_by_rung"]}</strong>: a second-decade slope of <strong>{rc2v["model_slope_per_doubling"]}</strong> per '
                      f'doubling of plaintexts (scored-chunk interval {rc2v["model_slope_ci95"]}) against {_b2["slope_per_doubling"]} required with the '
-                     f'interval\'s lower bound above {_b2["bootstrap_lower_bound_gt"]} — {_f2["second_decade_reading"]}; the first-decade slope '
+                     f'interval\'s lower bound above {_b2["bootstrap_lower_bound_gt"]} — {_f2["second_decade_reading"]} (0024 defines "the record\'s rate" as that {_b2["slope_per_doubling"]} bar, not the headline\'s rate); the first-decade slope '
                      f'{_f2["first_decade_slope_per_doubling"]["model"]} reproduces 0023\'s. The logistic\'s second-decade slope is '
                      f'{rc2v["logistic_slope_per_doubling"]}, the tree\'s {rc2v["depth3_tree_slope_per_doubling"]}; model minus logistic '
                      f'{rc2v["slope_model_minus_logistic"]}, paired interval {_f2["slope_model_minus_logistic_ci95_paired"]}. <strong>At the top rung, '
                      f'{_lead_sentence}</strong>: model minus logistic {_lt["point"]}, paired interval {_lt["ci95"]}, read by the rule sealed in advance as '
                      f'<span class="mono">{rc2v["lead_reading"]}</span>'
                      + (f' (the {", ".join(n[3:] for n in _cap)} at its iteration cap at the top rung: not a recipe comparison)' if _cap else '')
-                     + f'; at rung 4 the same reading is {_l4["point"]} with interval {_l4["ci95"]} ({_l4["reading"]}). <strong>The shift arm</strong> — '
+                     + f'; at rung 4 the same reading is {_l4["point"]} with interval {_l4["ci95"]} ({_l4["reading"]})'
+                     + "".join(f'; at rung {r["rung"]} the model read {r["model"]} against the logistic\'s {r["logistic"]}'
+                               for r in _f2["rung_table"][4:-1] if r["model"] < r["logistic"])
+                     + '; every interval here is over the scored chunks only and does not resample the fit side (one fit per role per rung). <strong>The shift arm</strong> — '
                      f'rung 5\'s new plaintexts alone at rung 4\'s count — reads {_sh["readings_ext_real_top1"]}, against rung 4 by '
                      f'{_sh["difference_from_rung_4"]} and against rung 5 by {_sh["difference_from_rung_5"]}: the direct reading of what other files '
                      f'of the same families buy for the original files. Against 0021\'s bar re-applied at the top rung, the model\'s {_bar_t["model"]} '
@@ -384,17 +427,20 @@ if rc3a and rc3v and rc3v["verdict"] != "VOID" and rc3a.get("complete"):
         for i, r in enumerate(_b3["rungs"]))
     _gain_rows3 = "".join(
         f'<tr><td>{label}</td><td class="mono">{_g3[role]["point"]}</td><td class="mono">{_g3[role]["ci95"]}</td><td class="mono">{_g3[role]["reading"]}</td>'
+        f'<td class="mono">{_f3["fourth_doubling_gain_with_rung7_at_0024s_reading"][role]}</td>'
         f'<td class="mono">{_f3["two_decade_slope_per_doubling"][role]["slope_per_doubling"]}</td><td class="mono">{_f3["two_decade_slope_per_doubling"][role]["ci95"]}</td>'
         f'<td class="mono">{_cv3[role]["slope_per_doubling_second_decade"]}</td><td class="mono">{_s8["difference_from_rung_4"][role]}</td>'
         f'<td class="mono">{_s8["difference_from_shift_arm_0024"][role]}</td></tr>'
         for role, label in _roles3)
-    _lt3 = _ld3["r8_model_minus_logistic"]; _l7 = _ld3["r7_model_minus_logistic"]; _gm = _g3["model"]
+    _lt3 = _ld3["r8_model_minus_logistic"]; _l7 = _ld3["r7_model_minus_logistic"]
     _gain_sentence = {"FOURTH_DOUBLING_RISES": "the fourth doubling of real plaintexts buys the model a rise at or above the record\'s rate",
                       "FOURTH_DOUBLING_BELOW_RATE": "the fourth doubling of real plaintexts buys the model a rise, below the record\'s rate",
                       "FOURTH_DOUBLING_NOT_RESOLVED": "whether the fourth doubling bought the model anything is not resolved by the scored chunks (never read as flat)",
                       "FOURTH_DOUBLING_FALLS": "the fourth doubling of real plaintexts lowered the model\'s reading on the original files"}[rc3v["gain_reading"]]
-    _lead_sentence3 = {"MODEL_LEADS": "the boosted model still leads the hand-writable linear rule",
-                       "LINEAR_LEADS": "the hand-writable linear rule leads the boosted model",
+    _lead_sentence3 = {"MODEL_LEADS": "the boosted model leads the standardised logistic (a 26-class linear model over "
+                                      f'{rc2a["corpus"]["n_features"]} features, not a rule written by hand)',
+                       "LINEAR_LEADS": "the standardised logistic (a 26-class linear model over "
+                                       f'{rc2a["corpus"]["n_features"]} features) leads the boosted model',
                        "NO_SEPARATION": "the two are not separated at this size (never read as equal)"}[rc3v["lead_reading"]]
     _cap3 = _f3["roles_at_iteration_cap_at_the_top_rung"]; _cap7 = _f3["roles_at_iteration_cap_at_rung_7"]
     boundary_0025 = (f'<p><strong>Two decades of real plaintexts: <span class="mono">{rc3v["verdict"]}</span></strong> '
@@ -407,11 +453,13 @@ if rc3a and rc3v and rc3v["verdict"] != "VOID" and rc3a.get("complete"):
                      f'too) was nested on top: {", ".join(str(r["n_chunks"]) for r in _b3["rungs"])} plaintexts, {_b3["doublings_spanned"]} doublings, '
                      f'{_b3["decades_spanned"]} decades: the span meets 0003\'s two-decade scope rule only in the sense that the rule asked for two decades '
                      f'of data; its one-corpus, one-seed terms are not met by this curve, whose first decade is the scored files\' own chunks. <strong>{_gain_sentence}</strong>: the model reads <strong>{rc3v["model_real_top1_by_rung"]}</strong>, '
-                     f'rung 8 minus rung 7 <strong>{_gm["point"]}</strong> with a paired scored-chunk interval {_gm["ci95"]} against the record\'s '
+                     f'{_p3["point_label"]} <strong>{_p3["published_point"]}</strong> with a paired '
+                     f'scored-chunk interval {_p3["interval"]} against the record\'s '
                      f'{_b3["gain_per_doubling"]} per doubling, read by the four-way rule sealed in advance as <span class="mono">{rc3v["gain_reading"]}</span>'
-                     + "".join(f' (the model at its iteration cap at rung {k})' for k in (7, 8) if f"r{k}_model" in _f3["roles_at_iteration_cap"])
+                     + _p3["gain_cap"]
                      + ('; the cap is part of the sealed recipe and is never raised, and the gain is read as is, not as a recipe reading'
-                        if any(f"r{k}_model" in _f3["roles_at_iteration_cap"] for k in (7, 8)) else '')
+                        if _p3["gain_cap_rungs"] else '')
+                     + _p3["straddle"]
                      + f'; the logistic\'s fourth-doubling gain is {_g3["logistic"]["point"]} ({_g3["logistic"]["reading"]}), the tree\'s {_g3["depth3_tree"]["point"]} '
                      f'({_g3["depth3_tree"]["reading"]}); per family (model) {_f3["per_family_fourth_doubling_gain"]["model"]}. Seven of the eight points were '
                      f'banked by 0023 and 0024 before this run, so the two-decade slope (model {_f3["two_decade_slope_per_doubling"]["model"]["slope_per_doubling"]} '
@@ -419,7 +467,7 @@ if rc3a and rc3v and rc3v["verdict"] != "VOID" and rc3a.get("complete"):
                      f'{rc3v["model_slope_per_doubling"]}, interval {rc3v["model_slope_ci95"]}) is a flag quoted only beside the fourth-doubling reading, never a '
                      f'rise of its own. <strong>At rung 8, {_lead_sentence3}</strong>: model minus logistic {_lt3["point"]}, paired interval {_lt3["ci95"]}, read '
                      f'by 0024\'s sealed rule as <span class="mono">{rc3v["lead_reading"]}</span>'
-                     + "".join(f' (the {n[3:]} at its iteration cap at rung 8)' for n in _cap3) + ('; not a recipe comparison' if _cap3 else '')
+                     + _p3["lead_cap"] + ('; not a recipe comparison' if _cap3 else '')
                      + f'; at rung 7 the same reading is 0024\'s {_l7["point"]} with interval {_l7["ci95"]} ({_l7["reading"]}), reproduced exactly. Under '
                      f'{_st["n_seeds"]} other bootstrap seeds the gain reading would have differed {_st["n_seeds_with_another_gain_reading"]} times and the '
                      f'lead reading {_st["n_seeds_with_another_lead_reading"]} times (a flag). <strong>The floors</strong>, refitted at rung 8 (majority, '
@@ -439,7 +487,7 @@ if rc3a and rc3v and rc3v["verdict"] != "VOID" and rc3a.get("complete"):
                      f'0016, 0017, 0018, 0019, 0021, 0022, 0023 or 0024, and nothing here establishes a buyer.</p>'
                      f'<table><thead><tr><th>rung</th><th>decade</th><th>plaintexts</th><th>rows</th><th>model</th><th>logistic</th><th>depth-3 tree</th></tr>'
                      f'</thead><tbody>{_rung_rows3}</tbody></table>'
-                     f'<table><thead><tr><th>role</th><th>4th-doubling gain (r8 − r7)</th><th>paired scored-chunk 95%</th><th>reading</th><th>two-decade slope / doubling</th>'
+                     f'<table><thead><tr><th>role</th><th>4th-doubling gain (r8 − r7)</th><th>paired scored-chunk 95%</th><th>reading</th><th>gain with r7 at 0024\'s banked reading</th><th>two-decade slope / doubling</th>'
                      f'<th>scored-chunk 95%</th><th>2nd-decade slope (4..8)</th><th>new arm − rung 4</th><th>new arm − 0024\'s arm</th></tr></thead><tbody>{_gain_rows3}</tbody></table>')
 
 fam2048_table = ""
@@ -861,7 +909,7 @@ a {{ color:var(--acc); }}
 @media (prefers-reduced-motion: reduce) {{ .tip {{ transition:none; }} }}
 </style>
 <main>
-<div class="eyebrow">Preregistered evidence · every number read from a banked artifact</div>
+<div class="eyebrow">Preregistered evidence · rendered from banked artifacts</div>
 <h1>raise-v1 Evidence Ledger</h1>
 <p class="dek">One task, measured under bars frozen before the data existed: recover which of 26
 DEFLATE implementation-and-level configurations produced a window carved from the middle of a
@@ -869,18 +917,20 @@ compressed stream — no header, no stream start, no plaintext. Passes and failu
 <div class="provenance">chain head {prereg["chain"][-1]["hash"][:16]} · {len(prereg["chain"])} preregistrations, hash-chained, beacon-anchored · rendered at {git_head} from artifacts whose combined sha256 begins {artifacts_sha} · this page is regenerated by tools/render/evidence_page.py and gated by claimcheck</div>
 
 <h2>The verdicts</h2>
-<p class="sub">Emitted by readers frozen by sha256 before their data existed. A failed clause fails
-the study; there is no aggregate score and no discretion.</p>
+<p class="sub">Emitted by readers frozen by sha256 before their data existed, except the two re-reads
+of banked runs (0013, 0019), which their chips name as such. A failed clause fails the study; there
+is no aggregate score and no discretion.</p>
 <div class="ledger">{chips}</div>
 
 <h2>The headline curve</h2>
-<p class="sub">Quality against the volume of manufactured labels — the FDM-1 question. Chance is
-{chance} across 26 classes; the null control (labels shuffled, identical pipeline) falls to
+<p class="sub">Quality against the volume of manufactured labels — the FDM-1 question, asked here of
+a boosted-tree model on the corpus builder's eight content families (seven parametric generators and
+Gutenberg prose). Chance is {chance} across 26 classes; the null control (labels shuffled, identical pipeline) falls to
 {curve["shuffled_label_accuracy"]}.</p>
 <div class="tiles">
 <div class="tile"><div class="v">+{curve["slope"]:.4f}</div><div class="k">accuracy per decade of data · cluster 95% CI [{curve["slope_ci95_low"]}, {curve["slope_ci95_high"]}] · r² {curve["slope_r2"]:.4f}</div></div>
 <div class="tile"><div class="v">{curve["top_rung_accuracy"]}</div><div class="k">top rung, {curve["rungs"][-1]["n_units"]:,} fragments · {curve["top_rung_accuracy"]/chance:.1f}× chance</div></div>
-<div class="tile"><div class="v">+{curve["margin_over_frozen_baseline"]}</div><div class="k">margin over the frozen baseline set (bar: 0.05) · stricter reading +{curve["margin_over_expanded_baseline"]}</div></div>
+<div class="tile"><div class="v">{r4096["final_top1"] - r4096["best_frozen_for_bar"]:+.4f}</div><div class="k">margin with every baseline searched too: over the best searched baseline, a standardised logistic (0014; bar: 0.05) · fixed recipes (0003): +{curve["margin_over_frozen_baseline"]} over the frozen set, +{curve["margin_over_expanded_baseline"]} over a depth-16 tree</div></div>
 </div>
 <figure>{chartA}
 <figcaption>Accuracy at four preregistered rungs spanning {curve["decades_spanned"]} decades. Dashed
@@ -892,10 +942,12 @@ artifact.</figcaption></figure>
 
 <h2>Where the curve lives</h2>
 <p class="sub">The headline is a mixture, and the decomposition is the sharpest statistic in the
-package: structured content carries the curve at roughly twice the headline rate; incompressible
-content sits at its own measured collision ceiling ({cap2["per_family"]["base64"]["mean_distinct"]}
-and {cap2["per_family"]["binary"]["mean_distinct"]} distinct streams of 26 for base64 and binary;
-the mean across all eight families is {cap["by_carve"]["4096"]["mean_distinct_streams_of_26"]}).</p>
+package: the builder's generated structured families (csv, log, json; no real file of these kinds is
+among the record's real-content families) carry the curve at roughly twice the headline rate;
+incompressible content sits at its own measured collision ceiling
+({cap2["per_family"]["base64"]["mean_distinct"]} and {cap2["per_family"]["binary"]["mean_distinct"]}
+distinct streams of 26 for base64 and binary, against {cap2["overall_mean_distinct_streams"]} across
+all eight families, all three on whole streams of {cap2["source_chunk_bytes"]}-byte source chunks).</p>
 <figure>{chartB}
 <figcaption>Per-family slope from the banked per-example scores, cluster-bootstrapped within each
 family's held-out chunks. Right column: that family's top-rung accuracy. The gutenberg row is the
@@ -918,8 +970,10 @@ shortlist and a confidence worth abstaining on?</p>
 protocol returns <span class="mono">CARVE_FAILS</span>: within-size top-1
 {carve["within_top1"]} against its own best baseline {carve["within_best_trivial_baseline"]}
 (margin below the 0.05 bar), and a 4096-trained model transfers at {carve["transfer_top1"]} —
-chance. The byte-identity ceiling barely moves across carve sizes, so this is a modelling failure
-and is reported as one. Two learned byte-sequence attempts (preregs 0009, 0010) did not rescue it.</p>
+chance. The byte-identity ceiling barely moves across carve sizes, so byte collisions do not explain it;
+0007 committed in advance to report this outcome as a modelling failure, and it is reported as one, though
+distinct bytes do not show that any model could recover the label, and the frozen reader reads it as not
+recoverable at the shorter carve. Two learned byte-sequence attempts (preregs 0009, 0010) did not rescue it.</p>
 {boundary_2048}{boundary_0012}{boundary_0014}{boundary_0015}{boundary_0016}{boundary_0017}{boundary_0018}{boundary_0020}{boundary_0022}{boundary_0023}{boundary_0024}{boundary_0025}{fam2048_table}
 </div>
 <div class="panel good">
@@ -935,7 +989,7 @@ inflated. Defect and direction are filed together in the corrections ledger.</p>
 <h2>The instrument the numbers passed through</h2>
 <div class="tiles">
 <div class="tile"><div class="v">{len(prereg["chain"])}</div><div class="k">preregistrations, hash-chained; entry N carries entry N−1's hash; NIST Beacon + drand anchors</div></div>
-<div class="tile"><div class="v">{mut["detected"]}/{mut["total_mutations"]}</div><div class="k">deliberate mutations detected across {len(mut["by_gate"])} gates — every gate provably able to fail</div></div>
+<div class="tile"><div class="v">{mut["detected"]}/{mut["total_mutations"]}</div><div class="k">deliberate mutations detected across {len(mut["by_gate"])} gates in the suite's last full run (the gate added since for the unfrozen preregistration 0025 is not in it) — every gate then in the suite shown to fail on its deliberate mutations</div></div>
 <div class="tile"><div class="v">{n_corrections}</div><div class="k">corrections filed against this work at full size, none softened</div></div>
 <div class="tile"><div class="v">{audit["n_confirmed"]}/{audit["n_raw_findings"]}</div><div class="k">adversarial-audit findings confirmed by double refutation ({audit_reject} rejected, record banked) — every finding fixed, the load-bearing ones by new measurement</div></div>
 <div class="tile"><div class="v">{cov_neither}/{cov_n}</div><div class="k">claims in the coverage map's weakest class — published loudest, on purpose</div></div>
@@ -951,9 +1005,22 @@ never as findings.</p>
 <pre>git clone &lt;repo&gt; &amp;&amp; cd raise-v1
 bash tools/gates.sh                              # every gate, one command, non-zero on any failure
 bash tools/pivot/fetch_sources.sh                # sources must hash to the banked edition, or it fails
-python3 tools/pivot/corpus_manifest.py --check   # prove a rebuilt corpus is byte-identical</pre>
+python3 tools/pivot/corpus_manifest.py --check   # compare a rebuilt corpus with the banked hashes (what can match: below)</pre>
+<p class="mut" style="font-size:14px">The check needs a rebuilt corpus (the build commands are in
+docs/DILIGENCE.md). A rebuild reproduces the pinned sources (byte-checked), the labels (y) of every
+corpus, raw_c1024 whole, full_c4096's evaluation set as a set of chunks (its banked order can be
+restored from banked layouts), and the corpora 0018 and 0021 rest on (ext_c4096, realfit_c4096), rebuilt
+identical on a second machine on 2026-10-21. It does not reproduce X and g of the three caches the corpus builder wrote
+(full_c4096, carve_c1024, carve_c2048): their rows are in worker-completion order, by design, so the
+check reports them as different, and every result fitted on a builder pool can be re-measured on a
+different draw but not re-derived on the same rows. Nor 0024's realfit2 corpus: rebuilt on a second
+machine, its X differs in rare rows outside its smoke subset (which rebuilds identical), and 0024's
+rung-7 logistic does not reproduce on it bit for bit. The rebuild of 0025's corpus is recorded in
+artifacts/pivot/engineering_log_0025.json. The detail is in CORRECTIONS.md.</p>
 <p class="mut" style="font-size:14px">Two dependencies, CPU-only. The full record — the 99-candidate
-search that found nothing, four measured laws, three conjectures, and {n_corrections} corrections — is in the
+search that found nothing, four laws derived by measurement (three of them from the search, part of whose
+evidence was measured in scratch directories that no longer exist and cannot be reproduced here), three
+conjectures, and {n_corrections} corrections — is in the
 repository this page was rendered from.</p>
 </main>'''
 
