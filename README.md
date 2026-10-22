@@ -1,3 +1,8 @@
+> **Public mirror.** This is the public mirror of the private working repository; its history omits four
+> GNSS product files (two ESA products whose redistribution terms could not be verified, and the two BKG
+> broadcast copies committed with them) and one e-mail address. Everything
+> else is identical. Commit-hash map and details: `docs/PUBLIC_MIRROR.md`.
+
 # raise-v1
 
 An evidence package built around one question: **does the quality of a model trained on
