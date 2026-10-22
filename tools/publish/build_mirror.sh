@@ -39,7 +39,7 @@ OWNER_EMAIL=${OWNER_EMAIL:-$(git -C "$SRC_REPO" log -1 --author="^$OWNER_NAME <"
 FILTER_EMAIL=${FILTER_EMAIL:-$OWNER_EMAIL}
 EMAIL_PLACEHOLDER="<contact: see the repository owner>"
 GNSS_PATHS="data/gnss/brdc001.rnx.gz data/gnss/brdc_001.rnx.gz data/gnss/clk_001.CLK.gz data/gnss/sp3_001.SP3.gz"
-EMAIL_FILES="docs/qa/NEW_DOCS_REVIEW.md tools/gnss/fetch.sh"
+EMAIL_FILES="docs/qa/NEW_DOCS_REVIEW.md tools/gnss/fetch.sh tools/publish/build_mirror.sh"
 STAMP=build_mirror.stamp
 
 die() { echo "build_mirror: ERROR: $*" >&2; exit 1; }
@@ -253,8 +253,8 @@ differs from the private repository's:
    open. All four were removed together so the mirror carries no agency products at all.
    `tools/gnss/fetch.sh` re-fetches them from the agencies for anyone reproducing the EphemErr
    study; the banked artifacts under `artifacts/ephemerr/` are unchanged.
-2. **One e-mail address** in two files (a user-agent string and a review byline), replaced by
-   a placeholder.
+2. **One e-mail address** in three files (a user-agent string, a review byline, and the earlier
+   versions of this mirror's own build script, which wrote it out), replaced by a placeholder.
 
 Nothing else differs: same trees otherwise, same authors, same dates, same messages, same order.
 The private repository's history is the precedence record the preregistration chain refers to:
