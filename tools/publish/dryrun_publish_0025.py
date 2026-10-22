@@ -155,8 +155,10 @@ def add_inflight(root):
     lace = ("both together span 1.8016 decades, short of 0003's two-decade scope rule; other files of the same kinds keep buying the "
             "recipe the record's rate on the files it is scored on, through 8232 plaintexts (eight times 0021's); other files of the same "
             "kinds keep raising the recipe's accuracy on the files it is scored on at or above the record's bar of 0.005 per doubling (the "
-            "bar 0024 sealed; 0.00697 measured), through 8232 plaintexts (eight times 0021's); the record's scaling thesis holds on these "
-            "real files, in distribution, over just under a decade (0003's scope rule asks for two); at the top rung the boosted model "
+            "bar 0024 sealed; 0.00697 measured; second decade minus first: -0.000374), through 8232 plaintexts (eight times 0021's); this "
+            "does not establish the record's scaling thesis, which 0003's scope rule ties to two decades of data on one corpus with one seed "
+            "(this curve spans 0.8985 of a decade); the record's scaling thesis holds on these real files, in distribution, over just under "
+            "a decade (0003's scope rule asks for two); at the top rung the boosted model "
             "leads the standardised logistic, by 0.0039; the boosted model edges ahead of the standardised linear rule; the standardised "
             "logistic 0.0039 behind the model at 0024's top rung; the model leads the standardised logistic by 0.0039 (paired interval "
             "[0.0001, 0.0077], entirely above 0) — `MODEL_LEADS` by the rule sealed in advance")
@@ -194,9 +196,9 @@ def sentences(t):
 
 
 GAIN_MARKERS = ['FOURTH_DOUBLING_', 'minus rung 7 for the model', 'fourth doubling bought', 'fourth doubling of real plaintexts', "a rise below the record's rate",
-                "lowered the model's reading", 'fourth-doubling gain', 'fourth-doubling reading', 'still buys the recipe']
+                "lowered the model's reading", 'fourth-doubling gain', 'fourth-doubling reading', "raises the recipe's accuracy"]
 LEAD_MARKERS = ['MODEL_LEADS', 'LINEAR_LEADS', 'NO_SEPARATION', 'model minus logistic', 'linear rule', 'standardised logistic leads', 'leads the standardised logistic',
-                'a rule a person can write out']
+                'a rule a person can write out', 'the standardised logistic (a ']
 
 
 def check_case(case, root, orig, before, after1, after2, out1, V, PR, problems):
@@ -222,9 +224,10 @@ def check_case(case, root, orig, before, after1, after2, out1, V, PR, problems):
     # keep and thesis sentences are bounded only in the documents their stop rule names; a reworded copy elsewhere is left alone.
     keep_phr = {'README.md': [f"keep buying the recipe the record's rate on the files it is scored on, through {p7} plaintexts (eight times 0021's)"],
                 'VERDICT.md': [f"keep raising the recipe's accuracy on the files it is scored on at or above the record's bar of 0.005 per doubling "
-                               f"(the bar 0024 sealed; 0.00697 measured), through {p7} plaintexts (eight times 0021's)"]}
-    thesis_phr = {'VERDICT.md': ["the record's scaling thesis holds on these real files, in distribution, over just under a decade (0003's scope rule asks for two)"],
-                  'docs/DILIGENCE.md': ["the record's scaling thesis holds"]}
+                               f"(the bar 0024 sealed; 0.00697 measured; second decade minus first: -0.000374), through {p7} plaintexts (eight times 0021's)"]}
+    th_new = ("this does not establish the record's scaling thesis, which 0003's scope rule ties to two decades of data on one corpus with one "
+              "seed (this curve spans 0.8985 of a decade)")
+    thesis_phr = {'VERDICT.md': [th_new], 'docs/DILIGENCE.md': [th_new]}
     lead_phr = ["at the top rung the boosted model leads the standardised logistic by 0.0039", "at the top rung the boosted model leads the standardised logistic, by 0.0039",
                 "At the top rung the boosted model leads the standardised logistic, by 0.0039", "at the top rung the boosted model leads the linear rule, by 0.0039",
                 "at the top rung the boosted model edges ahead of the standardised linear rule",

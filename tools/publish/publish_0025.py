@@ -27,8 +27,9 @@ the 2026-10-22 honesty pass:
       kinds keep buying the recipe the record's rate ... through 8232 plaintexts" (VERDICT.md now: "keep raising the recipe's
       accuracy ... at or above the record's bar ..., through 8232 plaintexts") -> bounded, with the rung-8 gain, its reading and
       the lead part beside it
-  on FALLS, in VERDICT.md and DILIGENCE.md: 0023's "the record's scaling thesis holds on real files" (now "holds on these real
-      files, in distribution, over just under a decade (...)" and "... the record's scaling thesis holds") -> a forward pointer
+  on FALLS, in VERDICT.md and DILIGENCE.md: 0023's "the record's scaling thesis holds on real files" (now, in both, "this does
+      not establish the record's scaling thesis, which 0003's scope rule ties to two decades ... (this curve spans 0.8985 of a
+      decade)") -> a forward pointer
   on LINEAR_LEADS, NO_SEPARATION: every published MODEL_LEADS of 0024 (each sentence that states its top-rung lead of 0.0039 or
       its `MODEL_LEADS` after the interval [0.0001, 0.0077], once per sentence; the one-pager's headline) -> bounded to 8232
       plaintexts with the rung-8 reading beside it
@@ -124,6 +125,10 @@ x7, x8 = W[p7 // p4], W[p8 // p4]; assert p7 % p4 == 0 and p8 % p4 == 0
 FAMS = sorted(V['fit3_rows_per_family']); assert FAMS == sorted(V['fit_rows_per_family']) == sorted(MAN3['families']); n_fam = W[len(FAMS)]
 carve = A['corpus']['carve_bytes']; assert carve == MAN3['carve']
 n_real = B['n_real_rows']; assert n_real == V['read']['n_ext_real_rows'] == A['n_ext_real_rows']
+# the comparator named as the 2026-10-22 honesty pass names it: a 26-class linear model over 1108 features, never 'hand-writable'
+n_cls, n_feat = A['n_classes'], A['corpus']['n_features']
+assert n_cls == V['read']['n_classes'] and n_feat == J('artifacts/pivot/realcurve2_4096.json')['corpus']['n_features']
+LOGI = f"the standardised logistic (a {n_cls}-class linear model over {n_feat} features)"
 fit3_rows, fit3_chunks = B['fit3_rows'], B['fit3_source_chunks']
 assert fit3_rows == MAN3['n_rows'] == PR['scope']['corpus_fit3']['n_new_rows'] and fit3_chunks == MAN3['n_chunks_with_rows'] == PR['scope']['corpus_fit3']['n_new_chunks_with_rows']
 n_arch3 = sum(1 for k in PINS3['files'] if not k.startswith('rfc3/')); n_rfc3 = sum(1 for k in PINS3['files'] if k.startswith('rfc3/'))
@@ -341,13 +346,13 @@ LEAD_TXT = {
     'LINEAR_LEADS': f"at rung {n_r} the standardised logistic leads the model by {round(-lp, 4)} (paired interval of model minus logistic {lci}, entirely below 0): a rule a person can write out has overtaken the boosted recipe",
     'NO_SEPARATION': f"at rung {n_r} model minus logistic is {lp} with a paired interval {lci} that includes 0: the two are not separated at this size, never read as 'equal'"}
 lead_txt = LEAD_TXT[lead] + LCAP
-GAIN_HEAD = {'FOURTH_DOUBLING_RISES': "The fourth doubling of real plaintexts rises at the record's rate",
+GAIN_HEAD = {'FOURTH_DOUBLING_RISES': f"The fourth doubling of real plaintexts rises at or above the record's bar of {bar} per doubling",
              'FOURTH_DOUBLING_BELOW_RATE': "The fourth doubling of real plaintexts buys a rise below the record's rate",
              'FOURTH_DOUBLING_NOT_RESOLVED': "Whether the fourth doubling bought anything is not resolved by the scored chunks at this size, never read as 'flat' or 'equal'",
              'FOURTH_DOUBLING_FALLS': "Adding the fourth doubling's files of the same kinds lowered the model's reading on the original files"}
-LEAD_HEAD = {'MODEL_LEADS': f"the boosted model is still ahead of the hand-writable linear rule at rung {n_r}",
-             'LINEAR_LEADS': f"the hand-writable linear rule leads the boosted model at rung {n_r}",
-             'NO_SEPARATION': f"at rung {n_r} the boosted model and the hand-writable linear rule are not separated, never read as 'equal'"}
+LEAD_HEAD = {'MODEL_LEADS': f"at rung {n_r} the boosted model leads {LOGI} by {lp}",
+             'LINEAR_LEADS': f"at rung {n_r} {LOGI} leads the boosted model by {round(-lp, 4)}",
+             'NO_SEPARATION': f"at rung {n_r} the boosted model and {LOGI} are not separated, never read as 'equal'"}
 headline = f"{GAIN_HEAD[pub]}{GCAP} — and {LEAD_HEAD[lead]}{LCAP}"
 stab = (f"under {ST['n_seeds']} other bootstrap seeds the gain reading would have differed {ST['n_seeds_with_another_gain_reading']} times and the "
         f"lead reading {ST['n_seeds_with_another_lead_reading']} times (a flag)")
@@ -395,15 +400,16 @@ controls = (f"Controls: the null control on rung {n_r}'s permuted labels reads {
             f"and {null_eval} on the evaluation set against chance {chance}; roles at their iteration cap: {', '.join(capped) if capped else 'none'}; "
             f"{ckpt_words}. Cost: {wall} s wall on the last of {launches} launch(es), {fits_s} s of fits banked (rung {n_r}'s model fit "
             f"{secs[f'{TOPK}model']} s), against the {est_lo} to {est_hi} s ({est_lo_h} to {est_hi_h} hours) of fits estimated in advance")
+KEEP24 = f"keep raising the recipe's accuracy at or above the record's bar of {bar} per doubling"   # 0024's keep sentence, as the honesty pass worded it
 MEAN_GAIN = {
-    'FOURTH_DOUBLING_RISES': f"one more doubling of other files of the same kinds still buys the recipe the record's rate on the files it is scored on, at {p8} plaintexts ({x8} times 0021's)",
-    'FOURTH_DOUBLING_BELOW_RATE': f"one more doubling of other files of the same kinds buys a rise below the record's rate on the files it is scored on, so 0024's sentence that such files keep the record's rate is bounded to {p7} plaintexts",
-    'FOURTH_DOUBLING_NOT_RESOLVED': f"whether the fourth doubling bought anything is not resolved by the scored chunks at this size, never read as 'flat' or 'equal', so 0024's sentence that such files keep the record's rate is bounded to {p7} plaintexts",
-    'FOURTH_DOUBLING_FALLS': f"adding the fourth doubling's files of the same kinds lowered the model's reading on the original files, so 0024's sentence that such files keep the record's rate is bounded to {p7} plaintexts, and so is 0023's sentence on the scaling thesis"}
+    'FOURTH_DOUBLING_RISES': f"one more doubling of other files of the same kinds raises the recipe's accuracy on the files it is scored on at or above the record's bar of {bar} per doubling (the bar 0025 sealed; {gp} measured), at {p8} plaintexts ({x8} times 0021's)",
+    'FOURTH_DOUBLING_BELOW_RATE': f"one more doubling of other files of the same kinds buys a rise below the record's rate on the files it is scored on, so 0024's sentence that such files {KEEP24} is bounded to {p7} plaintexts",
+    'FOURTH_DOUBLING_NOT_RESOLVED': f"whether the fourth doubling bought anything is not resolved by the scored chunks at this size, never read as 'flat' or 'equal', so 0024's sentence that such files {KEEP24} is bounded to {p7} plaintexts",
+    'FOURTH_DOUBLING_FALLS': f"adding the fourth doubling's files of the same kinds lowered the model's reading on the original files, so 0024's sentence that such files {KEEP24} is bounded to {p7} plaintexts, and so is 0023's sentence on the scaling thesis"}
 MEAN_LEAD = {
-    'MODEL_LEADS': f"at {x8} times 0021's plaintexts the boosted recipe is still ahead of a rule a person can write out on the record's own real content, by {lp}{LCAP} — the recipe conclusion of 0021, 0022 and 0023 (that the linear rule gets most of the signal) is bounded by the size of that lead, not reversed",
-    'LINEAR_LEADS': f"at {x8} times 0021's plaintexts a rule a person can write out is ahead of the boosted recipe on the record's own real content, by {round(-lp, 4)}{LCAP}, and 0024's lead of the model is bounded to {p7} plaintexts — the manufactured-label headline (0003, 0014) is not revised, but the claim that the recipe is what the data buys is",
-    'NO_SEPARATION': f"at {x8} times 0021's plaintexts the boosted recipe and a rule a person can write out are not separated on the record's own real content, never read as 'equal'{LCAP}, and 0024's lead of the model is bounded to {p7} plaintexts — the recipe conclusion of 0021, 0022 and 0023 stands as measured"}
+    'MODEL_LEADS': f"at {x8} times 0021's plaintexts the boosted recipe leads {LOGI} on the record's own real content by {lp}{LCAP} — the recipe conclusion of 0021, 0022 and 0023 (that the linear rule gets most of the signal) is bounded by the size of that lead, not reversed",
+    'LINEAR_LEADS': f"at {x8} times 0021's plaintexts {LOGI} leads the boosted recipe on the record's own real content by {round(-lp, 4)}{LCAP}, and 0024's lead of the model is bounded to {p7} plaintexts — the manufactured-label headline (0003, 0014) is not revised, but the claim that the recipe is what the data buys is",
+    'NO_SEPARATION': f"at {x8} times 0021's plaintexts the boosted recipe and {LOGI} are not separated on the record's own real content, never read as 'equal'{LCAP}, and 0024's lead of the model is bounded to {p7} plaintexts — the recipe conclusion of 0021, 0022 and 0023 stands as measured"}
 meaning = f"{MEAN_GAIN[pub]}{GCAP}; {MEAN_LEAD[lead]}"
 not_transfer = (f"Not a transfer reading: every rung holds the scored files' own unscored chunks and the plaintexts added above rung {n_first} are other "
                 f"files of the same kinds, so the fourth doubling confounds more plaintexts with a further shift of source, which the new shift arm "
@@ -423,7 +429,7 @@ LEAD_BOUND_WORDS = {'MODEL_LEADS': 'MODEL_LEADS', 'LINEAR_LEADS': 'the standardi
                     'NO_SEPARATION': "not separated, never read as 'equal': NO_SEPARATION"}
 lead_short = f"model minus logistic at rung {n_r} {lp} (paired interval {lci}), {LEAD_BOUND_WORDS[lead]}{LCAP}"
 lead_short_n = f"model minus logistic at rung {n_r} ({p8} plaintexts) {lp} (paired interval {lci}), {LEAD_BOUND_WORDS[lead]}{LCAP}"
-GAIN_SHORT = {'FOURTH_DOUBLING_RISES': "at or above the record's rate", 'FOURTH_DOUBLING_BELOW_RATE': "a rise below the record's rate",
+GAIN_SHORT = {'FOURTH_DOUBLING_RISES': f"at or above the record's bar of {bar} per doubling", 'FOURTH_DOUBLING_BELOW_RATE': "a rise below the record's rate",
               'FOURTH_DOUBLING_NOT_RESOLVED': "whether the fourth doubling bought anything is not resolved by the scored chunks at this size, never read as 'flat' or 'equal'",
               'FOURTH_DOUBLING_FALLS': "adding the fourth doubling's files of the same kinds lowered the model's reading on the original files"}
 gain_short = f"{RNG} for the model {gp} (paired interval {gci}): {GAIN_SHORT[pub]}{STRADDLE}{GCAP}"
@@ -451,12 +457,16 @@ RX_SPAN = re.compile(flex(f'{dec24} decades, short of') + SEP + r"(?:0003's|our"
 # 0024's meaning sentence: other files of the same kinds keep (buying the recipe the record's rate | raising the recipe's accuracy
 # at or above the record's bar) ... through rung 7's plaintexts; the bound goes after "(eight times 0021's)"
 RX_KEEP = re.compile(flex('of the same kinds keep') + IN_SENT + '{0,300}?' + SEP + flex(f"through {p7} plaintexts ({x7} times 0021's)"))
-# 0023's meaning sentence ("holds on real files" before the honesty pass; "holds on these real files, in distribution, over just
-# under a decade (0003's scope rule asks for two)" in VERDICT.md and "... the record's scaling thesis holds" in DILIGENCE.md after it);
-# the pointer goes after the scope words when they follow
-RX_THESIS = re.compile(flex("the record's scaling thesis holds") + '(?:' + SEP + flex('on') + '(?:' + SEP + flex('these') + ')?' + SEP
+# 0023's meaning sentence, anchored on "the record's scaling thesis": "holds on real files" before the honesty pass; "holds on these
+# real files, in distribution, over just under a decade (0003's scope rule asks for two)" after it; since 2026-10-22 (VERDICT.md and
+# DILIGENCE.md alike) "this does not establish the record's scaling thesis, which 0003's scope rule ties to two decades of data on one
+# corpus with one seed (this curve spans 0.8985 of a decade)". The pointer goes after the words that follow, when they do.
+RX_THESIS = re.compile(flex("the record's scaling thesis") + '(?:'
+                       + flex(", which 0003's scope rule ties to two decades of data on one corpus with one seed (this curve spans") + SEP
+                       + r'[0-9]+(?:\.[0-9]+)?' + SEP + flex('of a decade)')
+                       + '|' + SEP + flex('holds') + '(?:' + SEP + flex('on') + '(?:' + SEP + flex('these') + ')?' + SEP
                        + flex('real files') + '(?:' + flex(', in distribution, over just under a decade') + SEP
-                       + r"\(0003's" + SEP + flex('scope rule asks for two)') + ')?)?')
+                       + r"\(0003's" + SEP + flex('scope rule asks for two)') + ')?)?)?')
 # every statement of 0024's top-rung lead: "leads the standardised logistic / the linear rule ... by 0.0039" in one sentence
 # (headlines, headings, the meaning sentences, DILIGENCE's answer), "the standardised logistic 0.0039 behind the model", the one-pager's
 # headline (which carries no number), and a `MODEL_LEADS` token with 0024's interval just before it
@@ -701,12 +711,10 @@ d = load('docs/DILIGENCE.md'); a7 = '## "Who buys it?"'; Q25 = '## "Does a fourt
 if Q25 in d:
     assert d.index(Q25) < d.index(a7); d = d[:d.index(Q25)] + d[d.index(a7):]
 d = passes(d, 'docs/DILIGENCE.md')
-ANS = {'FOURTH_DOUBLING_RISES': "Yes, at the record's rate", 'FOURTH_DOUBLING_BELOW_RATE': "A rise below the record's rate",
+ANS = {'FOURTH_DOUBLING_RISES': f"Yes, at or above the record's bar of {bar} per doubling", 'FOURTH_DOUBLING_BELOW_RATE': "A rise below the record's rate",
        'FOURTH_DOUBLING_NOT_RESOLVED': "Whether the fourth doubling bought anything is not resolved by the scored chunks at this size, never read as 'flat' or 'equal'",
        'FOURTH_DOUBLING_FALLS': "No: adding the fourth doubling's files of the same kinds lowered the model's reading on the original files"}
-ANS_LEAD = {'MODEL_LEADS': f"and the boosted model is still ahead of the linear rule at rung {n_r}",
-            'LINEAR_LEADS': f"and the linear rule now leads the boosted model at rung {n_r}",
-            'NO_SEPARATION': f"and the boosted model and the linear rule are not separated at rung {n_r}, never read as 'equal'"}
+ANS_LEAD = {k: f"and {h}" for k, h in LEAD_HEAD.items()}     # the lead head's words: never 'still', never 'hand-writable'
 qa = (f"{Q25}\n\n"
       f"**{ANS[pub]}{GCAP} — {ANS_LEAD[lead]}{LCAP}** (prereg 0025, the doubling 0024 was short of: its curve spanned {dec24} decades). Rung {n_r} "
       f"is {what_added}, from {corpus_words} (`artifacts/pivot/realfit3_corpus_manifest.json`). {FAMS_SENT}. {cap1(W[n_r])} rungs of {L(plain)} plaintexts "
