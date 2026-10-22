@@ -405,8 +405,8 @@ if rc3a and rc3v and rc3v["verdict"] != "VOID" and rc3a.get("complete"):
                      f'per-family doubling of OTHER files of the same five families (twelve more PyPI projects, 600 more RFCs, the unused candidates of '
                      f'0024\'s archives; every chunk hashed against every whole chunk and every kilobyte run of the 0018 files, new files against 0024\'s '
                      f'too) was nested on top: {", ".join(str(r["n_chunks"]) for r in _b3["rungs"])} plaintexts, {_b3["doublings_spanned"]} doublings, '
-                     f'{_b3["decades_spanned"]} decades, which meets 0003\'s two-decade scope rule by construction (one corpus, one seed: its one-corpus, '
-                     f'one-seed terms are not met by this curve). <strong>{_gain_sentence}</strong>: the model reads <strong>{rc3v["model_real_top1_by_rung"]}</strong>, '
+                     f'{_b3["decades_spanned"]} decades: the span meets 0003\'s two-decade scope rule only in the sense that the rule asked for two decades '
+                     f'of data; its one-corpus, one-seed terms are not met by this curve, whose first decade is the scored files\' own chunks. <strong>{_gain_sentence}</strong>: the model reads <strong>{rc3v["model_real_top1_by_rung"]}</strong>, '
                      f'rung 8 minus rung 7 <strong>{_gm["point"]}</strong> with a paired scored-chunk interval {_gm["ci95"]} against the record\'s '
                      f'{_b3["gain_per_doubling"]} per doubling, read by the four-way rule sealed in advance as <span class="mono">{rc3v["gain_reading"]}</span>'
                      + "".join(f' (the model at its iteration cap at rung {k})' for k in (7, 8) if f"r{k}_model" in _f3["roles_at_iteration_cap"])
